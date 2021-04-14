@@ -1,66 +1,66 @@
-import './footer.css'
+import './footer.less'
 export default function Footer(){
   
   return (
-    <div id="footers">
-    <div class="footer_info">
-      <div class="hr"></div>
-      <div class="footer_box">
-        <div class="left">
+    <div className="footer">
+    <div className="footer_info">
+      <div className="hr"></div>
+      <div className="footer_box">
+        <div className="left">
           <div>
             <span>
               <router-link to='/lite'>App</router-link>  
             </span>
-            <span class="mt_27">
+            <span className="mt_27">
               <a href="https://docs.deri.finance/">Docs</a> 
             </span>
-            <span class="mt_27">
+            <span className="mt_27">
                 <a href="http://deri.finance/#/team">Team</a>
             </span>
-            <span class="mt_27">
+            <span className="mt_27">
               <a href="https://docs.deri.finance/faq">FAQ</a>
             </span>
           </div>
-          <div class="mt_19">© 2021 Deri Protocol</div>
+          <div className="mt_19">© 2021 Deri Protocol</div>
         </div>
-        <div class="right">
+        <div className="right">
           <span> Visit us on </span>
-          <a target="_blank" class="iocn_a" href="mailto: service@deri.finance">
-            <div class="circle">
-              <div class="fa fa-envelope"></div>
+          <a target="_blank" className="iocn_a" href="mailto: service@deri.finance">
+            <div className="circle">
+              <div className="fa fa-envelope"></div>
             </div>
           </a>
           <a
             target="_blank"
-            class="iocn_a"
+            className="iocn_a"
             href="https://deri-protocol.medium.com"
           >
-            <div class="circle">
-              <div class="fa fa-medium"></div>
+            <div className="circle">
+              <div className="fa fa-medium"></div>
             </div>
           </a>
           <a
             target="_blank"
-            class="iocn_a"
+            className="iocn_a"
             href="https://twitter.com/DeriProtocol"
           >
-            <div class="circle">
-              <div class="fa fa-twitter"></div>
+            <div className="circle">
+              <div className="fa fa-twitter"></div>
             </div>
           </a>
 
           <a
             target="_blank"
-            class="iocn_a"
+            className="iocn_a"
             href="https://github.com/deri-finance"
           >
-            <div class="circle">
-              <div class="fa fa-github"></div>
+            <div className="circle">
+              <div className="fa fa-github"></div>
             </div>
           </a>
-          <a target="_blank" class="iocn_a" href="https://t.me/DeriProtocol">
-            <div class="circle">
-              <div class="fa fa-paper-plane"></div>
+          <a target="_blank" className="iocn_a" href="https://t.me/DeriProtocol">
+            <div className="circle">
+              <div className="fa fa-paper-plane"></div>
             </div>
           </a>
         </div>

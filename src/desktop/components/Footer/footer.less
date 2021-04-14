@@ -1,0 +1,88 @@
+@import '../../style/font-awesome.min.css';
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 91px;
+    height: 120px;
+    font-family: "ArialMT";
+    color: #FFFFFF;
+
+    a {
+        text-decoration: none;
+        color: #fff;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        color: #fff;
+    }
+
+    .footer_info {
+        width: 100%;
+        height: 87px;
+        margin-bottom: 24px;
+
+        .hr {
+            width: 100%;
+            height: 1px;
+            background-color: #707070;
+        }
+
+        .footer_box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 40px;
+            height: 59px;
+
+            .left {
+                font-size: 15px;
+                font-weight: 300;
+                line-height: 30px;
+
+                .mt_27 {
+                    margin-left: 10px;
+                }
+
+                .mt_19 {
+                    margin-top: 5px;
+                }
+
+                a:hover {
+                    color: #569BDA;
+                }
+            }
+
+            .right {
+                font-weight: 500;
+                font-size: 20px;
+
+                a {
+                    margin-left: 45px;
+
+                }
+
+                a:hover .fa {
+                    color: #569BDA;
+                }
+
+                .fa {
+
+                    position: relative;
+                    color: #2f2f2f;
+                }
+
+                .circle {
+                    display: inline-block;
+                    background-color: #FFFFFF;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}

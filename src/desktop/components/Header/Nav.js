@@ -68,16 +68,16 @@ export default function Nav (){
           >
             Connect Wallet
           </button>
-          <button v-else className="nav_btn">
+          {/* <button v-else className="nav_btn">
             { wallet } { walletSymbol }
             <span className="address">{ address }</span>
-          </button>
+          </button> */}
         </div>
-        <div v-else>
+        {/* <div v-else>
           <button className="nav_btn noNetwork">
             { noNetworkText }
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )
