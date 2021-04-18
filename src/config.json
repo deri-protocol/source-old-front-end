@@ -1,0 +1,36 @@
+{
+  "prod" : {
+    "1" : {
+      "name" : "Ethereum",
+      "text" : "ETHEREUM",
+      "symbol" : "ETH"
+    },
+    "56" : {
+      "name" : "bsc",
+      "text" : "BSC",
+      "symbol" : "BNB"
+    },
+    "128" : {
+      "name" : "heco",
+      "text" : "HECO",
+      "symbol" : "HT"
+    }
+  },
+  "dev" : {
+    "3" : {
+      "name" : "Ropsten",
+      "text" : "ROPSTEN",
+      "symbol" : "ETH"
+    },
+    "97" : {
+      "name" : "Bsc-testnet",
+      "text" : "BSC TESTNET",
+      "symbol" : "BNB"
+    },
+    "256" : {
+      "name" : "Heco-testnet",
+      "text" : "HECO TESTNET",
+      "symbol" : "HT"
+    }
+  }
+}

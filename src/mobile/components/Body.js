@@ -4,7 +4,7 @@ import LoadableComponent from '../../utils/LoadableComponent'
 
 const Lite = LoadableComponent(()=>import('../pages/trade/Lite')) 
 const Pro = LoadableComponent(()=>import('../pages/trade/Pro')) 
-const Mining = LoadableComponent(() => import('../pages/Mining'))
+// const Mining = LoadableComponent(() => import('../pages/Mining/Mining'))
 
 @withRouter
 class Body extends React.Component {
@@ -16,7 +16,7 @@ class Body extends React.Component {
         <Route exact path='/' component={Lite}/>
         <Route exact path='/lite' component={Lite}/>
         <Route exact path='/pro' component={Pro}/>
-        <Route exact path='/mining' component={Mining}/>
+        {/* <Route exact path='/pool' component={Mining}/> */}
       </Switch>
     )
   }

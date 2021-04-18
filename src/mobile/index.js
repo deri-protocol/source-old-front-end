@@ -1,12 +1,12 @@
-import Header from './components/Header'
+import Header from './components/Header/Nav'
 import Body from './components/Body'
-import Footer from './components/Footer'
+import Footer from './components/Footer/Footer'
 import './style/index.css'
 
-export default function Desktop (){
+export default function mobile (){
   console.log('welcome Deri desktop app')
   return (
-    <div className='desktop'>
+    <div className='mobile'>
       <Header></Header>
       <Body></Body>
       <Footer></Footer>

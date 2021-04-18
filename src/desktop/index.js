@@ -1,5 +1,5 @@
 import Nav from './components/Header/Nav'
-import Body from './components/Body'
+import Body from './components/Body/Body'
 import Footer from './components/Footer/Footer'
 import './style/index.css'
 

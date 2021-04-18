@@ -1,170 +1,109 @@
-.nav {
-    background-color: #0D0E0F;
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 40px;
-    padding-right: 40px;
-    font-family: "ArialMT";
-    min-width: 1200px;
+.desktop {
 
-    a {
-        text-decoration: none;
-        color: #fff;
-    }
+	.nav {
+		background-color: #0D0E0F;
+		height: 80px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-left: 40px;
+		padding-right: 40px;
+		font-family: "ArialMT";
+		min-width: 1200px;
 
-    a:hover {
-        text-decoration: none;
-        color: #fff;
-    }
+		a {
+			text-decoration: none;
+			color: #fff;
+		}
 
-    .nav_mean {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+		a:hover {
+			text-decoration: none;
+			color: #fff;
+		}
 
-        .logo {
-            width: 95px;
+		.nav-menu {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 
-            img {
-                width: 47px;
-                font-size: 0;
-                float: left;
-            }
-        }
+			.logo {
+				width: 95px;
 
-        .mean {
-            height: 54px;
-            li {
-                float: left;
-                list-style: none;
-                margin-left: 30px;
-                font-size: 20px;
-                font-weight: 300;
-                cursor: pointer;
-                color: #FFFFFF;
-                font-family: "ArialMT";
-                a {
-                    color: #CCCCCC;
-                }
-            }
+				img {
+					width: 47px;
+					font-size: 0;
+					float: left;
+				}
+			}
 
-            li:hover a {
-                color: #FFFFFF;
-            }
+			.mean {
+				height: 54px;
 
-            .ref {
-                position: relative;
+				li {
+					float: left;
+					list-style: none;
+					margin-left: 30px;
+					font-size: 20px;
+					font-weight: 300;
+					cursor: pointer;
+					color: #FFFFFF;
+					font-family: "ArialMT";
 
-                .ref_box {
-                    display: none;
-                    width: 139px;
-                    margin-top: 26px;
-                    border-radius: 4px;
-                    padding-top: 8px;
-                    padding-bottom: 8px;
-                    position: relative;
-                    z-index: 9;
-                    background-color: #0D0E0F;
+					a {
+						color: #CCCCCC;
+					}
+				}
 
-                    li {
-                        width: 139px;
-                        height: 30px;
-                        font-family: "ArialMT";
-                        font-weight: 300;
-                        line-height: 30px;
-                        padding-left: 15px;
-                        float: none;
-                        font-size: 14px;
-                        margin-left: 0;
+				li:hover a {
+					color: #FFFFFF;
+				}
 
-                        a {
-                            color: #cccccc;
-                        }
+				.ref {
+					position: relative;
 
-                        a:hover {
-                            color: #ffffff;
-                        }
-                    }
+					i {
+						vertical-align: middle;
+					}
 
-                }
-            }
+					.ref_box {
+						padding-left: 0;
+						display: none;
+						width: 139px;
+						margin-top: 26px;
+						border-radius: 4px;
+						padding-top: 8px;
+						padding-bottom: 8px;
+						position: relative;
+						z-index: 9;
+						background-color: #0D0E0F;
 
-            .ref:hover .ref_box {
-                display: block;
-            }
-        }
-    }
+						li {
+							width: 139px;
+							height: 30px;
+							font-family: "ArialMT";
+							font-weight: 300;
+							line-height: 30px;
+							padding-left: 15px;
+							float: none;
+							font-size: 14px;
+							margin-left: 0;
 
-    .connect {
-        height: 54px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+							a {
+								color: #cccccc;
+							}
 
-        font-size: 16px;
-        font-weight: 300;
+							a:hover {
+								color: #ffffff;
+							}
+						}
 
-        .network_text_logo {
-            display: flex;
-            align-items: center;
-            margin-right: 13px;
+					}
+				}
 
-            .logo_text {
-                margin-left: 16px;
-            }
-
-            i {
-                display: inline-block;
-                width: 40px;
-                height: 40px;
-            }
-
-            .ETH {
-                background-image: url('../../img/ethereum-logo.png');
-                background-position: 15px;
-                background-repeat: no-repeat;
-            }
-
-            .BNB {
-                background-image: url('../../img/bsc-logo.png');
-                background-repeat: no-repeat;
-            }
-
-            .HT {
-                background-image: url('../../img/heco-logo.png');
-                background-position: 15px;
-                background-repeat: no-repeat;
-            }
-        }
-
-        button {
-            height: 48px;
-            padding-left: 14px;
-            padding-right: 14px;
-            color: #FFFFFF;
-            background-color: #0D0E0F;
-            font-weight: 300;
-            line-height: 33px;
-            background-image: url('../../img//connect_bg.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            border-radius: 17px;
-
-            .address {
-                color: #569BDA;
-                margin-left: 5px;
-            }
-        }
-
-        .connect_btn {
-            width: 220px;
-            text-align: center;
-        }
-
-        .noNetwork {
-            color: #E35061;
-        }
-    }
+				.ref:hover .ref_box {
+					display: block;
+				}
+			}
+		}
+	}
 }
