@@ -1,7 +1,9 @@
+
 .mobile {
   .footer {
-    width: 375px;
-    height: 58px;
+    min-width: 3.75rem;
+    width: 100%;
+    height: 0.58rem;
     background: #000000;
     box-shadow: 0px -3px 4px rgba(0, 0, 0, 0.2);
     position: fixed;
@@ -9,16 +11,36 @@
     align-items: center;
     justify-content: center;
     bottom: 0;
-    .premining{
-        width: 200px;
-        height: 40px;
-        background: #246CAD;
-        color: #fff;
-        text-align: center;
-        line-height: 40px;
-        font-family: "Korolev";
-        font-weight: 500;
-        
+
+    .logo-text ,.network-text-logo{
+      display: none;
     }
+
+    .connect {
+      margin-left: 1.4rem;
+      font-family: 'korolev';
+
+      button {
+        font-family: 'korolev';
+        font-weight: 300;
+      }
+
+    }
+
+
+    .premining {
+      width: 2rem;
+      height: 0.4rem;
+      background: #246CAD;
+      color: #fff;
+      text-align: center;
+      line-height: 0.4rem;
+      font-family: "Korolev";
+      font-size: 0.16rem;
+    }
+  }
+  .footer::before {
+    content: '';
+    line-height: 0.4rem;
   }
 }

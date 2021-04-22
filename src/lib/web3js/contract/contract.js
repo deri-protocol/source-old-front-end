@@ -1,7 +1,7 @@
-import Web3 from "web3";
-import { metaMaskWeb3, web3Factory } from "../factory/web3";
+import Web3 from 'web3';
+import { metaMaskWeb3, web3Factory } from '../factory/web3';
 
-const MAX_GAS_AMOUNT = 532731
+const MAX_GAS_AMOUNT = 532731;
 
 export class Contract {
   constructor(chainId, contractAddress, isProvider) {
@@ -14,19 +14,20 @@ export class Contract {
     }
   }
   setAccount(accountAddress) {
-    this.accountAddress = accountAddress
-    return this
+    this.accountAddress = accountAddress;
+    return this;
   }
   setPool(poolAddress) {
-    this.poolAddress = poolAddress
-    return this
+    this.poolAddress = poolAddress;
+    return this;
   }
   async _call(method, args = []) {
     return await this.contract.methods[method](...args).call();
   }
 
   async _estimatedGas(method, args = []) {
-    (!this.accountAddress) &&  console.log("please do setAccount(accountAddress) first")
+    !this.accountAddress &&
+      console.log('please do setAccount(accountAddress) first');
     let gas = 0;
     for (let i = 0; i < 20; i++) {
       try {
@@ -53,7 +54,7 @@ export class Contract {
         } else if (receipt === null) {
           setTimeout(() => _transactionReceipt(resolve, reject), 500);
         } else if (receipt.status === false) {
-          receipt.errorMessage = "Transaction failed"
+          receipt.errorMessage = 'Transaction failed';
           reject(receipt);
         } else {
           resolve(receipt);
@@ -62,19 +63,25 @@ export class Contract {
     };
   }
   async _transact(method, args) {
-    (!this.accountAddress) &&  console.log("please do setAccount(accountAddress) first")
-    const gas = await this._estimatedGas(method, args);
+    !this.accountAddress &&
+      console.log('please do setAccount(accountAddress) first');
+    //const gas = await this._estimatedGas(method, args);
+    const [gas, gasPrice] = await Promise.all([
+      this._estimatedGas(method, args),
+      this.web3.eth.getGasPrice(),
+    ]);
     let txRaw = [
       {
         from: this.accountAddress,
         to: this.contractAddress,
         gas: Web3.utils.numberToHex(gas),
-        value: Web3.utils.numberToHex("0"),
+        gasPrice: Web3.utils.numberToHex(gasPrice),
+        value: Web3.utils.numberToHex('0'),
         data: this.contract.methods[method](...args).encodeABI(),
       },
     ];
     let tx = await window.ethereum.request({
-      method: "eth_sendTransaction",
+      method: 'eth_sendTransaction',
       params: txRaw,
     });
     return await new Promise(this._getTransactionReceipt(tx));

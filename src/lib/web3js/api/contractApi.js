@@ -7,9 +7,13 @@ import {
   wormholeFactory,
   deriFactory,
   databaseWormholeFactory,
-} from "../factory/contracts";
-import { getPoolInfoApy, getUserInfoAll } from "./databaseApi";
-import { fundingRateCache, PerpetualPoolParametersCache, priceCache } from "./apiResultCache";
+} from '../factory/contracts';
+import { getPoolInfoApy, getUserInfoAll } from './databaseApi';
+import {
+  fundingRateCache,
+  PerpetualPoolParametersCache,
+  priceCache,
+} from './apiResultCache';
 import {
   hasInvalidArgsValue,
   naturalWithPercentage,
@@ -22,7 +26,7 @@ import {
   BigNumber,
   format,
   getDeriContractAddress,
-} from "../utils";
+} from '../utils';
 import {
   calculateFundingRate,
   calculateLiquidityUsed,
@@ -35,22 +39,19 @@ import {
   calculateLiquidationPrice,
   processFundingRate,
   isOrderValid,
-} from "../calculation";
+} from '../calculation';
 
 // api
-export const getSpecification = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, bTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const bToken = bTokenFactory(
-    chainId,
-    bTokenAddress,
-    pPoolAddress,
-  );
-  bToken.setAccount(accountAddress)
+export const getSpecification = async (
+  chainId,
+  poolAddress,
+  accountAddress
+) => {
+  const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  bToken.setAccount(accountAddress);
   const {
     multiplier,
     feeRatio,
@@ -69,8 +70,8 @@ export const getSpecification = async (chainId, bSymbol, accountAddress) => {
   const bSymbolRaw = await bToken.symbol();
 
   return {
-    addresses: pPoolAddress,
-    symbol: symbol,
+    addresses: poolAddress,
+    symbol,
     bSymbol: bSymbolRaw,
     multiplier: multiplier.toString(),
     feeRatio: feeRatio.toString(),
@@ -87,20 +88,13 @@ export const getSpecification = async (chainId, bSymbol, accountAddress) => {
   };
 };
 
-export const getPositionInfo = async (chainId, bSymbol, accountAddress) => {
-  let price = await getBTCUSDPrice();
-  const [pPoolAddress, , pTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const pToken = pTokenFactory(
-    chainId,
-    pTokenAddress,
-    pPoolAddress,
-  );
-  pToken.setAccount(accountAddress)
+export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
+  const price = await getBTCUSDPrice(chainId, poolAddress);
+  const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
+  pToken.setAccount(accountAddress);
   const {
     multiplier,
     minInitialMarginRatio,
@@ -130,36 +124,40 @@ export const getPositionInfo = async (chainId, bSymbol, accountAddress) => {
 };
 
 // use infura url, will remove later
-export const getLiquidityInfo = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, , , lTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress, true);
-  pPool.setAccount(accountAddress)
-  const lToken = lTokenFactory(
-    chainId,
-    lTokenAddress,
-    pPoolAddress,
-    true,
-  );
-  lToken.setAccount(accountAddress)
+export const getLiquidityInfo = async (
+  chainId,
+  poolAddress,
+  accountAddress
+) => {
+  const { lTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress, true);
+  pPool.setAccount(accountAddress);
+  const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress, true);
+  lToken.setAccount(accountAddress);
 
-  const [lTokenBalance, lTokenTotalSupply]= await Promise.all([lToken.balance(), lToken.totalSupply()])
-  const price = await getBTCUSDPrice();
+  const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
+    lToken.balance(),
+    lToken.totalSupply(),
+  ]);
+  const price = await getBTCUSDPrice(chainId, poolAddress);
   const {
     liquidity,
     tradersNetCost,
     tradersNetVolume,
   } = await pPool.getStateValues();
   const { multiplier, minPoolMarginRatio } = await pPool.getParameters();
-  const poolDynamicEquity = liquidity.plus(tradersNetCost.minus(tradersNetVolume.times(price).times(multiplier)))
+  const poolDynamicEquity = liquidity.plus(
+    tradersNetCost.minus(tradersNetVolume.times(price).times(multiplier))
+  );
 
   return {
     totalSupply: lTokenTotalSupply.toString(),
     poolLiquidity: liquidity.toString(),
     shares: lTokenBalance.toString(),
-    shareValue: calculateShareValue(lTokenTotalSupply, poolDynamicEquity).toString(),
+    shareValue: calculateShareValue(
+      lTokenTotalSupply,
+      poolDynamicEquity
+    ).toString(),
     maxRemovableShares: calculateMaxRemovableShares(
       lTokenBalance,
       lTokenTotalSupply,
@@ -173,68 +171,50 @@ export const getLiquidityInfo = async (chainId, bSymbol, accountAddress) => {
   };
 };
 
-export const getWalletBalance = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, bTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const bToken = bTokenFactory(
-    chainId,
-    bTokenAddress,
-    pPoolAddress,
-  );
-  bToken.setAccount(accountAddress)
+export const getWalletBalance = async (
+  chainId,
+  poolAddress,
+  accountAddress
+) => {
+  const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  bToken.setAccount(accountAddress);
   const balance = await bToken.balance(accountAddress);
   return balance.toString();
 };
 
-export const isUnlocked = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, bTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const bToken = bTokenFactory(
-    chainId,
-    bTokenAddress,
-    pPoolAddress,
-  );
-  bToken.setAccount(accountAddress)
+export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
+  const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
 };
 
-export const unlock = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, bTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const bToken = bTokenFactory(
-    chainId,
-    bTokenAddress,
-    pPoolAddress,
-  );
-  bToken.setAccount(accountAddress)
+export const unlock = async (chainId, poolAddress, accountAddress) => {
+  const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  bToken.setAccount(accountAddress);
 
   let res;
   try {
-    let tx = await bToken.unlock();
+    const tx = await bToken.unlock();
     res = { success: true, transaction: tx };
   } catch (err) {
     res = { success: false, error: err };
   }
-  return res
+  return res;
 };
 
 export const getEstimatedMargin = async (
   chainId,
-  bSymbol,
+  poolAddress,
   accountAddress,
   volume,
   leverage
 ) => {
-  const price = await getBTCUSDPrice();
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
+  const price = await getBTCUSDPrice(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
   const { multiplier } = await pPool.getParameters();
   return bg(volume)
     .abs()
@@ -244,25 +224,24 @@ export const getEstimatedMargin = async (
     .toString();
 };
 
-export const getEstimatedFee = async (
-  chainId,
-  bSymbol,
-  volume
-) => {
-  //const price = await getBTCUSDPrice();
-  let price = priceCache.get()
-  let parameters = PerpetualPoolParametersCache.get()
-  if (price === "") {
-    await priceCache.update()
-    price = priceCache.get()
+export const getEstimatedFee = async (chainId, poolAddress, volume) => {
+  // const price = await getBTCUSDPrice(chainId, poolAddress);
+  let price = priceCache.get();
+  let parameters = PerpetualPoolParametersCache.get();
+  if (price === '') {
+    await priceCache.update(chainId, poolAddress);
+    price = priceCache.get();
   }
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  //const pPool = perpetualPoolFactory(chainId, pPoolAddress, accountAddress);
-  //const { multiplier, feeRatio } = await pPool.getParameters();
+  // const pPool = perpetualPoolFactory(chainId, poolAddress, accountAddress);
+  // const { multiplier, feeRatio } = await pPool.getParameters();
   if (!parameters.multiplier) {
-    parameters = await PerpetualPoolParametersCache.update(chainId, pPoolAddress)
+    parameters = await PerpetualPoolParametersCache.update(
+      chainId,
+      poolAddress
+    );
   }
-  const { multiplier, feeRatio } =  parameters
+  //console.log('price', price);
+  const { multiplier, feeRatio } = parameters;
   return bg(volume)
     .abs()
     .times(price)
@@ -271,22 +250,25 @@ export const getEstimatedFee = async (
     .toString();
 };
 
-
-export const getFundingRate = async (chainId, bSymbol) => {
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  const perpetualPool = perpetualPoolFactory(chainId, pPoolAddress);
+export const getFundingRate = async (chainId, poolAddress) => {
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
 
   const res = await perpetualPool
     .getFundingRate()
-    .catch((err) => console.log("getFundingRate", err));
-  fundingRateCache.set(chainId, pPoolAddress, res);
-  const poolInfo = await getPoolInfoApy(chainId, bSymbol);
+    .catch((err) => console.log('getFundingRate', err));
+  fundingRateCache.set(chainId, poolAddress, res);
+  const poolInfo = await getPoolInfoApy(chainId, poolAddress);
 
   if (res) {
-    //console.log(hexToNatural(res[0]));
-    let { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res;
+    // console.log(hexToNatural(res[0]));
+    const {
+      fundingRate,
+      fundingRatePerBlock,
+      liquidity,
+      tradersNetVolume,
+    } = res;
     const volume = poolInfo.volume24h;
-    //fundingRate = processFundingRate(chainId, fundingRate);
+    // fundingRate = processFundingRate(chainId, fundingRate);
 
     return {
       fundingRate0: naturalWithPercentage(fundingRate),
@@ -300,17 +282,14 @@ export const getFundingRate = async (chainId, bSymbol) => {
 
 export const getEstimatedFundingRate = async (
   chainId,
-  bSymbol,
+  poolAddress,
   newNetVolume
 ) => {
-  let fundingRate1, res;
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  res = fundingRateCache.get(chainId, pPoolAddress);
+  let fundingRate1;
+  let res;
+  res = fundingRateCache.get(chainId, poolAddress);
   if (!res) {
-    const perpetualPool = perpetualPoolFactory(
-      chainId,
-      pPoolAddress,
-    );
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     res = await perpetualPool.getFundingRate();
   }
   if (res) {
@@ -323,32 +302,27 @@ export const getEstimatedFundingRate = async (
     ];
     if (hasInvalidArgsValue(...parameters)) {
       return {
-        fundingRate1: "0",
-      };
-    } else {
-      //console.log(parameters)
-      fundingRate1 = calculateFundingRate(...parameters);
-      fundingRate1 = processFundingRate(chainId, fundingRate1);
-      return {
-        fundingRate1: naturalWithPercentage(fundingRate1),
+        fundingRate1: '0',
       };
     }
+    // console.log(parameters)
+    fundingRate1 = calculateFundingRate(...parameters);
+    fundingRate1 = processFundingRate(chainId, fundingRate1);
+    return {
+      fundingRate1: naturalWithPercentage(fundingRate1),
+    };
   }
 };
 
-export const getLiquidityUsed = async (chainId, bSymbol) => {
+export const getLiquidityUsed = async (chainId, poolAddress) => {
   let res;
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  res = fundingRateCache.get(chainId, pPoolAddress);
+  res = fundingRateCache.get(chainId, poolAddress);
   if (!res) {
-    const perpetualPool = perpetualPoolFactory(
-      chainId,
-      pPoolAddress,
-    );
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     res = await perpetualPool.getFundingRate();
   }
   if (res) {
-    let { liquidityUsed } = res;
+    const { liquidityUsed } = res;
     return {
       liquidityUsed0: naturalWithPercentage(liquidityUsed),
     };
@@ -357,20 +331,16 @@ export const getLiquidityUsed = async (chainId, bSymbol) => {
 
 export const getEstimatedLiquidityUsed = async (
   chainId,
-  bSymbol,
+  poolAddress,
   newNetVolume
 ) => {
   let res;
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  res = fundingRateCache.get(chainId, pPoolAddress);
+  res = fundingRateCache.get(chainId, poolAddress);
   if (!res) {
-    const perpetualPool = perpetualPoolFactory(
-      chainId,
-      pPoolAddress,
-    );
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     res = await perpetualPool
       .getFundingRate()
-      .catch((err) => console.log("getLiquidityUsed", err));
+      .catch((err) => console.log('getLiquidityUsed', err));
   }
   if (res) {
     const parameters = [
@@ -382,49 +352,41 @@ export const getEstimatedLiquidityUsed = async (
     ];
     if (hasInvalidArgsValue(...parameters)) {
       return {
-        liquidityUsed1: "0",
-      };
-    } else {
-      const liquidityUsed1 = calculateLiquidityUsed(...parameters);
-      return {
-        liquidityUsed1: naturalWithPercentage(liquidityUsed1),
+        liquidityUsed1: '0',
       };
     }
+    const liquidityUsed1 = calculateLiquidityUsed(...parameters);
+    return {
+      liquidityUsed1: naturalWithPercentage(liquidityUsed1),
+    };
   }
 };
 export const depositMargin = async (
   chainId,
-  bSymbol,
+  poolAddress,
   accountAddress,
   amount
 ) => {
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  //console.log(chainId, pPoolAddress, accountAddress)
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  return await pPool.setAccount(accountAddress).depositMargin(naturalToDeri(amount));
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  return await pPool
+    .setAccount(accountAddress)
+    .depositMargin(naturalToDeri(amount));
 };
 
 export const withdrawMargin = async (
   chainId,
-  bSymbol,
+  poolAddress,
   accountAddress,
   amount
 ) => {
   let res;
-  const [pPoolAddress, , pTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const pToken = pTokenFactory(
-    chainId,
-    pTokenAddress,
-    pPoolAddress,
-  );
-  pToken.setAccount(accountAddress)
+  const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
+  pToken.setAccount(accountAddress);
 
-  const price = await getBTCUSDPrice();
+  const price = await getBTCUSDPrice(chainId, poolAddress);
   const { volume, margin, cost } = await pToken.getPositionInfo();
   const { multiplier, minInitialMarginRatio } = await pPool.getParameters();
 
@@ -438,48 +400,53 @@ export const withdrawMargin = async (
   );
   if (bg(amount).lte(maxWithdrawMargin)) {
     try {
-      let tx = await pPool._transactPool("withdrawMargin(uint256,uint256,uint256,uint8,bytes32,bytes32)", [
-        naturalToDeri(amount),
-      ]);
+      const tx = await pPool._transactPool(
+        'withdrawMargin(uint256,uint256,uint256,uint8,bytes32,bytes32)',
+        [naturalToDeri(amount)]
+      );
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
     }
   } else {
-    res = { success: false, error: "amount exceeds allowed" };
+    res = { success: false, error: 'amount exceeds allowed' };
   }
   return res;
 };
 
-
-export const mint = async (chainId, bSymbol, accountAddress, amount ) => {
-  const [pPoolAddress, bTokenAddress] = getPoolContractAddress(chainId, bSymbol);
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const bToken= bTokenFactory(chainId, bTokenAddress, pPoolAddress);
-  bToken.setAccount(accountAddress)
-  const decimals =  await bToken.decimals()
-  let BONE = 10 ** decimals;
+export const mint = async (chainId, poolAddress, accountAddress, amount) => {
+  const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  bToken.setAccount(accountAddress);
+  const decimals = await bToken.decimals();
+  const BONE = 10 ** decimals;
   amount = format(new BigNumber(amount).multipliedBy(BONE));
   let res;
   try {
-    let tx = await bToken._transact("mint", [amount]);
+    const tx = await bToken._transact('mint', [amount]);
     res = { success: true, transaction: tx };
   } catch (error) {
-    res = { success: false, error: error };
+    res = { success: false, error };
   }
   return res;
 };
 
-export const addLiquidity = async (chainId, bSymbol, accountAddress, amount) => {
-  const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
+export const addLiquidity = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  amount
+) => {
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
   let res;
   try {
-    let tx = await pPool._transactPool("addLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)", [
-      naturalToDeri(amount),
-    ]);
+    const tx = await pPool._transactPool(
+      'addLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)',
+      [naturalToDeri(amount)]
+    );
     res = { success: true, transaction: tx };
   } catch (err) {
     res = { success: false, error: err };
@@ -487,21 +454,22 @@ export const addLiquidity = async (chainId, bSymbol, accountAddress, amount) => 
   return res;
 };
 
-export const removeLiquidity = async (chainId, bSymbol,accountAddress, shares) => {
-  const [pPoolAddress, , , lTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const lToken = lTokenFactory(
-    chainId,
-    lTokenAddress,
-    pPoolAddress,
-  );
-  lToken.setAccount(accountAddress)
-  const price = await getBTCUSDPrice();
-  const [lTokenBalance, lTokenTotalSupply]= await Promise.all([lToken.balance(), lToken.totalSupply()])
+export const removeLiquidity = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  shares
+) => {
+  const { lTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress);
+  lToken.setAccount(accountAddress);
+  const price = await getBTCUSDPrice(chainId, poolAddress);
+  const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
+    lToken.balance(),
+    lToken.totalSupply(),
+  ]);
   const { multiplier, minPoolMarginRatio } = await pPool.getParameters();
   const {
     liquidity,
@@ -522,45 +490,42 @@ export const removeLiquidity = async (chainId, bSymbol,accountAddress, shares) =
   let res;
   if (bg(shares).lte(maxRemovableShares)) {
     try {
-      let tx = await pPool._transactPool("removeLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)", [
-        naturalToDeri(shares),
-      ]);
+      const tx = await pPool._transactPool(
+        'removeLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)',
+        [naturalToDeri(shares)]
+      );
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
     }
   } else {
-    res = { success: false, error: "shares exceeds allowed" };
+    res = { success: false, error: 'shares exceeds allowed' };
   }
   return res;
 };
 
-export const tradeWithMargin = async (chainId, bSymbol, accountAddress, newVolume, amount='0') => {
-  let price = await getBTCUSDPrice();
-  const [pPoolAddress, , pTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const pToken = pTokenFactory(
-    chainId,
-    pTokenAddress,
-    pPoolAddress,
-  );
-  pToken.setAccount(accountAddress)
+export const tradeWithMargin = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  newVolume,
+  amount = '0'
+) => {
+  const price = await getBTCUSDPrice(chainId, poolAddress);
+  const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
+  pToken.setAccount(accountAddress);
   const {
     multiplier,
     minInitialMarginRatio,
     minPoolMarginRatio,
   } = await pPool.getParameters();
-  const {
-    liquidity,
-    tradersNetVolume,
-  } = await pPool.getStateValues();
+  const { liquidity, tradersNetVolume } = await pPool.getStateValues();
   const { volume, margin } = await pToken.getPositionInfo();
   let res;
-  let orderValidation = isOrderValid(
+  const orderValidation = isOrderValid(
     price,
     margin,
     volume,
@@ -574,10 +539,10 @@ export const tradeWithMargin = async (chainId, bSymbol, accountAddress, newVolum
   );
   if (orderValidation.success) {
     try {
-      let tx = await pPool._transactPool("tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)", [
-        naturalToDeri(newVolume),
-        naturalToDeri(amount),
-      ]);
+      const tx = await pPool._transactPool(
+        'tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)',
+        [naturalToDeri(newVolume), naturalToDeri(amount)]
+      );
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
@@ -588,55 +553,45 @@ export const tradeWithMargin = async (chainId, bSymbol, accountAddress, newVolum
   return res;
 };
 
-export const closePosition = async (chainId, bSymbol, accountAddress) => {
-  const [pPoolAddress, , pTokenAddress] = getPoolContractAddress(
-    chainId,
-    bSymbol
-  );
-  const pPool = perpetualPoolFactory(chainId, pPoolAddress);
-  pPool.setAccount(accountAddress)
-  const pToken = pTokenFactory(
-    chainId,
-    pTokenAddress,
-    pPoolAddress,
-  );
-  pToken.setAccount(accountAddress)
+export const closePosition = async (chainId, poolAddress, accountAddress) => {
+  const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  pPool.setAccount(accountAddress);
+  const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
+  pToken.setAccount(accountAddress);
   let { volume } = await pToken.getPositionInfo();
   volume = volume.negated();
   let res;
   if (!volume.eq(0)) {
     try {
-      let tx = await pPool._transactPool("tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)", [
-        naturalToDeri(volume),
-        "0",
-      ]);
+      const tx = await pPool._transactPool(
+        'tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)',
+        [naturalToDeri(volume), '0']
+      );
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
     }
   } else {
-    res = { success: false, error: "no position to close" };
+    res = { success: false, error: 'no position to close' };
   }
   return res;
 };
 
 export const mintDToken = async (chainId, accountAddress) => {
-  let res
+  let res;
   const userInfo = await getUserInfoAll(accountAddress);
-  let amount = naturalToDeri(userInfo.amount);
-  let deadline = userInfo.deadline;
-  let nonce = userInfo.nonce;
-  let v = userInfo.v;
-  let r = userInfo.r;
-  let s = userInfo.s;
+  const amount = naturalToDeri(userInfo.amount);
+  const { deadline } = userInfo;
+  const { nonce } = userInfo;
+  const { v } = userInfo;
+  const { r } = userInfo;
+  const { s } = userInfo;
   if (userInfo.valid) {
     const miningVaultAddress = getMiningVaultContractAddress(chainId);
     if (miningVaultAddress) {
-      const miningVault = miningVaultPoolFactory(
-        chainId,
-        miningVaultAddress,
-      );
-      miningVault.setAccount(accountAddress)
+      const miningVault = miningVaultPoolFactory(chainId, miningVaultAddress);
+      miningVault.setAccount(accountAddress);
       try {
         const tx = await miningVault.mintDToken(
           accountAddress,
@@ -660,18 +615,15 @@ export const mintDToken = async (chainId, accountAddress) => {
   } else {
     res = {
       success: false,
-      error: `userinfo is not valid`,
+      error: 'userinfo is not valid',
     };
   }
-  return res
+  return res;
 };
 
 export const freeze = async (chainId, accountAddress, toChainId, amount) => {
-  const {wormholeAddress} = getDeriContractAddress(chainId)
-  const wormhole = wormholeFactory(
-    chainId,
-    wormholeAddress
-  );
+  const { wormholeAddress } = getDeriContractAddress(chainId);
+  const wormhole = wormholeFactory(chainId, wormholeAddress);
   wormhole.setAccount(accountAddress);
   let res;
   try {
@@ -680,8 +632,8 @@ export const freeze = async (chainId, accountAddress, toChainId, amount) => {
   } catch (error) {
     res = { success: false, error };
   }
-  return res
-}
+  return res;
+};
 
 export const getUserWormholeSignature = async (accountAddress) => {
   const databaseWormhole = databaseWormholeFactory(true);
@@ -689,28 +641,33 @@ export const getUserWormholeSignature = async (accountAddress) => {
 };
 
 export const mintDeri = async (toChainId, accountAddress) => {
-  let res
-  const databaseWormhole = databaseWormholeFactory(true)
-  //const userInfo = await getUserInfoAll(accountAddress);
-  const userInfo = await databaseWormhole.signature(accountAddress)
-  //console.log(userInfo)
-  const amount = userInfo.amount
-  const fromChainId = userInfo.fromChainId
-  const fromWormhole = userInfo.fromWormhole
+  let res;
+  const databaseWormhole = databaseWormholeFactory(true);
+  // const userInfo = await getUserInfoAll(accountAddress);
+  const userInfo = await databaseWormhole.signature(accountAddress);
+  // console.log(userInfo)
+  const { amount } = userInfo;
+  const { fromChainId } = userInfo;
+  const { fromWormhole } = userInfo;
   const fromNonce = userInfo.nonce;
-  const v = userInfo.v;
-  const r = userInfo.r;
-  const s = userInfo.s;
+  const { v } = userInfo;
+  const { r } = userInfo;
+  const { s } = userInfo;
   if (userInfo.valid) {
     const { wormholeAddress } = getDeriContractAddress(toChainId);
     if (wormholeAddress) {
-      const wormhole = wormholeFactory(
-        toChainId,
-        wormholeAddress
-      );
-      wormhole.setAccount(accountAddress)
+      const wormhole = wormholeFactory(toChainId, wormholeAddress);
+      wormhole.setAccount(accountAddress);
       try {
-        const tx = await wormhole.mintDeri(amount, fromChainId, fromWormhole, fromNonce, v, r, s);
+        const tx = await wormhole.mintDeri(
+          amount,
+          fromChainId,
+          fromWormhole,
+          fromNonce,
+          v,
+          r,
+          s
+        );
         res = { success: true, transaction: tx };
       } catch (err) {
         res = { success: false, error: err };
@@ -724,71 +681,55 @@ export const mintDeri = async (toChainId, accountAddress) => {
   } else {
     res = {
       success: false,
-      error: `userinfo is not valid`,
+      error: 'userinfo is not valid',
     };
   }
-  return res
+  return res;
 };
 
 export const isDeriUnlocked = async (chainId, accountAddress) => {
-  const {wormholeAddress, deriAddress} = getDeriContractAddress(
-    chainId
-  );
-  const deri = deriFactory(
-    chainId,
-    deriAddress
-  );
-  deri.setAccount(accountAddress).setPool(wormholeAddress)
-  let res
+  const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
+  const deri = deriFactory(chainId, deriAddress);
+  deri.setAccount(accountAddress).setPool(wormholeAddress);
+  let res;
   try {
     const tx = await deri.isUnlocked();
-    res = { success: true, transaction: tx}
+    res = { success: true, transaction: tx };
   } catch (error) {
-    res = { success: false, error}
+    res = { success: false, error };
   }
-  return res
-}
+  return res;
+};
 export const unlockDeri = async (chainId, accountAddress) => {
-  const {wormholeAddress, deriAddress} = getDeriContractAddress(
-    chainId
-  );
-  const deri = deriFactory(
-    chainId,
-    deriAddress
-  );
-  deri.setAccount(accountAddress).setPool(wormholeAddress)
-  let res
+  const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
+  const deri = deriFactory(chainId, deriAddress);
+  deri.setAccount(accountAddress).setPool(wormholeAddress);
+  let res;
   try {
     const tx = await deri.unlock();
-    res = { success: true, transaction: tx}
+    res = { success: true, transaction: tx };
   } catch (error) {
-    res = { success: false, error}
+    res = { success: false, error };
   }
-  return res
-}
+  return res;
+};
 
-export const getDeriBalance = async(chainId, accountAddress) => {
-  const {deriAddress} = getDeriContractAddress(
-    chainId
-  );
-  const deri = deriFactory(
-    chainId,
-    deriAddress
-  );
-  return (await deri.balance(accountAddress)).toString()
-}
+export const getDeriBalance = async (chainId, accountAddress) => {
+  const { deriAddress } = getDeriContractAddress(chainId);
+  const deri = deriFactory(chainId, deriAddress);
+  return (await deri.balance(accountAddress)).toString();
+};
 
 // // returns the funding rate without per year coeffient
 // export const getFundingRate2 = async (chainId, bSymbol) => {
-//   const [pPoolAddress] = getPoolContractAddress(chainId, bSymbol);
-//   const perpetualPool = perpetualPoolFactory(chainId, pPoolAddress);
+//   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
 
 //   const res = await perpetualPool
 //     .getFundingRate(false)
 //     .catch((err) => console.log("getFundingRate", err));
-//   //fundingRateCache.set(chainId, pPoolAddress, res);
+//   //fundingRateCache.set(chainId, poolAddress, res);
 //   //const db = databaseFactory();
-//   const poolInfo = await getPoolInfoApy(chainId, pPoolAddress);
+//   const poolInfo = await getPoolInfoApy(chainId, poolAddress);
 
 //   if (res) {
 //     //console.log(hexToNatural(res[0]));

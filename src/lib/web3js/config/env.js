@@ -1,16 +1,14 @@
-//export const DERI_ENV="dev"
+// export const DERI_ENV="dev"
 export const DeriEnv = (() => {
-  let _deriEnv = "dev"
+  let _deriEnv = 'dev';
   return {
-    get: () => {
-      return _deriEnv
-    },
+    get: () => _deriEnv,
     set: (value) => {
-      if (value === "dev" || value === "prod" || value === "production" ) {
-        _deriEnv = value
+      if (value === 'dev' || value === 'prod' || value === 'production') {
+        _deriEnv = value;
       } else {
-        throw new Error("please use 'dev' or 'prod' for DeriEnv")
+        throw new Error("please use 'dev' or 'prod' for DeriEnv");
       }
-    }
-  }
-})()
+    },
+  };
+})();

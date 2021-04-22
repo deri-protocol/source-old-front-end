@@ -1,29 +1,26 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import {
-  connectWallet,
   hasWallet
 } from '../../../lib/web3js/index'
 import walletManager from '../../../lib/account/WalletManager';
 import { formatAddress } from '../../../utils/utils';
 import './account.less'
+import { WalletContext } from '../../../context/WalletContext';
 
 export default function Account(){
-  const [wallet, setWallet] = useState({});
   let [wCText,setWCText] = useState('Connect Wallet')
+  const {walletContext} = useContext(WalletContext);
+  const [wallet, setWallet] = useState({});
 
   const wc = async () => {
-    const res = await connectWallet();
-    if(res && res.success){
-      const {chainId,account} = res;
-      const wallet = await walletManager.setWallet(chainId,account);
-      if(wallet){
-        setWallet(wallet);
-        const address = formatAddress(wallet.address)
-        const btn = <span>{wallet.balance} {wallet.symbol} <span className='address'>{address}</span></span>
-        setWCText(btn)
-      } else {
-        setWCText(<span className='no-supported'>Unsupported Chain ID {chainId}!</span>)
-      }
+    const w = await walletContext.connect();
+    setWallet(w);
+    if(w.symbol){
+      const formatAccount = formatAddress(w.account)
+      const btn = <span>{w.formatBalance} {w.symbol} <span className='address'>{formatAccount}</span></span>
+      setWCText(btn)
+    } else {
+      setWCText(<span className='no-supported'>Unsupported Chain ID {w.chainId}!</span>)
     }
   }
 

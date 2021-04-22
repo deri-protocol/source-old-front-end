@@ -1,49 +1,48 @@
 .mining-info {
-  min-width: 1201px;
-
   .mining-info-header,
   .mining-info-footer {
     display: flex;
-    height: 60px;
+    height: 0.6rem;
 
     a {
       background-color: #246CAD;
-      width: 200px;
-      height: 60px;
+      width: 2rem;
+      height: 0.6rem;
       text-align: center;
-      line-height: 60px;
+      line-height: 0.6rem;
       color: #FFFFFF;
     }
   }
 
   .mining-info-header {
     flex-direction: row-reverse;
-    margin-bottom: 5px;
+    margin-bottom: 0.005rem;
   }
 
   .mining-info-footer {
-    margin-top: 20px;
+    margin-top: 0.2rem;
   }
 
   .pools {
     .pool {
-      width: 381px;
+      width: 3.55rem;
       color: #AAAAAA;
       position: relative;
       background: rgba(13, 14, 15, 0.6);
-      height: 335px;
+      height: 3.35rem;
       display: inline-block;
       border: 1px solid #707070;
-      margin-left: 26px;
-      margin-top: 20px;
-      border-radius: 20px;
+      // margin-left: 0.26rem;
+      margin-top: 0.2rem;
+      border-radius: 0.2rem;
 
       .pool-header {
-        height: 55px;
+        height: 0.55rem;
+        font-size: 0.16rem;
         background: #0D0E0F;
         border-bottom: 1px solid #707070;
-        line-height: 55px;
-        padding-left: 40px;
+        line-height: 0.55rem;
+        padding-left: 0.4rem;
         color: #D4E05C;
         font-family: Tachyon;
         border-radius: 20px 20px 0px 0px;
@@ -56,8 +55,8 @@
         
 
         .info-center {
-          width: 301px;
-          margin-top: 27px;
+          width: 3.01rem;
+          margin-top: 0.27rem;
 
           .top-info {
             display: flex;
@@ -65,19 +64,19 @@
             align-items: flex-start;
 
             .logo {
-              width: 96px;
-              height: 96px;
+              width: 0.96rem;
+              height: 0.96rem;
               background-repeat: no-repeat;
               background-position: center;
             }
 
             .BUSD {
-              background-image: url(../../img/busd.png);
+              background-image: url(../../../assets/img/busd.png);
               background-size: cover;
             }
 
             .HUSD {
-              background-image: url(../../img/husd.png);
+              background-image: url(../../../assets/img/husd.png);
               background-size: cover;
             }
 
@@ -88,30 +87,30 @@
             }
 
             .DERI-USDT {
-              background-image: url(../../img/slp.png);
+              background-image: url(../../../assets/img/slp.png);
               background-size: 100%;
               background-repeat: no-repeat;
             }
 
             .USDT {
-              background-image: url(../../img/usdt.png);
+              background-image: url(../../../assets/img/usdt.png);
               background-size: cover;
             }
 
             .BAC {
-              background-image: url(../../img/bac.png);
+              background-image: url(../../../assets/img/bac.png);
               background-size: cover;
             }
 
             .pool-detail {
-              width: 220px;
-              padding-left: 30px;
+              width: 2.2rem;
+              padding-left: 0.3rem;
 
               div {
                 display: flex;
                 justify-content: space-between;
-                font-size: 16px;
-                margin-top: 8px;
+                font-size: 0.16rem;
+                margin-top: 0.08rem;
               }
 
               .base-token {
@@ -138,20 +137,16 @@
     }
 
     .loading {
-      width: 381px;
-      height: 355px;
+      width: 3.55rem;
+      height: 3.35rem;
       text-align: center;
-      line-height: 355px;
+      line-height: 3.35rem;
     }
 
     .spinner-border-sm {
-      width: 0.8rem;
-      height: 0.8rem;
-      border-width: .2em;
-    }
-
-    .pool:nth-child(3n+1) {
-      margin-left: 0px;
+      width: 0.10rem;
+      height: 0.10rem;
+      border-width: 0.02em;
     }
   }
 }

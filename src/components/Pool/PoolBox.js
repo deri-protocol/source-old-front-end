@@ -1,9 +1,10 @@
-import {Link,useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 export default function PoolBox({pool}){
   const logoClassName = `logo ${pool.bTokenSymbol}`
   const history = useHistory();
   const mining = () => history.push(`/mining/${pool.chainId}/${pool.bTokenSymbol}/${pool.address}`)
+  
   return(
     <div className="pool" >
       <div className="pool-header">

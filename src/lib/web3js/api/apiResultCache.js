@@ -1,82 +1,82 @@
-import { perpetualPoolFactory } from "../factory/contracts";
-import { getBTCUSDPrice } from "../utils";
+import { perpetualPoolFactory } from '../factory/contracts';
+import { getBTCUSDPrice } from '../utils';
 
 export const fundingRateCache = (function () {
   let resourceMap = {};
   return {
-    get: function (chainId, contractAddress) {
-      const key = `${chainId}.${contractAddress}`
+    get(chainId, contractAddress) {
+      const key = `${chainId}.${contractAddress}`;
       if (Object.keys(resourceMap).includes(key)) {
         return resourceMap[key];
-      } else {
-        console.log(`Cache key is not in resouceMap: ${key}`)
       }
+      console.log(`Cache key is not in resouceMap: ${key}`);
+      return undefined;
     },
-    set: function (chainId, contractAddress, resource) {
+    set(chainId, contractAddress, resource) {
       const key = `${chainId}.${contractAddress}`;
       resourceMap[key] = resource;
     },
   };
 })();
 
-export const accountAddressCache =(function() {
-  let _accountAddress = ""
+export const accountAddressCache = (function () {
+  let _accountAddress = '';
   return {
-    get: function() {
-      if (_accountAddress === "") {
-        console.log("please init 'accountAddress' first")
+    get() {
+      if (_accountAddress === '') {
+        console.log("please init 'accountAddress' first");
       }
-      return _accountAddress
+      return _accountAddress;
     },
-    set: function(value) {
-      if (typeof value === 'string' && value !== "") {
-        _accountAddress = value
+    set(value) {
+      if (typeof value === 'string' && value !== '') {
+        _accountAddress = value;
       }
-    }
-  }
-})()
+    },
+  };
+})();
 
-export const priceCache =(function() {
-  let _price = ""
+export const priceCache = (function () {
+  let _price = '';
   return {
-    get: function() {
-      if (_price === "") {
-        console.log("please init 'price' first")
+    get() {
+      if (_price === '') {
+        console.log("please init 'price' first");
       }
-      return _price
+      return _price;
     },
-    _update: async function() {
-      const res = await getBTCUSDPrice()
-      if (res !== "") {
-        _price = res
+    async _update(chainId, poolAddress) {
+      const res = await getBTCUSDPrice(chainId, poolAddress);
+      if (res !== '') {
+        _price = res;
       }
     },
-    update: function() {
-      const self = this
+    update(chainId, poolAddress) {
+      const self = this;
       setInterval(() => {
-        //console.log('tick')
-        self._update()
-      }, 5000)
-    }
-  }
-})()
+        // console.log('tick')
+        self._update(chainId, poolAddress);
+      }, 2000);
+    },
+  };
+})();
 
-export const PerpetualPoolParametersCache =(function() {
+export const PerpetualPoolParametersCache = (function () {
   let _parameters = {};
   return {
-    get: function () {
+    get() {
       if (!_parameters.multiplier) {
         console.log("please init 'perpetual pool parameters' first");
       }
       return _parameters;
     },
-    update: async function (chainId, poolAddress) {
+    async update(chainId, poolAddress) {
       const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
       const res = await perpetualPool.getParameters();
       if (res.multiplier) {
         _parameters = res;
       }
-      return res
+      return res;
     },
   };
-})()
+})();

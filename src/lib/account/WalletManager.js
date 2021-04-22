@@ -12,23 +12,23 @@ class WalletManager {
   isConnected = () => window.ethereum.isConnected();
 
   //设置钱包
-  setWallet = async (chianId,address) => {
+  setWallet = async (chianId,account) => {
     if(cc[chianId]){
-      const balance = await getUserWalletBalance(chianId,address)
+      const balance = await getUserWalletBalance(chianId,account)
       const symbol = cc[chianId].symbol
       const wallet = {
         chianId,
-        address,
+        account,
         balance : formatBalance(balance),
         symbol
       }
-      sessionStorage.setItem(walletKey,wallet)
+      sessionStorage.setItem(walletKey,JSON.stringify(wallet))
       return wallet;
     }
     return null;
   }
 
-  getWallet = () => sessionStorage.getItem(walletKey);
+  getWallet = () => sessionStorage.getItem(walletKey) ? JSON.parse(sessionStorage.getItem(walletKey)) : undefined;
 
   removeWallet = () =>sessionStorage.removeItem(walletKey)
 

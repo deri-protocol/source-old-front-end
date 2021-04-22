@@ -1,0 +1,143 @@
+@h: 100vh/812;
+
+.menu {
+  width: 100%;
+  height: 100vh;
+  z-index: 99;
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+
+  .top {
+    display: flex;
+    justify-content: center;
+    height: 0.5rem;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      img {
+        width: calc(60 * @h);
+        height: calc(35 * @h);
+        font-size: 0;
+        float: left;
+      }
+    }
+
+    .close-menu {
+      position: absolute;
+      right: 0;
+      width: 2.26355vh;
+      height: 2.26355vh;
+      vertical-align: middle;
+      background-image: url('../../img/close-left.png');
+      background-size: 100% 100%;
+      // font-size: (20px);
+      background-repeat: no-repeat;
+      margin: 1.94704vh 1.23153vh 1.94704vh 0;
+    }
+  }
+
+  .ul {
+    font-size: 3.69458vh;
+    background-color: #0D0E0F;
+    margin: 0.2rem 0 0;
+    padding-left: 0;
+    flex-grow: 2;
+    ul {
+      margin-bottom: 0;
+      padding-left: 0;
+
+      li {
+        list-style: none;
+        height: 6.28079vh;
+        line-height: 6.28079vh;
+        font-size: 3.69458vh;
+        padding-left: 7.2vw;
+        color: #569BDA;
+        font-family: 'Tachyon';
+
+        a {
+          color: #569BDA;
+          font-family: 'Tachyon';
+        }
+      }
+      li.selected{
+        background: hsla(0,0%,100%,.1);
+      }
+
+      .trade {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .ref-box {
+        display: none;
+
+        // opacity: 0;
+        li {
+          height: 3.69458vh;
+          line-height: 3.69458vh;
+          font-size: 2.46305vh;
+        }
+
+        a {
+          color: #AAAAAA;
+        }
+
+      }
+
+      .ref {
+        img {
+          width: 13px;
+          height: 9px;
+        }
+      }
+
+      .ref:hover .ref-box {
+        display: block;
+      }
+    }
+  }
+
+  .m-footer {
+    height: 12.31527vh;
+    bottom: 0px;
+    padding: 2.58621vh 2.58621vh 0;
+    background-color: #0D0E0F;
+    border-top: 1px solid #707070;
+
+    .footer-link {
+      .fa {
+        position: relative;
+        color: #2f2f2f;
+        font-size: 2.46305vh;
+      }
+
+      .circle {
+        display: flex;
+        float: left;
+        background-color: #666666;
+        width: 3.69458vh;
+        height: 3.69458vh;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        margin-right: 30px;
+      }
+    }
+
+    .no-p {
+      padding-left: 0;
+    }
+
+    .banquan {
+      padding-top: 1.84729vh;
+      clear: left;
+      font-family: "ArialMT";
+      font-weight: 400;
+      font-size: 2.46305vh;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 8px;
+    }
+  }
+}

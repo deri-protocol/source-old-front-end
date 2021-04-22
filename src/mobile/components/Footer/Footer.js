@@ -3,7 +3,7 @@ import './footer.less'
 import Account from "../../../desktop/components/Header/Account";
 
 export default function Footer(){
-  const showAccount = useRouteMatch('/pool') ? false : true
+  const showAccount = useRouteMatch({path : '/mining',exact : true}) ? false : true
   return(
     <div className="footer">
       {

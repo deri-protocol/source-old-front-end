@@ -1,7 +1,8 @@
-import './App.css';
 import {isBrowser,isMobile} from 'react-device-detect'
-import DesktopApp from './desktop/index'
-import MobileApp from './mobile/index'
+import LoadableComponent from './utils/LoadableComponent';
+
+const DesktopApp = LoadableComponent(() => import('./desktop/index'))
+const MobileApp = LoadableComponent(() => import('./mobile/index'))
 
 function App() {
   

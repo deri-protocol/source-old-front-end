@@ -117,6 +117,7 @@
           font-family: "Korolev";
           font-weight: 500;
           color: #AAAAAA;
+          white-space: nowrap;
         }
 
         .claim-btn {
@@ -130,12 +131,13 @@
             border-radius: 10px;
             color: #CCCCCC;
             margin-top: 20px;
-
+            font-size: 16px;
           }
         }
 
         .liquidity-btn {
           text-align: center;
+          font-size: 16px;
 
           .add-liquidity,
           .remove-liquidity {
@@ -164,168 +166,193 @@
         }
       }
     }
-
-
-    #addLiquidity,
-    #removeLiquidity {
-      .modal-dialog {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-
-        .modal-content {
-          width: 381px;
-          color: #AAAAAA;
-          position: relative;
-          background: rgba(13, 14, 15, 0.6);
-          height: 425px;
-          display: inline-block;
-          border: 1px solid #707070;
-          margin-left: 26px;
-          margin-top: 20px;
-          border-radius: 20px;
-
-          .modal-header {
-            height: 55px;
-            background: #0D0E0F;
-            border-bottom: 1px solid #707070;
-            line-height: 55px;
-            padding-left: 40px;
-            color: #D4E05C;
-            font-family: 'TachyonLight';
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-radius: 20px 20px 0px 0px;
-
-            .close {
-              color: #fff;
-              padding-right: 39px;
-
-              span {
-                cursor: pointer;
-              }
-            }
-          }
-
-          .modal-body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 0;
-
-            .margin-box-info {
-              width: 301px;
-              margin-top: 33px;
-              height: 280px;
-
-              .money {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: #FFFFFF;
-
-                .add {
-                  width: 10px;
-                  height: 10px;
-                  background: @green;
-                  border-radius: 50%;
-                }
-
-                .remove {
-                  width: 10px;
-                  height: 10px;
-                  background: @red;
-                  border-radius: 50%;
-                }
-
-                .bt-balance {
-                  font-size: 30px;
-                }
-              }
-
-              .enter-margin {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-end;
-                margin-top: 40px;
-
-                .input-margin {
-                  width: 253px;
-                  height: 50px;
-                  background: #363636;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  position: relative;
-                  box-shadow: -3px -3px 6px #363636;
-                  border-radius: 6px;
-
-                  .amount {
-                    position: absolute;
-                    top: 3px;
-                    left: 22px;
-                    font-size: 10px;
-                  }
-
-                  .box {
-                    width: 243px;
-                    height: 43px;
-                    border: 0;
-                    font-size: 18px;
-                    background: #1B1C1F;
-                    display: flex;
-                    justify-content: center;
-                    align-items: flex-end;
-                    border-radius: 3px;
-
-                    .margin-value {
-                      height: 24px;
-                      width: 243px;
-                      padding-left: 14px;
-                      border: 0;
-                      color: #fff;
-                      background: #1B1C1F;
-                    }
-                  }
-                }
-              }
-
-              .max {
-                margin-top: 15px;
-
-                span {
-                  color: #569BDA;
-                  cursor: pointer;
-                }
-
-                .max-num {
-                  color: #FFFFFF;
-                }
-              }
-
-              .add-margin-btn {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-top: 40px;
-
-                .margin-btn {
-                  width: 276px;
-                  height: 50px;
-                  background: #202124;
-                  box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
-                  border-radius: 10px;
-                  color: #CCCCCC;
-                  font-size: 18px;
-
-                }
-              }
-            }
-          }
-        }
-      }
-    }
   }
+}
+.modal-dialog {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	margin: 0;
+	font-weight: 300;
+
+	.modal-content {
+		width: 381px;
+		position: relative;
+		color: #AAAAAA;
+		position: relative;
+		background: rgba(13, 14, 15);
+		height: 410px;
+		display: inline-block;
+		border: 1px solid #707070;
+		border-radius: 20px;
+
+		.modal-header {
+			height: 50px;
+			background: #0D0E0F;
+			border-bottom: 1px solid #707070;
+			line-height: 50px;
+			padding: 0 30px;
+			font-size: 16px;
+			color: #D4E05C;
+			font-family: "Tachyon";
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+      border-radius: 20px 20px 0px 0px;
+      font-weight: 500;
+
+			.close {
+				float: right;
+				font-size: 1.5rem;
+				font-weight: 700;
+				line-height: 1;
+				text-shadow: 0 1px 0 #fff;
+				opacity: .5;
+        color: #fff;
+				span {
+					cursor: pointer;
+				}
+			}
+		}
+
+		.modal-body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0;
+
+			.margin-box-info {
+				width: 301px;
+				margin-top: 33px;
+				height: 280px;
+
+				.money {
+          margin-top: 12px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					color: #FFFFFF;
+
+					.add {
+						width: 10px;
+						height: 10px;
+						background: @green;
+						border-radius: 50%;
+					}
+
+					.pBasetoken {
+						font-size: 14px;
+						position: relative;
+						top: -7px;
+					}
+
+					.remove {
+						width: 10px;
+						height: 10px;
+						background: @red;
+						border-radius: 50%;
+					}
+
+					.bt-balance {
+            font-size: 30px;
+            
+
+						.modal-font {
+							font-size: 10px;
+						}
+          }
+          .base-token {
+            font-size: 14px;
+          }
+				}
+
+				.enter-margin {
+					display: flex;
+					justify-content: space-between;
+					align-items: flex-end;
+					margin-top: 25px;
+
+					.input-margin {
+						width: 244px;
+						height: 44px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						position: relative;
+						background-image: url('../../../assets/img/dark-button.png');
+						background-size: 100% 100%;
+						background-repeat: no-repeat;
+						border-radius: 6px;
+
+						.amount {
+							position: absolute;
+							top: 3px;
+							left: 12px;
+              font-size: 10px;
+              display: none;
+						}
+
+						.box {
+							width: 243px;
+							height: 43px;
+							border: 0;
+							font-size: 18px;
+							background: #1B1C1F;
+							display: flex;
+							justify-content: center;
+							align-items: flex-end;
+							border-radius: 3px;
+
+							.margin-value {
+                font-size: 18px;
+								height: 24px;
+								width: 243px;
+								padding-left: 10px;
+								border: 0;
+								color: #fff;
+								background: #1B1C1F;
+							}
+						}
+					}
+				}
+
+				.max {
+          margin-top: 16px;    
+          word-break: break-word;
+
+					.max-btn-left {
+						margin-left: 10px;
+					}
+
+					span {
+						color: #569BDA;
+						cursor: pointer;
+					}
+
+					.max-num {
+						color: #FFFFFF;
+					}
+				}
+
+				.add-margin-btn {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin-top: 41px;
+
+					.margin-btn {
+						width: 276px;
+						height: 50px;
+						background: #202124;
+						box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+						border-radius: 10px;
+						color: #CCCCCC;
+						font-size: 18px;
+
+					}
+				}
+			}
+		}
+	}
 }
