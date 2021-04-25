@@ -84,7 +84,8 @@ const dialogStyles = {
     position: 'absolute',
     border : 0,
     background : 'none',
-    inset : 0
+		inset : 0,
+		overflow : 'initial'
   }
 };
 
@@ -172,15 +173,6 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
     </div>}
     {!isApproved &&<div className="approve" >
 			<Button className='approve-btn' click={click} btnText={btnText}></Button>
-      {/* <button className="approve-btn" onClick={click} >
-        <span
-          className="spinner spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-          style={{display: 'none'}}
-        ></span>
-          {btnText}
-      </button> */}
     </div>}
   </div>
   )

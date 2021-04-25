@@ -175,7 +175,7 @@ export const slpPoolFactory = (function () {
 
 export const deriFactory = (function () {
   const deriInstanceMap = {};
-  return (chainId, contractAddress, isProvider = false) => {
+  return (chainId, contractAddress, poolAddress, isProvider = false) => {
     let key;
     if (isProvider) {
       key = `${chainId}.${contractAddress}.isProvider`;
@@ -185,7 +185,12 @@ export const deriFactory = (function () {
     if (Object.keys(deriInstanceMap).includes(key)) {
       return deriInstanceMap[key];
     }
-    const deri = new DeriContract(chainId, contractAddress, isProvider);
+    const deri = new DeriContract(
+      chainId,
+      contractAddress,
+      poolAddress,
+      isProvider
+    );
     deriInstanceMap[key] = deri;
     return deri;
   };

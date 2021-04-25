@@ -77,4 +77,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 3. funding-rate : getFundingRate,
 4. positon-info getPositionInfo (仓位)
 5. 流动性占用 ： getLiquidityUsed
+6. Dynamic Balance : 保证金
 

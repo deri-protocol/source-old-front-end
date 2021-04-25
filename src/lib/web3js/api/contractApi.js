@@ -49,9 +49,9 @@ export const getSpecification = async (
 ) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   const {
     multiplier,
     feeRatio,
@@ -92,15 +92,15 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
   const price = await getBTCUSDPrice(chainId, poolAddress);
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  pToken.setAccount(accountAddress);
+  //pToken.setAccount(accountAddress);
   const {
     multiplier,
     minInitialMarginRatio,
     minMaintenanceMarginRatio,
   } = await pPool.getParameters();
-  const { volume, margin, cost } = await pToken.getPositionInfo();
+  const { volume, margin, cost } = await pToken.getPositionInfo(accountAddress);
 
   return {
     volume: volume.toString(),
@@ -130,13 +130,13 @@ export const getLiquidityInfo = async (
   accountAddress
 ) => {
   const { lTokenAddress } = getPoolContractAddress(chainId, poolAddress);
-  const pPool = perpetualPoolFactory(chainId, poolAddress, true);
-  pPool.setAccount(accountAddress);
-  const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress, true);
-  lToken.setAccount(accountAddress);
+  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  //pPool.setAccount(accountAddress);
+  const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress);
+  //lToken.setAccount(accountAddress);
 
   const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
-    lToken.balance(),
+    lToken.balance(accountAddress),
     lToken.totalSupply(),
   ]);
   const price = await getBTCUSDPrice(chainId, poolAddress);
@@ -178,7 +178,7 @@ export const getWalletBalance = async (
 ) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   const balance = await bToken.balance(accountAddress);
   return balance.toString();
 };
@@ -186,18 +186,18 @@ export const getWalletBalance = async (
 export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
 };
 
 export const unlock = async (chainId, poolAddress, accountAddress) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
 
   let res;
   try {
-    const tx = await bToken.unlock();
+    const tx = await bToken.unlock(accountAddress);
     res = { success: true, transaction: tx };
   } catch (err) {
     res = { success: false, error: err };
@@ -214,7 +214,7 @@ export const getEstimatedMargin = async (
 ) => {
   const price = await getBTCUSDPrice(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const { multiplier } = await pPool.getParameters();
   return bg(volume)
     .abs()
@@ -368,9 +368,7 @@ export const depositMargin = async (
   amount
 ) => {
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  return await pPool
-    .setAccount(accountAddress)
-    .depositMargin(naturalToDeri(amount));
+  return await pPool.depositMargin(accountAddress, naturalToDeri(amount));
 };
 
 export const withdrawMargin = async (
@@ -382,12 +380,12 @@ export const withdrawMargin = async (
   let res;
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  pToken.setAccount(accountAddress);
+  //pToken.setAccount(accountAddress);
 
   const price = await getBTCUSDPrice(chainId, poolAddress);
-  const { volume, margin, cost } = await pToken.getPositionInfo();
+  const { volume, margin, cost } = await pToken.getPositionInfo(accountAddress);
   const { multiplier, minInitialMarginRatio } = await pPool.getParameters();
 
   const maxWithdrawMargin = calculateMaxWithdrawMargin(
@@ -402,7 +400,8 @@ export const withdrawMargin = async (
     try {
       const tx = await pPool._transactPool(
         'withdrawMargin(uint256,uint256,uint256,uint8,bytes32,bytes32)',
-        [naturalToDeri(amount)]
+        [naturalToDeri(amount)],
+        accountAddress
       );
       res = { success: true, transaction: tx };
     } catch (err) {
@@ -417,15 +416,15 @@ export const withdrawMargin = async (
 export const mint = async (chainId, poolAddress, accountAddress, amount) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   const decimals = await bToken.decimals();
   const BONE = 10 ** decimals;
   amount = format(new BigNumber(amount).multipliedBy(BONE));
   let res;
   try {
-    const tx = await bToken._transact('mint', [amount]);
+    const tx = await bToken._transact('mint', [amount], accountAddress);
     res = { success: true, transaction: tx };
   } catch (error) {
     res = { success: false, error };
@@ -440,12 +439,13 @@ export const addLiquidity = async (
   amount
 ) => {
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   let res;
   try {
     const tx = await pPool._transactPool(
       'addLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)',
-      [naturalToDeri(amount)]
+      [naturalToDeri(amount)],
+      accountAddress
     );
     res = { success: true, transaction: tx };
   } catch (err) {
@@ -462,12 +462,12 @@ export const removeLiquidity = async (
 ) => {
   const { lTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress);
-  lToken.setAccount(accountAddress);
+  //lToken.setAccount(accountAddress);
   const price = await getBTCUSDPrice(chainId, poolAddress);
   const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
-    lToken.balance(),
+    lToken.balance(accountAddress),
     lToken.totalSupply(),
   ]);
   const { multiplier, minPoolMarginRatio } = await pPool.getParameters();
@@ -492,7 +492,8 @@ export const removeLiquidity = async (
     try {
       const tx = await pPool._transactPool(
         'removeLiquidity(uint256,uint256,uint256,uint8,bytes32,bytes32)',
-        [naturalToDeri(shares)]
+        [naturalToDeri(shares)],
+        accountAddress
       );
       res = { success: true, transaction: tx };
     } catch (err) {
@@ -514,16 +515,16 @@ export const tradeWithMargin = async (
   const price = await getBTCUSDPrice(chainId, poolAddress);
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  pToken.setAccount(accountAddress);
+  //pToken.setAccount(accountAddress);
   const {
     multiplier,
     minInitialMarginRatio,
     minPoolMarginRatio,
   } = await pPool.getParameters();
   const { liquidity, tradersNetVolume } = await pPool.getStateValues();
-  const { volume, margin } = await pToken.getPositionInfo();
+  const { volume, margin } = await pToken.getPositionInfo(accountAddress);
   let res;
   const orderValidation = isOrderValid(
     price,
@@ -541,7 +542,8 @@ export const tradeWithMargin = async (
     try {
       const tx = await pPool._transactPool(
         'tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)',
-        [naturalToDeri(newVolume), naturalToDeri(amount)]
+        [naturalToDeri(newVolume), naturalToDeri(amount)],
+        accountAddress
       );
       res = { success: true, transaction: tx };
     } catch (err) {
@@ -556,17 +558,18 @@ export const tradeWithMargin = async (
 export const closePosition = async (chainId, poolAddress, accountAddress) => {
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
-  pPool.setAccount(accountAddress);
+  //pPool.setAccount(accountAddress);
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  pToken.setAccount(accountAddress);
-  let { volume } = await pToken.getPositionInfo();
+  //pToken.setAccount(accountAddress);
+  let { volume } = await pToken.getPositionInfo(accountAddress);
   volume = volume.negated();
   let res;
   if (!volume.eq(0)) {
     try {
       const tx = await pPool._transactPool(
         'tradeWithMargin(int256,uint256,uint256,uint256,uint8,bytes32,bytes32)',
-        [naturalToDeri(volume), '0']
+        [naturalToDeri(volume), '0'],
+        accountAddress
       );
       res = { success: true, transaction: tx };
     } catch (err) {
@@ -591,7 +594,7 @@ export const mintDToken = async (chainId, accountAddress) => {
     const miningVaultAddress = getMiningVaultContractAddress(chainId);
     if (miningVaultAddress) {
       const miningVault = miningVaultPoolFactory(chainId, miningVaultAddress);
-      miningVault.setAccount(accountAddress);
+      //miningVault.setAccount(accountAddress);
       try {
         const tx = await miningVault.mintDToken(
           accountAddress,
@@ -624,10 +627,10 @@ export const mintDToken = async (chainId, accountAddress) => {
 export const freeze = async (chainId, accountAddress, toChainId, amount) => {
   const { wormholeAddress } = getDeriContractAddress(chainId);
   const wormhole = wormholeFactory(chainId, wormholeAddress);
-  wormhole.setAccount(accountAddress);
+  //wormhole.setAccount(accountAddress);
   let res;
   try {
-    const tx = await wormhole.freeze(amount, toChainId);
+    const tx = await wormhole.freeze(accountAddress, amount, toChainId);
     res = { success: true, transaction: tx };
   } catch (error) {
     res = { success: false, error };
@@ -657,9 +660,10 @@ export const mintDeri = async (toChainId, accountAddress) => {
     const { wormholeAddress } = getDeriContractAddress(toChainId);
     if (wormholeAddress) {
       const wormhole = wormholeFactory(toChainId, wormholeAddress);
-      wormhole.setAccount(accountAddress);
+      //wormhole.setAccount(accountAddress);
       try {
         const tx = await wormhole.mintDeri(
+          accountAddress,
           amount,
           fromChainId,
           fromWormhole,
@@ -689,11 +693,11 @@ export const mintDeri = async (toChainId, accountAddress) => {
 
 export const isDeriUnlocked = async (chainId, accountAddress) => {
   const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
-  const deri = deriFactory(chainId, deriAddress);
-  deri.setAccount(accountAddress).setPool(wormholeAddress);
+  const deri = deriFactory(chainId, deriAddress, wormholeAddress);
+  //deri.setAccount(accountAddress).setPool(wormholeAddress);
   let res;
   try {
-    const tx = await deri.isUnlocked();
+    const tx = await deri.isUnlocked(accountAddress);
     res = { success: true, transaction: tx };
   } catch (error) {
     res = { success: false, error };
@@ -702,11 +706,11 @@ export const isDeriUnlocked = async (chainId, accountAddress) => {
 };
 export const unlockDeri = async (chainId, accountAddress) => {
   const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
-  const deri = deriFactory(chainId, deriAddress);
-  deri.setAccount(accountAddress).setPool(wormholeAddress);
+  const deri = deriFactory(chainId, deriAddress, wormholeAddress);
+  //deri.setAccount(accountAddress).setPool(wormholeAddress);
   let res;
   try {
-    const tx = await deri.unlock();
+    const tx = await deri.unlock(accountAddress);
     res = { success: true, transaction: tx };
   } catch (error) {
     res = { success: false, error };
@@ -715,8 +719,8 @@ export const unlockDeri = async (chainId, accountAddress) => {
 };
 
 export const getDeriBalance = async (chainId, accountAddress) => {
-  const { deriAddress } = getDeriContractAddress(chainId);
-  const deri = deriFactory(chainId, deriAddress);
+  const { deriAddress, wormholeAddress } = getDeriContractAddress(chainId);
+  const deri = deriFactory(chainId, deriAddress, wormholeAddress);
   return (await deri.balance(accountAddress)).toString();
 };
 

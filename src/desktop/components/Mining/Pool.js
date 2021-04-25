@@ -1,22 +1,7 @@
-import React, {useState,useEffect} from 'react'
-import './pool.less'
-import {
-  getContractAddressConfig,
-  getPoolLiquidity,
-  getPoolInfoApy,
-  getSlpContractAddressConfig,
-  getSlpPoolInfoApy,
-  DeriEnv
-} from '../../../lib/web3js/index'
-import config from '../../../config.json'
-import { deriNatural, formatAddress, formatBalance } from '../../../utils/utils';
 import PoolBox from '../../../components/Pool/PoolBox';
 import useMiningPool from '../../../hooks/useMiningPool';
 import useSlpMiningPool from '../../../hooks/useSlpMiningPool';
-
-
-const env = DeriEnv.get();
-const chainInfo = config[env]
+import './pool.less'
 
 
 export default function Pool(){

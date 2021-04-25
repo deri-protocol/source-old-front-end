@@ -1,5 +1,6 @@
 import Web3 from 'web3';
-import { web3Factory } from '../factory/web3';
+import { metaMaskWeb3 } from '../factory/web3';
+import { hexToNumber } from '../utils';
 
 export const hasWallet = () => {
   if (window.ethereum && window.ethereum.isMetaMask) {
@@ -12,24 +13,47 @@ export const hasWallet = () => {
   };
 };
 
-export const connectWallet = async () => {
+export const connectWallet = async (
+  handleChainChanged,
+  handleAccountChanged
+) => {
   if (typeof window.ethereum !== undefined) {
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-    const chainId = parseInt(
-      await window.ethereum.request({ method: 'eth_chainId' }),
-      16
+    //console.log('accounts', accounts);
+    // const chainId = parseInt(
+    //   await window.ethereum.request({ method: 'net_version' })
+    // );
+    const chainId = hexToNumber(
+      await window.ethereum.request({ method: 'eth_chainId' })
     );
-    // console.log('---chainId', chainId)
+    //console.log('chainId', chainId);
     const account = Array.isArray(accounts) && accounts[0];
 
     // await web3.eth.requestAccounts().then(console.log)
     window.ethereum.on('accountsChanged', (accounts) => {
-      window.location.reload();
+      let account;
+      if (accounts.length > 0) {
+        account = accounts[0];
+      } else {
+        account = '';
+      }
+      if (typeof handleAccountChanged === 'function') {
+        handleAccountChanged(account);
+      } else {
+        window.location.reload();
+      }
+      //console.log('accountChanged', account);
     });
     window.ethereum.on('chainChanged', (chainId) => {
-      window.location.reload();
+      let res = hexToNumber(chainId);
+      if (typeof handleChainChanged === 'function') {
+        handleChainChanged(res);
+      } else {
+        window.location.reload();
+      }
+      //console.log('chainChanged', res);
     });
     return { success: true, account, chainId };
   }
@@ -39,8 +63,9 @@ export const connectWallet = async () => {
   };
 };
 
-export const getUserWalletBalence = async (chainId, walletAddress) => {
-  const web3 = web3Factory(chainId);
+export const getUserWalletBalance = async (chainId, walletAddress) => {
+  //const web3 = web3Factory(chainId);
+  const web3 = metaMaskWeb3();
   const balance = await web3.eth.getBalance(walletAddress);
   const res = Web3.utils.fromWei(balance);
   return res;

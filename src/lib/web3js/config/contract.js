@@ -16,6 +16,18 @@ export const getContractAddressConfig = (env = 'dev') => {
         chainId: '56',
       },
       {
+        pool: '0x011346B81e5326904B5B76A11dECAf2c67eFFc23',
+        bToken: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+        pToken: '0xaE6429b4CDDDFefDB6ac702183c836B4e62Da410',
+        lToken: '0xd8f78c47b0e0943B3Cb2cE1e1726472C4ddd2F98',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
+        initialBlock: '6759703',
+        bTokenSymbol: 'BUSD',
+        symbol: 'COIN',
+        chainId: '56',
+      },
+      {
         pool: '0x3C2970466635AAeFEd1cfe630D051Fa6D281aEbB',
         bToken: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         pToken: '0x9c6134F9e759C6812aaC102FC1a9f7cA5615fD33',

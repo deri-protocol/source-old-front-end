@@ -110,14 +110,14 @@ export class PerpetualPool extends Contract {
       });
     };
   }
-  async _estimatedGas(method, args) {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async _estimatedGas(method, args, accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
     let gas = 0;
     for (let i = 0; i < 20; i++) {
       try {
         gas = await this.contract.methods[method](...args).estimateGas({
-          from: this.accountAddress,
+          from: accountAddress,
         });
         gas = parseInt(gas * 1.25);
         break;
@@ -130,24 +130,24 @@ export class PerpetualPool extends Contract {
     return gas;
   }
 
-  async _transactPool(method, args = []) {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async _transactPool(method, args = [], accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
     const oracle = await getOracleInfo(this.chainId, this.contractAddress);
     let signed = [oracle.timestamp, oracle.price, oracle.v, oracle.r, oracle.s];
 
     const [gas, gasPrice] = await Promise.all([
-      this._estimatedGas(method, [...args, ...signed]),
+      this._estimatedGas(method, [...args, ...signed], accountAddress),
       this.web3.eth.getGasPrice(),
     ]);
     console.log(`gasPrice ${gasPrice / 1000000000} GW`);
 
+    //gasPrice: Web3.utils.numberToHex(gasPrice),
     let txRaw = [
       {
-        from: this.accountAddress,
+        from: accountAddress,
         to: this.contractAddress,
         gas: Web3.utils.numberToHex(gas),
-        gasPrice: Web3.utils.numberToHex(gasPrice),
         value: Web3.utils.numberToHex('0'),
         data: this.contract.methods[method](...args, ...signed).encodeABI(),
       },
@@ -213,14 +213,15 @@ export class PerpetualPool extends Contract {
     }
   }
 
-  async depositMargin(amount) {
+  async depositMargin(accountAddress, amount) {
     //await this.web3.eth.getAccounts(console.log)
     console.log('depositMargin');
     let res;
     try {
       let tx = await this._transactPool(
         'depositMargin(uint256,uint256,uint256,uint8,bytes32,bytes32)',
-        [amount]
+        [amount],
+        accountAddress
       );
       res = { success: true, transaction: tx };
     } catch (err) {

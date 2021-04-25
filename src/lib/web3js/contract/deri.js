@@ -6,29 +6,29 @@ const CONTRACT_ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"construc
 /* eslint-enable */
 
 export class DeriContract extends Contract {
-  constructor(chainId, contractAddress, useProvider) {
+  constructor(chainId, contractAddress, poolAddress, useProvider) {
     super(chainId, contractAddress, useProvider);
+    this.poolAddress = poolAddress;
     this.contract = new this.web3.eth.Contract(
       CONTRACT_ABI,
       this.contractAddress
     );
   }
 
-  async isUnlocked() {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first')(
-        !this.poolAddress
-      ) &&
-      console.log('please do setAccount(poolAddress) first');
+  async isUnlocked(accountAddress) {
     let allowance = await this._call('allowance', [
-      this.accountAddress,
+      accountAddress,
       this.poolAddress,
     ]);
     return deriToNatural(allowance).gt(0);
   }
-  async unlock() {
-    !this.poolAddress && console.log('please do setAccount(poolAddress) first');
-    return await this._transact('approve', [this.poolAddress, MAX_VALUE]);
+  async unlock(accountAddress) {
+    //!this.poolAddress && console.log('please do setAccount(poolAddress) first');
+    return await this._transact(
+      'approve',
+      [this.poolAddress, MAX_VALUE],
+      accountAddress
+    );
   }
 
   async decimals() {

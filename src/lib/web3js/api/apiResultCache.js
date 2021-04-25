@@ -38,6 +38,7 @@ export const accountAddressCache = (function () {
 
 export const priceCache = (function () {
   let _price = '';
+  let _interval = null;
   return {
     get() {
       if (_price === '') {
@@ -53,10 +54,16 @@ export const priceCache = (function () {
     },
     update(chainId, poolAddress) {
       const self = this;
-      setInterval(() => {
+      _interval = setInterval(() => {
         // console.log('tick')
         self._update(chainId, poolAddress);
       }, 2000);
+    },
+    clear() {
+      if (_interval) {
+        clearInterval(_interval);
+      }
+      _price = '';
     },
   };
 })();

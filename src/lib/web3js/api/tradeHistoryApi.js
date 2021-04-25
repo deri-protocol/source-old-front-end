@@ -197,7 +197,7 @@ const getTradeHistoryOnline = async (
   const { bTokenSymbol } = getPoolContractAddress(chainId, poolAddress);
   // console.log(poolAddr, bTokenAddress);
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-  perpetualPool.setAccount(accountAddress);
+  //perpetualPool.setAccount(accountAddress);
   const toBlock = await perpetualPool._getBlockInfo('latest');
   /// let { initialBlock:fromBlock} = getPoolContractAddress(chainId, poolAddress)
   fromBlock = parseInt(fromBlock);
@@ -243,7 +243,7 @@ const getLiquidateHistoryOnline = async (
   const { bTokenSymbol } = getPoolContractAddress(chainId, poolAddress);
   // console.log(poolAddr, bTokenAddress);
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-  perpetualPool.setAccount(accountAddress);
+  //perpetualPool.setAccount(accountAddress);
   const toBlock = await perpetualPool._getBlockInfo('latest');
   fromBlock = parseInt(fromBlock);
   const filters = { owner: accountAddress };

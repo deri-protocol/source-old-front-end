@@ -2,12 +2,12 @@ import React, { useState ,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 import Button from '../../../Button/Button';
 import Modal from 'react-modal'
-import { addLiquidity, getUserWalletBalence, getSpecification } from '../../../../lib/web3js';
+import { addLiquidity, getWalletBalance } from '../../../../lib/web3js';
 import useSpecification from '../../../../hooks/useSpecification';
 
 
 
-export default function AddDialog({isOpen,wallet,address,baseToken,onClose,customizeStyle}){
+export default function AddDialog({isOpen,wallet = {},address,baseToken,onClose,customizeStyle}){
   const [addValue, setAddValue] = useState('')
   const [balance,setBalance] = useState(wallet.balance)
   const [modalIsOpen,setIsOpen] = useState(isOpen);
@@ -23,8 +23,10 @@ export default function AddDialog({isOpen,wallet,address,baseToken,onClose,custo
   }
 
   const getBalance = async () => {
-    const total = await getUserWalletBalence(wallet.chainId,wallet.account);
-    setBalance(total)
+    if(wallet && wallet.account){
+      const total = await getWalletBalance(wallet.chainId,address,wallet.account);
+      setBalance(total)
+    }
   }
 
 

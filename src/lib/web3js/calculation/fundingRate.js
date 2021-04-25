@@ -1,4 +1,4 @@
-import { bg, getAnnualBlockNumber, BigNumber } from '../utils';
+import { bg, getAnnualBlockNumber } from '../utils';
 
 export const calculateLiquidityUsed = (
   tradersNetVolume,
@@ -7,7 +7,7 @@ export const calculateLiquidityUsed = (
   liquidity,
   poolMarginRatio
 ) =>
-  BigNumber(
+  bg(
     ((tradersNetVolume * price * multiplier) / liquidity) * poolMarginRatio
   ).abs();
 

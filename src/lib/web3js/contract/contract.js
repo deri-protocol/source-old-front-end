@@ -25,14 +25,14 @@ export class Contract {
     return await this.contract.methods[method](...args).call();
   }
 
-  async _estimatedGas(method, args = []) {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async _estimatedGas(method, args = [], accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
     let gas = 0;
     for (let i = 0; i < 20; i++) {
       try {
         gas = await this.contract.methods[method](...args).estimateGas({
-          from: this.accountAddress,
+          from: accountAddress,
         });
         gas = parseInt(gas * 1.25);
         break;
@@ -62,20 +62,19 @@ export class Contract {
       });
     };
   }
-  async _transact(method, args) {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async _transact(method, args, accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
     //const gas = await this._estimatedGas(method, args);
     const [gas, gasPrice] = await Promise.all([
-      this._estimatedGas(method, args),
+      this._estimatedGas(method, args, accountAddress),
       this.web3.eth.getGasPrice(),
     ]);
     let txRaw = [
       {
-        from: this.accountAddress,
+        from: accountAddress,
         to: this.contractAddress,
         gas: Web3.utils.numberToHex(gas),
-        gasPrice: Web3.utils.numberToHex(gasPrice),
         value: Web3.utils.numberToHex('0'),
         data: this.contract.methods[method](...args).encodeABI(),
       },

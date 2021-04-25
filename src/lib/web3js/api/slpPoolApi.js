@@ -10,14 +10,14 @@ export const getSlpLiquidityInfo = async (
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
-    const slpPool = slpPoolFactory(chainId, poolAddress, true);
-    slpPool.setAccount(accountAddress);
-    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress, true);
-    bToken.setAccount(accountAddress);
+    const slpPool = slpPoolFactory(chainId, poolAddress);
+    //slpPool.setAccount(accountAddress);
+    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+    //bToken.setAccount(accountAddress);
     const [liquidity, bTokenBalance, shares] = await Promise.all([
       bToken.balance(poolAddress),
       bToken.balance(accountAddress),
-      slpPool.getLiquidity(),
+      slpPool.getLiquidity(accountAddress),
     ]);
 
     return {
@@ -41,12 +41,12 @@ export const addSlpLiquidity = async (
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
-    slpPool.setAccount(accountAddress);
+    //slpPool.setAccount(accountAddress);
     const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-    bToken.setAccount(accountAddress);
+    //bToken.setAccount(accountAddress);
     try {
-      const tx = await slpPool.addLiquidity(amount);
-      const res = { success: true, transaction: tx };
+      const tx = await slpPool.addLiquidity(accountAddress, amount);
+      res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
     }
@@ -67,12 +67,12 @@ export const removeSlpLiquidity = async (
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
-    slpPool.setAccount(accountAddress);
+    //slpPool.setAccount(accountAddress);
     const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-    bToken.setAccount(accountAddress);
+    //bToken.setAccount(accountAddress);
     try {
-      const tx = await slpPool.removeLiquidity(amount);
-      const res = { success: true, transaction: tx };
+      const tx = await slpPool.removeLiquidity(accountAddress, amount);
+      res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
     }
@@ -85,18 +85,18 @@ export const removeSlpLiquidity = async (
 export const isSlpUnlocked = async (chainId, poolAddress, accountAddress) => {
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
 };
 
 export const unlockSlp = async (chainId, poolAddress, accountAddress) => {
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
 
   let res;
   try {
-    const tx = await bToken.unlock();
+    const tx = await bToken.unlock(accountAddress);
     res = { success: true, transaction: tx };
   } catch (err) {
     res = { success: false, error: err };
@@ -111,7 +111,7 @@ export const getSlpWalletBalance = async (
 ) => {
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
-  bToken.setAccount(accountAddress);
+  //bToken.setAccount(accountAddress);
   const balance = await bToken.balance(accountAddress);
   return balance.toString();
 };

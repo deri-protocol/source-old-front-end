@@ -15,14 +15,12 @@ export class PTokenContract extends Contract {
     );
   }
 
-  async getPositionInfo() {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async getPositionInfo(accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
     let result = {};
     try {
-      const res = await this._call('getPosition(address)', [
-        this.accountAddress,
-      ]);
+      const res = await this._call('getPosition(address)', [accountAddress]);
       //console.log("getPositionInfo() raw:", res)
       result = {
         volume: deriToNatural(res[0]),
@@ -44,7 +42,7 @@ export class PTokenContract extends Contract {
     return result;
   }
 
-  async exists() {
-    return await this._call('exists', [this.accountAddress]);
+  async exists(accountAddress) {
+    return await this._call('exists', [accountAddress]);
   }
 }

@@ -2,7 +2,6 @@ import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import {
   DeriEnv,
-  getOracleUrl,
   ChainProviderUrls,
   getContractAddressConfig,
   getSlpContractAddressConfig,
@@ -178,14 +177,30 @@ export const getWalletBalanceUnit = (chainId) => {
 
 export const getPoolBaseSymbolList = (chainId) => {
   chainId = normalizeChainId(chainId);
-  const result = [];
+  let result = [];
   const pools = getContractAddressConfig(DeriEnv.get()).filter(
     (c) => c.chainId === chainId
   );
   for (let i = 0; i < pools.length; i++) {
-    const { bTokenSymbol } = pools[i];
-    if (bTokenSymbol) {
-      result.push(bTokenSymbol);
+    const { bTokenSymbol, symbol } = pools[i];
+    if (bTokenSymbol && symbol) {
+      result.push(`${symbol}/${bTokenSymbol}`);
+    }
+  }
+  return result;
+};
+
+export const getPoolBaseTokenAddressObject = (chainId) => {
+  chainId = normalizeChainId(chainId);
+  let result = {};
+  const pools = getContractAddressConfig(DeriEnv.get()).filter(
+    (c) => c.chainId === chainId
+  );
+  for (let i = 0; i < pools.length; i++) {
+    const { bTokenSymbol, symbol, pool } = pools[i];
+    const key = `${symbol}/${bTokenSymbol}`;
+    if (bTokenSymbol && symbol) {
+      result[key] = pool;
     }
   }
   return result;
@@ -300,13 +315,35 @@ export const getDeriContractAddress = (chainId) => {
   return {};
 };
 
+export const getOracleUrl = (env = 'dev', chainId, poolAddress) => {
+  const { symbol } = getPoolContractAddress(chainId, poolAddress);
+  const addSymbolParam = (url, symbol='BTCUSD') => `${url}?symbol=${symbol}`;
+  if (env === 'prod' || env === 'production') {
+    // for production
+    if (symbol) {
+      if (symbol === 'COIN') {
+        return addSymbolParam('https://oracle3.deri.finance/price', symbol);
+      } else {
+        return addSymbolParam('https://oracle.deri.finance/price', symbol);
+      }
+    }
+    return 'https://oracle.deri.finance/price';
+  } else {
+    if (symbol) {
+      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
+    }
+    // for test
+    return 'https://oracle2.deri.finance/price';
+  }
+};
+
 export const getBTCUSDPrice = async (chainId, poolAddress) => {
   try {
-    let url = getOracleUrl(DeriEnv.get());
-    const { symbol } = getPoolContractAddress(chainId, poolAddress);
-    if (symbol && symbol != '') {
-      url = `${url}?symbol=${symbol}`;
-    }
+    let url = getOracleUrl(DeriEnv.get(), chainId, poolAddress);
+    // const { symbol } = getPoolContractAddress(chainId, poolAddress);
+    // if (symbol && symbol != '') {
+    //   url = `${url}?symbol=${symbol}`;
+    // }
     const priceResponse = await fetch(url);
     const priceResponseJson = await priceResponse.json();
     return deriToNatural(priceResponseJson.price);
@@ -317,11 +354,11 @@ export const getBTCUSDPrice = async (chainId, poolAddress) => {
 };
 export const getOracleInfo = async (chainId, poolAddress) => {
   try {
-    let url = getOracleUrl(DeriEnv.get());
-    const { symbol } = getPoolContractAddress(chainId, poolAddress);
-    if (symbol && symbol != '') {
-      url = `${url}?symbol=${symbol}`;
-    }
+    let url = getOracleUrl(DeriEnv.get(), chainId, poolAddress);
+    // const { symbol } = getPoolContractAddress(chainId, poolAddress);
+    // if (symbol && symbol != '') {
+    //   url = `${url}?symbol=${symbol}`;
+    // }
     console.log('oracle url', url);
     const priceResponse = await fetch(url);
     const priceResponseJson = await priceResponse.json();

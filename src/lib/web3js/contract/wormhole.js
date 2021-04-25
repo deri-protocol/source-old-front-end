@@ -13,27 +13,32 @@ export class WormholeContract extends Contract {
       this.contractAddress
     );
   }
-  async freeze(amount, toChainId) {
+  async freeze(accountAddress, amount, toChainId) {
     const { wormholeAddress: toWormholeAddress } = getDeriContractAddress(
       toChainId
     );
     //console.log('toWormholeAddress', toWormholeAddress)
-    return this._transact('freeze', [
-      naturalToDeri(amount),
-      toChainId,
-      toWormholeAddress,
-    ]);
+    return this._transact(
+      'freeze',
+      [naturalToDeri(amount), toChainId, toWormholeAddress],
+      accountAddress
+    );
   }
 
-  async mintDeri(amount, fromChainId, fromWormhole, fromNonce, v, r, s) {
-    return this._transact('claim', [
-      amount,
-      fromChainId,
-      fromWormhole,
-      fromNonce,
-      v,
-      r,
-      s,
-    ]);
+  async mintDeri(
+    accountAddress,
+    amount,
+    fromChainId,
+    fromWormhole,
+    fromNonce,
+    v,
+    r,
+    s
+  ) {
+    return this._transact(
+      'claim',
+      [amount, fromChainId, fromWormhole, fromNonce, v, r, s],
+      accountAddress
+    );
   }
 }

@@ -13,18 +13,18 @@ export class SlpPool extends Contract {
       this.contractAddress
     );
   }
-  async addLiquidity(amount) {
+  async addLiquidity(accountAddress, amount) {
     const args = [152, naturalToDeri(amount)];
-    return await this._transact('deposit', args);
+    return await this._transact('deposit', args, accountAddress);
   }
-  async removeLiquidity(amount) {
+  async removeLiquidity(accountAddress, amount) {
     const args = [152, naturalToDeri(amount)];
-    return await this._transact('withdraw', args);
+    return await this._transact('withdraw', args, accountAddress);
   }
-  async getLiquidity() {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
-    const res = await this._call('userInfo', [152, this.accountAddress]);
+  async getLiquidity(accountAddress) {
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
+    const res = await this._call('userInfo', [152, accountAddress]);
     if (res && res.amount) {
       return deriToNatural(res.amount);
     } else {

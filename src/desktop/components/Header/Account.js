@@ -2,26 +2,31 @@ import React,{useState,useEffect,useContext} from 'react';
 import {
   hasWallet
 } from '../../../lib/web3js/index'
-import walletManager from '../../../lib/account/WalletManager';
 import { formatAddress } from '../../../utils/utils';
 import './account.less'
 import { WalletContext } from '../../../context/WalletContext';
 
 export default function Account(){
-  let [wCText,setWCText] = useState('Connect Wallet')
+  const [btnText,setBtnText] = useState('Connect Wallet')
   const {walletContext} = useContext(WalletContext);
   const [wallet, setWallet] = useState({});
+
+
+  const setAccountText = (wallet = {}) => {
+    //如果用户选择的网络正确
+    if(wallet && wallet.account){
+      if(wallet.supported){
+        setBtnText(<span>{wallet.formatBalance} {wallet.symbol} <span className='address'>{formatAddress(wallet.account)}</span></span>)
+      } else {
+        setBtnText(<span className='no-supported'>Unsupported Chain ID {wallet.chainId}!</span>)
+      }
+    }
+  }
 
   const wc = async () => {
     const w = await walletContext.connect();
     setWallet(w);
-    if(w.symbol){
-      const formatAccount = formatAddress(w.account)
-      const btn = <span>{w.formatBalance} {w.symbol} <span className='address'>{formatAccount}</span></span>
-      setWCText(btn)
-    } else {
-      setWCText(<span className='no-supported'>Unsupported Chain ID {w.chainId}!</span>)
-    }
+    setAccountText(w);
   }
 
   //连接钱包
@@ -33,14 +38,16 @@ export default function Account(){
 
   useEffect(() => {
     const init = async () => {
-      if(walletManager.isConnected()){
-        wc();
+      if(walletContext.isConnected()){
+        const c = walletContext.get() || {};
+        if(c.account){
+          wc();
+        }
       }
     }
+
     init();
-    return () => {
-      wCText = 'Connect Wallet'
-    }
+    return () => setBtnText('Connect Wallet')
   }, [])
 
 
@@ -48,11 +55,11 @@ export default function Account(){
     <div className="connect">
       <div className="network-text-logo">
         <i className={wallet.symbol}></i>
-        <span className="logo-text">{wallet.symbol}</span>
+        <span className="logo-text">{wallet.text}</span>
       </div>
       <div className="bg-btn">
         <button className="nav-btn connect-btn" onClick={walletCollectClick}>
-          {wCText}
+          {btnText}
         </button>
       </div>
     </div>

@@ -13,19 +13,26 @@ export class MiningVaultPool extends Contract {
       this.contractAddress
     );
   }
-  async mintDToken(...args) {
+  async mintDToken(accountAddress, ...args) {
     //return this._transact('claim', args)
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
-    const gas = await this._estimatedGas('claim', [...args]);
+    // !this.accountAddress &&
+    //   console.log('please do setAccount(accountAddress) first');
+    const gas = await this._estimatedGas(
+      'claim',
+      [accountAddress, ...args],
+      accountAddress
+    );
     console.log(gas);
     let txRaw = [
       {
-        from: this.accountAddress,
+        from: accountAddress,
         to: this.contractAddress,
         gas: Web3.utils.numberToHex(gas),
         value: Web3.utils.numberToHex('0'),
-        data: this.contract.methods['claim'](...args).encodeABI(),
+        data: this.contract.methods['claim'](
+          accountAddress,
+          ...args
+        ).encodeABI(),
       },
     ];
     //console.log('txRaw', txRaw)

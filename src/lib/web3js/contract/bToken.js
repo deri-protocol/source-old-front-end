@@ -15,19 +15,21 @@ export class BTokenContract extends Contract {
     );
   }
 
-  async isUnlocked() {
-    !this.accountAddress &&
-      console.log('please do setAccount(accountAddress) first');
+  async isUnlocked(accountAddress) {
     let allowance = await this._call('allowance', [
-      this.accountAddress,
+      accountAddress,
       this.poolAddress,
     ]);
     allowance = deriToNatural(allowance);
     return allowance.gt(0);
   }
 
-  async unlock() {
-    await this._transact('approve', [this.poolAddress, MAX_VALUE]);
+  async unlock(accountAddress) {
+    await this._transact(
+      'approve',
+      [this.poolAddress, MAX_VALUE],
+      accountAddress
+    );
   }
 
   async symbol() {

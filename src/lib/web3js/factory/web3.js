@@ -25,6 +25,9 @@ export const web3Factory = (function () {
     if (Object.keys(web3InstanceMap).includes(chainId)) {
       return web3InstanceMap[chainId];
     }
+    console.log(
+      `==== web3Factory(${chainId}), please caution the access limits ===`
+    );
     const providerUrl = getChainProviderUrl(chainId);
     const web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
     web3InstanceMap[chainId] = web3;

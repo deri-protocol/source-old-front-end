@@ -1,4 +1,4 @@
-import { getUserWalletBalence as getUserWalletBalance ,DeriEnv} from "../web3js";
+import { getUserWalletBalance ,DeriEnv} from "../web3js";
 import config from '../../config.json'
 import { formatBalance } from "../../utils/utils";
 
