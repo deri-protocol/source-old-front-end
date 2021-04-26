@@ -37,6 +37,9 @@ export default function Liquidity({wallet,chainId,baseToken,address}) {
 
 	useEffect(() => {
 		loadLiquidityInfo();
+		return () => {
+
+		}
 	}, [])
 
 
@@ -151,7 +154,10 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
 			}
     } else {
       setBtnText('Collect Wallet')
-    }
+		}
+		return () => {
+			
+		}
 	}, [])
 
   return (

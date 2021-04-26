@@ -58,7 +58,7 @@ export default function RemoveDialog({isOpen,wallet,address,onClose,customizeSty
   useEffect(() => {
     loadLiqidityInfo();
     return () => {
-      setAmount('')
+      
     }
   }, [])
 

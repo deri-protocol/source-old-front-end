@@ -32,6 +32,7 @@ export default function AddDialog({isOpen,wallet = {},address,baseToken,onClose,
 
   useEffect(() => {
     getBalance();
+    return () => {}
   }, [])
 
   const input = (e) => {
@@ -66,7 +67,6 @@ export default function AddDialog({isOpen,wallet = {},address,baseToken,onClose,
     setIsOpen(isOpen)
     return () => {
       isOpen = false
-      setAddValue('')
     } 
   }, [isOpen]);
 

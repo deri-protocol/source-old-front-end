@@ -5,7 +5,7 @@ export default function useSpecification({wallet,address}){
   const [spec, setSpec] = useState({});
 
   const getSpec = async () => {
-    if(wallet && wallet.account){
+    if(wallet && wallet.account && address){
       const spec =  await getSpecification(wallet.chainId,address,wallet.account);
       setSpec(spec);
     }
@@ -13,6 +13,9 @@ export default function useSpecification({wallet,address}){
 
   useEffect(() => {
     getSpec();
+    return () => {
+      
+    }
   }, []);
 
   return spec;

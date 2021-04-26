@@ -10,6 +10,7 @@ export default function Mobile (){
   const winSize = useWindowSize();
   useEffect(() => {
     document.querySelector('html').setAttribute('style',`font-size : ${winSize.width /375 * 100}px`) 
+    return () => {}
   }, [winSize])
 
   return (

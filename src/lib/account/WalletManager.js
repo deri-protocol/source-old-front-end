@@ -4,7 +4,7 @@ import { formatBalance } from "../../utils/utils";
 
 const walletKey = 'mm_wallet_key'
 const env = DeriEnv.get();
-const cc = config[env]
+const {chainInfo} = config[env]
 
 class WalletManager {
 
@@ -13,9 +13,9 @@ class WalletManager {
 
   //设置钱包
   setWallet = async (chianId,account) => {
-    if(cc[chianId]){
+    if(chainInfo[chianId]){
       const balance = await getUserWalletBalance(chianId,account)
-      const symbol = cc[chianId].symbol
+      const symbol = chainInfo[chianId].symbol
       const wallet = {
         chianId,
         account,

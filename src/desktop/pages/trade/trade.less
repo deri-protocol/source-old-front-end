@@ -7,7 +7,7 @@
   justify-content: space-between;
   align-items: flex-end;
   color: #AAAAAA;
-  margin-top: 40px;
+  font-family: Korolev, sans-serif;
 
   .check-lite-pro {
     width: 50px;
@@ -48,47 +48,55 @@
     height: 727px;
     background: #2C2D31;
     border-radius: 0px 20px 0px 0px;
-
-    .header {
-      height: 54px;
-      background: #0D0E0F;
-      color: #AAAAAA;
-      border-radius: 0px 20px 0px 0px;
-      line-height: 54px;
-      font-size: 15px;
-      font-weight: 400;
-      font-family: Tachyon, sans-serif;
-      letter-spacing: 2px;
+    .header-top {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-left: 54px;
-      padding-right: 54px;
+      background: #1c1c22;
 
-      span {
-        cursor: pointer;
+      .header {
+        height: 54px;
+        width: 100%;
+        color: #AAAAAA;
+        border-radius: 0px 20px 0px 0px;
+        line-height: 54px;
+        font-size: 15px;
+        font-weight: 400;
+        font-family: Tachyon, sans-serif;
+        letter-spacing: 2px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 54px;
+        padding-right: 54px;
+        background-color: #0D0E0F;
+
+        span {
+          cursor: pointer;
+        }
+
+        .action {
+          color: #D4E05C;
+        }
       }
-
-      .action {
-        color: #D4E05C;
+      .contract-info-header {
+        width: 50%;
+        background-color:#1c1c22 ;
       }
     }
 
+
     .trade-info {
       display: flex;
-      justify-content: center;
       align-items: center;
     }
 
     .trade-info {
-      margin-top: 12px;
 
       .trade-peration {
         width: 530px;
         height: 650px;
-        position: relative;
+        position: relative;        
+        margin: 20px 0 0 20px;
 
-        // border: 1px solid;
         .check-baseToken {
           display: flex;
 
@@ -100,30 +108,37 @@
           .check-baseToken-btn {
             width: 273px;
             height: 68px;
-            // background: #252628;
             position: relative;
             background-image: url('../../img//check-basetoken.png');
-            // box-shadow: -4px -4px 5px rgba(51, 51, 51, 0.8);
             background-size: 100% 100%;
             background-repeat: no-repeat;
             border-radius: 10px;
             cursor: pointer;
 
+            .dropdown-menu.show {
+              display: block;
+              position: absolute;
+              transform: translate3d(0px, 68px, 0px);
+              top: -14px;
+              left: 0px;
+              will-change: transform;
+            }
             .dropdown-menu {
               width: 273px;
               color: #CCCCCC;
               border: 0;
               border-radius: 10px;
-              // min-width: 228px;
               padding: 0;
               margin: 0;
               top: -12px !important;
               background-color: transparent;
               background-image: url('../../img/dorpdown.png');
-              // box-shadow: -4px -4px 5px rgba(51, 51, 51, 0.8);
               background-size: 100% 100%;
-              // background-position: 10px;
               background-repeat: no-repeat;
+              display: none;
+
+              
+
 
               .dropdown-box {
                 margin: 12px 0 12px 0;
@@ -142,9 +157,8 @@
               font-family: Korolev, sans-serif;
               font-weight: 300;
               color: #CCCCCC;
-              margin-left: 22px;
-              line-height: 27px;
-              // height: 50px;
+              margin-left: 32px;
+              line-height: 32px;
             }
 
             .dropdown-item:focus,
@@ -288,8 +302,8 @@
 
             .contrant {
               margin-top: 9px;
-              width: 240px;
-              height: 65px;
+              // width: 240px;
+              // height: 65px;
               background-image: url('../../img/dark-button.png');
               background-size: 100% 100%;
               background-repeat: no-repeat;
@@ -398,7 +412,6 @@
         .slider {
           width: 517px;
           margin-top: 57px;
-          height: 6px;
           // box-shadow: -3px -3px 3px #212224, 2px 2px 2px #353537;
 
         }
@@ -409,6 +422,7 @@
 
         .title-margin {
           font-size: 10px;
+          margin-top: 10px;
         }
 
         .enterInfo {

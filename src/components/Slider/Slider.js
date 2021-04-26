@@ -1,42 +1,54 @@
-import RcSlider from 'rc-slider'
+import React, { useState,useEffect } from 'react'
+import RcSlider,{createSliderWithTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css';
+import './slider.less'
 
-const Range = RcSlider.createSliderWithTooltip(RcSlider.Range);
 
-export default function Slider(){
+const SliderWithTooltip = createSliderWithTooltip(RcSlider);
+
+export default function Slider({max,defaultValue,onValueChange}){
+  const [limit, setLimit] = useState(0);
+  const [value, setValue] = useState(defaultValue);
+
+  const onSliderChange = value => {
+    setValue(value)
+    onValueChange && onValueChange();
+  }
+
+  useEffect(() => {
+    setLimit(+max)
+    return () => {};
+  }, [max]);
+
+  useEffect(() => {
+    setValue(defaultValue)
+    return () => {      
+    };
+  }, [defaultValue]);
+
   return (
-    <RcSlider 
-      defaultValue={30}
-      min={0}
-      max={100}
-      
-      railStyle={{ 
-        // position: 'relative',
-        margin: '13px auto',
-        width: '517px',
-        height: '6px',
-        backgroundImage: 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVYAAAAGCAYAAACYVrbAAAABVklEQVRoQ+3YQWrCQBQG4HmTMsEkYpLOKBNGDVnqJdx20zOIVyjopnfwEJ6jXSi4d+0hIhFRBpOWaV10Y73A/2B4s/74+RmG2O8EjDH/dv+6bSwIQAACELgjEMcxi6KI93o9Hoahsta+WGt1VVXv9KdUG8aYK1W33aBgESkIQAACdwSUUpSmKfX7fZ5l2VO32/W22+3b5XKJyBiTcs6/hBC1EKJptVqNEAKlijhBAAIQ+EfAWkuj0Yi01jwIAk9K6W02m+F+v/+gyWQifd9vpJRXrXWdZdnPizVJEpQrYgUBCEDgjkBZlhSGIeV5Tp1Oxzufz3y1Wg13u90nzWazdpIkvjHmWhRFned5o5RCqSJOEIAABB4IcM7JHTdVVfHpdLo4nU5t98fK5vN5ezAYiPF4XBtjmjiOUayIFAQgAIEHAofDwf2zsuVy+bxer1+Px2NRluXiG/F4WkFqCEA1AAAAAElFTkSuQmCC)',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '100% 100%',
-        /* box-shadow: -2px -2px 2px #212224, 2px 2px 2px #353537; */
-        borderRadius: '2px',
-        cursor: 'pointer'
-      }}
-      trackStyle={{ 
-        // position: 'absolute',
-        left: 0,
-        top: 0,
-        height: '6px',
-        borderRadius: '10px',
-        opacity: '0.35',
-        background: '-webkit-gradient(linear, right top, left top, from(#FFFFFF), to(#246CAD))',
-        background: 'linear-gradient(270deg, #FFFFFF 0%, #246CAD 100%)'
-      }}
-      handleStyle={{    
-        width: '24px',
-        height: '24px',
-        background: '#246CAD',
-        borderRadius: '50%;'
-    }} />
+      <RcSlider
+        className='deri-slider' 
+        min={0}
+        max={limit}
+        value={value}
+        onChange={onSliderChange}
+        overlay={value}
+       >
+        <div className='rc-slider-text'><span>0</span><span>{max}</span></div>        
+        <div className='m-rc-slider-mark'>
+          <span style={{left:0}}>l</span>
+          <span style={{left:'10%'}}>l</span>
+          <span style={{left:'20%'}}>l</span>
+          <span style={{left:'30%'}}>l</span>
+          <span style={{left:'40%'}}>l</span>
+          <span style={{left:'50%'}}>l</span>
+          <span style={{left:'60%'}}>l</span>
+          <span style={{left:'70%'}}>l</span>
+          <span style={{left:'80%'}}>l</span>
+          <span style={{left:'90%'}}>l</span>
+          <span style={{left:'99%'}}>l</span>
+        </div>
+      </RcSlider>
   )
 }

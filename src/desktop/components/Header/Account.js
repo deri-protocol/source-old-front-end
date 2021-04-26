@@ -47,7 +47,7 @@ export default function Account(){
     }
 
     init();
-    return () => setBtnText('Connect Wallet')
+    return () => {}
   }, [])
 
 

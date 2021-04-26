@@ -5,7 +5,7 @@ import { formatBalance } from "../utils/utils";
 
 const walletKey = 'mm_wallet_key'
 const env = DeriEnv.get();
-const chainConfig = config[env]
+const {chainInfo} = config[env]
 
 class Wallet {
 
@@ -14,7 +14,6 @@ class Wallet {
   }
 
   isConnected = () => window.ethereum.isConnected();
-
 
   connect =  async () => {
     const res = await connectWallet(null,account => {
@@ -41,8 +40,8 @@ class Wallet {
   set = async (chainId,account) => {
     const balance = await getUserWalletBalance(chainId,account)
     const wallet = {chainId,account,balance,formatBalance : formatBalance(balance)}
-    if(chainConfig[chainId]){
-      Object.assign(wallet,{...chainConfig[chainId],supported : true})
+    if(chainInfo[chainId]){
+      Object.assign(wallet,{...chainInfo[chainId],supported : true})
     }
     this.wallet = wallet;
     sessionStorage.setItem(walletKey,JSON.stringify(wallet))

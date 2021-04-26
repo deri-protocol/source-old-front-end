@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useState ,useContext} from 'react'
 import './trade.less'
 import Pro from './Pro';
 import Lite from '../../../components/Lite/Lite';
+import {WalletContext} from '../../../context/WalletContext'
 
 export default function Trade(){
   const [curTab, setCurTab] = useState('lite')
+  const context = useContext(WalletContext)
 
   const switchTab = current => {
     setCurTab(current)
+  }
+
+  const props = {
+    wallet : context.walletContext.get()
   }
 
   return (
@@ -17,7 +23,7 @@ export default function Trade(){
         <div className="pro" onClick={() => switchTab('pro')}> PRO
         </div>
       </div>
-      {curTab === 'lite' ? <Lite/> : <Pro/>}
+      {curTab === 'lite' ? <Lite {...props}/> : <Pro {...props}/>}
     </div>
   )
 }

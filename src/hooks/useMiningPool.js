@@ -9,7 +9,7 @@ import config from '../config.json'
 import { formatAddress, formatBalance } from '../utils/utils';
 
 const env = DeriEnv.get();
-const chainInfo = config[env]
+const {chainInfo} = config[env]
 
 export default function useMiningPool(){
   const [loaded,setLoaded] = useState(false)

@@ -8,7 +8,7 @@ import './mining.less'
 import classnames from "classnames";
 
 const env = DeriEnv.get();
-const chainInfo = config[env]
+const {chainInfo} = config[env]
 
 export default function Mining(){
 	const [currentTab,setCurrentTab] = useState('liquidity')
