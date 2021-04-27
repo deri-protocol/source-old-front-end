@@ -1,6 +1,13 @@
 import { perpetualPoolFactory } from '../factory/contracts';
 import { getBTCUSDPrice } from '../utils';
 
+/** @module apiCache */
+/**
+ * fundingRateCache Object
+ * @name fundingRateCache
+ * @property {function} get - Get the funding rate from cache
+ * @property {function} set - set the funding rate cache
+ */
 export const fundingRateCache = (function () {
   let resourceMap = {};
   return {
@@ -36,6 +43,13 @@ export const accountAddressCache = (function () {
   };
 })();
 
+/**
+ * priceCache Object
+ * @name priceCache
+ * @property {function} get - Get the price from cache
+ * @property {function} update - Set the price to automatic update during a time interval
+ * @property {function} clear - Clear the the automatic update of the price
+ */
 export const priceCache = (function () {
   let _price = '';
   let _interval = null;
@@ -67,6 +81,13 @@ export const priceCache = (function () {
     },
   };
 })();
+
+/**
+ * PerpetualPoolParametersCache Object
+ * @name PerpetualPoolParametersCache
+ * @property {function} get - Get the perpetualPoolParameters from cache
+ * @property {function} update - Set the perpetualPoolParameters
+ */
 
 export const PerpetualPoolParametersCache = (function () {
   let _parameters = {};

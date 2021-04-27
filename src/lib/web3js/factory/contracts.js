@@ -9,6 +9,7 @@ import { MiningVaultPool } from '../contract/mining_vault_pool';
 import { DeriEnv } from '../config/env';
 import { getDBAddressConfig, getDBWormholeAddressConfig } from '../config';
 import { SlpPool } from '../contract/slp_pool';
+import { ClpPool } from '../contract/clp_pool';
 import { DeriContract } from '../contract/deri';
 import { WormholeContract } from '../contract/wormhole';
 // import { getPoolBaseSymbolList } from '../utils'
@@ -170,6 +171,24 @@ export const slpPoolFactory = (function () {
     const slpPool = new SlpPool(chainId, contractAddress, isProvider);
     slpPoolInstanceMap[key] = slpPool;
     return slpPool;
+  };
+})();
+
+export const clpPoolFactory = (function () {
+  const clpPoolInstanceMap = {};
+  return (chainId, contractAddress, isProvider = false) => {
+    let key;
+    if (isProvider) {
+      key = `${chainId}.${contractAddress}.isProvider`;
+    } else {
+      key = `${chainId}.${contractAddress}`;
+    }
+    if (Object.keys(clpPoolInstanceMap).includes(key)) {
+      return clpPoolInstanceMap[key];
+    }
+    const clpPool = new ClpPool(chainId, contractAddress, isProvider);
+    clpPoolInstanceMap[key] = clpPool;
+    return clpPool;
   };
 })();
 

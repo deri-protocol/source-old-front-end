@@ -14,6 +14,7 @@ const processTradeEvent = async (
   bTokenSymbol,
   info,
   blockNumber,
+  txHash,
   multiplier,
   feeRatio
 ) => {
@@ -39,13 +40,19 @@ const processTradeEvent = async (
     notional: notional.toString(),
     volume: volume.toString(),
     transactionFee: transactionFee.toString(),
+    transactionHash: txHash.toString(),
     time,
   };
   // console.log(JSON.stringify(res))
   return res;
 };
 
-const processLiquidateEvent = async (info, bTokenSymbol, multiplier) => {
+const processLiquidateEvent = async (
+  info,
+  txHash,
+  bTokenSymbol,
+  multiplier
+) => {
   // console.log(info)
   const volume = deriToNatural(info.volume).abs();
   // const cost = deriToNatural(info.cost).abs()
@@ -64,6 +71,7 @@ const processLiquidateEvent = async (info, bTokenSymbol, multiplier) => {
     notional: naturalToDeri(national).toString(),
     volume: naturalToDeri(volume).toString(),
     transactionFee: '0',
+    transactionHash: txHash.toString(),
     time: timestamp,
     // cost: naturalToDeri(cost).toString(),
     // margin: margin.toString(),
@@ -72,6 +80,23 @@ const processLiquidateEvent = async (info, bTokenSymbol, multiplier) => {
   };
   return res;
 };
+
+/**
+ * Get the user trade history
+ * @async
+ * @method
+ * @param {string} chainId - Chain Id
+ * @param {string} poolAddress - Pool Address
+ * @param {string} accountAddress - Account Address
+ * @returns {Object[]} response
+ * @returns {string} response[].direction
+ * @returns {string} response[].baseToken
+ * @returns {string} response[].price
+ * @returns {string} response[].notional
+ * @returns {string} response[].volume
+ * @returns {string} response[].transactionFee
+ * @returns {string} response[].time - Timestamp of the trade
+ */
 
 export const getTradeHistory = async (chainId, poolAddress, accountAddress) => {
   const keyMeta = `${chainId}.${poolAddress}`;
@@ -157,15 +182,17 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
           `${key}.notional`,
           `${key}.volume`,
           `${key}.transactionFee`,
+          `${key}.transactionHash`,
           `${key}.time`,
         ]);
       }
       // console.log(keyArray)
-      const tradeHistoryLength = keyArray.length / 7;
+      const tradeHistoryLength = keyArray.length / 8;
       // console.log(`trade history length: ${tradeHistoryLength}`)
       const resp = await db.getValues(keyArray);
       for (let i = 0; i < tradeHistoryLength; i++) {
-        const indexBase = i * 7;
+        const indexBase = i * 8;
+        //console.log(resp[indexBase + 6].trim());
         const item = {
           direction: hexToString(resp[indexBase]).trim(),
           baseToken: hexToString(resp[indexBase + 1]).trim(),
@@ -173,7 +200,8 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
           notional: deriToNatural(resp[indexBase + 3]).toString(),
           volume: deriToNatural(resp[indexBase + 4]).toString(),
           transactionFee: deriToNatural(resp[indexBase + 5]).toString(),
-          time: hexToNumberString(resp[indexBase + 6]).toString(),
+          transactionHash: resp[indexBase + 6],
+          time: hexToNumberString(resp[indexBase + 7]).toString(),
         };
         result.push(item);
       }
@@ -224,6 +252,7 @@ const getTradeHistoryOnline = async (
       bTokenSymbol,
       item.returnValues,
       item.blockNumber,
+      item.transactionHash,
       multiplier,
       feeRatio,
       minInitialMarginRatio
@@ -262,6 +291,7 @@ const getLiquidateHistoryOnline = async (
     // const info = item.returnValues;
     const res = await processLiquidateEvent(
       item.returnValues,
+      item.transactionHash,
       bTokenSymbol,
       multiplier
     );
@@ -297,14 +327,15 @@ const getLiquidateHistoryOffline = async (
           `${key}.notional`,
           `${key}.volume`,
           `${key}.transactionFee`,
+          `${key}.transactionHash`,
           `${key}.time`,
         ]);
       }
       // console.log(keyArray)
-      const liquidateHistoryLength = keyArray.length / 7;
+      const liquidateHistoryLength = keyArray.length / 8;
       const resp = await db.getValues(keyArray);
       for (let i = 0; i < liquidateHistoryLength; i++) {
-        const indexBase = i * 7;
+        const indexBase = i * 8;
         const item = {
           direction: hexToString(resp[indexBase]).trim(),
           baseToken: hexToString(resp[indexBase + 1]).trim(),
@@ -312,7 +343,8 @@ const getLiquidateHistoryOffline = async (
           notional: deriToNatural(resp[indexBase + 3]).toString(),
           volume: deriToNatural(resp[indexBase + 4]).toString(),
           transactionFee: deriToNatural(resp[indexBase + 5]).toString(),
-          time: hexToNumberString(resp[indexBase + 6]).toString(),
+          transactionHash: resp[indexBase + 6],
+          time: hexToNumberString(resp[indexBase + 7]).toString(),
         };
         result.push(item);
       }

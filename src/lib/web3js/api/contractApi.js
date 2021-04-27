@@ -41,7 +41,31 @@ import {
   isOrderValid,
 } from '../calculation';
 
-// api
+/**
+ * Get the contract information
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {string} response.addresses
+ * @returns {string} response.symbol
+ * @returns {string} response.bSymbol
+ * @returns {string} response.multiplier
+ * @returns {string} response.feeRatio
+ * @returns {string} response.minPoo
+ * @returns {string} response.minPoolMarginRatio
+ * @returns {string} response.minInitialMarginRatio
+ * @returns {string} response.minMaintenanceMarginRatio
+ * @returns {string} response.minAddLiquidity
+ * @returns {string} response.redemptionFeeRatio
+ * @returns {string} response.fundingRateCoefficient
+ * @returns {string} response.minLiquidationReward
+ * @returns {string} response.maxLiquidationReward
+ * @returns {string} response.liquidationCutRatio
+ * @returns {string} response.priceDelayAllowance
+ */
 export const getSpecification = async (
   chainId,
   poolAddress,
@@ -88,6 +112,21 @@ export const getSpecification = async (
   };
 };
 
+/**
+ * Get position Information of the user
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {string} response.volume
+ * @returns {string} response.averageEntryPrice
+ * @returns {string} response.margin
+ * @returns {string} response.marginHeld
+ * @returns {string} response.unrealizedPnl
+ * @returns {string} response.liquidationPrice
+ */
 export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
   const price = await getBTCUSDPrice(chainId, poolAddress);
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
@@ -123,7 +162,20 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
   };
 };
 
-// use infura url, will remove later
+/**
+ * Get liquidity Info of the user
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {string} response.totalSupply
+ * @returns {string} response.poolLiquidity
+ * @returns {string} response.shares
+ * @returns {string} response.shareValue
+ * @returns {string} response.maxRemovableShares
+ */
 export const getLiquidityInfo = async (
   chainId,
   poolAddress,
@@ -171,6 +223,15 @@ export const getLiquidityInfo = async (
   };
 };
 
+/**
+ * Get user balance in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {string} user balance
+ */
 export const getWalletBalance = async (
   chainId,
   poolAddress,
@@ -183,6 +244,15 @@ export const getWalletBalance = async (
   return balance.toString();
 };
 
+/**
+ * Check account is unlocked in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {bool}
+ */
 export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
@@ -190,6 +260,18 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
   return await bToken.isUnlocked(accountAddress);
 };
 
+/**
+ * Unlock the account in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.[error]
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const unlock = async (chainId, poolAddress, accountAddress) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
@@ -205,6 +287,17 @@ export const unlock = async (chainId, poolAddress, accountAddress) => {
   return res;
 };
 
+/**
+ * Get sstimate margin in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} volume
+ * @param {string} leverage
+ * @returns {string}
+ */
 export const getEstimatedMargin = async (
   chainId,
   poolAddress,
@@ -224,6 +317,15 @@ export const getEstimatedMargin = async (
     .toString();
 };
 
+/**
+ * Get Estimate Fee in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} volume
+ * @returns {string}
+ */
 export const getEstimatedFee = async (chainId, poolAddress, volume) => {
   // const price = await getBTCUSDPrice(chainId, poolAddress);
   let price = priceCache.get();
@@ -250,6 +352,19 @@ export const getEstimatedFee = async (chainId, poolAddress, volume) => {
     .toString();
 };
 
+/**
+ * Get funding rate of the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.fundingRate0
+ * @returns {string} response.fundingRatePerBlock
+ * @returns {string} response.liquidity
+ * @returns {string} response.volume
+ * @returns {string} response.tradersNetVolume
+ */
 export const getFundingRate = async (chainId, poolAddress) => {
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
 
@@ -280,6 +395,16 @@ export const getFundingRate = async (chainId, poolAddress) => {
   }
 };
 
+/**
+ * Get estimate funding rate
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} newNetVolume
+ * @returns {Object} response
+ * @returns {string} response.fundingRate1
+ */
 export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
@@ -314,6 +439,15 @@ export const getEstimatedFundingRate = async (
   }
 };
 
+/**
+ * Get liquidity used
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.liquidityUsed0
+ */
 export const getLiquidityUsed = async (chainId, poolAddress) => {
   let res;
   res = fundingRateCache.get(chainId, poolAddress);
@@ -329,6 +463,16 @@ export const getLiquidityUsed = async (chainId, poolAddress) => {
   }
 };
 
+/**
+ * Get estimate liquidity used
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} newNetVolume
+ * @returns {Object} response
+ * @returns {string} response.fundingRate1
+ */
 export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
@@ -361,6 +505,20 @@ export const getEstimatedLiquidityUsed = async (
     };
   }
 };
+
+/**
+ * Deposit margin in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string|number} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const depositMargin = async (
   chainId,
   poolAddress,
@@ -371,6 +529,19 @@ export const depositMargin = async (
   return await pPool.depositMargin(accountAddress, naturalToDeri(amount));
 };
 
+/**
+ * Withdraw margin in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const withdrawMargin = async (
   chainId,
   poolAddress,
@@ -413,6 +584,19 @@ export const withdrawMargin = async (
   return res;
 };
 
+/**
+ * Mint in the perpetual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const mint = async (chainId, poolAddress, accountAddress, amount) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
@@ -432,6 +616,19 @@ export const mint = async (chainId, poolAddress, accountAddress, amount) => {
   return res;
 };
 
+/**
+ * Add liquidity in the perpertual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const addLiquidity = async (
   chainId,
   poolAddress,
@@ -454,6 +651,19 @@ export const addLiquidity = async (
   return res;
 };
 
+/**
+ * Remove liquidity in the perpertual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} shares
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const removeLiquidity = async (
   chainId,
   poolAddress,
@@ -505,6 +715,20 @@ export const removeLiquidity = async (
   return res;
 };
 
+/**
+ * Trade with margin in the perpertual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {string} newVolume
+ * @param {string} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const tradeWithMargin = async (
   chainId,
   poolAddress,
@@ -555,6 +779,18 @@ export const tradeWithMargin = async (
   return res;
 };
 
+/**
+ * Close position in the perpertual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const closePosition = async (chainId, poolAddress, accountAddress) => {
   const { pTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
@@ -581,6 +817,17 @@ export const closePosition = async (chainId, poolAddress, accountAddress) => {
   return res;
 };
 
+/**
+ * Mint DToken in the perpertual pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const mintDToken = async (chainId, accountAddress) => {
   let res;
   const userInfo = await getUserInfoAll(accountAddress);
@@ -624,6 +871,19 @@ export const mintDToken = async (chainId, accountAddress) => {
   return res;
 };
 
+/**
+ * freeze Deri in current wormhole pool to the specified chain
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} accountAddress
+ * @param {string} toChainId
+ * @param {string} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const freeze = async (chainId, accountAddress, toChainId, amount) => {
   const { wormholeAddress } = getDeriContractAddress(chainId);
   const wormhole = wormholeFactory(chainId, wormholeAddress);
@@ -638,11 +898,29 @@ export const freeze = async (chainId, accountAddress, toChainId, amount) => {
   return res;
 };
 
+/**
+ * Get user signature of the wormhole pool
+ * @async
+ * @method
+ * @param {string} accountAddress
+ * @returns {Object}
+ */
 export const getUserWormholeSignature = async (accountAddress) => {
   const databaseWormhole = databaseWormholeFactory(true);
   return await databaseWormhole.signature(accountAddress);
 };
 
+/**
+ * Mint Deri in wormhole pool
+ * @async
+ * @method
+ * @param {string} toChainId
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.[error] - error message when request failed
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const mintDeri = async (toChainId, accountAddress) => {
   let res;
   const databaseWormhole = databaseWormholeFactory(true);
@@ -691,6 +969,14 @@ export const mintDeri = async (toChainId, accountAddress) => {
   return res;
 };
 
+/**
+ * Check account is unlocked in the deri pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} accountAddress
+ * @returns {bool}
+ */
 export const isDeriUnlocked = async (chainId, accountAddress) => {
   const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
   const deri = deriFactory(chainId, deriAddress, wormholeAddress);
@@ -704,6 +990,18 @@ export const isDeriUnlocked = async (chainId, accountAddress) => {
   }
   return res;
 };
+
+/**
+ * Unlock the account in the deri pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.[error]
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const unlockDeri = async (chainId, accountAddress) => {
   const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
   const deri = deriFactory(chainId, deriAddress, wormholeAddress);
@@ -718,34 +1016,16 @@ export const unlockDeri = async (chainId, accountAddress) => {
   return res;
 };
 
+/**
+ * Get deri balance in the deri pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} accountAddress
+ * @returns {string}
+ */
 export const getDeriBalance = async (chainId, accountAddress) => {
   const { deriAddress, wormholeAddress } = getDeriContractAddress(chainId);
   const deri = deriFactory(chainId, deriAddress, wormholeAddress);
   return (await deri.balance(accountAddress)).toString();
 };
-
-// // returns the funding rate without per year coeffient
-// export const getFundingRate2 = async (chainId, bSymbol) => {
-//   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-
-//   const res = await perpetualPool
-//     .getFundingRate(false)
-//     .catch((err) => console.log("getFundingRate", err));
-//   //fundingRateCache.set(chainId, poolAddress, res);
-//   //const db = databaseFactory();
-//   const poolInfo = await getPoolInfoApy(chainId, poolAddress);
-
-//   if (res) {
-//     //console.log(hexToNatural(res[0]));
-//     let { fundingRate, liquidity, tradersNetVolume } = res;
-//     const volume = poolInfo.volume24h;
-//     //fundingRate = processFundingRate(chainId, fundingRate);
-
-//     return {
-//       fundingRate0: naturalWithPercentage(fundingRate),
-//       liquidity: liquidity.toString(),
-//       volume: deriToNatural(volume).toString(),
-//       tradersNetVolume: tradersNetVolume.toString(),
-//     };
-//   }
-// };

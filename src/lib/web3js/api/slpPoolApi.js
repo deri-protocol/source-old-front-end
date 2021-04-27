@@ -1,7 +1,18 @@
 import { bTokenFactory, slpPoolFactory } from '../factory/contracts';
 import { getSlpContractAddress } from '../utils';
 
-// use infura url, will remove later
+/**
+ * Get liquidity info of SLP pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {string} response.liquidity
+ * @returns {string} response.bTokenBalance
+ * @returns {string} response.shares
+ */
 export const getSlpLiquidityInfo = async (
   chainId,
   poolAddress,
@@ -30,6 +41,19 @@ export const getSlpLiquidityInfo = async (
   return {};
 };
 
+/**
+ * Add liquidity to SLP pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {number} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.[error]
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const addSlpLiquidity = async (
   chainId,
   poolAddress,
@@ -56,6 +80,19 @@ export const addSlpLiquidity = async (
   return res;
 };
 
+/**
+ * Remove liquidity to SLP pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @param {number} amount
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.[error]
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const removeSlpLiquidity = async (
   chainId,
   poolAddress,
@@ -82,6 +119,15 @@ export const removeSlpLiquidity = async (
   return res;
 };
 
+/**
+ * Check account is unlocked in the Slp pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {bool}
+ */
 export const isSlpUnlocked = async (chainId, poolAddress, accountAddress) => {
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
@@ -89,6 +135,18 @@ export const isSlpUnlocked = async (chainId, poolAddress, accountAddress) => {
   return await bToken.isUnlocked(accountAddress);
 };
 
+/**
+ * Unlock the account in the Slp pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} accountAddress
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.[error]
+ * @returns {Object} response.transaction - eth transaction receipt object
+ */
 export const unlockSlp = async (chainId, poolAddress, accountAddress) => {
   const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
@@ -104,6 +162,14 @@ export const unlockSlp = async (chainId, poolAddress, accountAddress) => {
   return res;
 };
 
+/**
+ * Get account balance in Slp pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} accountAddress
+ * @returns {string} Account balance
+ */
 export const getSlpWalletBalance = async (
   chainId,
   poolAddress,

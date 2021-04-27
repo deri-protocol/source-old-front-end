@@ -71,6 +71,24 @@ export const getUserInfoTotal = async (userAddress) => {
   }
 };
 
+/**
+ * Get user claim info from database
+ * @async
+ * @method
+ * @param {string} userAddress - account address
+ * @returns {Object} response
+ * @returns {string} resposne.chainId
+ * @returns {BigNumber} response.amount
+ * @returns {string} response.deadline
+ * @returns {string} response.nonce
+ * @returns {string} response.v
+ * @returns {string} response.r
+ * @returns {string} response.s
+ * @returns {bool} response.valid
+ * @returns {BigNumber} response.lp
+ * @returns {BigNumber} response.trade
+ * @returns {string} response.total
+ */
 export const getUserInfoAll = async (userAddress) => {
   const userInfo = await getUserInfo(userAddress);
   const userInfoHarvest = await getUserInfoHarvest(userAddress);
@@ -78,6 +96,16 @@ export const getUserInfoAll = async (userAddress) => {
   return Object.assign(userInfo, userInfoHarvest, userInfoTotal);
 };
 
+/**
+ * Get pool liquidity
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.liquidity
+ * @returns {symbol} response.symbol
+ */
 export const getPoolLiquidity = async (chainId, poolAddress) => {
   // use the dev database
   const db = databaseFactory();
@@ -98,6 +126,17 @@ export const getPoolLiquidity = async (chainId, poolAddress) => {
   }
 };
 
+/**
+ * Get pool apy
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.apy
+ * @returns {string} response.volume1h
+ * @returns {string} response.volume24h
+ */
 export const getPoolInfoApy = async (chainId, poolAddress) => {
   const db = databaseFactory(true);
   //const [poolAddress] = getPoolContractAddress(chainId, bSymbol);
@@ -124,10 +163,19 @@ export const getPoolInfoApy = async (chainId, poolAddress) => {
   }
 };
 
+/**
+ * Get apy of the Slp pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.apy
+ * @returns {string} response.volume1h
+ * @returns {string} response.volume24h
+ */
 export const getSlpPoolInfoApy = async (chainId, poolAddress) => {
   const db = databaseFactory(true);
-  // const { pool: poolAddr} = getSlpContractAddress(chainId, poolAddress);
-
   try {
     const poolNetwork = getNetworkName(chainId);
     const res = await db
@@ -150,6 +198,52 @@ export const getSlpPoolInfoApy = async (chainId, poolAddress) => {
   }
 };
 
+/**
+ * Get apy of the Clp pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @returns {Object} response
+ * @returns {string} response.apy
+ * @returns {string} response.volume1h
+ * @returns {string} response.volume24h
+ */
+export const getClpPoolInfoApy = async (chainId, poolAddress) => {
+  const db = databaseFactory(true);
+  try {
+    const poolNetwork = getNetworkName(chainId);
+    const res = await db
+      .getValues([
+        `${poolNetwork}.${poolAddress}.apy`,
+        `${poolNetwork}.${poolAddress}.volume.1h`,
+        `${poolNetwork}.${poolAddress}.volume.24h`,
+      ])
+      .catch((err) => console.log('getPoolInfoApy', err));
+    if (res) {
+      const [apy, volume1h, volume24h] = res;
+      return {
+        apy: deriToString(apy),
+        volume1h: deriToString(volume1h),
+        volume24h: deriToString(volume24h),
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/**
+ * Get user info of the pool
+ * @async
+ * @method
+ * @param {string} chainId
+ * @param {string} poolAddress
+ * @param {string} userAddress
+ * @returns {Object} response
+ * @returns {string} response.volume1h
+ * @returns {string} response.volume24h
+ */
 export const getUserInfoInPool = async (chainId, poolAddress, userAddress) => {
   const db = databaseFactory(true);
   //const {poolAddress} = getPoolContractAddress(chainId, poolAddress);

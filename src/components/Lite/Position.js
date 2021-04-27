@@ -1,18 +1,73 @@
-export default function Position(){
-  const {position,AverageEntryPrice,balanceContract,Direction,Margin,UnrealizedPnL,LiquidationPrice} = {}
+import React, { useState ,useEffect} from 'react'
+import NumberFormat from 'react-number-format';
+import { getPositionInfo, closePosition } from "../../lib/web3js";
+import className from 'classnames'
+import withModal from '../hoc/withModal';
+import DepositMargin from './Dialog/DepositMargin';
+
+export default function Position({wallet = {},spec = {}}){
+  const [position, setPosition] = useState({});
+  const [direction, setDirection] = useState('');
+  const [balanceContract, setBalanceContract] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const loadPositionInfo = async () => {
+    if(wallet.account && spec.pool){
+      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
+      if(positionInfo){
+        setPosition(positionInfo);
+        const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
+        setDirection(direction)      
+        setBalanceContract((+positionInfo.margin) + (+positionInfo.unrealizedPnl))
+      }
+    }    
+  }
+
+  const flatPosition = async () => {
+    const res = await closePosition(wallet.chainId,spec.pool,wallet.account);
+    if(res.success){
+      loadPositionInfo();
+    } else {
+      alert(res.error)
+    }
+  }
+
+  const afterDeposit = () => {
+    setModalIsOpen(false)
+  }
+
+  const onClose = () => {
+    setModalIsOpen(false)
+  }
+
+  const directionClass = className('Direction',{
+    'LONG' : direction === 'LONG',
+    'SHORT' : direction === 'SHORT'
+  })
+
+  const DepositDialog = withModal(DepositMargin);
+
+
+  useEffect(() => {
+    loadPositionInfo();
+    return () => {
+    };
+  }, [wallet.account,spec.pool]);
+  
+  // const {position,AverageEntryPrice,balanceContract,Direction,Margin,UnrealizedPnL,LiquidationPrice} = {}
   return(
 
     <div className='position-info' v-show='positionShow'>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Position</div>
-        <div className='info-num'>{ position }</div>
+        <div className='info-num'>{ position.volume}</div>
       </div>
       <div className='info-right'>
         <div
           className='close-position'
           id='close-p'
-          click='closePosition'
+          onClick={flatPosition}
         >
           <span
             className='spinner spinner-border spinner-border-sm'
@@ -27,7 +82,7 @@ export default function Position(){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Average Entry Price</div>
-        <div className='info-num'>{ AverageEntryPrice }</div>
+        <div className='info-num'>{ position.averageEntryPrice }</div>
       </div>
       <div className='info-right'></div>
     </div>
@@ -37,14 +92,13 @@ export default function Position(){
           Balance in Contract
           (Dynamic Balance)
         </div>
-        <div className='info-num'>{ balanceContract }</div>
+        <div className='info-num'> <NumberFormat decimalScale = {2} value={ balanceContract} displayType='text' /></div>
       </div>
       <div className='info-right'>
         <div
           className='add-margin'
           id='openAddMargin'
-          data-toggle='modal'
-          data-target='#addMargin'
+          onClick={() => setModalIsOpen(true)}
         >
           <svg
             className='svg'
@@ -90,31 +144,38 @@ export default function Position(){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Direction</div>
-        <div className='info-num' className='Direction'>{ Direction }</div>
+        <div className='info-num' className={directionClass} >{direction}</div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Margin</div>
-        <div className='info-num'>{ Margin }</div>
+        <div className='info-num'>{ position.marginHeld }</div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Unrealized PnL</div>
-        <div className='info-num'>{ UnrealizedPnL }</div>
+        <div className='info-num'>{ position.unrealizedPnl }</div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Liquidation Price</div>
-        <div className='info-num'>{ LiquidationPrice }</div>
+        <div className='info-num'><NumberFormat decimalScale = {2} value={position.liquidationPrice} displayType='text'/></div>
       </div>
       <div className='info-right'></div>
     </div>
+    <DepositDialog
+       wallet={wallet}
+       modalIsOpen={modalIsOpen} 
+       onClose={onClose}
+       spec={spec}
+       afterDeposit={afterDeposit}
+    />
   </div>
   )
 }

@@ -21,6 +21,7 @@ export class BTokenContract extends Contract {
       this.poolAddress,
     ]);
     allowance = deriToNatural(allowance);
+    //console.log(allowance.toString());
     return allowance.gt(0);
   }
 

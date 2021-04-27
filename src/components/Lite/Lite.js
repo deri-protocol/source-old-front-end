@@ -40,8 +40,8 @@ export default function Lite({wallet}){
           </div>
         </div>
         {curTab === 'tradeInfo' && <TradeInfo wallet ={wallet} symbols={symbols} onSpecChange={onSpecChange}/>}
-        {curTab === 'position' && <Position/>}
-        {curTab === 'history' && <History/>}
+        {curTab === 'position' && <Position  wallet ={wallet} spec={curSpec}/>}
+        {curTab === 'history' && <History wallet ={wallet} spec={curSpec}/>}
     </div>
     <ContractInfo wallet={wallet} spec={curSpec}/>    
   </>

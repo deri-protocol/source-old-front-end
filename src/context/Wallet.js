@@ -27,15 +27,14 @@ class Wallet {
     return new Promise(async (resolve,reject) => {
       if(res.success){
         const {chainId,account} = res
-        const wallet = await this.set(chainId,account);
-        //add disconnect event
-        window.ethereum.on('disconnect',this.remove)
+        const wallet = await this.set(chainId,account);        
         resolve(wallet)
       } else {
         reject(null)
       }
     })
   }
+
 
   set = async (chainId,account) => {
     const balance = await getUserWalletBalance(chainId,account)

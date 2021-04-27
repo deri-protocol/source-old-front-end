@@ -5,9 +5,12 @@ import {
   ChainProviderUrls,
   getContractAddressConfig,
   getSlpContractAddressConfig,
+  getClpContractAddressConfig,
   getAnnualBlockNumberConfig,
   getDeriContractAddressConfig,
 } from './config';
+
+/** @module utils */
 
 BigNumber.config({
   DECIMAL_PLACES: 18,
@@ -17,7 +20,13 @@ BigNumber.config({
 
 export { BigNumber };
 
-// numberic
+/**
+ * Change the value to BigNumber type
+ * @func
+ * @param {string|number} value - the number that need to changed to BigNumber type
+ * @param {string} base - base of the number
+ * @returns {BigNumber}
+ */
 export const bg = (value, base = 0) => {
   if (base === 0) {
     return BigNumber(value);
@@ -28,6 +37,13 @@ export const bg = (value, base = 0) => {
   return BigNumber(value).div(BigNumber(`1${'0'.repeat(-base)}`));
 };
 
+/**
+ * Get the max value
+ * @func
+ * @param {BigNumber} value1
+ * @param {BigNumber} value2
+ * @returns {BigNumber}
+ */
 export const max = (value1, value2) => {
   if (value1.gte(value2)) {
     return value1;
@@ -35,6 +51,13 @@ export const max = (value1, value2) => {
   return value2;
 };
 
+/**
+ * Get the min value
+ * @func
+ * @param {BigNumber} value1
+ * @param {BigNumber} value2
+ * @returns {BigNumber}
+ */
 export const min = (value1, value2) => {
   if (value1.lte(value2)) {
     return value1;
@@ -42,6 +65,13 @@ export const min = (value1, value2) => {
   return value2;
 };
 
+/**
+ * Convert the number to a fixed precision
+ * @func
+ * @param {string} value - the number that need to convert
+ * @param {number} num - the number for method toFixed()
+ * @returns {string}
+ */
 export const toNatural = (value, num = 0) =>
   BigNumber(value).toFixed(num).toString();
 
@@ -247,6 +277,7 @@ export const getPoolContractAddress = (chainId, poolAddress) => {
       MinningVaultAddress: pool[0].MiningVault,
       bTokenSymbol: pool[0].bTokenSymbol,
       symbol: pool[0].symbol,
+      unit: pool[0].unit,
       initialBlock: pool[0].initialBlock,
     };
   }
@@ -275,6 +306,7 @@ export const getAnnualBlockNumber = (chainId) => {
   }
   console.log(`cannot find the annual block number with chainId: ${chainId}`);
 };
+
 export const getSlpContractAddress = (chainId, poolAddress) => {
   chainId = normalizeChainId(chainId);
   const pools = getSlpContractAddressConfig(DeriEnv.get()).filter(
@@ -293,6 +325,25 @@ export const getSlpContractAddress = (chainId, poolAddress) => {
   }
   console.log(
     `getSlpContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
+  );
+  return {};
+};
+
+export const getClpContractAddress = (chainId, poolAddress) => {
+  chainId = normalizeChainId(chainId);
+  const pools = getClpContractAddressConfig(DeriEnv.get()).filter(
+    (c) => c.chainId === chainId
+  );
+  const pool = pools.filter((p) => p.pool === poolAddress);
+  if (pool.length > 0) {
+    return {
+      poolAddress: pool[0].pool,
+      bTokenAddress: pool[0].bToken,
+      lTokenAddress: pool[0].lToken,
+    };
+  }
+  console.log(
+    `getClpContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
   );
   return {};
 };
@@ -321,7 +372,7 @@ export const getOracleUrl = (env = 'dev', chainId, poolAddress) => {
   if (env === 'prod' || env === 'production') {
     // for production
     if (symbol) {
-      if (symbol === 'COIN') {
+      if (symbol !== 'BTCUSD') {
         return addSymbolParam('https://oracle3.deri.finance/price', symbol);
       } else {
         return addSymbolParam('https://oracle.deri.finance/price', symbol);

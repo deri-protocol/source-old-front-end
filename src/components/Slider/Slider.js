@@ -6,13 +6,15 @@ import './slider.less'
 
 const SliderWithTooltip = createSliderWithTooltip(RcSlider);
 
-export default function Slider({max,defaultValue,onValueChange}){
+export default function Slider({max,defaultValue,onValueChange,availableBalance}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(defaultValue);
+  const [disabled, setDisabled] = useState(true);
 
   const onSliderChange = value => {
     setValue(value)
-    onValueChange && onValueChange();
+    console.log('slide value',value)
+    onValueChange(value);
   }
 
   useEffect(() => {
@@ -26,6 +28,16 @@ export default function Slider({max,defaultValue,onValueChange}){
     };
   }, [defaultValue]);
 
+  useEffect(() => {
+    if((+availableBalance) > 0){
+      setDisabled(false)
+    } else {
+      setDisabled(true)
+    }
+    return () => {
+    };
+  }, [availableBalance]);
+
   return (
       <RcSlider
         className='deri-slider' 
@@ -33,6 +45,7 @@ export default function Slider({max,defaultValue,onValueChange}){
         max={limit}
         value={value}
         onChange={onSliderChange}
+        disabled={disabled}
         overlay={value}
        >
         <div className='rc-slider-text'><span>0</span><span>{max}</span></div>        

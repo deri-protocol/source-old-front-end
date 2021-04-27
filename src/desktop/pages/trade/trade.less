@@ -442,11 +442,11 @@
 
         .noMargin-text {
           width: 100%;
-          position: absolute;
           bottom: 100px;
           font-size: 14px;
           color: @red;
           text-align: center;
+          margin-bottom: 10px;
         }
 
         .submit-btn {
@@ -553,6 +553,7 @@
 
           .close-position {
             color: #fff;
+            // background-color : transparent;
 
             svg {
               // width: 18px;
@@ -710,6 +711,295 @@
 
       .info:nth-child(even) {
         background-color: #202124;
+      }
+    }
+  }
+}
+
+.modal-dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  .modal-content {
+    width: 491px;
+    position: relative;
+    color: #AAAAAA;
+    position: relative;
+    background: rgba(13, 14, 15);
+    height: 477px;
+    display: inline-block;
+    border: 1px solid #707070;
+    margin-left: 26px;
+    margin-top: 20px;
+    border-radius: 20px;
+
+    .modal-header {
+      height: 55px;
+      background: #0D0E0F;
+      border-bottom: 1px solid #707070;
+      line-height: 55px;
+      padding-left: 30px;
+      font-size: 15px;
+      color: #D4E05C;
+      font-family: Tachyon, sans-serif;;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 20px 20px 0px 0px;
+
+      .close {
+        color: #fff;
+        padding-right: 19px;
+        font-size: 1.5rem;
+        font-weight: 700;
+
+        span {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .modal-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+
+      .margin-box-info {
+        width: 301px;
+        margin-top: 33px;
+        height: 280px;
+
+        .money {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          color: #FFFFFF;
+
+          .add {
+            width: 10px;
+            height: 10px;
+            background: @green;
+            border-radius: 50%;
+          }
+
+          .remove {
+            width: 10px;
+            height: 10px;
+            background: @red;
+            border-radius: 50%;
+          }
+
+          .bt-balance {
+            font-size: 30px;
+          }
+        }
+
+        .enter-margin {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          margin-top: 25px;
+
+          .input-margin {
+            width: 253px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-image: url('../../../assets/img/dark-button.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            border-radius: 6px;
+
+            .amount {
+              position: absolute;
+              top: 3px;
+              left: 22px;
+              font-size: 10px;
+            }
+
+            .box {
+              width: 243px;
+              height: 43px;
+              border: 0;
+              font-size: 18px;
+              
+              background: #1B1C1F;
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              border-radius: 3px;
+
+              .margin-value {
+                height: 24px;
+                width: 243px;
+                padding-left: 14px;
+                border: 0;
+                color: #fff;
+                background: #1B1C1F;
+                font-size: 18px;
+              }
+            }
+          }
+        }
+        .remv{
+            margin-top: 58px;
+        }
+        .max {
+          margin-top: 15px;
+          .max-btn-left{
+              margin-left: 20px;
+          }
+          span {
+            color: #569BDA;
+            cursor: pointer;
+          }
+
+          .max-num {
+            color: #FFFFFF;
+          }
+        }
+
+        .add-margin-btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 35px;
+          .margin-btn {
+            width: 276px;
+            height: 50px;
+            background: #202124;
+            box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+            border-radius: 10px;
+            color: #CCCCCC;
+            font-size: 18px;
+          }
+        }
+
+        .remove-margin-btn {
+          margin-top: 56px;
+        }
+      }
+
+      .contract-box-info {
+        width: 471px;
+        height: 422px;
+
+        .enter-margin {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          margin-top: 25px;
+
+          .input-margin {
+            width: 253px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background-image: url('../../../assets/img/dark-button.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            border-radius: 6px;
+
+            .amount {
+              position: absolute;
+              top: 3px;
+              left: 22px;
+              font-size: 10px;
+            }
+
+            .box {
+              width: 243px;
+              height: 43px;
+              border: 0;
+              font-size: 18px;
+              
+              background: #1B1C1F;
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              border-radius: 3px;
+
+              .margin-value {
+                height: 24px;
+                width: 243px;
+                padding-left: 14px;
+                border: 0;
+                color: #fff;
+                background: #1B1C1F;
+              }
+            }
+          }
+        }
+
+        .top {
+          border-bottom: 1px solid rgba(112, 112, 112, 0.4470588235294118);
+          .text {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            padding-left: 9px;
+            padding-right: 10px;
+            font-size: 18px;
+            color: #FFFFFF;
+            font-family:  Korolev, sans-serif;;
+
+            .long {
+              color: @green;
+            }
+
+            .short {
+              color: @red;
+            }
+          }
+
+          .text:nth-child(odd) {
+            background: #323338;
+          }
+        }
+      }
+
+      .modal-footer {
+        margin-top: 42px;
+        padding: 0;
+        border: 0;
+        justify-content: center;
+
+        button {
+          width: 200px;
+          height: 50px;
+          border-radius: 10px;
+          color: #CCCCCC;
+          font-size: 18px;
+          cursor: pointer;
+        }
+
+        .confirm {
+          background: #202124;
+          box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+        }
+
+        .long-btn {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-left: 9px;
+          padding-right: 10px;
+
+          .cancel {
+            background: #323338;
+            box-shadow: -2px -2px 2px rgba(90, 90, 90, 0.8);
+          }
+
+        }
+
       }
     }
   }

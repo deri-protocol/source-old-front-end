@@ -2,6 +2,14 @@ import Web3 from 'web3';
 import { metaMaskWeb3 } from '../factory/web3';
 import { hexToNumber } from '../utils';
 
+/**
+ * check ethereum client status for web browser
+ * @function
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {boolean} response.isMetaMask - check if it is MetaMask client
+ * @returns {boolean} response.[error] - error message when request failed
+ */
 export const hasWallet = () => {
   if (window.ethereum && window.ethereum.isMetaMask) {
     return { success: true, isMetaMask: true };
@@ -13,6 +21,18 @@ export const hasWallet = () => {
   };
 };
 
+/**
+ *  Connect wallet using MetaMask account
+ * @async
+ * @function
+ * @param {function} [handleChainChanged] - Callback when chainId changed
+ * @param {function} [handleAccountChanged]  - callback when account changed
+ * @returns {Object} response
+ * @returns {boolean} response.success
+ * @returns {string} response.chainId - chain Id
+ * @returns {string} response.account - account address
+ * @returns {boolean} response.[error] - error message when request failed
+ */
 export const connectWallet = async (
   handleChainChanged,
   handleAccountChanged
@@ -63,6 +83,14 @@ export const connectWallet = async (
   };
 };
 
+/**
+ * Get balance of the connected account
+ * @async
+ * @method
+ * @param {string} chainId - Id of the chain
+ * @param {string} accountAddress - Address of the connected account
+ * @returns {string} Account balance
+ */
 export const getUserWalletBalance = async (chainId, walletAddress) => {
   //const web3 = web3Factory(chainId);
   const web3 = metaMaskWeb3();

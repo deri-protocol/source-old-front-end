@@ -1,3 +1,19 @@
+/** @module config */
+
+/**
+ * Get the contract address list based on the deri environment variable
+ * @method
+ * @param {string} env='dev' - Deri environment variable: 'prod' or 'dev'
+ * @returns {Object[]} response
+ * @returns {string} response[].pool - pool address
+ * @returns {string} response[].bToken - base token address
+ * @returns {string} response[].pToken - position token address
+ * @returns {string} response[].lToken - liquidity token address
+ * @returns {string} response[].initialBlock - initial block of the pool
+ * @returns {string} response[].bTokenSymbol - base token symbol
+ * @returns {string} response[].symbol - symbol
+ * @returns {string} response[].chainId - Id of the chain
+ */
 export const getContractAddressConfig = (env = 'dev') => {
   // production environment
   if (env === 'prod') {
@@ -13,6 +29,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         initialBlock: '5552805',
         bTokenSymbol: 'BUSD',
         symbol: 'BTCUSD',
+        unit: 'BTC',
         chainId: '56',
       },
       {
@@ -25,6 +42,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         initialBlock: '6759703',
         bTokenSymbol: 'BUSD',
         symbol: 'COIN',
+        unit: 'COIN',
         chainId: '56',
       },
       {
@@ -37,6 +55,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         initialBlock: '11949485',
         bTokenSymbol: 'USDT',
         symbol: 'BTCUSD',
+        unit: 'BTC',
         chainId: '1',
       },
       {
@@ -49,6 +68,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         initialBlock: '11860122',
         bTokenSymbol: 'BAC',
         symbol: 'BTCUSD',
+        unit: 'BTC',
         chainId: '1',
       },
       {
@@ -61,6 +81,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         initialBlock: '2558057',
         bTokenSymbol: 'HUSD',
         symbol: 'BTCUSD',
+        unit: 'BTC',
         chainId: '128',
       },
     ];
@@ -76,6 +97,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       initialBlock: '9986748',
       bTokenSymbol: 'USDT',
       symbol: 'BTCUSD',
+      unit: 'BTC',
       chainId: '3',
     },
     {
@@ -86,6 +108,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       initialBlock: '7796732',
       bTokenSymbol: 'BUSD',
       symbol: 'BTCUSD',
+      unit: 'BTC',
       chainId: '97',
     },
     {
@@ -96,6 +119,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       initialBlock: '8108595',
       bTokenSymbol: 'BUSD',
       symbol: 'COIN',
+      unit: 'COIN',
       chainId: '97',
     },
     {
@@ -106,11 +130,26 @@ export const getContractAddressConfig = (env = 'dev') => {
       initialBlock: '3663362',
       bTokenSymbol: 'HUSD',
       symbol: 'BTCUSD',
+      unit: 'BTC',
       chainId: '256',
     },
   ];
 };
 
+/**
+ * Get the Slp contract address list based on the deri environment variable
+ * @method
+ * @param {string} env='dev' - Deri environment variable: 'prod' or 'dev'
+ * @returns {Object[]} response
+ * @returns {string} response[].pool - pool address
+ * @returns {string} response[].bToken - base token address
+ * @returns {string} response[].pToken - position token address
+ * @returns {string} response[].lToken - liquidity token address
+ * @returns {string} response[].initialBlock - initial block of the pool
+ * @returns {string} response[].bTokenSymbol - base token symbol
+ * @returns {string} response[].symbol - symbol
+ * @returns {string} response[].chainId - Id of the chain
+ */
 export const getSlpContractAddressConfig = (env = 'dev') => {
   if (env === 'prod') {
     return [
@@ -130,6 +169,62 @@ export const getSlpContractAddressConfig = (env = 'dev') => {
   return [];
 };
 
+/**
+ * Get the Clp contract address list based on the deri environment variable
+ * @method
+ * @param {string} env='dev' - Deri environment variable: 'prod' or 'dev'
+ * @returns {Object[]} response
+ * @returns {string} response[].pool - pool address
+ * @returns {string} response[].bToken - base token address
+ * @returns {string} response[].lToken - liquidity token address
+ * @returns {string} response[].initialBlock - initial block of the pool
+ * @returns {string} response[].bTokenSymbol - base token symbol
+ * @returns {string} response[].chainId - Id of the chain
+ */
+export const getClpContractAddressConfig = (env = 'dev') => {
+  if (env === 'prod') {
+    return [
+      {
+        pool: '0x4de2Ac273aD1BBe2F5C41f986d7b3cef8383Df98',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x83b31Abc899863B8Eb06952994580CE86414156E',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '6894880',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP',
+        symbol: 'BTCUSD',
+      },
+    ];
+  } else {
+    return [
+      {
+        pool: '0x7aad5ADF82d8B85c826c91924AcdACafAAA945f5',
+        bToken: '0x76340AB22aECAaa8f52D5341d2df404CBA966039',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0xd2138766005FAB46E20e6F7e1C4C32A375CfAC56',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '8309032',
+        chainId: '97',
+        bTokenSymbol: 'CAKE-LP',
+        symbol: 'BTCUSD',
+      },
+    ];
+  }
+};
+
+/**
+ * Get the Deri contract address list based on the deri environment variable
+ * @method
+ * @param {string} env='dev' - Deri environment variable: 'prod' or 'dev'
+ * @returns {Object[]} response
+ * @returns {string} response[].Deri - deri address
+ * @returns {string} response[].Wormhole - wormhole token address
+ * @returns {string} response[].bTokenSymbol - base token symbol
+ * @returns {string} response[].chainId - Id of the chain
+ */
 export const getDeriContractAddressConfig = (env = 'dev') => {
   if (env === 'prod') {
     return [
