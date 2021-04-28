@@ -1,18 +1,59 @@
-export default function RemoveBalance(){
+import React, { useState ,useEffect} from 'react'
+import { withdrawMargin, getPositionInfo } from "../../../lib/web3js";
+import NumberFormat from 'react-number-format';
+import Button from '../../Button/Button';
+
+export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
+  const [walletBalance, setWalletBalance] = useState('');
+  const [decimal, setDecimal] = useState('');
+  const [amount,setAmount] = useState('');
+
+  const loadWalletBalance = async () => {
+    if(wallet && wallet.account){
+      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account);
+      if(positionInfo){
+        const balance = (+positionInfo.margin)  + (+positionInfo.unrealizedPnl) + ''       
+        const decimal = balance.substring(balance.indexOf('.'),balance.indexOf('.') +3)
+        setWalletBalance(balance);
+        setDecimal(decimal);
+      }
+    }
+  }
+
+  const removeAll = () => {
+    setAmount(walletBalance)
+  }
+
+  const onChange = event => {
+    const {value} =event.target
+    setAmount(value)
+  }
+
+  const withdraw = async () => {
+    const res = await withdrawMargin(wallet.chainId,spec.pool,wallet.account,amount);
+    if(res.success){
+      afterWithdraw();
+    } else {
+      alert(res.error)
+    }
+  }
+
+  useEffect(() => {
+    loadWalletBalance();
+    return () => {
+    };
+  }, [wallet]);
+
   return (
     <div
       className='modal fade'
       id='removeMargin'
-      tabindex='-1'
-      role='dialog'
-      aria-labelledby='exampleModalLabel'
-      aria-hidden='true'
     >
       <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
             <div className='title'>WITHDRAW MARGIN</div>
-            <div className='close' data-dismiss='modal'>
+            <div className='close' onClick={onClose}>
               <span>&times;</span>
             </div>
           </div>
@@ -22,46 +63,31 @@ export default function RemoveBalance(){
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    {/* {{ modalMarginNum }}.<span style='font-size:12px'>{{removeMarginSub}}</span>  */}
-                    </span>
-
-                  </span
-                >
+                    <NumberFormat value={ walletBalance } thousandSeparator ={false} displayType = 'text' decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
+                  </span>
+                  </span>
                 <span className='remove'></span>
               </div>
               <div className='enter-margin remv'>
                 <div className='input-margin'>
                   <div className='box'>
-                    <div className='amount' v-show='isEnterMargin'>AMOUNT</div>
+                    <div className='amount' style={{display : amount !=='' ? 'block' : 'none'}}>AMOUNT</div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder='Amount'
-                      v-model='withdrawMargin'
-                    />
+                      value={amount}
+                      onChange={onChange}
+                      placeholder='Amount'/>
                   </div>
                 </div>
-                <div>{{ baseToken }}</div>
+                <div>{ spec.baseToken }</div>
               </div>
               <div className='max' v-show='isPosition'>
-                {/* MAX: <span className='max-num'>{{ this.maxMargin }}</span> */}
-                <span className='max-btn-left'>REMOVE ALL</span>
+                MAX: <span className='max-num'>{ walletBalance }</span>
+                <span className='max-btn-left' onClick={removeAll}>REMOVE ALL</span>
               </div>
-              <div
-                className='add-margin-btn'
-              >
-                <button
-                  className='margin-btn'
-                  id='withdrawMarginButton'
-                >
-                  <span
-                    className='spinner spinner-border spinner-border-sm'
-                    role='status'
-                    aria-hidden='true'
-                    style='display: none'
-                  ></span>
-                  WITHDRAW
-                </button>
+              <div className='add-margin-btn'>
+                <Button className='margin-btn' btnText='WITHDRAW' click={withdraw}/>
               </div>
             </div>
           </div>

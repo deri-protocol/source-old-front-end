@@ -1,19 +1,28 @@
 import React, { useState ,useEffect} from 'react'
 import { getTradeHistory } from "../../lib/web3js";
+import dateFormat from 'date-format'
 
-export default function History({wallet,spec}){
+export default function History({wallet,spec,specs}){
   const [history, setHistory] = useState([]);
 
   const loadHistory =  async () => {
     const all = await getTradeHistory(wallet.chainId,spec.pool,wallet.account)
-    setHistory(all)
+    const his = all.map(item => {
+      item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
+      const find = specs.find(s => s.bTokenSymbol == item.baseToken)
+      if(find){
+        item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
+      }
+      return item;
+    })
+    setHistory(his)
   }
 
   useEffect(() => {
     loadHistory();
     return () => {      
     };
-  }, [wallet.account,spec.pool]);
+  }, [wallet.account,spec.pool,specs]);
   
   return (
     <div className='history-info' v-show='historyShow'>
@@ -22,10 +31,10 @@ export default function History({wallet,spec}){
           <div className='history-box'>
           <div className='direction-bToken-price'>
             <span>
-              <span className='his.direction'>{ his.direction }</span>
-              <span>{ his.baseToken }</span>
+              <span className={`${his.direction}`}>{ his.directionText }</span>
+              <span>{ his.baseTokenText }</span>
             </span>
-            <span className='history-text time'>{ his.time }</span>
+            <span className='history-text time'>{dateFormat.asString('yyyy-MM-dd hh:mm:ss',new Date(parseInt(his.time)))}</span>
           </div>
           <div className='time-price-volume'>
             <div className='history-price'>

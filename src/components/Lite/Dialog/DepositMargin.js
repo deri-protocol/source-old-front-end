@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { getUserWalletBalance, getWalletBalance, depositMargin } from "../../../lib/web3js";
+import {  getWalletBalance, depositMargin } from "../../../lib/web3js";
 import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
 
@@ -32,7 +32,8 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
   const deposit = async (amount) => {
     const res = await depositMargin(wallet.chainId,spec.pool,wallet.account,amount);
     if(res.success){
-      afterDeposit && afterDeposit();
+      afterDeposit();
+      onClose();
     } else {
       alert(res.error);
     }
@@ -66,7 +67,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
                   </span> 
                   <br/>
                   <span 
-                  style={{fontSize :'14px'}}>
+                  style={{fontSize :'14px',marginLeft: '10px',marginTop: '10px'}}>
                     {spec.bTokenSymbol}
                   </span>
                   </span

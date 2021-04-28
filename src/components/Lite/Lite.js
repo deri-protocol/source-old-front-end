@@ -1,26 +1,23 @@
-import { useState } from 'react'
+import { useState ,useEffect} from 'react'
 
 import TradeInfo from './TradeInfo';
 import Position from './Position';
 import History from './History';
 import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
-import useTransactionSymbol from '../../hooks/useTransactionSymbol';
 
-export default function Lite({wallet}){
+export default function Lite({wallet,specs,spec,onSpecChange}){
   const [curTab, setCurTab] = useState('tradeInfo');
-  const [curSpec, setCurSpec] = useState({});
-  const symbols = useTransactionSymbol(wallet)
 
-  const switchTab = current => setCurTab(current);
   const tradeClazz = classNames('trade',{action : curTab === 'tradeInfo'})
   const posistionClazz = classNames('position',{action : curTab === 'position'})
   const histroyClazz = classNames('history',{action : curTab === 'history'})
 
-  const onSpecChange = spec => {
-    setCurSpec(spec)
-  }
-  
+  const tab1 = <TradeInfo wallet ={wallet}  spec={spec} specs={specs}   onSpecChange={onSpecChange}/>
+  const tab2 = <Position  wallet ={wallet} spec={spec}/>
+  const tab3 = <History wallet ={wallet} spec={spec} specs={specs} />
+
+  const switchTab = current => setCurTab(current);
 
   return (
     <>
@@ -39,11 +36,11 @@ export default function Lite({wallet}){
             </span>
           </div>
         </div>
-        {curTab === 'tradeInfo' && <TradeInfo wallet ={wallet} symbols={symbols} onSpecChange={onSpecChange}/>}
-        {curTab === 'position' && <Position  wallet ={wallet} spec={curSpec}/>}
-        {curTab === 'history' && <History wallet ={wallet} spec={curSpec}/>}
+        {curTab === 'tradeInfo' && tab1}
+        {curTab === 'position' && tab2}
+        {curTab === 'history' && tab3}
     </div>
-    <ContractInfo wallet={wallet} spec={curSpec}/>    
+    <ContractInfo wallet={wallet} spec={spec}/>    
   </>
   )
 }

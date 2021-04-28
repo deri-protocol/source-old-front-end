@@ -4,14 +4,19 @@ import { getPositionInfo, closePosition } from "../../lib/web3js";
 import className from 'classnames'
 import withModal from '../hoc/withModal';
 import DepositMargin from './Dialog/DepositMargin';
+import WithdrawMagin from './Dialog/WithdrawMargin';
+import useInterval from '../../hooks/useInterval';
 
 export default function Position({wallet = {},spec = {}}){
+  const [isLiquidation, setIsLiquidation] = useState(false);
   const [position, setPosition] = useState({});
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [addModalIsOpen, setAddModalIsOpen] = useState(false);
+  const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+  useInterval(loadPositionInfo,3000)
 
-  const loadPositionInfo = async () => {
+  async function loadPositionInfo() { 
     if(wallet.account && spec.pool){
       const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
       if(positionInfo){
@@ -24,20 +29,39 @@ export default function Position({wallet = {},spec = {}}){
   }
 
   const flatPosition = async () => {
-    const res = await closePosition(wallet.chainId,spec.pool,wallet.account);
+    setIsLiquidation(true)
+    const res = await closePosition(wallet.chainId,spec.pool,wallet.account).finally(() => setIsLiquidation(false))
     if(res.success){
       loadPositionInfo();
     } else {
-      alert(res.error)
+      const error = typeof res.error === 'string' ? res.error : res.error.errorMessage
+      if(typeof res.error === 'string') {
+        alert(res.error)
+      } else if(typeof res.error === 'object'){
+        alert(res.error.errorMessage)
+      } else {
+        alert('Liquidation failed')
+      }
+      
     }
   }
 
   const afterDeposit = () => {
-    setModalIsOpen(false)
+    setAddModalIsOpen(false)
+    loadPositionInfo();
   }
 
-  const onClose = () => {
-    setModalIsOpen(false)
+  const onCloseDeposit = () => {
+    setAddModalIsOpen(false)
+  }
+
+  const afterWithdraw = () => {
+    setRemoveModalIsOpen(false)
+    loadPositionInfo();
+  }
+
+  const onCloseWithdraw = () => {
+    setRemoveModalIsOpen(false)
   }
 
   const directionClass = className('Direction',{
@@ -46,6 +70,7 @@ export default function Position({wallet = {},spec = {}}){
   })
 
   const DepositDialog = withModal(DepositMargin);
+  const WithDrawDialog = withModal(WithdrawMagin)
 
 
   useEffect(() => {
@@ -53,8 +78,9 @@ export default function Position({wallet = {},spec = {}}){
     return () => {
     };
   }, [wallet.account,spec.pool]);
+
+   
   
-  // const {position,AverageEntryPrice,balanceContract,Direction,Margin,UnrealizedPnL,LiquidationPrice} = {}
   return(
 
     <div className='position-info' v-show='positionShow'>
@@ -73,7 +99,7 @@ export default function Position({wallet = {},spec = {}}){
             className='spinner spinner-border spinner-border-sm'
             role='status'
             aria-hidden='true'
-            style={{display: 'none'}}
+            style={{display: isLiquidation ? 'block' : 'none'}}
           ></span>
           <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> Close
         </div>
@@ -98,7 +124,7 @@ export default function Position({wallet = {},spec = {}}){
         <div
           className='add-margin'
           id='openAddMargin'
-          onClick={() => setModalIsOpen(true)}
+          onClick={() => setAddModalIsOpen(true)}
         >
           <svg
             className='svg'
@@ -118,9 +144,7 @@ export default function Position({wallet = {},spec = {}}){
         </div>
         <div
           className='remove-margin'
-          data-toggle='modal'
-          data-target='#removeMargin'
-          id='openRemoveMargin'
+          onClick={() => setRemoveModalIsOpen(true)}
         >
           <svg
             className='svg'
@@ -171,11 +195,18 @@ export default function Position({wallet = {},spec = {}}){
     </div>
     <DepositDialog
        wallet={wallet}
-       modalIsOpen={modalIsOpen} 
-       onClose={onClose}
+       modalIsOpen={addModalIsOpen} 
+       onClose={onCloseDeposit}
        spec={spec}
        afterDeposit={afterDeposit}
     />
+    <WithDrawDialog
+      wallet={wallet}
+      modalIsOpen={removeModalIsOpen} 
+      onClose={onCloseWithdraw}
+      spec={spec}
+      afterWithdraw={afterWithdraw}
+      />
   </div>
   )
 }

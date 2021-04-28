@@ -6,14 +6,13 @@ import './slider.less'
 
 const SliderWithTooltip = createSliderWithTooltip(RcSlider);
 
-export default function Slider({max,defaultValue,onValueChange,availableBalance}){
+export default function Slider({max,margin,onValueChange,dynamicBalance}){
   const [limit, setLimit] = useState(0);
-  const [value, setValue] = useState(defaultValue);
-  const [disabled, setDisabled] = useState(true);
+  const [value, setValue] = useState(margin);
+  const [disabled, setDisabled] = useState(false);
 
   const onSliderChange = value => {
     setValue(value)
-    console.log('slide value',value)
     onValueChange(value);
   }
 
@@ -23,20 +22,20 @@ export default function Slider({max,defaultValue,onValueChange,availableBalance}
   }, [max]);
 
   useEffect(() => {
-    setValue(defaultValue)
+    setValue(margin)
     return () => {      
     };
-  }, [defaultValue]);
+  }, [margin]);
 
   useEffect(() => {
-    if((+availableBalance) > 0){
+    if(dynamicBalance > 0){
       setDisabled(false)
     } else {
       setDisabled(true)
     }
     return () => {
     };
-  }, [availableBalance]);
+  }, [dynamicBalance]);
 
   return (
       <RcSlider
@@ -47,6 +46,7 @@ export default function Slider({max,defaultValue,onValueChange,availableBalance}
         onChange={onSliderChange}
         disabled={disabled}
         overlay={value}
+        step={0.01}
        >
         <div className='rc-slider-text'><span>0</span><span>{max}</span></div>        
         <div className='m-rc-slider-mark'>

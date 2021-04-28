@@ -2,6 +2,15 @@
 @red: #E35061;
 @text:#FFFFFF;
 @title:#AAAAAA;
+.trade-body.lite {
+  
+  .lite {    
+    background: #41424A;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 20px 0px 0px 5px;
+  }
+}
 .trade-body {
   display: flex;
   justify-content: space-between;
@@ -29,7 +38,6 @@
     .lite {
       background: #41424A;
       font-weight: bold;
-      color: #fff;
       border-radius: 20px 0px 0px 5px;
     }
 
@@ -223,7 +231,7 @@
             height: 68px;
             padding-top: 13px;
 
-            .rose {
+            .rise {
               color: @green;
             }
 
@@ -553,7 +561,9 @@
 
           .close-position {
             color: #fff;
-            // background-color : transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             svg {
               // width: 18px;
@@ -768,15 +778,21 @@
       padding: 0;
 
       .margin-box-info {
-        width: 301px;
+        width: 400px;
         margin-top: 33px;
         height: 280px;
+
+        .max {
+          margin-top: 20px;
+          margin-left: 5px;
+        }
 
         .money {
           display: flex;
           justify-content: space-between;
           align-items: center;
           color: #FFFFFF;
+          margin-top: 14px;
 
           .add {
             width: 10px;
@@ -799,7 +815,6 @@
 
         .enter-margin {
           display: flex;
-          justify-content: space-between;
           align-items: flex-end;
           margin-top: 25px;
 
@@ -868,7 +883,8 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: 35px;
+          margin-top: 68px;
+
           .margin-btn {
             width: 276px;
             height: 50px;
@@ -891,12 +907,10 @@
 
         .enter-margin {
           display: flex;
-          justify-content: space-between;
           align-items: flex-end;
           margin-top: 25px;
 
           .input-margin {
-            width: 253px;
             height: 50px;
             display: flex;
             justify-content: center;
@@ -906,6 +920,7 @@
             background-size: 100% 100%;
             background-repeat: no-repeat;
             border-radius: 6px;
+            margin-right: 4px;
 
             .amount {
               position: absolute;
@@ -915,7 +930,6 @@
             }
 
             .box {
-              width: 243px;
               height: 43px;
               border: 0;
               font-size: 18px;
@@ -928,7 +942,7 @@
 
               .margin-value {
                 height: 24px;
-                width: 243px;
+                width: 328px;
                 padding-left: 14px;
                 border: 0;
                 color: #fff;

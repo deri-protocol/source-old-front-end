@@ -1,8 +1,21 @@
 import Button from "../../Button/Button";
 import NumberFormat from 'react-number-format';
+import { tradeWithMargin } from "../../../lib/web3js";
 
 
-export default function TradeConfirm({onClose,contractVolume,spec,direction,posistion ={},indexPrice,leverage,transFee,trade}){
+export default function TradeConfirm({wallet,spec,onClose,volume,direction,position = 0,indexPrice,leverage,transFee,afterTrade}){
+
+
+  const trade = async () => {
+    const amount = direction === 'long' ? volume : -volume
+    const res = await tradeWithMargin(wallet.chainId,spec.pool,wallet.account,amount)
+    if(res.success){
+      afterTrade()
+      onClose()
+    }
+  }
+
+  const afterTradePosition = direction === 'long' ? ((+volume) + (+position)) : ((+position) - (+volume))
 
   return (
     <div className='modal-dialog'>
@@ -18,11 +31,11 @@ export default function TradeConfirm({onClose,contractVolume,spec,direction,posi
             <div className='top'>
               <div className='text'>
                 <div className='text-title'># of Contracts</div>
-                <div className='text-num'>{ contractVolume }</div>
+                <div className='text-num'>{ volume }</div>
               </div>
               <div className='text'>
                 <div className='text-title'>Position after execution</div>
-                <div className='text-num'>{ (+contractVolume) + (posistion.volume || 0)}</div>
+                <div className='text-num'>{ afterTradePosition }</div>
               </div>
               <div className='text'>
                 <div className='text-title'>Direction</div>
