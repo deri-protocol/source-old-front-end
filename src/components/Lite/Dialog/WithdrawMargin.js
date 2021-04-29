@@ -42,7 +42,7 @@ export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
     loadWalletBalance();
     return () => {
     };
-  }, [wallet]);
+  }, [wallet.account]);
 
   return (
     <div

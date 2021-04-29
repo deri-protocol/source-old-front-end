@@ -28,13 +28,12 @@ export default function Position({wallet = {},spec = {}}){
     }    
   }
 
-  const flatPosition = async () => {
+  const onClosePosition = async () => {
     setIsLiquidation(true)
     const res = await closePosition(wallet.chainId,spec.pool,wallet.account).finally(() => setIsLiquidation(false))
     if(res.success){
       loadPositionInfo();
-    } else {
-      const error = typeof res.error === 'string' ? res.error : res.error.errorMessage
+    } else {      
       if(typeof res.error === 'string') {
         alert(res.error)
       } else if(typeof res.error === 'object'){
@@ -93,7 +92,7 @@ export default function Position({wallet = {},spec = {}}){
         <div
           className='close-position'
           id='close-p'
-          onClick={flatPosition}
+          onClick={onClosePosition}
         >
           <span
             className='spinner spinner-border spinner-border-sm'

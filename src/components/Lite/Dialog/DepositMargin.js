@@ -43,7 +43,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
     loadWalletBalance()
     return () => {
     };
-  }, [wallet]);
+  }, [wallet.account]);
 
 
 

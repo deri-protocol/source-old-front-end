@@ -1,4 +1,4 @@
-import { useState ,useEffect} from 'react'
+import { useState } from 'react'
 
 import TradeInfo from './TradeInfo';
 import Position from './Position';
@@ -6,7 +6,7 @@ import History from './History';
 import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 
-export default function Lite({wallet,specs,spec,onSpecChange}){
+export default function Lite({wallet,specs,spec,onSpecChange,isPro}){
   const [curTab, setCurTab] = useState('tradeInfo');
 
   const tradeClazz = classNames('trade',{action : curTab === 'tradeInfo'})
@@ -14,8 +14,8 @@ export default function Lite({wallet,specs,spec,onSpecChange}){
   const histroyClazz = classNames('history',{action : curTab === 'history'})
 
   const tab1 = <TradeInfo wallet ={wallet}  spec={spec} specs={specs}   onSpecChange={onSpecChange}/>
-  const tab2 = <Position  wallet ={wallet} spec={spec}/>
-  const tab3 = <History wallet ={wallet} spec={spec} specs={specs} />
+  const tab2 = !isPro && <Position  wallet ={wallet} spec={spec}/>
+  const tab3 = !isPro && <History wallet ={wallet} spec={spec} specs={specs} />
 
   const switchTab = current => setCurTab(current);
 
@@ -27,6 +27,7 @@ export default function Lite({wallet,specs,spec,onSpecChange}){
             <span className={tradeClazz} onClick={() => switchTab('tradeInfo')}>
               TRADE
             </span>
+            {!isPro && <>
             <span
               className={posistionClazz} onClick={() => switchTab('position')}>
               MY POSITION
@@ -34,6 +35,7 @@ export default function Lite({wallet,specs,spec,onSpecChange}){
             <span className={histroyClazz} onClick={() => switchTab('history')}>
               HISTORY
             </span>
+            </>}
           </div>
         </div>
         {curTab === 'tradeInfo' && tab1}

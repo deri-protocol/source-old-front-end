@@ -4,7 +4,7 @@ import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
 
 const Lite = LoadableComponent(()=>import('../../pages/trade/Trade')) 
-const Pro = LoadableComponent(()=>import('../../pages/trade/Pro')) 
+const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro')) 
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 

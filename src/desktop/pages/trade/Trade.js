@@ -1,6 +1,6 @@
 import { useState ,useContext,useEffect} from 'react'
 import './trade.less'
-import Pro from './Pro';
+import Pro from './Pro/Pro';
 import Lite from '../../../components/Lite/Lite';
 import {WalletContext} from '../../../context/WalletContext'
 import useTransactionSymbol from '../../../hooks/useTransactionSymbol';
@@ -9,7 +9,7 @@ import classNames from 'classnames';
 export default function Trade(){
   const [curTab, setCurTab] = useState('lite')
   const context = useContext(WalletContext)
-  const wallet = context.walletContext.get();
+  const wallet = context.walletContext.get() || {};
   const [spec, setSpec] = useState({});
   const specs = useTransactionSymbol(wallet)
 

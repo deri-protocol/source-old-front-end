@@ -1,6 +1,5 @@
 {
   "name": "app.deri.finance",
-  "homepage": "https://lhd-defactory.github.io/lhd-defactory/",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
@@ -86,7 +85,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "start_p" : "npx serve -s build"
   },
   "eslintConfig": {
     "extends": [
