@@ -6,14 +6,14 @@ import History from './History';
 import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 
-export default function Lite({wallet,specs,spec,onSpecChange,isPro}){
+export default function Lite({wallet,specs,spec,onSpecChange,isPro,indexPrice}){
   const [curTab, setCurTab] = useState('tradeInfo');
 
   const tradeClazz = classNames('trade',{action : curTab === 'tradeInfo'})
   const posistionClazz = classNames('position',{action : curTab === 'position'})
   const histroyClazz = classNames('history',{action : curTab === 'history'})
 
-  const tab1 = <TradeInfo wallet ={wallet}  spec={spec} specs={specs}   onSpecChange={onSpecChange}/>
+  const tab1 = <TradeInfo wallet ={wallet}  spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
   const tab2 = !isPro && <Position  wallet ={wallet} spec={spec}/>
   const tab3 = !isPro && <History wallet ={wallet} spec={spec} specs={specs} />
 

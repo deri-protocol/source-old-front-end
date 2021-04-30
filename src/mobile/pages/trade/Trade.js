@@ -1,7 +1,5 @@
+
 import { useState ,useContext,useEffect,useCallback} from 'react'
-import './trade.less'
-import Pro from './Pro/Pro';
-import Lite from '../../../components/Lite/Lite';
 import {WalletContext} from '../../../context/WalletContext'
 import useTransactionSymbol from '../../../hooks/useTransactionSymbol';
 import classNames from 'classnames';
@@ -9,11 +7,12 @@ import config from '../../../config.json'
 import axios from 'axios'
 import { DeriEnv, deriToNatural } from '../../../lib/web3js';
 import useInterval from '../../../hooks/useInterval';
+import Lite from "../../../components/Lite/Lite";
+import './trade.less'
 
 const oracleConfig = config[DeriEnv.get()]['oracle']
 
 export default function Trade(){
-  const [curTab, setCurTab] = useState('lite')
   const [spec, setSpec] = useState({});
   const [indexPrice, setIndexPrice] = useState('-');
   const context = useContext(WalletContext)
@@ -21,16 +20,9 @@ export default function Trade(){
   const specs = useTransactionSymbol(wallet)
 
 
-
-  const switchTab = current => {
-    setCurTab(current)
-  }
-
   const onSpecChange = spec => {
     setSpec(spec)
   }
-
-  const tradeBodyClass =classNames('trade-body', curTab)
 
 
   //价格指数
@@ -47,13 +39,13 @@ export default function Trade(){
     [indexPrice,spec],
   )
 
-  useInterval(loadIndexPrice,1000)
+  // useInterval(loadIndexPrice,1000)
 
   useEffect(() => {
     loadIndexPrice();
     return () => {
     };
-  }, [loadIndexPrice]);
+  }, [indexPrice,spec]);
 
 
   useEffect(() => {
@@ -72,15 +64,9 @@ export default function Trade(){
     onSpecChange,
     indexPrice
   }
-
   return (
-    <div className={tradeBodyClass}>
-      <div className="check-lite-pro">
-        <div className='lite' onClick={() => switchTab('lite')}>LITE</div>
-        <div className='pro' onClick={() => switchTab('pro')}> PRO
-        </div>
-      </div>
-      {curTab === 'lite' ? <Lite {...props}/> : <Pro {...props}/>}
-    </div>
+    <div className='trade-body'>
+      <Lite {...props} HideContractWhenMobile={true}/>
+    </div>    
   )
 }

@@ -1,8 +1,9 @@
 import React, { useState ,useEffect} from 'react'
 import { getTradeHistory } from "../../lib/web3js";
 import dateFormat from 'date-format'
+import NumberFormat from 'react-number-format';
 
-export default function History({wallet,spec,specs}){
+export default function History({wallet = {},spec ={} ,specs = []}){
   const [history, setHistory] = useState([]);
 
   const loadHistory =  async () => {
@@ -39,7 +40,7 @@ export default function History({wallet,spec,specs}){
           <div className='time-price-volume'>
             <div className='history-price'>
               <div className='history-title'>Volume @ Price</div>
-              <div className='history-text'>{ his.volume } @ { his.price }</div>
+              <div className='history-text'>{ his.volume } @ <NumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
             </div>
           <div className='notional'>
               <div className='history-title'>Notional</div>

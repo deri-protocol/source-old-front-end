@@ -1,6 +1,6 @@
 import {useState,useRef} from 'react';
-export default function Button({btnText,className,click,afterClick}){
-  const [status, setStatus] = useState('enabled');
+export default function Button({btnText,className,disabled,click,afterClick}){
+  const [status, setStatus] = useState(disabled ? 'disabled' : 'enabled');
   const loadRef = useRef(null)
 
   const onClick = async () => {

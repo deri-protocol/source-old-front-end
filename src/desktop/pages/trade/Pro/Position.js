@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useState,useEffect } from 'react'
 import NumberFormat from 'react-number-format'
 import { getPositionInfo, closePosition } from '../../../../lib/web3js';
@@ -8,7 +10,13 @@ import WithdrawMagin from '../../../../components/Lite/Dialog/WithdrawMargin';
 import useInterval from '../../../../hooks/useInterval';
 
 export default function Position({wallet = {},spec = {}}){
-  const [positionInfo, setPositionInfo] = useState({});
+  const [positionInfo, setPositionInfo] = useState({
+    balanceContract : '-',
+    averageEntryPrice : '-',
+    marginHeld : '-',
+    unrealizedPnl : '-',
+    liquidationPrice : '-'
+  });
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);

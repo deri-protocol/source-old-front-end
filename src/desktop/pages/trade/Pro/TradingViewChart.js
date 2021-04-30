@@ -7,7 +7,7 @@ const defaultProps = {
 }
 export default function TradingViewChart({spec = {}}){
   const [loading, setLoading] = useState(true);
-  const [actived, setActived] = useState('one-day');
+  const [actived, setActived] = useState('thirty');
   const [deriWidget, setDeriWidget] = useState(null);
 
   const activedClass = classNames('btn',actived)
@@ -63,9 +63,13 @@ export default function TradingViewChart({spec = {}}){
 
 
   const  changeTime= (time,period) => {
+    setLoading(true)
     setActived(period)
     deriWidget.chart().refreshMarks()
-    deriWidget.activeChart().setResolution(time)    
+    deriWidget.activeChart().setResolution(time,() => {
+      setLoading(false)
+    })    
+    
   }
 
   useEffect(() => {
@@ -83,7 +87,7 @@ export default function TradingViewChart({spec = {}}){
           <span className='tab-btn one' onClick={() => changeTime('1','one')} >1min</span>
           <span className='tab-btn five' onClick={() => changeTime('5','five')}>5min</span>
           <span className='tab-btn fifteen' onClick={() => changeTime('15','fifteen')}>15min</span>
-          <span className='tab-btn thrity' onClick={() => changeTime('30','thirty')}>30min</span>
+          <span className='tab-btn thirty' onClick={() => changeTime('30','thirty')}>30min</span>
           <span className='tab-btn sixty' onClick={() => changeTime('60','sixty')}>1hour</span>
           <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1day</span>
           <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1week</span>

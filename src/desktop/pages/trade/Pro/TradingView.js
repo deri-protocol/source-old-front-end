@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useRef } from 'react'
 import { getFundingRate } from "../../../../lib/web3js"
 import NumberFormat from 'react-number-format'
 import TradingViewChart from "./TradingViewChart";
 
-export default function TradingView({wallet = {},spec = {},indePrice}){
-  const [fundingRate, setFundingRate] = useState({});
+export default function TradingView({wallet = {},spec = {},indexPrice}){
+  const [fundingRate, setFundingRate] = useState({
+    fundingRate0 : '-',
+    tradersNetVolume: '-'
+  });
+  const [indexPriceClass, setIndexPriceClass] = useState('');
+  const indexPriceRef = useRef()
+
+
 
   const loadFundingRate = async () => {
     if(wallet.chainId){
@@ -12,11 +19,22 @@ export default function TradingView({wallet = {},spec = {},indePrice}){
       setFundingRate(fundingRate)
     }
   }
+
+
+  useEffect(() => {    
+    if(indexPriceRef.current){
+      indexPriceRef.current > indexPrice ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
+    }
+    indexPriceRef.current = indexPrice
+    return () => {      
+    };
+  }, [indexPrice]);
+
   useEffect(() => {
     loadFundingRate();
     return () => {
     };
-  }, [wallet,spec]);
+  }, [wallet,spec,indexPrice]);
   return (
     <div id="trading-view">
       <div className='right-top'>
@@ -25,7 +43,7 @@ export default function TradingView({wallet = {},spec = {},indePrice}){
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
-          <div className='trade-dashboard-value rose'>{indePrice}</div>
+          <div className={indexPriceClass}><NumberFormat value={indexPrice} displayType='text'/></div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>
@@ -37,11 +55,11 @@ export default function TradingView({wallet = {},spec = {},indePrice}){
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Total Net Position</div>
-          <div className='trade-dashboard-value'>{fundingRate.tradersNetVolume || '--'}</div>
+          <div className='trade-dashboard-value'>{fundingRate.tradersNetVolume}</div>
         </div>            
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Pool Total liquidity</div>
-          <div className='trade-dashboard-value'> <NumberFormat value={fundingRate.liquidity || '--'} displayType='text' decimalScale={2}/> {spec.bTokenSymbol}</div>
+          <div className='trade-dashboard-value'> <NumberFormat allowLeadingZeros={true} value={fundingRate.liquidity || '--'} displayType='text' decimalScale={2}/> {spec.bTokenSymbol}</div>
         </div>
       </div>
       <div className='tradingview'>
