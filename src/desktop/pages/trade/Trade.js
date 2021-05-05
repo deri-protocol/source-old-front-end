@@ -1,4 +1,4 @@
-import { useState ,useContext,useEffect,useCallback} from 'react'
+import { useState ,useContext,useEffect,useCallback,useRef} from 'react'
 import './trade.less'
 import Pro from './Pro/Pro';
 import Lite from '../../../components/Lite/Lite';
@@ -9,21 +9,27 @@ import config from '../../../config.json'
 import axios from 'axios'
 import { DeriEnv, deriToNatural } from '../../../lib/web3js';
 import useInterval from '../../../hooks/useInterval';
+import ContractInfo from '../../../components/ContractInfo/ContractInfo';
 
 const oracleConfig = config[DeriEnv.get()]['oracle']
 
 export default function Trade(){
   const [curTab, setCurTab] = useState('lite')
-  const [spec, setSpec] = useState({});
+  const [spec, setSpec] = useState({symbol : 'BTCUSD',bTokenSymbol : 'USDT'});
   const [indexPrice, setIndexPrice] = useState('-');
   const context = useContext(WalletContext)
-  const wallet = context.walletContext.get() || {};  
+  const wallet  = context.walletContext.get();  
   const specs = useTransactionSymbol(wallet)
 
 
 
   const switchTab = current => {
     setCurTab(current)
+    if(current === 'pro') {
+      document.querySelector('.desktop').style.width = '1920px';
+    } else {
+      document.querySelector('.desktop').style.width = 'inherit';
+    }
   }
 
   const onSpecChange = spec => {
@@ -47,7 +53,7 @@ export default function Trade(){
     [indexPrice,spec],
   )
 
-  useInterval(loadIndexPrice,1000)
+  // useInterval(loadIndexPrice,1000)
 
   useEffect(() => {
     loadIndexPrice();
@@ -66,7 +72,7 @@ export default function Trade(){
   }, [specs]);
 
   const props = {
-    wallet,
+    wallet : wallet,
     specs,
     spec ,
     onSpecChange,

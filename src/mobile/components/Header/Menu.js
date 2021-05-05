@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import {Link,useRouteMatch} from 'react-router-dom'
 import logo from '../../img/deri-logo.png'
 import menuDown from '../../img/menu-down.png'
@@ -5,7 +6,12 @@ import './menu.less'
 
 export default function Menu({closeMenu}){
   const isMining =  useRouteMatch('/mining') ? true : false
-  const isTrade = useRouteMatch('/trade') ? true : false
+  const isTrade = useRouteMatch('/lite') ? true : false
+
+  useEffect(() => {
+    document.querySelectorAll('.menu li a').forEach(e => e.addEventListener('click',closeMenu));
+    return () => {};
+  }, []);
 
   return (
     <div className='menu'>

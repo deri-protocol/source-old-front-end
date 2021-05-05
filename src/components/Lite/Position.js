@@ -17,7 +17,7 @@ export default function Position({wallet = {},spec = {}}){
   // useInterval(loadPositionInfo,3000)
 
   async function loadPositionInfo() { 
-    if(wallet.account && spec.pool){
+    if(wallet && wallet.account && spec && spec.pool){
       const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
       if(positionInfo){
         setPosition(positionInfo);
@@ -76,13 +76,13 @@ export default function Position({wallet = {},spec = {}}){
     loadPositionInfo();
     return () => {
     };
-  }, [wallet.account,spec.pool]);
+  }, [wallet,spec.pool]);
 
    
   
   return(
 
-    <div className='position-info' v-show='positionShow'>
+    <div className='position-info'>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Position</div>

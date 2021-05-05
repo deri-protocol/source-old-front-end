@@ -4,18 +4,12 @@
 @title: #aaaaaa;
 
 .trade-body.pro {
-  align-items: initial !important;
-  margin: 30px 0 !important;
-
+  margin: 0 0 0 40px;
   .pro {
     background: #41424a;
     font-weight: bold;
     color: #fff;
-    border-radius: 20px 0px 0px 5px;
-  }
-
-  .check-lite-pro {
-    height: initial;
+    border-radius: 5px 0px 0px 20px;
   }
 
   .trade-pro {
@@ -64,9 +58,11 @@
       }
       .trade-position {
         width: 575px;
-        height: 635px;
-        background: #2c2d31;
-        border-radius: 0px 20px 0px 0px;
+        height: 724px;
+        border-radius: 0px 0px 20px 0px;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
         .header {
           width: 575px;
           height: 54px;
@@ -89,15 +85,16 @@
           .action {
             color: #d4e05c;
           }
+          .history-info,.position-info {
+            display: none
+          }
         }
 
         .trade-info {
           display: flex;
           justify-content: center;
           align-items: center;
-        }
-        .trade-info {
-          margin-top: 12px;
+
           .trade-peration {
             width: 533px;
             height: 569px;
@@ -429,14 +426,20 @@
         background: #232529;
         justify-content: center;
         width: 575px;
-        height: 373px;
+        height: 365px;
+        border-radius: 0px;
+
+        .contract-header{
+          height: 0px;
+        }
+
         .contract-info {
           width: 535px;
-          margin-top: 15px;
+
           .conntract-header {
-            margin-left: 12px;
+            margin: 20px 0 12px;
+            margin-left: 36px;
             font-size: 15px;
-            margin-bottom: 10px;
             font-family: Tachyon, sans-serif;
             letter-spacing: 2px;
             font-weight: 400;

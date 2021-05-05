@@ -9,6 +9,46 @@
   font-family: Korolev, sans-serif;
   flex-direction: column;
 
+  .trade-position.trade {
+    .trade {
+      color: #D4E05C;
+    }
+    .trade-info {
+      display: block;
+    }
+    .position-info,.history-info {
+      display: none;
+    }  
+  }
+  .trade-position.position {
+    .position {
+      color: #D4E05C;
+    }
+    .position-info {
+      display: block;
+    }
+    .trade-info,.history-info {
+      display: none;
+    }
+    .contract-box{
+      display: none;
+    }
+  }
+  .trade-position.history {
+    .history {
+      color: #D4E05C;
+    }
+    .history-info {
+      display: block;
+    }
+    .trade-info,.position-info {
+      display: none;
+    }
+    .contract-box{
+      display: none;
+    }
+  }
+
   .trade-position {
     background: #2C2D31;
     border-radius: 0px 20px 0px 0px;
@@ -30,7 +70,7 @@
         justify-content: space-between;
         align-items: center;
         background-color: #0D0E0F;
-        padding-left: 10px;
+        padding: 0px 10px;
 
         span {
           cursor: pointer;
@@ -84,7 +124,7 @@
               will-change: transform;
             }
             .dropdown-menu {
-              width: 273px;
+              // width: 273px;
               color: #CCCCCC;
               border: 0;
               border-radius: 10px;
@@ -112,12 +152,12 @@
 
             .dropdown-item {
               padding: 0;
-              width: 228px;
+              width: 174px;
               font-size: 16px;
               font-family: Korolev, sans-serif;
               font-weight: 300;
               color: #CCCCCC;
-              margin-left: 32px;
+              margin-left: 19px;
               line-height: 32px;
             }
 
@@ -626,7 +666,6 @@
   .contract-box {
     height: 4.5rem;
     background: #232529;
-    border-radius: 0px 20px 20px 0px;
     display: flex;
     justify-content: center;
 
@@ -635,7 +674,7 @@
       margin-top: 35px;
 
       .conntract-header {
-        margin-left: 59px;
+        margin-left: 26px;
         margin-bottom: 19px;
         font-size: 15px;
         font-family: Tachyon, sans-serif;
@@ -682,7 +721,6 @@
     color: #AAAAAA;
     position: relative;
     background: rgba(13, 14, 15);
-    height: 4rem;
     display: inline-block;
     border: 1px solid #707070;
     margin-left: 26px;
@@ -826,7 +864,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: 0.5rem;
+          margin-top: 0.3rem;
 
           .margin-btn {
             width: 276px;
@@ -845,8 +883,8 @@
       }
 
       .contract-box-info {
-        width: 471px;
-        height: 422px;
+        display: flex;
+        flex-direction: column;
 
         .enter-margin {
           display: flex;
@@ -924,14 +962,14 @@
       }
 
       .modal-footer {
-        margin-top: 42px;
+        margin: 20px;
         padding: 0;
         border: 0;
         justify-content: center;
 
-        button {
-          width: 200px;
-          height: 50px;
+        button {    
+          width: 1.4rem;
+          height: 0.4rem;
           border-radius: 10px;
           color: #CCCCCC;
           font-size: 18px;
@@ -944,6 +982,7 @@
         }
 
         .long-btn {
+          width:100%;
           display: flex;
           justify-content: space-between;
           align-items: center;

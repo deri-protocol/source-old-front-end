@@ -31,7 +31,7 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
   }, [indexPrice]);
 
   useEffect(() => {
-    loadFundingRate();
+    wallet && loadFundingRate();
     return () => {
     };
   }, [wallet,spec,indexPrice]);

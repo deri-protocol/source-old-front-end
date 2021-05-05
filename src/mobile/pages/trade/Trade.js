@@ -9,11 +9,12 @@ import { DeriEnv, deriToNatural } from '../../../lib/web3js';
 import useInterval from '../../../hooks/useInterval';
 import Lite from "../../../components/Lite/Lite";
 import './trade.less'
+import ContractInfo from '../../../components/ContractInfo/ContractInfo';
 
 const oracleConfig = config[DeriEnv.get()]['oracle']
 
 export default function Trade(){
-  const [spec, setSpec] = useState({});
+  const [spec, setSpec] = useState({symbol : 'BTCUSD',bTokenSymbol : 'USDT'});  
   const [indexPrice, setIndexPrice] = useState('-');
   const context = useContext(WalletContext)
   const wallet = context.walletContext.get() || {};  
@@ -66,7 +67,7 @@ export default function Trade(){
   }
   return (
     <div className='trade-body'>
-      <Lite {...props} HideContractWhenMobile={true}/>
+      <Lite {...props} showContractWhenMobile={false}/>  
     </div>    
   )
 }

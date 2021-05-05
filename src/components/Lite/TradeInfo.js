@@ -37,7 +37,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //控制状态
   const [volume, setVolume] = useState('');  
 
-  useInterval(loadPosition,3000)
+  // useInterval(loadPosition,3000)
 
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{' checked-short' : direction === 'short'})
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
@@ -325,6 +325,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
               type='number'
               onFocus={onFocus}
               onBlur={onBlur}
+              disabled={!tradeInfo.available}
               onChange={event => setVolume(event.target.value)}
               value={tradeInfo.volume}
               className={volumeClazz}

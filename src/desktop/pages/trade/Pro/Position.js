@@ -37,12 +37,14 @@ export default function Position({wallet = {},spec = {}}){
 
   
   async function loadPositionInfo(){    
-    const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
-    if(positionInfo){
-      const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
-      positionInfo.direction = direction
-      positionInfo.balanceContract = (+positionInfo.margin) + (+positionInfo.unrealizedPnl)
-      setPositionInfo(positionInfo);
+    if(wallet){
+      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
+      if(positionInfo){
+        const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
+        positionInfo.direction = direction
+        positionInfo.balanceContract = (+positionInfo.margin) + (+positionInfo.unrealizedPnl)
+        setPositionInfo(positionInfo);
+      }
     }
   }
 
@@ -63,10 +65,10 @@ export default function Position({wallet = {},spec = {}}){
   }
 
   useEffect(() => {
-    loadPositionInfo();
+    wallet && spec && loadPositionInfo();
     return () => {
     };
-  }, [wallet,wallet,spec])
+  }, [wallet,spec])
 
   return (
     <div className='position-box' >

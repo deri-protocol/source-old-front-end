@@ -7,42 +7,32 @@ import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 
 export default function Lite({wallet,specs,spec,onSpecChange,isPro,indexPrice}){
-  const [curTab, setCurTab] = useState('tradeInfo');
-
-  const tradeClazz = classNames('trade',{action : curTab === 'tradeInfo'})
-  const posistionClazz = classNames('position',{action : curTab === 'position'})
-  const histroyClazz = classNames('history',{action : curTab === 'history'})
-
-  const tab1 = <TradeInfo wallet ={wallet}  spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
-  const tab2 = !isPro && <Position  wallet ={wallet} spec={spec}/>
-  const tab3 = !isPro && <History wallet ={wallet} spec={spec} specs={specs} />
+  const [curTab, setCurTab] = useState('trade');
 
   const switchTab = current => setCurTab(current);
-
+  const tradeClassName = classNames('trade-position',curTab)
   return (
-    <>
-      <div className='trade-position'>
+      <div className={tradeClassName}>
         <div className='header-top'>
           <div className='header'>
-            <span className={tradeClazz} onClick={() => switchTab('tradeInfo')}>
+            <span className='trade' onClick={() => switchTab('trade')}>
               TRADE
             </span>
             {!isPro && <>
             <span
-              className={posistionClazz} onClick={() => switchTab('position')}>
+              className='position' onClick={() => switchTab('position')}>
               MY POSITION
             </span>
-            <span className={histroyClazz} onClick={() => switchTab('history')}>
+            <span className='history' onClick={() => switchTab('history')}>
               HISTORY
             </span>
             </>}
           </div>
         </div>
-        {curTab === 'tradeInfo' && tab1}
-        {curTab === 'position' && tab2}
-        {curTab === 'history' && tab3}
-    </div>
-    <ContractInfo wallet={wallet} spec={spec}/>    
-  </>
+        <TradeInfo wallet ={wallet}  spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
+        <Position  wallet ={wallet} spec={spec}/>
+        <History wallet ={wallet} spec={spec} specs={specs} />
+        <ContractInfo wallet={wallet} spec={spec}/>   
+    </div> 
   )
 }

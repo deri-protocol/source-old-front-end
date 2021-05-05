@@ -12,7 +12,7 @@ export default function History({wallet,spec}) {
       const his = await getTradeHistory(wallet.chainId,spec.pool,wallet.account);    
       setHistory(his)
     }
-    loadHistory()
+    wallet && spec && loadHistory()
     return () => {
     };
   }, [wallet,wallet,spec]);

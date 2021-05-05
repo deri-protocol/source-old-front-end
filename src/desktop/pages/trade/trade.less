@@ -20,7 +20,7 @@
 
   .check-lite-pro {
     width: 50px;
-    height: 727px;
+    height: 100%;
     background: #232529;
     border-radius: 20px 0px 0px 20px;
 
@@ -50,15 +50,53 @@
       }
     }
   }
+  .trade-position.trade {
+    .trade {
+      color: #D4E05C;
+    }
+    .trade-info {
+      display: block;
+    }
+    .position-info,.history-info {
+      display: none;
+    }  
+  }
+  .trade-position.position {
+    .position {
+      color: #D4E05C;
+    }
+    .position-info {
+      display: block;
+    }
+    .trade-info,.history-info {
+      display: none;
+    }
+  }
+  .trade-position.history {
+    .history {
+      color: #D4E05C;
+    }
+    .history-info {
+      display: block;
+    }
+    .trade-info,.position-info {
+      display: none;
+    }
+  }
 
   .trade-position {
-    width: 575px;
-    height: 727px;
-    background: #2C2D31;
-    border-radius: 0px 20px 0px 0px;
+    width: 1150px;
+    height: 724px;
+    border-radius: 0px 0px 20px 0px;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    background: #2c2d31;
+
     .header-top {
       display: flex;
       background: #1c1c22;
+      width: 575px;
 
       .header {
         height: 54px;
@@ -80,10 +118,6 @@
         span {
           cursor: pointer;
         }
-
-        .action {
-          color: #D4E05C;
-        }
       }
       .contract-info-header {
         width: 50%;
@@ -91,13 +125,11 @@
       }
     }
 
-
     .trade-info {
+      width: 575px;
       display: flex;
       align-items: center;
-    }
-
-    .trade-info {
+      background: #2C2D31;
 
       .trade-peration {
         width: 530px;
@@ -483,6 +515,9 @@
     }
 
     .position-info {
+      
+      width: 575px;
+
       .info {
         display: flex;
         justify-content: space-between;
@@ -581,6 +616,7 @@
     }
 
     .history-info {
+      width: 575px;
       max-height: 673px;
       overflow-y: auto;
 
@@ -680,18 +716,27 @@
 
   .contract-box {
     width: 575px;
-    height: 673px;
-    background: #232529;
+    height: 727px;
     border-radius: 0px 20px 20px 0px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    background: #1b1c22;
+    
+
+    .contract-header {
+      height: 58px;
+      width: 100%;
+      background: #1b1c22;
+    }
 
     .contract-info {
-      width: 511px;
-      margin-top: 35px;
+      width: 575px;
+      border-radius: 0px 20px 20px 0;
+      background: #232529;
+      height: 100%;
 
       .conntract-header {
-        margin-left: 59px;
+        margin: 35px 86px;
         margin-bottom: 19px;
         font-size: 15px;
         font-family: Tachyon, sans-serif;
@@ -709,6 +754,8 @@
         font-family: Korolev, sans-serif;
         font-weight: 500;
         color: #AAAAAA;
+        width: 90%;
+        margin: auto;
 
         .title {
           padding-left: 59px;

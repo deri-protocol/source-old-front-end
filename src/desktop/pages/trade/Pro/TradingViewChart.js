@@ -56,7 +56,9 @@ export default function TradingViewChart({spec = {}}){
 		const w  = new widget(widgetOptions);
 
 		w.onChartReady(() => {
-      setLoading(false)
+      w.activeChart().setResolution('30',() => {
+        setLoading(false)
+      })
     });
     return w;
   }

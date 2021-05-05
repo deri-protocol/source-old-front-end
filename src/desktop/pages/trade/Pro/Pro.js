@@ -1,7 +1,9 @@
-import './pro.less'
+import { useEffect } from 'react'
+
 import Lite from '../../../../components/Lite/Lite'
 import TradingView from './TradingView'
 import Reference from './Reference'
+import './pro.less'
 
 export  default function Pro({wallet,specs,spec,onSpecChange,indexPrice}){
 

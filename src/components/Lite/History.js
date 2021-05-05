@@ -20,10 +20,10 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   }
 
   useEffect(() => {
-    loadHistory();
+    wallet && loadHistory();
     return () => {      
     };
-  }, [wallet.account,spec.pool,specs]);
+  }, [wallet,spec.pool,specs]);
   
   return (
     <div className='history-info' v-show='historyShow'>

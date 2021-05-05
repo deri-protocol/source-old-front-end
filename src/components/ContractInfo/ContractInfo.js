@@ -4,21 +4,30 @@ import { getSpecification } from '../../lib/web3js';
 
 
 export default function ContractInfo({wallet,spec ={}}){
-  const [contract, setContract] = useState({}); 
+  const [contract, setContract] = useState({
+    bSymbol : 'USDT',
+    symbol : 'BTCUSD',
+    multiplier : '0.0001',
+    fundingRateCoefficient : '0.0000025',
+    minInitialMarginRatio : 0.1,
+    minMaintenanceMarginRatio : 0.0005,
+    feeRatio : 0.05
+  }); 
 
   useEffect(() => { 
     const setSpec = async () => {           
-      if(spec.pool){
+      if(spec.pool && wallet && wallet.account){
         const contractInfo = await getSpecification(wallet.chainId,spec.pool,wallet.account) 
         setContract(contractInfo)  
       }
     }
-    setSpec();
+    wallet && setSpec();
     return setSpec;
-  }, [spec.pool]);
+  }, [spec.pool,wallet]);
   
   return(
     <div className="contract-box">
+      <div className='contract-header'></div>
       <div className="contract-info">
         <div className="conntract-header">CONTRACT INFO</div>
         <div className="info">
