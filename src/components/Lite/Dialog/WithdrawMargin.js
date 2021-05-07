@@ -9,8 +9,8 @@ export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
   const [amount,setAmount] = useState('');
 
   const loadWalletBalance = async () => {
-    if(wallet && wallet.account){
-      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account);
+    if(wallet.isConnected()){
+      const positionInfo = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account);
       if(positionInfo){
         const balance = (+positionInfo.margin)  + (+positionInfo.unrealizedPnl) + ''       
         const decimal = balance.substring(balance.indexOf('.'),balance.indexOf('.') +3)
@@ -30,7 +30,7 @@ export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
   }
 
   const withdraw = async () => {
-    const res = await withdrawMargin(wallet.chainId,spec.pool,wallet.account,amount);
+    const res = await withdrawMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
       afterWithdraw();
     } else {
@@ -42,7 +42,7 @@ export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
     loadWalletBalance();
     return () => {
     };
-  }, [wallet.account]);
+  }, [wallet.detail.account]);
 
   return (
     <div

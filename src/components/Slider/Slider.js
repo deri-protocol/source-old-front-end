@@ -28,7 +28,7 @@ export default function Slider({max,margin,onValueChange,dynamicBalance}){
   }, [margin]);
 
   useEffect(() => {
-    if(dynamicBalance > 0){
+    if((+dynamicBalance) > 0){
       setDisabled(false)
     } else {
       setDisabled(true)

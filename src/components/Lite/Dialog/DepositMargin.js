@@ -9,8 +9,8 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
   const [amount,setAmount] = useState('');
 
   const loadWalletBalance = async () => {
-    if(wallet && wallet.account){
-      const balance = await getWalletBalance(wallet.chainId,spec.pool,wallet.account)
+    if(wallet.isConnected()){
+      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(balance){
         const formatBalance = (+balance).toFixed(2)
         const addMarginSub = formatBalance.substring(formatBalance.indexOf('.'),formatBalance.length)
@@ -30,7 +30,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
   }
 
   const deposit = async (amount) => {
-    const res = await depositMargin(wallet.chainId,spec.pool,wallet.account,amount);
+    const res = await depositMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
       afterDeposit();
       onClose();
@@ -43,7 +43,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
     loadWalletBalance()
     return () => {
     };
-  }, [wallet.account]);
+  }, [wallet.detail.account]);
 
 
 

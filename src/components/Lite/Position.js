@@ -7,7 +7,7 @@ import DepositMargin from './Dialog/DepositMargin';
 import WithdrawMagin from './Dialog/WithdrawMargin';
 import useInterval from '../../hooks/useInterval';
 
-export default function Position({wallet = {},spec = {}}){
+export default function Position({wallet,spec = {}}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [position, setPosition] = useState({});
   const [direction, setDirection] = useState('');
@@ -17,7 +17,7 @@ export default function Position({wallet = {},spec = {}}){
   // useInterval(loadPositionInfo,3000)
 
   async function loadPositionInfo() { 
-    if(wallet && wallet.isConnected && spec && spec.pool){
+    if(wallet.isConnected() && spec && spec.pool){
       const positionInfo = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(positionInfo){
         setPosition(positionInfo);

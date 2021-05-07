@@ -485,7 +485,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const DepositDialog = withModal(DepositMargin)
 
   let actionElement =(<>
-    <ConfirmDialog  wallet={wallet.detail}
+    <ConfirmDialog  wallet={wallet}
                     spec={spec}
                     modalIsOpen={modalIsOpen} 
                     onClose={onClose} 
