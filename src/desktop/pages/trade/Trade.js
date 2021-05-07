@@ -1,34 +1,32 @@
-import { useState ,useContext,useEffect,useCallback,useRef} from 'react'
+import { useState ,useEffect,useCallback} from 'react'
 import './trade.less'
 import Pro from './Pro/Pro';
 import Lite from '../../../components/Lite/Lite';
-import {WalletContext} from '../../../context/WalletContext'
-import useTransactionSymbol from '../../../hooks/useTransactionSymbol';
+import useDeriConfig from '../../../hooks/useDeriConfig';
 import classNames from 'classnames';
 import config from '../../../config.json'
 import axios from 'axios'
 import { DeriEnv, deriToNatural } from '../../../lib/web3js';
 import useInterval from '../../../hooks/useInterval';
-import ContractInfo from '../../../components/ContractInfo/ContractInfo';
+import {observer, inject } from 'mobx-react';
+
 
 const oracleConfig = config[DeriEnv.get()]['oracle']
 
-export default function Trade(){
+function Trade({wallet}){
   const [curTab, setCurTab] = useState('lite')
-  const [spec, setSpec] = useState({symbol : 'BTCUSD',bTokenSymbol : 'USDT'});
+  const [spec, setSpec] = useState({});
   const [indexPrice, setIndexPrice] = useState('-');
-  const context = useContext(WalletContext)
-  const wallet  = context.walletContext.get();  
-  const specs = useTransactionSymbol(wallet)
+  const specs = useDeriConfig(wallet.detail)
 
 
 
   const switchTab = current => {
     setCurTab(current)
     if(current === 'pro') {
-      document.querySelector('.desktop').style.width = '1920px';
+      document.querySelector('.desktop').style.minWidth = '1920px';
     } else {
-      document.querySelector('.desktop').style.width = 'inherit';
+      document.querySelector('.desktop').style.minWidth = 'inherit';
     }
   }
 
@@ -72,7 +70,7 @@ export default function Trade(){
   }, [specs]);
 
   const props = {
-    wallet : wallet,
+    wallet,
     specs,
     spec ,
     onSpecChange,
@@ -90,3 +88,4 @@ export default function Trade(){
     </div>
   )
 }
+export default inject('wallet')(observer(Trade))

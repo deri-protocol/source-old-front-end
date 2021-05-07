@@ -1,7 +1,7 @@
 import { useState,useEffect,useContext,useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
-import {WalletContext} from '../../context/WalletContext'
+import {WalletContext} from '../../store/WalletContext'
 import Button from '../Button/Button';
 import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock, DeriEnv, deriToNatural, getFundingRate, getUserWalletBalance, getWalletBalance, getPositionInfo, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, tradeWithMargin, depositMargin, BigNumber} from '../../lib/web3js/index'
 import NumberFormat from 'react-number-format';
@@ -47,7 +47,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   const hasSpec = () => spec && spec.pool
 
   //是否有链接钱包
-  const hasConnectWallet = () => wallet && wallet.account
+  const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
   const directionChange = direction => {
     setDirection(direction)
@@ -74,7 +74,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //refresh cache
   const refreshCache = () => {
     if(hasConnectWallet() && hasSpec()){
-      const {chainId,account} = wallet;
+      const {chainId,account} = wallet.detail;
       const address = spec.pool
       priceCache.clear();
       priceCache.update(chainId,address);
@@ -86,7 +86,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //资金费率
   const loadFundingRate = async () => {
     if(hasConnectWallet() && hasSpec()){    
-      const res = await getFundingRate(wallet.chainId,spec.pool)
+      const res = await getFundingRate(wallet.detail.chainId,spec.pool)
       if(res){
         setFundingRate(res.fundingRate0)
         const tip = `Funding  Rate (per block) = ${res.fundingRatePerBlock}` +
@@ -101,7 +101,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //当前仓位
   async function loadPosition() {
     if(hasConnectWallet() && hasSpec()) {
-      const position = await getPositionInfo(wallet.chainId,spec.pool,wallet.account);
+      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account);
       if(position){
         setPosition(position);
       }
@@ -111,7 +111,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //价值合同信息
   const loadContractInfo = async () => {
     if(hasConnectWallet() && hasSpec()){
-      const contractInfo = await getSpecification(wallet.chainId,spec.pool,wallet.account);      
+      const contractInfo = await getSpecification(wallet.detail.chainId,spec.pool,wallet.detail.account);      
       setContractInfo(contractInfo)      
     }
   }
@@ -119,7 +119,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //交易费用
   const loadTransactionFee = async () => {
     if(hasConnectWallet() && hasSpec()) {
-      const transFee = await getEstimatedFee(wallet.chainId,spec.pool,volume);
+      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,volume);
       setTransFee(transFee);
     }
   }
@@ -127,8 +127,9 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //计算流动性的变化
   const calcLiquidityUsed = async () => {
     if(hasConnectWallet() && hasSpec()) {
-      const curLiqUsed = await getLiquidityUsed(wallet.chainId,spec.pool)
-      const afterLiqUsed = await getEstimatedLiquidityUsed(wallet.chainId,spec.pool,volume)
+      const {detail} = wallet
+      const curLiqUsed = await getLiquidityUsed(detail.chainId,spec.pool)
+      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,volume)
       if(curLiqUsed && afterLiqUsed){
         setLiqUsedPair({curLiqUsed : curLiqUsed.liquidityUsed0,afterLiqUsed : afterLiqUsed.liquidityUsed1})
       }
@@ -138,7 +139,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
     if(hasConnectWallet() && hasSpec()){
-      const fundingRateAfter = await getEstimatedFundingRate(wallet.chainId,spec.pool,volume);
+      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,volume);
       if(fundingRateAfter){
         setFundingRateAfter(fundingRateAfter.fundingRate1);
       }
@@ -208,10 +209,10 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
 
   //spec --> price index --> funding rate --> balance -->  contract info
   useEffect(() => {
-    initialzie(spec);
+    initialzie();
     return () => {
     };
-  }, [spec]);
+  }, [wallet.detail,spec]);
 
 
   useEffect(() => {
@@ -421,15 +422,15 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const context = useContext(WalletContext)
 
   
   const connect = () => {
-    context.wallet.connect()
+    wallet.connect()
   }
 
   const approve = () => {
-    const res = unlock(wallet.chainId,spec.pool,wallet.account);
+    const {detail} = wallet
+    const res = unlock(detail.chainId,spec.pool,detail.account);
     if(res.success){
       setIsApprove(true);
     } else {
@@ -447,7 +448,8 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   //load Approve status
   const loadApprove = async () => {
     if(hasConnectWallet() && spec.pool){
-      const result = await isUnlocked(wallet.chainId,spec.pool,wallet.account)
+      const {detail} = wallet
+      const result = await isUnlocked(detail.chainId,spec.pool,detail.account).catch(e => console.log(e))
       setIsApprove(result);
     }
   }
@@ -483,7 +485,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const DepositDialog = withModal(DepositMargin)
 
   let actionElement =(<>
-    <ConfirmDialog  wallet={wallet}
+    <ConfirmDialog  wallet={wallet.detail}
                     spec={spec}
                     modalIsOpen={modalIsOpen} 
                     onClose={onClose} 
@@ -502,10 +504,10 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   if(hasConnectWallet()){
     if(!isApprove) {
       actionElement = <Button className='approve' btnText='APPROVE' onClick={approve}/>
-    } else if(noBalance) {
+    } else if(noBalance && available !== undefined) {
       actionElement = (<>
         <DepositDialog 
-          wallet={wallet}
+          wallet={wallet.detail}
           modalIsOpen={modalIsOpen} 
           onClose={onClose}
           spec={spec}
@@ -518,10 +520,8 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       actionElement = <Button className='btn btn-danger short-submit' disabled btnText='ENTER VOLUME'/>
     }
   } else {
-    actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' onClick={connect}/>
+    actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' click={connect}/>
   }
-
-  // const withdrawDialog = withModal(<withdrawDialog/>)
   return (
     <div className='submit-btn'>
       {actionElement}        

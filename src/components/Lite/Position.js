@@ -17,8 +17,8 @@ export default function Position({wallet = {},spec = {}}){
   // useInterval(loadPositionInfo,3000)
 
   async function loadPositionInfo() { 
-    if(wallet && wallet.account && spec && spec.pool){
-      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
+    if(wallet && wallet.isConnected && spec && spec.pool){
+      const positionInfo = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(positionInfo){
         setPosition(positionInfo);
         const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
@@ -28,9 +28,10 @@ export default function Position({wallet = {},spec = {}}){
     }    
   }
 
+  //平仓
   const onClosePosition = async () => {
     setIsLiquidation(true)
-    const res = await closePosition(wallet.chainId,spec.pool,wallet.account).finally(() => setIsLiquidation(false))
+    const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setIsLiquidation(false))
     if(res.success){
       loadPositionInfo();
     } else {      
@@ -63,7 +64,7 @@ export default function Position({wallet = {},spec = {}}){
     setRemoveModalIsOpen(false)
   }
 
-  const directionClass = className('Direction',{
+  const directionClass = className('Direction','info-num',{
     'LONG' : direction === 'LONG',
     'SHORT' : direction === 'SHORT'
   })
@@ -76,7 +77,7 @@ export default function Position({wallet = {},spec = {}}){
     loadPositionInfo();
     return () => {
     };
-  }, [wallet,spec.pool]);
+  }, [wallet.detail.account,spec.pool]);
 
    
   
@@ -107,7 +108,7 @@ export default function Position({wallet = {},spec = {}}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Average Entry Price</div>
-        <div className='info-num'>{ position.averageEntryPrice }</div>
+        <div className='info-num'><NumberFormat value={ position.averageEntryPrice } decimalScale={2} displayType='text'/></div>
       </div>
       <div className='info-right'></div>
     </div>
@@ -167,21 +168,21 @@ export default function Position({wallet = {},spec = {}}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Direction</div>
-        <div className='info-num' className={directionClass} >{direction}</div>
+        <div className={directionClass} >{direction}</div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Margin</div>
-        <div className='info-num'>{ position.marginHeld }</div>
+        <div className='info-num'><NumberFormat value={ position.marginHeld } displayType='text' decimalScale={2}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Unrealized PnL</div>
-        <div className='info-num'>{ position.unrealizedPnl }</div>
+        <div className='info-num'><NumberFormat value={ position.unrealizedPnl } displayType='text' decimalScale={8}/></div>
       </div>
       <div className='info-right'></div>
     </div>

@@ -1,19 +1,20 @@
-import React, { useState, useEffect ,useContext} from 'react'
+import React, { useState, useEffect} from 'react'
 import {
 	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity
 } from '../../../lib/web3js/index'
-import { WalletContext } from '../../../context/WalletContext';
-import AddDialog from './Dialog/AddDialog';
-import RemoveDialog from './Dialog/RemoveDialog';
+import AddLiquidity from './Dialog/AddLiquidity';
+import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';
+import { inject, observer } from 'mobx-react';
+import withModal from '../../hoc/withModal';
 
-export default function Liquidity({wallet,chainId,baseToken,address}) {
+function Liquidity({wallet,chainId,baseToken,address}) {
   const [liquidity,setLiquidity] = useState({})
 
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,baseToken)
-		if(wallet){
-			const info = await getLiquidityInfo(chainId,address,wallet.account);
+		if(wallet.isConnected() && chainId == wallet.detail.chainId){
+			const info = await getLiquidityInfo(chainId,address,wallet.detail.account);
 			if(info){
 				setLiquidity({
 					total :  (+info.poolLiquidity),
@@ -37,10 +38,8 @@ export default function Liquidity({wallet,chainId,baseToken,address}) {
 
 	useEffect(() => {
 		loadLiquidityInfo();
-		return () => {
-
-		}
-	}, [])
+		return () => {}
+	}, [wallet.detail.account])
 
 
   return (
@@ -72,10 +71,12 @@ export default function Liquidity({wallet,chainId,baseToken,address}) {
 				</div>
 				<div className="title-check">
 				</div>
-				<Operator wallet={wallet} chainId={chainId} address={address} baseToken={baseToken} loadLiquidity={loadLiquidityInfo}/>
+				 <Operator wallet={wallet} chainId={chainId} address={address} baseToken={baseToken} loadLiquidity={loadLiquidityInfo}/>
 	</div>
   )
 }
+
+
 
 
 const dialogStyles = {
@@ -93,35 +94,30 @@ const dialogStyles = {
 };
 
 //操作区
-function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
+const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
 	const [btnText, setBtnText] = useState('Collect Wallet')
-	const {walletContext} = useContext(WalletContext)
 
 	const isApprove = async () => {
-		const result = wallet && await isUnlocked(chainId,address,wallet.account) 
+		const result = await isUnlocked(chainId,address,wallet.detail.account) 
 		return result
   }
 
 	const approve = async () => {
-		const res = await unlock(chainId,address,wallet.account);
+		const res = await unlock(chainId,address,wallet.detail.account);
 		if(res.success){
 			setIsApproved(true)
 		}
   }
 
 
-	const cw = async () => {
-		walletContext.connect();
-	}
-  
   const click = async () => {
-    if(wallet && wallet.account){
+    if(wallet.isConnected()){
       approve()
     } else {
-      cw();
+			wallet.connect();
     }
 	}
 	
@@ -130,7 +126,7 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
 		setBtnType('add')
 	}
 
-	const onClose = () => {
+	const afterClick = () => {
 		setIsOpen(false);
 		loadLiquidity()
 	}
@@ -139,11 +135,14 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
 		setIsOpen(true);
 		setBtnType('remove')
 	}
+
+
   
   useEffect(() => {
 		//todo 判断网络
-    if(wallet && wallet.account){
-			if(wallet.chainId == chainId){
+    if(wallet.isConnected()){
+			// eslint-disable-next-line eqeqeq
+			if(wallet.detail.chainId == chainId){
 				const result = isApprove();
 				setIsApproved(result);
 				if(!result){
@@ -158,14 +157,16 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
 		return () => {
 			
 		}
-	}, [])
+	}, [wallet.detail.account])
 
+	const AddDialog = withModal(AddLiquidity)
+	const RemoveDialog = withModal(RemoveLiquidity)
   return (
     <div className="liquidity-btn">
 			{
 				btnType === 'add' 
-				? <AddDialog isOpen={isOpen} onClose={onClose} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} customizeStyle={dialogStyles}/> 
-				: <RemoveDialog isOpen={isOpen} onClose={onClose} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} customizeStyle={dialogStyles}/>
+				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
 			}
       {isApproved &&<div className="add-remove-liquidity">
       <button 
@@ -183,3 +184,5 @@ function Operator({chainId,address,wallet,baseToken,loadLiquidity}) {
   </div>
   )
 }
+
+export default inject('wallet')(observer(Liquidity))

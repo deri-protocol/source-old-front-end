@@ -1,6 +1,45 @@
 @green: #3EBF38;
 @red: #E35061;
 
+
+.mining-info.liquidity{
+
+  .liquidity-mining{
+    background: #41424A!important;
+    color: #FFFFFF!important;
+    font-weight: bold!important;
+  }
+  .trade-mining {
+    color : #AAAAAA;
+    font-weight: initial;
+    background-color: #1C1E21 ;
+  }
+
+  .pool-info {
+    .trade-info {
+      display : none!important;
+    }
+  }
+}
+
+.mining-info.trade {
+  .liquidity-mining{
+    color : #AAAAAA;
+    font-weight: initial;
+    background-color: #1C1E21 ;
+  }
+  .trade-mining {
+    background: #41424A!important;
+    color: #FFFFFF!important;
+    font-weight: bold!important;
+  }
+  .pool-info{
+    .liquidity-info {
+      display: none!important;
+    }
+  }
+}
+
 .mining-info {
   width: 1200px;
   margin-top: 40px;
@@ -36,7 +75,6 @@
         background: linear-gradient(180deg, #282A2E 0%, #24262B 100%);
         border-radius: 10px 10px 0px 0px;
         color: #AAAAAA;
-
       }
 
       .trade-mining {
@@ -51,7 +89,6 @@
       }
     }
   }
-
   .pool-info {
     .liquidity-info,
     .trade-info {
@@ -103,9 +140,8 @@
           font-family: "Korolev";
           font-weight: 500;
 
-          .text-num {
+          .text-title {
             color: #AAAAAA;
-
           }
 
         }
@@ -117,6 +153,11 @@
           font-weight: 500;
           color: #AAAAAA;
           white-space: nowrap;
+        }
+
+        button {
+          font-family: Korolev, sans-serif;
+          font-size: 16px;
         }
 
         .claim-btn {
@@ -161,6 +202,7 @@
             border-radius: 10px;
             color: #CCCCCC;
             margin-top: 20px;
+            font-size: 16px;
           }
         }
       }
@@ -338,7 +380,7 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					margin-top: 41px;
+					margin-top: 50px;
 
 					.margin-btn {
 						width: 276px;

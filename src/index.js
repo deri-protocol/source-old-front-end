@@ -3,18 +3,22 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom'
 import App from './App';
 import './assets/deri.less';
-import { WalletContext } from './context/WalletContext';
-import Wallet from './context/Wallet';
+import { Provider } from 'mobx-react';
+import Wallet from './store/Wallet';
 
-const wallet = new Wallet()
+const wallet = new Wallet();
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <WalletContext.Provider value={{walletContext : wallet}}>
+      <Provider wallet={wallet}>
         <App />
-      </WalletContext.Provider>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+
+window.wallet = wallet
+

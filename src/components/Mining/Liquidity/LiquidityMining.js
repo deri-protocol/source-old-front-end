@@ -1,13 +1,13 @@
-import walletManager from '../../../lib/account/WalletManager';
 import Claim from '../../Claim/Claim';
 import Liquidity from './Liquidity';
 
 
-export default function LiquidityMining(props){
-	const wallet = walletManager.getWallet();
+function LiquidityMining(props){
   return (
     <div className="liquidity-info">
-      <Claim wallet={wallet}/>
-      <Liquidity wallet={wallet} {...props}/>
-</div>)
+      <Claim {...props}/>
+      <Liquidity {...props}/>
+  </div>)
 }
+
+export default LiquidityMining

@@ -6,47 +6,38 @@ import {DeriEnv} from '../../../lib/web3js/index'
 import config from '../../../config.json'
 import './mining.less'
 import classnames from "classnames";
+import { inject, observer } from 'mobx-react';
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function Mining(){
+function Mining({wallet,style}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
 	const {chainId,baseToken,address} =  useParams();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,baseToken,address}
-	const switchTab = () => {
-		if(currentTab === 'liquidity') {
-			setCurrentTab('trade')
-		} else {
-			setCurrentTab('liquidity')
-		}
-	}
-	const liqClassName = classnames('liquidity-mining',{
-		'selected' : currentTab === 'liquidity',
-	})
-	const tradeClassName = classnames('trade-mining',{
-		'selected' : currentTab === 'trade'
-	})
+	const props = {chainId,baseToken,address,wallet}
+	const poolInfoClass = classnames('mining-info',currentTab)
 	return(
-    <div className="mining-info">
+    <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
 							{baseToken} @ {networkText}
 					</div>
 					<div className="check-trade-liquidity">
-							<div className={liqClassName} onClick={switchTab} >
+							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
 									LIUQIDITY MINING
 							</div>
-							<div className={tradeClassName} onClick={switchTab} >
+							<div className='trade-mining' onClick={() => setCurrentTab('trade')} >
 									TRADING MINING
 							</div>
 					</div>
 			</div>
-			<div className="pool-info">
-					{currentTab === 'liquidity' &&<LiquidityMining {...props}/>}
-					{currentTab === 'trade' &&<TradeMining {...props}/>}
+			<div className='pool-info'>
+					<LiquidityMining {...props}/>
+					<TradeMining {...props}/>
 			</div>
 		</div>
 	)
 }
+
+export default inject('wallet')(observer(Mining))

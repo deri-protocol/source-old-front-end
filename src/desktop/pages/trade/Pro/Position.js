@@ -37,8 +37,8 @@ export default function Position({wallet = {},spec = {}}){
 
   
   async function loadPositionInfo(){    
-    if(wallet){
-      const positionInfo = await getPositionInfo(wallet.chainId,spec.pool,wallet.account)
+    if(wallet.isConnected() && spec.pool){
+      const positionInfo = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(positionInfo){
         const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
         positionInfo.direction = direction
@@ -50,7 +50,7 @@ export default function Position({wallet = {},spec = {}}){
 
   const onClosePosition = async () => {
     setClosing(true)
-    const res = await closePosition(wallet.chainId,spec.pool,wallet.account).finally(() => setClosing(false))
+    const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setClosing(false))
     if(res.success){
       loadPositionInfo();
     } else {            
@@ -65,10 +65,9 @@ export default function Position({wallet = {},spec = {}}){
   }
 
   useEffect(() => {
-    wallet && spec && loadPositionInfo();
-    return () => {
-    };
-  }, [wallet,spec])
+    loadPositionInfo();
+    return () => {};
+  }, [wallet.detail.account,spec.pool])
 
   return (
     <div className='position-box' >
@@ -95,7 +94,7 @@ export default function Position({wallet = {},spec = {}}){
           <img src={closePosImg} onClick={onClosePosition}/>
         </span>
       </div>
-      <div><NumberFormat value={positionInfo.averageEntryPrice} defaultValue='--' displayType='text' decimalScale={2}/></div>
+      <div><NumberFormat value={positionInfo.averageEntryPrice} displayType='text' decimalScale={2}/></div>
       <div className={positionInfo.direction}>{positionInfo.direction}</div>
       <div>
         <NumberFormat value={positionInfo.balanceContract} displayType='text' decimalScale={2}/>
@@ -111,7 +110,7 @@ export default function Position({wallet = {},spec = {}}){
         </span>
       </div>
       <div><NumberFormat value={positionInfo.marginHeld} displayType='text' decimalScale={2}/></div>
-      <div>{positionInfo.unrealizedPnl}</div>
+      <div><NumberFormat value={positionInfo.unrealizedPnl} displayType='text' decimalScale={8}/></div>
       <div><NumberFormat value={positionInfo.liquidationPrice} displayType='text' decimalScale={2}/></div>
     </div>
     <div className='p-box tbody'></div>

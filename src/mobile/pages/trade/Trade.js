@@ -1,24 +1,20 @@
 
 import { useState ,useContext,useEffect,useCallback} from 'react'
-import {WalletContext} from '../../../context/WalletContext'
-import useTransactionSymbol from '../../../hooks/useTransactionSymbol';
-import classNames from 'classnames';
 import config from '../../../config.json'
 import axios from 'axios'
 import { DeriEnv, deriToNatural } from '../../../lib/web3js';
 import useInterval from '../../../hooks/useInterval';
 import Lite from "../../../components/Lite/Lite";
 import './trade.less'
-import ContractInfo from '../../../components/ContractInfo/ContractInfo';
+import { inject, observer } from 'mobx-react';
+import useDeriConfig from '../../../hooks/useDeriConfig.js';
 
 const oracleConfig = config[DeriEnv.get()]['oracle']
 
-export default function Trade(){
-  const [spec, setSpec] = useState({symbol : 'BTCUSD',bTokenSymbol : 'USDT'});  
-  const [indexPrice, setIndexPrice] = useState('-');
-  const context = useContext(WalletContext)
-  const wallet = context.walletContext.get() || {};  
-  const specs = useTransactionSymbol(wallet)
+function Trade({wallet}){
+  const [spec, setSpec] = useState({});  
+  const [indexPrice, setIndexPrice] = useState('-'); 
+  const specs = useDeriConfig(wallet.detail)
 
 
   const onSpecChange = spec => {
@@ -67,7 +63,9 @@ export default function Trade(){
   }
   return (
     <div className='trade-body'>
-      <Lite {...props} showContractWhenMobile={false}/>  
+      <Lite {...props}/>  
     </div>    
   )
 }
+
+export default inject('wallet')(observer(Trade))

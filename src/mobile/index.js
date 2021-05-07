@@ -6,8 +6,8 @@ import './style/index.less'
 import useWindowSize from '../hooks/useWindowSize';
 
 export default function Mobile (){
-  console.log('welcome Deri desktop app')
   const winSize = useWindowSize();
+  
   useEffect(() => {
     document.querySelector('html').setAttribute('style',`font-size : ${winSize.width /375 * 100}px`) 
     return () => {}

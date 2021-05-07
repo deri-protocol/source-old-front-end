@@ -1,8 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal/lib/components/Modal';
 
-export default Component => {
-
+const withModal = Component => {
   const appElement = document.getElementById('root')
   const customizeStyle =  {
     overlay: {
@@ -39,3 +38,4 @@ export default Component => {
 
   return WithModal;
 }
+export default withModal;

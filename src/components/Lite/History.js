@@ -7,10 +7,10 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   const [history, setHistory] = useState([]);
 
   const loadHistory =  async () => {
-    const all = await getTradeHistory(wallet.chainId,spec.pool,wallet.account)
+    const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
     const his = all.map(item => {
       item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
-      const find = specs.find(s => s.bTokenSymbol == item.baseToken)
+      const find = specs.find(s => s.bTokenSymbol === item.baseToken)
       if(find){
         item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
       }
@@ -20,16 +20,16 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   }
 
   useEffect(() => {
-    wallet && loadHistory();
+    loadHistory();
     return () => {      
     };
-  }, [wallet,spec.pool,specs]);
+  }, [wallet.detail,spec.pool,specs]);
   
   return (
     <div className='history-info' v-show='historyShow'>
-      {history.map(his => {
+      {history.map((his,index) => {
         return (
-          <div className='history-box'>
+          <div className='history-box' key={index}>
           <div className='direction-bToken-price'>
             <span>
               <span className={`${his.direction}`}>{ his.directionText }</span>

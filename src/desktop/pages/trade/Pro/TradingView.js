@@ -14,8 +14,8 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
 
 
   const loadFundingRate = async () => {
-    if(wallet.chainId){
-      const fundingRate = await getFundingRate(wallet.chainId,spec.pool)
+    if(wallet.isConnected()){
+      const fundingRate = await getFundingRate(wallet.detail.chainId,spec.pool)
       setFundingRate(fundingRate)
     }
   }
@@ -31,10 +31,10 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
   }, [indexPrice]);
 
   useEffect(() => {
-    wallet && loadFundingRate();
+    loadFundingRate();
     return () => {
     };
-  }, [wallet,spec,indexPrice]);
+  }, [wallet.detail.account,spec,indexPrice]);
   return (
     <div id="trading-view">
       <div className='right-top'>

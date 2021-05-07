@@ -1,20 +1,19 @@
-import { useState, useEffect,useContext } from 'react'
+import { useState, useEffect} from 'react'
 
 import useClaimInfo from "../../hooks/useClaimInfo";
 import useConfig from "../../hooks/useConfig";
-import { mintDToken ,connectWallet } from "../../lib/web3js";
-import { WalletContext } from '../../context/WalletContext';
+import { mintDToken } from "../../lib/web3js";
+import Button from '../Button/Button';
 
-export default function Claim({wallet = {}}){
+export default function Claim({wallet}){
 	const [btnText, setBtnText] = useState('Collect Wallet')
 	const [claimInfo,claimInfoInterval] = useClaimInfo(wallet);
 	const [remainingTime, setRemainingTime] = useState('')
-	const config = useConfig(wallet.chainId) || {}
-	const {walletContext} =  useContext(WalletContext)
+	const config = useConfig(claimInfo.chainId) 
 
   //claim deri
 	const claim = async () => {
-		if (claimInfo.unclaimed == 0) {
+		if (claimInfo.unclaimed === 0) {
 			alert('Sorry,no DERI to claim yet');
 			return;
 		}
@@ -23,7 +22,7 @@ export default function Claim({wallet = {}}){
 			alert('Claiming DERI is disabled during first 30 minutes of each epoch');
 			return;
 		}
-		const res = await mintDToken(wallet.chainId,wallet.account)
+		const res = await mintDToken(wallet.detail.chainId,wallet.detail.account)
 		if(res.success){
       clearInterval(claimInfoInterval);
 		} else {
@@ -31,16 +30,11 @@ export default function Claim({wallet = {}}){
 		}
   }
 
-	const cw = async () => {
-		walletContext.connect();
-	}
-
-  //
 	const click = async () => {
-		if(wallet && wallet.account){
+		if(wallet.isConnected()){
 			claim();
 		} else {
-			cw();
+			wallet.connect();
 		}
 	}
 
@@ -48,7 +42,7 @@ export default function Claim({wallet = {}}){
 	
 	//初始化按钮文案和事件
 	const initButton = () => {
-		if(wallet && wallet.account){
+		if(wallet.isConnected()){
 			setBtnText('CLAIM')
 		} else {
 			setBtnText('Collect Wallet')
@@ -73,7 +67,7 @@ export default function Claim({wallet = {}}){
       clearInterval(interval);
 		};
 		
-  }, []);
+  }, [wallet.detail.account]);
 
 
   return (
@@ -103,15 +97,7 @@ export default function Claim({wallet = {}}){
 						<div className='text-title'>Your DERI is on { config.text } . Connect to { config.text } to claim.</div>
 				</div>
 				<div className='claim-btn'>
-					<button className='claim' onClick={click}
-						id='claimmyderi'>
-						<span
-							className='spinner spinner-border spinner-border-sm'
-							role='status'
-							aria-hidden='true'
-							style={{display: 'none'}}></span>
-								{btnText}
-						</button>
+					<Button btnText={btnText} click={click} className='claim'/>					
 				</div>
       </div>
   ) 

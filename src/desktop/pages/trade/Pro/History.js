@@ -1,21 +1,22 @@
 import React, { useState,useEffect } from 'react'
 import dateFormat from 'date-format'
 import { getTradeHistory } from '../../../../lib/web3js';
+import NumberFormat from 'react-number-format';
 
 export default function History({wallet,spec}) {
   const [history, setHistory] = useState([]);
 
-  
-
   useEffect(() => {
     const loadHistory = async () => {
-      const his = await getTradeHistory(wallet.chainId,spec.pool,wallet.account);    
-      setHistory(his)
+      if(wallet.isConnected() && spec.pool){
+        const his = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account);    
+        setHistory(his)
+      }
     }
-    wallet && spec && loadHistory()
+    loadHistory()
     return () => {
     };
-  }, [wallet,wallet,spec]);
+  }, [wallet.detail.account,spec]);
   return (
     <div className='history-box'>
       <div className='p-box theader'>
@@ -27,20 +28,20 @@ export default function History({wallet,spec}) {
         <div>Notional</div>
         <div>Transaction Fee</div>
       </div>
-      {history.map(his => {
+      {history.map((his,index) => {
         return (
-          <div className='p-box tbody' v-for='list in history'>
+          <div className='p-box tbody' key={index}>
             <div className='td'>
               {dateFormat.asString('yyyy-MM-dd hh:mm:ss',new Date(parseInt(his.time)))}
             </div>
             <div className={his.direction}>
-              {his.direction}
+              {his.direction === 'LONG' ? `${his.direction} / BUY` : `${his.direction} / SELL`}
             </div>
             <div>
               {his.baseToken}
             </div>
             <div>
-              {his.price}
+              <NumberFormat value={his.price} displayType='text' decimalScale={2}/>
             </div>
             <div>
               {his.volume}

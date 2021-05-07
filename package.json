@@ -46,6 +46,8 @@
     "jest-watch-typeahead": "0.6.1",
     "less": "^4.1.1",
     "mini-css-extract-plugin": "0.11.3",
+    "mobx": "^6.3.0",
+    "mobx-react": "^7.1.0",
     "nprogress": "^0.2.0",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
@@ -86,7 +88,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "start_p" : "npx serve -s build"
+    "start_p": "npx serve -s build"
   },
   "eslintConfig": {
     "extends": [

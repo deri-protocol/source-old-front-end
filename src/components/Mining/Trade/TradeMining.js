@@ -5,12 +5,11 @@ import WalletManager from '../../../lib/account/WalletManager';
 import Claim from '../../Claim/Claim';
 import Liquidity from './Liquidity';
 
-export default function TradeMining(props){
-	const wallet = WalletManager.getWallet();
+export default function TradeMining({wallet,...props}){
   return(
     <div className="trade-info">
       <Claim wallet={wallet}/>
-			<Liquidity wallet={wallet} {...props}/>
+			<Liquidity {...props}/>
   </div>
   )
 }
