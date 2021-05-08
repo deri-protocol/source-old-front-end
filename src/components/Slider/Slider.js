@@ -1,15 +1,33 @@
 import React, { useState,useEffect } from 'react'
-import RcSlider,{createSliderWithTooltip} from 'rc-slider'
+import RcSlider,{SliderTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css';
 import './slider.less'
+const { Handle } = RcSlider;
 
 
-const SliderWithTooltip = createSliderWithTooltip(RcSlider);
+ function handle(props){
+  const { value, dragging, index, ...restProps } = props;
+  return (
+    <SliderTooltip
+      prefixCls="rc-slider-tooltip"
+      overlay={value}
+      placement="top"
+      key={index}
+      visible={value > 0 ? true : false}
+      overlayStyle={{display : 'block'}}
+      overlayInnerStyle={{color : '#569BDA',background : 'none',display : 'block' ,fontSize : '10px',boxShadow : 'none'}}
+    >
+      <Handle value={value} {...restProps} />
+    </SliderTooltip>
+  );
+};
 
-export default function Slider({max,margin,onValueChange,dynamicBalance}){
+
+export default function Slider({max,start,onValueChange}){
   const [limit, setLimit] = useState(0);
-  const [value, setValue] = useState(margin);
+  const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
+  const [marks, setMarks] = useState({});
 
   const onSliderChange = value => {
     setValue(value)
@@ -17,29 +35,59 @@ export default function Slider({max,margin,onValueChange,dynamicBalance}){
   }
 
   useEffect(() => {
-    setLimit(+max)
+    if(isNaN(max)){
+      setLimit('')
+    }  else {
+      const mark = {
+      };
+      const per = (+max) / 10
+      for(let i = 0 ; i<=10 ; i++){
+        if(i === 0 || i ===10 ){
+          const style = {top: '-16px',position: 'relative'}
+          if(i ===10){
+            style.width = 100;
+            style.left = '-10px'
+            style.paddingRight = '10px'            
+          }
+          mark[i*per] = <><div style={style}>{i === 10 ? (i*per).toFixed(2) : i * per}</div><div style={{top: '-16px',position: 'relative'}}>l</div></>
+        } else{
+          mark[i*per] = 'l'
+        }
+        
+      }
+      setMarks(mark);
+      setLimit(+max)
+    }
+
     return () => {};
   }, [max]);
 
   useEffect(() => {
-    setValue(margin)
+    if(isNaN(start)){
+      setValue(0)
+    } else {
+      setValue(+start)
+    }
+    console.log('start..',start)
     return () => {      
     };
-  }, [margin]);
+  }, [start]);
 
   useEffect(() => {
-    if((+dynamicBalance) > 0){
+    if((+max) > 0){
       setDisabled(false)
     } else {
       setDisabled(true)
     }
     return () => {
     };
-  }, [dynamicBalance]);
+  }, [max]);
 
   return (
       <RcSlider
+        handle={handle}
         className='deri-slider' 
+        start={start}
         min={0}
         max={limit}
         value={value}
@@ -47,9 +95,10 @@ export default function Slider({max,margin,onValueChange,dynamicBalance}){
         disabled={disabled}
         overlay={value}
         step={0.01}
+        marks={marks}
        >
-        <div className='rc-slider-text'><span>0</span><span>{max}</span></div>        
-        <div className='m-rc-slider-mark'>
+        {/* <div className='rc-slider-text'><span>0</span><span>{max}</span></div>         */}
+        {/* <div className='m-rc-slider-mark'>
           <span style={{left:0}}>l</span>
           <span style={{left:'10%'}}>l</span>
           <span style={{left:'20%'}}>l</span>
@@ -61,7 +110,7 @@ export default function Slider({max,margin,onValueChange,dynamicBalance}){
           <span style={{left:'80%'}}>l</span>
           <span style={{left:'90%'}}>l</span>
           <span style={{left:'99%'}}>l</span>
-        </div>
+        </div> */}
       </RcSlider>
   )
 }

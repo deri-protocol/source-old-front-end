@@ -1,9 +1,8 @@
-import { useState,useEffect,useContext,useRef } from 'react'
+import { useState,useEffect,useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
-import {WalletContext} from '../../store/WalletContext'
 import Button from '../Button/Button';
-import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock, DeriEnv, deriToNatural, getFundingRate, getUserWalletBalance, getWalletBalance, getPositionInfo, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, tradeWithMargin, depositMargin, BigNumber} from '../../lib/web3js/index'
+import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock, DeriEnv, deriToNatural, getFundingRate, getUserWalletBalance, getWalletBalance, getPositionInfo, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate} from '../../lib/web3js/index'
 import NumberFormat from 'react-number-format';
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
@@ -17,20 +16,17 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   const [direction, setDirection] = useState('long');
   const [contractInfo, setContractInfo] = useState(null);
   const [dropdown, setDropdown] = useState(false);  
-  const [margin, setMargin] = useState('0.00');
-  const [marginTxt, setMarginTxt] = useState('');
+  const [margin, setMargin] = useState('0.00');  
   const [position, setPosition] = useState({});
   const [fundingRate, setFundingRate] = useState('0.00');
   const [fundingRateTip, setFundingRateTip] = useState('');
   const [fundingRateAfter, setFundingRateAfter] = useState('');
-  // const [indexPrice, setIndexPrice] = useState('0.00');
   const [transFee, setTransFee] = useState('');
   const [poolLiquidity, setPoolLiquidity] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('');
   const indexPriceRef = useRef();
   
-
 
   //交易信息
   const [tradeInfo, setTradeInfo] = useState({});
@@ -177,7 +173,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //计算交易相关数据（dynamic balance、margin、available balance)
   const calcTradeInfo = () => {
     if(position && contractInfo && indexPrice) {
-      const currentPosition = (+volume) + (+position.volume)
+      const currentPosition = direction === 'long' ? (+volume) + (+position.volume) : (-volume) + (+position.volume)
       const contractValue = currentPosition * indexPrice * contractInfo.multiplier;
       const dynamicBalance = ((+position.margin) + (+position.unrealizedPnl)).toFixed(2)
       const margin = (contractValue * contractInfo.minInitialMarginRatio).toFixed(2);
@@ -336,7 +332,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
               Contract Volume
             </div>
           </div>          
-          {volume && <div className='btc'><NumberFormat value={tradeInfo.converted} displayType='text' decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
+          {!!volume && <div className='btc'><NumberFormat value={tradeInfo.converted} displayType='text' decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
         </div>
         <div className='right-info'>
           <div className='contrant-info'>
@@ -365,11 +361,11 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={tradeInfo.dynamicBalance} dynamicBalance={tradeInfo.dynamicBalance} onValueChange={onSlide} margin={tradeInfo.margin}/>
+        <Slider max={tradeInfo.dynamicBalance} onValueChange={onSlide} start={tradeInfo.margin}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
-        {volume && <>
+        {!!volume && <>
         <div className='text-info'>
           <div className='title-enter pool'>Pool Liquidity</div>
           <div className='text-enter poolL'>
@@ -396,9 +392,6 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         </div>
         </>}
       </div>
-      {margin && <div className='noMargin-text'>
-        { marginTxt }
-      </div>}
       <Operator hasConnectWallet={hasConnectWallet} 
                 transFee={transFee} 
                 wallet={wallet} 
@@ -507,7 +500,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
     } else if(noBalance && available !== undefined) {
       actionElement = (<>
         <DepositDialog 
-          wallet={wallet.detail}
+          wallet={wallet}
           modalIsOpen={modalIsOpen} 
           onClose={onClose}
           spec={spec}

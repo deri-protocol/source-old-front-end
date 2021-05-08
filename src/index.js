@@ -5,6 +5,8 @@ import App from './App';
 import './assets/deri.less';
 import { Provider } from 'mobx-react';
 import Wallet from './store/Wallet';
+//note dont remove zhe line
+import NumberPolyfill from './lib/polyfill/numberPolyfill'
 
 const wallet = new Wallet();
 

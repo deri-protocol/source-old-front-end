@@ -16,14 +16,14 @@ export default function ContractInfo({wallet,spec ={}}){
 
   useEffect(() => { 
     const setSpec = async () => {           
-      if(spec.pool && wallet && wallet.account){
-        const contractInfo = await getSpecification(wallet.chainId,spec.pool,wallet.account) 
+      if(spec.pool && wallet.isConnected()){
+        const contractInfo = await getSpecification(wallet.detail.chainId,spec.pool,wallet.detail.account) 
         setContract(contractInfo)  
       }
     }
     wallet && setSpec();
     return setSpec;
-  }, [spec.pool,wallet]);
+  }, [spec,wallet]);
   
   return(
     <div className="contract-box">
