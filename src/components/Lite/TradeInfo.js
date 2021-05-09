@@ -33,7 +33,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //控制状态
   const [volume, setVolume] = useState('');  
 
-  // useInterval(loadPosition,3000)
+  useInterval(loadPosition,3000)
 
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{' checked-short' : direction === 'short'})
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
@@ -46,8 +46,8 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
   const directionChange = direction => {
-    setDirection(direction)
     setVolume('')
+    setDirection(direction)
   }
 
   const onDropdown = (event) => {
@@ -156,6 +156,10 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
     }    
   }
 
+  const onKeyUp = event => {
+    return event.target.value !== '' && /^\d*\.?\d*$/.test(event.target.value)
+  }
+
   //完成交易
   const afterTrade = () => {
     setVolume('')
@@ -173,14 +177,13 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //计算交易相关数据（dynamic balance、margin、available balance)
   const calcTradeInfo = () => {
     if(position && contractInfo && indexPrice) {
-      const currentPosition = direction === 'long' ? (+volume) + (+position.volume) : (-volume) + (+position.volume)
-      const contractValue = currentPosition * indexPrice * contractInfo.multiplier;
+      const currentPosition = (+volume) + (+position.volume)
+      const contractValue = Math.abs(currentPosition) * indexPrice * contractInfo.multiplier;
       const dynamicBalance = ((+position.margin) + (+position.unrealizedPnl)).toFixed(2)
       const margin = (contractValue * contractInfo.minInitialMarginRatio).toFixed(2);
       const leverage = (+contractValue / +dynamicBalance).toFixed(1);
       const available = (+dynamicBalance) - (+margin)
       const converted = contractValue / indexPrice
-      const overflow = (+available) < 0
       const tradeInfo = {
         volume,         //合约数量
         dynamicBalance, //动态余额
@@ -189,7 +192,6 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         available,      //可用余额
         converted,      //换算的值
         leverage,        //杠杆
-        overflow
       }
       setTradeInfo(tradeInfo);
     }
@@ -217,6 +219,11 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
       setIndexPriceClass(indexPriceRef.current > indexPrice ? 'fall' : 'rise')
     }
     indexPriceRef.current = indexPrice;
+    // if(position.volume >= 0){
+    //   setDirection('long')
+    // } else {
+    //   setDirection('short')
+    // }
     return () => {
     };
   }, [position.unrealizedPnl,position.volume,indexPrice,volume]);
@@ -234,18 +241,18 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
     if(contractInfo){
       const volume = (+margin) / ((+indexPrice) * (+contractInfo.multiplier) * (+contractInfo.minInitialMarginRatio)) - (+position.volume)
       if(!isNaN(volume)){
-        const number =  parseInt(volume)
-        if(number >= 0){
+        const number = Math.floor(volume);
+        if((number) >= 0){
           setDirection('long')
         } else {
           setDirection('short')
         }
         const cloned = {...tradeInfo}
-        cloned.volume = Math.abs(number);
-        cloned.margin = margin;
-        cloned.available = (+cloned.dynamicBalance) - margin
+        cloned.volume = number;
+        // cloned.margin = margin;
+        // cloned.available = (+cloned.dynamicBalance) - margin
         setTradeInfo(cloned)
-        setVolume(Math.abs(number));
+        setVolume(number);
       }
     }
     return () => {      
@@ -315,16 +322,17 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         <div className='left'>
           <div className='current-position'>
             <span>Current Position</span>
-            <span className='position-text'>{ position.volume }</span>
+            <span className='position-text'>{position.volume }</span>
           </div>
           <div className='contrant'>            
             <input
               type='number'
               onFocus={onFocus}
               onBlur={onBlur}
+              onKeyUp={onKeyUp}
               disabled={!tradeInfo.available}
-              onChange={event => setVolume(event.target.value)}
-              value={tradeInfo.volume}
+              onChange={event =>  setVolume(event.target.value)}
+              value={tradeInfo.volume && Math.abs(tradeInfo.volume)}
               className={volumeClazz}
               placeholder='Contract Volume'
             />
@@ -332,7 +340,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
               Contract Volume
             </div>
           </div>          
-          {!!volume && <div className='btc'><NumberFormat value={tradeInfo.converted} displayType='text' decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
+          {!!volume && <div className='btc'><NumberFormat value={tradeInfo.converted} allowNegative={false} displayType='text' decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
         </div>
         <div className='right-info'>
           <div className='contrant-info'>
@@ -348,7 +356,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
             <div className='box-margin'>
               <span> Margin </span>
               <span className='margin'>
-                <NumberFormat value={ tradeInfo.margin } displayType='text' decimalScale={2}/>
+                <NumberFormat value={ tradeInfo.margin } allowNegative={false}  displayType='text' decimalScale={2}/>
               </span>
             </div>
             <div className='available-balance'>
@@ -381,7 +389,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         <div className='text-info'>
           <div className='title-enter'>Funding Rate Impact</div>
           <div className='text-enter'>
-            { fundingRate } -> { fundingRateAfter }
+            <NumberFormat value={ fundingRate } displayType='text' allowNegative={false} decimalScale={4}/> -> <NumberFormat value={ fundingRateAfter } displayType='text' allowNegative={false} decimalScale={4}/>
           </div>
         </div>
         <div className='text-info'>

@@ -14,7 +14,7 @@ export default function Position({wallet,spec = {}}){
   const [balanceContract, setBalanceContract] = useState('');
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
-  // useInterval(loadPositionInfo,3000)
+  useInterval(loadPositionInfo,3000)
 
   async function loadPositionInfo() { 
     if(wallet.isConnected() && spec && spec.pool){

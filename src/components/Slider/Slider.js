@@ -38,6 +38,11 @@ export default function Slider({max,start,onValueChange}){
     if(isNaN(max)){
       setLimit('')
     }  else {
+      if((+max) > 0){
+        setDisabled(false)
+      } else {
+        setDisabled(true)
+      }
       const mark = {
       };
       const per = (+max) / 10
@@ -66,22 +71,11 @@ export default function Slider({max,start,onValueChange}){
     if(isNaN(start)){
       setValue(0)
     } else {
-      setValue(+start)
+      setValue(start)
     }
-    console.log('start..',start)
     return () => {      
     };
   }, [start]);
-
-  useEffect(() => {
-    if((+max) > 0){
-      setDisabled(false)
-    } else {
-      setDisabled(true)
-    }
-    return () => {
-    };
-  }, [max]);
 
   return (
       <RcSlider

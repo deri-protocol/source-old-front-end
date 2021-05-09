@@ -28,7 +28,7 @@ export default function Button({btnText,className,disabled,click,afterClick}){
             style={{display : 'none' ,marginRight : '2'}}>
           </span>
         </span>
-          {pending ? 'Pending' : btnText  }
+          {pending ? 'PENDING' : btnText  }
         </button>
   )
 }

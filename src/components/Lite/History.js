@@ -2,6 +2,7 @@ import React, { useState ,useEffect} from 'react'
 import { getTradeHistory } from "../../lib/web3js";
 import dateFormat from 'date-format'
 import NumberFormat from 'react-number-format';
+import useInterval from '../../hooks/useInterval';
 
 export default function History({wallet = {},spec ={} ,specs = []}){
   const [history, setHistory] = useState([]);
@@ -19,6 +20,7 @@ export default function History({wallet = {},spec ={} ,specs = []}){
     setHistory(his)
   }
 
+  useInterval(loadHistory,3000)
   useEffect(() => {
     loadHistory();
     return () => {      

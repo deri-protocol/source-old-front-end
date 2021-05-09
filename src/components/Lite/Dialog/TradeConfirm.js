@@ -12,10 +12,13 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
     if(res.success){
       afterTrade()
       onClose()
+    } else {
+      const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
+      alert(msg)
     }
   }
 
-  const afterTradePosition = direction === 'long' ? ((+volume) + (+position)) : ((+position) - (+volume))
+  const afterTradePosition = ((+volume) + (+position))
 
   return (
     <div className='modal-dialog'>

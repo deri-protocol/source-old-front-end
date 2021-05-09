@@ -34,7 +34,8 @@ export default function WithdrawMagin({wallet,spec = {},onClose,afterWithdraw}){
     if(res.success){
       afterWithdraw();
     } else {
-      alert(res.error)
+      const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
+      alert(msg)
     }
   }
 
