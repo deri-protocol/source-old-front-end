@@ -8,18 +8,16 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   const [history, setHistory] = useState([]);
 
   const loadHistory =  async () => {
-    if(wallet.detail.account && spec.pool && specs){
-      const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
-      const his = all.map(item => {
-        item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
-        const find = specs.find(s => s.bTokenSymbol === item.baseToken)
-        if(find){
-          item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
-        }
-        return item;
-      })
-      setHistory(his)
-    }
+    const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
+    const his = all.map(item => {
+      item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
+      const find = specs.find(s => s.bTokenSymbol === item.baseToken)
+      if(find){
+        item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
+      }
+      return item;
+    })
+    setHistory(his)
   }
 
   // useInterval(loadHistory,3000)

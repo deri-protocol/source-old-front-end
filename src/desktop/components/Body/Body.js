@@ -3,7 +3,7 @@ import { withRouter, Switch,Route} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
 
-const Lite = LoadableComponent(()=>import('../../pages/trade/Trade')) 
+const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite')) 
 const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro')) 
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))

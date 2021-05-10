@@ -12,7 +12,7 @@ import useInterval from '../../hooks/useInterval';
 
 
 
-export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice}){
+export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice}){
   const [direction, setDirection] = useState('long');
   const [contractInfo, setContractInfo] = useState(null);
   const [dropdown, setDropdown] = useState(false);  
@@ -59,11 +59,10 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
 
   //切换交易标的
   const onSelect = select => {
-    const selected = specs.find(config => config.symbol === select.symbol )
-    setDirection('long');
-    indexPrice.pause();    
+    const selected = specs.find(config => config.symbol === select.symbol )    
     onSpecChange(selected);
-    indexPrice.start(selected.symbol);
+    setVolume('')
+    setTradeInfo({})
   }
 
   const onSlide = value => {    
@@ -102,7 +101,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
     if(hasConnectWallet() && hasSpec()) {
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account);
       if(position){
-        setPosition(position);
+        setPosition(position);        
       }
     }
   }
@@ -118,7 +117,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
   //交易费用
   const loadTransactionFee = async () => {
     if(hasConnectWallet() && hasSpec()) {
-      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,volume);
+      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(volume));
       setTransFee(transFee);
     }
   }
@@ -286,11 +285,11 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
                 ></path></svg>
               </span>
           </button>
-          <div className={selectClass} >
+          <div className={selectClass}>
             <div className='dropdown-box'>
               {specs.map((config,index) => {
                 return (
-                  <div className='dropdown-item' key={index} onClick={() => onSelect(config)}>              
+                  <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
                     {config.symbol} / {config.bTokenSymbol} (10X)
                   </div>
                 )
@@ -300,12 +299,21 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
           </div>
         </div>
 
-        <div className='price-fundingRate'>
+        <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             Index Price: <span className={indexPriceClass}>&nbsp; <NumberFormat value={indexPrice.index} displayType='text'/></span>
           </div>
           <div className='funding-rate'>
             <span>Funding Rate Annual: &nbsp;</span>
+            <span className='funding-per' title={fundingRateTip}>{ fundingRate }</span> 
+          </div>
+        </div>
+        <div className='price-fundingRate mobile'>
+          <div className='index-prcie'>
+            Index: <span className={indexPriceClass}>&nbsp; <NumberFormat value={indexPrice.index} displayType='text'/></span>
+          </div>
+          <div className='funding-rate'>
+            <span>Funding: &nbsp;</span>
             <span className='funding-per' title={fundingRateTip}>{ fundingRate }</span> 
           </div>
         </div>
@@ -327,7 +335,7 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
               onBlur={onBlur}
               onKeyUp={onKeyUp}
               disabled={!tradeInfo.available}
-              onChange={event =>  setVolume(event.target.value)}
+              onChange={event =>  setVolume(direction === 'long' ? event.target.value : -event.target.value)}
               value={tradeInfo.volume && Math.abs(tradeInfo.volume)}
               className={volumeClazz}
               placeholder='Contract Volume'
@@ -341,9 +349,13 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
         <div className='right-info'>
           <div className='contrant-info'>
             <div className='balance-contract'>
-              <span className='balance-contract-text'>
+              <span className='balance-contract-text pc'>
                 Balance in Contract<br/>
                 (Dynamic Balance)
+              </span>
+              <span className='balance-contract-text mobile'>
+                Balance in Contract<br/>
+                (Dyn Bal.)
               </span>
               <span className='balance-contract-num'>
                 <NumberFormat value={ tradeInfo.dynamicBalance } displayType='text' decimalScale={2}/>
@@ -356,7 +368,8 @@ export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChang
               </span>
             </div>
             <div className='available-balance'>
-              <span> Available Balance </span>
+              <span className='available-balance pc'> Available Balance </span>
+              <span className='available-balance mobile'>Avail Bal</span>
               <span className='available-balance-num'>
                 <NumberFormat value={ tradeInfo.available } displayType='text' decimalScale={2} />
               </span>

@@ -22,7 +22,7 @@ export default function ContractInfo({wallet,spec ={}}){
       }
     }
     wallet && setSpec();
-    return setSpec;
+    return () => {};
   }, [spec,wallet]);
   
   return(

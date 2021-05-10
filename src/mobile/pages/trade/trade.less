@@ -42,6 +42,7 @@
     }
     .history-info {
       display: block;
+      z-index: 1;
     }
     .trade-info,.position-info {
       display: none;
@@ -106,6 +107,9 @@
           .price-fundingRate {
             display: inline-block;
           }
+          .price-fundingRate.pc {
+            display: none
+          }
 
           .check-baseToken-btn {
             width: 2.06rem;
@@ -157,20 +161,21 @@
               width: 174px;
               font-size: 16px;
               font-family: Korolev, sans-serif;
-              font-weight: 300;
               color: #CCCCCC;
               margin-left: 19px;
               line-height: 32px;
+              cursor: pointer;
             }
 
-            .dropdown-item:focus,
-            .dropdown-item:hover {
-              color: #fff;
-              border-radius: 10px;
-              display: inline;
-              text-decoration: none;
-              background-color: #252628;
-            }
+            // .dropdown-item:focus,
+            // .dropdown-item:hover {
+            //   color: #fff;
+            //   border-radius: 10px;
+            //   cursor: pointer;
+            //   display: inline;
+            //   text-decoration: none;
+            //   background-color: #252628;
+            // }
 
 
 
@@ -344,7 +349,7 @@
               }
 
               .inputFamliy {
-                font-size: 18px;
+                font-size: 30px;
                 text-align: right;
                 padding-right: 15px;
                 font-family: 'LED Calculator';
@@ -394,6 +399,12 @@
                   top: 10px;
                 }
               }
+              .available-balance.pc {
+                display: none
+              }
+              .balance-contract-text.pc{
+                display: none
+              }
 
               .available-balance-num {
                 color: @text;
@@ -418,7 +429,7 @@
         }
 
         .enterInfo {
-          margin: 20px 9px 0;
+          margin: 20px 14px 0;
           height: 100px;
 
           .text-info {

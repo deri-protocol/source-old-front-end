@@ -7,8 +7,7 @@ import { tradeWithMargin } from "../../../lib/web3js";
 export default function TradeConfirm({wallet,spec,onClose,volume,direction,position = 0,indexPrice,leverage,transFee,afterTrade}){
 
   const trade = async () => {
-    const amount = direction === 'long' ? volume : -volume
-    const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount)
+    const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,volume)
     if(res.success){
       afterTrade()
       onClose()

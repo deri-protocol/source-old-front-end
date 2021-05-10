@@ -23,18 +23,18 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
 
   useEffect(() => {    
     if(indexPriceRef.current){
-      indexPriceRef.current > indexPrice ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
+      indexPriceRef.current > indexPrice.index ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
     }
-    indexPriceRef.current = indexPrice
+    indexPriceRef.current = indexPrice.index
     return () => {      
     };
-  }, [indexPrice]);
+  }, [indexPrice.index]);
 
   useEffect(() => {
     loadFundingRate();
     return () => {
     };
-  }, [wallet.detail.account,spec,indexPrice]);
+  }, [wallet.detail.account,spec,indexPrice.index]);
   return (
     <div id="trading-view">
       <div className='right-top'>
@@ -43,7 +43,7 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
-          <div className={indexPriceClass}><NumberFormat value={indexPrice} displayType='text'/></div>
+          <div className={indexPriceClass}><NumberFormat value={indexPrice.index} displayType='text'/></div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>

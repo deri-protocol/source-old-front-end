@@ -10,10 +10,10 @@ const { Handle } = RcSlider;
   return (
     <SliderTooltip
       prefixCls="rc-slider-tooltip"
-      overlay={value}
+      overlay={!!value ? value : ''}
       placement="top"
       key={index}
-      visible={value > 0 ? true : false}
+      visible={!!value ? true : false}
       overlayStyle={{display : 'block'}}
       overlayInnerStyle={{color : '#569BDA',background : 'none',display : 'block' ,fontSize : '10px',boxShadow : 'none'}}
     >

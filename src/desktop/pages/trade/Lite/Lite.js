@@ -1,19 +1,14 @@
-import { useState ,useEffect,useCallback} from 'react'
-import './Lite/Lite.less'
-import Pro from './Pro/Pro';
-import Lite from '../../../components/Lite/Lite';
-import useDeriConfig from '../../../hooks/useDeriConfig';
+import { useState ,useEffect} from 'react'
+import ProTrade from '../Pro/Pro';
+import useDeriConfig from '../../../../hooks/useDeriConfig';
 import classNames from 'classnames';
-import config from '../../../config.json'
-import axios from 'axios'
-import { DeriEnv, deriToNatural } from '../../../lib/web3js';
-import useInterval from '../../../hooks/useInterval';
 import {observer, inject } from 'mobx-react';
+import './lite.less'
+import LiteTrade from '../../../../components/Trade/LiteTrade';
 
 
-const oracleConfig = config[DeriEnv.get()]['oracle']
 
-function Trade({wallet,indexPrice}){
+function Lite({wallet,indexPrice}){
   const [curTab, setCurTab] = useState('lite')
   const [spec, setSpec] = useState({});
   const specs = useDeriConfig(wallet.detail)
@@ -30,6 +25,7 @@ function Trade({wallet,indexPrice}){
   }
 
   const onSpecChange = spec => {
+    indexPrice.pause();
     setSpec(spec)
   }
 
@@ -47,7 +43,8 @@ function Trade({wallet,indexPrice}){
 
   useEffect(() => {
     if(specs.length > 0){
-      setSpec(specs[0]);      
+      setSpec(specs[0]);   
+      indexPrice.start(specs[0].symbol)   
     }
     return () => {
 
@@ -69,8 +66,8 @@ function Trade({wallet,indexPrice}){
         <div className='pro' onClick={() => switchTab('pro')}> PRO
         </div>
       </div>
-      {curTab === 'lite' ? <Lite {...props}/> : <Pro {...props}/>}
+      {curTab === 'lite' ? <LiteTrade {...props}/> : <ProTrade {...props}/>}
     </div>
   )
 }
-export default inject('wallet','indexPrice')(observer(Trade))
+export default inject('wallet','indexPrice')(observer(Lite))
