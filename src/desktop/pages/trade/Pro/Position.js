@@ -9,6 +9,11 @@ import DepositMargin from '../../../../components/Lite/Dialog/DepositMargin';
 import WithdrawMagin from '../../../../components/Lite/Dialog/WithdrawMargin';
 import useInterval from '../../../../hooks/useInterval';
 
+
+
+const DepositDialog = withModal(DepositMargin);
+const WithDrawDialog = withModal(WithdrawMagin)
+
 export default function Position({wallet = {},spec = {}}){
   const [positionInfo, setPositionInfo] = useState({
     balanceContract : '-',
@@ -21,9 +26,6 @@ export default function Position({wallet = {},spec = {}}){
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   useInterval(loadPositionInfo,3000)
-
-  const DepositDialog = withModal(DepositMargin);
-  const WithDrawDialog = withModal(WithdrawMagin)
 
   const afterWithdraw =() => {
     loadPositionInfo();

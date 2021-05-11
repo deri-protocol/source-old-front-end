@@ -2,7 +2,6 @@
   "name": "app.deri.finance",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://lhd-defactory.github.io/lhd-dfactory/",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",

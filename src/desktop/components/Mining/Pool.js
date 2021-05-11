@@ -18,9 +18,6 @@ export default function Pool(){
             </span>
           </div>}  
       </div>
-      <div className="mining-info-footer">
-        <a href="https://premining.deri.finance/#/">PREMINING</a> 
-      </div>
     </div>
   )
 }

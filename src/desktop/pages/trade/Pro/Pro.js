@@ -1,21 +1,25 @@
 import { useEffect } from 'react'
 
-import Lite from '../../../../components/Lite/Lite'
+
 import TradingView from './TradingView'
 import Reference from './Reference'
 import './pro.less'
+import LiteTrade from '../../../../components/Trade/LiteTrade'
+import { inject, observer } from 'mobx-react'
 
-export  default function Pro({wallet,specs,spec,onSpecChange,indexPrice}){
+function Pro({wallet,specs,spec,onSpecChange,indexPrice}){
 
   return (
     <div className='trade-pro'>
       <div className='left'>
-        <Lite wallet ={wallet} isPro={true} spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
+        <LiteTrade wallet ={wallet} isPro={true} spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
       </div>
       <div className='right'>
-          <TradingView wallet={wallet} spec={spec} indexPrice={indexPrice}/>
-          <Reference wallet={wallet} spec={spec}/>
-        </div>
+        <TradingView wallet={wallet} spec={spec} indexPrice={indexPrice}/>
+        <Reference wallet={wallet} spec={spec}/>
+      </div>
     </div>
   )
 }
+
+export  default inject('wallet','indexPrice')(observer(Pro))

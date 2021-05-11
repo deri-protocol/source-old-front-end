@@ -8,7 +8,7 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
     fundingRate0 : '-',
     tradersNetVolume: '-'
   });
-  const [indexPriceClass, setIndexPriceClass] = useState('');
+  const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 
 

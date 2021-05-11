@@ -77,21 +77,8 @@ function Liquidity({wallet,chainId,baseToken,address}) {
 }
 
 
-
-
-const dialogStyles = {
-  overlay: {
-    position: 'fixed',
-    background: 'none'
-  },
-  content: {
-    position: 'absolute',
-    border : 0,
-    background : 'none',
-		inset : 0,
-		overflow : 'initial'
-  }
-};
+const AddDialog = withModal(AddLiquidity)
+const RemoveDialog = withModal(RemoveLiquidity)
 
 //操作区
 const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
@@ -102,7 +89,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 
 	const isApprove = async () => {
 		const result = await isUnlocked(chainId,address,wallet.detail.account) 
-		return result
+		setIsApproved(result);
+		return result;
   }
 
 	const approve = async () => {
@@ -143,24 +131,23 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
     if(wallet.isConnected()){
 			// eslint-disable-next-line eqeqeq
 			if(wallet.detail.chainId == chainId){
-				const result = isApprove();
-				setIsApproved(result);
-				if(!result){
-					setBtnText('APPROVE')
-				}
+				isApprove()
 			} else {
 				setBtnText(<span className='red-color-font'>Wrong Network</span>)
 			}
     } else {
       setBtnText('Collect Wallet')
 		}
-		return () => {
-			
-		}
+		return () => {}
 	}, [wallet.detail.account])
 
-	const AddDialog = withModal(AddLiquidity)
-	const RemoveDialog = withModal(RemoveLiquidity)
+	useEffect(() => {
+		if(!isApproved){
+			setBtnText('APPROVE')
+		}
+		return () => {};
+	}, [isApproved]);
+
   return (
     <div className="liquidity-btn">
 			{
@@ -168,7 +155,10 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
 			}
-      {isApproved &&<div className="add-remove-liquidity">
+			{
+			isApproved  
+			? 
+			(<div className="add-remove-liquidity">
       <button 
           className="add-liquidity"
           onClick={addLiquidity}>
@@ -177,10 +167,12 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
       <button className="remove-liquidity" onClick={removeLiquidity}>
           REMOVE LIQUIDITY
       </button>
-    </div>}
-    {!isApproved &&<div className="approve" >
+    </div>)
+		:
+    (<div className="approve" >
 			<Button className='approve-btn' click={click} btnText={btnText}></Button>
-    </div>}
+    </div>)
+		}
   </div>
   )
 }

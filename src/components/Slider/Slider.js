@@ -23,7 +23,7 @@ const { Handle } = RcSlider;
 };
 
 
-export default function Slider({max,start,onValueChange}){
+export default function Slider({max,start,onValueChange,freeze}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -33,6 +33,11 @@ export default function Slider({max,start,onValueChange}){
     setValue(value)
     onValueChange(value);
   }
+
+  useEffect(() => {
+    setDisabled(freeze)
+    return () => { };
+  }, [freeze]);
 
   useEffect(() => {
     if(isNaN(max)){
@@ -91,20 +96,6 @@ export default function Slider({max,start,onValueChange}){
         step={0.01}
         marks={marks}
        >
-        {/* <div className='rc-slider-text'><span>0</span><span>{max}</span></div>         */}
-        {/* <div className='m-rc-slider-mark'>
-          <span style={{left:0}}>l</span>
-          <span style={{left:'10%'}}>l</span>
-          <span style={{left:'20%'}}>l</span>
-          <span style={{left:'30%'}}>l</span>
-          <span style={{left:'40%'}}>l</span>
-          <span style={{left:'50%'}}>l</span>
-          <span style={{left:'60%'}}>l</span>
-          <span style={{left:'70%'}}>l</span>
-          <span style={{left:'80%'}}>l</span>
-          <span style={{left:'90%'}}>l</span>
-          <span style={{left:'99%'}}>l</span>
-        </div> */}
       </RcSlider>
   )
 }

@@ -4,17 +4,20 @@
       "1" : {
         "name" : "Ethereum",
         "text" : "ETHEREUM",
-        "symbol" : "ETH"
+        "symbol" : "ETH",
+        "viewUrl" : "https://etherscan.io/address/"
       },
       "56" : {
         "name" : "bsc",
         "text" : "BSC",
-        "symbol" : "BNB"
+        "symbol" : "BNB",
+        "viewUrl" : "https://bscscan.com/address/"
       },
       "128" : {
         "name" : "heco",
         "text" : "HECO",
-        "symbol" : "HT"
+        "symbol" : "HT",
+        "viewUrl" : "https://hecoscan.xyz/address/"
       }
     },
     "oracle" : {
@@ -27,17 +30,20 @@
       "3" : {
         "name" : "Ropsten",
         "text" : "ROPSTEN",
-        "symbol" : "ETH"
+        "symbol" : "ETH",
+        "viewUrl" : "https://ropsten.etherscan.io/address/"
       },
       "97" : {
         "name" : "Bsc-testnet",
         "text" : "BSC TESTNET",
-        "symbol" : "BNB"
+        "symbol" : "BNB",
+        "viewUrl" : "https://testnet.bscscan.com/address/"
       },
       "256" : {
         "name" : "Heco-testnet",
         "text" : "HECO TESTNET",
-        "symbol" : "HT"
+        "symbol" : "HT",
+        "viewUrl" : "https://scan-testnet.hecochain.com/address/"
       }
     },
     "oracle" : {

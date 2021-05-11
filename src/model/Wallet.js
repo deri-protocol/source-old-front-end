@@ -24,14 +24,7 @@ class Wallet {
   isConnected = () => !!this.detail.account;
 
   connect =  async () => {
-    const res = await connectWallet(null,account => {
-      //如果还有账号，切换这个这个账号，否则清除sessionStorage
-      if(account) {
-        //@todo
-      } else {
-        this.remove();
-      }
-    });
+    const res = await connectWallet();
     return new Promise(async (resolve,reject) => {
       if(res.success){
         const {chainId,account} = res

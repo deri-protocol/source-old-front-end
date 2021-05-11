@@ -18,7 +18,7 @@ export default function TradingViewChart({spec = {}}){
       datafeed: datafeeds,
       interval: localStorage.getItem('localResolutions') || '1D',
       container_id: defaultProps.containerId,
-      library_path: '/charting_library/',
+      library_path: `${process.env.PUBLIC_URL}/charting_library/`,
       locale: 'en',
       disabled_features: [
         'header_widget',

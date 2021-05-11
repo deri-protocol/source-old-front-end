@@ -30,12 +30,12 @@ export default function Menu({closeMenu}){
           <Link to="/lite"> Trade </Link>
           </li>
           <li>
-            <a target="_blank" href="https://governance.deri.finance/"
+            <a target="_blank" rel='noreferrer' href="https://governance.deri.finance/"
               >Governance</a
             >
           </li>
           <li>
-            <a target="_blank" href="https://bridge.deri.finance/">Bridge</a>
+            <a target="_blank" rel='noreferrer' href="https://bridge.deri.finance/">Bridge</a>
           </li>
           <li className="ref">
             Docs <img  src={menuDown} alt=""/>
@@ -71,7 +71,7 @@ export default function Menu({closeMenu}){
       </div>
       <div className="m-footer">
         <div className="footer-link">
-          <a target="_blank" className="iocn-a" href="mailto: service@deri.finance">
+          <a target="_blank" rel='noreferrer' className="iocn-a" href="mailto: service@deri.finance">
               <div className="circle">
                 <div className="fa fa-envelope"></div>
               </div>
@@ -79,6 +79,7 @@ export default function Menu({closeMenu}){
             <a
               target="_blank"
               className="iocn-a"
+              rel='noreferrer'
               href="https://deri-protocol.medium.com"
             >
               <div className="circle">

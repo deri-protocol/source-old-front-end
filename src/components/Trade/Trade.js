@@ -25,6 +25,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
   const [poolLiquidity, setPoolLiquidity] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('');
+  const [freeze, setFreeze] = useState(false);
   const indexPriceRef = useRef();
   
 
@@ -60,9 +61,10 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
   //切换交易标的
   const onSelect = select => {
     const selected = specs.find(config => config.symbol === select.symbol )    
+    setFreeze(true)
     onSpecChange(selected);
     setVolume('')
-    setTradeInfo({})
+    setFreeze(false)
   }
 
   const onSlide = value => {    
@@ -378,7 +380,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={tradeInfo.dynamicBalance} onValueChange={onSlide} start={tradeInfo.margin}/>
+        <Slider max={tradeInfo.dynamicBalance} freeze={freeze} onValueChange={onSlide} start={tradeInfo.margin}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>

@@ -1,7 +1,8 @@
 import React from 'react';
-import { withRouter, Switch,Route} from 'react-router-dom'
+import { withRouter, Switch,Route,Redirect} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
+
 
 
 const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite')) 
@@ -16,11 +17,14 @@ class Body extends React.Component {
     return (
       <div className='body'>
         <Switch >
-          <Route exact path='/' component={Lite}/>
+          <Route exact path='/'>
+            <Redirect to='/lite'/>
+          </Route>
           <Route exact path='/mining' component={Pool}/>
           <Route exact path='/mining/:chainId/:baseToken/:address' component={Mining}/>
           <Route exact path='/lite' component={Lite}/>
           <Route exact path='/pro' component={Pro}/>
+          <Route component={Lite} />
         </Switch>
       </div>
     )
