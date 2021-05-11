@@ -1,5 +1,6 @@
 {
   "name": "app.deri.finance",
+  "homepage": "https://lhd-defactory.github.io/lhd-dfactory/",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
