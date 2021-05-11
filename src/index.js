@@ -14,7 +14,7 @@ const indexPrice = new IndexPrice();
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Provider wallet={wallet} indexPrice={indexPrice}>
         <App />
       </Provider>
