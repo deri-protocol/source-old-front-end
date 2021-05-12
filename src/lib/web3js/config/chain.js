@@ -1,8 +1,6 @@
 export const ChainProviderUrls = [
   {
     provider_urls: [
-      'https://mainnet.infura.io/v3/be8f2596352a4ea2986472ec46f5c6e1',
-      'https://mainnet.infura.io/v3/2ded4661ec3d4e6f9bb1c9a27a160436',
       'https://mainnet.infura.io/v3/ec73e2f0c79a42c0997ee535364de584',
     ],
     chainId: '1',
@@ -21,16 +19,12 @@ export const ChainProviderUrls = [
   },
   {
     provider_urls: [
-      'https://ropsten.infura.io/v3/2ded4661ec3d4e6f9bb1c9a27a160436',
-      'https://ropsten.infura.io/v3/be8f2596352a4ea2986472ec46f5c6e1',
       'https://ropsten.infura.io/v3/ec73e2f0c79a42c0997ee535364de584',
     ],
     chainId: '3',
   },
   {
     provider_urls: [
-      'https://kovan.infura.io/v3/be8f2596352a4ea2986472ec46f5c6e1',
-      'https://kovan.infura.io/v3/2ded4661ec3d4e6f9bb1c9a27a160436',
       'https://kovan.infura.io/v3/ec73e2f0c79a42c0997ee535364de584',
     ],
     chainId: '42',

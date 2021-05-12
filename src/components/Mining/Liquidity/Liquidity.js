@@ -1,19 +1,21 @@
 import React, { useState, useEffect} from 'react'
 import {
-	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity
+	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance
 } from '../../../lib/web3js/index'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';
 import { inject, observer } from 'mobx-react';
 import withModal from '../../hoc/withModal';
+import { eqInNumber } from '../../../utils/utils';
+import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
 function Liquidity({wallet,chainId,baseToken,address}) {
   const [liquidity,setLiquidity] = useState({})
 
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,baseToken)
-		if(wallet.isConnected() && chainId == wallet.detail.chainId){
+		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
 			const info = await getLiquidityInfo(chainId,address,wallet.detail.account);
 			if(info){
 				setLiquidity({
@@ -47,7 +49,7 @@ function Liquidity({wallet,chainId,baseToken,address}) {
       <div className="odd title">Provide { baseToken } Earn DERI</div>
 				<div className="odd text">
 						<div className="text-title">Pool Total Liquidity</div>
-						<div className="text-num"> { liquidity.total || '--'} { baseToken }</div>
+						<div className="text-num"><DeriNumberFormat value={ liquidity.total} suffix={ baseToken } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">APY</div>
@@ -55,18 +57,18 @@ function Liquidity({wallet,chainId,baseToken,address}) {
 				</div>
 				<div className="odd text">
 						<div className="text-title">Liquidity Share Value</div>
-						<div className="text-num">{ liquidity.shareValue || '--'} { baseToken }</div>
+						<div className="text-num"><DeriNumberFormat value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
-						<div className="text-num">{ liquidity.percent || '--' }</div>
+						<div className="text-num"><DeriNumberFormat value={ liquidity.percent } /></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">Staked Balance </div>
-						<div className="text-num">{ liquidity.shares || '--' }  <span>Shares</span> </div>
+						<div className="text-num"><DeriNumberFormat value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
 				</div>
 				<div className="odd claim-network">
-					<div className="text-title money">{liquidity.values} { baseToken }</div>
+					<div className="text-title money"><DeriNumberFormat value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
 						
 				</div>
 				<div className="title-check">
@@ -86,6 +88,30 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
 	const [btnText, setBtnText] = useState('Collect Wallet')
+	const [balance, setBalance] = useState('');
+	const [liqInfo, setLiqInfo] = useState({})
+	
+	const loadLiqidityInfo = async () => {
+    if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
+      const info = await getLiquidityInfo(wallet.detail.chainId,address,wallet.detail.account);	
+      setLiqInfo({shares : info.shares})
+    }
+  }
+
+
+  const loadBalance = async () => {
+    if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
+      const total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+      setBalance(total)
+    }
+  }
+
+  useEffect(() => {
+		loadBalance();
+		loadLiqidityInfo();
+    return () => {}
+  }, [wallet.detail.account])
+
 
 	const isApprove = async () => {
 		const result = await isUnlocked(chainId,address,wallet.detail.account) 
@@ -117,6 +143,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 	const afterClick = () => {
 		setIsOpen(false);
 		loadLiquidity()
+		loadBalance();
+		loadLiqidityInfo();
 	}
 
 	const removeLiquidity = () => {
@@ -129,8 +157,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
   useEffect(() => {
 		//todo 判断网络
     if(wallet.isConnected()){
-			// eslint-disable-next-line eqeqeq
-			if(wallet.detail.chainId == chainId){
+			if(eqInNumber(wallet.detail.chainId, chainId)){
 				isApprove()
 			} else {
 				setBtnText(<span className='red-color-font'>Wrong Network</span>)
@@ -152,8 +179,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
     <div className="liquidity-btn">
 			{
 				btnType === 'add' 
-				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
-				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} chainId={chainId} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
+				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
 			}
 			{
 			isApproved  

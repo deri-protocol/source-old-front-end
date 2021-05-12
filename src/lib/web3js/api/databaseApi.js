@@ -28,7 +28,7 @@ export const getUserInfo = async (userAddress) => {
     const [chainId, amount, deadline, nonce, v, r, s, valid] = res;
     return {
       chainId: deriToString(chainId),
-      amount: deriToNatural(amount),
+      amount: deriToNatural(amount).toString(),
       deadline: deriToString(deadline),
       nonce: deriToString(nonce),
       v: deriToString(v),
@@ -51,8 +51,8 @@ export const getUserInfoHarvest = async (userAddress) => {
   if (res) {
     const [harvestLp, harvestTrade] = res;
     return {
-      lp: deriToNatural(harvestLp),
-      trade: deriToNatural(harvestTrade),
+      lp: deriToNatural(harvestLp).toString(),
+      trade: deriToNatural(harvestTrade).toString(),
     };
   }
 };
@@ -66,7 +66,7 @@ export const getUserInfoTotal = async (userAddress) => {
   if (res) {
     const [total] = res;
     return {
-      total: deriToString(total),
+      total: deriToNatural(total).toString(),
     };
   }
 };
@@ -153,9 +153,9 @@ export const getPoolInfoApy = async (chainId, poolAddress) => {
     if (res) {
       const [apy, volume1h, volume24h] = res;
       return {
-        apy: deriToString(apy),
-        volume1h: deriToString(volume1h),
-        volume24h: deriToString(volume24h),
+        apy: deriToNatural(apy).toString(),
+        volume1h: deriToNatural(volume1h).toString(),
+        volume24h: deriToNatural(volume24h).toString(),
       };
     }
   } catch (err) {
@@ -188,9 +188,9 @@ export const getSlpPoolInfoApy = async (chainId, poolAddress) => {
     if (res) {
       const [apy, volume1h, volume24h] = res;
       return {
-        apy: deriToString(apy),
-        volume1h: deriToString(volume1h),
-        volume24h: deriToString(volume24h),
+        apy: deriToNatural(apy).toString(),
+        volume1h: deriToNatural(volume1h).toString(),
+        volume24h: deriToNatural(volume24h).toString(),
       };
     }
   } catch (err) {
@@ -223,9 +223,9 @@ export const getClpPoolInfoApy = async (chainId, poolAddress) => {
     if (res) {
       const [apy, volume1h, volume24h] = res;
       return {
-        apy: deriToString(apy),
-        volume1h: deriToString(volume1h),
-        volume24h: deriToString(volume24h),
+        apy: deriToNatural(apy).toString(),
+        volume1h: deriToNatural(volume1h).toString(),
+        volume24h: deriToNatural(volume24h).toString(),
       };
     }
   } catch (err) {
@@ -259,11 +259,68 @@ export const getUserInfoInPool = async (chainId, poolAddress, userAddress) => {
     if (res) {
       const [volume1h, volume24h] = res;
       return {
-        volume1h: deriToString(volume1h),
-        volume24h: deriToString(volume24h),
+        volume1h: deriToNatural(volume1h).toString(),
+        volume24h: deriToNatural(volume24h).toString(),
       };
     }
   } catch (err) {
     console.log(err);
+  }
+};
+
+export const getUserInfoAllForAirDrop = async (userAddress) => {
+  const db = databaseFactory();
+  userAddress = toChecksumAddress(userAddress);
+  const res = await db
+    .getValues([
+      `${userAddress}.claim.chainId`,
+      `${userAddress}.claim.amount`,
+      `${userAddress}.claim.deadline`,
+      `${userAddress}.claim.nonce`,
+      `${userAddress}.claim.v1`,
+      `${userAddress}.claim.r1`,
+      `${userAddress}.claim.s1`,
+      `${userAddress}.claim.v2`,
+      `${userAddress}.claim.r2`,
+      `${userAddress}.claim.s2`,
+      `${userAddress}.claim.valid`,
+      // `${userAddress}.claim.harvest.lp`,
+      // `${userAddress}.claim.harvest.trade`,
+      // `${userAddress}.claim.total`,
+    ])
+    .catch((err) => console.log('getUserInfoAllForAirDrop', err));
+  if (res) {
+    const [
+      chainId,
+      amount,
+      deadline,
+      nonce,
+      v1,
+      r1,
+      s1,
+      v2,
+      r2,
+      s2,
+      valid,
+      // harvestLp,
+      // harvestTrade,
+      // total,
+    ] = res;
+    return {
+      chainId: deriToString(chainId),
+      amount: deriToNatural(amount).toString(),
+      deadline: deriToString(deadline),
+      nonce: deriToString(nonce),
+      v1: deriToString(v1),
+      r1,
+      s1,
+      v2: deriToString(v2),
+      r2,
+      s2,
+      valid: deriToBool(valid),
+      // lp: deriToNatural(harvestLp),
+      // trade: deriToNatural(harvestTrade),
+      // total: deriToString(total),
+    };
   }
 };

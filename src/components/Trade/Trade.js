@@ -400,7 +400,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
         <div className='text-info'>
           <div className='title-enter'>Funding Rate Impact</div>
           <div className='text-enter'>
-            <NumberFormat value={ fundingRate } displayType='text' allowNegative={false} decimalScale={4}/> -> <NumberFormat value={ fundingRateAfter } displayType='text' allowNegative={false} decimalScale={4}/>
+            <NumberFormat value={ fundingRate } displayType='text' suffix='%' allowNegative={false} decimalScale={4}/> -> <NumberFormat value={ fundingRateAfter } displayType='text' allowNegative={false} decimalScale={4} suffix='%' />
           </div>
         </div>
         <div className='text-info'>
@@ -438,6 +438,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [balance, setBalance] = useState('');
 
   
   const connect = () => {
@@ -469,6 +470,20 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       setIsApprove(result);
     }
   }
+
+  const loadBalance = async () => {
+    if(wallet.isConnected()){
+      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      if(balance){
+        setBalance(balance)
+      }
+    }
+  }
+
+  useEffect(() => {
+    loadBalance();
+    return () => {};
+  }, [wallet.detail.account]);
 
   useEffect(() => {
     if((+available) > 0){
@@ -524,6 +539,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
           modalIsOpen={modalIsOpen} 
           onClose={onClose}
           spec={spec}
+          balance={balance}
           afterDeposit={afterDeposit}
         />
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>

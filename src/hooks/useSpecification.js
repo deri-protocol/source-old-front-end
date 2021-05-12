@@ -16,7 +16,7 @@ export default function useSpecification({wallet,address}){
     return () => {
       
     }
-  }, []);
+  }, wallet.detail.account);
 
   return spec;
 }

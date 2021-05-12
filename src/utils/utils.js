@@ -22,3 +22,7 @@ export function formatAddress(address){
 export function formatBalance(balance){
   return balance && (+balance).toFixed(4)
 }
+
+export function eqInNumber(str1,str2){
+  return (+str1) === (+str2)
+}

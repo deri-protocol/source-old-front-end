@@ -1,8 +1,12 @@
 import React, { useState,useEffect } from 'react'
 import dateFormat from 'date-format'
-import { getTradeHistory } from '../../../../lib/web3js';
+import { getTradeHistory ,DeriEnv} from '../../../../lib/web3js';
 import NumberFormat from 'react-number-format';
+import classNames from 'classnames';
+import config from '../../../../config.json'
+import rightArrow from '../../../../assets/img/play-button.png'
 
+const chainConfig = config[DeriEnv.get()]['chainInfo'];
 export default function History({wallet,spec}) {
   const [history, setHistory] = useState([]);
 
@@ -36,6 +40,7 @@ export default function History({wallet,spec}) {
             </div>
             <div className={his.direction}>
               {his.direction === 'LONG' ? `${his.direction} / BUY` : `${his.direction} / SELL`}
+              <HistoryLine wallet={wallet} his={his}/>
             </div>
             <div>
               {his.baseToken}
@@ -58,3 +63,27 @@ export default function History({wallet,spec}) {
     </div>
   )
 }
+
+
+function HistoryLine({wallet,his}){
+  const [isHover, setIsHover] = useState(false);
+  const mouseOver = () => {
+    setIsHover(true)
+  }
+  const mouseOut = () => {
+    setIsHover(false)
+  }
+  const clazz = classNames('view',{hover : isHover})
+  return (
+    <span class={clazz} onMouseOut={mouseOut}>
+      <span className='view-space' onMouseOver={mouseOver} >
+        <a target='_blank' rel='noreferrer' href={`${chainConfig[wallet.detail.chainId]['viewUrl']}tx/${his.transactionHash}`}>View at {chainConfig[wallet.detail.chainId]['viewUrl']}</a>
+      </span>              
+      <span className='right-arrow' onMouseOver={mouseOver}><img alt='' src={rightArrow}/></span>                          
+      <span className='view-arrow' onMouseOver={mouseOver} onMouseOut={mouseOut} >
+        <img rel='noreferrer' alt='' src="data:image/svg+xml;base64,DQo8c3ZnIGZpbGw9Im5vbmUiIGhlaWdodD0iMTAiIHdpZHRoPSIxMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNOC42NzYuNjQyYS42NS42NSAwIDAwLS4wNzIuMDA2SDQuNzkzYS42NS42NSAwIDAwLS41Ny45NzUuNjUuNjUgMCAwMC41Ny4zMjJINy4xMkwuNDM4IDguNjE0YS42NDcuNjQ3IDAgMDAuMjg2IDEuMDk2LjY1LjY1IDAgMDAuNjMyLS4xNzlMOC4wNCAyLjg2MXYyLjMyNGEuNjQ4LjY0OCAwIDAwLjk3Ny41Ny42NDguNjQ4IDAgMDAuMzIyLS41N1YxLjM4YS42NDcuNjQ3IDAgMDAtLjY2Mi0uNzM3eiIgZmlsbD0iI0FBQUFBQSIvPg0KPC9zdmc+DQoNCg=="/>
+      </span>
+    </span> 
+  )
+}
+

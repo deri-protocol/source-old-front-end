@@ -2,6 +2,7 @@ import {useHistory} from 'react-router-dom'
 import NumberFormat from 'react-number-format';
 import config from  '../../config.json'
 import { DeriEnv } from '../../lib/web3js/index.js';
+import DeriNumberFormat from '../../utils/DeriNumberFormat';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
@@ -10,14 +11,6 @@ export default function PoolBox({pool}){
   const history = useHistory();
   const mining = () => history.push(`/mining/${pool.chainId}/${pool.bTokenSymbol}/${pool.address}`)
   
-  const formatApy = val => {
-    if(!isNaN(val) && (+val > 0)){
-      return val.toNumber();
-    } else {
-      return '--'
-    }
-  }
-
   return(
     <div className="pool" >
       <div className="pool-header">
@@ -33,7 +26,7 @@ export default function PoolBox({pool}){
               <div className="base-token">{pool.bTokenSymbol}</div>
               <div>
                 <span>Pool Liq</span>
-                <NumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={0} />
+                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={0}/>
               </div>
               <div>
                 <span>Symbol</span>
@@ -43,19 +36,18 @@ export default function PoolBox({pool}){
                 <span>APY</span>
                 <span>
                   <span>
-                    <NumberFormat value={pool.apy} suffix='%' displayType='text' decimalScale={2} format={formatApy}/>
-                  
+                    <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' decimalScale={2}/>                  
                   </span>
                   {pool.sushiApy &&<>
                   <span>+</span>
-                  <span > {pool.sushiApy}</span>
+                  <span > <DeriNumberFormat value={pool.sushiApy} displayType='text' suffix='%' decimalScale={2}/>}</span>
                   </>}
                 </span>
                 
               </div>
               <div className="pool-address">
                 <span>Address</span>
-                <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId]['viewUrl']}/${pool.address}`}>{pool.pool}</a>
+                <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId]['viewUrl']}/address/${pool.address}`}>{pool.pool}</a>
               </div>
             </div>
           </div>

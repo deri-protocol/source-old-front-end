@@ -5,6 +5,7 @@ import { LTokenContract } from '../contract/lToken';
 import { DatabaseContract } from '../contract/database';
 import { DatabaseWormholeContract } from '../contract/database_wormhole';
 import { MiningVaultPool } from '../contract/mining_vault_pool';
+import { MiningVaultRouter } from '../contract/mining_vault_router';
 
 import { DeriEnv } from '../config/env';
 import { getDBAddressConfig, getDBWormholeAddressConfig } from '../config';
@@ -12,6 +13,7 @@ import { SlpPool } from '../contract/slp_pool';
 import { ClpPool } from '../contract/clp_pool';
 import { DeriContract } from '../contract/deri';
 import { WormholeContract } from '../contract/wormhole';
+import { getLpContractAddress } from '../utils';
 // import { getPoolBaseSymbolList } from '../utils'
 
 export const databaseFactory = (() => {
@@ -192,6 +194,32 @@ export const clpPoolFactory = (function () {
   };
 })();
 
+export const lpPoolFactory = (function () {
+  const lpPoolInstanceMap = {};
+  return (chainId, contractAddress, isProvider = false) => {
+    let key;
+    if (isProvider) {
+      key = `${chainId}.${contractAddress}.isProvider`;
+    } else {
+      key = `${chainId}.${contractAddress}`;
+    }
+    if (Object.keys(lpPoolInstanceMap).includes(key)) {
+      return lpPoolInstanceMap[key];
+    } else {
+      let lpPool;
+      const { type } = getLpContractAddress(chainId, contractAddress);
+      console.log(`lp type: ${type}`);
+      if (type === 'slp') {
+        lpPool = new SlpPool(chainId, contractAddress, isProvider);
+      } else if (type === 'clp') {
+        lpPool = new ClpPool(chainId, contractAddress, isProvider);
+      }
+      lpPoolInstanceMap[key] = lpPool;
+      return lpPool;
+    }
+  };
+})();
+
 export const deriFactory = (function () {
   const deriInstanceMap = {};
   return (chainId, contractAddress, poolAddress, isProvider = false) => {
@@ -230,5 +258,24 @@ export const wormholeFactory = (function () {
     const wormhole = new WormholeContract(chainId, contractAddress, isProvider);
     wormholeInstanceMap[key] = wormhole;
     return wormhole;
+  };
+})();
+
+export const miningVaultRouterFactory = (function () {
+  const mVaultInstanceMap = {};
+  return (chainId, contractAddress, isProvider = false) => {
+    let key;
+    if (isProvider) {
+      key = `${chainId}.${contractAddress}.isProvider`;
+    } else {
+      key = `${chainId}.${contractAddress}`;
+    }
+    if (Object.keys(mVaultInstanceMap).includes(key)) {
+      return mVaultInstanceMap[key];
+    }
+    const mVault = new MiningVaultRouter(chainId, contractAddress, isProvider);
+    // console.log("new MiningValutPool")
+    mVaultInstanceMap[key] = mVault;
+    return mVault;
   };
 })();

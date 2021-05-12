@@ -6,6 +6,7 @@ import {
   getContractAddressConfig,
   getSlpContractAddressConfig,
   getClpContractAddressConfig,
+  getLpContractAddressConfig,
   getAnnualBlockNumberConfig,
   getDeriContractAddressConfig,
 } from './config';
@@ -299,6 +300,18 @@ export const getMiningVaultContractAddress = (chainId) => {
   }
 };
 
+export const getMiningVaultRouterContractAddress = (chainId) => {
+  chainId = normalizeChainId(chainId);
+  const pools = getContractAddressConfig(DeriEnv.get()).filter(
+    (c) => c.chainId === chainId
+  );
+  if (pools.length > 0) {
+    if (pools[0].MiningVaultRouter) {
+      return pools[0].MiningVaultRouter;
+    }
+  }
+};
+
 export const getAnnualBlockNumber = (chainId) => {
   const blockNumbers = getAnnualBlockNumberConfig();
   if (blockNumbers[chainId]) {
@@ -315,12 +328,12 @@ export const getSlpContractAddress = (chainId, poolAddress) => {
   const pool = pools.filter((p) => p.pool === poolAddress);
   if (pool.length > 0) {
     return {
-      pool: pool[0].pool,
-      bToken: pool[0].bToken,
-      pToken: pool[0].pToken,
-      lToken: pool[0].lToken,
-      dToken: pool[0].dToken,
-      MinningVault: pool[0].MiningVault,
+      poolAddress: pool[0].pool,
+      bTokenAddress: pool[0].bToken,
+      pTokenAddress: pool[0].pToken,
+      lTokenAddress: pool[0].lToken,
+      dTokenAdress: pool[0].dToken,
+      MinningVaultAddress: pool[0].MiningVault,
     };
   }
   console.log(
@@ -344,6 +357,26 @@ export const getClpContractAddress = (chainId, poolAddress) => {
   }
   console.log(
     `getClpContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
+  );
+  return {};
+};
+
+export const getLpContractAddress = (chainId, poolAddress) => {
+  chainId = normalizeChainId(chainId);
+  const pools = getLpContractAddressConfig(DeriEnv.get()).filter(
+    (c) => c.chainId === chainId
+  );
+  const pool = pools.filter((p) => p.pool === poolAddress);
+  if (pool.length > 0) {
+    return {
+      poolAddress: pool[0].pool,
+      bTokenAddress: pool[0].bToken,
+      lTokenAddress: pool[0].lToken,
+      type: pool[0].type,
+    };
+  }
+  console.log(
+    `getLpContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
   );
   return {};
 };

@@ -237,17 +237,29 @@ export class PerpetualPool extends Contract {
     let events = [];
     //let toBlock = await this._getBlockInfo("latest");
     //toBlock = toBlock.number;
+    let amount;
+    if (this.chainId === '56') {
+      amount = 1999;
+    } else {
+      amount = 4999;
+    }
+    if (fromBlock + amount > to) {
+      amount = to - fromBlock;
+    }
     while (fromBlock <= to) {
       //console.log('tick')
       let es = await this.contract.getPastEvents(eventName, {
         filter: filter,
         fromBlock,
-        toBlock: fromBlock + 4999,
+        toBlock: fromBlock + amount,
       });
       for (let e of es) {
         events.push(e);
       }
-      fromBlock += 5000;
+      fromBlock += amount + 1;
+      if (fromBlock + amount > to) {
+        amount = to - fromBlock;
+      }
     }
     return events;
   }

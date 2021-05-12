@@ -33,9 +33,7 @@ export default function Claim({wallet}){
 	const click = async () => {
 		if(wallet.isConnected()){
 			claim();
-		} else {
-			wallet.connect();
-		}
+		} 
 	}
 
 

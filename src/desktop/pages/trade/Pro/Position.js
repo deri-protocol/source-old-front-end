@@ -2,11 +2,11 @@
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useState,useEffect } from 'react'
 import NumberFormat from 'react-number-format'
-import { getPositionInfo, closePosition } from '../../../../lib/web3js';
+import { getPositionInfo, closePosition, getWalletBalance } from '../../../../lib/web3js';
 import closePosImg from '../../../img/close-position.png'
 import withModal from '../../../../components/hoc/withModal';
-import DepositMargin from '../../../../components/Lite/Dialog/DepositMargin';
-import WithdrawMagin from '../../../../components/Lite/Dialog/WithdrawMargin';
+import DepositMargin from '../../../../components/Trade/Dialog/DepositMargin';
+import WithdrawMagin from '../../../../components/Trade/Dialog/WithdrawMargin';
 import useInterval from '../../../../hooks/useInterval';
 
 
@@ -25,6 +25,7 @@ export default function Position({wallet = {},spec = {}}){
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+  const [balance, setBalance] = useState('');
   useInterval(loadPositionInfo,3000)
 
   const afterWithdraw =() => {
@@ -50,6 +51,16 @@ export default function Position({wallet = {},spec = {}}){
     }
   }
 
+
+  const loadBalance = async () => {
+    if(wallet.isConnected()){
+      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      if(balance){
+        setBalance(balance)
+      }
+    }
+  }
+
   const onClosePosition = async () => {
     setClosing(true)
     const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setClosing(false))
@@ -68,6 +79,7 @@ export default function Position({wallet = {},spec = {}}){
 
   useEffect(() => {
     loadPositionInfo();
+    loadBalance();
     return () => {};
   }, [wallet.detail.account,spec.pool])
 
@@ -123,6 +135,7 @@ export default function Position({wallet = {},spec = {}}){
         onClose={onCloseDeposit}
         spec={spec}
         afterDeposit={afterDeposit}
+        balance={balance}
       />
       <WithDrawDialog
         wallet={wallet}
@@ -130,6 +143,7 @@ export default function Position({wallet = {},spec = {}}){
         onClose={onCloseWithdraw}
         spec={spec}
         afterWithdraw={afterWithdraw}
+        position={positionInfo}
         />
   </div>
   )

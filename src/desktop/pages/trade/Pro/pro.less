@@ -655,6 +655,9 @@
             .td {
               margin-left: 30px;
             }
+            .LONG ,.SHORT{
+              position: relative;
+            }
             .LONG {
               color: @green;
             }
@@ -683,6 +686,54 @@
                 min-height: 40px;
                 display: flex;
                 align-items: center;
+              }
+            }
+
+            .direction {
+              position: relative;
+            }
+    
+            .view.hover {
+              .view-space ,.right-arrow {
+                display: block;
+              }
+            }
+            .view {
+              position: absolute;
+              width: 104px;
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+    
+              .view-space {
+                background-color: #000;
+                padding: 2px;             
+                font-size: 14px;
+                white-space: nowrap;
+                border-radius: 4px;
+                display: none;
+                cursor: pointer;
+                a {
+                  color : #fff;            
+                }
+              }
+    
+              .view-arrow {
+                img {
+                  padding : 0 0 2px;
+                  cursor: pointer;
+                }
+              }
+    
+              .right-arrow {            
+                height: 24px;
+                display: none;
+                img {
+                  width: 14px;
+                  vertical-align: middle;
+                  left: -1px;
+                  position: relative;
+                }
               }
             }
           }

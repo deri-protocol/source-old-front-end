@@ -35,11 +35,11 @@ export default function Liquidity({wallet = {},chainId,address}) {
       <div className="odd title">Trade to Earn DERI</div>
         <div className="odd text">
             <div className="text-title">Total Trading Volume in Current Hour</div>
-            <div className="text-num">{ tradeSummary.totalTradingVolumeCurrent }</div>
+            <div className="text-num">{ tradeSummary.totalTradingVolumeCurrent || 0}</div>
         </div>
         <div className="odd text">
             <div className="text-title">My Trading Volume in Current Hour</div>
-            <div className="text-num">{ userInfoInPool.myTradingVolumeCurrent }</div>
+            <div className="text-num">{ userInfoInPool.myTradingVolumeCurrent || 0 }</div>
         </div>
         <div className="odd text">
             <div className="text-title"></div>

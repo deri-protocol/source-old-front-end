@@ -26,7 +26,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
-        initialBlock: '5552805',
+        initialBlock: '5288684',
         bTokenSymbol: 'BUSD',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -39,7 +39,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0xd8f78c47b0e0943B3Cb2cE1e1726472C4ddd2F98',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
-        initialBlock: '6759703',
+        initialBlock: '6753399',
         bTokenSymbol: 'BUSD',
         symbol: 'COIN',
         unit: 'COIN',
@@ -52,7 +52,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0x43CA6D7129d7F490d5B91B4D14D7c877D15A92dA',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        initialBlock: '11949485',
+        initialBlock: '11949433',
         bTokenSymbol: 'USDT',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -65,7 +65,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0xeC27d4c53C2E29F1113A9667c0B19442df83c1f1',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        initialBlock: '11860122',
+        initialBlock: '11860070',
         bTokenSymbol: 'BAC',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -78,7 +78,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0x90fE976Cbb48E0761A84DDA2974024377994a997',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
-        initialBlock: '2558057',
+        initialBlock: '2557914',
         bTokenSymbol: 'HUSD',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -90,11 +90,11 @@ export const getContractAddressConfig = (env = 'dev') => {
   // console.log('-- test ---')
   return [
     {
+      pool: '0x67eE8f0CB17e750219Bd58d433D52ab4B3d8A081',
       bToken: '0x8F038C454B6E68B2988706a1a5f78dE2C4634097',
       pToken: '0xad794Adc3Ed6085A79Ba3e2FCD13Df8d33d462Ec',
       lToken: '0x37732230ac101f59490762Ef73Be43B5E5Ec4949',
-      pool: '0x67eE8f0CB17e750219Bd58d433D52ab4B3d8A081',
-      initialBlock: '9986748',
+      initialBlock: '9986356',
       bTokenSymbol: 'USDT',
       symbol: 'BTCUSD',
       unit: 'BTC',
@@ -105,7 +105,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       bToken: '0xa0354a4bB59657ad9A2b3eeC4f53f7A6Fb171DD1',
       pToken: '0x5FeF67FD24f37b90E0c96324380F63413dF22f78',
       lToken: '0xCdDbf76F76B9F95135F5D531fefc344258ff322a',
-      initialBlock: '7796732',
+      initialBlock: '7796681',
       bTokenSymbol: 'BUSD',
       symbol: 'BTCUSD',
       unit: 'BTC',
@@ -116,7 +116,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       bToken: '0xa0354a4bB59657ad9A2b3eeC4f53f7A6Fb171DD1',
       pToken: '0x4396025914025F1C8B74788bF7c64f879064FbA6',
       lToken: '0x2E80928a9eC105FE79cfC4B54c65d185AC3b7E9C',
-      initialBlock: '8108595',
+      initialBlock: '8108552',
       bTokenSymbol: 'BUSD',
       symbol: 'COIN',
       unit: 'COIN',
@@ -127,7 +127,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       bToken: '0x02c9840fD044abFd58E9674ecc232e8b1F323fE8',
       pToken: '0xfa803C4528A1b9f91DFc5f8b4ff940f9FE4F4635',
       lToken: '0xbD57300A178075F774b5F0F9f367B9A2912b7b5e',
-      initialBlock: '3663362',
+      initialBlock: '3663327',
       bTokenSymbol: 'HUSD',
       symbol: 'BTCUSD',
       unit: 'BTC',
@@ -210,6 +210,53 @@ export const getClpContractAddressConfig = (env = 'dev') => {
         chainId: '97',
         bTokenSymbol: 'CAKE-LP',
         symbol: 'BTCUSD',
+      },
+    ];
+  }
+};
+
+export const getLpContractAddressConfig = (env = 'dev') => {
+  if (env === 'prod') {
+    return [
+      {
+        pool: '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd',
+        bToken: '0xA3DfbF2933FF3d96177bde4928D0F5840eE55600',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0000000000000000000000000000000000000000',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
+        chainId: '1',
+        bTokenSymbol: 'DERI-USDT SLP ONSEN',
+        type: 'slp',
+      },
+      {
+        pool: '0x4de2Ac273aD1BBe2F5C41f986d7b3cef8383Df98',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x83b31Abc899863B8Eb06952994580CE86414156E',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '6894880',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP',
+        symbol: 'BTCUSD',
+        type: 'clp',
+      },
+    ];
+  } else {
+    return [
+      {
+        pool: '0x7aad5ADF82d8B85c826c91924AcdACafAAA945f5',
+        bToken: '0x76340AB22aECAaa8f52D5341d2df404CBA966039',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0xd2138766005FAB46E20e6F7e1C4C32A375CfAC56',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '8309032',
+        chainId: '97',
+        bTokenSymbol: 'CAKE-LP',
+        symbol: 'BTCUSD',
+        type: 'clp',
       },
     ];
   }

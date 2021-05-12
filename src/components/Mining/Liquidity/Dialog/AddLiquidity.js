@@ -7,23 +7,10 @@ import useSpecification from '../../../../hooks/useSpecification';
 
 
 
-export default function AddLiquidity({wallet,chainId,address,baseToken,onClose,afterAdd}){
+export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance}){
   const [addValue, setAddValue] = useState('')
-  const [balance,setBalance] = useState('')
   const spec = useSpecification({wallet,address});
 
-
-  const getBalance = async () => {
-    if(wallet.isConnected() && wallet.detail.chainId == chainId){
-      const total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
-      setBalance(total)
-    }
-  }
-
-  useEffect(() => {
-    getBalance();
-    return () => {}
-  }, [wallet.detail.account])
 
   const input = (e) => {
     const {value} =e.target
@@ -31,7 +18,7 @@ export default function AddLiquidity({wallet,chainId,address,baseToken,onClose,a
   }
 
   const addAll = () => {
-    setAddValue(wallet.detail.balance);
+    setAddValue(balance);
   }
 
   const addLiq = async () => {
@@ -49,8 +36,6 @@ export default function AddLiquidity({wallet,chainId,address,baseToken,onClose,a
     }
     return true;
   }
-
-
 
 
   return(

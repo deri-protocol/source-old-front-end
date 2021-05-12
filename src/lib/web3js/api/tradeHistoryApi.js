@@ -216,7 +216,7 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
 };
 
 // get trade history online from the Block number
-const getTradeHistoryOnline = async (
+export const getTradeHistoryOnline = async (
   chainId,
   poolAddress,
   accountAddress,
@@ -263,7 +263,7 @@ const getTradeHistoryOnline = async (
 };
 
 // get liquidate history online from the Block number
-const getLiquidateHistoryOnline = async (
+export const getLiquidateHistoryOnline = async (
   chainId,
   poolAddress,
   accountAddress,

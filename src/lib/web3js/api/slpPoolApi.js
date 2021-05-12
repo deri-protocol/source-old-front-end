@@ -18,7 +18,7 @@ export const getSlpLiquidityInfo = async (
   poolAddress,
   accountAddress
 ) => {
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
@@ -32,7 +32,7 @@ export const getSlpLiquidityInfo = async (
     ]);
 
     return {
-      liquidity: liquidity.toString(),
+      poolLiquidity: liquidity.toString(),
       bTokenBalance: bTokenBalance.toString(),
       shares: shares.toString(),
     };
@@ -61,7 +61,7 @@ export const addSlpLiquidity = async (
   amount
 ) => {
   let res;
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
@@ -100,7 +100,7 @@ export const removeSlpLiquidity = async (
   amount
 ) => {
   let res;
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   // console.log('pool', poolAddress, bTokenAddress)
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
@@ -129,7 +129,7 @@ export const removeSlpLiquidity = async (
  * @returns {bool}
  */
 export const isSlpUnlocked = async (chainId, poolAddress, accountAddress) => {
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
   //bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
@@ -148,7 +148,7 @@ export const isSlpUnlocked = async (chainId, poolAddress, accountAddress) => {
  * @returns {Object} response.transaction - eth transaction receipt object
  */
 export const unlockSlp = async (chainId, poolAddress, accountAddress) => {
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
   //bToken.setAccount(accountAddress);
 
@@ -175,7 +175,7 @@ export const getSlpWalletBalance = async (
   poolAddress,
   accountAddress
 ) => {
-  const { bToken: bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
+  const { bTokenAddress } = getSlpContractAddress(chainId, poolAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
   //bToken.setAccount(accountAddress);
   const balance = await bToken.balance(accountAddress);

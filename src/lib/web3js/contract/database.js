@@ -1,5 +1,5 @@
+import Web3 from 'web3';
 import { getDBProviderUrlsConfig } from '../config/database';
-import { web3Factory } from '../factory/web3';
 import { getAliveHttpServer, checkHttpServerIsAlive } from '../utils';
 
 /* eslint-disable */
@@ -16,7 +16,7 @@ export class DatabaseContract {
   }
   _init() {
     // only use 'bsc testnet' with chainId 97
-    this.web3 = web3Factory('97');
+    this.web3 = new Web3(new Web3.providers.HttpProvider(this.providerUrl));
     this.contract = new this.web3.eth.Contract(
       DB_CONTRACT_ABI,
       this.contractAddress
@@ -24,18 +24,20 @@ export class DatabaseContract {
   }
 
   async updateProviderUrl() {
-    if (
-      !(this.providerUrl && (await checkHttpServerIsAlive(this.providerUrl)))
+    if (!this.providerUrl) {
+      this.providerUrl = await getAliveHttpServer(getDBProviderUrlsConfig());
+      this._init();
+    } else if (
+      this.providerUrl &&
+      !(await checkHttpServerIsAlive(this.providerUrl))
     ) {
       this.providerUrl = await getAliveHttpServer(getDBProviderUrlsConfig());
+      this._init();
     }
-    this._init();
   }
 
   async getValues(keyArray) {
-    if (!this.contract) {
-      await this.updateProviderUrl();
-    }
+    await this.updateProviderUrl();
     return await this.contract.methods.getValues(keyArray).call();
   }
 }

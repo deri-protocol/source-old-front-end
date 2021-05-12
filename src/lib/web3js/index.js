@@ -1,5 +1,6 @@
 export * from './api/walletApi';
-export * from './api/contractApi';
+export * from './api/contractQueryApi';
+export * from './api/contractTransactionApi';
 export * from './api/databaseApi';
 export * from './api/factoryApi';
 export * from './api/slpPoolApi';

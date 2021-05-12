@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import Modal from 'react-modal'
+import React, { useState } from 'react'
 import NumberFormat from 'react-number-format'
-import { getLiquidityInfo, removeLiquidity } from '../../../../lib/web3js';
+import { removeLiquidity } from '../../../../lib/web3js';
 import Button from '../../../Button/Button';
 
-export default function RemoveLiquidity({isOpen,wallet,chainId,address,onClose,afterRemove}){
-  const [modalIsOpen,setIsOpen] = useState(isOpen);
-  const [liqInfo, setLiqInfo] = useState({})
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove}){  
   const [amount, setAmount] = useState('');
-  const [status, setStatus] = useState('enabled');
 
-  const loadLiqidityInfo = async () => {
-    if(wallet.isConnected() && wallet.detail.chainId == chainId){
-      const info = await getLiquidityInfo(wallet.detail.chainId,address,wallet.detail.account);	
-      setLiqInfo({shares : info.shares})
-    }
-  }
 
   const addAll = () => {
     setAmount(liqInfo.shares)
@@ -46,16 +36,6 @@ export default function RemoveLiquidity({isOpen,wallet,chainId,address,onClose,a
     }
     return true;
   }
-
-  useEffect(() => {
-    loadLiqidityInfo();
-    return () => {}
-  }, [])
-
-  useEffect(() => {
-    setIsOpen(isOpen)
-    return () => isOpen = false
-  }, [isOpen]);
   
   
   return(

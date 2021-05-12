@@ -24,7 +24,9 @@ function Account({wallet}){
   useEffect(() => {
     const init = async () => {
       const detail = await wallet.connect()
-      setAccountText(detail)
+      if(detail){
+        setAccountText(detail)
+      }
     }
 
     init();

@@ -3,22 +3,10 @@ import {  getWalletBalance, depositMargin } from "../../../lib/web3js";
 import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
 
-export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
-  const [walletBalance, setWalletBalance] = useState('');
-  const [addMarginSub, setAddMarginSub] = useState('');
+export default function DepositMargin({wallet,spec = {},onClose,balance,afterDeposit}){
+  const [integer, setInteger] = useState('');
+  const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
-
-  const loadWalletBalance = async () => {
-    if(wallet.isConnected()){
-      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
-      if(balance){
-        const formatBalance = (+balance).toFixed(2)
-        const addMarginSub = formatBalance.substring(formatBalance.indexOf('.'),formatBalance.length)
-        setWalletBalance(balance);
-        setAddMarginSub(addMarginSub)
-      }
-    }
-  }
 
   const onChange = event => {
     const {value} = event.target
@@ -26,7 +14,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
   }
 
   const addAll = () => {
-    setAmount(walletBalance)
+    setAmount(balance)
   }
 
   const deposit = async (amount) => {
@@ -40,12 +28,20 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
     }
   }
 
+  const splitDecimal = () => {
+    if(balance){
+      const formatBalance = (+balance).toFixed(2)
+      const addMarginSub = formatBalance.indexOf('.') > 0 ? formatBalance.substring(formatBalance.indexOf('.') + 1,formatBalance.length) : '0'
+      setInteger(balance);
+      setDecimal(addMarginSub)
+    }
+  }
+
   useEffect(() => {
-    loadWalletBalance()
+    splitDecimal();
     return () => {
     };
-  }, [wallet.detail]);
-
+  }, [balance]);
 
 
   return (
@@ -64,7 +60,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    <NumberFormat value={ walletBalance } displayType = 'text' decimalScale={0}/>.<span style={{fontSize:'12px'}}>{addMarginSub}</span> 
+                    <NumberFormat value={ integer } displayType = 'text' decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span> 
                   </span> 
                   <br/>
                   <span 
@@ -91,7 +87,7 @@ export default function DepositMargin({wallet,spec = {},onClose,afterDeposit}){
                 <div>{ spec.bTokenSymbol }</div>
               </div>
               <div className='max'>
-                MAX: <span className='max-num'>{ walletBalance }</span>
+                MAX: <span className='max-num'>{ balance }</span>
                 <span className='max-btn-left' onClick={addAll} >ADD ALL</span>
               </div>
               <div className='add-margin-btn'>

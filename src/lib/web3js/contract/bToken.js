@@ -26,7 +26,7 @@ export class BTokenContract extends Contract {
   }
 
   async unlock(accountAddress) {
-    await this._transact(
+    return await this._transact(
       'approve',
       [this.poolAddress, MAX_VALUE],
       accountAddress
