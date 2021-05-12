@@ -75,7 +75,7 @@ function HistoryLine({wallet,his}){
   }
   const clazz = classNames('view',{hover : isHover})
   return (
-    <span class={clazz} onMouseOut={mouseOut}>
+    <span className={clazz} onMouseOut={mouseOut}>
       <span className='view-space' onMouseOver={mouseOver} >
         <a target='_blank' rel='noreferrer' href={`${chainConfig[wallet.detail.chainId]['viewUrl']}tx/${his.transactionHash}`}>View at {chainConfig[wallet.detail.chainId]['viewUrl']}</a>
       </span>              
