@@ -13,15 +13,15 @@ const {chainInfo} = config[env]
 
 function Mining({wallet,style}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
-	const {chainId,baseToken,address} =  useParams();
+	const {chainId,symbol,baseToken,address} =  useParams();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,baseToken,address,wallet}
+	const props = {chainId,symbol,baseToken,address,wallet}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	return(
     <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
-							{baseToken} @ {networkText}
+						{symbol}/{baseToken} @ {networkText}
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >

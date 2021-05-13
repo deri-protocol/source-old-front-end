@@ -1,7 +1,7 @@
 import React, { useState ,useEffect} from 'react'
 import { withdrawMargin } from "../../../lib/web3js";
-import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
+import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
 export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw}){
   const [integer, setInteger] = useState('');
@@ -9,13 +9,11 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
   const [amount,setAmount] = useState('');
 
   const calculateBalance = async () => {
-    if(wallet.isConnected()){      
-      if(position){
-        const balance = (+position.margin)  + (+position.unrealizedPnl) + ''       
-        const decimal = balance.indexOf('.') > 0 ? balance.substring(balance.indexOf('.') + 1,balance.indexOf('.') +3) : '0'
-        setInteger(balance);
-        setDecimal(decimal);
-      }
+    if(wallet.isConnected() && position.info.margin && position.info.unrealizedPnl){      
+      const balance = ((+position.info.margin)  + (+position.info.unrealizedPnl)).toFixed(2) + ''       
+      const decimal = balance.indexOf('.') > 0 ? balance.substring(balance.indexOf('.') + 1,balance.indexOf('.') +3) : '0'
+      setInteger(balance);
+      setDecimal(decimal);
     }
   }
 
@@ -42,7 +40,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
     calculateBalance();
     return () => {
     };
-  }, [wallet.detail.account,position.unrealizedPnl]);
+  }, [wallet.detail.account,position.info.unrealizedPnl,position.info.margin]);
 
   return (
     <div
@@ -63,7 +61,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    <NumberFormat value={ integer } thousandSeparator ={false} displayType = 'text' decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
+                    <DeriNumberFormat value={ integer } thousandSeparator ={true}  decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
                   </span>
                   </span>
                 <span className='remove'></span>

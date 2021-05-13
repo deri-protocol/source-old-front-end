@@ -23,7 +23,26 @@ const { Handle } = RcSlider;
 };
 
 
-export default function Slider({max,start,onValueChange,freeze}){
+const initDefaultMarks = (max) => {
+  const mark = {}
+  const per = (+max) / 10
+  for(let i = 0 ; i<=10 ; i++){
+    if(i === 0 || i ===10 ){
+      const style = {top: '-16px',position: 'relative'}
+      if(i ===10){
+        style.width = 100;
+        style.left = '-10px'
+        style.paddingRight = '10px'            
+      }
+      mark[i*per] = <><div style={style}>{i === 10 ? (i*per).toFixed(2) : i * per}</div><div style={{top: '-16px',position: 'relative'}}>l</div></>
+    } else{
+      mark[i*per] = 'l'
+    }    
+  }
+  return mark;
+}
+
+export default function Slider({max = 100 ,start,onValueChange,freeze}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -34,10 +53,12 @@ export default function Slider({max,start,onValueChange,freeze}){
     onValueChange(value);
   }
 
+
   useEffect(() => {
     setDisabled(freeze)
     return () => { };
   }, [freeze]);
+
 
   useEffect(() => {
     if(isNaN(max)){
@@ -48,27 +69,9 @@ export default function Slider({max,start,onValueChange,freeze}){
       } else {
         setDisabled(true)
       }
-      const mark = {
-      };
-      const per = (+max) / 10
-      for(let i = 0 ; i<=10 ; i++){
-        if(i === 0 || i ===10 ){
-          const style = {top: '-16px',position: 'relative'}
-          if(i ===10){
-            style.width = 100;
-            style.left = '-10px'
-            style.paddingRight = '10px'            
-          }
-          mark[i*per] = <><div style={style}>{i === 10 ? (i*per).toFixed(2) : i * per}</div><div style={{top: '-16px',position: 'relative'}}>l</div></>
-        } else{
-          mark[i*per] = 'l'
-        }
-        
-      }
-      setMarks(mark);
-      setLimit(+max)
     }
-
+    setMarks(initDefaultMarks(max));    
+    setLimit(+max)
     return () => {};
   }, [max]);
 

@@ -75,13 +75,15 @@ export default function TradingViewChart({spec = {}}){
   }
 
   useEffect(() => {
-    setDeriWidget(initialize())
+    if(spec.symbol){
+      setDeriWidget(initialize())
+    }
     return () => {
       if (deriWidget !== null) {
         deriWidget.remove();
       }
     };
-  }, []);
+  }, [spec.symbol]);
 
   return(
     <div id='tradingview'>

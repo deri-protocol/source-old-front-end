@@ -16,7 +16,7 @@ class Wallet {
   constructor(){
     makeAutoObservable(this,{
       detail : observable,
-      set : action,
+      loadWalletBalance : action,
       connect : action      
     })
   }
@@ -28,7 +28,7 @@ class Wallet {
     return new Promise(async (resolve,reject) => {
       if(res.success){
         const {chainId,account} = res
-        const wallet = await this.set(chainId,account);        
+        const wallet = await this.loadWalletBalance(chainId,account);        
         resolve(wallet)
       } else {
         reject(null)
@@ -36,14 +36,13 @@ class Wallet {
     })
   }
 
-  set = async (chainId,account) => {
+  loadWalletBalance = async (chainId,account) => {
     const balance = await getUserWalletBalance(chainId,account)
     const detail = {chainId,account,balance,formatBalance : formatBalance(balance)}
     if(chainInfo[chainId]){
       Object.assign(detail,{...chainInfo[chainId],supported : true})
     }
     this.detail = detail;
-    // sessionStorage.setItem(walletKey,JSON.stringify(wallet))
     return detail;
   }
 

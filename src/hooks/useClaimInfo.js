@@ -22,6 +22,6 @@ export default function useClaimInfo(wallet){
     interval = window.setInterval(loadClaimInfo,1000 * 60 *3);
       loadClaimInfo();
     return () => clearInterval(interval);
-  }, [])
+  }, [wallet.detail.account])
   return [claimInfo,interval];
 }

@@ -8,14 +8,16 @@ import Wallet from './model/Wallet';
 //note dont remove zhe line
 import NumberPolyfill from './lib/polyfill/numberPolyfill'
 import IndexPrice from './model/IndexPrice';
+import Position from './model/Position';
 
 const wallet = new Wallet();
 const indexPrice = new IndexPrice();
+const position = new Position();
 
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-      <Provider wallet={wallet} indexPrice={indexPrice}>
+      <Provider wallet={wallet} indexPrice={indexPrice} position={position}>
         <App />
       </Provider>
     </HashRouter>

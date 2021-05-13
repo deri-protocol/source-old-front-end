@@ -1,41 +1,33 @@
 import React, { useState ,useEffect} from 'react'
-import NumberFormat from 'react-number-format';
-import { getPositionInfo, closePosition, getWalletBalance } from "../../lib/web3js";
+import { closePosition, getWalletBalance } from "../../lib/web3js";
 import className from 'classnames'
 import withModal from '../hoc/withModal';
 import DepositMargin from './Dialog/DepositMargin';
 import WithdrawMagin from './Dialog/WithdrawMargin';
-import useInterval from '../../hooks/useInterval';
+import DeriNumberFormat from '../../utils/DeriNumberFormat';
+import { eqInNumber } from '../../utils/utils';
 
 
 
 const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
 
-export default function Position({wallet,spec = {}}){
+export default function Position({wallet,spec = {},position}){
   const [isLiquidation, setIsLiquidation] = useState(false);
-  const [position, setPosition] = useState({});
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
-  useInterval(loadPositionInfo,3000)
 
   async function loadPositionInfo() { 
-    if(wallet.isConnected() && spec && spec.pool){
-      const positionInfo = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
-      if(positionInfo){
-        setPosition(positionInfo);
-        const direction = (+positionInfo.volume) > 0 ? 'LONG' : (positionInfo.volume == 0 ? '--' : 'SHORT') 
-        setDirection(direction)      
-        setBalanceContract((+positionInfo.margin) + (+positionInfo.unrealizedPnl))
-      }
+    if(wallet.isConnected() && spec.pool){
+      position.load(wallet,spec)      
     }    
   }
 
   const loadBalance = async () => {
-    if(wallet.isConnected()){
+    if(wallet.isConnected() && spec.pool){
       const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(balance){
         setBalance(balance)
@@ -91,6 +83,17 @@ export default function Position({wallet,spec = {}}){
     };
   }, [wallet.detail.account,spec.pool]);
 
+
+  useEffect(() => {
+    if(position.info){
+      const {info} = position
+      const direction = (+info.volume) > 0 ? 'LONG' : (eqInNumber(info.volume, 0) ? '--' : 'SHORT') 
+      setDirection(direction)      
+      setBalanceContract((+info.margin) + (+info.unrealizedPnl))
+    }
+    return () => {};
+  }, [position.info.volume,position.info.margin,position.info.unrealizedPnl]);
+
    
   
   return(
@@ -99,7 +102,7 @@ export default function Position({wallet,spec = {}}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Position</div>
-        <div className='info-num'>{ position.volume}</div>
+        <div className='info-num'>{ position.info.volume}</div>
       </div>
       <div className='info-right'>
         <div
@@ -120,7 +123,7 @@ export default function Position({wallet,spec = {}}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Average Entry Price</div>
-        <div className='info-num'><NumberFormat value={ position.averageEntryPrice } decimalScale={2} displayType='text'/></div>
+        <div className='info-num'><DeriNumberFormat value={ position.info.averageEntryPrice } decimalScale={2} /></div>
       </div>
       <div className='info-right'></div>
     </div>
@@ -130,7 +133,7 @@ export default function Position({wallet,spec = {}}){
           Balance in Contract
           (Dynamic Balance)
         </div>
-        <div className='info-num'> <NumberFormat decimalScale = {2} value={ balanceContract} displayType='text' /></div>
+        <div className='info-num'> <DeriNumberFormat decimalScale = {2} value={ balanceContract}  /></div>
       </div>
       <div className='info-right'>
         <div
@@ -187,21 +190,21 @@ export default function Position({wallet,spec = {}}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Margin</div>
-        <div className='info-num'><NumberFormat value={ position.marginHeld } displayType='text' decimalScale={2}/></div>
+        <div className='info-num'><DeriNumberFormat value={ position.info.marginHeld }  decimalScale={2}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Unrealized PnL</div>
-        <div className='info-num'><NumberFormat value={ position.unrealizedPnl } displayType='text' decimalScale={8}/></div>
+        <div className='info-num'><DeriNumberFormat value={ position.info.unrealizedPnl }  decimalScale={8}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Liquidation Price</div>
-        <div className='info-num'><NumberFormat decimalScale = {2} value={position.liquidationPrice} displayType='text'/></div>
+        <div className='info-num'><DeriNumberFormat decimalScale = {2} value={position.info.liquidationPrice} /></div>
       </div>
       <div className='info-right'></div>
     </div>

@@ -9,7 +9,7 @@ const chainConfig = config[DeriEnv.get()]['chainInfo'];
 export default function PoolBox({pool}){
   const logoClassName = `logo ${pool.bTokenSymbol}`
   const history = useHistory();
-  const mining = () => history.push(`/mining/${pool.chainId}/${pool.bTokenSymbol}/${pool.address}`)
+  const mining = () => history.push(`/mining/${pool.chainId}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`)
   
   return(
     <div className="pool" >
@@ -36,7 +36,7 @@ export default function PoolBox({pool}){
                 <span>APY</span>
                 <span>
                   <span>
-                    <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' decimalScale={2}/>                  
+                    <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/>                  
                   </span>
                   {pool.sushiApy &&<>
                   <span>+</span>

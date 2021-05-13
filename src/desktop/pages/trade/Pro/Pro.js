@@ -7,12 +7,14 @@ import LiteTrade from '../../../../components/Trade/LiteTrade'
 import Tab from '../Tab/Tab'
 import '../Lite/lite.less'
 import './pro.less'
+import { eqInNumber } from '../../../../utils/utils';
 
 
 
 function Pro({wallet,indexPrice}){
   const [spec, setSpec] = useState({});
-  const specs = useDeriConfig(wallet.detail)
+  const specs = useDeriConfig(wallet)
+
 
   const onSpecChange = spec => {
     indexPrice.pause();
@@ -31,21 +33,24 @@ function Pro({wallet,indexPrice}){
 
 
   useEffect(() => {
-    if(specs.length > 0){
-      setSpec(specs[0]);   
-      indexPrice.start(specs[0].symbol)   
-    }
     document.querySelector('.desktop').style.minWidth = '1920px';
-    return () => {};
-  }, [specs]);
+    if(specs.length > 0 && wallet.detail.chainId){
+      const curSpecs = specs.filter(s => eqInNumber(s.chainId,wallet.detail.chainId))
+      if(curSpecs.length > 0){
+        setSpec(curSpecs[0]);   
+        indexPrice.start(curSpecs[0].symbol)   
+      }      
+    }
+    return () => { };
+  }, [wallet.detail.account,specs]);
 
 
   return (
-    <div className='trade-body pro'>
+    <div className='trade-body'>
       <Tab/>
       <div className='trade-pro'>
         <div className='left'>
-          <LiteTrade wallet ={wallet} isPro={true} spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange}/>
+          <LiteTrade wallet ={wallet} isPro={true} specChange={onSpecChange}/>
         </div>
         <div className='right'>
           <TradingView wallet={wallet} spec={spec} indexPrice={indexPrice}/>

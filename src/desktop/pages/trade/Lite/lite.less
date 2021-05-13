@@ -2,15 +2,6 @@
 @red: #E35061;
 @text:#FFFFFF;
 @title:#AAAAAA;
-.trade-body.lite {
-  
-  .lite {    
-    background: #41424A;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 20px 0px 0px 5px;
-  }
-}
 .trade-body {
   display: flex;
   justify-content: space-between;
@@ -18,38 +9,43 @@
   color: #AAAAAA;
   font-family: Korolev, sans-serif;
 
+  .check-lite-pro.lite .lite,.check-lite-pro.pro .pro{
+    font-weight: bold;
+    color:#fff;
+    background: #41424A;
+    font-weight: bold;
+    // border-radius: 20px 0px 0px 5px;
+  }
+
   .check-lite-pro {
     width: 50px;
     height: 100%;
     background: #232529;
     border-radius: 20px 0px 0px 20px;
-
-    .lite,
+    .lite {
+      border-radius: 20px 0 0 5px;
+    }
     .pro {
+      border-radius: 5px 0 0 10px;
+    }
+
+    .lite, .pro {
       width: 50px;
       height: 107px;
       line-height: 52px;
       text-align: center;
       font-size: 16px;
       writing-mode: tb-rl;
+      font-weight: normal;
       cursor: pointer;
-    }
-
-    .lite {
-      background: #41424A;
-      font-weight: bold;
-      border-radius: 20px 0px 0px 5px;
-    }
-
-    .pro {
       background: linear-gradient(229deg, #232529 0%, #2C2D31 100%);
-      border-radius: 5px 0px 0px 10px;
 
       a {
         color: #CCCCCC;
       }
     }
   }
+
   .trade-position.trade {
     .trade {
       color: #D4E05C;
@@ -850,12 +846,10 @@
   transform: translate(-50%, -50%);
 
   .modal-content {
-    width: 491px;
     position: relative;
     color: #AAAAAA;
     position: relative;
     background: rgba(13, 14, 15);
-    height: 477px;
     display: inline-block;
     border: 1px solid #707070;
     margin-left: 26px;
@@ -875,13 +869,13 @@
       justify-content: space-between;
       align-items: center;
       border-radius: 20px 20px 0px 0px;
+      padding : 0 20px;
 
       .close {
         color: #fff;
-        padding-right: 19px;
         font-size: 1.5rem;
         font-weight: 700;
-
+        cursor: pointer;
         span {
           cursor: pointer;
         }
@@ -895,9 +889,8 @@
       padding: 0;
 
       .margin-box-info {
-        width: 400px;
         margin-top: 33px;
-        height: 280px;
+        padding: 0 30px 30px;
 
         .max {
           margin-top: 20px;
@@ -979,7 +972,7 @@
           }
         }
         .remv{
-            margin-top: 58px;
+            margin-top: 36px;
         }
         .max {
           margin-top: 15px;
@@ -1000,7 +993,7 @@
           display: flex;
           justify-content: center;
           align-items: center;
-          margin-top: 68px;
+          margin-top: 44px;
 
           .margin-btn {
             width: 276px;
@@ -1021,6 +1014,7 @@
       .contract-box-info {
         width: 471px;
         height: 422px;
+        padding : 0 10px;
 
         .enter-margin {
           display: flex;

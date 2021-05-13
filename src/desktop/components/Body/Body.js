@@ -21,7 +21,7 @@ class Body extends React.Component {
             <Redirect to='/lite'/>
           </Route>
           <Route exact path='/mining' component={Pool}/>
-          <Route exact path='/mining/:chainId/:baseToken/:address' component={Mining}/>
+          <Route exact path='/mining/:chainId/:symbol/:baseToken/:address' component={Mining}/>
           <Route exact path='/lite' component={Lite}/>
           <Route exact path='/pro' component={Pro}/>
           <Route component={Lite} />

@@ -2,6 +2,7 @@ import React, { useState, useEffect,useRef } from 'react'
 import { getFundingRate } from "../../../../lib/web3js"
 import NumberFormat from 'react-number-format'
 import TradingViewChart from "./TradingViewChart";
+import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 
 export default function TradingView({wallet = {},spec = {},indexPrice}){
   const [fundingRate, setFundingRate] = useState({
@@ -43,23 +44,23 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
-          <div className={indexPriceClass}><NumberFormat value={indexPrice.index} displayType='text'/></div>
+          <div className={indexPriceClass}><DeriNumberFormat value={indexPrice.index}/></div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>
           <div className='trade-dashboard-value'> 
           <span className='funding-per'> 
-            <NumberFormat value={ fundingRate.fundingRate0 } displayType='text' decimalScale={4} suffix='%'/>
+            <DeriNumberFormat value={ fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
           </span>
           </div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Total Net Position</div>
-          <div className='trade-dashboard-value'>{fundingRate.tradersNetVolume}</div>
+          <div className='trade-dashboard-value'><DeriNumberFormat value={fundingRate.tradersNetVolume}/></div>
         </div>            
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Pool Total liquidity</div>
-          <div className='trade-dashboard-value'> <NumberFormat allowLeadingZeros={true} value={fundingRate.liquidity || '--'} displayType='text' decimalScale={2}/> {spec.bTokenSymbol}</div>
+          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={fundingRate.liquidity}  decimalScale={2}/> {spec.bTokenSymbol}</div>
         </div>
       </div>
       <div className='tradingview'>

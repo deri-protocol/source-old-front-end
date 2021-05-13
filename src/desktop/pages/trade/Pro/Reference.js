@@ -11,6 +11,7 @@ export default function Reference({wallet,spec}) {
     setCurTab(tab)
   }
 
+
   const curClassName = classNames('position-info',curTab)
 
   return (

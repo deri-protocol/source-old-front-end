@@ -5,7 +5,9 @@ import { useRouteMatch } from 'react-router-dom'
 
 export default function Menu() {
   const isMining = useRouteMatch ('/mining') ? true : false
-  const isTrade = useRouteMatch('/lite') ? true : false
+  const isLite = useRouteMatch('/lite') ? true : false
+  const isPro = useRouteMatch('/pro') ? true : false;
+
 
   return (
     <div className="nav-menu">
@@ -20,7 +22,7 @@ export default function Menu() {
           <li>
             <Link to="/mining" className={isMining ? 'selected' :''}>Mining</Link>
           </li>
-          <li><Link to='/lite' className={isTrade ? 'selected' : ''}>Trade</Link></li>
+          <li><Link to='/lite' className={isLite || isPro ? 'selected' : ''}>Trade</Link></li>
           <li>
             <a target="_blank" rel='noreferrer' href="https://governance.deri.finance/">Governance</a>
           </li>

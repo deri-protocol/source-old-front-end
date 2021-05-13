@@ -37,7 +37,7 @@ function Account({wallet}){
     setAccountText(wallet.detail)
     return () => {
     };
-  }, [wallet.detail.account]);
+  }, [wallet.detail.account,wallet.detail.formatBalance]);
 
 
   return (

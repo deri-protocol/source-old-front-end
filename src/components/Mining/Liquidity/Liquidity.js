@@ -22,7 +22,7 @@ function Liquidity({wallet,chainId,baseToken,address}) {
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy),
 					shareValue : (+info.shareValue).toFixed(6),
-					percent : (((info.shares * info.shareValue) / info.poolLiquidity) * 100).toFixed(2) + '%',
+					percent : (((info.shares * info.shareValue) / info.poolLiquidity) * 100).toFixed(2) ,
 					shares : (+info.shares).toFixed(2),
 					values : (+info.shares * info.shareValue).toFixed(2)
 				})	
@@ -61,7 +61,7 @@ function Liquidity({wallet,chainId,baseToken,address}) {
 				</div>
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
-						<div className="text-num"><DeriNumberFormat value={ liquidity.percent } /></div>
+						<div className="text-num"><DeriNumberFormat value={ liquidity.percent } suffix={'%'}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">Staked Balance </div>
@@ -90,6 +90,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 	const [btnText, setBtnText] = useState('Collect Wallet')
 	const [balance, setBalance] = useState('');
 	const [liqInfo, setLiqInfo] = useState({})
+	const [buttonElment, setButtonElment] = useState(null);
 	
 	const loadLiqidityInfo = async () => {
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
@@ -123,16 +124,14 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 		const res = await unlock(chainId,address,wallet.detail.account);
 		if(res.success){
 			setIsApproved(true)
+		} else {
+			alert(res.error ?  res.error.message || 'Approve failed' : 'Approve failed')
 		}
   }
 
 
-  const click = async () => {
-    if(wallet.isConnected()){
-      approve()
-    } else {
-			wallet.connect();
-    }
+	const connect =  async () => {
+		await wallet.connect();
 	}
 	
 	const addLiquidity = () => {
@@ -156,24 +155,38 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
   
   useEffect(() => {
 		//todo 判断网络
-    if(wallet.isConnected()){
-			if(eqInNumber(wallet.detail.chainId, chainId)){
-				isApprove()
-			} else {
-				setBtnText(<span className='red-color-font'>Wrong Network</span>)
-			}
-    } else {
-      setBtnText('Collect Wallet')
-		}
+    if(wallet.isConnected() && eqInNumber(wallet.detail.chainId, chainId)){
+			isApprove()
+    }
 		return () => {}
 	}, [wallet.detail.account])
 
-	useEffect(() => {
-		if(!isApproved){
-			setBtnText('APPROVE')
+	useEffect(() => {		
+		if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId) && isApproved){
+			setButtonElment((<div className="add-remove-liquidity">
+			<button 
+					className="add-liquidity"
+					onClick={addLiquidity}>
+					ADD LIQUIDITY
+			</button>
+			<button className="remove-liquidity" onClick={removeLiquidity}>
+					REMOVE LIQUIDITY
+			</button>
+		</div>))
+		} else {
+			let el = null
+			if(!wallet.isConnected()){
+				el = <div className='approve'><Button className='approve-btn' click={connect} btnText='Connect Wallet'></Button></div>
+			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
+				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText='Wrong Network'></Button></div>				
+			} else if(!isApproved) {
+				el = <div className='approve'><Button className='approve-btn' click={approve} btnText='APPROVE'></Button></div>
+			} 
+			setButtonElment(el)
 		}
+			
 		return () => {};
-	}, [isApproved]);
+	}, [wallet.detail.account,isApproved]);
 
   return (
     <div className="liquidity-btn">
@@ -181,25 +194,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 				btnType === 'add' 
 				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
-			}
-			{
-			isApproved  
-			? 
-			(<div className="add-remove-liquidity">
-      <button 
-          className="add-liquidity"
-          onClick={addLiquidity}>
-          ADD LIQUIDITY
-      </button>
-      <button className="remove-liquidity" onClick={removeLiquidity}>
-          REMOVE LIQUIDITY
-      </button>
-    </div>)
-		:
-    (<div className="approve" >
-			<Button className='approve-btn' click={click} btnText={btnText}></Button>
-    </div>)
-		}
+			}			
+			{buttonElment}
   </div>
   )
 }
