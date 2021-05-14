@@ -2,12 +2,10 @@ import { useState,useEffect,useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock,  getFundingRate,  getWalletBalance,  getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate} from '../../lib/web3js/index'
-import NumberFormat from 'react-number-format';
+import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock,  getFundingRate,  getWalletBalance,  getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate} from '../../lib/web3js/indexV2'
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
-import useInterval from '../../hooks/useInterval';
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 
 
@@ -18,16 +16,13 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
   const [contractInfo, setContractInfo] = useState(null);
   const [dropdown, setDropdown] = useState(false);  
   const [margin, setMargin] = useState('');  
-  // const [position, setPosition] = useState({});
   const [fundingRate, setFundingRate] = useState('');
   const [fundingRateTip, setFundingRateTip] = useState('');
   const [fundingRateAfter, setFundingRateAfter] = useState('');
   const [transFee, setTransFee] = useState('');
   const [poolLiquidity, setPoolLiquidity] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
-  const [indexPriceClass, setIndexPriceClass] = useState('');
-  const [freeze, setFreeze] = useState(false);
-  const [paused, setPaused] = useState(false);
+  const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef();
   
 
@@ -60,11 +55,12 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
 
   //切换交易标的
   const onSelect = select => {
-    const selected = specs.find(config => config.symbol === select.symbol )    
-    setFreeze(true)
-    onSpecChange(selected);
     setVolume('')
-    setFreeze(false)
+    const selected = specs.find(config => config.symbol === select.symbol )
+    position.pause();
+    indexPrice.pause();
+    onSpecChange(selected);
+
   }
 
   const onSlide = value => {    
@@ -158,7 +154,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
     let {value} = event.target
     if(value === '0'){
       value = ''
-    } else {
+    } else if(value !== ''){
       value = direction === 'long' ? value : -value
     }
     setVolume(value);
@@ -167,7 +163,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
   //完成交易
   const afterTrade = () => {
     setVolume('')
-    position.load();
+    position.load(wallet,spec);
     wallet.loadWalletBalance(wallet.detail.chainId,wallet.detail.account)
   }
 
@@ -181,7 +177,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
   //计算交易相关数据（dynamic balance、margin、available balance)
   const calcTradeInfo = () => {
     const info = position.info
-    if(info.volume && contractInfo && indexPrice.index) {
+    if(contractInfo && contractInfo.symbol === spec.symbol && info.volume && indexPrice.index) {
       const currentPosition = (+volume) + (+info.volume)
       const contractValue = Math.abs(currentPosition) * indexPrice.index * contractInfo.multiplier;
       const dynamicBalance = ((+info.margin) + (+info.unrealizedPnl)).toFixed(2)
@@ -225,7 +221,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
     }
     indexPriceRef.current = indexPrice.index;
     return () => {};
-  }, [position.info.unrealizedPnl,position.info.volume,indexPrice.index,volume]);
+  }, [position.info.unrealizedPnl,position.info.volume,indexPrice.index,volume,contractInfo]);
 
   useEffect(() => {
     calcFundingRateAfter();
@@ -233,7 +229,6 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
     loadTransactionFee();
 
     if(volume !== '') {
-      indexPrice.pause();
       position.pause();
     } else if(wallet.detail.account && spec.pool){
       indexPrice.start(spec.symbol);
@@ -310,7 +305,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
 
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
-            Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={indexPrice.index} /></span>
+            Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={indexPrice.index} decimalScale={2} /></span>
           </div>
           <div className='funding-rate'>
             <span>Funding Rate Annual: &nbsp;</span>
@@ -319,7 +314,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
         </div>
         <div className='price-fundingRate mobile'>
           <div className='index-prcie'>
-            Index: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={indexPrice.index}/></span>
+            Index: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={indexPrice.index} decimalScale={2}/></span>
           </div>
           <div className='funding-rate'>
             <span>Funding: &nbsp;</span>
@@ -387,7 +382,7 @@ export default function Trade({wallet = {},spec = {}, specs = [],onSpecChange,in
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={tradeInfo.dynamicBalance} freeze={freeze} onValueChange={onSlide} start={tradeInfo.margin}/>
+        <Slider max={tradeInfo.dynamicBalance} onValueChange={onSlide} start={tradeInfo.margin}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>

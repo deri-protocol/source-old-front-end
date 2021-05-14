@@ -9,15 +9,17 @@ import Wallet from './model/Wallet';
 import NumberPolyfill from './lib/polyfill/numberPolyfill'
 import IndexPrice from './model/IndexPrice';
 import Position from './model/Position';
+import Oracle from './model/Oracle';
 
 const wallet = new Wallet();
 const indexPrice = new IndexPrice();
 const position = new Position();
+const oracle = new Oracle();
 
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-      <Provider wallet={wallet} indexPrice={indexPrice} position={position}>
+      <Provider wallet={wallet} indexPrice={oracle} position={position}>
         <App />
       </Provider>
     </HashRouter>

@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react'
 
 import useClaimInfo from "../../hooks/useClaimInfo";
 import useConfig from "../../hooks/useConfig";
-import { mintDToken } from "../../lib/web3js";
+import { mintDToken } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button';
 
 export default function Claim({wallet}){

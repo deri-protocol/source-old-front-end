@@ -7,7 +7,7 @@ export * from './api/slpPoolApi';
 export * from './api/clpPoolApi';
 export * from './api/tradeHistoryApi';
 export * from './api/restApi';
-export * from './api/apiResultCache';
+export * from './api/apiGlobals';
 export {
   DeriEnv,
   getContractAddressConfig,

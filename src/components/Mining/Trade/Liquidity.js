@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
-import { getUserInfoAll,getUserInfoInPool ,getPoolInfoApy} from '../../../lib/web3js';
+import { getUserInfoAll,getUserInfoInPool ,getPoolInfoApy} from '../../../lib/web3js/indexV2';
 
 
 

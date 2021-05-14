@@ -2,7 +2,7 @@ import {useState} from 'react'
 import {useParams} from "react-router-dom";
 import LiquidityMining from "../../../components/Mining/Liquidity/LiquidityMining";
 import TradeMining from "../../../components/Mining/Trade/TradeMining";
-import {DeriEnv} from '../../../lib/web3js/index'
+import {DeriEnv} from '../../../lib/web3js/indexV2'
 import config from '../../../config.json'
 import './mining.less'
 import classnames from "classnames";

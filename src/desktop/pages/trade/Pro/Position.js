@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useState,useEffect } from 'react'
-import { getPositionInfo, closePosition, getWalletBalance } from '../../../../lib/web3js';
+import { getPositionInfo, closePosition, getWalletBalance } from '../../../../lib/web3js/indexV2';
 import closePosImg from '../../../img/close-position.png'
 import withModal from '../../../../components/hoc/withModal';
 import DepositMargin from '../../../../components/Trade/Dialog/DepositMargin';
@@ -25,7 +25,7 @@ function Position({wallet = {},spec = {},position }){
 
 
   const afterWithdraw =() => {
-    loadPositionInfo();
+    refreshBalance();
   }
 
   const afterDeposit = afterWithdraw
@@ -34,10 +34,17 @@ function Position({wallet = {},spec = {},position }){
   const onCloseWithdraw = () => setRemoveModalIsOpen(false);
 
 
+
+  //todo 收拢到position modal
+  const refreshBalance = () => {
+    loadPositionInfo();
+    loadBalance();
+    wallet.loadWalletBalance(wallet.detail.chainId,wallet.detail.account)
+  }
   
   async function loadPositionInfo(){    
     if(wallet.isConnected() && spec.pool){
-      position.start(wallet,spec);
+      position.load(wallet,spec);
     }
   }
 
@@ -55,7 +62,7 @@ function Position({wallet = {},spec = {},position }){
     setClosing(true)
     const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setClosing(false))
     if(res.success){
-      loadPositionInfo();
+      refreshBalance();
     } else {            
       if(typeof res.error === 'string') {
         alert(res.error || 'Liquidation failed')
@@ -99,11 +106,11 @@ function Position({wallet = {},spec = {},position }){
       <div>
         {position.info.volume}
         <span className='close-position'>
+          {!closing && <img src={closePosImg} onClick={onClosePosition}/>}
           <span
             className='spinner spinner-border spinner-border-sm'
-            style={{display : closing ? 'block' : 'none'}}
+            style={{display : closing ? 'block' : 'none',marginLeft : '8px'}}
           ></span>
-          <img src={closePosImg} onClick={onClosePosition}/>
         </span>
       </div>
       <div><DeriNumberFormat value={position.info.averageEntryPrice}  decimalScale={2}/></div>

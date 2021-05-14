@@ -5,7 +5,7 @@ import {
   getSlpContractAddressConfig,
   getSlpPoolInfoApy,
   DeriEnv
-} from '../lib/web3js/index'
+} from '../lib/web3js/indexV2'
 import { deriNatural} from '../utils/utils';
 
 const env = DeriEnv.get();

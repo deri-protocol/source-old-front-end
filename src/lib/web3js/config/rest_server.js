@@ -9,6 +9,14 @@ export const getRestServerConfig = (env = 'dev') => {
     return 'https://api.deri.finance';
   } else {
     // for test
-    return 'http://47.52.225.179';
+    return 'https://apitest.deri.finance';
+  }
+};
+
+export const getRedisWorkerQueneConfig = (env = "dev") => {
+  if (env === "prod") {
+    return ['trade_tx_quene', 'trade_worker_group']
+  } else {
+    return ['trade_tx_quene_dev', 'trade_worker_group_dev']
   }
 };

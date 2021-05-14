@@ -2,7 +2,7 @@ import React, { useState ,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 import Button from '../../../Button/Button';
 import Modal from 'react-modal'
-import { addLiquidity, getWalletBalance } from '../../../../lib/web3js';
+import { addLiquidity, getWalletBalance } from '../../../../lib/web3js/indexV2';
 import useSpecification from '../../../../hooks/useSpecification';
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from 'react'
-import { getFundingRate } from "../../../../lib/web3js"
+import { getFundingRate } from "../../../../lib/web3js/indexV2"
 import NumberFormat from 'react-number-format'
 import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
@@ -40,11 +40,11 @@ export default function TradingView({wallet = {},spec = {},indexPrice}){
     <div id="trading-view">
       <div className='right-top'>
         <div className='symbol-basetoken-text'>
-          {spec.symbol} / {spec.bTokenSymbol} (10X)
+          {spec.symbol || 'BTCUSD'} / {spec.bTokenSymbol|| 'BUSD'} (10X)
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
-          <div className={indexPriceClass}><DeriNumberFormat value={indexPrice.index}/></div>
+          <div className={indexPriceClass}><DeriNumberFormat value={indexPrice.index} decimalScale={2} /></div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>

@@ -1,6 +1,6 @@
 import React, { useState,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
-import { getSpecification } from '../../lib/web3js';
+import { getSpecification } from '../../lib/web3js/indexV2';
 
 
 export default function ContractInfo({wallet,spec ={}}){

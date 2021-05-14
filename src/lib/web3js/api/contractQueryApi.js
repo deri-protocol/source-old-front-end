@@ -11,7 +11,7 @@ import {
   fundingRateCache,
   PerpetualPoolParametersCache,
   priceCache,
-} from './apiResultCache';
+} from './apiGlobals';
 import {
   hasInvalidArgsValue,
   naturalWithPercentage,
@@ -132,7 +132,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
     minInitialMarginRatio,
     minMaintenanceMarginRatio,
   } = await pPool.getParameters();
-  console.log('getPositionInfo', chainId, poolAddress, accountAddress, price);
+  //console.log('getPositionInfo', chainId, poolAddress, accountAddress, price);
   const { volume, margin, cost } = await pToken.getPositionInfo(accountAddress);
 
   return {

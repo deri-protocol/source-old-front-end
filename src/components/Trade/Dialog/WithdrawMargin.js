@@ -1,24 +1,35 @@
 import React, { useState ,useEffect} from 'react'
-import { withdrawMargin } from "../../../lib/web3js";
+import { withdrawMargin } from "../../../lib/web3js/indexV2";
 import Button from '../../Button/Button';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
 export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw}){
-  const [integer, setInteger] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
+  const [pending, setPending] = useState(false);
+
 
   const calculateBalance = async () => {
-    if(wallet.isConnected() && position.info.margin && position.info.unrealizedPnl){      
-      const balance = ((+position.info.margin)  + (+position.info.unrealizedPnl)).toFixed(2) + ''       
-      const decimal = balance.indexOf('.') > 0 ? balance.substring(balance.indexOf('.') + 1,balance.indexOf('.') +3) : '0'
-      setInteger(balance);
-      setDecimal(decimal);
+    if(wallet.isConnected() && position.info.margin){      
+      const balance = position.info.margin
+      const pos = balance.indexOf('.');
+      if(pos > 0){
+        setDecimal(balance.substring(pos + 1,pos+3));
+      } else {
+        setDecimal('00')
+      }
+      
     }
   }
 
   const removeAll = () => {
-    setAmount(integer)
+    setAmount(position.info.margin)
+  }
+
+  const close = () => {
+    if(!pending){
+      onClose()
+    }
   }
 
   const onChange = event => {
@@ -27,13 +38,16 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
   }
 
   const withdraw = async () => {
+    setPending(true);
     const res = await withdrawMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
       afterWithdraw();
+      onClose();
     } else {
       const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
       alert(msg)
     }
+    setPending(false);
   }
 
   useEffect(() => {
@@ -51,7 +65,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
         <div className='modal-content'>
           <div className='modal-header'>
             <div className='title'>WITHDRAW MARGIN</div>
-            <div className='close' onClick={onClose}>
+            <div className='close' onClick={close}>
               <span>&times;</span>
             </div>
           </div>
@@ -61,7 +75,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    <DeriNumberFormat value={ integer } thousandSeparator ={true}  decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
+                    <DeriNumberFormat value={ position.info.margin } thousandSeparator ={true}  decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
                   </span>
                   </span>
                 <span className='remove'></span>
@@ -80,8 +94,8 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 </div>
                 <div>{ spec.baseToken }</div>
               </div>
-              {(+position.volume) === 0 && <div className='max' v-show='isPosition'>
-                MAX: <span className='max-num'>{ integer }</span>
+              {(+position.info.volume) === 0 && <div className='max' v-show='isPosition'>
+                MAX: <span className='max-num'>{ position.info.margin }</span>
                 <span className='max-btn-left' onClick={removeAll}>REMOVE ALL</span>
               </div>}
               <div className='add-margin-btn'>

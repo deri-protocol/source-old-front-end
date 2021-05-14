@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import NumberFormat from 'react-number-format'
-import { removeLiquidity } from '../../../../lib/web3js';
+import { removeLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 
 export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove}){  

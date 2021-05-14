@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { getTradeHistory,DeriEnv } from "../../lib/web3js";
+import { getTradeHistory,DeriEnv } from "../../lib/web3js/indexV2";
 import dateFormat from 'date-format'
 import NumberFormat from 'react-number-format';
 import useInterval from '../../hooks/useInterval';
@@ -14,16 +14,18 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   
 
   const loadHistory =  async () => {
-    const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
-    const his = all.map(item => {
-      item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
-      const find = specs.find(s => s.bTokenSymbol === item.baseToken)
-      if(find){
-        item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
-      }
-      return item;
-    })
-    setHistory(his)
+    if(wallet.isConnected() && spec.pool){
+      const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      const his = all.map(item => {
+        item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
+        const find = specs.find(s => s.bTokenSymbol === item.baseToken)
+        if(find){
+          item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
+        }
+        return item;
+      })
+      setHistory(his)
+    }
   }
 
   // useInterval(loadHistory,3000)
@@ -36,11 +38,6 @@ export default function History({wallet = {},spec ={} ,specs = []}){
   return (
     <div className='history-info' v-show='historyShow'>
       {history.map((his,index) => {
-        let viewHoverClass = 'view'
-        const hover = () => {
-          viewHoverClass = viewHoverClass + ' hover'
-
-        }
         return (
           <div className='history-box' key={index}>
           <div className='direction-bToken-price'>

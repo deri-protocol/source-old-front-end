@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import axios from 'axios'
-import {DeriEnv} from "../../../../../lib/web3js";
+import {DeriEnv} from "../../../../../lib/web3js/indexV2";
 
 const history = {}
 
@@ -47,11 +47,6 @@ export default {
             ...params
         }
     }).then(res => {
-        // console.log(res)
-        // if (data.Response && data.Response === 'Error') {
-        //   console.log('CryptoCompare API error:', data.Message)
-        //   return []
-        // }
         if (res.data.data.length) {
           // res.data.shift()
           // console.log(`Actually returned: ${new Date(data.TimeFrom * 1000).toISOString()} - ${new Date(data.TimeTo * 1000).toISOString()}`)

@@ -5,6 +5,8 @@ export {
   getSlpContractAddressConfig,
 } from './config';
 export * from './utils';
+
+export * from './api/apiGlobals';
 export * from './api/factoryApi';
 export * from './api/walletApi';
 export {
@@ -16,14 +18,50 @@ export {
   isDeriUnlocked,
   getUserWormholeSignature,
 } from './api/contractQueryApi';
-export * from './api/contractTransactionApi';
+export {
+  unlock,
+  //depositMargin,
+  //withdrawMargin,
+  mint,
+  //addLiquidity,
+  //removeLiquidity,
+  //tradeWithMargin,
+  //closePosition,
+  mintDToken,
+  freeze,
+  mintDeri,
+  unlockDeri,
+  mintAirdrop,
+} from './api/contractTransactionApi';
 export * from './api/databaseApi';
 
 // export * from './api/slpPoolApi';
 // export * from './api/clpPoolApi';
-export * from './api/lpPoolApi';
 
 // export * from './api/tradeHistoryApi';
-// export * from './api/restApi';
-export * from './apiV2/apiAlias';
-export * from './api/apiResultCache';
+export {
+getSpecification2 as getSpecification,
+getPositionInfo2 as getPositionInfo,
+getLiquidityInfo2 as getLiquidityInfo,
+getWalletBalance2 as getWalletBalance,
+getFundingRate2 as getFundingRate,
+getLiquidityUsed2 as getLiquidityUsed,
+getFundingRateCache2 as getFundingRateCache,
+getSlpLiquidityInfo2 as getSlpLiquidityInfo,
+getSlpWalletBalance2 as getSlpWalletBalance,
+getClpLiquidityInfo2 as getClpLiquidityInfo,
+getClpWalletBalance2 as getClpWalletBalance,
+getDeriBalance2 as getDeriBalance,
+getTradeHistory2 as getTradeHistory,
+} from './api/restApi';
+
+export {
+  tradeWithMargin2 as tradeWithMargin,
+  closePosition2 as closePosition,
+  depositMargin2 as depositMargin,
+  withdrawMargin2 as withdrawMargin,
+  addLiquidity2 as addLiquidity,
+  removeLiquidity2 as removeLiquidity,
+} from './apiV2/contractTransactionApiV2'
+
+export * from './apiV2/lpPoolApi';

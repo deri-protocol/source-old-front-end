@@ -15,6 +15,7 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
 
   const onSpecChange = spec => {
     indexPrice.pause();
+    position.pause();
     setSpec(spec)
     if(specChange){
       specChange(spec)
@@ -28,7 +29,7 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
       indexPrice.start(spec.symbol)
     }
     return () => {};
-  }, [indexPrice.index,spec.symbol]);
+  }, [indexPrice,spec.symbol]);
 
 
   //仓位
@@ -48,6 +49,12 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
     }
     return () => {};
   }, [wallet.detail.account,specs]);
+
+
+  useEffect(() => {
+    return () => {
+    };
+  }, [indexPrice.index,position.info]);
 
 
 

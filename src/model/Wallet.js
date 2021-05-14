@@ -1,5 +1,5 @@
 
-import {getUserWalletBalance ,DeriEnv,connectWallet} from "../lib/web3js";
+import {getUserWalletBalance ,DeriEnv,connectWallet} from "../lib/web3js/indexV2";
 import config from '../config.json'
 import { formatBalance } from "../utils/utils";
 import { observable, computed, action, makeAutoObservable } from "mobx";

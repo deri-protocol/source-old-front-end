@@ -4,7 +4,7 @@ import {
   getContractAddressConfig,
   getPoolLiquidity,
   getPoolInfoApy,
-} from '../lib/web3js/index'
+} from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, formatBalance } from '../utils/utils';
 

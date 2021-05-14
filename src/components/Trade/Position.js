@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { closePosition, getWalletBalance } from "../../lib/web3js";
+import { closePosition, getWalletBalance } from "../../lib/web3js/indexV2";
 import className from 'classnames'
 import withModal from '../hoc/withModal';
 import DepositMargin from './Dialog/DepositMargin';
@@ -40,20 +40,27 @@ export default function Position({wallet,spec = {},position}){
     setIsLiquidation(true)
     const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setIsLiquidation(false))
     if(res.success){
-      loadPositionInfo();
+      refreshBalance()
     } else {      
       if(typeof res.error === 'string') {
         alert(res.error || 'Liquidation failed')
       } else if(typeof res.error === 'object'){
         alert(res.error.errorMessage || 'Liquidation failed')
-      }
-      
+      } else {
+        alert('Liquidation failed')
+      }      
     }
+  }
+
+  const refreshBalance = () => {
+    loadPositionInfo();
+    loadBalance();
+    wallet.loadWalletBalance(wallet.detail.chainId,wallet.detail.account)
   }
 
   const afterDeposit = () => {
     setAddModalIsOpen(false)
-    loadPositionInfo();
+    refreshBalance()
   }
 
   const onCloseDeposit = () => {
@@ -62,7 +69,7 @@ export default function Position({wallet,spec = {},position}){
 
   const afterWithdraw = () => {
     setRemoveModalIsOpen(false)
-    loadPositionInfo();
+    refreshBalance(); 
   }
 
   const onCloseWithdraw = () => {
@@ -111,7 +118,7 @@ export default function Position({wallet,spec = {},position}){
           onClick={onClosePosition}
         >
           <span
-            className='spinner spinner-border spinner-border-sm'
+            className='spinner spinner-border spinner-border-10px'
             role='status'
             aria-hidden='true'
             style={{display: isLiquidation ? 'block' : 'none'}}

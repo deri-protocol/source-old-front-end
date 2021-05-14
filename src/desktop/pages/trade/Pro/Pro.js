@@ -17,7 +17,6 @@ function Pro({wallet,indexPrice}){
 
 
   const onSpecChange = spec => {
-    indexPrice.pause();
     setSpec(spec)
   }
 
@@ -43,6 +42,12 @@ function Pro({wallet,indexPrice}){
     }
     return () => { };
   }, [wallet.detail.account,specs]);
+
+  useEffect(() => {
+    
+    return () => {
+    };
+  }, [indexPrice.index]);
 
 
   return (

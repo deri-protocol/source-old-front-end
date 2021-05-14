@@ -1,12 +1,14 @@
 import React, { useState ,useEffect} from 'react'
 import Button from "../../Button/Button";
 import NumberFormat from 'react-number-format';
-import { tradeWithMargin } from "../../../lib/web3js";
+import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 
 
 export default function TradeConfirm({wallet,spec,onClose,volume,direction,position = 0,indexPrice,leverage,transFee,afterTrade}){
+  const [pending, setPending] = useState(false);
 
   const trade = async () => {
+    setPending(true)
     const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,volume)
     if(res.success){
       afterTrade()
@@ -14,6 +16,13 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
     } else {
       const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
       alert(msg)
+    }
+    setPending(false)
+  }
+
+  const close = () => {
+    if(!pending){
+      onClose()
     }
   }
 
@@ -25,7 +34,7 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
       <div className='modal-content'>
         <div className='modal-header'>
           <div className='title'>CONFIRM</div>
-          <div className='close' data-dismiss='modal' onClick={onClose}>
+          <div className='close' data-dismiss='modal' onClick={close}>
             <span>&times;</span>
           </div>
         </div>
@@ -61,7 +70,7 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
             </div>
             <div className='modal-footer'>
               <div className='long-btn' v-if='confirm'>
-                <button className='cancel' onClick={onClose}>CANCEL</button>
+                {!pending && <button className='cancel' onClick={close}>CANCEL</button>}
                 <Button className='confirm' btnText='OK' click={trade} />
               </div>
             </div>

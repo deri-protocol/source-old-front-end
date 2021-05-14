@@ -6,7 +6,7 @@ import useDeriConfig from '../../../hooks/useDeriConfig';
 import classNames from 'classnames';
 import config from '../../../config.json'
 import axios from 'axios'
-import { DeriEnv, deriToNatural } from '../../../lib/web3js';
+import { DeriEnv, deriToNatural } from '../../../lib/web3js/indexV2';
 import useInterval from '../../../hooks/useInterval';
 import {observer, inject } from 'mobx-react';
 

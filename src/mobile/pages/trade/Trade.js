@@ -2,7 +2,7 @@
 import { useState ,useEffect,useCallback} from 'react'
 import config from '../../../config.json'
 import axios from 'axios'
-import { DeriEnv, deriToNatural } from '../../../lib/web3js';
+import { DeriEnv, deriToNatural } from '../../../lib/web3js/indexV2';
 import LiteTrade from "../../../components/Trade/LiteTrade";
 import './trade.less'
 import { inject, observer } from 'mobx-react';

@@ -1,5 +1,5 @@
 import { makeAutoObservable, observable, action, computed } from "mobx"
-import { getPositionInfo } from "../lib/web3js";
+import { getPositionInfo } from "../lib/web3js/indexV2";
 
 
 export default class Trade {

@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react'
 import dateFormat from 'date-format'
-import { getTradeHistory ,DeriEnv} from '../../../../lib/web3js';
+import { getTradeHistory ,DeriEnv} from '../../../../lib/web3js/indexV2';
 import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
 import config from '../../../../config.json'

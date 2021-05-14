@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react'
 import RcSlider,{SliderTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css';
 import './slider.less'
+import classNames from 'classnames';
 const { Handle } = RcSlider;
 
 
@@ -42,11 +43,12 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = 100 ,start,onValueChange,freeze}){
+export default function Slider({max =100 ,start,onValueChange,freeze}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const [marks, setMarks] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   const onSliderChange = value => {
     setValue(value)
@@ -72,6 +74,9 @@ export default function Slider({max = 100 ,start,onValueChange,freeze}){
     }
     setMarks(initDefaultMarks(max));    
     setLimit(+max)
+    if(max !== 100){
+      setLoaded(true)
+    }
     return () => {};
   }, [max]);
 
@@ -81,14 +86,17 @@ export default function Slider({max = 100 ,start,onValueChange,freeze}){
     } else {
       setValue(start)
     }
+
     return () => {      
     };
   }, [start]);
 
+  const clazz =classNames('deri-slider',{controlled : loaded})
+
   return (
       <RcSlider
         handle={handle}
-        className='deri-slider' 
+        className={clazz} 
         start={start}
         min={0}
         max={limit}

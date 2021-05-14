@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import {
 	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance
-} from '../../../lib/web3js/index'
+} from '../../../lib/web3js/indexV2'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';

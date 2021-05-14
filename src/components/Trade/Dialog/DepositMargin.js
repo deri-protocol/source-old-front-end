@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import {  getWalletBalance, depositMargin } from "../../../lib/web3js";
+import {  getWalletBalance, depositMargin } from "../../../lib/web3js/indexV2";
 import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
 
@@ -7,6 +7,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
   const [integer, setInteger] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
+  const [pending, setPending] = useState(false);
 
   const onChange = event => {
     const {value} = event.target
@@ -18,6 +19,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
   }
 
   const deposit = async (amount) => {
+    setPending(true)
     const res = await depositMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
       afterDeposit();
@@ -25,6 +27,13 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
     } else {
       const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
       alert(msg)
+    }
+    setPending(false)
+  }
+
+  const close = () => {
+    if(!pending){
+      onClose()
     }
   }
 
@@ -50,7 +59,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
         <div className='modal-content'>
           <div className='modal-header'>
             <div className='title'>DEPOSIT MARGIN</div>
-            <div className='close' data-dismiss='modal' onClick={onClose}>
+            <div className='close' data-dismiss='modal' onClick={close}>
               <span>&times;</span>
             </div>
           </div>
