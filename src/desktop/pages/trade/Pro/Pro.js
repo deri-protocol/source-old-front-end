@@ -40,7 +40,9 @@ function Pro({wallet,indexPrice}){
         indexPrice.start(curSpecs[0].symbol)   
       }      
     }
-    return () => { };
+    return () => { 
+      document.querySelector('.desktop').style.minWidth = '';
+    };
   }, [wallet.detail.account,specs]);
 
   useEffect(() => {

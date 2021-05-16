@@ -10,16 +10,22 @@ import NumberPolyfill from './lib/polyfill/numberPolyfill'
 import IndexPrice from './model/IndexPrice';
 import Position from './model/Position';
 import Oracle from './model/Oracle';
+import OrderLine from './model/MboxExample';
+import { autorun, runInAction } from 'mobx';
+import Trading from './model/Trading';
 
 const wallet = new Wallet();
-const indexPrice = new IndexPrice();
-const position = new Position();
-const oracle = new Oracle();
+// const indexPrice = new IndexPrice();
+// const position = new Position();
+// const oracle = new Oracle();
+
+// const order = new OrderLine(0)
+const trading = new Trading()
 
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-      <Provider wallet={wallet} indexPrice={oracle} position={position}>
+      <Provider wallet={wallet}  trading={trading} >
         <App />
       </Provider>
     </HashRouter>
@@ -28,5 +34,10 @@ ReactDOM.render(
 );
 
 
-window.wallet = wallet
+// window.trading = trading;
+// window.wallet = wallet
+// trading.init(wallet);
+// runInAction(() => {
+//   console.log(trading.amount)
+// })
 

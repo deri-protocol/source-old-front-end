@@ -76,7 +76,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <div>Shares</div>
               </div>
               <div className='max'>
-                MAX REMOVEABLE:
+                <span>MAX REMOVEABLE:</span>
                 <span className='max-num'>{liqInfo.shares}</span>
                 <span className='max-btn-left' onClick={addAll}>REMOVE ALL</span>
               </div>

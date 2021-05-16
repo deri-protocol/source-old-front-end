@@ -87,7 +87,6 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
-	const [btnText, setBtnText] = useState('Collect Wallet')
 	const [balance, setBalance] = useState('');
 	const [liqInfo, setLiqInfo] = useState({})
 	const [buttonElment, setButtonElment] = useState(null);
@@ -102,8 +101,10 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 
   const loadBalance = async () => {
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
-      const total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
-      setBalance(total)
+			const total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+			if(typeof total !== 'object'){
+				setBalance(total)				
+			}
     }
   }
 

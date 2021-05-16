@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {DeriEnv} from "../../src/lib/web3js/indexV2";
+import {DeriEnv} from "../../src/lib/web3js";
 
 const history = {}
 

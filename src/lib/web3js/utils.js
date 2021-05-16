@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
 import {
   DeriEnv,
-  ChainProviderUrls,
+  getChainProviderUrlsConfig,
   getContractAddressConfig,
   getSlpContractAddressConfig,
   getClpContractAddressConfig,
@@ -134,7 +134,7 @@ export const checkHttpServerIsAlive = async (url) => {
       return true;
     }
   } catch (err) {
-    console.log(err);
+    //console.log(err);
   }
   return false;
 };
@@ -145,7 +145,7 @@ export const getAliveHttpServer = async (urls = []) => {
       return url;
     }
   }
-  throw new Error('No alive http server');
+  throw new Error('No alive http server in urls', urls);
 };
 
 // ethereum chain
@@ -399,7 +399,8 @@ export const getDeriContractAddress = (chainId) => {
   return {};
 };
 
-export const getOracleUrl = (env = 'dev', chainId, poolAddress) => {
+export const getOracleUrl = (chainId, poolAddress) => {
+  const env = DeriEnv.get()
   const { symbol } = getPoolContractAddress(chainId, poolAddress);
   const addSymbolParam = (url, symbol='BTCUSD') => `${url}?symbol=${symbol}`;
   if (env === 'prod' || env === 'production') {
@@ -421,51 +422,33 @@ export const getOracleUrl = (env = 'dev', chainId, poolAddress) => {
   }
 };
 
-export const getBTCUSDPrice = async (chainId, poolAddress) => {
-  try {
-    let url = getOracleUrl(DeriEnv.get(), chainId, poolAddress);
-    // const { symbol } = getPoolContractAddress(chainId, poolAddress);
-    // if (symbol && symbol != '') {
-    //   url = `${url}?symbol=${symbol}`;
-    // }
-    const priceResponse = await fetch(url);
-    const priceResponseJson = await priceResponse.json();
-    return deriToNatural(priceResponseJson.price);
-  } catch (err) {
-    console.log(`fetch BTCUSD price error: ${err}`);
-  }
-  return '0';
-};
 export const getOracleInfo = async (chainId, poolAddress) => {
   try {
-    let url = getOracleUrl(DeriEnv.get(), chainId, poolAddress);
-    // const { symbol } = getPoolContractAddress(chainId, poolAddress);
-    // if (symbol && symbol != '') {
-    //   url = `${url}?symbol=${symbol}`;
-    // }
-    console.log('oracle url', url);
+    let url = getOracleUrl(chainId, poolAddress);
+    //console.log('oracle url', url);
     const priceResponse = await fetch(url);
     const priceResponseJson = await priceResponse.json();
     return priceResponseJson;
   } catch (err) {
-    console.log(`fetch Oracle info error: ${err}`);
+    throw new Error(`fetch oracle info error: ${err}`);
   }
-  return {};
 };
 
-export const getChainProviderUrl = (chainId) => {
+export const getBTCUSDPrice = async (chainId, poolAddress) => {
+  try {
+    const responseJson = await getOracleInfo(chainId, poolAddress)
+    return deriToNatural(responseJson.price).toString();
+  } catch (err) {
+    throw new Error(`fetch oracle price error: ${err}`);
+  }
+};
+export const getOraclePrice = getBTCUSDPrice;
+
+export const getChainProviderUrl = async(chainId) => {
   chainId = normalizeChainId(chainId);
-  const chains = ChainProviderUrls.filter((item) => item.chainId === chainId);
-  if (chains.length === 1) {
-    try {
-      // const url = await getAliveHttpServer(chains[0].provider_urls)
-      return chains[0].provider_urls[0];
-    } catch (err) {
-      throw new Error(
-        `Cannot find the alive chain provider url with chainId: ${chainId}`
-      );
-    }
-    // return chains[0].provider_urls[0];
+  const urls = getChainProviderUrlsConfig(chainId)
+  if (urls.length > 0) {
+    return await getAliveHttpServer(urls)
   } else {
     throw new Error(
       `Cannot find the chain provider url with chainId: ${chainId}`

@@ -1,7 +1,7 @@
 import {useHistory} from 'react-router-dom'
 import NumberFormat from 'react-number-format';
 import config from  '../../config.json'
-import { DeriEnv } from '../../lib/web3js/indexV2.js';
+import { DeriEnv } from '../../lib/web3js/indexV2';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];

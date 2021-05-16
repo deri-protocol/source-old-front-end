@@ -8,14 +8,14 @@ import { inject, observer } from 'mobx-react';
 import useDeriConfig from '../../hooks/useDeriConfig';
 import { eqInNumber } from '../../utils/utils';
 
-function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
+function LiteTrade({wallet,indexPrice = {},position = {info : {}},trading,isPro,specChange}){
   const [curTab, setCurTab] = useState('trade');
   const [spec, setSpec] = useState({});
   const specs = useDeriConfig(wallet)
 
   const onSpecChange = spec => {
-    indexPrice.pause();
-    position.pause();
+    // indexPrice.pause();
+    // position.pause();
     setSpec(spec)
     if(specChange){
       specChange(spec)
@@ -26,7 +26,7 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
   //oracle index
   useEffect(() => {
     if(spec.symbol){
-      indexPrice.start(spec.symbol)
+      // indexPrice.start(spec.symbol)
     }
     return () => {};
   }, [indexPrice,spec.symbol]);
@@ -35,7 +35,7 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
   //仓位
   useEffect(() => {
     if(spec.symbol && wallet.detail.account)
-    position.start(wallet,spec)
+    // position.start(wallet,spec)
     return () => {};
   }, [spec.symbol,wallet.detail.account]);
 
@@ -55,6 +55,7 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
     return () => {
     };
   }, [indexPrice.index,position.info]);
+
 
 
 
@@ -81,11 +82,11 @@ function LiteTrade({wallet,indexPrice,position,isPro,specChange}){
           </div>
         </div>
         <Trade wallet ={wallet}  spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange} position={position}/>
-        <Position  wallet ={wallet} spec={spec} position={position}/>
+        {/* <Position  wallet ={wallet} spec={spec} position={position} trading={trading}/>
         <History wallet ={wallet} spec={spec} specs={specs} />
-        <ContractInfo wallet={wallet} spec={spec}/>   
+        <ContractInfo wallet={wallet} spec={spec} trading={trading}/>    */}
     </div> 
   )
 }
 
-export default inject('wallet','indexPrice','position')(observer(LiteTrade))
+export default inject('wallet')(observer(LiteTrade))

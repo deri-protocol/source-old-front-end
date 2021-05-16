@@ -289,7 +289,7 @@ export const getTradeHistory2 = async (
     liquidateFromBlock = parseInt(res.data.liquidateHistoryBlock);
     tradeHistory = res.data.tradeHistory;
   }
-  tradeHistory = tradeHistory.map((i) => {
+  tradeHistory = tradeHistory.filter((i) => i).map((i) => {
     return {
       direction: i.direction.trim(),
       baseToken: i.baseToken.trim(),

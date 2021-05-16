@@ -38,7 +38,7 @@ function Trade({wallet,indexPrice}){
 
   useEffect(() => {
     if(spec.symbol){
-      indexPrice.start(spec.symbol)
+      // indexPrice.start(spec.symbol)
     }
     return () => {
     };

@@ -14,6 +14,7 @@ export default class Oracle {
       kData : observable,
       setIndex : action,
     })
+    this.initWebSocket()
   }
 
   initWebSocket(){
@@ -23,20 +24,6 @@ export default class Oracle {
         path: '/kline'
       })
       this.ws.on('connect',() => console.log('ws is already connected'));
-      this.ws.on('kline_update',data => {
-        const obj = {}
-        let time = data.time
-        if (data.symbol === this.symbol) {
-          obj.time = time 
-          obj.low = Number(data.low)
-          obj.high = Number(data.high)
-          obj.open = Number(data.open)
-          obj.close = Number(data.close)
-          obj.volume = Number(data.volume)
-          this.setIndex(obj.close)
-        }
-      })
-  
     }    
   }
 
@@ -46,9 +33,44 @@ export default class Oracle {
     this.ws.emit('get_kline', {'symbol': symbol, 'time_type': 'min', 'bars': 10})
   }
 
+  load(symbol,callback){
+    this.resume();
+    this.setSymbol(symbol)
+    this.ws.on('kline_update',data => {
+      const obj = {}
+      let time = data.time
+      if (data.symbol === this.symbol) {
+        obj.time = time 
+        obj.low = Number(data.low)
+        obj.high = Number(data.high)
+        obj.open = Number(data.open)
+        obj.close = Number(data.close)
+        obj.volume = Number(data.volume)
+        if(!this.paused) {
+          this.setIndex(obj.close)
+          callback(obj.close)
+        }
+      }
+    })
+    this.ws.emit('get_kline', {'symbol': symbol, 'time_type': 'min', 'bars': 10})
+  }
+
   start(symbol){
     this.initWebSocket();
     this.loadIndex(symbol);
+    this.ws.on('kline_update',data => {
+      const obj = {}
+      let time = data.time
+      if (data.symbol === this.symbol) {
+        obj.time = time 
+        obj.low = Number(data.low)
+        obj.high = Number(data.high)
+        obj.open = Number(data.open)
+        obj.close = Number(data.close)
+        obj.volume = Number(data.volume)
+        this.setIndex(obj.close)
+      }
+    })
   }
 
   resume(){

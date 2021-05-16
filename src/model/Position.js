@@ -32,6 +32,10 @@ export default class Position {
     this.interval = null;
    }
 
+   resume(){
+     
+   }
+
    setInfo(info){
      this.info = info;
    }

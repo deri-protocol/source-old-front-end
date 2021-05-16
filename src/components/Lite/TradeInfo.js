@@ -2,28 +2,29 @@ import { useState,useEffect,useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock,  getFundingRate,  getWalletBalance,  getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate} from '../../lib/web3js/indexV2'
+import {priceCache,PerpetualPoolParametersCache, isUnlocked,unlock, DeriEnv, deriToNatural, getFundingRate, getUserWalletBalance, getWalletBalance, getPositionInfo, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate} from '../../lib/web3js/indexV2/index'
+import NumberFormat from 'react-number-format';
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
-import DeriNumberFormat from '../../utils/DeriNumberFormat'
-import { inject, Observer, observer } from 'mobx-react';
+import useInterval from '../../hooks/useInterval';
 
 
 
 
-function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,position,trading}){
+export default function TradeInfo({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice}){
   const [direction, setDirection] = useState('long');
   const [contractInfo, setContractInfo] = useState(null);
   const [dropdown, setDropdown] = useState(false);  
-  const [margin, setMargin] = useState('');  
-  const [fundingRate, setFundingRate] = useState('');
+  const [margin, setMargin] = useState('0.00');  
+  const [position, setPosition] = useState({});
+  const [fundingRate, setFundingRate] = useState('0.00');
   const [fundingRateTip, setFundingRateTip] = useState('');
   const [fundingRateAfter, setFundingRateAfter] = useState('');
   const [transFee, setTransFee] = useState('');
   const [poolLiquidity, setPoolLiquidity] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
-  const [indexPriceClass, setIndexPriceClass] = useState('rise');
+  const [indexPriceClass, setIndexPriceClass] = useState('');
   const indexPriceRef = useRef();
   
 
@@ -32,9 +33,11 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
   //控制状态
   const [volume, setVolume] = useState('');  
 
+  useInterval(loadPosition,3000)
+
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{' checked-short' : direction === 'short'})
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
-  const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
+  const volumeClazz = classNames('contrant-input',{'inputFamliy' : volume !== ''})
 
   //是否有 spec
   const hasSpec = () => spec && spec.pool
@@ -56,17 +59,12 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
 
   //切换交易标的
   const onSelect = select => {
-    // setVolume('')
-    // position.pause();
-    // indexPrice.pause();
     const selected = specs.find(config => config.symbol === select.symbol )
-    if(selected){
-      trading.switch(selected.symbol);
-    }
+    onSpecChange(selected);
   }
 
   const onSlide = value => {    
-    trading.setMargin(value);
+    setMargin(value);
   }
 
   //refresh cache
@@ -96,6 +94,16 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
   }
 
 
+  //当前仓位
+  async function loadPosition() {
+    if(hasConnectWallet() && hasSpec()) {
+      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account);
+      if(position){
+        setPosition(position);
+      }
+    }
+  }
+
   //价值合同信息
   const loadContractInfo = async () => {
     if(hasConnectWallet() && hasSpec()){
@@ -107,7 +115,7 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
   //交易费用
   const loadTransactionFee = async () => {
     if(hasConnectWallet() && hasSpec()) {
-      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(trading.volume));
+      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,volume);
       setTransFee(transFee);
     }
   }
@@ -117,7 +125,7 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
     if(hasConnectWallet() && hasSpec()) {
       const {detail} = wallet
       const curLiqUsed = await getLiquidityUsed(detail.chainId,spec.pool)
-      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,trading.volume)
+      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,volume)
       if(curLiqUsed && afterLiqUsed){
         setLiqUsedPair({curLiqUsed : curLiqUsed.liquidityUsed0,afterLiqUsed : afterLiqUsed.liquidityUsed1})
       }
@@ -127,7 +135,7 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
     if(hasConnectWallet() && hasSpec()){
-      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,trading.volume);
+      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,volume);
       if(fundingRateAfter){
         setFundingRateAfter(fundingRateAfter.fundingRate1);
       }
@@ -152,47 +160,35 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
     return event.target.value !== '' && /^\d*\.?\d*$/.test(event.target.value)
   }
 
-  const volumeChange = event => {
-    let {value} = event.target
-    if(value === '0'){
-      value = ''
-    } else if(value !== ''){
-      value = direction === 'long' ? value : -value
-    }
-    // setVolume(value);
-    // trading.pause();
-    trading.setVolume(value)
-  }
-
   //完成交易
   const afterTrade = () => {
     setVolume('')
-    position.load(wallet,spec);
-    wallet.loadWalletBalance(wallet.detail.chainId,wallet.detail.account)
+    loadPosition();
   }
 
 
   const initialzie = () => {    
     refreshCache(); //refresh cache
     loadFundingRate(); // funding rate changed
+    loadPosition() // balance in contract changed
     loadContractInfo(); //contract info change    
   }
 
   //计算交易相关数据（dynamic balance、margin、available balance)
   const calcTradeInfo = () => {
-    const info = position.info
-    if(contractInfo && contractInfo.symbol === spec.symbol && info.volume && indexPrice.index) {
-      const currentPosition = (+volume) + (+info.volume)
-      const contractValue = Math.abs(currentPosition) * indexPrice.index * contractInfo.multiplier;
-      const dynamicBalance = ((+info.margin) + (+info.unrealizedPnl)).toFixed(2)
+    if(position && contractInfo && indexPrice) {
+      const currentPosition = (+volume) + (+position.volume)
+      const contractValue = Math.abs(currentPosition) * indexPrice * contractInfo.multiplier;
+      const dynamicBalance = ((+position.margin) + (+position.unrealizedPnl)).toFixed(2)
       const margin = (contractValue * contractInfo.minInitialMarginRatio).toFixed(2);
       const leverage = (+contractValue / +dynamicBalance).toFixed(1);
       const available = (+dynamicBalance) - (+margin)
-      const converted = contractValue / indexPrice.index
+      const converted = contractValue / indexPrice
       const tradeInfo = {
         volume,         //合约数量
         dynamicBalance, //动态余额
         margin,         //存入保证金
+        marginHeld : position.marginHeld ,//冻结保证金 
         available,      //可用余额
         converted,      //换算的值
         leverage,        //杠杆
@@ -217,50 +213,33 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
   }, [wallet.detail,spec]);
 
 
-  // useEffect(() => {
-  //   calcTradeInfo()
-
-  //   //index color
-  //   if(indexPriceRef.current){
-  //     setIndexPriceClass(indexPriceRef.current > indexPrice.index ? 'fall' : 'rise')
-  //   }
-  //   indexPriceRef.current = indexPrice.index;
-  //   return () => {};
-  // }, [position.info.unrealizedPnl,position.info.volume,indexPrice.index,volume,contractInfo]);
-
-
-
-
   useEffect(() => {
-    if(trading.positionInfo.volume >= 0){
-      setDirection('long')
-    } else {
-      setDirection('short')
+    calcTradeInfo()
+    if(indexPriceRef.current){
+      setIndexPriceClass(indexPriceRef.current > indexPrice ? 'fall' : 'rise')
     }
-    return () => {};
-  }, [trading.positionInfo.volume]);
+    indexPriceRef.current = indexPrice;
+    // if(position.volume >= 0){
+    //   setDirection('long')
+    // } else {
+    //   setDirection('short')
+    // }
+    return () => {
+    };
+  }, [position.unrealizedPnl,position.volume,indexPrice,volume]);
 
   useEffect(() => {
     calcFundingRateAfter();
     calcLiquidityUsed();
     loadTransactionFee();
-
-    if(trading.volume !== '') {
-      trading.pause();
-      // position.pause();
-      // indexPrice.pause();
-    } else if(wallet.detail.account && spec.pool){
-      // indexPrice.start(spec.symbol);
-      // position.start(wallet,spec)
-      trading.resume()
-    } 
-    return () => {};
-  }, [trading.volume]);
+    return () => {      
+    };
+  }, [volume]);
 
 
   useEffect(() => {    
     if(contractInfo){
-      const volume = (+margin) / ((+indexPrice.index) * (+contractInfo.multiplier) * (+contractInfo.minInitialMarginRatio)) - (+position.info.volume)
+      const volume = (+margin) / ((+indexPrice) * (+contractInfo.multiplier) * (+contractInfo.minInitialMarginRatio)) - (+position.volume)
       if(!isNaN(volume)){
         const number = Math.floor(volume);
         if((number) >= 0){
@@ -270,6 +249,8 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
         }
         const cloned = {...tradeInfo}
         cloned.volume = number;
+        // cloned.margin = margin;
+        // cloned.available = (+cloned.dynamicBalance) - margin
         setTradeInfo(cloned)
         setVolume(number);
       }
@@ -277,13 +258,6 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
     return () => {      
     };
   }, [margin]);
-
-
-  useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet)
-    }
-  },[wallet.detail.account,trading.index])
 
 
    
@@ -296,7 +270,7 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
             type='button'
             onClick={onDropdown}
             className='btn chec'>
-            {spec.symbol || 'BTCUSD'} / {spec.bTokenSymbol || 'BUSD'} (10X)
+            {spec.symbol} / {spec.bTokenSymbol} (10X)
             <span
               className='check-base-down' onClick={onDropdown}
             ><svg
@@ -316,12 +290,12 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
                 ></path></svg>
               </span>
           </button>
-          <div className={selectClass}>
+          <div className={selectClass} >
             <div className='dropdown-box'>
-              {trading.configs.map((config,index) => {
+              {specs.map((config,index) => {
                 return (
-                  <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
-                    {config.symbol } / {config.bTokenSymbol} (10X)
+                  <div className='dropdown-item' key={index} onClick={() => onSelect(config)}>              
+                    {config.symbol} / {config.bTokenSymbol} (10X)
                   </div>
                 )
               })}
@@ -330,22 +304,13 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
           </div>
         </div>
 
-        <div className='price-fundingRate pc'>
+        <div className='price-fundingRate'>
           <div className='index-prcie'>
-            Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
+            Index Price: <span className={indexPriceClass}>&nbsp; <NumberFormat value={indexPrice} displayType='text'/></span>
           </div>
           <div className='funding-rate'>
             <span>Funding Rate Annual: &nbsp;</span>
-            <span className='funding-per' title={fundingRateTip}><DeriNumberFormat value={ fundingRate } suffix='%'/></span> 
-          </div>
-        </div>
-        <div className='price-fundingRate mobile'>
-          <div className='index-prcie'>
-            Index: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={indexPrice.index} decimalScale={2}/></span>
-          </div>
-          <div className='funding-rate'>
-            <span>Funding: &nbsp;</span>
-            <span className='funding-per' title={fundingRateTip}><DeriNumberFormat value={indexPrice.index}/></span> 
+            <span className='funding-per' title={fundingRateTip}>{ fundingRate }</span> 
           </div>
         </div>
       </div>
@@ -357,7 +322,7 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
         <div className='left'>
           <div className='current-position'>
             <span>Current Position</span>
-            <span className='position-text'><DeriNumberFormat value={trading.position.volume} allowZero={true}/></span>
+            <span className='position-text'>{position.volume }</span>
           </div>
           <div className='contrant'>            
             <input
@@ -365,9 +330,9 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
               onFocus={onFocus}
               onBlur={onBlur}
               onKeyUp={onKeyUp}
-              disabled={!trading.amount.available}
-              onChange={event =>  volumeChange(event) }
-              value={trading.volume && Math.abs(trading.volume)}
+              disabled={!tradeInfo.available}
+              onChange={event =>  setVolume(event.target.value)}
+              value={tradeInfo.volume && Math.abs(tradeInfo.volume)}
               className={volumeClazz}
               placeholder='Contract Volume'
             />
@@ -375,67 +340,62 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
               Contract Volume
             </div>
           </div>          
-          {!!volume && <div className='btc'><DeriNumberFormat value={tradeInfo.converted} allowNegative={false} decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
+          {!!volume && <div className='btc'><NumberFormat value={tradeInfo.converted} allowNegative={false} displayType='text' decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
         </div>
         <div className='right-info'>
           <div className='contrant-info'>
             <div className='balance-contract'>
-              <span className='balance-contract-text pc'>
+              <span className='balance-contract-text'>
                 Balance in Contract<br/>
                 (Dynamic Balance)
               </span>
-              <span className='balance-contract-text mobile'>
-                Balance in Contract<br/>
-                (Dyn Bal.)
-              </span>
               <span className='balance-contract-num'>
-                <DeriNumberFormat value={ trading.amount.dynBalance } decimalScale={2}/>
+                <NumberFormat value={ tradeInfo.dynamicBalance } displayType='text' decimalScale={2}/>
               </span>
             </div>
             <div className='box-margin'>
               <span> Margin </span>
               <span className='margin'>
-                <DeriNumberFormat value={ trading.amount.margin } allowNegative={false}  decimalScale={2}/>
+                <NumberFormat value={ tradeInfo.margin } allowNegative={false}  displayType='text' decimalScale={2}/>
               </span>
             </div>
             <div className='available-balance'>
-              <span className='available-balance pc'> Available Balance </span>
-              <span className='available-balance mobile'>Avail Bal</span>
+              <span> Available Balance </span>
               <span className='available-balance-num'>
-                <DeriNumberFormat value={ trading.amount.available } decimalScale={2} />
+                <NumberFormat value={ tradeInfo.available } displayType='text' decimalScale={2} />
               </span>
             </div>
           </div>
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin}/>
+        <Slider max={tradeInfo.dynamicBalance} onValueChange={onSlide} start={tradeInfo.margin}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
-        {!!trading.volume && <>
+        {!!volume && <>
         <div className='text-info'>
           <div className='title-enter pool'>Pool Liquidity</div>
           <div className='text-enter poolL'>
-            <DeriNumberFormat value={ poolLiquidity } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } /> 
+            <NumberFormat value={ poolLiquidity } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } displayType='text'/> 
           </div>
         </div>
         <div className='text-info'>
           <div className='title-enter'>Liquidity Used</div>
           <div className='text-enter'>
-            <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%'/> -> <DeriNumberFormat value={ liqUsedPair.afterLiqUsed }  decimalScale={2}  suffix='%'/>
+            <NumberFormat value={liqUsedPair.curLiqUsed} displayType='text' suffix='%'/> -> <NumberFormat value={ liqUsedPair.afterLiqUsed } displayType='text' decimalScale={2}  suffix='%'/>
           </div>
         </div>
         <div className='text-info'>
           <div className='title-enter'>Funding Rate Impact</div>
           <div className='text-enter'>
-            <DeriNumberFormat value={ fundingRate }  suffix='%' allowNegative={false} decimalScale={4}/> -> <DeriNumberFormat value={ fundingRateAfter }  allowNegative={false} decimalScale={4} suffix='%' />
+            <NumberFormat value={ fundingRate } displayType='text' allowNegative={false} decimalScale={4}/> -> <NumberFormat value={ fundingRateAfter } displayType='text' allowNegative={false} decimalScale={4}/>
           </div>
         </div>
         <div className='text-info'>
           <div className='title-enter'>Transaction Fee</div>
           <div className='text-enter'>
-            <DeriNumberFormat value={ transFee } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } />             
+            <NumberFormat value={ transFee } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } displayType='text'/>             
           </div>
         </div>
         </>}
@@ -450,16 +410,12 @@ function Trade({wallet = {},spec = {}, specs = [],onSpecChange,indexPrice,positi
                 direction={direction}
                 leverage={tradeInfo.leverage}
                 afterTrade={afterTrade}
-                position={position}
+                position={position.volume}
        />
     </div>
   </div>
   )
 }
-
-
-const ConfirmDialog = withModal(TradeConfirm)
-const DepositDialog = withModal(DepositMargin)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
                   baseToken,leverage,indexPrice,position,direction,transFee,afterTrade}){
@@ -467,7 +423,6 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [balance, setBalance] = useState('');
 
   
   const connect = () => {
@@ -485,7 +440,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   }
 
 
-  const afterDeposit = async () => {    
+  const afterDeposit = async (amount) => {    
     onClose();
     afterTrade()
   }
@@ -499,20 +454,6 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       setIsApprove(result);
     }
   }
-
-  const loadBalance = async () => {
-    if(wallet.isConnected() && spec.pool){
-      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
-      if(balance){
-        setBalance(balance)
-      }
-    }
-  }
-
-  useEffect(() => {
-    loadBalance();
-    return () => {};
-  }, [wallet.detail.account,spec.pool]);
 
   useEffect(() => {
     if((+available) > 0){
@@ -539,7 +480,10 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const onClose = () => {
     setModalIsOpen(false)
   }
+
   
+  const ConfirmDialog = withModal(TradeConfirm)
+  const DepositDialog = withModal(DepositMargin)
 
   let actionElement =(<>
     <ConfirmDialog  wallet={wallet}
@@ -550,8 +494,8 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     baseToken={baseToken} 
                     volume={volume} 
                     direction={direction} 
-                    position={position.info.volume} 
-                    indexPrice={indexPrice.index} 
+                    position={position} 
+                    indexPrice={indexPrice} 
                     transFee={transFee}
                     afterTrade={afterTrade}
                     />
@@ -568,7 +512,6 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
           modalIsOpen={modalIsOpen} 
           onClose={onClose}
           spec={spec}
-          balance={balance}
           afterDeposit={afterDeposit}
         />
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
@@ -586,5 +529,3 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
     </div>
   )
 }
-
-export default inject('trading')(observer(Trade))
