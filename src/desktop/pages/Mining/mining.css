@@ -227,9 +227,11 @@
   font-weight: 300;
 }
 .modal-dialog .modal-content {
+  width: 381px;
   color: #AAAAAA;
   position: relative;
   background: rgba(13, 14, 15);
+  height: 425px;
   display: inline-block;
   border: 1px solid #707070;
   border-radius: 20px;
@@ -266,12 +268,12 @@
   justify-content: center;
   align-items: center;
   padding: 0;
+  font-family: Korolev, sans-serif;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info {
   width: 360px;
   margin-top: 20px;
   height: 300px;
-  padding: 0 20px;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info .money {
   margin-top: 12px;
@@ -311,10 +313,11 @@
   justify-content: space-between;
   align-items: flex-end;
   margin-top: 25px;
+  width: 301px;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin {
-  width: 244px;
-  height: 44px;
+  width: 253px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
