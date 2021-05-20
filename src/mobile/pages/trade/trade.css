@@ -635,15 +635,15 @@
 .trade-body .contract-box .contract-info .info:nth-child(even) {
   background-color: #202124;
 }
-.modal-dialog {
+.trading-dialog .modal-dialog {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.modal-dialog .modal-content {
+.trading-dialog .modal-dialog .modal-content {
   width: 3.4rem;
-  height: 4rem;
+  height: 4.3rem;
   color: #AAAAAA;
   position: relative;
   background: rgba(13, 14, 15);
@@ -654,7 +654,7 @@
   border-radius: 20px;
   margin: auto;
 }
-.modal-dialog .modal-content .modal-header {
+.trading-dialog .modal-dialog .modal-content .modal-header {
   height: 0.55rem;
   background: #0D0E0F;
   border-bottom: 1px solid #707070;
@@ -668,16 +668,16 @@
   align-items: center;
   border-radius: 20px 20px 0px 0px;
 }
-.modal-dialog .modal-content .modal-header .close {
+.trading-dialog .modal-dialog .modal-content .modal-header .close {
   color: #fff;
   padding-right: 19px;
   font-size: 0.3rem;
   font-weight: 700;
 }
-.modal-dialog .modal-content .modal-header .close span {
+.trading-dialog .modal-dialog .modal-content .modal-header .close span {
   cursor: pointer;
 }
-.modal-dialog .modal-content .modal-body {
+.trading-dialog .modal-dialog .modal-content .modal-body {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -685,44 +685,44 @@
   font-weight: 300;
   font-family: Korolev, sans-serif;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info {
   width: 4rem;
   margin-top: 33px;
   height: 2.8rem;
   font-size: 0.16rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .max {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max {
   margin-top: 20px;
   margin-left: 5px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .money {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .money {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #FFFFFF;
   margin-top: 14px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .money .add {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .money .add {
   width: 10px;
   height: 10px;
   background: #3EBF38;
   border-radius: 50%;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .money .remove {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .money .remove {
   width: 10px;
   height: 10px;
   background: #E35061;
   border-radius: 50%;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance {
   font-size: 0.3rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin {
   display: flex;
   align-items: flex-end;
   margin-top: 25px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin {
   width: 253px;
   height: 50px;
   display: flex;
@@ -734,13 +734,13 @@
   background-repeat: no-repeat;
   border-radius: 6px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .amount {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .amount {
   position: absolute;
   top: 3px;
   left: 22px;
   font-size: 0.1rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box {
   width: 243px;
   height: 43px;
   border: 0;
@@ -751,7 +751,7 @@
   align-items: flex-end;
   border-radius: 3px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box .margin-value {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box .margin-value {
   height: 24px;
   width: 225px;
   padding-left: 14px;
@@ -760,26 +760,26 @@
   background: #1B1C1F;
   font-size: 0.18rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .max {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max {
   margin-top: 15px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .max .max-btn-left {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max .max-btn-left {
   margin-left: 20px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .max span {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max span {
   color: #569BDA;
   cursor: pointer;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .max .max-num {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max .max-num {
   color: #FFFFFF;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 0.3rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn .margin-btn {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn .margin-btn {
   width: 276px;
   height: 50px;
   background: #202124;
@@ -788,19 +788,19 @@
   color: #CCCCCC;
   font-size: 0.18rem;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info .remove-margin-btn {
+.trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .remove-margin-btn {
   margin-top: 56px;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info {
   display: flex;
   flex-direction: column;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .enter-margin {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .enter-margin {
   display: flex;
   align-items: flex-end;
   margin-top: 25px;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin {
   height: 50px;
   display: flex;
   justify-content: center;
@@ -812,13 +812,13 @@
   border-radius: 6px;
   margin-right: 4px;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .amount {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .amount {
   position: absolute;
   top: 3px;
   left: 22px;
   font-size: 0.1rem;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .box {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .box {
   height: 43px;
   border: 0;
   font-size: 0.18rem;
@@ -828,7 +828,7 @@
   align-items: flex-end;
   border-radius: 3px;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .box .margin-value {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .enter-margin .input-margin .box .margin-value {
   height: 24px;
   width: 328px;
   padding-left: 14px;
@@ -836,10 +836,10 @@
   color: #fff;
   background: #1B1C1F;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .top {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .top {
   border-bottom: 1px solid rgba(112, 112, 112, 0.44705882);
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .top .text {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .top .text {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -850,22 +850,22 @@
   color: #FFFFFF;
   font-family: Korolev, sans-serif;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .top .text .long {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .top .text .long {
   color: #3EBF38;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .top .text .short {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .top .text .short {
   color: #E35061;
 }
-.modal-dialog .modal-content .modal-body .contract-box-info .top .text:nth-child(odd) {
+.trading-dialog .modal-dialog .modal-content .modal-body .contract-box-info .top .text:nth-child(odd) {
   background: #323338;
 }
-.modal-dialog .modal-content .modal-body .modal-footer {
+.trading-dialog .modal-dialog .modal-content .modal-body .modal-footer {
   margin: 20px;
   padding: 0;
   border: 0;
   justify-content: center;
 }
-.modal-dialog .modal-content .modal-body .modal-footer button {
+.trading-dialog .modal-dialog .modal-content .modal-body .modal-footer button {
   width: 1.4rem;
   height: 0.4rem;
   border-radius: 10px;
@@ -873,11 +873,11 @@
   font-size: 0.18rem;
   cursor: pointer;
 }
-.modal-dialog .modal-content .modal-body .modal-footer .confirm {
+.trading-dialog .modal-dialog .modal-content .modal-body .modal-footer .confirm {
   background: #202124;
   box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
 }
-.modal-dialog .modal-content .modal-body .modal-footer .long-btn {
+.trading-dialog .modal-dialog .modal-content .modal-body .modal-footer .long-btn {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -885,7 +885,7 @@
   padding-left: 9px;
   padding-right: 10px;
 }
-.modal-dialog .modal-content .modal-body .modal-footer .long-btn .cancel {
+.trading-dialog .modal-dialog .modal-content .modal-body .modal-footer .long-btn .cancel {
   background: #323338;
   box-shadow: -2px -2px 2px rgba(90, 90, 90, 0.8);
 }
