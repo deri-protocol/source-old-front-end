@@ -76,7 +76,7 @@ export default function TradeConfirm({wallet,spec,onClose,direction,volume,posit
             </div>
             <div className='modal-footer'>
               <div className='long-btn' v-if='confirm'>
-                {!pending && <button className='cancel' onClick={close}>CANCEL</button>}
+                <button className='cancel' onClick={close}>CANCEL</button>
                 <Button className='confirm' btnText='OK' click={trade} />
               </div>
             </div>

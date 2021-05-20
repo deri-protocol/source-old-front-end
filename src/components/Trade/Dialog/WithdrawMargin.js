@@ -107,9 +107,13 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 </div>
                 <div>{ spec.baseToken }</div>
               </div>
-              {(+position.volume) === 0 && <div className='max' v-show='isPosition'>
+              {(+position.volume) === 0 && <div className='max'>
                 MAX: <span className='max-num'>{ position.margin }</span>
                 <span className='max-btn-left' onClick={removeAll}>REMOVE ALL</span>
+              </div>}
+              {(+position.volume) > 0 && <div className='max'>
+                <span className='max-num'></span>
+                <span className='max-btn-left'> </span>
               </div>}
               <div className='add-margin-btn'>
                 <Button className='margin-btn' btnText='WITHDRAW' click={withdraw}/>
