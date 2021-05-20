@@ -10,6 +10,7 @@ function TradingViewChart({symbol}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one-day');
   const [deriWidget, setDeriWidget] = useState(null);
+  const [currentInterval, setCurrentInterval] = useState('1D');
 
   const activedClass = classNames('btn',actived)
 
@@ -17,7 +18,7 @@ function TradingViewChart({symbol}){
     const widgetOptions = {
 			symbol: symbol,
       datafeed: datafeeds,
-      interval: '1D',
+      interval: currentInterval,
       container_id: defaultProps.containerId,
       library_path: `${process.env.PUBLIC_URL}/charting_library/`,      
       locale: 'en',
@@ -57,7 +58,7 @@ function TradingViewChart({symbol}){
 
     const w  = new widget(widgetOptions);
     document.querySelector("iframe").addEventListener("load", function(e) {
-      setTimeout(() => setLoading(false),250)
+      setTimeout(() => setLoading(false),500)
     });
     return w;
   }
@@ -65,6 +66,7 @@ function TradingViewChart({symbol}){
 
   const  changeTime= (time,period) => {
     setActived(period)
+    setCurrentInterval(time)
     deriWidget.chart().refreshMarks()
     deriWidget.activeChart().setResolution(time)        
   }

@@ -36,10 +36,10 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				setLiquidity({
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
-					shareValue : (+info.shareValue).toFixed(6),
-					percent : (((info.shares * info.shareValue) / info.poolLiquidity) * 100).toFixed(2) ,
-					shares : (+info.shares).toFixed(2),
-					values : (+info.shares * info.shareValue).toFixed(2),
+					shareValue : info.shareValue,
+					percent : ((info.shares * info.shareValue) / info.poolLiquidity) * 100 ,
+					shares : info.shares,
+					values : info.shares * info.shareValue,
 					sushiApy
 				})	
 			}
@@ -51,7 +51,7 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 			}
 			if(pooLiquidity){
 				setLiquidity({
-					total : (+pooLiquidity.liquidity),
+					total : pooLiquidity.liquidity,
 					apy : (+apyPool.apy) * 100,
 					sushiApy
 				})
@@ -82,18 +82,18 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				</div>
 				<div className="odd text">
 						<div className="text-title">Liquidity Share Value</div>
-						<div className="text-num"><DeriNumberFormat  allowZero={true}  value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
+						<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
-						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.percent } suffix={'%'}/></div>
+						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.percent } decimalScale={2} suffix={'%'}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">Staked Balance </div>
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
 				</div>
 				<div className="odd claim-network">
-					<div className="text-title money"><DeriNumberFormat allowZero={true}  value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
+					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
 						
 				</div>
 				<div className="title-check">
@@ -113,16 +113,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
 	const [balance, setBalance] = useState('');
-	// const [liqInfo, setLiqInfo] = useState({})
 	const [buttonElment, setButtonElment] = useState(null);
 	
-	// const loadLiqidityInfo = async () => {
-  //   if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
-  //     const info = await getLiquidityInfo(wallet.detail.chainId,address,wallet.detail.account);	
-  //     setLiqInfo({shares : info.shares})
-  //   }
-  // }
-
 
   const loadBalance = async () => {
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
