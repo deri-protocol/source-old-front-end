@@ -9,7 +9,7 @@ export default function useClaimInfo(wallet){
   const loadClaimInfo =  async () => {
     if(wallet.isConnected()){
       const claimInfo  = await getUserInfoAll(wallet.detail.account);
-      const claimed = deriToNatural(claimInfo.total).toFixed(2);
+      const claimed = (+claimInfo.total).toFixed(2);
       const unclaimed = claimInfo.valid ? (+claimInfo.amount).toFixed(2) : 0;
       const harvestDeriLp = (+claimInfo.lp).toFixed(2);
       const harvestDeriTrade = (+claimInfo.trade).toFixed(2);

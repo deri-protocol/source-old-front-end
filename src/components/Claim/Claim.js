@@ -8,13 +8,14 @@ import { eqInNumber } from '../../utils/utils';
 
 export default function Claim({wallet}){
 	const [btnText, setBtnText] = useState('Collect Wallet')
+	const [claimed, setClaimed] = useState(false);
 	const [claimInfo,claimInfoInterval] = useClaimInfo(wallet);
 	const [remainingTime, setRemainingTime] = useState('')
 	const config = useConfig(claimInfo.chainId) 
 
   //claim deri
 	const claim = async () => {
-		if(!eqInNumber(wallet.detail.chainId,claim.chainId)) {
+		if(!eqInNumber(wallet.detail.chainId,claimInfo.chainId)) {
 			alert(`Your DERI is on ${ config.text } . Connect to ${ config.text } to claim.`)
 			return ;
 		}
@@ -29,15 +30,20 @@ export default function Claim({wallet}){
 		}
 		const res = await mintDToken(wallet.detail.chainId,wallet.detail.account)
 		if(res.success){
-      clearInterval(claimInfoInterval);
+			clearInterval(claimInfoInterval);
+			return true;
 		} else {
 			alert('Claim failed')
+			return false;
 		}
   }
 
 	const click = async () => {
 		if(wallet.isConnected()){
-			await claim();
+			const res = await claim();
+			if(res){
+				setClaimed(true)
+			}
 		} 
 	}
 
@@ -94,7 +100,7 @@ export default function Claim({wallet}){
 				</div>
 				<div className='odd text'>
 						<div className='text-title'>Unclaimed DERI</div>
-						<div className='text-num'>{ claimInfo.unclaimed }</div>
+						<div className='text-num'>{ claimed ? 0 : claimInfo.unclaimed }</div>
 				</div>
 				<div className='odd claim-network'>
 						<div className='text-title'>Your DERI is on { config.text } . Connect to { config.text } to claim.</div>
