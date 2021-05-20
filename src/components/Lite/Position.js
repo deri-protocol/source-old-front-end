@@ -199,6 +199,7 @@ export default function Position({wallet,spec = {}}){
        onClose={onCloseDeposit}
        spec={spec}
        afterDeposit={afterDeposit}
+       className='trade-dialog'
     />
     <WithDrawDialog
       wallet={wallet}
@@ -206,6 +207,7 @@ export default function Position({wallet,spec = {}}){
       onClose={onCloseWithdraw}
       spec={spec}
       afterWithdraw={afterWithdraw}
+      className='trade-dialog'
       />
   </div>
   )
