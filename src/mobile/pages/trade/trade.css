@@ -643,7 +643,6 @@
 }
 .trading-dialog .modal-dialog .modal-content {
   width: 3.4rem;
-  height: 4.3rem;
   color: #AAAAAA;
   position: relative;
   background: rgba(13, 14, 15);
@@ -688,7 +687,7 @@
 .trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info {
   width: 4rem;
   margin-top: 33px;
-  height: 2.8rem;
+  height: 3.2rem;
   font-size: 0.16rem;
 }
 .trading-dialog .modal-dialog .modal-content .modal-body .margin-box-info .max {
