@@ -148,7 +148,7 @@ function Trade({wallet = {},trading}){
 
   //spec select hide listener
   useEffect(() => {
-    const bodyClickListener = document.body.addEventListener('click',() => setDropdown(false),false)
+    const bodyClickListener = document.body.addEventListener('click',() => setDropdown(false))
     return () => {
       document.body.removeEventListener('click',bodyClickListener)
     }
@@ -278,7 +278,7 @@ function Trade({wallet = {},trading}){
           </div>
           <div className='funding-rate'>
             <span>Funding: &nbsp;</span>
-            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.index} decimalScale={4}/></span> 
+            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.index} decimalScale={4} suffix='%'/></span> 
           </div>
         </div>
       </div>
@@ -411,10 +411,11 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const approve = async () => {
     const {detail} = wallet
     const res = await unlock(detail.chainId,spec.pool,detail.account);
-    if(res){
+    if(res.success){
       setIsApprove(true);
       trading.refresh();
     } else {
+      setIsApprove(false)
       alert('Approve faild')
     }
   }

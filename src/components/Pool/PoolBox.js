@@ -41,6 +41,8 @@ function PoolBox({wallet,pool}){
     if(pool && pool.airdrop){
       if(!wallet.isConnected()) {
         setButtonElement(<Button btnText='Connect Wallet' click={connectWallet}></Button>)
+      } else {
+        setButtonElement(<Button btnText='CLAIM' click={airdrop}></Button>)
       }
     } else {
       setButtonElement(

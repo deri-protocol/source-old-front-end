@@ -132,7 +132,9 @@ function Position({wallet,trading}){
           Balance in Contract
           (Dynamic Balance)
         </div>
-        <div className='info-num'> <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  /></div>
+        <div className='info-num'> 
+          <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />
+        </div>
       </div>
       <div className='info-right'>
         <div

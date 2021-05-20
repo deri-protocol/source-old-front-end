@@ -98,10 +98,11 @@ export default class Trading {
 
   async switch(spec){
     const cur = this.configs.find(config => config.pool === spec.pool)
+    const changed = spec.symbol !== this.config.symbol
     if(cur){
       this.pause();
       this.setConfig(cur)
-      this.onConfigChange(this.wallet,cur,this.config.symbol !== cur.symbol);      
+      this.onConfigChange(this.wallet,cur,changed);      
       this.resume()
       this.setVolume('')
     }

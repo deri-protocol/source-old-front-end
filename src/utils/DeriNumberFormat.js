@@ -5,8 +5,9 @@ export default function DeriNumberFormat(props){
   const [renderablity, setRenderablity] = useState('--');
 
   useEffect(() => {
-    if((props.value || ((Math.abs(props.value)) === 0 && props.allowZero === true))) {
-      setRenderablity(<NumberFormat {...props} displayType = 'text' />)
+    const {allowZero,...others} = props 
+    if((props.value || ((Math.abs(props.value)) === 0 && allowZero === true))) {
+      setRenderablity(<NumberFormat {...others} displayType = 'text' />)
     } 
     return () => {};
   }, [props.value]);

@@ -6,6 +6,7 @@ import useInterval from '../../hooks/useInterval';
 import config from '../../config.json'
 import classNames from 'classnames';
 import rightArrow from '../../assets/img/play-button.png'
+import DeriNumberFormat from '../../utils/DeriNumberFormat';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
@@ -53,15 +54,16 @@ export default function History({wallet = {},spec ={} ,specs = []}){
           <div className='time-price-volume'>
             <div className='history-price'>
               <div className='history-title'>Volume @ Price</div>
-              <div className='history-text'>{ his.volume } @ <NumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
+              <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
             </div>
           <div className='notional'>
               <div className='history-title'>Notional</div>
-              <div className='history-text'>{ his.notional }</div>
+              <div className='history-text'><DeriNumberFormat value={ his.notional} decimalScale={4}/></div>
             </div>
-            <div className='history-fee'>
-              <div className='history-title'>Transaction Fee</div>
-              <div className='history-text'>{ his.transactionFee }</div>
+          <div className='history-fee'>
+            <div className='history-title pc'>Transaction Fee</div>
+              <div className='history-title mobile'>Fee</div>
+              <div className='history-text'><DeriNumberFormat value={ his.transactionFee } decimalScale={4}/></div>            
             </div>
           </div>        
         </div>

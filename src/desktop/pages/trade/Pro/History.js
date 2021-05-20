@@ -5,6 +5,7 @@ import NumberFormat from 'react-number-format';
 import classNames from 'classnames';
 import config from '../../../../config.json'
 import rightArrow from '../../../../assets/img/play-button.png'
+import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 export default function History({wallet,spec}) {
@@ -46,16 +47,16 @@ export default function History({wallet,spec}) {
               {his.baseToken}
             </div>
             <div>
-              <NumberFormat value={his.price} displayType='text' decimalScale={2}/>
+              <DeriNumberFormat value={his.price}  decimalScale={2}/>
             </div>
             <div>
               {his.volume}
             </div>
             <div >
-              {his.notional}
+              <DeriNumberFormat value={his.notional} decimalScale={4}/>
             </div>
             <div >
-              {his.transactionFee}
+              <DeriNumberFormat value={his.transactionFee} decimalScale={4}/>              
             </div>
           </div>
         )

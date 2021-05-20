@@ -46,11 +46,12 @@ export default function History({wallet = {},spec ={} ,specs = []}){
             </div>
           <div className='notional'>
               <div className='history-title'>Notional</div>
-              <div className='history-text'>{ his.notional }</div>
+              <div className='history-text'><NumberFormat value={ his.notional} decimalScale={4}/></div>
             </div>
             <div className='history-fee'>
-              <div className='history-title'>Transaction Fee</div>
-              <div className='history-text'>{ his.transactionFee }</div>
+              <div className='history-title pc'>Transaction Fee</div>
+              <div className='history-title mobile'>Fee</div>
+              <div className='history-text'><NumberFormat value={ his.transactionFee } decimalScale={4}/></div>
             </div>
           </div>        
         </div>
