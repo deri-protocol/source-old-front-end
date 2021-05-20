@@ -643,6 +643,7 @@
 }
 .modal-dialog .modal-content {
   width: 3.4rem;
+  height: 4rem;
   color: #AAAAAA;
   position: relative;
   background: rgba(13, 14, 15);
