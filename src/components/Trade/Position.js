@@ -153,7 +153,7 @@ function Position({wallet,trading}){
               transform='translate(18) rotate(90)'
               fill='#3ebf38'
             />
-          </svg>
+          </svg> 
           Add
         </div>
         <div
