@@ -275,37 +275,37 @@
   margin-top: 20px;
   height: 300px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money {
+.modal-dialog .modal-content .modal-body .margin-box-info .money {
   margin-top: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #FFFFFF;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .add {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .add {
   width: 10px;
   height: 10px;
   background: #3EBF38;
   border-radius: 50%;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .pBasetoken {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .pBasetoken {
   font-size: 14px;
   position: relative;
   top: -7px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .remove {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .remove {
   width: 10px;
   height: 10px;
   background: #E35061;
   border-radius: 50%;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .bt-balance {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance {
   font-size: 30px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .bt-balance .modal-font {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance .modal-font {
   font-size: 10px;
 }
-.modal-dialog .modal-content .modal-body .margin-box-info ga .money .base-token {
+.modal-dialog .modal-content .modal-body .margin-box-info .money .base-token {
   font-size: 14px;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin {

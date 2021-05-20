@@ -169,6 +169,7 @@
 .mobile .mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn,
 .mobile .mining-info .pool-info .trade-info .liquidity-box .liquidity-btn {
   text-align: center;
+  padding-bottom: 20px;
 }
 .mobile .mining-info .pool-info .liquidity-info .claim-box .liquidity-btn .add-remove-liquidity,
 .mobile .mining-info .pool-info .trade-info .claim-box .liquidity-btn .add-remove-liquidity,
