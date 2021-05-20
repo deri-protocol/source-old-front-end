@@ -487,6 +487,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
   let actionElement =(<>
     <ConfirmDialog  wallet={wallet}
+                    className='trade-dialog'
                     spec={spec}
                     modalIsOpen={modalIsOpen} 
                     onClose={onClose} 
@@ -514,6 +515,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
           spec={spec}
           balance={balance}
           afterDeposit={afterDeposit}
+          className='trade-dialog'
         />
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
         <button className='short-submit'  onClick={() => setModalIsOpen(true)}>DEPOSIT</button>
