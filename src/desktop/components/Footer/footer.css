@@ -1,0 +1,87 @@
+.desktop .footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "ArialMT";
+  color: #FFFFFF;
+  padding: 0 40px;
+}
+.desktop .footer a {
+  text-decoration: none;
+  color: #fff;
+}
+.desktop .footer a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+.desktop .footer .wechat {
+  background-color: white;
+  background-image: url('../../../assets/img/wechat.jpeg');
+  background-size: cover;
+  border: 1px solid #707070;
+  width: 99px;
+  height: 99px;
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  top: -125px;
+  left: -55px;
+}
+.desktop .footer .wechat .down_box {
+  border-right: 8px solid transparent;
+  border-left: 8px solid transparent;
+  border-bottom: 10px solid white;
+  position: absolute;
+  transform: rotate(180deg);
+  bottom: -10px;
+  right: 20px;
+}
+.desktop .footer .footer_info {
+  width: 100%;
+  height: 88px;
+}
+.desktop .footer .footer_info .hr {
+  width: 100%;
+  height: 1px;
+  background-color: #707070;
+}
+.desktop .footer .footer_info .footer_box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 120px;
+  color: #ccc;
+}
+.desktop .footer .footer_info .footer_box .left {
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 30px;
+}
+.desktop .footer .footer_info .footer_box .left .mt_27 {
+  margin-left: 20px;
+}
+.desktop .footer .footer_info .footer_box .left a {
+  color: #ccc;
+}
+.desktop .footer .footer_info .footer_box .left .mt_19 {
+  margin-top: 5px;
+}
+.desktop .footer .footer_info .footer_box .left a:hover {
+  color: #569BDA;
+}
+.desktop .footer .footer_info .footer_box .right {
+  font-weight: 500;
+  font-size: 20px;
+}
+.desktop .footer .footer_info .footer_box .right .circle {
+  position: relative;
+}
+.desktop .footer .footer_info .footer_box .right .circle:hover .wechat {
+  display: block;
+}
+.desktop .footer .footer_info .footer_box .right a {
+  margin-left: 45px;
+}
+.desktop .footer .footer_info .footer_box .right a:hover .fa {
+  color: #569BDA;
+}

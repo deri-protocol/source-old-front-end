@@ -1,0 +1,101 @@
+.desktop .nav {
+  background-color: #0D0E0F;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 40px;
+  padding-right: 40px;
+  font-family: "ArialMT";
+  min-width: 1200px;
+}
+.desktop .nav a {
+  text-decoration: none;
+  color: #fff;
+}
+.desktop .nav a:hover {
+  text-decoration: none;
+  color: #fff;
+}
+.desktop .nav .nav-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+.desktop .nav .nav-menu .logo {
+  width: 85.78px;
+}
+.desktop .nav .nav-menu .logo img {
+  font-size: 0;
+  float: left;
+  width: 85.78px;
+  height: 50px;
+}
+.desktop .nav .nav-menu .mean {
+  height: 80px;
+}
+.desktop .nav .nav-menu .mean ul {
+  padding-left: 0px;
+  margin: 0;
+}
+.desktop .nav .nav-menu .mean li {
+  float: left;
+  list-style: none;
+  margin-left: 30px;
+  font-size: 20px;
+  height: 80px;
+  font-weight: 300;
+  line-height: 80px;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-family: "Arial MT,sans-serif";
+}
+.desktop .nav .nav-menu .mean li a {
+  color: #CCCCCC;
+}
+.desktop .nav .nav-menu .mean .selected,
+.desktop .nav .nav-menu .mean li:hover a {
+  color: #FFFFFF;
+}
+.desktop .nav .nav-menu .mean .ref {
+  position: relative;
+}
+.desktop .nav .nav-menu .mean .ref i {
+  vertical-align: middle;
+}
+.desktop .nav .nav-menu .mean .ref i svg {
+  vertical-align: sub;
+}
+.desktop .nav .nav-menu .mean .ref .ref_box {
+  padding-left: 0;
+  display: none;
+  width: 139px;
+  margin-top: 2px;
+  border-radius: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  position: relative;
+  z-index: 9;
+  background-color: #0D0E0F;
+}
+.desktop .nav .nav-menu .mean .ref .ref_box li {
+  width: 139px;
+  height: 30px;
+  font-family: "ArialMT";
+  font-weight: 300;
+  line-height: 30px;
+  padding-left: 15px;
+  float: none;
+  font-size: 14px;
+  margin-left: 0;
+}
+.desktop .nav .nav-menu .mean .ref .ref_box li a {
+  color: #cccccc;
+}
+.desktop .nav .nav-menu .mean .ref .ref_box li a:hover {
+  color: #ffffff;
+}
+.desktop .nav .nav-menu .mean .ref:hover .ref_box {
+  display: block;
+}

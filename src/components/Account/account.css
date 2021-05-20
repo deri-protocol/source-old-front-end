@@ -1,0 +1,59 @@
+.connect {
+  height: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 300;
+}
+.connect .network-text-logo {
+  display: flex;
+  align-items: center;
+  margin-right: 13px;
+}
+.connect .network-text-logo .logo-text {
+  margin-left: 16px;
+}
+.connect .network-text-logo i {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+.connect .network-text-logo .ETH {
+  background-image: url('../../assets/img/ethereum-logo.png');
+  background-position: 15px;
+  background-repeat: no-repeat;
+}
+.connect .network-text-logo .BNB {
+  background-image: url('../../assets/img/bsc-logo.png');
+  background-repeat: no-repeat;
+}
+.connect .network-text-logo .HT {
+  background-image: url('../../assets/img/heco-logo.png');
+  background-position: 15px;
+  background-repeat: no-repeat;
+}
+.connect button {
+  line-height: 48px;
+  color: #FFFFFF;
+  background-color: #0D0E0F;
+  background-image: url('../../assets/img/connect-bg.png');
+  background-size: 100% 100%;
+  border-radius: 17px;
+  font-size: 16px;
+  padding: 0 14px 0 14px;
+  white-space: nowrap;
+  font-family: Arial MT, sans-serif;
+  font-weight: 300;
+}
+.connect button .address {
+  color: #569BDA;
+  margin-left: 5px;
+}
+.connect .connect-btn {
+  text-align: center;
+  min-width: 220px;
+}
+.connect .no-supported {
+  color: #E35061;
+}

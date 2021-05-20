@@ -1,9 +1,9 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import logo from '../../../assets/img/logo.png'
 import { useRouteMatch } from 'react-router-dom'
 
 export default function Menu() {
-  const isMining = useRouteMatch ('/mining') ? true : false
+  const isMining = useRouteMatch('/mining') ? true : false
   const isLite = useRouteMatch('/lite') ? true : false
   const isPro = useRouteMatch('/pro') ? true : false;
 
@@ -19,7 +19,7 @@ export default function Menu() {
       <div className="mean">
         <ul>
           <li>
-            <Link to="/mining" className={isMining ? 'selected' :''}>Mining</Link>
+            <Link to="/mining" className={isMining ? 'selected' : ''}>Mining</Link>
           </li>
           <li><Link to='/lite' className={isLite || isPro ? 'selected' : ''}>Trade</Link></li>
           <li>

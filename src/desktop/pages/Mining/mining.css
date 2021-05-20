@@ -1,0 +1,386 @@
+.mining-info.liquidity .liquidity-mining {
+  background: #41424A !important;
+  color: #FFFFFF !important;
+  font-weight: bold!important;
+}
+.mining-info.liquidity .trade-mining {
+  color: #AAAAAA;
+  font-weight: initial;
+  background-color: #1C1E21;
+}
+.mining-info.liquidity .pool-info .trade-info {
+  display: none!important;
+}
+.mining-info.trade .liquidity-mining {
+  color: #AAAAAA;
+  font-weight: initial;
+  background-color: #1C1E21;
+}
+.mining-info.trade .trade-mining {
+  background: #41424A !important;
+  color: #FFFFFF !important;
+  font-weight: bold!important;
+}
+.mining-info.trade .pool-info .liquidity-info {
+  display: none!important;
+}
+.mining-info {
+  width: 1200px;
+  margin-top: 40px;
+  border-radius: 20px;
+}
+.mining-info .pool-header {
+  display: flex;
+  justify-content: space-between;
+  height: 73px;
+  align-items: center;
+}
+.mining-info .pool-header .pool-network {
+  padding-left: 33px;
+  color: #D4E05C;
+  font-size: 25px;
+  font-family: Tachyon, sans-serif;
+  font-weight: 300;
+}
+.mining-info .pool-header .check-trade-liquidity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mining-info .pool-header .check-trade-liquidity .liquidity-mining,
+.mining-info .pool-header .check-trade-liquidity .trade-mining {
+  width: 231px;
+  height: 73px;
+  cursor: pointer;
+  text-align: center;
+  font-family: "Korolev";
+  line-height: 73px;
+  background: linear-gradient(180deg, #282A2E 0%, #24262B 100%);
+  border-radius: 10px 10px 0px 0px;
+  color: #AAAAAA;
+  font-weight: 300;
+}
+.mining-info .pool-header .check-trade-liquidity .trade-mining {
+  border-radius: 10px 20px 0px 0px;
+}
+.mining-info .pool-header .check-trade-liquidity .selected {
+  background: #41424A;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+.mining-info .pool-info .liquidity-info,
+.mining-info .pool-info .trade-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mining-info .pool-info .liquidity-info .claim-box,
+.mining-info .pool-info .trade-info .claim-box,
+.mining-info .pool-info .liquidity-info .liquidity-box,
+.mining-info .pool-info .trade-info .liquidity-box {
+  width: 555px;
+  height: 500px;
+  border-radius: 0px 0px 20px 20px;
+  background: #202124;
+}
+.mining-info .pool-info .liquidity-info .claim-box .odd,
+.mining-info .pool-info .trade-info .claim-box .odd,
+.mining-info .pool-info .liquidity-info .liquidity-box .odd,
+.mining-info .pool-info .trade-info .liquidity-box .odd {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .odd .money,
+.mining-info .pool-info .trade-info .claim-box .odd .money,
+.mining-info .pool-info .liquidity-info .liquidity-box .odd .money,
+.mining-info .pool-info .trade-info .liquidity-box .odd .money {
+  float: right;
+}
+.mining-info .pool-info .liquidity-info .claim-box .odd:nth-child(odd),
+.mining-info .pool-info .trade-info .claim-box .odd:nth-child(odd),
+.mining-info .pool-info .liquidity-info .liquidity-box .odd:nth-child(odd),
+.mining-info .pool-info .trade-info .liquidity-box .odd:nth-child(odd) {
+  background-color: #0D0E0F;
+}
+.mining-info .pool-info .liquidity-info .claim-box .title-check,
+.mining-info .pool-info .trade-info .claim-box .title-check,
+.mining-info .pool-info .liquidity-info .liquidity-box .title-check,
+.mining-info .pool-info .trade-info .liquidity-box .title-check {
+  text-align: center;
+  color: #E35061;
+  font-size: 15px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .title,
+.mining-info .pool-info .trade-info .claim-box .title,
+.mining-info .pool-info .liquidity-info .liquidity-box .title,
+.mining-info .pool-info .trade-info .liquidity-box .title {
+  height: 89px;
+  font-size: 20px;
+  line-height: 89px;
+  font-size: 16px;
+  font-family: "Termina";
+  font-weight: bold;
+}
+.mining-info .pool-info .liquidity-info .claim-box .text,
+.mining-info .pool-info .trade-info .claim-box .text,
+.mining-info .pool-info .liquidity-info .liquidity-box .text,
+.mining-info .pool-info .trade-info .liquidity-box .text {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Korolev";
+  font-weight: 500;
+}
+.mining-info .pool-info .liquidity-info .claim-box .text .text-title,
+.mining-info .pool-info .trade-info .claim-box .text .text-title,
+.mining-info .pool-info .liquidity-info .liquidity-box .text .text-title,
+.mining-info .pool-info .trade-info .liquidity-box .text .text-title {
+  color: #AAAAAA;
+}
+.mining-info .pool-info .liquidity-info .claim-box .claim-network,
+.mining-info .pool-info .trade-info .claim-box .claim-network,
+.mining-info .pool-info .liquidity-info .liquidity-box .claim-network,
+.mining-info .pool-info .trade-info .liquidity-box .claim-network {
+  height: 70px;
+  line-height: 70px;
+  font-family: "Korolev";
+  font-weight: 500;
+  color: #AAAAAA;
+  white-space: nowrap;
+}
+.mining-info .pool-info .liquidity-info .claim-box button,
+.mining-info .pool-info .trade-info .claim-box button,
+.mining-info .pool-info .liquidity-info .liquidity-box button,
+.mining-info .pool-info .trade-info .liquidity-box button {
+  font-family: Korolev, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+}
+.mining-info .pool-info .liquidity-info .claim-box .claim-btn,
+.mining-info .pool-info .trade-info .claim-box .claim-btn,
+.mining-info .pool-info .liquidity-info .liquidity-box .claim-btn,
+.mining-info .pool-info .trade-info .liquidity-box .claim-btn {
+  text-align: center;
+}
+.mining-info .pool-info .liquidity-info .claim-box .claim-btn .claim,
+.mining-info .pool-info .trade-info .claim-box .claim-btn .claim,
+.mining-info .pool-info .liquidity-info .liquidity-box .claim-btn .claim,
+.mining-info .pool-info .trade-info .liquidity-box .claim-btn .claim {
+  width: 300px;
+  height: 50px;
+  background: #202124;
+  box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+  border-radius: 10px;
+  color: #CCCCCC;
+  margin-top: 20px;
+  font-size: 16px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .liquidity-btn,
+.mining-info .pool-info .trade-info .claim-box .liquidity-btn,
+.mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn,
+.mining-info .pool-info .trade-info .liquidity-box .liquidity-btn {
+  text-align: center;
+  font-size: 16px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .liquidity-btn .add-liquidity,
+.mining-info .pool-info .trade-info .claim-box .liquidity-btn .add-liquidity,
+.mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn .add-liquidity,
+.mining-info .pool-info .trade-info .liquidity-box .liquidity-btn .add-liquidity,
+.mining-info .pool-info .liquidity-info .claim-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .trade-info .claim-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .trade-info .liquidity-box .liquidity-btn .remove-liquidity {
+  width: 205px;
+  height: 50px;
+  background: #202124;
+  box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+  border-radius: 10px;
+  color: #CCCCCC;
+  margin-top: 20px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .trade-info .claim-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn .remove-liquidity,
+.mining-info .pool-info .trade-info .liquidity-box .liquidity-btn .remove-liquidity {
+  margin-left: 20px;
+}
+.mining-info .pool-info .liquidity-info .claim-box .liquidity-btn .approve-btn,
+.mining-info .pool-info .trade-info .claim-box .liquidity-btn .approve-btn,
+.mining-info .pool-info .liquidity-info .liquidity-box .liquidity-btn .approve-btn,
+.mining-info .pool-info .trade-info .liquidity-box .liquidity-btn .approve-btn {
+  width: 300px;
+  height: 50px;
+  background: #202124;
+  box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+  border-radius: 10px;
+  color: #CCCCCC;
+  margin-top: 20px;
+  font-size: 16px;
+}
+.modal-dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  font-weight: 300;
+}
+.modal-dialog .modal-content {
+  color: #AAAAAA;
+  position: relative;
+  background: rgba(13, 14, 15);
+  display: inline-block;
+  border: 1px solid #707070;
+  border-radius: 20px;
+}
+.modal-dialog .modal-content .modal-header {
+  height: 50px;
+  background: #0D0E0F;
+  border-bottom: 1px solid #707070;
+  line-height: 50px;
+  padding: 0 20px 0 30px;
+  font-size: 16px;
+  color: #D4E05C;
+  font-family: "Tachyon";
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 20px 20px 0px 0px;
+  font-weight: 500;
+}
+.modal-dialog .modal-content .modal-header .close {
+  float: right;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  color: #fff;
+}
+.modal-dialog .modal-content .modal-header .close span {
+  cursor: pointer;
+}
+.modal-dialog .modal-content .modal-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info {
+  width: 360px;
+  margin-top: 20px;
+  height: 300px;
+  padding: 0 20px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #FFFFFF;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .add {
+  width: 10px;
+  height: 10px;
+  background: #3EBF38;
+  border-radius: 50%;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .pBasetoken {
+  font-size: 14px;
+  position: relative;
+  top: -7px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .remove {
+  width: 10px;
+  height: 10px;
+  background: #E35061;
+  border-radius: 50%;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance {
+  font-size: 30px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance .modal-font {
+  font-size: 10px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .money .base-token {
+  font-size: 14px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 25px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin {
+  width: 244px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-image: url('../../../assets/img/dark-button.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .amount {
+  position: absolute;
+  top: 3px;
+  left: 12px;
+  font-size: 10px;
+  display: none;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box {
+  width: 243px;
+  height: 43px;
+  border: 0;
+  font-size: 18px;
+  background: #1B1C1F;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border-radius: 3px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .enter-margin .input-margin .box .margin-value {
+  font-size: 18px;
+  height: 24px;
+  width: 243px;
+  padding-left: 10px;
+  border: 0;
+  color: #fff;
+  background: #1B1C1F;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .max {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .max .max-num {
+  margin-left: 10px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .max .max-btn-left {
+  margin-left: 10px;
+  color: #569BDA;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .max span {
+  cursor: pointer;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .max .max-num {
+  color: #FFFFFF;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 40px;
+}
+.modal-dialog .modal-content .modal-body .margin-box-info .add-margin-btn .margin-btn {
+  width: 276px;
+  height: 50px;
+  background: #202124;
+  box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+  border-radius: 10px;
+  color: #CCCCCC;
+  font-size: 18px;
+}
