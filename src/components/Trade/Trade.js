@@ -487,6 +487,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
   let actionElement =(<>
     <ConfirmDialog  wallet={wallet}
+                    className='trade-dialog'
                     spec={spec}
                     modalIsOpen={modalIsOpen} 
                     onClose={onClose} 

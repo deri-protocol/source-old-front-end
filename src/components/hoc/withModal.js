@@ -27,9 +27,9 @@ const withModal = Component => {
     }
 
     render(){
-      const {modalIsOpen} = this.props
+      const {modalIsOpen,className} = this.props
       return (
-        <Modal isOpen={modalIsOpen} style={customizeStyle} appElement={appElement}>
+        <Modal isOpen={modalIsOpen} className={className} style={customizeStyle} appElement={appElement}>
           <Component {...this.props} onClose={this.props.onClose}/>
         </Modal>
       )
