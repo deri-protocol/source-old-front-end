@@ -707,6 +707,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  font-family: Korolev, sans-serif;
 }
 .trade-dialog .modal-dialog .modal-content {
   color: #AAAAAA;
