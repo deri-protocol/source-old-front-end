@@ -13,7 +13,7 @@ import { DeriEnv } from './lib/web3js/config';
 const wallet = new Wallet();
 const trading = new Trading()
 
-// DeriEnv.set('prod')
+DeriEnv.set('prod')
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
