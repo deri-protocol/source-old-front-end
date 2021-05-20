@@ -182,7 +182,7 @@ function Trade({wallet = {},trading}){
     }
 
     return () => {};
-  }, [trading.volumeDisplay]);
+  }, [trading.volume]);
 
 
   useEffect(() => {

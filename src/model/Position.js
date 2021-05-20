@@ -4,6 +4,10 @@ import { getPositionInfo } from "../lib/web3js/indexV2"
 export default class Position {
    // contract info
    info = {}
+
+   callback = () => {}
+   wallet = null;
+   spec = null
  
    constructor(){
      makeAutoObservable(this,{
@@ -30,6 +34,9 @@ export default class Position {
    start(wallet,spec,callback){
      if(!this.interval){
       this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)
+      this.wallet = wallet;
+      this.spec = spec;
+      this.callback = callback;
      }
    }
 
@@ -39,7 +46,7 @@ export default class Position {
    }
 
    resume(){
-     
+     this.start(this.wallet,this.spec,this.callback)
    }
 
    setInfo(info){
