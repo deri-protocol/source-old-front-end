@@ -49,7 +49,7 @@
   line-height: 80px;
   cursor: pointer;
   color: #FFFFFF;
-  font-family: "ArialMT,sans-serif";
+  font-family: ArialMT,sans-serif;
 }
 .desktop .nav .nav-menu .mean li a {
   color: #CCCCCC;
