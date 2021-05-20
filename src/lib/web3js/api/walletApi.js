@@ -41,14 +41,12 @@ export const connectWallet = async (
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-    //console.log('accounts', accounts);
-    // const chainId = parseInt(
-    //   await window.ethereum.request({ method: 'net_version' })
-    // );
-    const chainId = hexToNumber(
-      await window.ethereum.request({ method: 'eth_chainId' })
+    const chainId = parseInt(
+      await window.ethereum.request({ method: 'net_version' })
     );
-    //console.log('chainId', chainId);
+    // const chainId = hexToNumber(
+    //   await window.ethereum.request({ method: 'eth_chainId' })
+    // );
     const account = Array.isArray(accounts) && accounts[0];
 
     // await web3.eth.requestAccounts().then(console.log)

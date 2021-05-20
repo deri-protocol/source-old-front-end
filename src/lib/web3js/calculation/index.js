@@ -32,10 +32,13 @@ export const calculateMarginHeld = (
   volume,
   multiplier,
   minInitialMarginRatio
-) => volume.abs().times(price).times(multiplier).times(minInitialMarginRatio);
+) => {
+  return volume.abs().times(price).times(multiplier).times(minInitialMarginRatio)
+};
 
-export const calculatePnl = (price, volume, multiplier, cost) =>
-  volume.times(price).times(multiplier).minus(cost);
+export const calculatePnl = (price, volume, multiplier, cost) => {
+  return volume.times(price).times(multiplier).minus(cost);
+}
 
 export const calculateMaxWithdrawMargin = (
   price,

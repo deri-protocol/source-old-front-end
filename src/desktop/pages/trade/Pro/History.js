@@ -12,7 +12,7 @@ export default function History({wallet,spec}) {
 
   useEffect(() => {
     const loadHistory = async () => {
-      if(wallet.isConnected() && spec.pool){
+      if(wallet.isConnected() && spec && spec.pool){
         const his = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account);    
         setHistory(his)
       }

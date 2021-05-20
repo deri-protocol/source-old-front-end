@@ -5,8 +5,6 @@ import { formatBalance } from "../utils/utils";
 import { observable, computed, action, makeAutoObservable } from "mobx";
 
 const walletKey = 'mm_wallet_key'
-const env = DeriEnv.get();
-const {chainInfo} = config[env]
 
 
 class Wallet {
@@ -39,6 +37,9 @@ class Wallet {
   loadWalletBalance = async (chainId,account) => {
     const balance = await getUserWalletBalance(chainId,account)
     const detail = {chainId,account,balance,formatBalance : formatBalance(balance)}
+    const env = DeriEnv.get();
+    const {chainInfo} = config[env]
+    
     if(chainInfo[chainId]){
       Object.assign(detail,{...chainInfo[chainId],supported : true})
     }

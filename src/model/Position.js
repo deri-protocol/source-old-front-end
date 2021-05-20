@@ -13,17 +13,23 @@ export default class Position {
      )
    }
 
-   async load(wallet,spec){
-    const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
-    if(position){
-      this.setInfo(position);
-    }
-    return position;
+   async load(wallet,spec,callback){
+     if(spec && spec.pool){
+      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      if(position){
+        this.setInfo(position);
+        if(callback){
+          callback(position)
+        }
+      }
+      this.start(wallet,spec,callback)
+      return position;
+     }
    }
 
-   start(wallet,spec){
+   start(wallet,spec,callback){
      if(!this.interval){
-      this.interval = window.setInterval(() => this.load(wallet,spec),3000)
+      this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)
      }
    }
 

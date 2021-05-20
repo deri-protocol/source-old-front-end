@@ -46,6 +46,19 @@ export const getContractAddressConfig = (env = 'dev') => {
         chainId: '56',
       },
       {
+        pool: '0x919F97417857781f754e00CCCD9100f78B759818',
+        bToken: '0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5',
+        pToken: '0x29Be63E854727BB3Fef77eB107B8d1c33081f989',
+        lToken: '0x610b39F9ba0fF2167AEb646462473c011A431Cd7',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
+        initialBlock: '7475766',
+        bTokenSymbol: 'DERI',
+        symbol: 'iMEME',
+        unit: 'iMEME',
+        chainId: '56',
+      },
+      {
         pool: '0x3C2970466635AAeFEd1cfe630D051Fa6D281aEbB',
         bToken: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         pToken: '0x9c6134F9e759C6812aaC102FC1a9f7cA5615fD33',
@@ -161,7 +174,8 @@ export const getSlpContractAddressConfig = (env = 'dev') => {
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
         chainId: '1',
-        bTokenSymbol: 'DERI-USDT SLP ONSEN',
+        bTokenSymbol: 'DERI-USDT SLP',
+        symbol: '--',
       },
     ];
   }
@@ -194,7 +208,7 @@ export const getClpContractAddressConfig = (env = 'dev') => {
         initialBlock: '6894880',
         chainId: '56',
         bTokenSymbol: 'CAKE-LP',
-        symbol: 'BTCUSD',
+        symbol: '--',
       },
     ];
   } else {
@@ -209,7 +223,7 @@ export const getClpContractAddressConfig = (env = 'dev') => {
         initialBlock: '8309032',
         chainId: '97',
         bTokenSymbol: 'CAKE-LP',
-        symbol: 'BTCUSD',
+        symbol: '--',
       },
     ];
   }
@@ -226,7 +240,8 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
         chainId: '1',
-        bTokenSymbol: 'DERI-USDT SLP ONSEN',
+        bTokenSymbol: 'DERI-USDT SLP',
+        symbol: '--',
         type: 'slp',
       },
       {
@@ -239,7 +254,7 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         initialBlock: '6894880',
         chainId: '56',
         bTokenSymbol: 'CAKE-LP',
-        symbol: 'BTCUSD',
+        symbol: '--',
         type: 'clp',
       },
     ];
@@ -255,12 +270,28 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         initialBlock: '8309032',
         chainId: '97',
         bTokenSymbol: 'CAKE-LP',
-        symbol: 'BTCUSD',
+        symbol: '--',
         type: 'clp',
       },
     ];
   }
 };
+
+export const getMiningVaultRouterContractAddress= (chainId) => {
+  const configs = [
+      {
+        MiningVaultRouter: '0x8d5613451Dc0592388f98d7Ab1ce5A732561936e',
+        chainId: '56'
+      }
+    ]
+  const filteredConfig = configs.filter((i) => i.chainId === chainId)
+  if (filteredConfig.length > 0) {
+    return filteredConfig[0].MiningVaultRouter
+  } else {
+    throw new Error(`getMiningVaultRouterAddressConfig: no address for chainId ${chainId}`)
+  }
+
+}
 
 /**
  * Get the Deri contract address list based on the deri environment variable

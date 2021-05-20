@@ -8,54 +8,58 @@ import { inject, observer } from 'mobx-react';
 import useDeriConfig from '../../hooks/useDeriConfig';
 import { eqInNumber } from '../../utils/utils';
 
-function LiteTrade({wallet,indexPrice = {},position = {info : {}},trading,isPro,specChange}){
+function LiteTrade({wallet,trading,isPro}){
   const [curTab, setCurTab] = useState('trade');
-  const [spec, setSpec] = useState({});
-  const specs = useDeriConfig(wallet)
-
-  const onSpecChange = spec => {
-    // indexPrice.pause();
-    // position.pause();
-    setSpec(spec)
-    if(specChange){
-      specChange(spec)
-    }
-  }
+  // const [spec, setSpec] = useState({});
+  // const specs = useDeriConfig(wallet)
 
 
-  //oracle index
-  useEffect(() => {
-    if(spec.symbol){
-      // indexPrice.start(spec.symbol)
-    }
-    return () => {};
-  }, [indexPrice,spec.symbol]);
+  // //oracle index
+  // useEffect(() => {
+  //   if(spec.symbol){
+  //     // indexPrice.start(spec.symbol)
+  //   }
+  //   return () => {};
+  // }, [indexPrice,spec.symbol]);
 
 
   //仓位
-  useEffect(() => {
-    if(spec.symbol && wallet.detail.account)
-    // position.start(wallet,spec)
-    return () => {};
-  }, [spec.symbol,wallet.detail.account]);
+  // useEffect(() => {
+  //   if(spec.symbol && wallet.detail.account)
+  //   // position.start(wallet,spec)
+  //   return () => {};
+  // }, [spec.symbol,wallet.detail.account]);
+
+
+  // useEffect(() => {
+  //   if(specs.length > 0 && wallet.detail.chainId){
+  //     const curSpecs = specs.filter(s => eqInNumber(s.chainId,wallet.detail.chainId))
+  //     if(curSpecs.length > 0){
+  //       setSpec(curSpecs[0]);   
+  //     }      
+  //   }
+  //   return () => {};
+  // }, [wallet.detail.account,specs]);
+
+
+  // useEffect(() => {
+  //   return () => {
+  //   };
+  // }, [indexPrice.index,trading.position]);
+
+
+
+  // useEffect(() => {
+  //   return () => {
+  //   };
+  // }, [trading.index]);
 
 
   useEffect(() => {
-    if(specs.length > 0 && wallet.detail.chainId){
-      const curSpecs = specs.filter(s => eqInNumber(s.chainId,wallet.detail.chainId))
-      if(curSpecs.length > 0){
-        setSpec(curSpecs[0]);   
-      }      
+    if(wallet.detail.account){
+      trading.init(wallet)
     }
-    return () => {};
-  }, [wallet.detail.account,specs]);
-
-
-  useEffect(() => {
-    return () => {
-    };
-  }, [indexPrice.index,position.info]);
-
+  },[wallet.detail.account])
 
 
 
@@ -72,8 +76,12 @@ function LiteTrade({wallet,indexPrice = {},position = {info : {}},trading,isPro,
             </span>
             {!isPro && <>
             <span
-              className='position' onClick={() => switchTab('position')}>
+              className='pc position' onClick={() => switchTab('position')}>
               MY POSITION
+            </span>
+            <span
+              className='mobile position' onClick={() => switchTab('position')}>
+              POSITION
             </span>
             <span className='history' onClick={() => switchTab('history')}>
               HISTORY
@@ -81,12 +89,12 @@ function LiteTrade({wallet,indexPrice = {},position = {info : {}},trading,isPro,
             </>}
           </div>
         </div>
-        <Trade wallet ={wallet}  spec={spec} specs={specs} indexPrice={indexPrice}  onSpecChange={onSpecChange} position={position}/>
-        {/* <Position  wallet ={wallet} spec={spec} position={position} trading={trading}/>
-        <History wallet ={wallet} spec={spec} specs={specs} />
-        <ContractInfo wallet={wallet} spec={spec} trading={trading}/>    */}
+        <Trade/>
+        <Position  wallet ={wallet} />
+        <History wallet ={wallet} spec={trading.config} specs={trading.configs} />
+        <ContractInfo wallet={wallet} />   
     </div> 
   )
 }
 
-export default inject('wallet')(observer(LiteTrade))
+export default inject('wallet','trading')(observer(LiteTrade))

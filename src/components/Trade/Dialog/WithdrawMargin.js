@@ -2,16 +2,19 @@ import React, { useState ,useEffect} from 'react'
 import { withdrawMargin } from "../../../lib/web3js/indexV2";
 import Button from '../../Button/Button';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
+import { bg } from '../../../utils/utils';
 
 export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw}){
+  const [availble, setAvailble] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
   const [pending, setPending] = useState(false);
 
 
   const calculateBalance = async () => {
-    if(wallet.isConnected() && position.info.margin){      
-      const balance = position.info.margin
+    if(wallet.isConnected() && position && position.margin && position.unrealizedPnl){      
+      const balance = ((+position.margin )+ (+position.unrealizedPnl) - (+position.marginHeld)).toFixed(2)
+      setAvailble(balance)
       const pos = balance.indexOf('.');
       if(pos > 0){
         setDecimal(balance.substring(pos + 1,pos+3));
@@ -23,7 +26,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
   }
 
   const removeAll = () => {
-    setAmount(position.info.margin)
+    setAmount(position.margin)
   }
 
   const close = () => {
@@ -38,6 +41,16 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
   }
 
   const withdraw = async () => {
+    const max = (+position.volume) === 0 ? bg(position.margin) : bg(availble)
+    const curAmount = bg(amount)    
+    if(curAmount.gt(max)) {
+      alert("under margin");
+      return;
+    }
+    if ((+amount) <= 0 || isNaN(amount)) {
+      alert("It has to be greater than zero");
+      return;
+    }
     setPending(true);
     const res = await withdrawMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
@@ -54,7 +67,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
     calculateBalance();
     return () => {
     };
-  }, [wallet.detail.account,position.info.unrealizedPnl,position.info.margin]);
+  }, [wallet.detail.account,position.margin,position.unrealizedPnl]);
 
   return (
     <div
@@ -75,7 +88,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    <DeriNumberFormat value={ position.info.margin } thousandSeparator ={true}  decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
+                    <DeriNumberFormat value={ availble } thousandSeparator ={true}  decimalScale={0}/>.<span style={{fontSize:'12px'}}>{decimal}</span>                     
                   </span>
                   </span>
                 <span className='remove'></span>
@@ -94,8 +107,8 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 </div>
                 <div>{ spec.baseToken }</div>
               </div>
-              {(+position.info.volume) === 0 && <div className='max' v-show='isPosition'>
-                MAX: <span className='max-num'>{ position.info.margin }</span>
+              {(+position.volume) === 0 && <div className='max' v-show='isPosition'>
+                MAX: <span className='max-num'>{ position.margin }</span>
                 <span className='max-btn-left' onClick={removeAll}>REMOVE ALL</span>
               </div>}
               <div className='add-margin-btn'>

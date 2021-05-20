@@ -1,5 +1,5 @@
 import { getDBProviderUrlsConfig } from '../config/database';
-import { web3Factory } from '../factory/web3';
+import Web3 from 'web3';
 import { getAliveHttpServer, checkHttpServerIsAlive } from '../utils';
 
 /* eslint-disable */
@@ -14,26 +14,47 @@ export class DatabaseWormholeContract {
       this._init();
     }
   }
+
   async updateProviderUrl() {
-    if (
-      !(this.providerUrl && (await checkHttpServerIsAlive(this.providerUrl)))
+    if (!this.providerUrl) {
+      this.providerUrl = await getAliveHttpServer(getDBProviderUrlsConfig());
+      this._init();
+    } else if (
+      this.providerUrl &&
+      !(await checkHttpServerIsAlive(this.providerUrl))
     ) {
       this.providerUrl = await getAliveHttpServer(getDBProviderUrlsConfig());
+      this._init();
     }
-    this._init();
   }
+
   _init() {
     // only use 'bsc testnet' with chainId 97
-    this.web3 = web3Factory('97');
+    this.web3 = new Web3(new Web3.providers.HttpProvider(this.providerUrl));
     this.contract = new this.web3.eth.Contract(
       CONTRACT_ABI,
       this.contractAddress
     );
   }
+
   async signature(accountAddress) {
-    if (!this.contract) {
-      await this.updateProviderUrl();
+    let res
+    let retry = 3
+    while(retry > 0) {
+      try {
+        await this.updateProviderUrl();
+        res = await this.contract.methods['signature'](accountAddress).call();
+      } catch (err) {
+        this.providerUrl = null
+      }
+      if (res) {
+        break
+      }
+      retry -= 1
     }
-    return await this.contract.methods['signature'](accountAddress).call();
+    if (retry === 0 && !res) {
+      throw new Error(`database getValues(): exceed max retry 3.`)
+    }
+    return res
   }
 }

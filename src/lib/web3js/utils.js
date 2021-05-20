@@ -126,9 +126,28 @@ export const hasInvalidArgsValue = (...args) =>
 // language
 export const isObject = (obj) => typeof obj === 'object';
 
+const np = () => {}
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+// fetchWithTimeout
+const fetchWithTimeout = (url, delay=2000, options={}, onTimeout=np) => {
+  const timer = new Promise((resolve) => {
+    setTimeout(resolve, delay, {
+      timeout: true,
+    });
+  });
+  return Promise.race([fetch(url, options), timer]).then((response) => {
+    if (response.timeout) {
+      onTimeout();
+    }
+    return response;
+  });
+};
+
 // http
 export const checkHttpServerIsAlive = async (url) => {
   try {
+    //const response = await fetch(url);
     const response = await fetch(url);
     if (response.ok) {
       return true;
@@ -300,17 +319,17 @@ export const getMiningVaultContractAddress = (chainId) => {
   }
 };
 
-export const getMiningVaultRouterContractAddress = (chainId) => {
-  chainId = normalizeChainId(chainId);
-  const pools = getContractAddressConfig(DeriEnv.get()).filter(
-    (c) => c.chainId === chainId
-  );
-  if (pools.length > 0) {
-    if (pools[0].MiningVaultRouter) {
-      return pools[0].MiningVaultRouter;
-    }
-  }
-};
+// export const getMiningVaultRouterContractAddress = (chainId) => {
+//   chainId = normalizeChainId(chainId);
+//   const pools = getContractAddressConfig(DeriEnv.get()).filter(
+//     (c) => c.chainId === chainId
+//   );
+//   if (pools.length > 0) {
+//     if (pools[0].MiningVaultRouter) {
+//       return pools[0].MiningVaultRouter;
+//     }
+//   }
+// };
 
 export const getAnnualBlockNumber = (chainId) => {
   const blockNumbers = getAnnualBlockNumberConfig();
@@ -423,23 +442,37 @@ export const getOracleUrl = (chainId, poolAddress) => {
 };
 
 export const getOracleInfo = async (chainId, poolAddress) => {
-  try {
-    let url = getOracleUrl(chainId, poolAddress);
-    //console.log('oracle url', url);
-    const priceResponse = await fetch(url);
-    const priceResponseJson = await priceResponse.json();
-    return priceResponseJson;
-  } catch (err) {
-    throw new Error(`fetch oracle info error: ${err}`);
+  let url = getOracleUrl(chainId, poolAddress);
+  //console.log('oracle url', url);
+  let retry = 5;
+  //let timeout = 1000;
+  let res;
+  while (retry > 0) {
+    res = await fetch(url);
+    //if (res && !res.timeout) {
+    if (res) {
+      break;
+    }
+    //console.log('get oracle info timeout')
+    retry -= 1;
+    //timeout += 800;
   }
+  if (retry === 0 && !res) {
+    throw new Error(`fetch oracle info error: exceed max retry(5).`);
+  }
+  return await res.json();
 };
 
 export const getBTCUSDPrice = async (chainId, poolAddress) => {
   try {
     const responseJson = await getOracleInfo(chainId, poolAddress)
+    let price = responseJson.price
+    if (!price) {
+      price = '0';
+    }
     return deriToNatural(responseJson.price).toString();
   } catch (err) {
-    throw new Error(`fetch oracle price error: ${err}`);
+    throw err
   }
 };
 export const getOraclePrice = getBTCUSDPrice;
@@ -460,9 +493,19 @@ export const format = (bigNumber) =>
   bigNumber.toFormat().replaceAll(',', '').toString();
 
 export const normalizeChainId = (chainId) => {
-  let res = chainId;
-  if (typeof chainId === 'number') {
-    res = chainId.toString();
+  const chainIds = ['1', '56', '128', '3', '42', '97', '256']
+  let res = chainId ? chainId.toString() : chainId;
+  if (chainId && chainIds.includes(res)) {
+    return res;
+  } else {
+    throw new Error(`invalid chainId: ${chainId}`)
   }
-  return res;
+};
+
+export const normalizeAddress = (address) => {
+  if (address && typeof address === 'string' && address.startsWith('0x')) {
+    return Web3.utils.toChecksumAddress(address);
+  } else {
+    throw new Error(`invalid address: ${address}`)
+  }
 };

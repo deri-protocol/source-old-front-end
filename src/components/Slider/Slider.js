@@ -43,7 +43,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max =100 ,start,onValueChange,freeze}){
+export default function Slider({max = '--' ,start,onValueChange,freeze}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -58,24 +58,28 @@ export default function Slider({max =100 ,start,onValueChange,freeze}){
 
   useEffect(() => {
     setDisabled(freeze)
+    if(Math.abs(max) === 0){
+      setDisabled(true)
+    }
     return () => { };
-  }, [freeze]);
+  }, [freeze,max]);
 
 
   useEffect(() => {
-    if(isNaN(max)){
-      setLimit('')
-    }  else {
-      if((+max) > 0){
-        setDisabled(false)
-      } else {
-        setDisabled(true)
-      }
+    const origin = max
+    if(Math.abs(max) === 0 || max === '--') {
+      max = 100;
     }
-    setMarks(initDefaultMarks(max));    
+    if(isNaN(origin)){
+      setLimit('')
+    }
+    max && setMarks(initDefaultMarks(max));    
     setLimit(+max)
-    if(max !== 100){
+    if(origin !== '--'){
       setLoaded(true)
+    } 
+    if(Math.abs(max) === 0 || Math.abs(origin) === 0){
+      setLoaded(false)
     }
     return () => {};
   }, [max]);
@@ -86,7 +90,6 @@ export default function Slider({max =100 ,start,onValueChange,freeze}){
     } else {
       setValue(start)
     }
-
     return () => {      
     };
   }, [start]);

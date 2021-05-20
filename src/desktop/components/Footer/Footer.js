@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import './footer.less'
 export default function Footer(){
   
@@ -25,7 +26,15 @@ export default function Footer(){
         </div>
         <div className="right">
           <span> Visit us on </span>
-          <a target="_blank" className="iocn_a" href="mailto: service@deri.finance">
+          <a target="_blank" rel='noreferrer' className="iocn_a" >
+            <div className="circle">
+              <div className='wechat'>
+                <div className='down_box'></div>
+              </div>
+              <div className="fa fa-wechat"></div>
+            </div>
+          </a>
+          <a target="_blank" rel='noreferrer' className="iocn_a" href="mailto: service@deri.finance">
             <div className="circle">
               <div className="fa fa-envelope"></div>
             </div>
@@ -34,6 +43,7 @@ export default function Footer(){
             target="_blank"
             className="iocn_a"
             href="https://deri-protocol.medium.com"
+            rel='noreferrer' 
           >
             <div className="circle">
               <div className="fa fa-medium"></div>
@@ -43,6 +53,7 @@ export default function Footer(){
             target="_blank"
             className="iocn_a"
             href="https://twitter.com/DeriProtocol"
+            rel='noreferrer' 
           >
             <div className="circle">
               <div className="fa fa-twitter"></div>
@@ -53,12 +64,13 @@ export default function Footer(){
             target="_blank"
             className="iocn_a"
             href="https://github.com/deri-finance"
+            rel='noreferrer' 
           >
             <div className="circle">
               <div className="fa fa-github"></div>
             </div>
           </a>
-          <a target="_blank" className="iocn_a" href="https://t.me/DeriProtocol">
+          <a rel='noreferrer'  target="_blank" className="iocn_a" href="https://t.me/DeriProtocol">
             <div className="circle">
               <div className="fa fa-paper-plane"></div>
             </div>

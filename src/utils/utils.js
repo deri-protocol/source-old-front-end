@@ -26,3 +26,7 @@ export function formatBalance(balance){
 export function eqInNumber(str1,str2){
   return (+str1) === (+str2)
 }
+
+export function isSushi(address){
+  return address === '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd'
+}

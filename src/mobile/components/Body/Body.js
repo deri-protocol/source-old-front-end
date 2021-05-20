@@ -17,7 +17,7 @@ class Body extends React.Component {
           <Route exact path='/' component={Trade}/>
           <Route exact path='/lite' component={Trade}/>
           <Route exact path='/mining' component={Mining}/>
-          <Route exact path='/mining/:chainId/:symbol/:baseToken/:address' component={MiningDetail}/>
+          <Route exact path='/mining/:chainId/:type/:symbol/:baseToken/:address' component={MiningDetail}/>
         </Switch>
       </div>
     )

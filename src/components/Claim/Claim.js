@@ -4,6 +4,7 @@ import useClaimInfo from "../../hooks/useClaimInfo";
 import useConfig from "../../hooks/useConfig";
 import { mintDToken } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button';
+import { eqInNumber } from '../../utils/utils';
 
 export default function Claim({wallet}){
 	const [btnText, setBtnText] = useState('Collect Wallet')
@@ -13,6 +14,10 @@ export default function Claim({wallet}){
 
   //claim deri
 	const claim = async () => {
+		if(!eqInNumber(wallet.detail.chainId,claim.chainId)) {
+			alert(`Your DERI is on ${ config.text } . Connect to ${ config.text } to claim.`)
+			return ;
+		}
 		if (claimInfo.unclaimed === 0) {
 			alert('Sorry,no DERI to claim yet');
 			return;
@@ -32,7 +37,7 @@ export default function Claim({wallet}){
 
 	const click = async () => {
 		if(wallet.isConnected()){
-			claim();
+			await claim();
 		} 
 	}
 

@@ -36,79 +36,33 @@ export default {
       minmov: 1,
       type: "crypto",
       has_intraday: true,
-      intraday_multipliers: [
-        "1",
-        "2",
-        "5",
-        "15",
-        "30",
-        "60",
-        "240",
-        "1D",
-        "7D",
-        "1W",
-        "1M",
-      ], //所有的周期
+      intraday_multipliers: ["1","2","5","15","30","60","240","1D","7D","1W","1M"], //所有的周期
       has_weekly_and_monthly: true, //是否有周线和月线
       data_status: "streaming",
       has_no_volume: true, //是否将成交量独立出来
       pro_name: symbolName,
       has_daily: true,
-      regular_session: "24x7",
+      timezone : 'UTC',
+      session: "24x7",
     };
     setTimeout(function () {
       onSymbolResolvedCallback(symbol_stub);
     }, 0);
   },
-  getBars: function (
-    symbolInfo,
-    resolution,
-    from,
-    to,
-    onHistoryCallback,
-    onErrorCallback,
-    firstDataRequest
-  ) {
+  getBars: function (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) {
     if (from > 0 && to > 0) {
-      const localResolutions =
-        localStorage.getItem("localResolutions") || resolution;
-      // setInterval(()=>{
-      historyProvider
-        .getBars(symbolInfo, localResolutions, from, to, firstDataRequest)
-        .then((bars) => {
-          const len = bars.length;
-          // window.bars = bars;
-          if (len) {
-            if (to * 1000 > bars[len - 1].time) {
-              onHistoryCallback(bars, { noData: false });
-            } else {
-              onHistoryCallback([], { noData: true });
-            }
-          } else {
-            onHistoryCallback(bars, { noData: true });
-          }
-        })
-        .catch((err) => {
-          onErrorCallback(err);
-        });
-    }
+      const localResolutions = localStorage.getItem("localResolutions") || resolution;      
+      historyProvider.getBars(symbolInfo, localResolutions, from, to, firstDataRequest,onHistoryCallback,onErrorCallback)
+    }        
   },
-  subscribeBars: (
-    symbolInfo,
-    resolution,
-    onRealtimeCallback,
-    subscribeUID,
-    onResetCacheNeededCallback
-  ) => {},
-  unsubscribeBars: (subscriberUID) => {},
+  subscribeBars: (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
+    historyProvider.subscribeBars(symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback)
+  },
+  unsubscribeBars: (subscriberUID) => {
+    historyProvider.unsubscribeBars(subscriberUID)
+  },
   calculateHistoryDepth: (resolution, resolutionBack, intervalBack) => {},
   getMarks: (symbolInfo, startDate, endDate, onDataCallback, resolution) => {},
-  getTimeScaleMarks: (
-    symbolInfo,
-    startDate,
-    endDate,
-    onDataCallback,
-    resolution
-  ) => {},
+  getTimeScaleMarks: (symbolInfo,startDate,endDate,onDataCallback,resolution) => {},
   getServerTime: (cb) => {},
 };

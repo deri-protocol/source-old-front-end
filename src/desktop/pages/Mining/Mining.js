@@ -11,17 +11,17 @@ import { inject, observer } from 'mobx-react';
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-function Mining({wallet,style}){
+function Mining({wallet}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
-	const {chainId,symbol,baseToken,address} =  useParams();
+	const {chainId,symbol,baseToken,address,type} =  useParams();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,symbol,baseToken,address,wallet}
+	const props = {chainId,symbol,baseToken,address,wallet,type}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	return(
     <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
-						{symbol}/{baseToken} @ {networkText}
+						{type === 'lp' ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}`}
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >

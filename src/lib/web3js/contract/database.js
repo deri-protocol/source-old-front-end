@@ -37,7 +37,23 @@ export class DatabaseContract {
   }
 
   async getValues(keyArray) {
-    await this.updateProviderUrl();
-    return await this.contract.methods.getValues(keyArray).call();
+    let res
+    let retry = 3
+    while(retry > 0) {
+      try {
+        await this.updateProviderUrl();
+        res = await this.contract.methods.getValues(keyArray).call();
+      } catch (err) {
+        this.providerUrl = null
+      }
+      if (res) {
+        break
+      }
+      retry -= 1
+    }
+    if (retry === 0 && !res) {
+      throw new Error(`database getValues(): exceed max retry 3.`)
+    }
+    return res
   }
 }

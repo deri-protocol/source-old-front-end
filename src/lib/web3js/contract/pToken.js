@@ -16,8 +16,6 @@ export class PTokenContract extends Contract {
   }
 
   async getPositionInfo(accountAddress) {
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
     let result = {};
     try {
       const res = await this._call('getPosition(address)', [accountAddress]);

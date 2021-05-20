@@ -2,12 +2,12 @@ import React, { useState ,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 import Button from '../../../Button/Button';
 import Modal from 'react-modal'
-import { addLiquidity, getWalletBalance } from '../../../../lib/web3js/indexV2';
+import { addLiquidity, getWalletBalance, bg, addLpLiquidity } from '../../../../lib/web3js/indexV2';
 import useSpecification from '../../../../hooks/useSpecification';
 
 
 
-export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance}){
+export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool}){
   const [addValue, setAddValue] = useState('')
   const spec = useSpecification({wallet,address});
 
@@ -22,16 +22,28 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
   }
 
   const addLiq = async () => {
-    if((+addValue) > (+balance)) {
+    const max = bg(balance)
+    const cur = bg(addValue);
+    if(cur.gt(max)) {
       alert("not sufficient funds");
       return false;
     }
-    if((+addValue) < (+spec.minAddLiquidity)) {
+    if(spec && (+addValue) < (+spec.minAddLiquidity)) {
       alert(`The input liquidity shall not be less than ${spec.minAddLiquidity}`);
       return false;
     }
-    const res = await addLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue)
-    if (!res.success) {
+    if(addValue <=0 || isNaN(addValue)){
+      alert("It has to be greater than zero");
+      return false;
+    }
+    let res =  null;
+    if(isLpPool){
+      res = await addLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue);
+    } else{
+      res = await addLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue)
+    }
+    
+    if (!res ||  !res.success) {
       alert("failure of transaction");
     }
     return true;

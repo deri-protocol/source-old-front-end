@@ -2,10 +2,11 @@ import React, { useState, useEffect ,useRef} from 'react'
 import {widget} from '../../../../lib/charting_library'
 import datafeeds from './datafeeds/index'
 import classNames from 'classnames';
+import { inject, observer } from 'mobx-react';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
-export default function TradingViewChart({spec = {}}){
+function TradingViewChart({symbol}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('thirty');
   const [deriWidget, setDeriWidget] = useState(null);
@@ -14,26 +15,20 @@ export default function TradingViewChart({spec = {}}){
 
   const initialize = () => {
     const widgetOptions = {
-			symbol: spec.symbol,
+			symbol: symbol,
       datafeed: datafeeds,
       interval: localStorage.getItem('localResolutions') || '1D',
       container_id: defaultProps.containerId,
-      library_path: `${process.env.PUBLIC_URL}/charting_library/`,
+      library_path: `${process.env.PUBLIC_URL}/charting_library/`,      
       locale: 'en',
+      custom_css_url : `${process.env.PUBLIC_URL}/style/tradingview-overide.css`,
       disabled_features: [
-        'header_widget',
-        'display_market_status',
-        'timeframes_toolbar',
-        'left_toolbar',
-        'legend_context_menu',
-        'adptive_logo',
-        'use_localstorage_for_settings',
-        'edit_buttons_in_legend',
-        'control_bar',
-        'move_logo_to_main_pane',
+        "header_widget",
+        "timeframes_toolbar",
+        "go_to_date",
       ],
       enabled_features: [
-          'show_logo_on_all_charts'
+        'show_logo_on_all_charts'
       ],
       charts_storage_url: 'https://saveload.tradingview.com',
       charts_storage_api_version: '1.14',
@@ -42,40 +37,60 @@ export default function TradingViewChart({spec = {}}){
       fullscreen: false,
       autosize: true,
       overrides: {
-        'paneProperties.background': '#212327',
-        'paneProperties.vertGridProperties.color': '#212327',
-        'paneProperties.horzGridProperties.color': '#212327',
-        'symbolWatermarkProperties.transparency': 90,
-        'scalesProperties.textColor': '#AAA',
-        'mainSeriesProperties.candleStyle.wickUpColor': '#76af8e',
-        'mainSeriesProperties.candleStyle.wickDownColor': '#ee5766',
-      },
-      timezone: 'Asia/Beijing',
+        "paneProperties.background": "#212327",
+        "paneProperties.vertGridProperties.color": "#212327",
+        "paneProperties.horzGridProperties.color": "#212327",
+        "mainSeriesProperties.candleStyle.upColor": "#53B987",
+        "mainSeriesProperties.candleStyle.downColor": "#EB4D5C",
+        "symbolWatermarkProperties.transparency": 90,
+        "mainSeriesProperties.candleStyle.wickUpColor": "#53B987",
+        "mainSeriesProperties.candleStyle.wickDownColor": "#EB4D5C",
+        "mainSeriesProperties.candleStyle.drawBorder": true,
+        "mainSeriesProperties.candleStyle.borderUpColor" : "#53B987",
+        "mainSeriesProperties.candleStyle.borderDownColor" : "#EB4D5C",
+        "scalesProperties.textColor": "#AAA",
+      },      
+      toolbar_bg: "#212327",
+      timezone: "Asia/Shanghai", 
+      session: "24x7"
     }
 
-		const w  = new widget(widgetOptions);
+    const w  = new widget(widgetOptions);
+    // const w = new window.TradingView.widget(widgetOptions);
 
-		w.onChartReady(() => {
-      w.activeChart().setResolution('30',() => {
-        setLoading(false)
-      })
-    });
-    return w;
+    window.setTimeout(() => {
+      // this.chart = this.widget.chart()
+      if(w.activeChart()) {
+        w.activeChart().setResolution('30',() => setLoading(false));
+      }
+    },1000)
+
+    // if(w.onChartReady){
+    //   w.onChartReady(() => {
+    //     w.activeChart().setResolution('30',() => {
+    //       setLoading(false)
+    //     })
+    //   });
+    // } else {
+    //   window.setTimeout(() => {
+    //     w.activeChart().setResolution('30',() => {
+    //       setLoading(false)
+    //     })
+    //   },2000)
+    // }
+    // return w;
   }
 
 
   const  changeTime= (time,period) => {
-    setLoading(true)
     setActived(period)
     deriWidget.chart().refreshMarks()
-    deriWidget.activeChart().setResolution(time,() => {
-      setLoading(false)
-    })    
+    deriWidget.activeChart().setResolution(time)    
     
   }
 
   useEffect(() => {
-    if(spec.symbol){
+    if(symbol){
       setDeriWidget(initialize())
     }
     return () => {
@@ -83,7 +98,7 @@ export default function TradingViewChart({spec = {}}){
         deriWidget.remove();
       }
     };
-  }, [spec.symbol]);
+  }, [symbol]);
 
   return(
     <div id='tradingview'>
@@ -106,3 +121,4 @@ export default function TradingViewChart({spec = {}}){
   </div>
   )
 }
+export default inject('trading')(observer(TradingViewChart))

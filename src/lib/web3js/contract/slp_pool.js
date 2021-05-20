@@ -22,8 +22,6 @@ export class SlpPool extends Contract {
     return await this._transact('withdraw', args, accountAddress);
   }
   async getLiquidity(accountAddress) {
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
     const res = await this._call('userInfo', [152, accountAddress]);
     if (res && res.amount) {
       return deriToNatural(res.amount);

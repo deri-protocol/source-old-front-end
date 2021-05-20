@@ -1,38 +1,59 @@
 import React, { useState, useEffect} from 'react'
 import {
-	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance
+	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo
 } from '../../../lib/web3js/indexV2'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';
 import { inject, observer } from 'mobx-react';
 import withModal from '../../hoc/withModal';
-import { eqInNumber } from '../../../utils/utils';
+import { eqInNumber, isSushi } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-function Liquidity({wallet,chainId,baseToken,address}) {
+function Liquidity({wallet,chainId,baseToken,address,type}) {
   const [liquidity,setLiquidity] = useState({})
 
+	const isLpPool = (type === 'lp')
+	
+
 	const loadLiquidityInfo = async () => {
-		const apyPool = await getPoolInfoApy(chainId,baseToken)
+		const apyPool = await getPoolInfoApy(chainId,address)
+		const pooLiquidity = await getPoolLiquidity(chainId,address);
+
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
-			const info = await getLiquidityInfo(chainId,address,wallet.detail.account);
+			let info = null;
+			if(isLpPool){
+				info = await getLpLiquidityInfo(chainId,address,wallet.detail.account)
+			} else {
+				info = await getLiquidityInfo(chainId,address,wallet.detail.account);
+			}
+
+			let sushiApy ;
+			if(isSushi(address)){
+				sushiApy =  0.22008070161007/(+pooLiquidity.liquidity) * 100;           
+			}
 			if(info){
 				setLiquidity({
 					total :  (+info.poolLiquidity),
-					apy : (+apyPool.apy),
+					apy : (+apyPool.apy) * 100,
 					shareValue : (+info.shareValue).toFixed(6),
 					percent : (((info.shares * info.shareValue) / info.poolLiquidity) * 100).toFixed(2) ,
 					shares : (+info.shares).toFixed(2),
-					values : (+info.shares * info.shareValue).toFixed(2)
+					values : (+info.shares * info.shareValue).toFixed(2),
+					sushiApy
 				})	
 			}
 		} else {
-			const info = await getPoolLiquidity(chainId,address);
-			if(info){
+			
+			let sushiApy ;
+			if(isSushi(address)){
+				sushiApy =  0.22008070161007/pooLiquidity.liquidity * 100;           
+			}
+			if(pooLiquidity){
 				setLiquidity({
-					total : (+info.liquidity),
-					apy : (+apyPool.apy)
+					total : (+pooLiquidity.liquidity),
+					apy : (+apyPool.apy) * 100,
+					sushiApy
 				})
 			}
 		}
@@ -49,31 +70,35 @@ function Liquidity({wallet,chainId,baseToken,address}) {
       <div className="odd title">Provide { baseToken } Earn DERI</div>
 				<div className="odd text">
 						<div className="text-title">Pool Total Liquidity</div>
-						<div className="text-num"><DeriNumberFormat value={ liquidity.total} suffix={ baseToken } thousandSeparator={true}/></div>
+						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${baseToken}`  } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">APY</div>
-						<div className="text-num">{ liquidity.apy || '--' }</div>
+						<div className='text-num' >
+							<span title={isSushi(address) && 'DERI-APY'} className={`${isSushi(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
+							{isSushi(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title='SUSHI-APY'> 
+							<DeriNumberFormat value={ liquidity.sushiApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
+						</div>						
 				</div>
 				<div className="odd text">
 						<div className="text-title">Liquidity Share Value</div>
-						<div className="text-num"><DeriNumberFormat value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
+						<div className="text-num"><DeriNumberFormat  allowZero={true}  value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
-						<div className="text-num"><DeriNumberFormat value={ liquidity.percent } suffix={'%'}/></div>
+						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.percent } suffix={'%'}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">Staked Balance </div>
-						<div className="text-num"><DeriNumberFormat value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
+						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
 				</div>
 				<div className="odd claim-network">
-					<div className="text-title money"><DeriNumberFormat value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
+					<div className="text-title money"><DeriNumberFormat allowZero={true}  value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
 						
 				</div>
 				<div className="title-check">
 				</div>
-				 <Operator wallet={wallet} chainId={chainId} address={address} baseToken={baseToken} loadLiquidity={loadLiquidityInfo}/>
+				 <Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={baseToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo}/>
 	</div>
   )
 }
@@ -83,25 +108,30 @@ const AddDialog = withModal(AddLiquidity)
 const RemoveDialog = withModal(RemoveLiquidity)
 
 //操作区
-const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
+const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqInfo,loadLiqidityInfo})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
 	const [balance, setBalance] = useState('');
-	const [liqInfo, setLiqInfo] = useState({})
+	// const [liqInfo, setLiqInfo] = useState({})
 	const [buttonElment, setButtonElment] = useState(null);
 	
-	const loadLiqidityInfo = async () => {
-    if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
-      const info = await getLiquidityInfo(wallet.detail.chainId,address,wallet.detail.account);	
-      setLiqInfo({shares : info.shares})
-    }
-  }
+	// const loadLiqidityInfo = async () => {
+  //   if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
+  //     const info = await getLiquidityInfo(wallet.detail.chainId,address,wallet.detail.account);	
+  //     setLiqInfo({shares : info.shares})
+  //   }
+  // }
 
 
   const loadBalance = async () => {
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
-			const total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+			let total = null;
+			if(isLpPool){
+				total = await getLpWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+			} else {
+				total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+			}
 			if(typeof total !== 'object'){
 				setBalance(total)				
 			}
@@ -116,14 +146,27 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
 
 
 	const isApprove = async () => {
-		const result = await isUnlocked(chainId,address,wallet.detail.account) 
-		setIsApproved(result);
-		return result;
-  }
+		if(isLpPool){
+			const result = await isLpUnlocked(chainId,address,wallet.detail.account) 			 
+			setIsApproved(result);
+			return result;
+		} else {
+			const result = await isUnlocked(chainId,address,wallet.detail.account) 			 
+			setIsApproved(result);
+			return result;
+		}
+	}
+	
+
 
 	const approve = async () => {
-		const res = await unlock(chainId,address,wallet.detail.account);
-		if(res.success){
+		let res = null;
+		if(isLpPool){
+			res = await unlockLp(chainId,address,wallet.detail.account);
+		} else {
+			res = await unlock(chainId,address,wallet.detail.account);
+		}		
+		if(res && res.success){
 			setIsApproved(true)
 		} else {
 			alert(res.error ?  res.error.message || 'Approve failed' : 'Approve failed')
@@ -193,8 +236,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity})=> {
     <div className="liquidity-btn">
 			{
 				btnType === 'add' 
-				? <AddDialog  modalIsOpen={isOpen} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
-				: <RemoveDialog  modalIsOpen={isOpen} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
+				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
 			}			
 			{buttonElment}
   </div>

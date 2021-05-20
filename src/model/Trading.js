@@ -1,13 +1,10 @@
-import { observable, action, computed, makeObservable, runInAction } from "mobx";
+import { observable, action, computed, makeObservable } from "mobx";
 import Oracle from "./Oracle";
 import Position from "./Position";
 import Contract from "./Contract";
-import Chain from "./Config";
 import Config from "./Config";
 import { eqInNumber } from "../utils/utils";
-import { getEstimatedFundingRate,getLiquidityUsed, getEstimatedLiquidityUsed, getEstimatedFee } from "../lib/web3js/indexV2";
-import { fromPromise } from "mobx-utils";
-import { computedAsync, promisedComputed } from "computed-async-mobx";
+import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
 
 /**
  * 交易模型
@@ -45,17 +42,23 @@ export default class Trading {
   fundingRate = '--' 
   index = null
   volume = ''
-  margin = '--'
+  paused = false
+  margin = ''
   position = {}
   contract = {}
+  fundingRate = {}
+  userSelectedDirection = 'long'
 
   constructor(){
     makeObservable(this,{
       index : observable,
       volume : observable,
       margin : observable,
+      fundingRate : observable,
       position : observable,
       contract : observable,
+      paused : observable,
+      userSelectedDirection : observable,
       setWallet :action,
       setConfigs : action,
       setConfig : action,
@@ -63,8 +66,14 @@ export default class Trading {
       setContract : action,
       setPosition : action,
       setVolume : action,
+      setUserSelectedDirection : action,
+      setFundingRate : action,
+      setPaused : action,
       amount : computed,
-      effect : computed,
+      // effect : computed,
+      fundingRateTip : computed,
+      direction : computed,
+      volumeDisplay : computed
     })
     this.configInfo = new Config();
     this.oracle = new Oracle();
@@ -81,45 +90,60 @@ export default class Trading {
       //配置信息，如chainId、pool address、symbol、baseToken等
       const all = await this.configInfo.load();
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
-      this.setConfig(all.find(c => eqInNumber(wallet.detail.chainId,c.chainId)))
-      //position
-      const position = await this.positionInfo.load(this.wallet,this.config)
-      this.setPosition(position);
-      //index
-      this.oracle.load(this.config.symbol,index => {
-        this.setIndex(index)
-      })
-      //contract
-      const contract = await this.contractInfo.load(this.wallet,this.config)
-      this.setContract(contract)
+      this.setConfig(all.find(c => eqInNumber(wallet.detail.chainId,c.chainId)) || {})
+      this.onConfigChange(this.wallet,this.config,true)
+    }
+    this.setVolume('')
+  }
+
+  async switch(spec){
+    const cur = this.configs.find(config => config.pool === spec.pool)
+    if(cur){
+      this.pause();
+      this.setConfig(cur)
+      this.onConfigChange(this.wallet,cur,this.config.symbol !== cur.symbol);      
+      this.resume()
+      this.setVolume('')
     }
   }
 
-  async switch(symbol){
-    const cur = this.configs.find(config => config.symbol === symbol)
-    if(cur){
-      this.pause();
-      this.setVolume('')
-      this.setConfig(cur)
-      
-      //position
-      const position = await this.positionInfo.load(this.wallet,this.config)
-      this.setPosition(position);
-      //index
-      this.oracle.load(this.config.symbol,index => {
-        this.setIndex(index)
+  async onConfigChange(wallet,config,symbolChanged){
+     //position
+     const position = await this.positionInfo.load(wallet,config,position => {       
+        this.setPosition(position);
+     })
+     this.setPosition(position);
+     //index
+
+    if(symbolChanged){
+      this.oracle.unsubscribeBars();
+      this.oracle.addListener('trading',data => {
+        this.setIndex(data.close)
       })
-      //contract
-      const contract = await this.contractInfo.load(this.wallet,this.config)
-      this.setContract(contract)
+      this.oracle.load(config.symbol)
     }
+     //contract
+     const contract = await this.contractInfo.load(wallet,config)
+     this.setContract(contract)
+
+     //funding rate
+     const fundingRate = await this.loadFundingRate(wallet,config)
+     this.setFundingRate(fundingRate)
+  }
+
+  async refresh(){
+    const position = await this.positionInfo.load(this.wallet,this.config);
+    this.setPosition(position)
+    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+    this.setVolume('')
   }
 
   /**
    * 暂停实时读取index和定时读取position
    */
   pause(){
-    this.oracle.pause();
+    this.setPaused(true)
+    // this.oracle.pause();
     this.positionInfo.pause();
   }
 
@@ -127,6 +151,7 @@ export default class Trading {
    * 恢复读取
    */
   resume(){
+    this.setPaused(false)
     this.oracle.resume();
     this.positionInfo.resume();
   }
@@ -148,40 +173,86 @@ export default class Trading {
   }
 
   setPosition(position){
-    this.position = position
+    if(position){
+      this.position = position
+    }
   }
 
   setContract(contract){
     this.contract = contract
   }
 
+  setFundingRate(fundingRate){
+    this.fundingRate = fundingRate;
+  }
+
   setVolume(volume){
     this.volume = volume;
+  }
+
+  setPaused(paused){
+    this.paused = paused
+  }
+
+  setUserSelectedDirection(direction){
+    this.userSelectedDirection = direction
   }
 
   setMargin(margin){
     this.margin = margin
     if(this.contract){
-      const volume = (+margin) / ((+this.index) * (+this.contract.multiplier) * (+this.contract.minInitialMarginRatio)) - (+this.position.volume)
+      const volume = (+margin) / ((+this.index) * (+this.contract.multiplier) * (+this.contract.minInitialMarginRatio))      
       if(!isNaN(volume)){
-        const number = volume.toFixed(0);
-        this.setVolume(number);
+        this.setVolume(Math.abs(volume))
+        console.log('volume ',volume)
       }
     }
   }
 
+  get volumeDisplay(){
+    if(this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
+      return '';
+    } else if(this.margin !== '') {
+        if((+this.volume) > Math.abs(+this.position.volume)) {
+          const result = parseInt(Math.abs(this.volume) - Math.abs(this.position.volume))
+          return result
+        } else {
+          const result = parseInt(Math.abs(this.position.volume) - Math.abs(this.volume));          
+          return result
+        }
+    } else {
+      return this.volume
+    }
+  }
 
-
+  
   //计算available balance、contract value、
   get amount(){
-    if(this.index && this.position && this.contract){
-      const curPosistion = (+this.volume) + (+this.position.volume)
+    if(this.index && this.position && this.contract && this.volume !== ''){
       //合同价值
-      const contractValue = Math.abs(curPosistion) * this.index * this.contract.multiplier
+      let curVolume = Math.abs(this.volume);
+      //如果不是通过marge 算出来的volume
+      if(this.margin === '') {       
+        if(this.userSelectedDirection === 'long') {
+          if((+this.position.volume) > 0) {
+            curVolume = curVolume + (+this.position.volume)
+          } else {
+            curVolume = Math.abs(this.position.volume) - curVolume
+          }         
+        } else {
+          if((+this.position.volume) > 0){
+            curVolume =  (+this.position.volume) - curVolume
+          } else {
+            curVolume = Math.abs(this.position.volume) + (+curVolume)
+          }
+        }
+      }
+      const contractValue = Math.abs(curVolume) * this.index * this.contract.multiplier
       const dynBalance = (+this.position.margin) + (+this.position.unrealizedPnl)
       const margin = contractValue * this.contract.minInitialMarginRatio
       const leverage = (+contractValue / +dynBalance).toFixed(1);
-      const available = (+dynBalance) - (+margin)
+      const balance = ((+dynBalance) - (+margin)).toFixed(2)
+      const available = balance > 0 ? balance : 0
       const exchanged = contractValue / this.index
       return {
         dynBalance, //动态余额
@@ -190,31 +261,54 @@ export default class Trading {
         exchanged,      //换算的值
         leverage,        //杠杆
       }
+    } else if(this.position && this.position.margin){
+      const dynBalance = ((+this.position.margin) + (+this.position.unrealizedPnl)).toFixed(2)
+      const margin = (+this.position.marginHeld).toFixed(2)
+      const available = ((+dynBalance) - (+margin)).toFixed(2)
+      return {
+        dynBalance,
+        margin,
+        available,
+      }
     }
     return {}
   }
 
-  observableEffect = promisedComputed(
-    0,
-    async () => {
-      if(this.volume && this.wallet && this.config){
-        const fundingRateAfter = await getEstimatedFundingRate(this.wallet.detail.chainId,this.config.pool,this.volume);
-        const curLiqUsed = await getLiquidityUsed(this.wallet.detail.chainId,this.config.pool)
-        const afterLiqUsed = await getEstimatedLiquidityUsed(this.wallet.detail.chainId,this.config.pool,this.volume)
-        const transFee = await getEstimatedFee(this.wallet.detail.chainId,this.config.pool,Math.abs(this.volume));
-        return {
-          fundingRateAfter : fundingRateAfter.fundingRate1,
-          curLiqUsed : curLiqUsed.liquidityUsed0,
-          afterLiqUsed : afterLiqUsed.liquidityUsed1,
-          transFee
+  get direction(){    
+    // 正仓
+    if(this.margin !== ''){
+      if((+this.position.volume) > 0) {
+        if(Math.abs(this.volume) > Math.abs(this.position.volume)) {
+          return 'long'
+        } else {
+          return 'short'
+        }
+      } else if((+this.position.volume) < 0){
+        //负仓
+        if((+this.volume) > Math.abs(+this.position.volume)){
+          return 'short'
+        } else {
+          return 'long'
         }
       }
     }
-  )
+    return 0
+  }
 
-  get effect(){
-    const o = this.observableEffect.value
-    return o
+  //资金费率
+  async loadFundingRate(wallet,config){
+    if(wallet && config){    
+      const res = await getFundingRate(wallet.detail.chainId,config.pool)
+      return res;
+    }
+  }
+
+  get fundingRateTip(){
+    if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
+      return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
+      `\n(1 Long contract pays 1 short contract ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} per block)`        
+    }
+    return ''
   }
 
 

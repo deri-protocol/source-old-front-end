@@ -26,8 +26,6 @@ export class Contract {
   }
 
   async _estimatedGas(method, args = [], accountAddress) {
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
     let gas = 0;
     for (let i = 0; i < 20; i++) {
       try {
@@ -63,9 +61,6 @@ export class Contract {
     };
   }
   async _transact(method, args, accountAddress) {
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
-    //const gas = await this._estimatedGas(method, args);
     const [gas, gasPrice] = await Promise.all([
       this._estimatedGas(method, args, accountAddress),
       this.web3.eth.getGasPrice(),

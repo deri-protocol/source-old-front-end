@@ -6,13 +6,14 @@ import DepositMargin from './Dialog/DepositMargin';
 import WithdrawMagin from './Dialog/WithdrawMargin';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { eqInNumber } from '../../utils/utils';
+import { inject, observer } from 'mobx-react';
 
 
 
 const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
 
-export default function Position({wallet,spec = {},position}){
+function Position({wallet,trading}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
@@ -20,15 +21,9 @@ export default function Position({wallet,spec = {},position}){
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
 
-  async function loadPositionInfo() { 
-    if(wallet.isConnected() && spec.pool){
-      position.load(wallet,spec)      
-    }    
-  }
-
   const loadBalance = async () => {
-    if(wallet.isConnected() && spec.pool){
-      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
+    if(wallet.isConnected() && trading.config){
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account)
       if(balance){
         setBalance(balance)
       }
@@ -38,7 +33,7 @@ export default function Position({wallet,spec = {},position}){
   //平仓
   const onClosePosition = async () => {
     setIsLiquidation(true)
-    const res = await closePosition(wallet.detail.chainId,spec.pool,wallet.detail.account).finally(() => setIsLiquidation(false))
+    const res = await closePosition(wallet.detail.chainId,trading.config.pool,wallet.detail.account).finally(() => setIsLiquidation(false))
     if(res.success){
       refreshBalance()
     } else {      
@@ -53,9 +48,8 @@ export default function Position({wallet,spec = {},position}){
   }
 
   const refreshBalance = () => {
-    loadPositionInfo();
-    loadBalance();
-    wallet.loadWalletBalance(wallet.detail.chainId,wallet.detail.account)
+    trading.refresh();
+   loadBalance();
   }
 
   const afterDeposit = () => {
@@ -84,32 +78,30 @@ export default function Position({wallet,spec = {},position}){
 
 
   useEffect(() => {
-    loadPositionInfo();
     loadBalance();
     return () => {
     };
-  }, [wallet.detail.account,spec.pool]);
+  }, [wallet.detail.account,trading.config]);
 
 
   useEffect(() => {
-    if(position.info){
-      const {info} = position
-      const direction = (+info.volume) > 0 ? 'LONG' : (eqInNumber(info.volume, 0) ? '--' : 'SHORT') 
+    if(trading.position){
+      const {position} = trading
+      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) ? '--' : 'SHORT') 
       setDirection(direction)      
-      setBalanceContract((+info.margin) + (+info.unrealizedPnl))
+      setBalanceContract((+position.margin) + (+position.unrealizedPnl))
     }
     return () => {};
-  }, [position.info.volume,position.info.margin,position.info.unrealizedPnl]);
+  }, [trading.position.volume,trading.position.margin,trading.position.unrealizedPnl]);
 
    
   
   return(
-
     <div className='position-info'>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Position</div>
-        <div className='info-num'>{ position.info.volume}</div>
+        <div className='info-num'>{ trading.position.volume}</div>
       </div>
       <div className='info-right'>
         <div
@@ -130,7 +122,7 @@ export default function Position({wallet,spec = {},position}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Average Entry Price</div>
-        <div className='info-num'><DeriNumberFormat value={ position.info.averageEntryPrice } decimalScale={2} /></div>
+        <div className='info-num'><DeriNumberFormat value={ trading.position.averageEntryPrice } decimalScale={2} /></div>
       </div>
       <div className='info-right'></div>
     </div>
@@ -140,7 +132,7 @@ export default function Position({wallet,spec = {},position}){
           Balance in Contract
           (Dynamic Balance)
         </div>
-        <div className='info-num'> <DeriNumberFormat decimalScale = {2} value={ balanceContract}  /></div>
+        <div className='info-num'> <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  /></div>
       </div>
       <div className='info-right'>
         <div
@@ -197,21 +189,21 @@ export default function Position({wallet,spec = {},position}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Margin</div>
-        <div className='info-num'><DeriNumberFormat value={ position.info.marginHeld }  decimalScale={2}/></div>
+        <div className='info-num'><DeriNumberFormat value={ trading.position.marginHeld }  decimalScale={2}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Unrealized PnL</div>
-        <div className='info-num'><DeriNumberFormat value={ position.info.unrealizedPnl }  decimalScale={8}/></div>
+        <div className='info-num'><DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Liquidation Price</div>
-        <div className='info-num'><DeriNumberFormat decimalScale = {2} value={position.info.liquidationPrice} /></div>
+        <div className='info-num'><DeriNumberFormat decimalScale = {2} value={trading.position.liquidationPrice} /></div>
       </div>
       <div className='info-right'></div>
     </div>
@@ -219,7 +211,7 @@ export default function Position({wallet,spec = {},position}){
        wallet={wallet}
        modalIsOpen={addModalIsOpen} 
        onClose={onCloseDeposit}
-       spec={spec}
+       spec={trading.config}
        afterDeposit={afterDeposit}
        balance={balance}
     />
@@ -227,10 +219,12 @@ export default function Position({wallet,spec = {},position}){
       wallet={wallet}
       modalIsOpen={removeModalIsOpen} 
       onClose={onCloseWithdraw}
-      spec={spec}
+      spec={trading.config}
       afterWithdraw={afterWithdraw}
-      position={position}
+      position={trading.position}
+      // trading={trading}
       />
   </div>
   )
 }
+export default inject('trading')(observer(Position))

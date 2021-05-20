@@ -1,4 +1,4 @@
-import { databaseFactory } from '../factory/contracts';
+import { databaseFactory, databaseAirdropFactory } from '../factory/contracts';
 import {
   toChecksumAddress,
   getNetworkName,
@@ -269,7 +269,7 @@ export const getUserInfoInPool = async (chainId, poolAddress, userAddress) => {
 };
 
 export const getUserInfoAllForAirDrop = async (userAddress) => {
-  const db = databaseFactory();
+  const db = databaseAirdropFactory(true);
   userAddress = toChecksumAddress(userAddress);
   const res = await db
     .getValues([

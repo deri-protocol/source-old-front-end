@@ -1,19 +1,26 @@
 import {
-  addSlpLiquidity,
   getSlpLiquidityInfo,
   getSlpWalletBalance,
   isSlpUnlocked,
-  removeSlpLiquidity,
   unlockSlp,
+  // addSlpLiquidity,
+  // removeSlpLiquidity,
 } from './slpPoolApi';
 import {
-  addClpLiquidity,
   getClpLiquidityInfo,
-  removeClpLiquidity,
-  isClpUnlocked,
   getClpWalletBalance,
+  isClpUnlocked,
   unlockClp,
+  // addClpLiquidity,
+  // removeClpLiquidity,
 } from './clpPoolApi';
+
+import {
+  addSlpLiquidity2 as addSlpLiquidity,
+  removeSlpLiquidity2 as removeSlpLiquidity,
+  addClpLiquidity2 as addClpLiquidity,
+  removeClpLiquidity2 as removeClpLiquidity,
+} from './contractTransactionApiV2'
 import { getLpContractAddress } from '../utils';
 
 /**

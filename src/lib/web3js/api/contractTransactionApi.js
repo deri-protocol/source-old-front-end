@@ -13,7 +13,6 @@ import { getUserInfoAll, getUserInfoAllForAirDrop } from './databaseApi';
 import {
   getPoolContractAddress,
   getMiningVaultContractAddress,
-  getMiningVaultRouterContractAddress,
   getBTCUSDPrice,
   bg,
   naturalToDeri,
@@ -21,6 +20,9 @@ import {
   format,
   getDeriContractAddress,
 } from '../utils';
+import {
+  getMiningVaultRouterContractAddress
+} from '../config'
 import {
   calculateMaxRemovableShares,
   calculateMaxWithdrawMargin,
@@ -548,12 +550,13 @@ export const mintAirdrop = async (chainId, accountAddress) => {
   const { deadline, nonce, v1, r1, s1, v2, r2, s2 } = userInfo;
   if (userInfo.valid) {
     const miningVaultAddress = getMiningVaultRouterContractAddress(chainId);
+    // console.log("miningVaultAddress", miningVaultAddress)
+    // console.log("userInfo", userInfo)
     if (miningVaultAddress) {
       const miningVaultRouter = miningVaultRouterFactory(
         chainId,
         miningVaultAddress
       );
-      //miningVault.setAccount(accountAddress);
       try {
         const tx = await miningVaultRouter.mint(
           accountAddress,

@@ -30,10 +30,12 @@ export default function History({wallet = {},spec ={} ,specs = []}){
 
   // useInterval(loadHistory,3000)
   useEffect(() => {
-    loadHistory();
+    if(spec && specs.length > 0){
+      loadHistory();
+    }
     return () => {      
     };
-  }, [wallet.detail,spec.pool,specs]);
+  }, [wallet.detail,spec,specs]);
   
   return (
     <div className='history-info' v-show='historyShow'>

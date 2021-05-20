@@ -4,11 +4,13 @@ import NumberFormat from 'react-number-format';
 import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 
 
-export default function TradeConfirm({wallet,spec,onClose,volume,direction,position = 0,indexPrice,leverage,transFee,afterTrade}){
+export default function TradeConfirm({wallet,spec,onClose,direction,volume,position = 0,indexPrice,leverage,transFee,afterTrade}){
   const [pending, setPending] = useState(false);
+  
 
   const trade = async () => {
     setPending(true)
+    volume = direction === 'long' ? volume : -(+volume)
     const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,volume)
     if(res.success){
       afterTrade()
@@ -26,8 +28,12 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
     }
   }
 
+  
 
-  const afterTradePosition = ((+volume) + (+position))
+
+
+
+  const afterTradePosition = direction === 'long' ?  ((+volume) + (+position)) : (+position) - (+volume)
 
   return (
     <div className='modal-dialog'>
@@ -43,7 +49,7 @@ export default function TradeConfirm({wallet,spec,onClose,volume,direction,posit
             <div className='top'>
               <div className='text'>
                 <div className='text-title'># of Contracts</div>
-                <div className='text-num'>{ volume }</div>
+                <div className='text-num'>{ direction === 'long' ? volume  : `-${volume}`}</div>
               </div>
               <div className='text'>
                 <div className='text-title'>Position after execution</div>

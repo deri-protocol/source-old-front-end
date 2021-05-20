@@ -35,7 +35,6 @@ export class MiningVaultPool extends Contract {
         ).encodeABI(),
       },
     ];
-    //console.log('txRaw', txRaw)
     let tx = await window.ethereum.request({
       method: 'eth_sendTransaction',
       params: txRaw,

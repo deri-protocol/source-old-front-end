@@ -11,45 +11,40 @@ import { eqInNumber } from '../../../../utils/utils';
 
 
 
-function Pro({wallet,indexPrice}){
-  const [spec, setSpec] = useState({});
-  const specs = useDeriConfig(wallet)
+function Pro({wallet}){
+  // const [spec, setSpec] = useState({});
+  // const specs = useDeriConfig(wallet)
 
 
-  const onSpecChange = spec => {
-    setSpec(spec)
-  }
+  // const onSpecChange = spec => {
+  //   setSpec(spec)
+  // }
 
 
 
-  useEffect(() => {
-    if(spec.symbol){
-      indexPrice.start(spec.symbol)
-    }
-    return () => {
-    };
-  }, [spec.symbol]);
+  // useEffect(() => {
+  //   if(spec.symbol){
+  //     indexPrice.start(spec.symbol)
+  //   }
+  //   return () => {
+  //   };
+  // }, [spec.symbol]);
 
 
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1920px';
-    if(specs.length > 0 && wallet.detail.chainId){
-      const curSpecs = specs.filter(s => eqInNumber(s.chainId,wallet.detail.chainId))
-      if(curSpecs.length > 0){
-        setSpec(curSpecs[0]);   
-        indexPrice.start(curSpecs[0].symbol)   
-      }      
-    }
+    // if(specs.length > 0 && wallet.detail.chainId){
+    //   const curSpecs = specs.filter(s => eqInNumber(s.chainId,wallet.detail.chainId))
+    //   if(curSpecs.length > 0){
+    //     setSpec(curSpecs[0]);   
+    //     // indexPrice.start(curSpecs[0].symbol)   
+    //   }      
+    // }
     return () => { 
       document.querySelector('.desktop').style.minWidth = '';
     };
-  }, [wallet.detail.account,specs]);
+  }, [wallet.detail.account]);
 
-  useEffect(() => {
-    
-    return () => {
-    };
-  }, [indexPrice.index]);
 
 
   return (
@@ -57,14 +52,15 @@ function Pro({wallet,indexPrice}){
       <Tab/>
       <div className='trade-pro'>
         <div className='left'>
-          <LiteTrade wallet ={wallet} isPro={true} specChange={onSpecChange}/>
+          <LiteTrade isPro={true}/>
         </div>
         <div className='right'>
-          <TradingView wallet={wallet} spec={spec} indexPrice={indexPrice}/>
-          <Reference wallet={wallet} spec={spec}/>
+          <TradingView wallet={wallet}/>
+          <Reference/>
         </div>
     </div> 
   </div>
   )
 }
-export  default inject('wallet','indexPrice')(observer(Pro))
+export  default inject('wallet')(observer(Pro))
+// export default Pro

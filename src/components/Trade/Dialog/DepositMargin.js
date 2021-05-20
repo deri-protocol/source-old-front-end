@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import {  getWalletBalance, depositMargin } from "../../../lib/web3js/indexV2";
+import {  getWalletBalance, depositMargin, bg } from "../../../lib/web3js/indexV2";
 import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
 
@@ -19,14 +19,24 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
   }
 
   const deposit = async (amount) => {
+    const maxBalance = bg(balance)
+    const curBalance = bg(amount);
+    if (curBalance.gt(maxBalance)) {
+      alert("Insufficient balance in wallet");
+      return;
+    }
+    if ((+amount) <= 0 || isNaN(amount)) {
+      alert("It has to be greater than zero");
+      return;
+    }
     setPending(true)
     const res = await depositMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
     if(res.success){
       afterDeposit();
       onClose();
     } else {
-      const msg = typeof res.error === 'string' ? res.error : res.error.errorMessage || res.error.message
-      alert(msg)
+      // const msg = typeof res.error === 'string' ? res.error :
+      alert('Deposit failed')
     }
     setPending(false)
   }

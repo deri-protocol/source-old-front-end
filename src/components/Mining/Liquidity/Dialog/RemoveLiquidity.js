@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import NumberFormat from 'react-number-format'
-import { removeLiquidity } from '../../../../lib/web3js/indexV2';
+import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 
-export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove}){  
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool}){  
   const [amount, setAmount] = useState('');
 
 
@@ -17,11 +17,16 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
   }
 
   const remove = async () => {
-    if (liqInfo.shares < 1 && liqInfo.shares !== 0) {
-      alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
-      return false;
+    const max = bg(liqInfo.shares);
+    const cur = bg(amount);
+    if(!isLpPool){
+      const balance = (+liqInfo.shares) - (+amount)
+      if (balance < 1 && balance !== 0) {
+        alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
+        return false;
+      }
     }
-    if ((+liqInfo.shares) < (+amount)) {
+    if (cur.gt(max)) {
       alert(`Your current max removable shares are  ${liqInfo.shares}`);
       return false;
     }
@@ -29,8 +34,14 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
       alert("Invalid Liquidity!");
       return false;
     }
-    const res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
-    if(!res.success){
+    let res = null;
+    if(isLpPool){
+      res = await removeLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
+    } else {
+      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
+    }
+    
+    if(!res || !res.success){
       alert("failure of transaction");
       return false; 
     }

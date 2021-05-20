@@ -1,6 +1,5 @@
 import {Link} from 'react-router-dom'
-import deri from '../../img/deri.svg'
-import logo from '../../img/logo.svg'
+import logo from '../../../assets/img/logo.png'
 import { useRouteMatch } from 'react-router-dom'
 
 export default function Menu() {
@@ -14,7 +13,7 @@ export default function Menu() {
       <div className="logo">
         <a href="http://deri.finance" rel='noreferrer' target="_blank">
           <img src={logo} alt="" />
-          <img src={deri} alt="" />
+          {/* <img src={deri} alt="" /> */}
         </a>
       </div>
       <div className="mean">

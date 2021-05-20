@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from 'react'
 import {Link,useRouteMatch} from 'react-router-dom'
 import logo from '../../img/deri-logo.png'
@@ -8,8 +9,10 @@ export default function Menu({closeMenu}){
   const isMining =  useRouteMatch('/mining') ? true : false
   const isTrade = useRouteMatch('/lite') ? true : false
 
+
+
   useEffect(() => {
-    document.querySelectorAll('.menu li a').forEach(e => e.addEventListener('click',closeMenu));
+    document.querySelectorAll('.menu li a').forEach(e => e.addEventListener('click',closeMenu));    
     return () => {};
   }, []);
 
@@ -71,6 +74,14 @@ export default function Menu({closeMenu}){
       </div>
       <div className="m-footer">
         <div className="footer-link">
+          <a target="_blank" rel='noreferrer' className="iocn_a" >
+            <div className="circle">
+              <div className='wechat'>
+                <div className='down_box'></div>
+              </div>
+              <div className="fa fa-wechat"></div>
+            </div>
+          </a>
           <a target="_blank" rel='noreferrer' className="iocn-a" href="mailto: service@deri.finance">
               <div className="circle">
                 <div className="fa fa-envelope"></div>
@@ -89,6 +100,7 @@ export default function Menu({closeMenu}){
             <a
               target="_blank"
               className="iocn-a"
+              rel='noreferrer'
               href="https://twitter.com/DeriProtocol"
             >
               <div className="circle">
@@ -99,13 +111,14 @@ export default function Menu({closeMenu}){
             <a
               target="_blank"
               className="iocn-a"
+              rel='noreferrer'
               href="https://github.com/deri-finance"
             >
               <div className="circle">
                 <div className="fa fa-github"></div>
               </div>
             </a>
-            <a target="_blank" className="iocn-a" href="https://t.me/DeriProtocol">
+            <a target="_blank" rel='noreferrer' className="iocn-a" href="https://t.me/DeriProtocol">
               <div className="circle">
                 <div className="fa fa-paper-plane"></div>
               </div>

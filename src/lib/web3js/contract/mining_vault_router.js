@@ -14,6 +14,7 @@ export class MiningVaultRouter extends Contract {
     );
   }
   async mint(accountAddress, ...args) {
+    //console.log(accountAddress, args)
     const gas = await this._estimatedGas(
       'claim',
       [accountAddress, ...args],

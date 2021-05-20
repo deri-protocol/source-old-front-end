@@ -14,10 +14,11 @@ import {
   getOraclePrice,
   checkHttpServerIsAlive,
   getAliveHttpServer,
-  getChainProviderUrlsConfig,
   getChainProviderUrl,
+  normalizeChainId,
 } from '../indexV2';
 import fetch from 'node-fetch'
+import { normalizeAddress } from '../utils';
 global.fetch = fetch
 
 const TIMEOUT=20000
@@ -78,7 +79,7 @@ describe('utils', () => {
   test('getOraclePrice()', async() => {
     const [input, output] = [['97','0xFFe402106E8F73F0A44C7350C2b734e048f448f2'], {priceLength: 5}];
     const res = await getOraclePrice(...input)
-    expect(res.length).toEqual(output.priceLength);
+    expect(res.split('.')[0].length).toEqual(output.priceLength);
   }, TIMEOUT)
   test('checkHttpServerIsAlive()', async() => {
     const [input, output] = ['http://www.baidu.com', true];
@@ -93,7 +94,34 @@ describe('utils', () => {
   test('getChainProviderUrl()', async() => {
     const input = '97'
     const res = await getChainProviderUrl(input)
-    console.log(res)
     expect(res).toMatch(/data-seed-prebsc-\d-s\d\.binance\.org/);
+  })
+  test('normalizeChainId()', async() => {
+    expect(normalizeChainId(1)).toEqual('1');
+    expect(normalizeChainId('56')).toEqual('56')
+    expect(normalizeChainId(128)).toEqual('128')
+
+    function withInvalidChainId() {
+      return normalizeChainId('43')
+    }
+    expect(withInvalidChainId).toThrowError(/invalid chainId/);
+
+    function withEmptyChainId() {
+      return normalizeChainId('')
+    }
+    expect(withEmptyChainId).toThrowError(/invalid chainId/);
+
+    function withNullChainId() {
+      return normalizeChainId()
+    }
+    expect(withNullChainId).toThrow(/invalid chainId/);
+  })
+  test('normalizeAddress()', async() => {
+    expect(normalizeAddress('0x2baa211d7e62593ba379df362f23e7b813d760ad')).toEqual('0x2bAa211D7E62593bA379dF362F23e7B813d760Ad');
+
+    function withInvalidAddress() {
+      return normalizeAddress('56')
+    }
+    expect(withInvalidAddress).toThrowError(/invalid address/);
   })
 });

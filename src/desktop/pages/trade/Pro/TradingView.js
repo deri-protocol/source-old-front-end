@@ -1,71 +1,60 @@
 import React, { useState, useEffect,useRef } from 'react'
-import { getFundingRate } from "../../../../lib/web3js/indexV2"
-import NumberFormat from 'react-number-format'
 import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
+import { inject, observer } from 'mobx-react';
 
-export default function TradingView({wallet = {},spec = {},indexPrice}){
-  const [fundingRate, setFundingRate] = useState({
-    fundingRate0 : '-',
-    tradersNetVolume: '-'
-  });
+function TradingView({wallet,trading}){
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 
-
-
-  const loadFundingRate = async () => {
-    if(wallet.isConnected()){
-      const fundingRate = await getFundingRate(wallet.detail.chainId,spec.pool)
-      setFundingRate(fundingRate)
-    }
-  }
-
-
   useEffect(() => {    
     if(indexPriceRef.current){
-      indexPriceRef.current > indexPrice.index ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
+      indexPriceRef.current > trading.index ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
     }
-    indexPriceRef.current = indexPrice.index
+    indexPriceRef.current = trading.index
     return () => {      
     };
-  }, [indexPrice.index]);
+  }, [trading.index]);
 
   useEffect(() => {
-    loadFundingRate();
-    return () => {
-    };
-  }, [wallet.detail.account,spec,indexPrice.index]);
+    if(wallet.detail.account){
+      trading.init(wallet);
+    }
+    return () => {};
+  }, [wallet.detail.account]);
+
   return (
     <div id="trading-view">
       <div className='right-top'>
         <div className='symbol-basetoken-text'>
-          {spec.symbol || 'BTCUSD'} / {spec.bTokenSymbol|| 'BUSD'} (10X)
+          {(trading.config && trading.config.symbol) || 'BTCUSD'} / {(trading.config && trading.config.bTokenSymbol) || 'BUSD'} (10X)
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
-          <div className={indexPriceClass}><DeriNumberFormat value={indexPrice.index} decimalScale={2} /></div>
+          <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>
           <div className='trade-dashboard-value'> 
           <span className='funding-per'> 
-            <DeriNumberFormat value={ fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
+            <DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
           </span>
           </div>
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Total Net Position</div>
-          <div className='trade-dashboard-value'><DeriNumberFormat value={fundingRate.tradersNetVolume}/></div>
+          <div className='trade-dashboard-value'><DeriNumberFormat value={trading.fundingRate.tradersNetVolume}/></div>
         </div>            
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Pool Total liquidity</div>
-          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={fundingRate.liquidity}  decimalScale={2}/> {spec.bTokenSymbol}</div>
+          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity}  decimalScale={2}/> {trading.config && trading.config.bTokenSymbol}</div>
         </div>
       </div>
       <div className='tradingview'>
-        <TradingViewChart spec={spec} />
+        <TradingViewChart symbol={trading.config && trading.config.symbol} />
       </div>
   </div>
   )
 }
+
+export default  inject('trading')(observer(TradingView))

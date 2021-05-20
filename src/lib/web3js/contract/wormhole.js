@@ -17,7 +17,6 @@ export class WormholeContract extends Contract {
     const { wormholeAddress: toWormholeAddress } = getDeriContractAddress(
       toChainId
     );
-    //console.log('toWormholeAddress', toWormholeAddress)
     return this._transact(
       'freeze',
       [naturalToDeri(amount), toChainId, toWormholeAddress],

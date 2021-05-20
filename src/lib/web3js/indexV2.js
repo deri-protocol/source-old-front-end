@@ -5,6 +5,7 @@ export {
   getSlpContractAddressConfig,
 } from './config';
 export * from './utils';
+export * from './calculation';
 
 export * from './api/apiGlobals';
 export * from './api/factoryApi';
@@ -17,16 +18,18 @@ export {
   getEstimatedLiquidityUsed,
   isDeriUnlocked,
   getUserWormholeSignature,
+  // getFundingRate,
+  getPositionInfo,
 } from './api/contractQueryApi';
 export {
   unlock,
   //depositMargin,
   //withdrawMargin,
-  mint,
   //addLiquidity,
   //removeLiquidity,
   //tradeWithMargin,
   //closePosition,
+  mint,
   mintDToken,
   freeze,
   mintDeri,
@@ -41,7 +44,7 @@ export * from './api/databaseApi';
 // export * from './api/tradeHistoryApi';
 export {
 getSpecification2 as getSpecification,
-getPositionInfo2 as getPositionInfo,
+// getPositionInfo2 as getPositionInfo,
 getLiquidityInfo2 as getLiquidityInfo,
 getWalletBalance2 as getWalletBalance,
 getFundingRate2 as getFundingRate,
@@ -62,6 +65,6 @@ export {
   withdrawMargin2 as withdrawMargin,
   addLiquidity2 as addLiquidity,
   removeLiquidity2 as removeLiquidity,
-} from './apiV2/contractTransactionApiV2'
+} from './api/contractTransactionApiV2'
 
-export * from './apiV2/lpPoolApi';
+export * from './api/lpPoolApi';

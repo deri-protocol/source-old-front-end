@@ -63,9 +63,13 @@ export const priceCache = (function () {
       return _price;
     },
     async _update(chainId, poolAddress) {
-      const res = await getBTCUSDPrice(chainId, poolAddress);
-      if (res !== '') {
-        _price = res;
+      try {
+        const res = await getBTCUSDPrice(chainId, poolAddress);
+        if (res !== '') {
+          _price = res;
+        }
+      } catch (err) {
+        console.log(`priceCache.update: ${err}`)
       }
     },
     update(chainId, poolAddress) {
@@ -73,7 +77,7 @@ export const priceCache = (function () {
       _interval = setInterval(() => {
         // console.log('tick')
         self._update(chainId, poolAddress);
-      }, 2000);
+      }, 3000);
     },
     clear() {
       if (_interval) {

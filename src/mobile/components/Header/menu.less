@@ -106,6 +106,29 @@
     background-color: #0D0E0F;
     border-top: 1px solid #707070;
 
+    .wechat{
+			background-color: white;
+			background-image: url('../../../assets/img/wechat.jpeg');
+			background-size: cover;
+			border: 1px solid #707070;
+			width: 99px;
+			height: 99px;
+			border-radius: 10px;
+			display: none;
+			position: absolute;
+			top: -125px;
+			left: -10px;
+			.down_box{
+				border-right: 8px solid transparent;
+				border-left: 8px solid transparent;
+				border-bottom: 10px solid white;
+				position: absolute;
+				transform: rotate(180deg);
+				bottom: -10px;
+				right: 67px;
+			}
+		}
+
     .footer-link {
       .fa {
         position: relative;
@@ -114,6 +137,7 @@
       }
 
       .circle {
+        position: relative;
         display: flex;
         float: left;
         background-color: #666666;
@@ -123,6 +147,9 @@
         align-items: center;
         border-radius: 50%;
         margin-right: 30px;
+      }
+      .circle:hover .wechat{
+        display: block
       }
     }
 

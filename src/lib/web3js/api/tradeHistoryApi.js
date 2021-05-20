@@ -67,9 +67,9 @@ const processLiquidateEvent = async (
   const res = {
     direction: 'Liquidation',
     baseToken: bTokenSymbol,
-    price: naturalToDeri(price).toString(),
-    notional: naturalToDeri(national).toString(),
-    volume: naturalToDeri(volume).toString(),
+    price: price.toString(),
+    notional: national.toString(),
+    volume: volume.toString(),
     transactionFee: '0',
     transactionHash: txHash.toString(),
     time: timestamp,

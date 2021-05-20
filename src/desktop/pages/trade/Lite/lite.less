@@ -92,6 +92,12 @@
     background: #2c2d31;
     // z-index: 1;
 
+    .header {
+      .position.mobile {
+        display: none
+      }
+    }
+
     .header-top {
       display: flex;
       background: #1c1c22;
@@ -345,7 +351,7 @@
 
             .contrant {
               margin-top: 9px;
-              // width: 240px;
+              width: 240px;
               // height: 65px;
               background-image: url('../../../../assets/img/dark-button.png');
               background-size: 100% 100%;
@@ -368,17 +374,18 @@
               }
 
               .contrant-input {
+                 box-sizing: border-box;
                 width: 229px;
-                height: 50px;
+                height: 56px;
                 background: rgba(212, 224, 92, 0.05);
                 border: 0;
-                font-size: 20px;
-                padding-top: 20px;
+                padding-top: 10px;
                 padding-right: 10px;
                 padding-left: 20px;
                 color: #D4E05C;
                 border-radius: 3px;
-                font-size: 20px
+                font-size: 20px;
+               
               }
               .contrant-input::placeholder {                
                 font-size: 20px;
@@ -486,7 +493,7 @@
           .text-info {
             display: flex;
             justify-content: space-between;
-            width: 260px;
+            width: 56%;
             font-size: 12px;
 
             .text-enter {

@@ -24,3 +24,12 @@ export const getDBWormholeAddressConfig = (env = 'dev', useProductionDB) => {
   // for test
   return '0x3c9118C7f9f4ef0Ab5333cD710922dBCCC2d870d';
 };
+
+export const getDBAirdropAddressConfig = (env = 'dev', useProductionDB) => {
+  if ((env === 'prod' || env === 'production') && useProductionDB) {
+    // for production
+    return '0x35b2650eFb799DF4696b292D11b4770a0fFaa7c7';
+  }
+  // for test
+  return '0x7C1267188379f57d92e640E519151229E1eA5565';
+};

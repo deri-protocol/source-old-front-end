@@ -16,9 +16,6 @@ export class LTokenContract extends Contract {
   }
 
   async balance(accountAddress) {
-    //console.log('balance', this.chainId, this.contractAddress, accountAddress)
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
     const res = deriToNatural(await this._call('balanceOf', [accountAddress]));
     //console.log("> lToken balance", res.toString())
     return res;

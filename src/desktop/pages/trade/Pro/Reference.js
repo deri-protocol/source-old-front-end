@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react'
 import Position from "./Position";
 import History from "./History";
 import classNames from "classnames";
+import { inject, observer } from 'mobx-react';
 
-export default function Reference({wallet,spec}) {
+function Reference({wallet,trading}) {
   const [curTab, setCurTab] = useState('position');
 
   const switchTab = tab => {
     setCurTab(tab)
   }
-
 
   const curClassName = classNames('position-info',curTab)
 
@@ -37,9 +37,10 @@ export default function Reference({wallet,spec}) {
         </div>
       </div>
       <div className='pos-his-info '>
-        <Position wallet={wallet} spec={spec}/>
-        <History wallet={wallet} spec={spec}/>
+        <Position/>
+        <History wallet={wallet} spec ={trading.config}/>
       </div>
     </div>
   )
 }
+export default  inject('wallet','trading')(observer(Reference))

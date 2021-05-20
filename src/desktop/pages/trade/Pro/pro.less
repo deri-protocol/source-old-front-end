@@ -179,6 +179,7 @@
                   .check-base-down {
                     position: absolute;
                     right: 20px;
+                    line-height: 10px;
                   }
                 }
 
@@ -279,17 +280,18 @@
                     display: none;
                     color: #d4e05c;
                   }
-                  .contrant-input {
-                    width: 210px;
+                  .contrant-input {                    
+                    box-sizing: border-box;
+                    width: 229px;
                     height: 56px;
                     background: rgba(212, 224, 92, 0.05);
                     border: 0;
-                    font-size: 20px;
                     padding-top: 10px;
                     padding-right: 10px;
                     padding-left: 20px;
-                    color: #d4e05c;
+                    color: #D4E05C;
                     border-radius: 3px;
+                    font-size: 20px;
                   }
                   .contrant-input:focus {
                     text-align: right;
@@ -362,17 +364,21 @@
               font-size: 10px;
             }
             .enterInfo {
-              display: flex;
+              // display: flex;
               margin-top: 21px;
               color: @title;
-              justify-content: space-between;
+              // justify-content: space-between;
               .text-info {
-                display: flex;
-                justify-content: space-between;
-                width: 250px;
+                display: inline-block;
+                // justify-content: space-between;
+                width: 266px;
                 font-size: 12px;
                 .text-enter {
                   color: @text;
+                }
+                div {
+                  display: inline;
+                  margin-right: 10px;
                 }
               }
             }
@@ -463,6 +469,7 @@
         align-items: center;
         height: 56px;
         background-color: #212327;
+        font-weight: 300;
         .symbol-basetoken-text {
           background: #181a20;
           height: 100%;
@@ -567,7 +574,7 @@
             align-items: center;
             height: 33px;
             position: relative;
-            top: -48px;
+            top: -33px;
             .btn-position,
             .btn-history {
               width: 230px;
@@ -1047,7 +1054,7 @@
       width: 100%;
       height: 540px;
       position: absolute;
-      z-index: 9;
+      z-index: 1;
       background-color: #212327;
       .spinner-border{
         position: absolute;

@@ -33,7 +33,6 @@ export class ClpPool extends Contract {
 
   async getStateValues() {
     const res = await this._call('getStateValues');
-    //console.log('res', res);
     return {
       liquidity: deriToNatural(res),
     };
