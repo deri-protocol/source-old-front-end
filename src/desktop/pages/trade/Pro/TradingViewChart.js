@@ -8,7 +8,7 @@ const defaultProps = {
 }
 function TradingViewChart({symbol}){
   const [loading, setLoading] = useState(true);
-  const [actived, setActived] = useState('thirty');
+  const [actived, setActived] = useState('one-day');
   const [deriWidget, setDeriWidget] = useState(null);
 
   const activedClass = classNames('btn',actived)
@@ -17,7 +17,7 @@ function TradingViewChart({symbol}){
     const widgetOptions = {
 			symbol: symbol,
       datafeed: datafeeds,
-      interval: localStorage.getItem('localResolutions') || '1D',
+      interval: '1D',
       container_id: defaultProps.containerId,
       library_path: `${process.env.PUBLIC_URL}/charting_library/`,      
       locale: 'en',
@@ -36,7 +36,7 @@ function TradingViewChart({symbol}){
       user_id: 'public_user_id',
       fullscreen: false,
       autosize: true,
-      overrides: {
+      overrides: {        
         "paneProperties.background": "#212327",
         "paneProperties.vertGridProperties.color": "#212327",
         "paneProperties.horzGridProperties.color": "#212327",
@@ -56,37 +56,17 @@ function TradingViewChart({symbol}){
     }
 
     const w  = new widget(widgetOptions);
-    // const w = new window.TradingView.widget(widgetOptions);
-
-    window.setTimeout(() => {
-      // this.chart = this.widget.chart()
-      if(w.activeChart()) {
-        w.activeChart().setResolution('30',() => setLoading(false));
-      }
-    },1000)
-
-    // if(w.onChartReady){
-    //   w.onChartReady(() => {
-    //     w.activeChart().setResolution('30',() => {
-    //       setLoading(false)
-    //     })
-    //   });
-    // } else {
-    //   window.setTimeout(() => {
-    //     w.activeChart().setResolution('30',() => {
-    //       setLoading(false)
-    //     })
-    //   },2000)
-    // }
-    // return w;
+    document.querySelector("iframe").addEventListener("load", function(e) {
+      setTimeout(() => setLoading(false),250)
+    });
+    return w;
   }
 
 
   const  changeTime= (time,period) => {
     setActived(period)
     deriWidget.chart().refreshMarks()
-    deriWidget.activeChart().setResolution(time)    
-    
+    deriWidget.activeChart().setResolution(time)        
   }
 
   useEffect(() => {

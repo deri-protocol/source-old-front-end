@@ -134,7 +134,7 @@ socket.on('kline_update', data => {
     obj.close = Number(data.close)
     obj.volume = Number(data.volume)
     const sub = _subs[_subs.length - 1] || {}
-    sub.listener(obj)
+    sub.listener && sub.listener(obj)
     // sub.lastBar = obj
   }
 })
