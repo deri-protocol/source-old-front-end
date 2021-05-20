@@ -40,9 +40,13 @@ function Trade({wallet = {},trading}){
 
   const onDropdown = (event) => {
     if(trading.configs.length > 0){
-      event.stopPropagation();
+      // event.stopPropagation();
       setDropdown(!dropdown)    
     }
+  }
+
+  const showOrCloseMenu = () => {
+   setDropdown(!dropdown) 
   }
 
   //切换交易标的
@@ -51,8 +55,9 @@ function Trade({wallet = {},trading}){
     if(selected){
       setSpec(selected)
       trading.switch(selected);
-    }
+    } 
   }
+
 
   const onSlide = value => {    
     trading.setMargin(value);
@@ -230,9 +235,8 @@ function Trade({wallet = {},trading}){
             onClick={onDropdown}
             className='btn chec'>
             {(spec.symbol) || 'BTCUSD'} / {(spec.bTokenSymbol) || 'BUSD'} (10X)
-            <span
-              className='check-base-down' onClick={onDropdown}
-            ><svg
+            <span className='check-base-down' >
+            <svg
               t='1616752321986'
               className='icon'
               viewBox='0 0 1024 1024'

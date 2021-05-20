@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import { getUserInfoAll,getUserInfoInPool ,getPoolInfoApy} from '../../../lib/web3js/indexV2';
+import { useHistory } from 'react-router-dom';
 
 
 
 export default function Liquidity({wallet = {},chainId,address}) {
   const [userInfoInPool,setUserInfoInPool] = useState({})
   const [tradeSummary, setTradeSummary] = useState({});
+  const history = useHistory();
 
 	const loadUserInfoInPool = async () => {
 		const userInfo = await getUserInfoAll(wallet.account);
@@ -20,7 +22,9 @@ export default function Liquidity({wallet = {},chainId,address}) {
 		const poolInfo = await getPoolInfoApy(chainId,address);
 		const totalTradingVolumeCurrent = poolInfo.volume1h
 		setTradeSummary({totalTradingVolumeCurrent})
-	}
+  }
+  
+  const toTrade = () => history.push('/lite')
 
 	useEffect(() => {
 		if(wallet && wallet.account){
@@ -57,11 +61,9 @@ export default function Liquidity({wallet = {},chainId,address}) {
               
         </div>
         <div className="claim-btn">
-            <Link to='/lite'>
-                <button className="claim">
-                  TRADE
-                </button>
-              </Link>
+            <button className="claim" onClick={toTrade}>
+              TRADE
+            </button>
         </div>
     </div> 
   )
