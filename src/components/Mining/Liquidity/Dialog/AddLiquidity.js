@@ -8,6 +8,8 @@ import useSpecification from '../../../../hooks/useSpecification';
 
 
 export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool}){
+  const [amount, setAmount] = useState('0');
+  const [decimal, setDecimal] = useState('00');
   const [addValue, setAddValue] = useState('')
   const spec = useSpecification({wallet,address});
 
@@ -49,6 +51,14 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
     return true;
   }
 
+  useEffect(() => {    
+    const amount = (+balance).toFixed(2)
+    const decimal = amount.substring(amount.indexOf('.') + 1,amount.length)
+    setAmount(amount);
+    setDecimal(decimal)
+    return () => {};
+  }, [balance]);
+
 
   return(
     <div className='modal-dialog'>
@@ -65,7 +75,8 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
               <div className='money'>
                 <span> 
                   <span className='bt-balance'>
-                    <NumberFormat displayType='text' value ={balance } thousandSeparator={true} decimalScale={2}/>
+                    <NumberFormat displayType='text' value ={amount } thousandSeparator={true} allowZero={true}/>.
+                    <span className='float'><NumberFormat displayType='text' value ={decimal} thousandSeparator={true} decimalScale={2} allowZero={true}/></span>
                   </span> 
                     <div className='base-token'>{ baseToken }</div> 
                   </span>

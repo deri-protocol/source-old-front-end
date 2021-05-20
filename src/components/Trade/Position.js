@@ -216,7 +216,7 @@ function Position({wallet,trading}){
        spec={trading.config}
        afterDeposit={afterDeposit}
        balance={balance}
-       className='trade-dialog'
+       className='trading-dialog'
     />
     <WithDrawDialog
       wallet={wallet}
@@ -225,7 +225,7 @@ function Position({wallet,trading}){
       spec={trading.config}
       afterWithdraw={afterWithdraw}
       position={trading.position}
-      className='trade-dialog'
+      className='trading-dialog'
       // trading={trading}
       />
   </div>

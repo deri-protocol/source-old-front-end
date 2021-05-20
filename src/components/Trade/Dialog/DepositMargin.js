@@ -35,7 +35,6 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
       afterDeposit();
       onClose();
     } else {
-      // const msg = typeof res.error === 'string' ? res.error :
       alert('Deposit failed')
     }
     setPending(false)

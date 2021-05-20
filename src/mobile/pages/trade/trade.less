@@ -781,295 +781,346 @@
     }
   }
 }
+.trade-dialog {
 
-.modal-dialog {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  .modal-dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
-  .modal-content {
-    width: 3.4rem;
-    position: relative;
-    color: #AAAAAA;
-    position: relative;
-    background: rgba(13, 14, 15);
-    display: inline-block;
-    border: 1px solid #707070;
-    margin-left: 26px;
-    margin-top: 20px;
-    border-radius: 20px;
-    margin: auto;
+    .modal-content {
+      width: 3.4rem;
+      position: relative;
+      color: #AAAAAA;
+      position: relative;
+      background: rgba(13, 14, 15);
+      display: inline-block;
+      border: 1px solid #707070;
+      margin-left: 26px;
+      margin-top: 20px;
+      border-radius: 20px;
+      margin: auto;
 
-    .modal-header {
-      height: 0.55rem;
-      background: #0D0E0F;
-      border-bottom: 1px solid #707070;
-      line-height: 55px;
-      padding-left: 30px;
-      font-size: 0.15rem;
-      color: #D4E05C;
-      font-family: Tachyon, sans-serif;;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 20px 20px 0px 0px;
+      .modal-header {
+        height: 0.55rem;
+        background: #0D0E0F;
+        border-bottom: 1px solid #707070;
+        line-height: 55px;
+        padding-left: 30px;
+        font-size: 0.15rem;
+        color: #D4E05C;
+        font-family: Tachyon, sans-serif;;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 20px 20px 0px 0px;
 
-      .close {
-        color: #fff;
-        padding-right: 19px;
-        font-size: 0.3rem;
-        font-weight: 700;
+<<<<<<< Updated upstream
+.trading-dialog {
 
-        span {
-          cursor: pointer;
-        }
-      }
-    }
+  .modal-dialog {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
-    .modal-body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 10px;
-      font-weight: 300;
-      font-family: Korolev, sans-serif;
-      .margin-box-info {
-        width: 4rem;
-        margin-top: 33px;
-        height: 2.8rem;
-        font-size: 0.16rem;
+    .modal-content {
+      width: 3.4rem;
+      position: relative;
+      color: #AAAAAA;
+      position: relative;
+      background: rgba(13, 14, 15);
+      display: inline-block;
+      border: 1px solid #707070;
+      margin-left: 26px;
+      margin-top: 20px;
+      border-radius: 20px;
+      margin: auto;
 
-        .max {
-          margin-top: 20px;
-          margin-left: 5px;
-        }
+      .modal-header {
+        height: 0.55rem;
+        background: #0D0E0F;
+        border-bottom: 1px solid #707070;
+        line-height: 55px;
+        padding-left: 30px;
+        font-size: 0.15rem;
+        color: #D4E05C;
+        font-family: Tachyon, sans-serif;;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 20px 20px 0px 0px;
 
-        .money {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          color: #FFFFFF;
-          margin-top: 14px;
+=======
+>>>>>>> Stashed changes
+        .close {
+          color: #fff;
+          padding-right: 19px;
+          font-size: 0.3rem;
+          font-weight: 700;
 
-          .add {
-            width: 10px;
-            height: 10px;
-            background: @green;
-            border-radius: 50%;
-          }
-
-          .remove {
-            width: 10px;
-            height: 10px;
-            background: @red;
-            border-radius: 50%;
-          }
-
-          .bt-balance {
-            font-size: 0.3rem;
-          }
-        }
-
-        .enter-margin {
-          display: flex;
-          align-items: flex-end;
-          margin-top: 25px;
-
-          .input-margin {
-            width: 253px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            background-image: url('../../../assets/img/dark-button.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            border-radius: 6px;
-
-            .amount {
-              position: absolute;
-              top: 3px;
-              left: 22px;
-              font-size: 0.1rem;
-            }
-
-            .box {
-              width: 243px;
-              height: 43px;
-              border: 0;
-              font-size: 0.18rem;
-              
-              background: #1B1C1F;
-              display: flex;
-              justify-content: center;
-              align-items: flex-end;
-              border-radius: 3px;
-
-              .margin-value {
-                height: 24px;
-                width: 225px;
-                padding-left: 14px;
-                border: 0;
-                color: #fff;
-                background: #1B1C1F;
-                font-size: 0.18rem;
-              }
-            }
-          }
-        }
-        .max {
-          margin-top: 15px;
-          .max-btn-left{
-              margin-left: 20px;
-          }
           span {
-            color: #569BDA;
             cursor: pointer;
           }
-
-          .max-num {
-            color: #FFFFFF;
-          }
-        }
-
-        .add-margin-btn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-top: 0.3rem;
-
-          .margin-btn {
-            width: 276px;
-            height: 50px;
-            background: #202124;
-            box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
-            border-radius: 10px;
-            color: #CCCCCC;
-            font-size: 0.18rem;
-          }
-        }
-
-        .remove-margin-btn {
-          margin-top: 56px;
         }
       }
 
-      .contract-box-info {
+      .modal-body {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 10px;
+        font-weight: 300;
+        font-family: Korolev, sans-serif;
+        .margin-box-info {
+          width: 4rem;
+          margin-top: 33px;
+          height: 2.8rem;
+          font-size: 0.16rem;
 
-        .enter-margin {
-          display: flex;
-          align-items: flex-end;
-          margin-top: 25px;
-
-          .input-margin {
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            background-image: url('../../../assets/img/dark-button.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            border-radius: 6px;
-            margin-right: 4px;
-
-            .amount {
-              position: absolute;
-              top: 3px;
-              left: 22px;
-              font-size: 0.10rem;
-            }
-
-            .box {
-              height: 43px;
-              border: 0;
-              font-size: 0.18rem;
-              
-              background: #1B1C1F;
-              display: flex;
-              justify-content: center;
-              align-items: flex-end;
-              border-radius: 3px;
-
-              .margin-value {
-                height: 24px;
-                width: 328px;
-                padding-left: 14px;
-                border: 0;
-                color: #fff;
-                background: #1B1C1F;
-              }
-            }
+          .max {
+            margin-top: 20px;
+            margin-left: 5px;
           }
-        }
 
-        .top {
-          border-bottom: 1px solid rgba(112, 112, 112, 0.4470588235294118);
-          .text {
+          .money {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 50px;
+            color: #FFFFFF;
+            margin-top: 14px;
+
+            .add {
+              width: 10px;
+              height: 10px;
+              background: @green;
+              border-radius: 50%;
+            }
+
+            .remove {
+              width: 10px;
+              height: 10px;
+              background: @red;
+              border-radius: 50%;
+            }
+
+            .bt-balance {
+              font-size: 0.3rem;
+            }
+          }
+
+          .enter-margin {
+            display: flex;
+            align-items: flex-end;
+            margin-top: 25px;
+
+            .input-margin {
+              width: 253px;
+              height: 50px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              background-image: url('../../../assets/img/dark-button.png');
+              background-size: 100% 100%;
+              background-repeat: no-repeat;
+              border-radius: 6px;
+<<<<<<< Updated upstream
+
+              .amount {
+                position: absolute;
+                top: 3px;
+                left: 22px;
+                font-size: 0.1rem;
+              }
+
+=======
+
+              .amount {
+                position: absolute;
+                top: 3px;
+                left: 22px;
+                font-size: 0.1rem;
+              }
+
+>>>>>>> Stashed changes
+              .box {
+                width: 243px;
+                height: 43px;
+                border: 0;
+                font-size: 0.18rem;
+                
+                background: #1B1C1F;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                border-radius: 3px;
+
+                .margin-value {
+                  height: 24px;
+                  width: 225px;
+                  padding-left: 14px;
+                  border: 0;
+                  color: #fff;
+                  background: #1B1C1F;
+                  font-size: 0.18rem;
+                }
+              }
+            }
+          }
+          .max {
+            margin-top: 15px;
+            .max-btn-left{
+                margin-left: 20px;
+            }
+            span {
+              color: #569BDA;
+              cursor: pointer;
+            }
+
+            .max-num {
+              color: #FFFFFF;
+            }
+          }
+
+          .add-margin-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.3rem;
+
+            .margin-btn {
+              width: 276px;
+              height: 50px;
+              background: #202124;
+              box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+              border-radius: 10px;
+              color: #CCCCCC;
+              font-size: 0.18rem;
+            }
+          }
+
+          .remove-margin-btn {
+            margin-top: 56px;
+          }
+        }
+
+        .contract-box-info {
+          display: flex;
+          flex-direction: column;
+
+          .enter-margin {
+            display: flex;
+            align-items: flex-end;
+            margin-top: 25px;
+
+            .input-margin {
+              height: 50px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: relative;
+              background-image: url('../../../assets/img/dark-button.png');
+              background-size: 100% 100%;
+              background-repeat: no-repeat;
+              border-radius: 6px;
+              margin-right: 4px;
+
+              .amount {
+                position: absolute;
+                top: 3px;
+                left: 22px;
+                font-size: 0.10rem;
+              }
+
+              .box {
+                height: 43px;
+                border: 0;
+                font-size: 0.18rem;
+                
+                background: #1B1C1F;
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                border-radius: 3px;
+
+                .margin-value {
+                  height: 24px;
+                  width: 328px;
+                  padding-left: 14px;
+                  border: 0;
+                  color: #fff;
+                  background: #1B1C1F;
+                }
+              }
+            }
+          }
+
+          .top {
+            border-bottom: 1px solid rgba(112, 112, 112, 0.4470588235294118);
+            .text {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              height: 50px;
+              padding-left: 9px;
+              padding-right: 10px;
+              font-size: 0.18rem;
+              color: #FFFFFF;
+              font-family:  Korolev, sans-serif;;
+
+              .long {
+                color: @green;
+              }
+
+              .short {
+                color: @red;
+              }
+            }
+
+            .text:nth-child(odd) {
+              background: #323338;
+            }
+          }
+        }
+
+        .modal-footer {
+          margin: 20px;
+          padding: 0;
+          border: 0;
+          justify-content: center;
+
+          button {    
+            width: 1.4rem;
+            height: 0.4rem;
+            border-radius: 10px;
+            color: #CCCCCC;
+            font-size: 0.18rem;
+            cursor: pointer;
+          }
+
+          .confirm {
+            background: #202124;
+            box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
+          }
+
+          .long-btn {
+            width:100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding-left: 9px;
             padding-right: 10px;
-            font-size: 0.18rem;
-            color: #FFFFFF;
-            font-family:  Korolev, sans-serif;;
 
-            .long {
-              color: @green;
+            .cancel {
+              background: #323338;
+              box-shadow: -2px -2px 2px rgba(90, 90, 90, 0.8);
             }
 
-            .short {
-              color: @red;
-            }
-          }
-
-          .text:nth-child(odd) {
-            background: #323338;
-          }
-        }
-      }
-
-      .modal-footer {
-        margin: 20px;
-        padding: 0;
-        border: 0;
-        justify-content: center;
-
-        button {    
-          width: 1.4rem;
-          height: 0.4rem;
-          border-radius: 10px;
-          color: #CCCCCC;
-          font-size: 0.18rem;
-          cursor: pointer;
-        }
-
-        .confirm {
-          background: #202124;
-          box-shadow: 0px 0px 7px rgba(170, 170, 170, 0.8);
-        }
-
-        .long-btn {
-          width:100%;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-left: 9px;
-          padding-right: 10px;
-
-          .cancel {
-            background: #323338;
-            box-shadow: -2px -2px 2px rgba(90, 90, 90, 0.8);
           }
 
         }
-
       }
     }
   }

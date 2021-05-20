@@ -40,13 +40,9 @@ function Trade({wallet = {},trading}){
 
   const onDropdown = (event) => {
     if(trading.configs.length > 0){
-      // event.stopPropagation();
+      event.preventDefault();
       setDropdown(!dropdown)    
     }
-  }
-
-  const showOrCloseMenu = () => {
-   setDropdown(!dropdown) 
   }
 
   //切换交易标的
@@ -55,6 +51,7 @@ function Trade({wallet = {},trading}){
     if(selected){
       setSpec(selected)
       trading.switch(selected);
+      setDropdown(false)    
     } 
   }
 
@@ -153,7 +150,9 @@ function Trade({wallet = {},trading}){
 
   //spec select hide listener
   useEffect(() => {
-    const bodyClickListener = document.body.addEventListener('click',() => setDropdown(false))
+    const bodyClickListener = document.body.addEventListener('click',event => {
+      setDropdown(false)
+    },false)
     return () => {
       document.body.removeEventListener('click',bodyClickListener)
     }
@@ -231,11 +230,11 @@ function Trade({wallet = {},trading}){
       <div className='check-baseToken'>
         <div className='btn-group check-baseToken-btn'>
           <button
-            type='button'
+            type='button'            
             onClick={onDropdown}
             className='btn chec'>
             {(spec.symbol) || 'BTCUSD'} / {(spec.bTokenSymbol) || 'BUSD'} (10X)
-            <span className='check-base-down' >
+            <span className='check-base-down'>
             <svg
               t='1616752321986'
               className='icon'
@@ -404,7 +403,8 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const [isApprove, setIsApprove] = useState(true);
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [confirmIsOpen, setConfirmIsOpen] = useState(false);
+  const [depositIsOpen, setDeposiIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
 
   
@@ -426,7 +426,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
 
   const afterDeposit = async () => {    
-    onClose();
+    setDeposiIsOpen(false);
     afterTrade()
   }
 
@@ -457,10 +457,12 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   }, [wallet.detail.account,spec,available]);
 
   useEffect(() => {
-    if((+available) > 0){
-      setNoBalance(false)
-    } else {
-      setNoBalance(true)
+    if(!depositIsOpen && !confirmIsOpen){
+      if((+available) > 0){
+        setNoBalance(false)
+      } else {
+        setNoBalance(true)
+      }
     }
     return () => {
     };
@@ -476,21 +478,16 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
     if(spec){
       loadApprove();
     }
-    return () => {      
-    };
+    return () => {};
   }, [spec]);
 
-  const onClose = () => {
-    setModalIsOpen(false)
-  }
-  
 
   let actionElement =(<>
     <ConfirmDialog  wallet={wallet}
-                    className='trade-dialog'
+                    className='trading-dialog'
                     spec={spec}
-                    modalIsOpen={modalIsOpen} 
-                    onClose={onClose} 
+                    modalIsOpen={confirmIsOpen} 
+                    onClose={() => setConfirmIsOpen(false)} 
                     leverage = {leverage} 
                     baseToken={baseToken} 
                     volume={volume} 
@@ -500,7 +497,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     afterTrade={afterTrade}
                     direction={direction}
                     />
-    <button className='short-submit' onClick={() => setModalIsOpen(true)}>TRADE</button>
+    <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>TRADE</button>
   </>)
 
   if(hasConnectWallet()){
@@ -510,15 +507,15 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       actionElement = (<>
         <DepositDialog 
           wallet={wallet}
-          modalIsOpen={modalIsOpen} 
-          onClose={onClose}
+          modalIsOpen={depositIsOpen} 
+          onClose={() => setDeposiIsOpen(false)}
           spec={spec}
           balance={balance}
           afterDeposit={afterDeposit}
-          className='trade-dialog'
+          className='trading-dialog'
         />
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
-        <button className='short-submit'  onClick={() => setModalIsOpen(true)}>DEPOSIT</button>
+        <button className='short-submit'  onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
       </>)
     } else if(emptyVolume) {
       actionElement = <Button className='btn btn-danger short-submit' disabled btnText='ENTER VOLUME'/>

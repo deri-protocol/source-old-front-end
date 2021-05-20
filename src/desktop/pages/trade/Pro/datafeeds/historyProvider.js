@@ -126,7 +126,7 @@ socket.on('connect', data => {
 socket.on('kline_update', data => {
   let obj = {}
   let time = data.time
-  if (data.time_type === param.time_type && data.symbol === param.symbol) {
+  if (data.time_type === param.time_type && data.symbol.toUpperCase() === param.symbol.toUpperCase()) {
     obj.time = time // TradingView requires bar time in ms
     obj.low = Number(data.low)
     obj.high = Number(data.high)

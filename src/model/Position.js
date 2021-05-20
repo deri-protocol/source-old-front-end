@@ -33,10 +33,16 @@ export default class Position {
 
    start(wallet,spec,callback){
      if(!this.interval){
-      this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)
-      this.wallet = wallet;
-      this.spec = spec;
-      this.callback = callback;
+      this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)      
+      if(wallet){
+        this.wallet= wallet; 
+        }
+        if(spec){
+          this.spec = spec
+        }
+        if(callback){
+          this.callback = callback;
+        }
      }
    }
 
@@ -45,8 +51,8 @@ export default class Position {
     this.interval = null;
    }
 
-   resume(){
-     this.start(this.wallet,this.spec,this.callback)
+   resume(wallet,spec,callback){
+     this.start(wallet,spec,callback || this.callback)
    }
 
    setInfo(info){

@@ -29,8 +29,7 @@ function PoolBox({wallet,pool}){
       mintAirdrop(chainId,wallet.detail.account)
     }
   }
-  const mining = () => history.push(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`)
-  const approve = async () => await unlock(wallet.detail.chainId,pool.pool,wallet.detail.chainId)
+  const mining = () => history.push(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`)  
 
   const connectWallet = () => {
     wallet.connect()

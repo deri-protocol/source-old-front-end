@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 
 export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool}){  
   const [amount, setAmount] = useState('');
+  const [balance, setBalance] = useState('0');
+  const [decimal, setDecimal] = useState('00');
 
 
   const addAll = () => {
@@ -47,6 +49,18 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     }
     return true;
   }
+
+
+  useEffect(() => {    
+    if(liqInfo && liqInfo.shares){
+      const balance = (+liqInfo.shares).toFixed(2)
+      const decimal = balance.substring(balance.indexOf('.') +1 ,balance.length)
+      setBalance(balance);
+      setDecimal(decimal)
+    }
+    return () => {};
+  }, [liqInfo.shares]);
+
   
   
   return(
@@ -64,8 +78,9 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
-                    <NumberFormat displayType='text' value ={liqInfo.shares} thousandSeparator={true} decimalScale={2}/>
-                    </span>
+                    <NumberFormat displayType='text' value ={balance} decimalScale={0} thousandSeparator={true}/>.
+                    <span className='float'>{decimal}</span>
+                  </span>
                     </span>
                 <span className='remove'></span>
               </div>

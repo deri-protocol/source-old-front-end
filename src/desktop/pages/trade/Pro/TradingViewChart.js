@@ -20,7 +20,7 @@ function TradingViewChart({symbol}){
       datafeed: datafeeds,
       interval: currentInterval,
       container_id: defaultProps.containerId,
-      library_path: `${process.env.PUBLIC_URL}/charting_library/`,      
+      library_path: '/charting_library/',      
       locale: 'en',
       custom_css_url : `${process.env.PUBLIC_URL}/style/tradingview-overide.css`,
       disabled_features: [

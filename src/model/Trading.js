@@ -90,7 +90,8 @@ export default class Trading {
       //配置信息，如chainId、pool address、symbol、baseToken等
       const all = await this.configInfo.load();
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
-      this.setConfig(all.find(c => eqInNumber(wallet.detail.chainId,c.chainId)) || {})
+      const defaultConfig = this.getDefaultConfig(this.configs,wallet);
+      this.setConfig(defaultConfig);
       this.onConfigChange(this.wallet,this.config,true)
     }
     this.setVolume('')
@@ -100,12 +101,40 @@ export default class Trading {
     const cur = this.configs.find(config => config.pool === spec.pool)
     const changed = spec.symbol !== this.config.symbol
     if(cur){
-      this.pause();
       this.setConfig(cur)
-      this.onConfigChange(this.wallet,cur,changed);      
+      this.pause();
+      this.onConfigChange(this.wallet,cur,changed);  
+      if(changed){
+        this.store(cur)
+      }    
       this.resume()
       this.setVolume('')
     }
+  }
+
+
+  getDefaultConfig(all = [],wallet){
+    //优先使用session storage 的
+    if(all.length > 0){    
+      const fromStore = this.getFromStore();
+      if(fromStore && eqInNumber(wallet.detail.chainId,fromStore.chainId)){
+        return fromStore;
+      } else {
+        return all[0]
+      }
+    }
+    return {}    
+  }
+
+  //存起来
+  store(config){
+    if(config){
+      sessionStorage.setItem('current-trading-pool',JSON.stringify(config))
+    }
+  }
+
+  getFromStore(){
+    return JSON.parse(sessionStorage.getItem('current-trading-pool'))
   }
 
   async onConfigChange(wallet,config,symbolChanged){
@@ -153,8 +182,8 @@ export default class Trading {
    */
   resume(){
     this.setPaused(false)
-    this.oracle.resume();
-    this.positionInfo.resume();
+    // this.oracle.resume();
+    this.positionInfo.resume(this.wallet,this.config);
   }
 
   setWallet(wallet){

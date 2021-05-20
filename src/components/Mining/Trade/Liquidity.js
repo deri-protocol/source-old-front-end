@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import { getUserInfoAll,getUserInfoInPool ,getPoolInfoApy} from '../../../lib/web3js/indexV2';
 import { useHistory } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 
 
 
-export default function Liquidity({wallet = {},chainId,address}) {
+function Liquidity({wallet = {},trading,chainId,address,symbol}) {
   const [userInfoInPool,setUserInfoInPool] = useState({})
   const [tradeSummary, setTradeSummary] = useState({});
   const history = useHistory();
@@ -24,7 +25,11 @@ export default function Liquidity({wallet = {},chainId,address}) {
 		setTradeSummary({totalTradingVolumeCurrent})
   }
   
-  const toTrade = () => history.push('/lite')
+  const toTrade = () => {
+    trading.switch({chainId : chainId,pool : address,symbol : symbol})
+    // sessionStorage.setItem('current-trading-pool',JSON.stringify())
+    history.push('/lite')
+  }
 
 	useEffect(() => {
 		if(wallet && wallet.account){
@@ -68,3 +73,4 @@ export default function Liquidity({wallet = {},chainId,address}) {
     </div> 
   )
 }
+export default inject('trading')(observer(Liquidity))
