@@ -31,8 +31,8 @@
   margin: auto;
 }
 .mobile .nav .logo img {
-  width: calc(60 * 100vh/812);
-  height: calc(35 * 100vh/812);
+  width: 7.38916vh;
+  height: 4.31034vh;
 }
 .mobile .btn {
   font-size: 0.16rem;
