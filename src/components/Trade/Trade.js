@@ -281,7 +281,7 @@ function Trade({wallet = {},trading}){
           </div>
           <div className='funding-rate'>
             <span>Funding: &nbsp;</span>
-            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.index} decimalScale={4} suffix='%'/></span> 
+            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%'/></span> 
           </div>
         </div>
       </div>

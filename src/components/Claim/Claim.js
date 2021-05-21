@@ -92,7 +92,7 @@ export default function Claim({wallet}){
 				</div>
 				<div className='odd text'>
 						<div className='text-title'>Claimed DERI</div>
-						<div className='text-num'>{ claimInfo.claimed }</div>
+						<div className='text-num'>{claimed ? ((+claimInfo.claimed) + (+claimInfo.unclaimed)).toFixed(2) : claimInfo.claimed }</div>
 				</div>
 				<div className='odd text'>
 						<div className='text-title'></div>

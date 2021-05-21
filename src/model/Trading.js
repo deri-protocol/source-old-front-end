@@ -165,6 +165,8 @@ export default class Trading {
     const position = await this.positionInfo.load(this.wallet,this.config);
     this.setPosition(position)
     this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+    const fundingRate = await this.loadFundingRate(this.wallet,this.config)
+    this.setFundingRate(fundingRate)
     this.setVolume('')
   }
 
