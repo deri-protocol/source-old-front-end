@@ -49,6 +49,7 @@ function Trade({wallet = {},trading}){
   const onSelect = select => {
     const selected = trading.configs.find(config => config.pool === select.pool )
     if(selected){
+      trading.pause();
       setSpec(selected)
       trading.switch(selected);
       setDropdown(false)    
@@ -85,7 +86,9 @@ function Trade({wallet = {},trading}){
   const loadTransactionFee = async () => {
     if(hasConnectWallet() && hasSpec()) {
       const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(trading.volumeDisplay));
-      setTransFee(transFee);
+      if(!isNaN(transFee)){
+        setTransFee((+transFee).toFixed(2));
+      }
     }
   }
 
@@ -149,14 +152,14 @@ function Trade({wallet = {},trading}){
 
 
   //spec select hide listener
-  useEffect(() => {
-    const bodyClickListener = document.body.addEventListener('click',event => {
-      setDropdown(false)
-    },false)
-    return () => {
-      document.body.removeEventListener('click',bodyClickListener)
-    }
-  }, []);
+  // useEffect(() => {
+  //   const bodyClickListener = document.body.addEventListener('click',event => {
+  //     setDropdown(false)
+  //   },false)
+  //   return () => {
+  //     document.body.removeEventListener('click',bodyClickListener)
+  //   }
+  // }, []);
 
   
   useEffect(() => {

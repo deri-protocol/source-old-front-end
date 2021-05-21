@@ -13,9 +13,9 @@ const {chainInfo} = config[env]
 
 function Mining({wallet}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
-	const {chainId,baseToken,address} =  useParams();
+	const {chainId,baseToken,address,type} =  useParams();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,baseToken,address,wallet}
+	const props = {chainId,baseToken,address,wallet,type}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	return(
     <div className={poolInfoClass}>

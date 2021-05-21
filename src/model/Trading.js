@@ -2,6 +2,7 @@ import { observable, action, computed, makeObservable } from "mobx";
 import Oracle from "./Oracle";
 import Position from "./Position";
 import Contract from "./Contract";
+import History from './History'
 import Config from "./Config";
 import { eqInNumber } from "../utils/utils";
 import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
@@ -47,6 +48,7 @@ export default class Trading {
   position = {}
   contract = {}
   fundingRate = {}
+  history = []
   userSelectedDirection = 'long'
 
   constructor(){
@@ -56,6 +58,7 @@ export default class Trading {
       margin : observable,
       fundingRate : observable,
       position : observable,
+      history : observable,
       contract : observable,
       paused : observable,
       userSelectedDirection : observable,
@@ -68,9 +71,9 @@ export default class Trading {
       setVolume : action,
       setUserSelectedDirection : action,
       setFundingRate : action,
+      setHistory : action,
       setPaused : action,
       amount : computed,
-      // effect : computed,
       fundingRateTip : computed,
       direction : computed,
       volumeDisplay : computed
@@ -79,6 +82,7 @@ export default class Trading {
     this.oracle = new Oracle();
     this.positionInfo = new Position()
     this.contractInfo = new Contract();
+    this.historyInfo = new History()
   }
 
   /**
@@ -99,7 +103,7 @@ export default class Trading {
 
   async switch(spec){
     const cur = this.configs.find(config => config.pool === spec.pool)
-    const changed = spec.symbol !== this.config.symbol
+    const changed = !this.config || spec.pool !== this.config.pool
     if(cur){
       this.setConfig(cur)
       this.pause();
@@ -110,6 +114,33 @@ export default class Trading {
       this.resume()
       this.setVolume('')
     }
+  }
+
+  async onConfigChange(wallet,config,symbolChanged){
+     //position
+     this.positionInfo.load(wallet,config,position => {       
+        this.setPosition(position);
+     })
+
+     //切换指数
+    if(symbolChanged){
+      this.oracle.unsubscribeBars();
+      this.oracle.addListener('trading',data => {
+        this.setIndex(data.close)
+      })
+      this.oracle.load(config.symbol)
+    }
+     //contract
+     const contract = await this.contractInfo.load(wallet,config)
+     this.setContract(contract)
+
+     //funding rate
+     const fundingRate = await this.loadFundingRate(wallet,config)
+     this.setFundingRate(fundingRate)
+
+     //history
+     const history = await this.historyInfo.load(wallet,config);
+     this.setHistory(history);
   }
 
 
@@ -137,37 +168,19 @@ export default class Trading {
     return JSON.parse(sessionStorage.getItem('current-trading-pool'))
   }
 
-  async onConfigChange(wallet,config,symbolChanged){
-     //position
-     const position = await this.positionInfo.load(wallet,config,position => {       
-        this.setPosition(position);
-     })
-     this.setPosition(position);
-     //index
-
-    if(symbolChanged){
-      this.oracle.unsubscribeBars();
-      this.oracle.addListener('trading',data => {
-        this.setIndex(data.close)
-      })
-      this.oracle.load(config.symbol)
-    }
-     //contract
-     const contract = await this.contractInfo.load(wallet,config)
-     this.setContract(contract)
-
-     //funding rate
-     const fundingRate = await this.loadFundingRate(wallet,config)
-     this.setFundingRate(fundingRate)
-  }
-
   async refresh(){
+    this.pause()
     const position = await this.positionInfo.load(this.wallet,this.config);
     this.setPosition(position)
     this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
     const fundingRate = await this.loadFundingRate(this.wallet,this.config)
     this.setFundingRate(fundingRate)
+    const history = await this.historyInfo.load(this.wallet,this.config)
+    if(history){
+      this.setHistory(history)
+    }
     this.setVolume('')
+    this.resume();
   }
 
   /**
@@ -175,7 +188,7 @@ export default class Trading {
    */
   pause(){
     this.setPaused(true)
-    // this.oracle.pause();
+    this.oracle.pause();
     this.positionInfo.pause();
   }
 
@@ -184,7 +197,7 @@ export default class Trading {
    */
   resume(){
     this.setPaused(false)
-    // this.oracle.resume();
+    this.oracle.resume();
     this.positionInfo.resume(this.wallet,this.config);
   }
 
@@ -212,6 +225,10 @@ export default class Trading {
 
   setContract(contract){
     this.contract = contract
+  }
+
+  setHistory(history){
+    this.history = history
   }
 
   setFundingRate(fundingRate){

@@ -1,27 +1,16 @@
-import { makeAutoObservable, observable, action } from "mobx"
 import { getPositionInfo } from "../lib/web3js/indexV2"
 
 export default class Position {
-   // contract info
-   info = {}
 
-   callback = () => {}
+  callback = () => {}
    wallet = null;
    spec = null
  
-   constructor(){
-     makeAutoObservable(this,{
-        info : observable,
-        setInfo : action,
-       }
-     )
-   }
 
    async load(wallet,spec,callback){
      if(spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
       if(position){
-        this.setInfo(position);
         if(callback){
           callback(position)
         }
@@ -55,9 +44,7 @@ export default class Position {
      this.start(wallet,spec,callback || this.callback)
    }
 
-   setInfo(info){
-     this.info = info;
-   }
+   
 
 
  

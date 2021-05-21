@@ -6,16 +6,16 @@ import classNames from 'classnames';
 import config from '../../../../config.json'
 import rightArrow from '../../../../assets/img/play-button.png'
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
+import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
-export default function History({wallet,spec}) {
+
+function History({wallet,trading}) {
   const [history, setHistory] = useState([]);
 
-  useEffect(() => {
-    const loadHistory = async () => {
-      if(wallet.isConnected() && spec && spec.pool){
-        const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account);    
-        const his = all.map(item => {
+  async function loadHistory (){
+    if(wallet.isConnected() && trading.config && trading.history.length > 0){
+      const his = trading.history.map(item => {
         item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
         item.directionText = 'LONG / BUY' 
         if(item.direction === 'SHORT') {
@@ -25,13 +25,18 @@ export default function History({wallet,spec}) {
         }
         return item;
       })
-        setHistory(his)
-      }
+    setHistory(his)
     }
+  }
+
+
+  useEffect(() => {
     loadHistory()
-    return () => {
-    };
-  }, [wallet.detail.account,spec]);
+    return () => {};
+  }, [wallet.detail.account,trading.config,trading.history]);
+
+
+
   return (
     <div className='history-box'>
       <div className='p-box theader'>
@@ -99,4 +104,6 @@ function HistoryLine({wallet,his}){
     </span> 
   )
 }
+
+export default inject('wallet','trading')(observer(History))
 
