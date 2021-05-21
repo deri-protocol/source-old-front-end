@@ -14,7 +14,17 @@ export default function History({wallet,spec}) {
   useEffect(() => {
     const loadHistory = async () => {
       if(wallet.isConnected() && spec && spec.pool){
-        const his = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account);    
+        const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account);    
+        const his = all.map(item => {
+        item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
+        item.directionText = 'LONG / BUY' 
+        if(item.direction === 'SHORT') {
+          item.directionText = 'SHORT / SELL'
+        } else if (item.direction === 'Liquidation') {
+          item.directionText = 'LIQUIDATION'
+        }
+        return item;
+      })
         setHistory(his)
       }
     }
@@ -40,7 +50,7 @@ export default function History({wallet,spec}) {
               {dateFormat.asString('yyyy-MM-dd hh:mm:ss',new Date(parseInt(his.time)))}
             </div>
             <div className={his.direction}>
-              {his.direction === 'LONG' ? `${his.direction} / BUY` : `${his.direction} / SELL`}
+              {his.directionText}
               <HistoryLine wallet={wallet} his={his}/>
             </div>
             <div>

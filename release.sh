@@ -1,4 +1,4 @@
-yarn build
+yarn build --nomaps
 cp -R build/* ../alphatest
 cd ../alphatest
 git add .

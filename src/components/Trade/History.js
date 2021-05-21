@@ -19,6 +19,12 @@ export default function History({wallet = {},spec ={} ,specs = []}){
       const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
       const his = all.map(item => {
         item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
+        item.directionText = 'LONG / BUY' 
+        if(item.direction === 'SHORT') {
+          item.directionText = 'SHORT / SELL'
+        } else if (item.direction === 'Liquidation') {
+          item.directionText = 'LIQUIDATION'
+        }
         const find = specs.find(s => s.bTokenSymbol === item.baseToken)
         if(find){
           item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
