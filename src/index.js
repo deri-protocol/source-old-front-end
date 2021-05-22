@@ -13,7 +13,11 @@ import { DeriEnv } from './lib/web3js/config';
 const wallet = new Wallet();
 const trading = new Trading()
 
-DeriEnv.set('prod')
+console.log(process.env)
+if(process.env.NODE_ENV === 'production') {
+  DeriEnv.set('prod')
+} 
+
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
