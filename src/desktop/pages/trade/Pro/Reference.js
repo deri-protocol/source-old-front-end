@@ -14,6 +14,7 @@ function Reference({wallet,trading}) {
 
   const curClassName = classNames('position-info',curTab)
 
+
   return (
     <div className={curClassName}>
       <div className='position-header'>
@@ -38,9 +39,10 @@ function Reference({wallet,trading}) {
       </div>
       <div className='pos-his-info '>
         <Position/>
-        <History wallet={wallet} spec ={trading.config}/>
+        <History/>
       </div>
     </div>
   )
 }
-export default  inject('wallet','trading')(observer(Reference))
+export default  Reference;
+// export default  inject('wallet','trading')(observer(Reference))

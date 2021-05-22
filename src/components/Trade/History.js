@@ -7,16 +7,16 @@ import config from '../../config.json'
 import classNames from 'classnames';
 import rightArrow from '../../assets/img/play-button.png'
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
+import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-export default function History({wallet = {},spec ={} ,specs = []}){
-  const [history, setHistory] = useState([]);
-  
+function History({wallet ,trading}){
+  const [history, setHistory] = useState([]);  
 
-  const loadHistory =  async () => {
-    if(wallet.isConnected() && spec.pool){
-      const all = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account)
+  async function loadHistory (){
+    if(wallet.isConnected() && trading.configs && trading.config){
+      const all = trading.history
       const his = all.map(item => {
         item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
         item.directionText = 'LONG / BUY' 
@@ -25,7 +25,7 @@ export default function History({wallet = {},spec ={} ,specs = []}){
         } else if (item.direction === 'Liquidation') {
           item.directionText = 'LIQUIDATION'
         }
-        const find = specs.find(s => s.bTokenSymbol === item.baseToken)
+        const find = trading.configs.find(s => s.bTokenSymbol === item.baseToken)
         if(find){
           item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
         }
@@ -35,14 +35,10 @@ export default function History({wallet = {},spec ={} ,specs = []}){
     }
   }
 
-  // useInterval(loadHistory,3000)
   useEffect(() => {
-    if(spec && specs.length > 0){
-      loadHistory();
-    }
-    return () => {      
-    };
-  }, [wallet.detail,spec,specs]);
+    loadHistory();
+    return () => {};
+  }, [wallet.detail,trading.configs,trading.config]);
   
   return (
     <div className='history-info' v-show='historyShow'>
@@ -102,3 +98,5 @@ function HistoryLine({wallet,his}){
     </span> 
   )
 }
+
+export default inject('wallet','trading')(observer(History))

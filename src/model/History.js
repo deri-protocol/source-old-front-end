@@ -1,18 +1,10 @@
-import { makeAutoObservable, observable, action } from "mobx"
+import { getTradeHistory } from "../lib/web3js/indexV2";
+
 
 export default class History {
-   //history 
-   history = []
- 
-   constructor(){
-     makeAutoObservable(this,{
-         history : observable,
-         getHistory : action,
-       }
-     )
-   }
 
-   getHistory(){
-     
+   async load(wallet,config){
+    const all = await getTradeHistory(wallet.detail.chainId,config.pool,wallet.detail.account);    
+    return all;
    }
 }

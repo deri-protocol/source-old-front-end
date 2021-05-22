@@ -6,6 +6,7 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
 import { eqInNumber } from '../../utils/utils.js';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
@@ -29,8 +30,10 @@ function PoolBox({wallet,pool}){
       mintAirdrop(chainId,wallet.detail.account)
     }
   }
-  const mining = () => history.push(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`)  
 
+  const gotoMining = url => {
+    history.push(url)
+  }
   const connectWallet = () => {
     wallet.connect()
   }
@@ -44,10 +47,11 @@ function PoolBox({wallet,pool}){
         setButtonElement(<Button btnText='CLAIM' click={airdrop}></Button>)
       }
     } else {
-      setButtonElement(
-        <button onClick={mining}>
-          STAKING
-        </button>)
+      setButtonElement(        
+          <button onClick={() => gotoMining(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`)}>
+            STAKING
+          </button>
+        )
     }    
     return () => {};
   }, [pool]);

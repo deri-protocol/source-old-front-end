@@ -5,7 +5,7 @@ import Liquidity from './Liquidity';
 function LiquidityMining(props){
   return (
     <div className="liquidity-info">
-      <Claim {...props}/>
+      <Claim {...props} miningClaim={true}/>
       <Liquidity {...props}/>
   </div>)
 }
