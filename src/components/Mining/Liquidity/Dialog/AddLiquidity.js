@@ -75,7 +75,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
               <div className='money'>
                 <span> 
                   <span className='bt-balance'>
-                    <NumberFormat displayType='text' value ={amount } thousandSeparator={true} allowZero={true}/>.
+                    <NumberFormat displayType='text' value ={amount } thousandSeparator={true} allowZero={true} decimalScale={0}/>.
                     <span className='float'><NumberFormat displayType='text' value ={decimal} thousandSeparator={true} decimalScale={2} allowZero={true}/></span>
                   </span> 
                     <div className='base-token'>{ baseToken }</div> 
