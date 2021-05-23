@@ -1,12 +1,13 @@
+import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../../assets/img/logo.png'
 import { useRouteMatch } from 'react-router-dom'
+import Version from './Version';
 
 export default function Menu() {
   const isMining = useRouteMatch('/mining') ? true : false
   const isLite = useRouteMatch('/lite') ? true : false
   const isPro = useRouteMatch('/pro') ? true : false;
-
 
   return (
     <div className="nav-menu">
@@ -53,6 +54,7 @@ export default function Menu() {
           </li>
         </ul>
       </div>
+      <Version/>
     </div>
   )
 }

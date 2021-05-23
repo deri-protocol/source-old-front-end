@@ -7,16 +7,19 @@ import WithdrawMagin from './Dialog/WithdrawMargin';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { eqInNumber } from '../../utils/utils';
 import { inject, observer } from 'mobx-react';
+import { BalanceList } from './Dialog/BalanceList';
 
 
 
 const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
+const BalanceListDialog = withModal(BalanceList)
 
-function Position({wallet,trading}){
+function Position({wallet,trading,version}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
+  const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false)
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
@@ -55,6 +58,13 @@ function Position({wallet,trading}){
   const afterDeposit = () => {
     setAddModalIsOpen(false)
     refreshBalance()
+  }
+
+  const afterDepositAndWithdraw = () => {
+  }
+
+  const onCloseBalanceList = () => {
+    setBalanceListModalIsOpen(false)
   }
 
   const onCloseDeposit = () => {
@@ -137,6 +147,7 @@ function Position({wallet,trading}){
         </div>
       </div>
       <div className='info-right'>
+      {version.isV1 ? <>
         <div
           className='add-margin'
           id='openAddMargin'
@@ -179,6 +190,22 @@ function Position({wallet,trading}){
           </svg>
           Remove
         </div>
+      </> : (<div onClick={() => setBalanceListModalIsOpen(true)}><svg
+            className='svg'
+            xmlns='http://www.w3.org/2000/svg'
+            width='18'
+            height='18'
+            viewBox='0 0 18 18'
+          >
+            <path
+              id='log-out'
+              data-name='log out'
+              d='M18,9,12,4V7H5v4h7v3ZM2,2h8V0H2A2.006,2.006,0,0,0,0,2V16a2.006,2.006,0,0,0,2,2h8V16H2Z'
+              transform='translate(0 18) rotate(-90)'
+              fill='#e35061'
+            />
+          </svg>Deposit</div>)}
+        
       </div>
     </div>
     <div className='info'>
@@ -226,9 +253,18 @@ function Position({wallet,trading}){
       afterWithdraw={afterWithdraw}
       position={trading.position}
       className='trading-dialog'
-      // trading={trading}
       />
+    <BalanceListDialog
+      wallet={wallet}
+      modalIsOpen={balanceListModalIsOpen}
+      onClose={onCloseBalanceList}
+      spec={trading.config}
+      afterDepositAndWithdraw={afterDepositAndWithdraw}
+      position={trading.position}
+      overlay={{background : '#1b1c22'}}
+      className='balance-list-dialog'
+    />
   </div>
   )
 }
-export default inject('trading')(observer(Position))
+export default inject('wallet','trading','version')(observer(Position))

@@ -27,9 +27,11 @@ const withModal = Component => {
     }
 
     render(){
-      const {modalIsOpen,className} = this.props
+      const {modalIsOpen,className,overlay = {}} = this.props
+      const overlayMerged = Object.assign(customizeStyle.overlay,{...overlay})
+      const mergedStyle = Object.assign(customizeStyle,{overlay :overlayMerged})
       return (
-        <Modal isOpen={modalIsOpen} style={customizeStyle} appElement={appElement}>
+        <Modal isOpen={modalIsOpen} style={mergedStyle} appElement={appElement}>
           <div className={className}>
             <Component {...this.props} className={className} onClose={this.props.onClose}/>
           </div>

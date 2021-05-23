@@ -99,3 +99,10 @@
 .desktop .nav .nav-menu .mean .ref:hover .ref_box {
   display: block;
 }
+
+.desktop .nav .nav-menu .mean .v1 {
+  background: url(../../../assets/img/v1.png) 100% no-repeat
+}
+.desktop .nav .nav-menu .mean .v2 {
+  background: url(../../../assets/img/v2.png) 100% no-repeat
+}

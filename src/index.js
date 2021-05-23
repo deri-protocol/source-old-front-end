@@ -9,11 +9,12 @@ import Wallet from './model/Wallet';
 import NumberPolyfill from './lib/polyfill/numberPolyfill'
 import Trading from './model/Trading';
 import { DeriEnv } from './lib/web3js/config';
+import Version from './model/Version';
 
 const wallet = new Wallet();
 const trading = new Trading()
+const version = new Version();
 
-console.log(process.env)
 if(process.env.NODE_ENV === 'production') {
   DeriEnv.set('prod')
 } 
@@ -21,7 +22,7 @@ if(process.env.NODE_ENV === 'production') {
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-      <Provider wallet={wallet}  trading={trading} >
+      <Provider wallet={wallet}  trading={trading} version={version}>
         <App />
       </Provider>
     </HashRouter>

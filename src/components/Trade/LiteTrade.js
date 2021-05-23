@@ -45,9 +45,9 @@ function LiteTrade({wallet,trading,isPro}){
           </div>
         </div>
         <Trade/>
-        <Position  wallet ={wallet} />
+        <Position/>
         <History wallet ={wallet} spec={trading.config} specs={trading.configs} />
-        <ContractInfo wallet={wallet} />   
+        <ContractInfo />   
     </div> 
   )
 }
