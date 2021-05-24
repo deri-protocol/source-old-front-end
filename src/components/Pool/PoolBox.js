@@ -16,19 +16,19 @@ function PoolBox({wallet,pool}){
   const history = useHistory();
 
   const airdrop = () => {
-    const res = getUserInfoAllForAirDrop(pool.pool)
-    if(res){
-      const {chainId,valid} = res;
-      if(!valid){
-        alert('No DERI to claim')
-        return;
-      }
-      if(!eqInNumber(wallet.detail.chainId,chainId)) {
-        alert('Please switch to BSC to claim DERI')
-        return;
-      }
-      mintAirdrop(chainId,wallet.detail.account)
-    }
+    // const res = getUserInfoAllForAirDrop(pool.pool)
+    // if(res){
+    //   const {chainId,valid} = res;
+    //   if(!valid){
+    //     alert('No DERI to claim')
+    //     return;
+    //   }
+    //   if(!eqInNumber(wallet.detail.chainId,chainId)) {
+    //     alert('Please switch to BSC to claim DERI')
+    //     return;
+    //   }
+    //   mintAirdrop(chainId,wallet.detail.account)
+    // }
   }
 
   const gotoMining = url => {

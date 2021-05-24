@@ -8,9 +8,9 @@ const defaultProps = {
 }
 function TradingViewChart({symbol}){
   const [loading, setLoading] = useState(true);
-  const [actived, setActived] = useState('one-day');
+  const [actived, setActived] = useState('one');
   const [deriWidget, setDeriWidget] = useState(null);
-  const [currentInterval, setCurrentInterval] = useState('1D');
+  const [currentInterval, setCurrentInterval] = useState('1');
 
   const activedClass = classNames('btn',actived)
 

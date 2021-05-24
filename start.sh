@@ -1,1 +1,1 @@
-yarn start NODE_ENV=test
+yarn start NODE_ENV=production

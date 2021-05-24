@@ -27,7 +27,7 @@ function TradingView({wallet,trading}){
     <div id="trading-view">
       <div className='right-top'>
         <div className='symbol-basetoken-text'>
-          {(trading.config && trading.config.symbol) || 'BTCUSD'} / {(trading.config && trading.config.bTokenSymbol) || 'BUSD'} (10X)
+          {(trading.config && trading.config.symbol) || 'BTCUSD'} / {(trading.config && trading.config.bTokenSymbol) || 'USDT'} (10X)
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
