@@ -5,7 +5,7 @@ import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
 import { eqInNumber } from "../utils/utils";
-import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
+import { getFundingRate } from "../lib/web3js/indexV2";
 
 /**
  * 交易模型
@@ -129,6 +129,10 @@ export default class Trading {
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
+      if(!config.symbol){
+        config.symbol = 'BTCUSD'
+        config.bTokenSymbol = 'BUSD'
+      }
       this.oracle.load(config.symbol)
     }
      //contract
@@ -349,6 +353,10 @@ export default class Trading {
   //资金费率
   async loadFundingRate(wallet,config){
     if(wallet && config){    
+      if(!config.pool){
+        config.pool = '0x639a9C2fAe976D089dCcc2ffAE51Ef1dd04B7985';
+        wallet.detail.chainId = 56
+      }
       const res = await getFundingRate(wallet.detail.chainId,config.pool)
       return res;
     }

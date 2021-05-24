@@ -334,7 +334,6 @@ export const getEstimatedFee = async (chainId, poolAddress, volume) => {
  */
 export const getFundingRate = async (chainId, poolAddress) => {
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-
   const res = await perpetualPool
     .getFundingRate()
     .catch((err) => console.log('getFundingRate', err));
