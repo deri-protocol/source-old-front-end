@@ -12,17 +12,17 @@ export default class Contract {
   }
 
   setInfo(info){
-    if(!info.data){
-      info = {
-         bSymbol:'BUSD',
-         symbol:'BTCUSD',
-         multiplier:'0.0001',
-         fundingRateCoefficient:'0.0000025',
-         minInitialMarginRatio:0.1,
-         minMaintenanceMarginRatio:0.05,
-         feeRatio:0.0005,
-     }
-    }
+    // if(!info){
+    //   info = {
+    //      bSymbol:'BUSD',
+    //      symbol:'BTCUSD',
+    //      multiplier:'0.0001',
+    //      fundingRateCoefficient:'0.0000025',
+    //      minInitialMarginRatio:0.1,
+    //      minMaintenanceMarginRatio:0.05,
+    //      feeRatio:0.0005,
+    //  }
+    // }
     this.info = info;
   }
 

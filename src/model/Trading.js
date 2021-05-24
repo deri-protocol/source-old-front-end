@@ -97,7 +97,6 @@ export default class Trading {
       const defaultConfig = this.getDefaultConfig(this.configs,wallet);
       this.setConfig(defaultConfig);
       this.onConfigChange(this.wallet,this.config,true)
-      
     }
     this.setVolume('')
   }
@@ -211,7 +210,6 @@ export default class Trading {
   }
 
   setConfig(config){
-    
     this.config = config
   }
 
