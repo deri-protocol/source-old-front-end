@@ -48,7 +48,7 @@ function PoolBox({wallet,version,pool}){
       }
     } else {
       setButtonElement(        
-          <button onClick={() => gotoMining(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.symbolId}/${pool.bTokenSymbol}/${pool.baseTokenId}/${pool.address}`)}>
+          <button onClick={() => gotoMining(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.symbolId}/${pool.bTokenSymbol}/${pool.bTokenId}/${pool.address}`)}>
             STAKING
           </button>
         )

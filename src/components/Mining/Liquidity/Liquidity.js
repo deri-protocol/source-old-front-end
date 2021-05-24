@@ -156,7 +156,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 		if(isLpPool){
 			res = await unlockLp(chainId,address,wallet.detail.account);
 		} else {
-			res = await unlock(chainId,address,wallet.detail.account);
+			res = await unlock(chainId,address,wallet.detail.account,baseTokenId);
 		}		
 		if(res && res.success){
 			setIsApproved(true)
@@ -228,8 +228,8 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
     <div className="liquidity-btn">
 			{
 				btnType === 'add' 
-				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick}/> 
-				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick}/>
+				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick} baseTokenId={baseTokenId}/>
 			}			
 			{buttonElment}
   </div>

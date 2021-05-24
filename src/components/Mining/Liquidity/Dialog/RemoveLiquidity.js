@@ -3,7 +3,7 @@ import NumberFormat from 'react-number-format'
 import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 
-export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool}){  
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId}){  
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('0');
   const [decimal, setDecimal] = useState('00');
@@ -40,7 +40,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     if(isLpPool){
       res = await removeLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
     } else {
-      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
+      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount,baseTokenId);
     }
     
     if(!res || !res.success){

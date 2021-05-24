@@ -7,7 +7,7 @@ import useSpecification from '../../../../hooks/useSpecification';
 
 
 
-export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool}){
+export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool,baseTokenId}){
   const [amount, setAmount] = useState('0');
   const [decimal, setDecimal] = useState('00');
   const [addValue, setAddValue] = useState('')
@@ -42,7 +42,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
     if(isLpPool){
       res = await addLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue);
     } else{
-      res = await addLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue)
+      res = await addLiquidity(wallet.detail.chainId,address,wallet.detail.account,addValue,baseTokenId)
     }
     
     if (!res ||  !res.success) {
