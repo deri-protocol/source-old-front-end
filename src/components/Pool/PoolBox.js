@@ -6,11 +6,11 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
 import { eqInNumber } from '../../utils/utils.js';
-import { Link } from 'react-router-dom/cjs/react-router-dom.min';
-
+import v2LabelImg from '../../assets/img/v2-label.png'
+import v1LabelImg from '../../assets/img/v1-label.png'
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function PoolBox({wallet,pool}){
+function PoolBox({wallet,version,pool}){
   const [buttonElement, setButtonElement] = useState('');
   const logoClassName = `logo ${pool.bTokenSymbol}`
   const history = useHistory();
@@ -62,6 +62,7 @@ function PoolBox({wallet,pool}){
         <div className="network">
           {pool.network && pool.network.toUpperCase()}
         </div>
+        {version.isV2 && <div className='pool-label'><img src={pool.version === 'v2' ? v2LabelImg : v1LabelImg} alt={pool.version || 'v1'}/></div> }
       </div>
       <div className="pool-info">
         <div className="info-center">
@@ -106,4 +107,4 @@ function PoolBox({wallet,pool}){
     </div>
   )
 }
-export default  inject('wallet')(observer(PoolBox))
+export default  inject('wallet','version')(observer(PoolBox))

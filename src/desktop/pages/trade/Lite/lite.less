@@ -603,6 +603,11 @@
             //   box-shadow: -3px -3px 3px rgba(163, 163, 163, 0.2);
           }
 
+          img {            
+            margin-right: 3px;
+            vertical-align: middle;
+          }
+
           .svg {
             margin-right: 3px;
             vertical-align: middle;
@@ -1157,15 +1162,13 @@
     .modal-content {
       position: relative;
       display: inline-block;
-      margin-left: 26px;
-      margin-top: 20px;
       width: initial;
       height: initial;
 
       .modal-header {
-        height: 40px;
+        height: 54px;
         background: #0D0E0F;
-        line-height: 40px;
+        line-height: 54px;
         padding: 0 30px;
         font-size: 15px;
         color: #D4E05C;
@@ -1192,16 +1195,31 @@
         align-items: center;
         background: rgba(13, 14, 15);
         padding: 0;
+        .balance-list {
+          width : 640px;
+        }
         .balance-list .row {
-          height: 40px;
+          height: 50px;
+          line-height: 50px;
           padding : 0 20px;
-          line-height: 40px;
+          font-size: 16px;
+        }
+        .balance-list .row.header {
+          color: #AAAAAA;
+          font-size: 18px;
+        }
+        .balance-list .row span:nth-child(1) {
+          width: 120px;
+        }
+        .balance-list .row span:nth-child(2) ,.balance-list .row span:nth-child(3){
+          width: 150px;
+        }
+        .balance-list .row span:last-child{
+          width: 220px;
         }
         .balance-list .row span {
-          margin-left: 20px;
-          width: 50px;
-          width: 130px;
           display: inline-block;
+          text-align: center;
         }
         .balance-list .row:nth-child(odd) {
           background-color: #202124;

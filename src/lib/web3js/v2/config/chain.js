@@ -55,3 +55,14 @@ export const getChainProviderUrls = (chainId) => {
     throw new Error(`getChainProviderUrls: no urls for chainId ${chainId}`)
   }
 }
+
+export const getAnnualBlockNumberConfig = () => {
+  return {
+    1: '2367422',
+    56: '10497304',
+    128: '10511369',
+    3: '2367422',
+    97: '10497304',
+    256: '10511369',
+  };
+};

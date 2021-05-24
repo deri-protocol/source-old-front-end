@@ -23,7 +23,6 @@ describe('config', () => {
   test('getFilteredPoolconfig()', () => {
     expect(
       getFilteredPoolConfigList(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         '0',
         '1'
@@ -31,20 +30,17 @@ describe('config', () => {
     ).toEqual(1);
     expect(
       getFilteredPoolConfigList(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         '0',
       ).length
     ).toEqual(2);
     expect(
       getFilteredPoolConfigList(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
       ).length
     ).toEqual(5);
     expect(
       getFilteredPoolConfigList(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         null,
         '1',
@@ -54,7 +50,6 @@ describe('config', () => {
   test('getPoolconfig()', () => {
     expect(
       getPoolConfig(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         '0',
         '1'
@@ -62,20 +57,17 @@ describe('config', () => {
     ).toEqual('0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF');
     expect(
       getPoolConfig(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         '0',
       ).router
     ).toEqual('0xaDEe3A9149ee1FBa712aB081c5A6067D613571C1');
     expect(
       getPoolConfig(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
       ).router
     ).toEqual('0xaDEe3A9149ee1FBa712aB081c5A6067D613571C1');
     expect(
       getPoolConfig(
-        'dev',
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         null,
         '1',

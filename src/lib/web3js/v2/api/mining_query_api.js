@@ -1,6 +1,5 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
 import { getPoolConfig } from '../config'
-import { DeriEnv } from '../../config';
 
 export const getLiquidityInfo = async (
   chainId,
@@ -10,50 +9,24 @@ export const getLiquidityInfo = async (
   symbolId,
   useInfura,
 ) => {
-  // const {lToken:lTokenAddress} = getPoolConfig(DeriEnv.get(), poolAddress, bTokenId, symbolId)
-  // const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  // const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
+  const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId, symbolId)
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+  const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
-  // const [price, symbolInfo, parameterInfo] = await Promise.all([
-  //   getBTCUSDPrice(chainId, poolAddress),
-  //   pPool.getSymbol(symbolId),
-  //   pPool.getParameters(),
-  // ])
-  // const { multiplier, tradersNetCost, tradersNetVolume } = symbolInfo
-  // const { minPoolMarginRatio } = parameterInfo
-  // const poolDynamicEquity = liquidity.plus(
-  //   tradersNetCost.minus(tradersNetVolume.times(price).times(multiplier))
-  // );
-
-  // const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
-  //   lToken.balance(accountAddress),
-  //   lToken.totalSupply(),
-  // ]);
-  // return {
-  //   totalSupply: lTokenTotalSupply.toString(),
-  //   poolLiquidity: liquidity.toString(),
-  //   shares: lTokenBalance.toString(),
-  //   shareValue: calculateShareValue(
-  //     lTokenTotalSupply,
-  //     poolDynamicEquity
-  //   ).toString(),
-  //   maxRemovableShares: calculateMaxRemovableShares(
-  //     lTokenBalance,
-  //     lTokenTotalSupply,
-  //     liquidity,
-  //     tradersNetVolume,
-  //     tradersNetCost,
-  //     multiplier,
-  //     minPoolMarginRatio,
-  //     price
-  //   ).toString(),
-  // };
+  const [bTokenInfo, lTokenAsset] = await Promise.all([
+    perpetualPool.getBToken(bTokenId),
+    lToken.getAsset(accountAddress, bTokenId),
+  ])
+  const { liquidity: poolLiquidity } = bTokenInfo;
+  const { liquidity } = lTokenAsset
   return {
-    totalSupply: '-',
-    poolLiquidity: '-',
-    shares: '-',
-    shareValue: '-',
-    maxRemovableShares: '-',
+    //totalSupply: lTokenTotalSupply.toString(),
+    poolLiquidity: poolLiquidity.toString(),
+    // shares: liquidity.toString(),
+    // shareValue: '1',
+    // maxRemovableShares: liquidity.toString()
+    liquidity: liquidity.toString(),
+    maxRemovableliquidity: liquidity.toString()
   };
 };
 

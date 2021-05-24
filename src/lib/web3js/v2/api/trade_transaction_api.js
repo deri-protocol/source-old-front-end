@@ -1,9 +1,8 @@
-import { DeriEnv } from '../../config'
 import { getPoolConfig } from '../config'
 import { bTokenFactory, perpetualPoolRouterFactory, pTokenFactory } from '../factory'
 
 export const unlock = async (chainId, poolAddress, accountAddress, bTokenId) => {
-   const { bToken: bTokenAddress } = getPoolConfig(DeriEnv.get(), poolAddress, bTokenId);
+   const { bToken: bTokenAddress } = getPoolConfig(poolAddress, bTokenId);
   const bToken = bTokenFactory(chainId, bTokenAddress);
   let res;
   try {
@@ -23,7 +22,7 @@ export const depositMargin = async (
   amount,
   bTokenId,
 ) => {
-   const { router: routerAddress } = getPoolConfig(DeriEnv.get(), poolAddress, bTokenId);
+   const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -39,10 +38,10 @@ export const withdrawMargin = async (
   chainId,
   poolAddress,
   accountAddress,
+  amount,
   bTokenId,
-  amount
 ) => {
-   const { router: routerAddress } = getPoolConfig(DeriEnv.get(), poolAddress, bTokenId);
+   const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -58,10 +57,10 @@ export const tradeWithMargin = async (
   chainId,
   poolAddress,
   accountAddress,
-  symbolId,
   newVolume,
+  symbolId,
 ) => {
-   const { router: routerAddress } = getPoolConfig(DeriEnv.get(), poolAddress);
+   const { router: routerAddress } = getPoolConfig(poolAddress);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -74,7 +73,7 @@ export const tradeWithMargin = async (
 }
 
 export const closePosition = async (chainId, poolAddress, accountAddress, symbolId) => {
-   const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig(DeriEnv.get(), poolAddress);
+   const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig(poolAddress);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const pToken = pTokenFactory(chainId, pTokenAddress)
    const { volume } = await pToken.getPosition(accountAddress, symbolId)

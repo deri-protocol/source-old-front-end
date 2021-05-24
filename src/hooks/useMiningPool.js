@@ -12,7 +12,7 @@ import { formatAddress, isSushi } from '../utils/utils';
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function useMiningPool(){
+export default function useMiningPool(version){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
 

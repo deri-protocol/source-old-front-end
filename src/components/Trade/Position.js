@@ -8,6 +8,9 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { eqInNumber } from '../../utils/utils';
 import { inject, observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
+import addMarginIcon  from '../../assets/img/add-margin.svg'
+import removeMarginIcon from '../../assets/img/remove-margin.svg'
+import marginDetailIcon from '../../assets/img/margin-detail.png'
 
 
 
@@ -152,59 +155,14 @@ function Position({wallet,trading,version}){
           className='add-margin'
           id='openAddMargin'
           onClick={() => setAddModalIsOpen(true)}
-        >
-          <svg
-            className='svg'
-            xmlns='http://www.w3.org/2000/svg'
-            width='18'
-            height='18'
-            viewBox='0 0 18 18'
-          >
-            <path
-              id='login'
-              d='M13,9,7,4V7H0v4H7v3Zm3,7H8v2h8a2.006,2.006,0,0,0,2-2V2a2.006,2.006,0,0,0-2-2H8V2h8Z'
-              transform='translate(18) rotate(90)'
-              fill='#3ebf38'
-            />
-          </svg> 
-          Add
+        > 
+          <img src={removeMarginIcon} alt='add margin'/> Add
         </div>
-        <div
-          className='remove-margin'
-          onClick={() => setRemoveModalIsOpen(true)}
-        >
-          <svg
-            className='svg'
-            xmlns='http://www.w3.org/2000/svg'
-            width='18'
-            height='18'
-            viewBox='0 0 18 18'
-          >
-            <path
-              id='log-out'
-              data-name='log out'
-              d='M18,9,12,4V7H5v4h7v3ZM2,2h8V0H2A2.006,2.006,0,0,0,0,2V16a2.006,2.006,0,0,0,2,2h8V16H2Z'
-              transform='translate(0 18) rotate(-90)'
-              fill='#e35061'
-            />
-          </svg>
-          Remove
+        <div className='remove-margin'
+          onClick={() => setRemoveModalIsOpen(true)}>
+          <img src={addMarginIcon} alt='add margin'/> Remove
         </div>
-      </> : (<div onClick={() => setBalanceListModalIsOpen(true)}><svg
-            className='svg'
-            xmlns='http://www.w3.org/2000/svg'
-            width='18'
-            height='18'
-            viewBox='0 0 18 18'
-          >
-            <path
-              id='log-out'
-              data-name='log out'
-              d='M18,9,12,4V7H5v4h7v3ZM2,2h8V0H2A2.006,2.006,0,0,0,0,2V16a2.006,2.006,0,0,0,2,2h8V16H2Z'
-              transform='translate(0 18) rotate(-90)'
-              fill='#e35061'
-            />
-          </svg>Deposit</div>)}
+      </> : (<div onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</div>)}
         
       </div>
     </div>

@@ -1,16 +1,22 @@
-import { perpetualPoolFactory } from '../factory';
-import { getFilteredPoolConfigList } from '../config'
-import { bTokenFactory } from '../../factory/contracts';
+import { perpetualPoolFactory, bTokenFactory, pTokenFactory } from '../factory';
+import { getFilteredPoolConfigList, getPoolConfig} from '../config'
+import {
+  calculateEntryPrice,
+  calculatePnl,
+  calculateMarginHeld,
+  calculateLiquidationPrice,
+} from '../calculation'
+import { getOraclePrice, bg } from '../utils'
 
 export const getSpecification = async (
   chainId,
   poolAddress,
   bTokenId,
   symbolId,
+  useInfura,
 ) => {
-  const {symbol, bTokenSymbol } = getPoolConfig(DeriEnv.get(), poolAddress, bTokenId)
-  const perpetualPool = perpetualPoolFactory(chainId, routerAddress);
-
+  const {symbol, bTokenSymbol } = getPoolConfig(poolAddress, bTokenId)
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
   const [symbolInfo, parameterInfo] = await Promise.all([
     perpetualPool.getSymbol(symbolId),
     perpetualPool.getParameters(),
@@ -30,12 +36,12 @@ export const getSpecification = async (
     bSymbol: bTokenSymbol,
     multiplier: multiplier.toString(),
     feeRatio: feeRatio.toString(),
+    fundingRateCoefficient: fundingRateCoefficient.toString(),
     minPoolMarginRatio: minPoolMarginRatio.toString(),
     minInitialMarginRatio: minInitialMarginRatio.toString(),
     minMaintenanceMarginRatio: minMaintenanceMarginRatio.toString(),
     //minAddLiquidity: minAddLiquidity.toString(),
     //redemptionFeeRatio: redemptionFeeRatio.toString(),
-    fundingRateCoefficient: fundingRateCoefficient.toString(),
     minLiquidationReward: minLiquidationReward.toString(),
     maxLiquidationReward: maxLiquidationReward.toString(),
     liquidationCutRatio: liquidationCutRatio.toString(),
@@ -43,33 +49,41 @@ export const getSpecification = async (
   }
 };
 
-export const getPositionInfo = async (chainId, poolAddress, accountAddress, bTokenId, symbolId) => {
-//  return {
-//    volume: volume.toString(),
-//    averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
-//    margin: margin.toString(),
-//    marginHeld: calculateMarginHeld(
-//      price,
-//      volume,
-//      multiplier,
-//      minInitialMarginRatio
-//    ).toString(),
-//    unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
-//    liquidationPrice: calculateLiquidationPrice(
-//      volume,
-//      margin,
-//      cost,
-//      multiplier,
-//      minMaintenanceMarginRatio
-//    ).toString(),
-//  };
+export const getPositionInfo = async (chainId, poolAddress, accountAddress, bTokenId, symbolId, useInfura) => {
+  const {pToken: pTokenAddress } = getPoolConfig(poolAddress, bTokenId, symbolId)
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+  const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
+  const [price, symbolInfo, parameterInfo, positionInfo, margin] = await Promise.all([
+    getOraclePrice(poolAddress, symbolId),
+    perpetualPool.getSymbol(symbolId),
+    perpetualPool.getParameters(),
+    pToken.getPosition(accountAddress, symbolId),
+    pToken.getMargin(accountAddress, symbolId),
+  ])
+  const { volume, cost } = positionInfo
+  const { multiplier } = symbolInfo
+  const {
+    minInitialMarginRatio,
+    minMaintenanceMarginRatio,
+  } = parameterInfo
  return {
-   volume: '-',
-   averageEntryPrice: '-',
-   margin: '-',
-   marginHeld: '-',
-   unrealizedPnl: '-',
-   liquidationPrice: '-',
+   volume: volume.toString(),
+   averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
+   margin: margin.toString(),
+   marginHeld: calculateMarginHeld(
+     price,
+     volume,
+     multiplier,
+     minInitialMarginRatio
+   ).toString(),
+   unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
+   liquidationPrice: calculateLiquidationPrice(
+     volume,
+     margin,
+     cost,
+     multiplier,
+     minMaintenanceMarginRatio
+   ).toString(),
  };
 }
 
@@ -78,27 +92,40 @@ export const getWalletBalance = async (
   poolAddress,
   accountAddress,
   bTokenId,
+  useInfura,
 ) => {
+  const { bToken: bTokenAddress } = getPoolConfig(poolAddress, bTokenId);
+  const balance = await bTokenFactory(chainId, bTokenAddress, useInfura).balanceOf(accountAddress)
+  return balance.toString()
+}
+
+export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId, useInfura) => { 
+  const { bToken: bTokenAddress } = getPoolConfig(poolAddress, bTokenId);
+  const bToken = await bTokenFactory(chainId, bTokenAddress, useInfura)
+  return bToken.isUnlocked(accountAddress, poolAddress)
+}
+
+export const getEstimatedFee = async (chainId, poolAddress, volume, bTokenId, symbolId, useInfura) => {
   return '-'
 }
 
-export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => { 
-  return false
-}
-
-export const getEstimatedFee = async (chainId, poolAddress, bTokenId, symbolId, volume) => {
-  return '-'
-}
-
-export const getEstimatedMargin = async(chainId,
+export const getEstimatedMargin = async(
+  chainId,
   poolAddress,
   accountAddress,
-  bTokenId,
-  symbolId,
   volume,
-  leverage
+  leverage,
+  symbolId,
+  useInfura,
 ) => {
-  return '-'
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+  const [price, symbolInfo ] = await Promise.all([
+    getOraclePrice(poolAddress, symbolId),
+    perpetualPool.getSymbol(symbolId),
+  ])
+  const {multiplier} = symbolInfo
+  console.log('m',multiplier.toString())
+  return bg(volume).abs().times(price).times(multiplier).div(bg(leverage)).toString()
 }
 
 export const getFundingRate = async (chainId, poolAddress, bTokenId, symbolId) => {
@@ -114,9 +141,9 @@ export const getFundingRate = async (chainId, poolAddress, bTokenId, symbolId) =
 export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
+  newNetVolume,
   bTokenId,
   symbolId,
-  newNetVolume
 ) => {
   return {
     fundingRate1: '-',
@@ -137,9 +164,9 @@ export const getLiquidityUsed = async (
 export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
+  newNetVolume,
   bTokenId,
   symbolId,
-  newNetVolume
 ) => {
   return {
     liquidityUsed1: '-'
@@ -154,13 +181,21 @@ export const getFundingRateCache = async(chainId, poolAddress, bTokenId, symbolI
   }
 }
 
-export const getPoolBTokensBySymbolId = async(chainId, poolAddress, symbolId) => {
-  const poolconfigList = getFilteredPoolConfigList(chainId, poolAddress, null, symbolId)
+export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddress, symbolId, useInfura) => {
+  const poolconfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
   let bTokenList = poolconfigList.map((i) => {
-    return {bTokenId: i.bTokenId, bTokenSymbol: i.bTokenSymbol}
+    return {bTokenId: i.bTokenId, bTokenSymbol: i.bTokenSymbol, bTokenAddress: i.bToken}
   })
+  let promiseList = []
+  for (let i=0; i<bTokenList.length; i++) {
+    promiseList.push(bTokenFactory(chainId, bTokenList[i].bTokenAddress, useInfura).balanceOf(accountAddress))
+  }
+  const resultList = await Promise.all(promiseList)
+  for (let i=0; i<bTokenList.length; i++) {
+    bTokenList[i].walletBalance = resultList[i].toString()
+  }
   bTokenList = bTokenList.map((i) => {
-    i.walletBalance = '0',
     i.availableBalance = '0'
     return i
   })

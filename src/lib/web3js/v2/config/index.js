@@ -1,2 +1,6 @@
-export { getChainProviderUrls } from './chain'
-export { getPoolConfigList, getFilteredPoolConfigList, getPoolConfig} from './contract'
+export { getChainProviderUrls, getAnnualBlockNumberConfig } from './chain';
+export {
+  getPoolConfigList,
+  getFilteredPoolConfigList,
+  getPoolConfig,
+} from './contract';

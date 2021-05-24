@@ -60,7 +60,7 @@ export const getWalletBalance = async (
   if (bTokenId === undefined) {
     return getWalletBalance2(chainId, poolAddress, accountAddress)
   } else {
-    return getWalletBalanceV2(chainId, poolAddress, accountAddress, bTokenId, symbolId)
+    return getWalletBalanceV2(chainId, poolAddress, accountAddress, bTokenId)
   }
 }
 
@@ -68,15 +68,15 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId)
   if (bTokenId === undefined) {
     return isUnlocked2(chainId, poolAddress, accountAddress)
   } else {
-    return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId, symbolId)
+    return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId)
   }
 }
 
-export const getEstimatedFee = async (chainId, poolAddress, bTokenId, symbolId, volume) => {
-  if (symbolId === undefined) {
+export const getEstimatedFee = async (chainId, poolAddress, volume, bTokenId, symbolId) => {
+  if (bTokenId === undefined) {
     return getEstimatedFee2(chainId, poolAddress, volume)
   } else {
-    return getEstimatedFeeV2(chainId, poolAddress, bTokenId, symbolId, volume)
+    return getEstimatedFeeV2(chainId, poolAddress, volume, bTokenId, symbolId)
   }
 }
 
@@ -84,15 +84,15 @@ export const getEstimatedMargin = async(
   chainId,
   poolAddress,
   accountAddress,
+  volume,
+  leverage,
   bTokenId,
   symbolId,
-  volume,
-  leverage
 ) => {
-  if (volume === undefined) {
+  if (bTokenId === undefined) {
     return getEstimatedMargin2(chainId, poolAddress, accountAddress, volume, leverage)
   } else {
-    return getEstimatedMarginV2(chainId, poolAddress, accountAddress, bTokenId, symbolId, volume, leverage)
+    return getEstimatedMarginV2(chainId, poolAddress, accountAddress, volume, leverage, bTokenId, symbolId)
   }
 }
 
@@ -107,14 +107,14 @@ export const getFundingRate = async (chainId, poolAddress, bTokenId, symbolId) =
 export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
+  newNetVolume,
   bTokenId,
   symbolId,
-  newNetVolume
 ) => {
-  if (symbolId === undefined) {
+  if (bTokenId === undefined) {
     return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume)
   } else {
-    return getEstimatedFundingRateV2(chainId, poolAddress, bTokenId, symbolId, newNetVolume)
+    return getEstimatedFundingRateV2(chainId, poolAddress, newNetVolume, bTokenId, symbolId)
   }
 }
 
@@ -134,14 +134,14 @@ export const getLiquidityUsed = async (
 export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
+  newNetVolume,
   bTokenId,
   symbolId,
-  newNetVolume
 ) => {
-  if (symbolId === undefined) {
+  if (bTokenId === undefined) {
     return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume)
   } else {
-    return getEstimatedLiquidityUsedV2(chainId, poolAddress, bTokenId, symbolId, newNetVolume)
+    return getEstimatedLiquidityUsedV2(chainId, poolAddress, newNetVolume, bTokenId, symbolId)
   }
 }
 

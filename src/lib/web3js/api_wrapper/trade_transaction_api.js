@@ -31,13 +31,13 @@ export const depositMargin = async (
   chainId,
   poolAddress,
   accountAddress,
+  amount,
   bTokenId,
-  amount
 ) => {
-  if(amount === undefined) {
+  if(bTokenId === undefined) {
     return depositMargin2(chainId, poolAddress, accountAddress, amount)
   } else {
-    return depositMarginV2(chainId, poolAddress, accountAddress, bTokenId, amount)
+    return depositMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId)
   }
 };
 
@@ -45,13 +45,13 @@ export const withdrawMargin = async (
   chainId,
   poolAddress,
   accountAddress,
+  amount,
   bTokenId,
-  amount
 ) => {
-  if(amount === undefined) {
+  if(bTokenId === undefined) {
     return withdrawMargin2(chainId, poolAddress, accountAddress, amount)
   } else {
-    return withdrawMarginV2(chainId, poolAddress, accountAddress, bTokenId, amount)
+    return withdrawMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId)
   }
 };
 
@@ -59,13 +59,13 @@ export const tradeWithMargin = async (
   chainId,
   poolAddress,
   accountAddress,
+  newVolume,
   symbolId,
-  newVolume
 ) => {
-  if(newVolume === undefined) {
+  if(symbolId === undefined) {
     return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume)
   } else {
-    return tradeWithMarginV2(chainId, poolAddress, accountAddress, symbolId, newVolume)
+    return tradeWithMarginV2(chainId, poolAddress, accountAddress, newVolume, symbolId)
   }
 };
 

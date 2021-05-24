@@ -4,7 +4,8 @@ export {
   toWei,
   numberToHex,
   bg,
-  fetchWithTimeout,
 } from './utils';
-export * from './api'
+export * from './calculation'
+
 export * from './contract'
+export * from './api'

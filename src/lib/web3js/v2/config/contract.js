@@ -1,4 +1,4 @@
-import { bTokenFactory } from "../../factory/contracts";
+import { DeriEnv } from "../../config";
 
 export const getPoolConfigList = (env = 'dev') => {
   if (env === 'prod') {
@@ -84,10 +84,10 @@ export const getPoolConfigList = (env = 'dev') => {
   }
 };
 
-export const getFilteredPoolConfigList = (env='dev', poolAddress, bTokenId, symbolId) => {
+export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId) => {
   bTokenId = typeof bTokenId === 'number' ? bTokenId.toString() : bTokenId
   symbolId = typeof symbolId === 'number' ? symbolId.toString() : symbolId
-  const poolConfigList = getPoolConfigList(env)
+  const poolConfigList = getPoolConfigList(DeriEnv.get())
   const check = bTokenId != null
     ? symbolId != null
       ? (i) =>
@@ -105,7 +105,7 @@ export const getFilteredPoolConfigList = (env='dev', poolAddress, bTokenId, symb
   throw new Error(`Cannot find the pool config by poolAddress(${poolAddress}) bTokenId(${bTokenId}) and symbolId(${symbolId})`)
 }
 
-export const getPoolConfig = (env='dev', poolAddress, bTokenId, symbolId) => {
-  const res =  getFilteredPoolConfigList(env, poolAddress, bTokenId, symbolId)
+export const getPoolConfig = (poolAddress, bTokenId, symbolId) => {
+  const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId)
   return res[0]
 }
