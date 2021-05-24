@@ -93,7 +93,7 @@
     "build": "node scripts/build.js cross-env NODE_ENV=production",
     "build_alphatest": "node scripts/build.js cross-env NODE_ENV=test",
     "test": "node scripts/test.js cross-env NODE_ENV=test",
-    "start_p": "npx serve -s build"
+    "start_p": "node scripts/start.js cross-env NODE_ENV=production"
   },
   "eslintConfig": {
     "extends": [

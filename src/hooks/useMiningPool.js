@@ -56,7 +56,7 @@ export default function useMiningPool(version){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '12800',
+        liquidity : '0',
         symbol : '--',
         airdrop : true,
         buttonText : 'CLAIM'

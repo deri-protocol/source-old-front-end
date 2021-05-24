@@ -2,7 +2,7 @@
 import {useState} from 'react'
 import menuIcon from '../../img/menu.png'
 import logo from '../../img/deri-logo.png'
-import Menu from './Menu';
+import Menu from './Menu'; 
 import './header.less'
 
 export default function Nav(){
