@@ -15,22 +15,6 @@ function PoolBox({wallet,version,pool}){
   const logoClassName = `logo ${pool.bTokenSymbol}`
   const history = useHistory();
 
-  const airdrop = () => {
-    // const res = getUserInfoAllForAirDrop(pool.pool)
-    // if(res){
-    //   const {chainId,valid} = res;
-    //   if(!valid){
-    //     alert('No DERI to claim')
-    //     return;
-    //   }
-    //   if(!eqInNumber(wallet.detail.chainId,chainId)) {
-    //     alert('Please switch to BSC to claim DERI')
-    //     return;
-    //   }
-    //   mintAirdrop(chainId,wallet.detail.account)
-    // }
-  }
-
   const gotoMining = url => {
     history.push(url)
   }
@@ -44,11 +28,22 @@ function PoolBox({wallet,version,pool}){
       if(!wallet.isConnected()) {
         setButtonElement(<Button btnText='Connect Wallet' click={connectWallet}></Button>)
       } else {
-        setButtonElement(<Button btnText='CLAIM' click={airdrop}></Button>)
+        setButtonElement(<button>CLAIM</button>)
       }
     } else {
+      let url = `/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`
+      if(pool.bTokenId){
+        url = `${url}?baseTokenId=${pool.bTokenId}`
+      }
+      if(pool.symboleId){
+        if(url.indexOf('?') > 0){
+          url = `${url}&symboleId=${pool.symboleId}`
+        } else {
+          url = `${url}?symboleId=${pool.symboleId}`
+        }
+      }
       setButtonElement(        
-          <button onClick={() => gotoMining(`/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.symbolId}/${pool.bTokenSymbol}/${pool.bTokenId}/${pool.address}`)}>
+          <button onClick={() => gotoMining(url)}>
             STAKING
           </button>
         )

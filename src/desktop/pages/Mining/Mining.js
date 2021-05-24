@@ -17,7 +17,7 @@ function Mining({wallet}){
 	const {chainId,symbol,baseToken,address,type} =  useParams();
 	const query = useQuery();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,symbol,baseToken,address,wallet,type,baseTokenId,symbolId}
+	const props = {chainId,symbol,baseToken,address,wallet,type,baseTokenId : query.get('baseTokenId'),symbolId : query.get('symbolId')}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	return(
     <div className={poolInfoClass}>
