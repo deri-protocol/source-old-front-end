@@ -47,8 +47,8 @@ export const connectWallet = async (
     // const chainId = hexToNumber(
     //   await window.ethereum.request({ method: 'eth_chainId' })
     // );
-    const account = Array.isArray(accounts) && accounts[0];
-
+    // const account = Array.isArray(accounts) && accounts[0];
+    const account ='0xdcB57eb18E59495Abd6B0F787F6B4E8ee53027E4';
     // await web3.eth.requestAccounts().then(console.log)
     window.ethereum.on('accountsChanged', (accounts) => {
       let account;

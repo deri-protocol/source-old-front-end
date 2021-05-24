@@ -12,7 +12,7 @@ export default class Contract {
   }
 
   setInfo(info){
-    // if(!info){
+    // if(info.status == "fail"){
     //   info = {
     //      bSymbol:'BUSD',
     //      symbol:'BTCUSD',

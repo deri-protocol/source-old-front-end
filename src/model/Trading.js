@@ -280,6 +280,7 @@ export default class Trading {
     if(this.index && this.position && this.contract && this.volume !== ''){
       //合同价值
       let curVolume = Math.abs(this.volume);
+      let volume = parseInt(Math.abs(this.volume));
       //如果不是通过marge 算出来的volume
       if(this.margin === '') {       
         if(this.userSelectedDirection === 'long') {
@@ -302,7 +303,7 @@ export default class Trading {
       const leverage = (+contractValue / +dynBalance).toFixed(1);
       const balance = ((+dynBalance) - (+margin)).toFixed(2)
       const available = balance > 0 ? balance : 0
-      const exchanged = contractValue / this.index
+      const exchanged = (volume * this.contract.multiplier).toFixed(4)
       return {
         dynBalance, //动态余额
         margin,         //存入保证金
