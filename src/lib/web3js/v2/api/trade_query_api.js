@@ -5,17 +5,21 @@ import {
   calculatePnl,
   calculateMarginHeld,
   calculateLiquidationPrice,
-} from '../calculation'
+  calculateLiquidityUsed,
+  calculateFundingRate,
+  processFundingRate,
+} from '../calculation';
 import { getOraclePrice, bg } from '../utils'
+import { fundingRateCache, priceCache } from '../api/api_globals';
 
 export const getSpecification = async (
   chainId,
   poolAddress,
-  bTokenId,
+  //bTokenId,
   symbolId,
   useInfura,
 ) => {
-  const {symbol, bTokenSymbol } = getPoolConfig(poolAddress, bTokenId)
+  const {symbol } = getPoolConfig(poolAddress, null, symbolId)
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
   const [symbolInfo, parameterInfo] = await Promise.all([
     perpetualPool.getSymbol(symbolId),
@@ -33,7 +37,7 @@ export const getSpecification = async (
   } = parameterInfo
   return {
     symbol: symbol,
-    bSymbol: bTokenSymbol,
+    //bSymbol: bTokenSymbol,
     multiplier: multiplier.toString(),
     feeRatio: feeRatio.toString(),
     fundingRateCoefficient: fundingRateCoefficient.toString(),
@@ -49,8 +53,8 @@ export const getSpecification = async (
   }
 };
 
-export const getPositionInfo = async (chainId, poolAddress, accountAddress, bTokenId, symbolId, useInfura) => {
-  const {pToken: pTokenAddress } = getPoolConfig(poolAddress, bTokenId, symbolId)
+export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId, useInfura) => {
+  const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
   const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
   const [price, symbolInfo, parameterInfo, positionInfo, margin] = await Promise.all([
@@ -60,6 +64,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, bTok
     pToken.getPosition(accountAddress, symbolId),
     pToken.getMargin(accountAddress, symbolId),
   ])
+  priceCache.set(poolAddress, symbolId, price)
   const { volume, cost } = positionInfo
   const { multiplier } = symbolInfo
   const {
@@ -105,8 +110,20 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId,
   return bToken.isUnlocked(accountAddress, poolAddress)
 }
 
-export const getEstimatedFee = async (chainId, poolAddress, volume, bTokenId, symbolId, useInfura) => {
-  return '-'
+export const getEstimatedFee = async (chainId, poolAddress, volume, symbolId, useInfura) => {
+  let price = priceCache.get(poolAddress, symbolId)
+  if (!price) {
+    price = await getOraclePrice(poolAddress, symbolId)
+    priceCache.set(poolAddress, symbolId, price)
+  }
+  let cache = fundingRateCache.get(chainId, poolAddress, symbolId)
+  if (!cache || !cache.multiplier) {
+    await _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+    cache = fundingRateCache.get(chainId, poolAddress, symbolId)
+  }
+  const { multiplier, feeRatio } = cache;
+  //console.log(volume, price, multiplier, feeRatio)
+  return bg(volume).abs().times(price).times(multiplier).times(feeRatio).toString()
 }
 
 export const getEstimatedMargin = async(
@@ -123,18 +140,79 @@ export const getEstimatedMargin = async(
     getOraclePrice(poolAddress, symbolId),
     perpetualPool.getSymbol(symbolId),
   ])
+  priceCache.set(poolAddress, symbolId, price)
   const {multiplier} = symbolInfo
-  console.log('m',multiplier.toString())
+  //console.log('m',multiplier.toString())
   return bg(volume).abs().times(price).times(multiplier).div(bg(leverage)).toString()
 }
 
-export const getFundingRate = async (chainId, poolAddress, bTokenId, symbolId) => {
+export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
+  return fundingRateCache.get(chainId, poolAddress, symbolId)
+}
+
+const _getFundingRate = async(chainId, poolAddress, symbolId, useInfura) => {
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+  const poolconfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+  let bTokenIdList = poolconfigList.map((i) => i.bTokenId)
+  let promiseList = []
+  for (let i=0; i<bTokenIdList.length; i++) {
+    promiseList.push(perpetualPool.getBToken(i))
+  }
+  const bTokenInfoList = await Promise.all(promiseList)
+  //console.log('bTokenInfoList', bTokenInfoList[0].discount.toString(), bTokenInfoList[1].discount.toString())
+  const liquidity = bTokenInfoList.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.discount).plus(i.pnl)), bg(0))
+  //console.log('liquidity', liquidity.toString())
+
+  const [price, symbolInfo, parameterInfo] = await Promise.all([
+    getOraclePrice(poolAddress, symbolId),
+    perpetualPool.getSymbol(symbolId),
+    perpetualPool.getParameters(),
+  ])
+  priceCache.set(poolAddress, symbolId, price)
+  const { multiplier, fundingRateCoefficient, tradersNetVolume, feeRatio } = symbolInfo;
+  const { minPoolMarginRatio } = parameterInfo;
+  const fundingRateArgs = [
+    tradersNetVolume,
+    price,
+    multiplier,
+    liquidity,
+    fundingRateCoefficient,
+  ]
+  const fundingRatePerBlock = calculateFundingRate(...fundingRateArgs)
+  const fundingRate = processFundingRate(chainId, fundingRatePerBlock)
+  const liquidityUsedArgs = [
+    tradersNetVolume,
+    price,
+    multiplier,
+    liquidity,
+    minPoolMarginRatio,
+  ]
+  const liquidityUsed = calculateLiquidityUsed(...liquidityUsedArgs)
+  const res = {
+    price,
+    multiplier: multiplier.toString(),
+    feeRatio: feeRatio.toString(),
+    tradersNetVolume: tradersNetVolume.toString(),
+    liquidity: liquidity.toString(),
+    fundingRateCoefficient: fundingRateCoefficient.toString(),
+    minPoolMarginRatio: minPoolMarginRatio.toString(),
+    fundingRatePerBlock: fundingRatePerBlock,
+    fundingRate: fundingRate,
+    liquidityUsed: liquidityUsed,
+  }
+  fundingRateCache.set(chainId, poolAddress, symbolId, res)
+  return res
+}
+
+export const getFundingRate = async (chainId, poolAddress, symbolId, useInfura) => {
+  const res = await _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res
   return {
-    fundingRate0: '0.00%-',
-    fundingRatePerBlock: '-',
-    liquidity: '-',
+    fundingRate0: fundingRate.toString(),
+    fundingRatePerBlock: fundingRatePerBlock.toString(),
+    liquidity: liquidity.toString(),
     volume: '-',
-    tradersNetVolume: '-',
+    tradersNetVolume: tradersNetVolume.toString()
   };
 }
 
@@ -142,22 +220,39 @@ export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
   newNetVolume,
-  bTokenId,
   symbolId,
+  useInfura,
 ) => {
+  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+  if (!res) {
+    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  }
+  const args = [
+    bg(res.tradersNetVolume).plus(newNetVolume).toString(),
+    res.price,
+    res.multiplier,
+    res.liquidity,
+    res.fundingRateCoefficient,
+  ]
+  let fundingRate1 = calculateFundingRate(...args)
+  fundingRate1 = processFundingRate(chainId, fundingRate1)
   return {
-    fundingRate1: '-',
+    fundingRate1,
   }
 }
 
 export const getLiquidityUsed = async (
   chainId,
   poolAddress,
-  bTokenId,
-  symbolId
+  symbolId,
+  useInfura,
 ) => {
+  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+  if (!res) {
+    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  }
   return {
-    liquidityUsed0: '-',
+    liquidityUsed0: res.liquidityUsed.toString(),
   };
 };
 
@@ -165,21 +260,26 @@ export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
   newNetVolume,
-  bTokenId,
   symbolId,
+  useInfura,
 ) => {
+  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+  if (!res) {
+    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  }
+  const args = [
+    bg(res.tradersNetVolume).plus(newNetVolume).toString(),
+    res.price,
+    res.multiplier,
+    res.liquidity,
+    res.minPoolMarginRatio,
+  ]
+  const liquidityUsed1 = calculateLiquidityUsed(...args)
   return {
-    liquidityUsed1: '-'
+    liquidityUsed1: liquidityUsed1
   }
 }
 
-export const getFundingRateCache = async(chainId, poolAddress, bTokenId, symbolId) => {
-  return {
-    price: '-',
-    fundingRate: '-',
-    liquidityUsed: '-',
-  }
-}
 
 export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddress, symbolId, useInfura) => {
   const poolconfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)

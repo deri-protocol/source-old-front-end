@@ -18,7 +18,7 @@ describe('Mining query api', () => {
     const output = {
       poolLiquidity: '6040.987446450976269604',
       liquidity: '1040.987446450976269604',
-      maxRemovableliquidity: '1040.987446450976269604',
+      maxRemovableLiquidity: '1040.987446450976269604',
     }
     expect(await getLiquidityInfo(...input)).toEqual(output)
   }, TIMEOUT)

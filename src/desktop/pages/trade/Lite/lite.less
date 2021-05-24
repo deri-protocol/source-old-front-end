@@ -167,6 +167,7 @@
               top: -14px;
               left: 0px;
               will-change: transform;
+              z-index: 1;
             }
             .dropdown-menu {
               width: 273px;
@@ -1156,7 +1157,7 @@
   .modal-dialog {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 20%;
     transform: translate(-50%, -50%);
     font-family: Korolev,sans-serif;
     .modal-content {
@@ -1195,6 +1196,8 @@
         align-items: center;
         background: rgba(13, 14, 15);
         padding: 0;
+        border-radius: 20px;
+
         .balance-list {
           width : 640px;
         }
@@ -1203,19 +1206,22 @@
           line-height: 50px;
           padding : 0 20px;
           font-size: 16px;
+          .btoken {
+            width: 120px;
+          }
+          .w-balance,.avail-balance {
+            width: 150px;
+          }
+          .action {
+            span {
+              margin-left: 20px;
+              cursor: pointer;
+            }
+          }
         }
         .balance-list .row.header {
           color: #AAAAAA;
           font-size: 18px;
-        }
-        .balance-list .row span:nth-child(1) {
-          width: 120px;
-        }
-        .balance-list .row span:nth-child(2) ,.balance-list .row span:nth-child(3){
-          width: 150px;
-        }
-        .balance-list .row span:last-child{
-          width: 220px;
         }
         .balance-list .row span {
           display: inline-block;

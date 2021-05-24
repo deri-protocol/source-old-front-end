@@ -12,7 +12,7 @@ import { inject,  observer } from 'mobx-react';
 
 
 
-function Trade({wallet = {},trading}){
+function Trade({wallet = {},trading,version}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
   const [dropdown, setDropdown] = useState(false);  
@@ -132,7 +132,6 @@ function Trade({wallet = {},trading}){
     if (evt.which < 48 || evt.which > 57){
         evt.preventDefault();
     }
-    // return event.target.value !== '-' && event.target.value !== 'e' && event.target.value !== '' && /^\d*\.?\d*$/.test(event.target.value)
   }
 
   const volumeChange = event => {
@@ -213,9 +212,9 @@ function Trade({wallet = {},trading}){
 
   useEffect(() => {
     if(wallet.detail.account){
-      trading.init(wallet)
+      trading.init(wallet,version)
     }
-  },[wallet.detail.account])
+  },[wallet.detail.account,version.current])
 
 
   useEffect(() => {
@@ -391,6 +390,7 @@ function Trade({wallet = {},trading}){
                 afterTrade={afterTrade}
                 position={trading.position}
                 trading={trading}
+                symbolId={trading.config && trading.config.symbolId}
        />
     </div>
   </div>
@@ -402,7 +402,7 @@ const ConfirmDialog = withModal(TradeConfirm)
 const DepositDialog = withModal(DepositMargin)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
-                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading}){
+                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId}){
   const [isApprove, setIsApprove] = useState(true);
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
@@ -438,7 +438,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const loadApprove = async () => {
     if(hasConnectWallet() && spec){
       const {detail} = wallet
-      const result = await isUnlocked(detail.chainId,spec.pool,detail.account).catch(e => console.log(e))
+      const result = await isUnlocked(detail.chainId,spec.pool,detail.account,symbolId).catch(e => console.log(e))
       setIsApprove(result);
     }
   }
@@ -533,5 +533,5 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading')(observer(Trade))
+export default inject('wallet','trading','version')(observer(Trade))
 // export default Trade

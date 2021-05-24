@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { closePosition, getWalletBalance } from "../../lib/web3js/indexV2";
+import { closePosition, getWalletBalance, getPoolBTokensBySymbolId } from "../../lib/web3js/indexV2";
 import className from 'classnames'
 import withModal from '../hoc/withModal';
 import DepositMargin from './Dialog/DepositMargin';
@@ -26,6 +26,7 @@ function Position({wallet,trading,version}){
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
+  const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
@@ -89,9 +90,20 @@ function Position({wallet,trading,version}){
   })
 
 
+  const loadBalanceList = async () => {
+    if(wallet.detail.account && trading.config){
+      const list = await getPoolBTokensBySymbolId(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.symbolId)
+      setDepositAndWithdragList(list)
+    }
+
+  }
+
+
+
 
   useEffect(() => {
     loadBalance();
+    loadBalanceList();
     return () => {
     };
   }, [wallet.detail.account,trading.config]);
@@ -219,8 +231,9 @@ function Position({wallet,trading,version}){
       spec={trading.config}
       afterDepositAndWithdraw={afterDepositAndWithdraw}
       position={trading.position}
-      overlay={{background : '#1b1c22'}}
+      overlay={{background : '#1b1c22',top : 80}}
       className='balance-list-dialog'
+      depositAndWithdragList={depositAndWithdragList}
     />
   </div>
   )

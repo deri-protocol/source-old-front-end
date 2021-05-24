@@ -18,3 +18,5 @@ export const normalizeAddress = (address) => {
     throw new Error(`invalid address: ${address}`);
   }
 };
+
+export const validateArgs = (...args) => args.every((i) => !isNaN(parseFloat(i)));

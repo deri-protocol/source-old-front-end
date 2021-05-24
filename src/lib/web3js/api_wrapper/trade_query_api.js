@@ -14,7 +14,7 @@ import {
   getLiquidityUsed2,
   getFundingRateCache2,
 } from '../api/restApi'
-import { bTokenFactory } from '../factory/contracts'
+//import { bTokenFactory } from '../factory/contracts'
 
 import {
   getPositionInfo as getPositionInfoV2,
@@ -34,21 +34,20 @@ import {
 export const getSpecification = async (
   chainId,
   poolAddress,
-  bTokenId,
   symbolId,
 ) => {
   if (symbolId === undefined) {
     return getSpecification2(chainId, poolAddress)
   } else {
-    return getSpecificationV2(chainId, poolAddress, bTokenId, symbolId)
+    return getSpecificationV2(chainId, poolAddress, symbolId)
   }
 }
 
-export const getPositionInfo = async (chainId, poolAddress, accountAddress, bTokenId, symbolId) => {
-  if (bTokenId === undefined) {
+export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId) => {
+  if (symbolId === undefined) {
     return getPositionInfo2(chainId, poolAddress, accountAddress)
   } else {
-    return getPositionInfoV2(chainId, poolAddress, accountAddress, bTokenId, symbolId)
+    return getPositionInfoV2(chainId, poolAddress, accountAddress, symbolId)
   }
 }
 export const getWalletBalance = async (
@@ -72,11 +71,11 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId)
   }
 }
 
-export const getEstimatedFee = async (chainId, poolAddress, volume, bTokenId, symbolId) => {
-  if (bTokenId === undefined) {
+export const getEstimatedFee = async (chainId, poolAddress, volume, symbolId) => {
+  if (symbolId === undefined) {
     return getEstimatedFee2(chainId, poolAddress, volume)
   } else {
-    return getEstimatedFeeV2(chainId, poolAddress, volume, bTokenId, symbolId)
+    return getEstimatedFeeV2(chainId, poolAddress, volume, symbolId)
   }
 }
 
@@ -86,21 +85,20 @@ export const getEstimatedMargin = async(
   accountAddress,
   volume,
   leverage,
-  bTokenId,
   symbolId,
 ) => {
-  if (bTokenId === undefined) {
+  if (symbolId === undefined) {
     return getEstimatedMargin2(chainId, poolAddress, accountAddress, volume, leverage)
   } else {
-    return getEstimatedMarginV2(chainId, poolAddress, accountAddress, volume, leverage, bTokenId, symbolId)
+    return getEstimatedMarginV2(chainId, poolAddress, accountAddress, volume, leverage, symbolId)
   }
 }
 
-export const getFundingRate = async (chainId, poolAddress, bTokenId, symbolId) => {
-  if (bTokenId === undefined) {
+export const getFundingRate = async (chainId, poolAddress, symbolId) => {
+  if (symbolId === undefined) {
     return getFundingRate2(chainId, poolAddress)
   } else {
-    return getFundingRateV2(chainId, poolAddress, bTokenId, symbolId)
+    return getFundingRateV2(chainId, poolAddress, symbolId)
   }
 }
 
@@ -108,26 +106,24 @@ export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
   newNetVolume,
-  bTokenId,
   symbolId,
 ) => {
-  if (bTokenId === undefined) {
+  if (symbolId === undefined) {
     return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume)
   } else {
-    return getEstimatedFundingRateV2(chainId, poolAddress, newNetVolume, bTokenId, symbolId)
+    return getEstimatedFundingRateV2(chainId, poolAddress, newNetVolume, symbolId)
   }
 }
 
 export const getLiquidityUsed = async (
   chainId,
   poolAddress,
-  bTokenId,
   symbolId
 ) => {
-  if (bTokenId === undefined) {
+  if (symbolId === undefined) {
     return getLiquidityUsed2(chainId, poolAddress)
   } else {
-    return getLiquidityUsedV2(chainId, poolAddress, bTokenId, symbolId)
+    return getLiquidityUsedV2(chainId, poolAddress, symbolId)
   }
 };
 
@@ -135,20 +131,19 @@ export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
   newNetVolume,
-  bTokenId,
   symbolId,
 ) => {
-  if (bTokenId === undefined) {
+  if (symbolId === undefined) {
     return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume)
   } else {
-    return getEstimatedLiquidityUsedV2(chainId, poolAddress, newNetVolume, bTokenId, symbolId)
+    return getEstimatedLiquidityUsedV2(chainId, poolAddress, newNetVolume, symbolId)
   }
 }
 
-export const getFundingRateCache = async(chainId, poolAddress, bTokenId, symbolId) => {
-  if (bTokenId === undefined) {
+export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
+  if (symbolId === undefined) {
     return getFundingRateCache2(chainId, poolAddress)
   } else {
-    return getFundingRateCacheV2(chainId, poolAddress, bTokenId, symbolId)
+    return getFundingRateCacheV2(chainId, poolAddress, symbolId)
   }
 }

@@ -21,6 +21,7 @@ import {
   getAliveHttpServer,
   getChainProviderUrl,
   getAnnualBlockNumber,
+  validateArgs,
 } from '../utils'
 import fetch from 'node-fetch'
 import { getAnnualBlockNumberConfig } from '../config'
@@ -132,12 +133,12 @@ describe('utils', () => {
     function withInvalidChainId() {
       return normalizeChainId('43')
     }
-    expect(withInvalidChainId).toThrowError(/invalid chainId/);
+    expect(withInvalidChainId).toThrow(/invalid chainId/);
 
     function withEmptyChainId() {
       return normalizeChainId('')
     }
-    expect(withEmptyChainId).toThrowError(/invalid chainId/);
+    expect(withEmptyChainId).toThrow(/invalid chainId/);
 
     function withNullChainId() {
       return normalizeChainId()
@@ -156,5 +157,10 @@ describe('utils', () => {
     expect(getAnnualBlockNumber('1')).toEqual(2367422);
     expect(getAnnualBlockNumber('56')).toEqual(10497304);
     expect(getAnnualBlockNumber('97')).toEqual(10497304);
+  })
+  test('validateArgs()', () => {
+    expect(validateArgs('1')).toEqual(true);
+    expect(validateArgs(1.99)).toEqual(true);
+    expect(validateArgs(undefined)).toEqual(false);
   })
 })

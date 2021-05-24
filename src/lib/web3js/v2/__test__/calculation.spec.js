@@ -1,6 +1,8 @@
 import {
   calculateEntryPrice,
   calculatePnl,
+  calculateFundingRate,
+  calculateLiquidityUsed,
   calculateMaxWithdrawMargin,
 } from '../calculation';
 import { bg } from '../utils';
@@ -55,5 +57,25 @@ describe('calculation', () => {
     const input = [bg('36.97'), bg('7'), bg('0.1'), bg('27.33')]
     const output = bg('-1.451')
     expect(calculatePnl(...input)).toEqual(output)
+  })
+  test('calculateFundingRate()', () => {
+    // price, volume, multiplier, cost
+    const input = ['36.97', '7000', '0.1', '1000', '0.0001']
+    const output = bg('1.81153')
+    expect(calculateFundingRate(...input)).toEqual(output)
+
+    function withInvalidArgs() {
+      return calculateFundingRate('36.97', '7000', undefined, '1000', '0.0001')
+    }
+    expect(withInvalidArgs).toThrow(/invalid args/);
+  })
+  test('calculateLiquidityUsed', () => {
+    // price, volume, multiplier, cost
+    const input = ['29.99', '6999', '0.1', '1000', '0.1']
+    const output = bg('2.0990001')
+    expect(calculateLiquidityUsed(...input)).toEqual(output)
+    const input2 = ['-29.99', '6999', '0.1', '1000', '0.1']
+    const output2 = bg('2.0990001')
+    expect(calculateLiquidityUsed(...input2)).toEqual(output2)
   })
 })

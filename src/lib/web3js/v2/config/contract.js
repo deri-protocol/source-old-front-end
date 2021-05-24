@@ -64,22 +64,7 @@ export const getPoolConfigList = (env = 'dev') => {
         unit: 'ETH',
         chainId: '97',
         version: 'v2',
-      },
-      {
-        pool: '0x7dB32101081B17E105283820b2Ed3659DFE21470',
-        pToken: '0xeBA1c76F7A773B8210130f068798839F84392241',
-        lToken: '0x61162b0c9665Ce27a53b59E79C1B7A929cc3bB57',
-        router: '0xaDEe3A9149ee1FBa712aB081c5A6067D613571C1',
-        bToken: '0x0E7593F7058958dD3c6D487f0Bcb4F5455B64B67',
-        bTokenId: '3',
-        initialBlock: '',
-        bTokenSymbol: 'BETH',
-        symbol: 'ETHUSD',
-        symbolId: '1',
-        unit: 'ETH',
-        chainId: '97',
-        version: 'v2',
-      },
+      }
     ];
   }
 };

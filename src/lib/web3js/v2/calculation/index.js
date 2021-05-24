@@ -6,3 +6,9 @@ export {
   calculateLiquidationPrice,
   isOrderValid,
 } from './position';
+
+export {
+  calculateFundingRate,
+  calculateLiquidityUsed,
+  processFundingRate,
+} from './funding_rate'

@@ -88,11 +88,11 @@ export default class Trading {
   /**
    * 初始化
    */
-  async init(wallet){
+  async init(wallet,version){
+    //配置信息，如chainId、pool address、symbol、baseToken等
+    const all = await this.configInfo.load(version ? version.current : version);
     if(!this.wallet || wallet.detail.account !== this.wallet.detail.account){
       this.setWallet(wallet);
-      //配置信息，如chainId、pool address、symbol、baseToken等
-      const all = await this.configInfo.load();
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
       const defaultConfig = this.getDefaultConfig(this.configs,wallet);
       this.setConfig(defaultConfig);

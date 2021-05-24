@@ -17,8 +17,14 @@ describe('config', () => {
     expect(getChainProviderUrls('56')).toEqual(output);
   });
   test('getPoolConfigList()', () => {
-    const output = 5;
+    const output = 4;
     expect(getPoolConfigList('dev').length).toEqual(output);
+  });
+  test('getPoolConfigList() uniq by bTokenId', () => {
+    const output = 2;
+    const arr1 = getPoolConfigList('dev')
+    const arr2 = arr1.map(i => i.bTokenId)
+    expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(output)
   });
   test('getFilteredPoolconfig()', () => {
     expect(
@@ -38,14 +44,14 @@ describe('config', () => {
       getFilteredPoolConfigList(
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
       ).length
-    ).toEqual(5);
+    ).toEqual(4);
     expect(
       getFilteredPoolConfigList(
         '0x7dB32101081B17E105283820b2Ed3659DFE21470',
         null,
         '1',
       ).length
-    ).toEqual(3);
+    ).toEqual(2);
   });
   test('getPoolconfig()', () => {
     expect(

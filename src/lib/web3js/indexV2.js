@@ -83,5 +83,6 @@ export * from './api_wrapper';
 
 export {
   getPoolConfigList,
+  getFilteredPoolConfigList,
   getPoolBTokensBySymbolId,
 } from './v2';

@@ -11,8 +11,8 @@ export default class Config {
     })
   }
 
-  async load(){
-    const configs = await getContractAddressConfig(DeriEnv.get())
+  async load(version){
+    const configs = await getContractAddressConfig(DeriEnv.get(),version)
     this.setAll(configs)
     return configs;
   }

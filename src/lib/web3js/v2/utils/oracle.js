@@ -28,7 +28,7 @@ export const getOracleUrl = (poolAddress, symbolId) => {
 export const getOracleInfo = async (poolAddress, symbolId) => {
   let url = getOracleUrl(poolAddress, symbolId);
   //console.log('oracle url', url);
-  let retry = 5;
+  let retry = 3;
   //let timeout = 1000;
   let res;
   while (retry > 0) {

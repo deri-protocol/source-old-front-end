@@ -26,7 +26,7 @@ export const getLiquidityInfo = async (
     // shareValue: '1',
     // maxRemovableShares: liquidity.toString()
     liquidity: liquidity.toString(),
-    maxRemovableliquidity: liquidity.toString()
+    maxRemovableLiquidity: liquidity.toString()
   };
 };
 
