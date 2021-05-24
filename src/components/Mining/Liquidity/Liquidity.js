@@ -10,7 +10,7 @@ import withModal from '../../hoc/withModal';
 import { eqInNumber, isSushi } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-function Liquidity({wallet,chainId,baseToken,address,type}) {
+function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId}) {
   const [liquidity,setLiquidity] = useState({})
 
 	const isLpPool = (type === 'lp')
@@ -98,7 +98,7 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				</div>
 				<div className="title-check">
 				</div>
-				 <Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={baseToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo}/>
+				 <Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={baseToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
 	</div>
   )
 }
@@ -108,7 +108,7 @@ const AddDialog = withModal(AddLiquidity)
 const RemoveDialog = withModal(RemoveLiquidity)
 
 //操作区
-const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqInfo,loadLiqidityInfo})=> {
+const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqInfo,loadLiqidityInfo,baseTokenId,symbolId})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
@@ -143,7 +143,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 			setIsApproved(result);
 			return result;
 		} else {
-			const result = await isUnlocked(chainId,address,wallet.detail.account) 			 
+			const result = await isUnlocked(chainId,address,wallet.detail.account,baseTokenId) 			 
 			setIsApproved(result);
 			return result;
 		}
