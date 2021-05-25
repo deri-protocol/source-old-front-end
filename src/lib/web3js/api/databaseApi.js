@@ -174,21 +174,23 @@ export const getPoolInfoApy = async (chainId, poolAddress) => {
  * @returns {string} response.volume1h
  * @returns {string} response.volume24h
  */
-export const getSlpPoolInfoApy = async (chainId, poolAddress) => {
+export const getLpPoolInfoApy = async (chainId, poolAddress) => {
   const db = databaseFactory(true);
   try {
     const poolNetwork = getNetworkName(chainId);
     const res = await db
       .getValues([
         `${poolNetwork}.${poolAddress}.apy`,
+        `${poolNetwork}.${poolAddress}.apy2`,
         `${poolNetwork}.${poolAddress}.volume.1h`,
         `${poolNetwork}.${poolAddress}.volume.24h`,
       ])
       .catch((err) => console.log('getPoolInfoApy', err));
     if (res) {
-      const [apy, volume1h, volume24h] = res;
+      const [apy, apy2, volume1h, volume24h] = res;
       return {
         apy: deriToNatural(apy).toString(),
+        apy2: deriToNatural(apy2).toString(),
         volume1h: deriToNatural(volume1h).toString(),
         volume24h: deriToNatural(volume24h).toString(),
       };
@@ -209,29 +211,31 @@ export const getSlpPoolInfoApy = async (chainId, poolAddress) => {
  * @returns {string} response.volume1h
  * @returns {string} response.volume24h
  */
-export const getClpPoolInfoApy = async (chainId, poolAddress) => {
-  const db = databaseFactory(true);
-  try {
-    const poolNetwork = getNetworkName(chainId);
-    const res = await db
-      .getValues([
-        `${poolNetwork}.${poolAddress}.apy`,
-        `${poolNetwork}.${poolAddress}.volume.1h`,
-        `${poolNetwork}.${poolAddress}.volume.24h`,
-      ])
-      .catch((err) => console.log('getPoolInfoApy', err));
-    if (res) {
-      const [apy, volume1h, volume24h] = res;
-      return {
-        apy: deriToNatural(apy).toString(),
-        volume1h: deriToNatural(volume1h).toString(),
-        volume24h: deriToNatural(volume24h).toString(),
-      };
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+// export const getClpPoolInfoApy = async (chainId, poolAddress) => {
+//   const db = databaseFactory(true);
+//   try {
+//     const poolNetwork = getNetworkName(chainId);
+//     const res = await db
+//       .getValues([
+//         `${poolNetwork}.${poolAddress}.apy`,
+//         `${poolNetwork}.${poolAddress}.apy2`,
+//         `${poolNetwork}.${poolAddress}.volume.1h`,
+//         `${poolNetwork}.${poolAddress}.volume.24h`,
+//       ])
+//       .catch((err) => console.log('getPoolInfoApy', err));
+//     if (res) {
+//       const [apy, apy2, volume1h, volume24h] = res;
+//       return {
+//         apy: deriToNatural(apy).toString(),
+//         apy2: deriToNatural(apy2).toString(),
+//         volume1h: deriToNatural(volume1h).toString(),
+//         volume24h: deriToNatural(volume24h).toString(),
+//       };
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 /**
  * Get user info of the pool

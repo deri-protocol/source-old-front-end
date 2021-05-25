@@ -1,10 +1,8 @@
 
 import {getUserWalletBalance ,DeriEnv,connectWallet} from "../lib/web3js/indexV2";
 import config from '../config.json'
-import { formatBalance } from "../utils/utils";
+import { formatBalance, eqInNumber } from "../utils/utils";
 import { observable, computed, action, makeAutoObservable } from "mobx";
-
-const walletKey = 'mm_wallet_key'
 
 
 class Wallet {
@@ -14,8 +12,8 @@ class Wallet {
   constructor(){
     makeAutoObservable(this,{
       detail : observable,
-      loadWalletBalance : action,
-      connect : action      
+      setDetail : action,
+      supportV2 : computed   
     })
   }
 
@@ -43,7 +41,7 @@ class Wallet {
     if(chainInfo[chainId]){
       Object.assign(detail,{...chainInfo[chainId],supported : true})
     }
-    this.detail = detail;
+    this.setDetail(detail)
     return detail;
   }
 
@@ -51,11 +49,14 @@ class Wallet {
     return this.detail;
   }
 
-  remove = () => {
-    this.detail = null;
-    sessionStorage.removeItem(walletKey);
-    window.location.reload();
+  setDetail(detail){
+    this.detail = detail;
   }
+
+  get supportV2() {
+    return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97)
+  }
+
 }
 
 export default Wallet;

@@ -6,6 +6,7 @@ import {
   getContractAddressConfig,
   getSlpContractAddressConfig,
   getClpContractAddressConfig,
+  getClp2ContractAddressConfig,
   getLpContractAddressConfig,
   getAnnualBlockNumberConfig,
   getDeriContractAddressConfig,
@@ -357,6 +358,28 @@ export const getSlpContractAddress = (chainId, poolAddress) => {
   }
   console.log(
     `getSlpContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
+  );
+  return {};
+};
+
+export const getClp2ContractAddress = (chainId, poolAddress) => {
+  chainId = normalizeChainId(chainId);
+  const pools = getClp2ContractAddressConfig(DeriEnv.get()).filter(
+    (c) => c.chainId === chainId
+  );
+  const pool = pools.filter((p) => p.pool === poolAddress);
+  if (pool.length > 0) {
+    return {
+      poolAddress: pool[0].pool,
+      bTokenAddress: pool[0].bToken,
+      pTokenAddress: pool[0].pToken,
+      lTokenAddress: pool[0].lToken,
+      dTokenAdress: pool[0].dToken,
+      MinningVaultAddress: pool[0].MiningVault,
+    };
+  }
+  console.log(
+    `getClp2ContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
   );
   return {};
 };

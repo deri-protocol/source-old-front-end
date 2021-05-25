@@ -31,6 +31,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '56',
+        version: 'v1',
       },
       {
         pool: '0x011346B81e5326904B5B76A11dECAf2c67eFFc23',
@@ -44,6 +45,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'COIN',
         unit: 'COIN',
         chainId: '56',
+        version: 'v1',
       },
       {
         pool: '0x919F97417857781f754e00CCCD9100f78B759818',
@@ -57,6 +59,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'iMEME',
         unit: 'iMEME',
         chainId: '56',
+        version: 'v1',
       },
       {
         pool: '0x3C2970466635AAeFEd1cfe630D051Fa6D281aEbB',
@@ -70,6 +73,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '1',
+        version: 'v1',
       },
       {
         pool: '0x7137cc9f252dc405dadc35F597dA8B32e8653603',
@@ -83,6 +87,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '1',
+        version: 'v1',
       },
       {
         pool: '0x9b404BAB12CE0D5039e7313d9e24f4b5c8E8E8e3',
@@ -96,6 +101,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '128',
+        version: 'v1',
       },
     ];
   }
@@ -112,6 +118,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       symbol: 'BTCUSD',
       unit: 'BTC',
       chainId: '3',
+      version: 'v1',
     },
     {
       pool: '0xFFe402106E8F73F0A44C7350C2b734e048f448f2',
@@ -123,6 +130,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       symbol: 'BTCUSD',
       unit: 'BTC',
       chainId: '97',
+      version: 'v1',
     },
     {
       pool: '0x02A614844212f71049c469902F7A20F6540a2792',
@@ -134,6 +142,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       symbol: 'COIN',
       unit: 'COIN',
       chainId: '97',
+      version: 'v1',
     },
     {
       pool: '0xE5a4fCd3CE3a824bF15D5FABd390cF44E83AbE8B',
@@ -145,6 +154,7 @@ export const getContractAddressConfig = (env = 'dev') => {
       symbol: 'BTCUSD',
       unit: 'BTC',
       chainId: '256',
+      version: 'v1',
     },
   ];
 };
@@ -228,6 +238,26 @@ export const getClpContractAddressConfig = (env = 'dev') => {
     ];
   }
 };
+export const getClp2ContractAddressConfig = (env = 'dev') => {
+  if (env === 'prod') {
+    return [
+      {
+        pool: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0000000000000000000000000000000000000000',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '699498',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP ONSEN',
+        symbol: '--',
+      }
+    ]
+  } else {
+    return []
+  }
+}
 
 export const getLpContractAddressConfig = (env = 'dev') => {
   if (env === 'prod') {
@@ -256,6 +286,19 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         bTokenSymbol: 'CAKE-LP',
         symbol: '--',
         type: 'clp',
+      },
+      {
+        pool: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0000000000000000000000000000000000000000',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '699498',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP ONSEN',
+        symbol: '--',
+        type: 'clp2',
       },
     ];
   } else {

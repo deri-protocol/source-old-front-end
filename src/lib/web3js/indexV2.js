@@ -42,8 +42,7 @@ export {
   getUserInfoTotal,
   getUserInfoAll,
   getPoolInfoApy,
-  getSlpPoolInfoApy,
-  getClpPoolInfoApy,
+  getLpPoolInfoApy,
   getUserInfoInPool,
   getUserInfoAllForAirDrop,
 } from './api/databaseApi';

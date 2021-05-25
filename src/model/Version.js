@@ -2,7 +2,7 @@ import { makeAutoObservable, observable, action, computed } from "mobx";
 const versionKey = 'deri-current-version'
 
 export default class Version {
-  current = 'v2'
+  current = null;
 
   constructor(){
     makeAutoObservable(this,{
@@ -12,13 +12,15 @@ export default class Version {
       isV2 : computed
     })
     const versionFromSession = sessionStorage.getItem(versionKey);
-    this.current = versionFromSession ? versionFromSession : 'v2'
+    this.current = versionFromSession ? versionFromSession : null
   }
 
 
-  setCurrent(version){
+  setCurrent(version,notSave){
     this.current = version;
-    sessionStorage.setItem(versionKey,version)
+    if(!notSave){
+      sessionStorage.setItem(versionKey,version)
+    }
   }
 
   switch(){

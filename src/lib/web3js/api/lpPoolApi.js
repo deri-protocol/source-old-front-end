@@ -7,6 +7,14 @@ import {
   // removeSlpLiquidity,
 } from './slpPoolApi';
 import {
+  getClp2LiquidityInfo,
+  getClp2WalletBalance,
+  isClp2Unlocked,
+  unlockClp2,
+  // addSlpLiquidity,
+  // removeSlpLiquidity,
+} from './clp2PoolApi';
+import {
   getClpLiquidityInfo,
   getClpWalletBalance,
   isClpUnlocked,
@@ -20,6 +28,8 @@ import {
   removeSlpLiquidity2 as removeSlpLiquidity,
   addClpLiquidity2 as addClpLiquidity,
   removeClpLiquidity2 as removeClpLiquidity,
+  addClp2Liquidity2 as addClp2Liquidity,
+  removeClp2Liquidity2 as removeClp2Liquidity,
 } from './contractTransactionApiV2'
 import { getLpContractAddress } from '../utils';
 
@@ -45,6 +55,8 @@ export const getLpLiquidityInfo = async (
     return await getSlpLiquidityInfo(chainId, poolAddress, accountAddress);
   } else if (type === 'clp') {
     return await getClpLiquidityInfo(chainId, poolAddress, accountAddress);
+  } else if (type === 'clp2') {
+    return await getClp2LiquidityInfo(chainId, poolAddress, accountAddress);
   } else {
     console.log(`getLpLiquidityInfo(): invalid lp type ${type}`);
   }
@@ -74,6 +86,8 @@ export const addLpLiquidity = async (
     return await addSlpLiquidity(chainId, poolAddress, accountAddress, amount);
   } else if (type === 'clp') {
     return await addClpLiquidity(chainId, poolAddress, accountAddress, amount);
+  } else if (type === 'clp2') {
+    return await addClp2Liquidity(chainId, poolAddress, accountAddress, amount);
   } else {
     console.log(`addLpLiquidity(): invalid lp type ${type}`);
   }
@@ -113,6 +127,13 @@ export const removeLpLiquidity = async (
       accountAddress,
       amount
     );
+  } else if (type === 'clp2') {
+    return await removeClp2Liquidity(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount
+    );
   } else {
     console.log(`removeLpLiquidity(): invalid lp type ${type}`);
   }
@@ -133,6 +154,8 @@ export const isLpUnlocked = async (chainId, poolAddress, accountAddress) => {
     return await isSlpUnlocked(chainId, poolAddress, accountAddress);
   } else if (type === 'clp') {
     return await isClpUnlocked(chainId, poolAddress, accountAddress);
+  } else if (type === 'clp2') {
+    return await isClp2Unlocked(chainId, poolAddress, accountAddress);
   } else {
     console.log(`isLpLiquidity(): invalid lp type ${type}`);
   }
@@ -156,6 +179,8 @@ export const unlockLp = async (chainId, poolAddress, accountAddress) => {
     return await unlockSlp(chainId, poolAddress, accountAddress);
   } else if (type === 'clp') {
     return await unlockClp(chainId, poolAddress, accountAddress);
+  } else if (type === 'clp2') {
+    return await unlockClp2(chainId, poolAddress, accountAddress);
   } else {
     console.log(`unlockLp(): invalid lp type ${type}`);
   }
@@ -179,6 +204,8 @@ export const getLpWalletBalance = async (
     return await getSlpWalletBalance(chainId, poolAddress, accountAddress);
   } else if (type === 'clp') {
     return await getClpWalletBalance(chainId, poolAddress, accountAddress);
+  } else if (type === 'clp2') {
+    return await getClp2WalletBalance(chainId, poolAddress, accountAddress);
   } else {
     console.log(`getLpWalletBalance(): invalid lp type ${type}`);
   }
