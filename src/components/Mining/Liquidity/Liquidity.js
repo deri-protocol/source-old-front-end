@@ -33,6 +33,9 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 				sushiApy =  0.22008070161007/(+pooLiquidity.liquidity) * 100;           
 			}
 			if(info){
+				if(!info.shareValue){
+					info.shareValue = 1;
+				}
 				setLiquidity({
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
