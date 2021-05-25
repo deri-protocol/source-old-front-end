@@ -9,7 +9,7 @@ export default class Position {
 
    async load(wallet,spec,callback){
      if(spec && spec.pool){
-      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       if(position){
         if(callback){
           callback(position)

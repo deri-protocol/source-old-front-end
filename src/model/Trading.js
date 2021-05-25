@@ -5,7 +5,7 @@ import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
 import { eqInNumber } from "../utils/utils";
-import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
+import { getFundingRate } from "../lib/web3js/indexV2";
 
 /**
  * 交易模型
@@ -37,6 +37,7 @@ import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
  */
 
 export default class Trading {
+  version = null;
   wallet = null;
   configs = [] 
   config = null;
@@ -91,6 +92,10 @@ export default class Trading {
   async init(wallet,version){
     //配置信息，如chainId、pool address、symbol、baseToken等
     const all = await this.configInfo.load(version ? version.current : version);
+    //version 可选项
+    if(version){
+      this.version = version
+    }
     if(!this.wallet || wallet.detail.account !== this.wallet.detail.account){
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
@@ -102,8 +107,12 @@ export default class Trading {
   }
 
   async switch(spec){
-    const cur = this.configs.find(config => config.pool === spec.pool)
-    const changed = !this.config || spec.pool !== this.config.pool
+    const cur = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
+    //v1 只需要比较池子地址，v2 需要比较symbolId
+    let changed = !this.config || (spec.pool !== this.config.pool )
+    if(this.version && this.version.isV2){
+      changed = changed && spec.symbolId !== this.config.symbolId
+    }
     if(cur){
       this.setConfig(cur)
       this.pause();
@@ -157,15 +166,20 @@ export default class Trading {
     return {}    
   }
 
+  sessionStorageKey(){
+    return `${this.version.current}-current-trading-pool`
+  }
+
   //存起来
   store(config){
     if(config){
-      sessionStorage.setItem('current-trading-pool',JSON.stringify(config))
+      const key = this.sessionStorageKey();
+      sessionStorage.setItem(key,JSON.stringify(config))
     }
   }
 
   getFromStore(){
-    return JSON.parse(sessionStorage.getItem('current-trading-pool'))
+    return JSON.parse(sessionStorage.getItem(this.sessionStorageKey()))
   }
 
   async refresh(){
@@ -348,7 +362,7 @@ export default class Trading {
   //资金费率
   async loadFundingRate(wallet,config){
     if(wallet && config){    
-      const res = await getFundingRate(wallet.detail.chainId,config.pool)
+      const res = await getFundingRate(wallet.detail.chainId,config.pool,config.symbolId)
       return res;
     }
   }

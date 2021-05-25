@@ -7,16 +7,25 @@ import config from '../../../config.json'
 import './mining.less'
 import classnames from "classnames";
 import { inject, observer } from 'mobx-react';
+import useQuery from '../../../hooks/useQuery'
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
 function Mining({wallet}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
-	const {chainId,baseToken,address,type,baseTokenId,symbolId} =  useParams();
+	const {chainId,baseToken,address,type} =  useParams();
+	const query = useQuery();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,baseToken,address,wallet,type,baseTokenId,symbolId}
+	const props = {chainId,baseToken,address,wallet,type}
 	const poolInfoClass = classnames('mining-info',currentTab)
+	if(query.has('baseTokenId')) {
+		props['baseTokenId'] = query.get('baseTokenId')
+	}
+	if(query.has('symbolId')){
+		props['symbolId'] = query.get('symbolId')
+	}
+	
 	return(
     <div className={poolInfoClass}>
 			<div className="pool-header">

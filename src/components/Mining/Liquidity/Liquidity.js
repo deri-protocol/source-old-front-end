@@ -228,8 +228,10 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
     <div className="liquidity-btn">
 			{
 				btnType === 'add' 
-				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance} address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}/> 
-				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick} baseTokenId={baseTokenId}/>
+				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
+										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} 
+											address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
 			}			
 			{buttonElment}
   </div>

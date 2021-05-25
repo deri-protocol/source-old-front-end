@@ -7,11 +7,11 @@ import useSpecification from '../../../../hooks/useSpecification';
 
 
 
-export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool,baseTokenId}){
+export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool,baseTokenId,symbolId}){
   const [amount, setAmount] = useState('0');
   const [decimal, setDecimal] = useState('00');
   const [addValue, setAddValue] = useState('')
-  const spec = useSpecification({wallet,address});
+  const spec = useSpecification({wallet,address,symbolId});
 
 
   const input = (e) => {

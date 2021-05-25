@@ -35,11 +35,11 @@ function PoolBox({wallet,version,pool}){
       if(pool.bTokenId){
         url = `${url}?baseTokenId=${pool.bTokenId}`
       }
-      if(pool.symboleId){
+      if(pool.symbolId){
         if(url.indexOf('?') > 0){
-          url = `${url}&symboleId=${pool.symboleId}`
+          url = `${url}&symbolId=${pool.symbolId}`
         } else {
-          url = `${url}?symboleId=${pool.symboleId}`
+          url = `${url}?symbolId=${pool.symbolId}`
         }
       }
       setButtonElement(        

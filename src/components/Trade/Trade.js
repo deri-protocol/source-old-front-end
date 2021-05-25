@@ -8,6 +8,7 @@ import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject,  observer } from 'mobx-react';
+import { BalanceList } from './Dialog/BalanceList';
 
 
 
@@ -47,7 +48,7 @@ function Trade({wallet = {},trading,version}){
 
   //切换交易标的
   const onSelect = select => {
-    const selected = trading.configs.find(config => config.pool === select.pool )
+    const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
     if(selected){
       trading.pause();
       setSpec(selected)
@@ -148,18 +149,6 @@ function Trade({wallet = {},trading,version}){
     trading.refresh()
     trading.setVolume('')
   }
-
-
-  //spec select hide listener
-  // useEffect(() => {
-  //   const bodyClickListener = document.body.addEventListener('click',event => {
-  //     setDropdown(false)
-  //   },false)
-  //   return () => {
-  //     document.body.removeEventListener('click',bodyClickListener)
-  //   }
-  // }, []);
-
   
   useEffect(() => {
     refreshCache();
@@ -274,7 +263,7 @@ function Trade({wallet = {},trading,version}){
           </div>
           <div className='funding-rate'>
             <span>Funding Rate Annual: &nbsp;</span>
-            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } suffix='%'/></span> 
+            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
           </div>
         </div>
         <div className='price-fundingRate mobile'>
@@ -391,6 +380,7 @@ function Trade({wallet = {},trading,version}){
                 position={trading.position}
                 trading={trading}
                 symbolId={trading.config && trading.config.symbolId}
+                version={version}
        />
     </div>
   </div>
@@ -400,9 +390,10 @@ function Trade({wallet = {},trading,version}){
 
 const ConfirmDialog = withModal(TradeConfirm)
 const DepositDialog = withModal(DepositMargin)
+const BalanceListDialog = withModal(BalanceList)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
-                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId}){
+                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,version}){
   const [isApprove, setIsApprove] = useState(true);
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
@@ -429,6 +420,11 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
 
   const afterDeposit = async () => {    
+    setDeposiIsOpen(false);
+    afterTrade()
+  }
+
+  const afterDepositAndWithdraw = () => {
     setDeposiIsOpen(false);
     afterTrade()
   }
@@ -508,15 +504,28 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       actionElement = <Button className='approve' btnText='APPROVE' click={approve}/>
     } else if(noBalance && available !== undefined) {
       actionElement = (<>
-        <DepositDialog 
-          wallet={wallet}
-          modalIsOpen={depositIsOpen} 
-          onClose={() => setDeposiIsOpen(false)}
-          spec={spec}
-          balance={balance}
-          afterDeposit={afterDeposit}
-          className='trading-dialog'
-        />
+      {version.isV2 
+      ?
+       <BalanceListDialog
+        wallet={wallet}
+        modalIsOpen={depositIsOpen}
+        onClose={() => setDeposiIsOpen(false)}
+        spec={trading.config}
+        afterDepositAndWithdraw={afterDepositAndWithdraw}
+        position={trading.position}
+        overlay={{background : '#1b1c22',top : 80}}
+        className='balance-list-dialog'
+       />
+      :
+      <DepositDialog 
+        wallet={wallet}
+        modalIsOpen={depositIsOpen} 
+        onClose={() => setDeposiIsOpen(false)}
+        spec={spec}
+        balance={balance}
+        afterDeposit={afterDeposit}
+        className='trading-dialog'
+      />}
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
         <button className='short-submit'  onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
       </>)

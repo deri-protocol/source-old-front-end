@@ -4,7 +4,7 @@ export default class Contract {
 
   async load(wallet,config){
     if(!this.info || (this.info && config.pool !== this.info.pool)){
-      const info = await getSpecification(wallet.detail.chainId,config.pool,config.symbolId)
+      const info = await getSpecification(wallet.detail.chainId,config.pool,config.bTokenId,config.symbolId)
       this.setInfo(info);
 
     }

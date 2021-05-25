@@ -18,10 +18,10 @@ const TIMEOUT=20000
 
 describe('Trade query api', () => {
   it('getSpecification()', async() => {
-    const input = ['97', '0x7dB32101081B17E105283820b2Ed3659DFE21470', '0', true]
+    const input = ['97', '0x7dB32101081B17E105283820b2Ed3659DFE21470', '0', '0', true]
     const output = {
       symbol: 'BTCUSD',
-      //bSymbol: 'BUSD',
+      bSymbol: 'BUSD',
       multiplier: '0.0001',
       feeRatio: '0.0001',
       minPoolMarginRatio: '1',

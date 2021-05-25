@@ -2,10 +2,11 @@ import React from 'react'
 import './pool.less'
 import PoolBox from '../../../components/Pool/PoolBox';
 import useMiningPool from '../../../hooks/useMiningPool';
+import { inject, observer } from 'mobx-react';
 
 
-export default function Pool(){
-  const [loaded,pools] = useMiningPool();
+function Pool({version}){
+  const [loaded,pools] = useMiningPool(version);
 
   return (
     <div className="mining-info">
@@ -20,3 +21,4 @@ export default function Pool(){
     </div>
   )
 }
+export default inject('version')(observer(Pool))

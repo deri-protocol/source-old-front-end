@@ -30,7 +30,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
       return;
     }
     setPending(true)
-    const res = await depositMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount);
+    const res = await depositMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount,spec.bTokenId);
     if(res.success){
       afterDeposit();
       onClose();

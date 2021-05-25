@@ -34,12 +34,13 @@ import {
 export const getSpecification = async (
   chainId,
   poolAddress,
+  bTokenId,
   symbolId,
 ) => {
   if (symbolId === undefined) {
     return getSpecification2(chainId, poolAddress)
   } else {
-    return getSpecificationV2(chainId, poolAddress, symbolId)
+    return getSpecificationV2(chainId, poolAddress, bTokenId, symbolId)
   }
 }
 

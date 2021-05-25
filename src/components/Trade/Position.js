@@ -26,11 +26,10 @@ function Position({wallet,trading,version}){
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
-  const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account)
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId)
       if(balance){
         setBalance(balance)
       }
@@ -56,7 +55,7 @@ function Position({wallet,trading,version}){
 
   const refreshBalance = () => {
     trading.refresh();
-   loadBalance();
+    loadBalance();
   }
 
   const afterDeposit = () => {
@@ -90,20 +89,10 @@ function Position({wallet,trading,version}){
   })
 
 
-  const loadBalanceList = async () => {
-    if(wallet.detail.account && trading.config){
-      const list = await getPoolBTokensBySymbolId(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.symbolId)
-      setDepositAndWithdragList(list)
-    }
-
-  }
-
-
 
 
   useEffect(() => {
     loadBalance();
-    loadBalanceList();
     return () => {
     };
   }, [wallet.detail.account,trading.config]);
@@ -233,7 +222,6 @@ function Position({wallet,trading,version}){
       position={trading.position}
       overlay={{background : '#1b1c22',top : 80}}
       className='balance-list-dialog'
-      depositAndWithdragList={depositAndWithdragList}
     />
   </div>
   )
