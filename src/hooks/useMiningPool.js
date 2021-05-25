@@ -71,7 +71,7 @@ export default function useMiningPool(){
         airdrop : true,
         buttonText : 'CLAIM'
       }
-      pools.push(airDrop)
+      // pools.push(airDrop)
       setPools(pools);
       setLoaded(true)
     })
