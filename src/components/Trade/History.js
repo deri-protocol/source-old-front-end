@@ -25,7 +25,7 @@ function History({wallet ,trading}){
         } else if (item.direction === 'Liquidation') {
           item.directionText = 'LIQUIDATION'
         }
-        const find = trading.config.find(s => s.bTokenSymbol === item.baseToken)
+        const find = trading.config
         if(find){
           item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
         }

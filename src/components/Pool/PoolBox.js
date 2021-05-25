@@ -85,7 +85,7 @@ function PoolBox({wallet,pool}){
                   </span>
                   {pool.lpApy &&<>
                   <span> + </span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && 'SUSHI-APY'}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                   </>}
                 </span>
                 

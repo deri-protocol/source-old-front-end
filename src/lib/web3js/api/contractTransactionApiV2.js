@@ -195,7 +195,7 @@ export const addClp2Liquidity2 = async (
 ) => {
   const res = await addClp2Liquidity(chainId, poolAddress, accountAddress, amount)
   if (res.success) {
-    const res2 = await sendTradeTxToWorkerQuene(`add_clp2_liquidity(${chainId},${poolAddress},${accountAddress})`)
+    const res2 = await sendTradeTxToWorkerQuene(`add_clp_liquidity(${chainId},${poolAddress},${accountAddress})`)
     return {...res2, ...res}
   } else {
     return res
@@ -210,7 +210,7 @@ export const removeClp2Liquidity2 = async (
 ) => {
   const res = await removeClp2Liquidity(chainId, poolAddress, accountAddress, shares)
   if (res.success) {
-    const res2 = await sendTradeTxToWorkerQuene(`remove_clp2_liquidity(${chainId},${poolAddress},${accountAddress})`)
+    const res2 = await sendTradeTxToWorkerQuene(`remove_clp_liquidity(${chainId},${poolAddress},${accountAddress})`)
     return {...res2, ...res}
   } else {
     return res

@@ -14,16 +14,16 @@ export class Clp2Pool extends Contract {
     );
   }
   async addLiquidity(accountAddress, amount) {
-    const args = [388, naturalToDeri(amount)];
+    const args = [391, naturalToDeri(amount)];
     return await this._transact('deposit', args, accountAddress);
   }
   async removeLiquidity(accountAddress, amount) {
-    const args = [388, naturalToDeri(amount)];
+    const args = [391, naturalToDeri(amount)];
     return await this._transact('withdraw', args, accountAddress);
   }
   async getLiquidity(accountAddress) {
     //console.log('hit clp2')
-    const res = await this._call('userInfo', [388, accountAddress]);
+    const res = await this._call('userInfo', [391, accountAddress]);
     if (res && res.amount) {
       return deriToNatural(res.amount);
     } else {

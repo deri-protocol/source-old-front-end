@@ -240,7 +240,7 @@ export const getClp2ContractAddressConfig = (env = 'dev') => {
         MiningVault: '0x0000000000000000000000000000000000000000',
         initialBlock: '699498',
         chainId: '56',
-        bTokenSymbol: 'CAKE-LP ONSEN',
+        bTokenSymbol: 'CAKE-LP SYRUP',
         symbol: '--',
       }
     ]
@@ -286,7 +286,7 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         MiningVault: '0x0000000000000000000000000000000000000000',
         initialBlock: '699498',
         chainId: '56',
-        bTokenSymbol: 'CAKE-LP ONSEN',
+        bTokenSymbol: 'CAKE-LP SYRUP',
         symbol: '--',
         type: 'clp2',
       },
