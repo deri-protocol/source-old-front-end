@@ -280,7 +280,7 @@ export default class Trading {
     if(this.index && this.position && this.contract && this.volume !== ''){
       //合同价值
       let curVolume = Math.abs(this.volume);
-      const originVolume = Math.abs(this.volume);
+      const originVolume = Math.abs(this.volumeDisplay);
       //如果不是通过marge 算出来的volume
       if(this.margin === '') {       
         if(this.userSelectedDirection === 'long') {
