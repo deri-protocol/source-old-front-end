@@ -6,7 +6,6 @@ export default class Contract {
     if(!this.info || (this.info && config.pool !== this.info.pool)){
       const info = await getSpecification(wallet.detail.chainid,config.pool)
       this.setInfo(info);
-
     }
     return this.info
   }

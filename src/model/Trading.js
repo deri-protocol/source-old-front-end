@@ -5,7 +5,7 @@ import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
 import { eqInNumber } from "../utils/utils";
-import { getFundingRate } from "../lib/web3js/api/contractQueryApi";
+import { getFundingRate } from "../lib/web3js/indexV2";
 
 /**
  * 交易模型
@@ -210,6 +210,14 @@ export default class Trading {
   }
 
   setConfig(config){
+    // if(!config.pool){
+    //   config ={
+    //     bTokenSymbol: 'BUSD',
+    //     symbol: 'BTCUSD',
+    //     unit: 'BTC',
+    //     chainId: '56',
+    //   }
+    // }
     this.config = config
   }
 
@@ -280,7 +288,7 @@ export default class Trading {
     if(this.index && this.position && this.contract && this.volume !== ''){
       //合同价值
       let curVolume = Math.abs(this.volume);
-      let volume = parseInt(Math.abs(this.volume));
+      const originVolume = Math.abs(this.volumeDisplay);
       //如果不是通过marge 算出来的volume
       if(this.margin === '') {       
         if(this.userSelectedDirection === 'long') {
@@ -303,7 +311,7 @@ export default class Trading {
       const leverage = (+contractValue / +dynBalance).toFixed(1);
       const balance = ((+dynBalance) - (+margin)).toFixed(2)
       const available = balance > 0 ? balance : 0
-      const exchanged = (volume * this.contract.multiplier).toFixed(4)
+      const exchanged = (originVolume * (+this.contract.multiplier)).toFixed(4)
       return {
         dynBalance, //动态余额
         margin,         //存入保证金
@@ -347,7 +355,10 @@ export default class Trading {
 
   //资金费率
   async loadFundingRate(wallet,config){
-    if(wallet && config){    
+    if(wallet && config){
+      // if(!config.pool){
+      //   config.pool = '0x639a9C2fAe976D089dCcc2ffAE51Ef1dd04B7985'
+      // }    
       const res = await getFundingRate(wallet.detail.chainId,config.pool)
       return res;
     }

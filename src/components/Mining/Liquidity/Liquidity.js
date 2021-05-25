@@ -7,7 +7,7 @@ import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';
 import { inject, observer } from 'mobx-react';
 import withModal from '../../hoc/withModal';
-import { eqInNumber, isSushi } from '../../../utils/utils';
+import { eqInNumber, isLP } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
 function Liquidity({wallet,chainId,baseToken,address,type}) {
@@ -28,11 +28,14 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				info = await getLiquidityInfo(chainId,address,wallet.detail.account);
 			}
 
-			let sushiApy ;
-			if(isSushi(address)){
-				sushiApy =  0.22008070161007/(+pooLiquidity.liquidity) * 100;           
+			let lpApy ;
+			if(isLP(address)){
+				lpApy =  0.22008070161007/(+pooLiquidity.liquidity) * 100;           
 			}
 			if(info){
+				if(!info.shareValue){
+					info.shareValue = 1; 
+				}
 				setLiquidity({
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
@@ -40,20 +43,20 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 					percent : ((info.shares * info.shareValue) / info.poolLiquidity) * 100 ,
 					shares : info.shares,
 					values : info.shares * info.shareValue,
-					sushiApy
+					lpApy
 				})	
 			}
 		} else {
 			
-			let sushiApy ;
-			if(isSushi(address)){
-				sushiApy =  0.22008070161007/pooLiquidity.liquidity * 100;           
+			let lpApy ;
+			if(isLP(address)){
+				lpApy =  0.22008070161007/pooLiquidity.liquidity * 100;           
 			}
 			if(pooLiquidity){
 				setLiquidity({
 					total : pooLiquidity.liquidity,
 					apy : (+apyPool.apy) * 100,
-					sushiApy
+					lpApy
 				})
 			}
 		}
@@ -75,11 +78,11 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				<div className="odd text">
 						<div className="text-title">APY</div>
 						<div className='text-num' >
-							<span title={isSushi(address) && 'DERI-APY'} className={`${isSushi(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-							{isSushi(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title='SUSHI-APY'> 
-							<DeriNumberFormat value={ liquidity.sushiApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
+							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
+							{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title='SUSHI-APY'> 
+							<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
-				</div>
+				</div>	
 				<div className="odd text">
 						<div className="text-title">Liquidity Share Value</div>
 						<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>

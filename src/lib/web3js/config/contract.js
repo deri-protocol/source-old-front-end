@@ -228,6 +228,26 @@ export const getClpContractAddressConfig = (env = 'dev') => {
     ];
   }
 };
+export const getClp2ContractAddressConfig = (env = 'dev') => {
+  if (env === 'prod') {
+    return [
+      {
+        pool: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0000000000000000000000000000000000000000',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '699498',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP ONSEN',
+        symbol: '--',
+      }
+    ]
+  } else {
+    return []
+  }
+}
 
 export const getLpContractAddressConfig = (env = 'dev') => {
   if (env === 'prod') {
@@ -256,6 +276,19 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         bTokenSymbol: 'CAKE-LP',
         symbol: '--',
         type: 'clp',
+      },
+      {
+        pool: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
+        bToken: '0xDc7188AC11e124B1fA650b73BA88Bf615Ef15256',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0000000000000000000000000000000000000000',
+        dToken: '0x0000000000000000000000000000000000000000',
+        MiningVault: '0x0000000000000000000000000000000000000000',
+        initialBlock: '699498',
+        chainId: '56',
+        bTokenSymbol: 'CAKE-LP ONSEN',
+        symbol: '--',
+        type: 'clp2',
       },
     ];
   } else {

@@ -12,6 +12,7 @@ import { DeriEnv } from '../config/env';
 import { getDBAddressConfig, getDBWormholeAddressConfig, getDBAirdropAddressConfig } from '../config';
 import { SlpPool } from '../contract/slp_pool';
 import { ClpPool } from '../contract/clp_pool';
+import { Clp2Pool } from '../contract/clp2_pool';
 import { DeriContract } from '../contract/deri';
 import { WormholeContract } from '../contract/wormhole';
 import { getLpContractAddress } from '../utils';
@@ -207,6 +208,24 @@ export const clpPoolFactory = (function () {
     const clpPool = new ClpPool(chainId, contractAddress, isProvider);
     clpPoolInstanceMap[key] = clpPool;
     return clpPool;
+  };
+})();
+
+export const clp2PoolFactory = (function () {
+  const clp2PoolInstanceMap = {};
+  return (chainId, contractAddress, isProvider = false) => {
+    let key;
+    if (isProvider) {
+      key = `${chainId}.${contractAddress}.isProvider`;
+    } else {
+      key = `${chainId}.${contractAddress}`;
+    }
+    if (Object.keys(clp2PoolInstanceMap).includes(key)) {
+      return clp2PoolInstanceMap[key];
+    }
+    const clp2Pool = new Clp2Pool(chainId, contractAddress, isProvider);
+    clp2PoolInstanceMap[key] = clp2Pool;
+    return clp2Pool;
   };
 })();
 

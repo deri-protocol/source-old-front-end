@@ -14,6 +14,10 @@ import {
   addClpLiquidity,
   removeClpLiquidity,
 } from './clpPoolApi'
+import {
+  addClp2Liquidity,
+  removeClp2Liquidity,
+} from './clp2PoolApi'
 import { wsInstance } from './apiGlobals'
 import { getRestServerConfig, DeriEnv, getRedisWorkerQueneConfig } from '../config'
 
@@ -177,6 +181,36 @@ export const removeClpLiquidity2 = async (
   const res = await removeClpLiquidity(chainId, poolAddress, accountAddress, shares)
   if (res.success) {
     const res2 = await sendTradeTxToWorkerQuene(`remove_clp_liquidity(${chainId},${poolAddress},${accountAddress})`)
+    return {...res2, ...res}
+  } else {
+    return res
+  }
+};
+
+export const addClp2Liquidity2 = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  amount = '0'
+) => {
+  const res = await addClp2Liquidity(chainId, poolAddress, accountAddress, amount)
+  if (res.success) {
+    const res2 = await sendTradeTxToWorkerQuene(`add_clp2_liquidity(${chainId},${poolAddress},${accountAddress})`)
+    return {...res2, ...res}
+  } else {
+    return res
+  }
+};
+
+export const removeClp2Liquidity2 = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  shares = '0'
+) => {
+  const res = await removeClp2Liquidity(chainId, poolAddress, accountAddress, shares)
+  if (res.success) {
+    const res2 = await sendTradeTxToWorkerQuene(`remove_clp2_liquidity(${chainId},${poolAddress},${accountAddress})`)
     return {...res2, ...res}
   } else {
     return res
