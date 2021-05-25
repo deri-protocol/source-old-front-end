@@ -12,6 +12,7 @@ const RemoveMarginDialog = withModal(WithdrawMagin)
 
 export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClose}){  
   const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
+  const [placeholdList, setPlaceholdList] = useState([]);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
 
@@ -43,6 +44,9 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
     if(wallet.detail.account && spec){
       const list = await getPoolBTokensBySymbolId(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       setDepositAndWithdragList(list)
+      if(list.length < 10){
+        setPlaceholdList(Array.from({length : 20 - list.length}));
+      }
     }
   }
 
@@ -66,15 +70,18 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
             <div className='modal-body'>
               <div className='balance-list'>
                 <div className='row header'>
-                  <span className='btoken'>Base Token</span>
-                  <span className='w-balance'>Wallet Balance</span>
-                  <span className='avail-balance'>Available Balance</span>
+                  <span className='btoken pc'>Base Token</span>
+                  <span className='btoken mobile'>B Token</span>
+                  <span className='w-balance pc'>Wallet Balance</span>
+                  <span className='w-balance mobile'>Wal Bal</span>
+                  <span className='avail-balance pc'>Available Balance</span>
+                  <span className='avail-balance mobile'>Avail Bal</span>
                 </div>
-                {depositAndWithdragList.map(item => (                  
-                  <div className='row'>
+                {depositAndWithdragList.map((item,index) => (                  
+                  <div className='row' key={index}>
                     <span className='btoken'>{item.bTokenSymbol}</span>
-                    <span className='w-balance'><DeriNumberFormat value={item.walletBalance} decimalScale={2}/></span>
-                    <span className='avail-balance'><DeriNumberFormat value={item.availableBalance} decimalScale={2}/></span>
+                    <span className='w-balance'><DeriNumberFormat value={item.walletBalance} fixedDecimalScale decimalScale={2}/></span>
+                    <span className='avail-balance'><DeriNumberFormat value={item.availableBalance} fixedDecimalScale decimalScale={2}/></span>
                     <span className='action'>
                       <span
                         className='add-margin'
@@ -88,6 +95,25 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                       </span>
                     </span>
                   </div>
+                ))}
+                {placeholdList.map(item =>  (
+                  <div className='row'>
+                  {/* <span className='btoken'>{item.bTokenSymbol}</span>
+                  <span className='w-balance'><DeriNumberFormat value={item.walletBalance} fixedDecimalScale decimalScale={2}/></span>
+                  <span className='avail-balance'><DeriNumberFormat value={item.availableBalance} fixedDecimalScale decimalScale={2}/></span>
+                  <span className='action'>
+                    <span
+                      className='add-margin'
+                      id='openAddMargin'
+                      onClick={() => addMargin(item.walletBalance,item.bTokenId)}> 
+                      <img src={removeMarginIcon} alt='add margin'/> Add
+                    </span>
+                    <span className='remove-margin'
+                      onClick={() => setRemoveModalIsOpen(true)}>
+                      <img src={addMarginIcon} alt='add margin'/> Remove
+                    </span>
+                  </span> */}
+                </div>
                 ))}
               </div>
             </div>

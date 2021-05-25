@@ -1,6 +1,6 @@
 
 import LiteTrade from "../../../components/Trade/LiteTrade";
-import './trade.less'
+import './lite.less'
 
 function Trade(){
 

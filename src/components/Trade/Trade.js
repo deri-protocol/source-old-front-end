@@ -86,7 +86,7 @@ function Trade({wallet = {},trading,version}){
   //交易费用
   const loadTransactionFee = async () => {
     if(hasConnectWallet() && hasSpec()) {
-      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(trading.volumeDisplay));
+      const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(trading.volumeDisplay),spec.symbolId);
       if(!isNaN(transFee)){
         setTransFee((+transFee).toFixed(2));
       }
@@ -97,8 +97,8 @@ function Trade({wallet = {},trading,version}){
   const calcLiquidityUsed = async () => {
     if(hasConnectWallet() && hasSpec()) {
       const {detail} = wallet
-      const curLiqUsed = await getLiquidityUsed(detail.chainId,spec.pool)
-      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,trading.volumeDisplay)
+      const curLiqUsed = await getLiquidityUsed(detail.chainId,spec.pool,spec.symbolId)
+      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,trading.volumeDisplay,spec.symbolId)
       if(curLiqUsed && afterLiqUsed){
         setLiqUsedPair({curLiqUsed : curLiqUsed.liquidityUsed0,afterLiqUsed : afterLiqUsed.liquidityUsed1})
       }
@@ -108,7 +108,7 @@ function Trade({wallet = {},trading,version}){
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
     if(hasConnectWallet() && hasSpec()){
-      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,trading.volumeDisplay);
+      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,trading.volumeDisplay,spec.symbolId);
       if(fundingRateAfter){
         setFundingRateAfter(fundingRateAfter.fundingRate1);
       }

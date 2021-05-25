@@ -1,6 +1,6 @@
-import './lite.less'
 import LiteTrade from '../../../../components/Trade/LiteTrade';
 import Tab from '../Tab/Tab';
+import './lite.less'
 
 
 
