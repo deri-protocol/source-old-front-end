@@ -6,13 +6,12 @@ export default class Contract {
     if(!this.info || (this.info && config.pool !== this.info.pool)){
       const info = await getSpecification(wallet.detail.chainId,config.pool,config.bTokenId,config.symbolId)
       this.setInfo(info);
-
     }
     return this.info
   }
 
   setInfo(info){
-    // if(!info){
+    // if(info.status == "fail"){
     //   info = {
     //      bSymbol:'BUSD',
     //      symbol:'BTCUSD',

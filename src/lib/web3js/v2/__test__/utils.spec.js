@@ -96,7 +96,7 @@ describe('utils', () => {
   test('getOracleUrl()', () => {
     const [input, output] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '0'], 'https://oracle2.deri.finance/price?symbol=BTCUSD'];
     expect(getOracleUrl(...input)).toEqual(output);
-    const [input3, output3] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '1'], 'https://oracle2.deri.finance/price?symbol=ETHUSD'];
+    const [input3, output3] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
     expect(getOracleUrl(...input3)).toEqual(output3);
   });
   test('getOracleInfo()', async() => {

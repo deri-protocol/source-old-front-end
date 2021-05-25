@@ -11,7 +11,7 @@ export default function TradeConfirm({wallet,spec,onClose,direction,volume,posit
   const trade = async () => {
     setPending(true)
     volume = direction === 'long' ? volume : -(+volume)
-    const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,volume)
+    const res = await tradeWithMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,volume,spec.symbolId)
     if(res.success){
       afterTrade()
       onClose()

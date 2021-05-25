@@ -4,10 +4,11 @@ import {
   getContractAddressConfig,
   getPoolLiquidity,
   getPoolInfoApy,
-  getLpContractAddressConfig
+  getLpContractAddressConfig,
+  getLpPoolInfoApy
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
-import { formatAddress, isSushi } from '../utils/utils';
+import { formatAddress, isLP,isSushiLP,isCakeLP } from '../utils/utils';
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
@@ -37,18 +38,27 @@ export default function useMiningPool(version){
       const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
       const pool = config.pool || ''      
-      let sushiApy ;
-      if(isSushi(config.pool)){
-        sushiApy =  0.22008070161007/liqInfo.liquidity * 100;           
+      let lpApy;
+      let label;
+      if(isLP(config.pool)){
+        let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
+        lpApy = (+lapy.apy2) * 100;           
+      }
+      if(isSushiLP(config.pool)){
+        label = 'SUSHI-APY'
+      }
+      if(isCakeLP(config.pool)){
+        label = 'CAKE-APY'
       }
       return Object.assign(config,{
         network : chainInfo[config.chainId].name,
         liquidity : liqInfo.liquidity,
         apy : (+apyPool.apy) * 100,
         pool : formatAddress(pool),
-        sushiApy : sushiApy,
+        lpApy : lpApy,
         address : pool,
         type : 'lp',
+        label:label,
         buttonText : 'STAKING'
       })    
     })
@@ -62,7 +72,7 @@ export default function useMiningPool(version){
         airdrop : true,
         buttonText : 'CLAIM'
       }
-      pools.push(airDrop)
+      // pools.push(airDrop)
       setPools(pools);
       setLoaded(true)
     })

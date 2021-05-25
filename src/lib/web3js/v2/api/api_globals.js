@@ -31,7 +31,7 @@ export const fundingRateCache = (function () {
       if (Object.keys(resourceMap).includes(key)) {
         return resourceMap[key];
       }
-      console.log(`Cache key is not in resouceMap: ${key}`);
+      console.log(`fundingRateCache: key is not in exist: ${key}`);
       return undefined;
     },
     set(chainId, contractAddress, symbolId, resource) {

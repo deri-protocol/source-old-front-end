@@ -1,3 +1,7 @@
+.mining-info.liquidity .sushi-apy-underline {
+  cursor: pointer;
+  border-bottom: 1px dashed #aaa;
+}
 .mining-info.liquidity .liquidity-mining {
   background: #41424A !important;
   color: #FFFFFF !important;
@@ -302,11 +306,14 @@
 .modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance {
   font-size: 30px;
 }
+.modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance .float {
+  font-size: 14px;
+}
 .modal-dialog .modal-content .modal-body .margin-box-info .money .bt-balance .modal-font {
   font-size: 10px;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info .money .base-token {
-  font-size: 14px;
+  font-size: 16px;
 }
 .modal-dialog .modal-content .modal-body .margin-box-info .enter-margin {
   display: flex;

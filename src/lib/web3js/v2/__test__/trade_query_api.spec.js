@@ -50,14 +50,14 @@ describe('Trade query api', () => {
         bTokenId: '0',
         bTokenSymbol: 'BUSD',
         walletBalance: '47320',
-        availableBalance: '0'
+        availableBalance: '27281.366636475062184977'
       },
       {
         bTokenAddress: "0x5f59b256e411CB222D1790a08De492f4b6dA6E62",
         bTokenId: '1',
         bTokenSymbol: 'BETH',
         walletBalance: '29',
-        availableBalance: '0'
+        availableBalance: '13.651307337153643431'
       },
     ]
     expect(await getPoolBTokensBySymbolId(...input)).toEqual(output)
@@ -67,7 +67,7 @@ describe('Trade query api', () => {
     const output = {
       volume: '7',
       averageEntryPrice: '40842.95',
-      margin: '161.833538410037708476',
+      margin: '34132.72219767423',
       marginHeld: '2.8704363625',
       unrealizedPnl: '0.114298625',
       liquidationPrice: '0',

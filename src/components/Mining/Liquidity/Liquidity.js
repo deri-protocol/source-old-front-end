@@ -1,17 +1,18 @@
 import React, { useState, useEffect} from 'react'
 import {
-	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo
+	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo,getLpPoolInfoApy
 } from '../../../lib/web3js/indexV2'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
 import Button from '../../Button/Button';
 import { inject, observer } from 'mobx-react';
 import withModal from '../../hoc/withModal';
-import { eqInNumber, isSushi } from '../../../utils/utils';
+import { eqInNumber, isCakeLP, isLP, isSushiLP } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
 function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId}) {
   const [liquidity,setLiquidity] = useState({})
+  const [bToken,setBToken] = useState(baseToken)
 
 	const isLpPool = (type === 'lp')
 	
@@ -19,7 +20,6 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,address)
 		const pooLiquidity = await getPoolLiquidity(chainId,address);
-
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
 			let info = null;
 			if(isLpPool){
@@ -27,14 +27,15 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 			} else {
 				info = await getLiquidityInfo(chainId,address,wallet.detail.account);
 			}
-
-			let sushiApy ;
-			if(isSushi(address)){
-				sushiApy =  0.22008070161007/(+pooLiquidity.liquidity) * 100;           
+			let lpApy ;
+			if(isLP(address)){
+				let lapy = await getLpPoolInfoApy(chainId,address)
+        		lpApy = (+lapy.apy2) * 100;                     
 			}
+
 			if(info){
 				if(!info.shareValue){
-					info.shareValue = 1;
+					info.shareValue = 1; 
 				}
 				setLiquidity({
 					total :  (+info.poolLiquidity),
@@ -43,20 +44,21 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 					percent : ((info.shares * info.shareValue) / info.poolLiquidity) * 100 ,
 					shares : info.shares,
 					values : info.shares * info.shareValue,
-					sushiApy
+					lpApy
 				})	
 			}
 		} else {
 			
-			let sushiApy ;
-			if(isSushi(address)){
-				sushiApy =  0.22008070161007/pooLiquidity.liquidity * 100;           
+			let lpApy ;
+			if(isLP(address)){
+				let lapy = await getLpPoolInfoApy(chainId,address)
+        		lpApy = (+lapy.apy2) * 100;                           
 			}
 			if(pooLiquidity){
 				setLiquidity({
 					total : pooLiquidity.liquidity,
 					apy : (+apyPool.apy) * 100,
-					sushiApy
+					lpApy
 				})
 			}
 		}
@@ -64,28 +66,31 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 
 	useEffect(() => {
 		loadLiquidityInfo();
+		if(isCakeLP(address)){
+			setBToken('CAKE-LP')
+		}
 		return () => {}
-	}, [wallet.detail.account])
+	}, [wallet.detail.account,baseToken])
 
 
   return (
     <div className="liquidity-box">
-      <div className="odd title">Provide { baseToken } Earn DERI</div>
+      <div className="odd title">Provide { bToken } Earn DERI</div>
 				<div className="odd text">
 						<div className="text-title">Pool Total Liquidity</div>
-						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${baseToken}`  } thousandSeparator={true}/></div>
+						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">APY</div>
 						<div className='text-num' >
-							<span title={isSushi(address) && 'DERI-APY'} className={`${isSushi(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-							{isSushi(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title='SUSHI-APY'> 
-							<DeriNumberFormat value={ liquidity.sushiApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
+							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
+							{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? 'SUSHI-APY' : 'CAKE-APY'}> 
+							<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
-				</div>
+				</div>	
 				<div className="odd text">
 						<div className="text-title">Liquidity Share Value</div>
-						<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ baseToken } thousandSeparator={true}/></div>
+						<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
@@ -96,12 +101,12 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
 				</div>
 				<div className="odd claim-network">
-					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ baseToken } decimalScale={2}/></div>
+					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>
 						
 				</div>
 				<div className="title-check">
 				</div>
-				 <Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={baseToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
+				<Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
 	</div>
   )
 }

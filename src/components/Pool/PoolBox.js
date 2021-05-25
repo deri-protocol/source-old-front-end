@@ -67,7 +67,7 @@ function PoolBox({wallet,version,pool}){
               <div className="base-token">{pool.bTokenSymbol}</div>
               <div>
                 <span>{pool.airdrop ? 'Total' : 'Pool Liq'}</span>
-                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.sushiApy ? 7 : 0}/>
+                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.lpApy ? 7 : 0}/>
               </div>
               <div>
                 <span>Symbol</span>
@@ -76,12 +76,12 @@ function PoolBox({wallet,version,pool}){
               <div className="apy">
                 <span>APY</span>
                 <span>
-                  <span className={pool.sushiApy ? 'sushi-apy-underline' : ''} title={ pool.sushiApy && 'DERI-APY'}>
+                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} title={ pool.lpApy && 'DERI-APY'}>
                     {pool.apy ? <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
                   </span>
-                  {pool.sushiApy &&<>
+                  {pool.lpApy &&<>
                   <span> + </span>
-                  <span className={pool.sushiApy ? 'sushi-apy-underline' : '' } title={ pool.sushiApy && 'SUSHI-APY'}> <DeriNumberFormat value={pool.sushiApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                   </>}
                 </span>
                 

@@ -166,9 +166,11 @@ function Trade({wallet = {},trading,version}){
   }, [trading.position.volume]);
 
   useEffect(() => {
-    calcFundingRateAfter();
-    calcLiquidityUsed();
-    loadTransactionFee();
+    if(trading.volume !==''){
+      calcFundingRateAfter();
+      calcLiquidityUsed();
+      loadTransactionFee();
+    }
 
     if(trading.volume !== '') {
       trading.pause();

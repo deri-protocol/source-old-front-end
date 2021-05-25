@@ -1,26 +1,32 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/jsx-no-comment-textnodes */
 import React, { useState,useEffect } from 'react'
-import { getPositionInfo, closePosition, getWalletBalance } from '../../../../lib/web3js/indexV2';
+import { closePosition, getWalletBalance } from '../../../../lib/web3js/indexV2';
 import closePosImg from '../../../img/close-position.png'
 import withModal from '../../../../components/hoc/withModal';
 import DepositMargin from '../../../../components/Trade/Dialog/DepositMargin';
 import WithdrawMagin from '../../../../components/Trade/Dialog/WithdrawMargin';
-import useInterval from '../../../../hooks/useInterval';
 import { eqInNumber } from '../../../../utils/utils';
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
+import removeMarginIcon from '../../../../assets/img/remove-margin.svg'
+import addMarginIcon from '../../../../assets/img/add-margin.svg'
+import marginDetailIcon from '../../../../assets/img/margin-detail.png'
+import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
 
 
 
 const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
+const BalanceListDialog = withModal(BalanceList)
 
-function Position({wallet,trading}){
+
+function Position({wallet,trading,version}){
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+  const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
 
 
@@ -32,6 +38,10 @@ function Position({wallet,trading}){
 
   const onCloseDeposit = () => setAddModalIsOpen(false)
   const onCloseWithdraw = () => setRemoveModalIsOpen(false);
+  const onCloseBalanceList = () => setBalanceListModalIsOpen(false);
+  const afterDepositAndWithdraw = () => {
+    refreshBalance();
+  }
 
   const refreshBalance = () => {
     loadBalance();
@@ -41,7 +51,7 @@ function Position({wallet,trading}){
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account)
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId)
       if(balance){
         setBalance(balance)
       }
@@ -50,7 +60,7 @@ function Position({wallet,trading}){
 
   const onClosePosition = async () => {
     setClosing(true)
-    const res = await closePosition(wallet.detail.chainId,trading.config.pool,wallet.detail.account).finally(() => setClosing(false))
+    const res = await closePosition(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.symbolId).finally(() => setClosing(false))
     if(res.success){
       refreshBalance();
     } else {            
@@ -114,16 +124,19 @@ function Position({wallet,trading}){
       <div className={direction}>{direction}</div>
       <div>
         <DeriNumberFormat allowZero={true} value={(+trading.position.margin) + (+trading.position.unrealizedPnl)}  decimalScale={2}/>
-        <span className='open-add' onClick={()=> setAddModalIsOpen(true)} >
-          <svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'>
-            <path id='login' d='M13,9,7,4V7H0v4H7v3Zm3,7H8v2h8a2.006,2.006,0,0,0,2-2V2a2.006,2.006,0,0,0-2-2H8V2h8Z' transform='translate(18) rotate(90)' fill='#3ebf38' />
-          </svg>
+        {version.isV1 ? <span>
+        <span
+          className='open-add'
+          id='openAddMargin'
+          onClick={() => setAddModalIsOpen(true)}
+        > 
+          <img src={removeMarginIcon} alt='add margin'/>
         </span>
-        <span className='open-remove' onClick={() => setRemoveModalIsOpen(true)}>
-          <svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 18 18'>
-            <path id='log-out' data-name='log out' d='M18,9,12,4V7H5v4h7v3ZM2,2h8V0H2A2.006,2.006,0,0,0,0,2V16a2.006,2.006,0,0,0,2,2h8V16H2Z' transform='translate(0 18) rotate(-90)' fill='#e35061' />
-          </svg>
+        <span className='open-remove'
+          onClick={() => setRemoveModalIsOpen(true)}>
+          <img src={addMarginIcon} alt='add margin'/>
         </span>
+      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</span>)}       
       </div>
       <div><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
       <div><DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={8}/></div>
@@ -149,8 +162,19 @@ function Position({wallet,trading}){
         position={trading.position}
         className='trading-dialog'
         />
+
+      <BalanceListDialog
+        wallet={wallet}
+        modalIsOpen={balanceListModalIsOpen}
+        onClose={onCloseBalanceList}
+        spec={trading.config}
+        afterDepositAndWithdraw={afterDepositAndWithdraw}
+        position={trading.position}
+        overlay={{background : '#1b1c22',top : 80}}
+        className='balance-list-dialog'
+      />
   </div>
   )
 }
 
-export default inject('wallet','trading')(observer(Position))
+export default inject('wallet','trading','version')(observer(Position))

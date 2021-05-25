@@ -17,7 +17,9 @@ export const getOracleUrl = (poolAddress, symbolId) => {
     }
     return 'https://oracle.deri.finance/price';
   } else {
-    if (symbol) {
+    if (symbol === 'ETHUSD') {
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
+    } else if (symbol) {
       return addSymbolParam('https://oracle2.deri.finance/price', symbol);
     }
     // for test

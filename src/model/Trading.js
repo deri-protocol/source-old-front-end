@@ -224,6 +224,14 @@ export default class Trading {
   }
 
   setConfig(config){
+    // if(!config.pool){
+    //   config ={
+    //     bTokenSymbol: 'BUSD',
+    //     symbol: 'BTCUSD',
+    //     unit: 'BTC',
+    //     chainId: '56',
+    //   }
+    // }
     this.config = config
   }
 

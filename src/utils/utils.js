@@ -27,6 +27,13 @@ export function eqInNumber(str1,str2){
   return (+str1) === (+str2)
 }
 
-export function isSushi(address){
+export function isLP(address){
+  return address === '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd' || address === '0x73feaa1eE314F8c655E354234017bE2193C9E24E'
+}
+export function isSushiLP(address){
   return address === '0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd'
 }
+export function isCakeLP(address){
+  return address === '0x73feaa1eE314F8c655E354234017bE2193C9E24E'
+}
+
