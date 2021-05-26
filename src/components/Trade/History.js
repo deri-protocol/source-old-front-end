@@ -18,7 +18,6 @@ function History({wallet ,trading}){
     if(wallet.isConnected() && trading.configs && trading.config){
       const all = trading.history
       const his = all.map(item => {
-        item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
         item.directionText = 'LONG / BUY' 
         if(item.direction === 'SHORT') {
           item.directionText = 'SHORT / SELL'
@@ -27,7 +26,7 @@ function History({wallet ,trading}){
         }
         const find = trading.config
         if(find){
-          item.baseTokenText = ` ${find.symbol} / ${find.bTokenSymbol}`
+          item.baseTokenText = item.baseToken && ` ${find.symbol} / ${find.bTokenSymbol}`
         }
         return item;
       })
@@ -38,7 +37,7 @@ function History({wallet ,trading}){
   useEffect(() => {
     loadHistory();
     return () => {};
-  }, [wallet.detail,trading.configs,trading.config]);
+  }, [wallet.detail,trading.configs,trading.config,trading.history]);
   
   return (
     <div className='history-info' v-show='historyShow'>

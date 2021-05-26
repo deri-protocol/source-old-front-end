@@ -109,9 +109,9 @@ export default class Trading {
   async switch(spec){
     const cur = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
-    let changed = !this.config || (spec.pool !== this.config.pool )
-    if(this.version && this.version.isV2){
-      changed = changed && spec.symbolId !== this.config.symbolId
+    let changed = false
+    if(this.version){
+      changed = this.version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
     }
     if(cur){
       this.setConfig(cur)

@@ -19,24 +19,24 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,address)
-		const pooLiquidity = await getPoolLiquidity(chainId,address);
+		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId,symbolId);
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
 			let info = null;
 			if(isLpPool){
 				info = await getLpLiquidityInfo(chainId,address,wallet.detail.account)
 			} else {
-				info = await getLiquidityInfo(chainId,address,wallet.detail.account);
+				info = await getLiquidityInfo(chainId,address,wallet.detail.account,baseTokenId,symbolId);
 			}
 			let lpApy ;
 			if(isLP(address)){
 				let lapy = await getLpPoolInfoApy(chainId,address)
-        		lpApy = (+lapy.apy2) * 100;                     
-			}
-
-			if(info){
+				lpApy = (+lapy.apy2) * 100;                     						
 				if(!info.shareValue){
 					info.shareValue = 1; 
 				}
+			}
+
+			if(info){
 				setLiquidity({
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
@@ -130,7 +130,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 			if(isLpPool){
 				total = await getLpWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
 			} else {
-				total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
+				total = await getWalletBalance(wallet.detail.chainId,address,wallet.detail.account,baseTokenId);
 			}
 			if(typeof total !== 'object'){
 				setBalance(total)				

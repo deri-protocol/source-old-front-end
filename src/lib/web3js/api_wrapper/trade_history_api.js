@@ -8,17 +8,15 @@ export const getTradeHistory = async (
   chainId,
   poolAddress,
   accountAddress,
-  bTokenId,
   symbolId,
 ) => {
-  if (bTokenId === undefined) {
+  if (symbolId === undefined) {
     return getTradeHistory2(chainId, poolAddress, accountAddress);
   } else {
     return getTradeHistoryV2(
       chainId,
       poolAddress,
       accountAddress,
-      bTokenId,
       symbolId,
     );
   }

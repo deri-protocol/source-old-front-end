@@ -93,4 +93,5 @@ export class ContractBase {
     return await new Promise(this._getTransactionReceipt(tx));
     //return await this.contract.methods[method](...args).send({from: accountAddress})
   }
+
 }

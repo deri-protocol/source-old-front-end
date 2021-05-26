@@ -314,12 +314,8 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
     bTokenList[i].walletBalance = resultList[i].toString()
   }
 
-  let bTokenIdList = bTokensConfigList.map((i) => {
-    return i.bTokenId
-  })
-  let symbolIdList = symbolsConfigList.map((i) => {
-    return i.symbolId
-  })
+  let bTokenIdList = bTokensConfigList.map((i) => i.bTokenId)
+  let symbolIdList = symbolsConfigList.map((i) => i.symbolId)
   //console.log('symbolIds', symbolIdList)
   const [margins, positions, parameterInfo] = await Promise.all([
     pToken.getMargins(accountAddress),

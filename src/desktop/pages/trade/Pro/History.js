@@ -59,7 +59,7 @@ function History({wallet,trading}) {
               <HistoryLine wallet={wallet} his={his}/>
             </div>
             <div>
-              {his.baseToken}
+              {his.baseToken || '--'}
             </div>
             <div>
               <DeriNumberFormat value={his.price}  decimalScale={2}/>

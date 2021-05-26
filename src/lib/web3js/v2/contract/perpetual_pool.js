@@ -1,6 +1,6 @@
 import { ContractBase } from './contract_base'
 import { perpetualPoolAbi } from './abis';
-import { deriToNatural } from '../utils'
+import { deriToNatural, bg } from '../utils'
 
 export class PerpetualPool extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
@@ -118,5 +118,53 @@ export class PerpetualPool extends ContractBase {
   async getSymbolOracle(symbolId) {
     //symbolId = parseInt(symbolId)
     return await this._call('getSymbolOracle', [symbolId])
+  }
+
+  // trade history query methods
+  async _getTimeStamp(blockNumber) {
+    await this._init()
+    return await this.web3.eth.getBlock(blockNumber);
+  }
+  _calculateFee(volume, price, multiplier, feeRatio) {
+    return bg(volume)
+      .abs()
+      .times(price)
+      .times(multiplier)
+      .times(feeRatio)
+      .toString();
+  }
+  async _getBlockInfo(blockNumber) {
+    await this._init()
+    return await this.web3.eth.getBlock(blockNumber);
+  }
+
+  async _getPastEvents(eventName, filter = {}, fromBlock = 0, to = 0) {
+    await this._init()
+    let events = [];
+    //let toBlock = await this._getBlockInfo("latest");
+    let amount
+    if (['56', '97'].includes(this.chainId)) {
+      amount = 999
+    } else {
+      amount = 4999
+    }
+    if ((fromBlock + amount) > to) {
+      amount = to - fromBlock
+    }
+    while (fromBlock <= to) {
+      let es = await this.contract.getPastEvents(eventName, {
+        filter: filter,
+        fromBlock: fromBlock,
+        toBlock: fromBlock + amount,
+      });
+      for (let e of es) {
+        events.push(e);
+      }
+      fromBlock += amount + 1;
+      if ((fromBlock + amount) > to) {
+        amount = to - fromBlock
+      }
+    }
+    return events;
   }
 }

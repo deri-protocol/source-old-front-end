@@ -9,7 +9,8 @@ export const getRestServerConfig = (env = 'dev') => {
     return 'https://api.deri.finance';
   } else {
     // for test
-    return 'https://apitest.deri.finance';
+    // return 'https://apitest.deri.finance';
+    return 'http://47.52.225.179';
   }
 };
 

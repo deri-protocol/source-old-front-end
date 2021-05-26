@@ -39,7 +39,7 @@ function Position({wallet,trading,version}){
   //平仓
   const onClosePosition = async () => {
     setIsLiquidation(true)
-    const res = await closePosition(wallet.detail.chainId,trading.config.pool,wallet.detail.account).finally(() => setIsLiquidation(false))
+    const res = await closePosition(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.symbolId).finally(() => setIsLiquidation(false))
     if(res.success){
       refreshBalance()
     } else {      
