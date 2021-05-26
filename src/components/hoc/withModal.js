@@ -6,7 +6,7 @@ const withModal = Component => {
   const customizeStyle =  {
     overlay: {
       position: 'fixed',
-      zIndex : 2,
+      zIndex : 1,
       background : 'rgb(0 0 0 / 0.5)'
     },
     content: {

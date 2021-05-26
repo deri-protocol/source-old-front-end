@@ -20,8 +20,7 @@ export default function useMiningPool(version){
 
   useEffect(() => {
     const configs = getContractAddressConfig(env,version.current).map(async config =>  {
-      console.log(config)
-      const liqPool = await getPoolLiquidity(config.chainId,config.pool) || {}
+      const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {}
       const pool = config.pool || ''
       return Object.assign(config,{ 

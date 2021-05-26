@@ -69,18 +69,18 @@ function Position({wallet,trading,version}){
       } else if(typeof res.error === 'object'){
         alert(res.error.errorMessage || 'Liquidation failed')
       } else {
-        alert('Liquidation failed')
+        alert('Close position failed')
       }
     }
   }
 
-  useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet)
-    }
-    return () => {
-    };
-  }, [wallet.detail.account]);
+  // useEffect(() => {
+  //   if(wallet.detail.account){
+  //     trading.init(wallet)
+  //   }
+  //   return () => {
+  //   };
+  // }, [wallet.detail.account]);
 
   useEffect(() => {
     loadBalance();

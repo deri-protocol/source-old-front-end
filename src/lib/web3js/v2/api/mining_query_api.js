@@ -1,15 +1,16 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
 import { getPoolConfig } from '../config'
+import { deriToNatural } from '../utils'
+import { databaseFactory } from '../../factory/contracts';
 
 export const getLiquidityInfo = async (
   chainId,
   poolAddress,
   accountAddress,
   bTokenId,
-  symbolId,
   useInfura,
 ) => {
-  const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId, symbolId)
+  const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId)
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
   const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
@@ -25,13 +26,30 @@ export const getLiquidityInfo = async (
     // shares: liquidity.toString(),
     // shareValue: '1',
     // maxRemovableShares: liquidity.toString()
-    liquidity: liquidity.toString(),
-    maxRemovableLiquidity: liquidity.toString()
+    shares: liquidity.toString(),
+    maxRemovableShares: liquidity.toString()
   };
 };
 
 export const getPoolLiquidity = async (chainId, poolAddress, bTokenId, useInfura=false) => {
-  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  const res = await perpetualPool.getBToken(bTokenId)
-  return res.liquidity.toString()
+  // const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+  // const res = await perpetualPool.getBToken(bTokenId)
+  // return res.liquidity.toString()
+
+  // use the dev database
+  const db = databaseFactory();
+  try {
+    const res = await db
+      .getValues([`${chainId}.${poolAddress}.${bTokenId}.liquidity`])
+      .catch((err) => console.log('getPoolLiquidity', err));
+    if (res) {
+      const [liquidity] = res;
+      return {
+        liquidity: deriToNatural(liquidity).toString(),
+        symbol:'',
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };

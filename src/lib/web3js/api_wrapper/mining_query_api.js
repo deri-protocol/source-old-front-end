@@ -10,25 +10,22 @@ export const getLiquidityInfo = async (
   poolAddress,
   accountAddress,
   bTokenId,
-  symbolId
 ) => {
   if (bTokenId === undefined) {
     return getLiquidityInfo2(chainId, poolAddress, accountAddress)
   } else {
-    return getLiquidityInfoV2(chainId, poolAddress, accountAddress, bTokenId, symbolId)
+    return getLiquidityInfoV2(chainId, poolAddress, accountAddress, bTokenId)
   }
 };
 
 export const getPoolLiquidity = async (
   chainId,
   poolAddress,
-  accountAddress,
   bTokenId,
-  symbolId
 ) => {
   if (bTokenId === undefined) {
-    return getPoolLiquidity2(chainId, poolAddress, accountAddress)
+    return getPoolLiquidity2(chainId, poolAddress)
   } else {
-    return getPoolLiquidityV2(chainId, poolAddress, accountAddress, bTokenId, symbolId)
+    return getPoolLiquidityV2(chainId, poolAddress, bTokenId)
   }
 };

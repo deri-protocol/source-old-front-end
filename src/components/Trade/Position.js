@@ -48,7 +48,7 @@ function Position({wallet,trading,version}){
       } else if(typeof res.error === 'object'){
         alert(res.error.errorMessage || 'Liquidation failed')
       } else {
-        alert('Liquidation failed')
+        alert('Close position failed')
       }      
     }
   }

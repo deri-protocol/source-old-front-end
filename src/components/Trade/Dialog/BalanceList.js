@@ -9,14 +9,15 @@ import { getPoolBTokensBySymbolId } from '../../../lib/web3js/v2';
 
 const AddMarginDialog = withModal(DepositMargin)
 const RemoveMarginDialog = withModal(WithdrawMagin)
-const balanceListLength = 19
 
 export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClose}){  
   const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
-  const [placeholdList, setPlaceholdList] = useState(Array.from({length : balanceListLength}));
+  const limit = parseInt((document.body.offsetHeight - 140)/54)
+  const [placeholdList, setPlaceholdList] = useState(Array.from({length : limit}));
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
+  const [availableBalance, setAvailableBalance] = useState('');
 
   const closeAddMargin = () => setAddModalIsOpen(false)
 
@@ -30,6 +31,10 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
     setBalance(balance);
     setAddModalIsOpen(true)
     spec.bTokenId = bTokenId
+  }
+  const removeMargin = (availableBalance) => {
+    setAvailableBalance(availableBalance);
+    setRemoveModalIsOpen(true);
   }
 
   const afterDeposit = () => {
@@ -46,15 +51,18 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
     if(wallet.detail.account && spec){
       const list = await getPoolBTokensBySymbolId(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       setDepositAndWithdragList(list)
-      if(list.length < 20){
-        setPlaceholdList(Array.from({length : balanceListLength - list.length}));
+      if(list.length < limit){
+        setPlaceholdList(Array.from({length : limit - list.length}));
       }
     }
   }
 
   useEffect(() => {
     loadBalanceList();
+    window.scrollTo(0, 0);
+    document.querySelector('body').style.overflow = 'hidden'
     return () => {
+      document.querySelector('body').style.overflow = 'auto'
     };
   }, [wallet.detail.account,spec]);
 
@@ -92,7 +100,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                         <img src={removeMarginIcon} alt='add margin'/> Add
                       </span>
                       <span className='remove-margin'
-                        onClick={() => setRemoveModalIsOpen(true)}>
+                        onClick={() => removeMargin(item.availableBalance)}>
                         <img src={addMarginIcon} alt='add margin'/> Remove
                       </span>
                     </span>
@@ -107,7 +115,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
       <AddMarginDialog  wallet={wallet} onClose={closeAddMargin} balance={balance} spec={spec} 
                         position={position} modalIsOpen={addModalIsOpen} afterDeposit={afterDeposit} className='trading-dialog'/>
       <RemoveMarginDialog wallet={wallet} onClose={closeRemoveMargin} spec={spec} 
-                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} className='trading-dialog'/>
+                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} availableBalance={availableBalance} className='trading-dialog'/>
     </>
   )
 }

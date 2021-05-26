@@ -10,7 +10,7 @@ import withModal from '../../hoc/withModal';
 import { eqInNumber, isCakeLP, isLP, isSushiLP } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId}) {
+function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,symbolId}) {
   const [liquidity,setLiquidity] = useState({})
   const [bToken,setBToken] = useState(baseToken)
 
@@ -19,13 +19,13 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,address)
-		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId,symbolId);
+		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId);
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
 			let info = null;
 			if(isLpPool){
 				info = await getLpLiquidityInfo(chainId,address,wallet.detail.account)
 			} else {
-				info = await getLiquidityInfo(chainId,address,wallet.detail.account,baseTokenId,symbolId);
+				info = await getLiquidityInfo(chainId,address,wallet.detail.account,baseTokenId);
 			}
 			let lpApy ;
 			if(isLP(address)){
@@ -34,16 +34,31 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 				if(!info.shareValue){
 					info.shareValue = 1; 
 				}
-				const total = bg(info.shares).multipliedBy(info.shareValue)
-				setLiquidity({
-					total :  (+info.poolLiquidity),
-					apy : (+apyPool.apy) * 100,
-					shareValue : info.shareValue,
-					percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
-					shares : info.shares,
-					values : total.toString(),
-					lpApy
-				})	
+			}
+			if(info){
+				if(version.isV1) {
+					const total = bg(info.shares).multipliedBy(info.shareValue)
+					setLiquidity({
+						total :  (+info.poolLiquidity),
+						apy : (+apyPool.apy) * 100,
+						shareValue : info.shareValue,
+						percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
+						shares : info.shares,
+						values : total.toString(),
+						lpApy,
+						unit : 'shares',
+						sharesTitle : 'Staked Balance'
+					})
+				} else {
+					setLiquidity({
+						total : (+info.poolLiquidity),
+						apy : (+apyPool.apy) * 100,
+						shares : info.shares,
+						percent : bg(info.shares).dividedBy(info.poolLiquidity).multipliedBy(100).toString(),
+						unit : baseToken,
+						sharesTitle : 'My Liquidity'
+					})
+				}	
 			}
 		} else {
 			
@@ -64,6 +79,7 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 
 	useEffect(() => {
 		loadLiquidityInfo();
+		//cake 显示的baseToken 不一致，特殊处理
 		if(isCakeLP(address)){
 			setBToken('CAKE-LP')
 		}
@@ -86,24 +102,25 @@ function Liquidity({wallet,chainId,baseToken,address,type,baseTokenId,symbolId})
 							<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
 				</div>	
-				<div className="odd text">
-						<div className="text-title">Liquidity Share Value</div>
-						<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>
-				</div>
+				{version.isV1 && <div className="odd text">
+					<div className="text-title">Liquidity Share Value</div>
+					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						
+				</div>}
 				<div className="odd text">
 						<div className="text-title">My Liquidity Pencentage</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.percent } decimalScale={2} suffix={'%'}/></div>
 				</div>
 				<div className="odd text">
-						<div className="text-title">Staked Balance </div>
-						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
+						<div className="text-title">{liquidity.sharesTitle} </div>
+						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
-				<div className="odd claim-network">
-					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
+				<div className="odd text">
+					<div className="text-title money">{version.isV1 && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
 				</div>
+				{version.isV2 && <div className="odd text"></div>}
 				<div className="title-check">
 				</div>
-				<Operator wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} loadLiquidity={loadLiquidityInfo} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
+				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
 	</div>
   )
 }
@@ -113,7 +130,7 @@ const AddDialog = withModal(AddLiquidity)
 const RemoveDialog = withModal(RemoveLiquidity)
 
 //操作区
-const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqInfo,loadLiqidityInfo,baseTokenId,symbolId})=> {
+const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loadLiqidityInfo,baseTokenId,symbolId})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
@@ -182,7 +199,7 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 
 	const afterClick = () => {
 		setIsOpen(false);
-		loadLiquidity()
+		// loadLiquidity()
 		loadBalance();
 		loadLiqidityInfo();
 	}
@@ -236,11 +253,11 @@ const Operator = ({wallet,chainId,address,baseToken,loadLiquidity,isLpPool,liqIn
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} 
-											address={address} wallet={wallet} baseToken={baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
+											address={address} wallet={wallet} unit={version.isV1 ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
 			}			
 			{buttonElment}
   </div>
   )
 }
 
-export default inject('wallet')(observer(Liquidity))
+export default inject('wallet','version')(observer(Liquidity))

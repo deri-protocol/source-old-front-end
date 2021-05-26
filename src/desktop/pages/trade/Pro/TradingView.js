@@ -16,12 +16,12 @@ function TradingView({wallet,trading}){
     };
   }, [trading.index]);
 
-  useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet);
-    }
-    return () => {};
-  }, [wallet.detail.account]);
+  // useEffect(() => {
+  //   if(wallet.detail.account){
+  //     trading.init(wallet);
+  //   }
+  //   return () => {};
+  // }, [wallet.detail.account]);
 
   return (
     <div id="trading-view">

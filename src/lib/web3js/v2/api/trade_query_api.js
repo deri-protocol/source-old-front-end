@@ -54,10 +54,10 @@ export const getSpecification = async (
 };
 
 export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId, useInfura) => {
-  const poolconfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
-  let bTokenList = poolconfigList.map((i) => {
-    return i.bTokenId
-  })
+  const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+  //const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+  let bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
+  //let symbolIdList = symbolConfigList.map((i) => i.symbolId)
   //console.log('bTokenList', bTokenList)
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
   const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
@@ -77,15 +77,24 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
     minMaintenanceMarginRatio,
   } = parameterInfo
   const margins = await pToken.getMargins(accountAddress)
-  //console.log('margins', margins[0].toString(), margins[1].toString())
   let promises = []
-  for (let i=0; i<bTokenList.length; i++) {
-    promises.push(perpetualPool.getBToken(bTokenList[i]))
+  for (let i=0; i<bTokenIdList.length; i++) {
+    promises.push(perpetualPool.getBToken(bTokenIdList[i]))
   }
   const bTokens = await Promise.all(promises)
   const margin = bTokens.reduce((accum, a, index) => {
     return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
   }, bg(0))
+
+  // promises = []
+  // for (let i=0; i<symbolIdList.length; i++) {
+  //   promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+  // }
+  // const symbols = await Promise.all(promises)
+  // //console.log('symbols', symbols[0].price.toString(), symbols[0].multiplier.toString(), symbols[1].price.toString(), symbols[1].multiplier.toString())
+  // const marginHeld = symbols.reduce((accum, a, index) => {
+  //   return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
+  // }, bg(0))
  return {
    volume: volume.toString(),
    averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
@@ -96,6 +105,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
      multiplier,
      minInitialMarginRatio
    ).toString(),
+   //marginHeld: marginHeld.toString(),
    unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
    liquidationPrice: calculateLiquidationPrice(
      volume,
@@ -316,14 +326,12 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
 
   let bTokenIdList = bTokensConfigList.map((i) => i.bTokenId)
   let symbolIdList = symbolsConfigList.map((i) => i.symbolId)
-  //console.log('symbolIds', symbolIdList)
   const [margins, positions, parameterInfo] = await Promise.all([
     pToken.getMargins(accountAddress),
     pToken.getPositions(accountAddress),
     perpetualPool.getParameters(),
   ]);
   const { minInitialMarginRatio } = parameterInfo;
-  //console.log('margins', margins[0].toString(), margins[1].toString())
   let promises = []
   for (let i=0; i<bTokenIdList.length; i++) {
     promises.push(perpetualPool.getBToken(bTokenIdList[i]))
@@ -335,7 +343,7 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
   //console.log('margin', margin.toString())
   promises = []
   for (let i=0; i<symbolIdList.length; i++) {
-    promises.push(perpetualPool.getSymbol(bTokenIdList[i]))
+    promises.push(perpetualPool.getSymbol(symbolIdList[i]))
   }
   const symbols = await Promise.all(promises)
   //console.log('symbols', symbols[0].price.toString(), symbols[0].multiplier.toString(), symbols[1].price.toString(), symbols[1].multiplier.toString())
@@ -344,7 +352,11 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
   }, bg(0))
   //console.log('marginHeld', marginHeld.toString())
   bTokenList = bTokenList.map((i, index) => {
-    i.availableBalance = margin.minus(marginHeld).div(bTokens[index].price).toString()
+    if(!isNaN(parseFloat(bTokens[index].price)) || bTokens[index].price !== '0') {
+      i.availableBalance = margin.minus(marginHeld).div(bTokens[index].price).toString()
+    } else {
+      i.availableBalance = '-'
+    }
     return i
   })
   return bTokenList

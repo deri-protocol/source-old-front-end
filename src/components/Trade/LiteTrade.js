@@ -10,11 +10,11 @@ function LiteTrade({wallet,trading,isPro}){
   const [curTab, setCurTab] = useState('trade');
 
 
-  useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet)
-    }
-  },[wallet.detail.account])
+  // useEffect(() => {
+  //   if(wallet.detail.account){
+  //     trading.init(wallet)
+  //   }
+  // },[wallet.detail.account])
 
 
 

@@ -24,11 +24,11 @@ function ContractInfo({wallet,trading}){
   // }, [trading.config]);
 
 
-  useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet)
-    }
-  },[wallet.detail.account])
+  // useEffect(() => {
+  //   if(wallet.detail.account){
+  //     trading.init(wallet)
+  //   }
+  // },[wallet.detail.account])
   
   return(
     <div className="contract-box">

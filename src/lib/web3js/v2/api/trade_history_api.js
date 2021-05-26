@@ -106,13 +106,15 @@ export const getTradeHistory = async (
   accountAddress,
   symbolId
 ) => {
-  let tradeFromBlock, tradeHistory;
+  let tradeFromBlock, tradeHistory = [];
   const res = await fetchJson(
     `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}/${symbolId}`
   );
   if (res && res.success) {
     tradeFromBlock = parseInt(res.data.tradeHistoryBlock);
-    tradeHistory = res.data.tradeHistory;
+    if (res.data.tradeHistory && Array.isArray(res.data.tradeHistory)) {
+      tradeHistory = res.data.tradeHistory;
+    }
   }
   tradeHistory = tradeHistory
     .filter((i) => i)

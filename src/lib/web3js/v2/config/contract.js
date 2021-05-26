@@ -28,7 +28,7 @@ export const getPoolConfigList = (env = 'dev') => {
         bToken: '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF',
         bTokenId: '0',
         initialBlock: '',
-        bTokenSymbol: 'BETH',
+        bTokenSymbol: 'BUSD',
         symbol: 'ETHUSD',
         symbolId: '1',
         unit: 'ETH',

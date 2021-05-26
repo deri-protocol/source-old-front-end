@@ -3,7 +3,7 @@ import NumberFormat from 'react-number-format'
 import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 
-export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId}){  
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit}){  
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('0');
   const [decimal, setDecimal] = useState('00');
@@ -53,8 +53,8 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
 
   useEffect(() => {    
     if(liqInfo && liqInfo.shares){
-      const balance = (+liqInfo.shares).toFixed(2)
-      const decimal = balance.substring(balance.indexOf('.') +1 ,balance.length)
+      const balance = liqInfo.shares
+      const decimal = balance.substring(balance.indexOf('.') +1 ,balance.indexOf('.') + 3)
       setBalance(balance);
       setDecimal(decimal)
     }
@@ -99,7 +99,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                     />
                   </div>
                 </div>
-                <div>Shares</div>
+                <div>{unit}</div>
               </div>
               <div className='max'>
                 <span>MAX REMOVEABLE:</span>
