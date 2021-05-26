@@ -11,8 +11,22 @@ export default class Config {
     })
   }
 
-  async load(version){
-    const configs = await getContractAddressConfig(DeriEnv.get(),version)
+  load(version){
+    const current = version && version.current;
+    let configs = getContractAddressConfig(DeriEnv.get(),current)
+    if(version){
+      configs = configs.filter(c => c.version === version.current)
+      //v2 不需要展示base token,需要合并相同的base token
+      if(version.isV2){
+        configs = configs.reduce((total,cur) => {
+          const pos = total.findIndex(c => c.symbolId === cur.symbolId);
+          if(pos === -1){
+            total.push(cur)
+          }
+          return total;
+        },[])
+      }
+    }
     this.setAll(configs)
     return configs;
   }

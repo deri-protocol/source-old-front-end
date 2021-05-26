@@ -91,7 +91,7 @@ export default class Trading {
    */
   async init(wallet,version){
     //配置信息，如chainId、pool address、symbol、baseToken等
-    const all = await this.configInfo.load(version ? version.current : version);
+    const all = await this.configInfo.load(version);
     //version 可选项
     if(version){
       this.version = version
@@ -224,14 +224,6 @@ export default class Trading {
   }
 
   setConfig(config){
-    // if(!config.pool){
-    //   config ={
-    //     bTokenSymbol: 'BUSD',
-    //     symbol: 'BTCUSD',
-    //     unit: 'BTC',
-    //     chainId: '56',
-    //   }
-    // }
     this.config = config
   }
 

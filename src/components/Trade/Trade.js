@@ -9,6 +9,7 @@ import DepositMargin from './Dialog/DepositMargin'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
+import SymbolSelector from './SymbolSelector';
 
 
 
@@ -16,14 +17,12 @@ import { BalanceList } from './Dialog/BalanceList';
 function Trade({wallet = {},trading,version}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
-  const [dropdown, setDropdown] = useState(false);  
   const [fundingRateAfter, setFundingRateAfter] = useState('');
   const [transFee, setTransFee] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
-  const selectClass = classNames('dropdown-menu',{'show' : dropdown})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
 
 
@@ -38,25 +37,6 @@ function Trade({wallet = {},trading,version}){
     trading.setUserSelectedDirection(direction)
     setDirection(direction)
   }
-
-  const onDropdown = (event) => {
-    if(trading.configs.length > 0){
-      event.preventDefault();
-      setDropdown(!dropdown)    
-    }
-  }
-
-  //切换交易标的
-  const onSelect = select => {
-    const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
-    if(selected){
-      trading.pause();
-      setSpec(selected)
-      trading.switch(selected);
-      setDropdown(false)    
-    } 
-  }
-
 
   const onSlide = value => {    
     trading.setMargin(value);
@@ -221,44 +201,7 @@ function Trade({wallet = {},trading,version}){
     <div className='trade-info'>
     <div className='trade-peration'>
       <div className='check-baseToken'>
-        <div className='btn-group check-baseToken-btn'>
-          <button
-            type='button'            
-            onClick={onDropdown}
-            className='btn chec'>
-            {(spec.symbol) || 'BTCUSD'} / {(spec.bTokenSymbol) || 'BUSD'} (10X)
-            <span className='check-base-down'>
-            <svg
-              t='1616752321986'
-              className='icon'
-              viewBox='0 0 1024 1024'
-              version='1.1'
-              xmlns='http://www.w3.org/2000/svg'
-              p-id='1700'
-              width='16'
-              height='16'
-            >
-                <path
-                  d='M843.946667 285.866667L512 617.386667 180.053333 285.866667 119.893333 346.026667l331.946667 331.946666L512 738.133333l392.106667-392.106666-60.16-60.16z'
-                  p-id='1701'
-                  fill='#cccccc'
-                ></path></svg>
-              </span>
-          </button>
-          <div className={selectClass}>
-            <div className='dropdown-box'>
-              {trading.configs.map((config,index) => {
-                return (
-                  <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
-                    {config.symbol } / {config.bTokenSymbol} (10X)
-                  </div>
-                )
-              })}
-            </div>
-            
-          </div>
-        </div>
-
+        <SymbolSelector setSpec={setSpec} spec={spec}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>

@@ -9,17 +9,19 @@ import { getPoolBTokensBySymbolId } from '../../../lib/web3js/v2';
 
 const AddMarginDialog = withModal(DepositMargin)
 const RemoveMarginDialog = withModal(WithdrawMagin)
+const balanceListLength = 19
 
 export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClose}){  
   const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
-  const [placeholdList, setPlaceholdList] = useState([]);
+  const [placeholdList, setPlaceholdList] = useState(Array.from({length : balanceListLength}));
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
-
   const [balance, setBalance] = useState('');
 
   const closeAddMargin = () => setAddModalIsOpen(false)
+
   const closeRemoveMargin = () => setRemoveModalIsOpen(false)
+
   const closeCurrent = () => {
     afterDepositAndWithdraw();
     onClose();
@@ -44,8 +46,8 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
     if(wallet.detail.account && spec){
       const list = await getPoolBTokensBySymbolId(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       setDepositAndWithdragList(list)
-      if(list.length < 10){
-        setPlaceholdList(Array.from({length : 20 - list.length}));
+      if(list.length < 20){
+        setPlaceholdList(Array.from({length : balanceListLength - list.length}));
       }
     }
   }
@@ -96,25 +98,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                     </span>
                   </div>
                 ))}
-                {placeholdList.map(item =>  (
-                  <div className='row'>
-                  {/* <span className='btoken'>{item.bTokenSymbol}</span>
-                  <span className='w-balance'><DeriNumberFormat value={item.walletBalance} fixedDecimalScale decimalScale={2}/></span>
-                  <span className='avail-balance'><DeriNumberFormat value={item.availableBalance} fixedDecimalScale decimalScale={2}/></span>
-                  <span className='action'>
-                    <span
-                      className='add-margin'
-                      id='openAddMargin'
-                      onClick={() => addMargin(item.walletBalance,item.bTokenId)}> 
-                      <img src={removeMarginIcon} alt='add margin'/> Add
-                    </span>
-                    <span className='remove-margin'
-                      onClick={() => setRemoveModalIsOpen(true)}>
-                      <img src={addMarginIcon} alt='add margin'/> Remove
-                    </span>
-                  </span> */}
-                </div>
-                ))}
+                {placeholdList.map(item => <div className='row'></div>)}
               </div>
             </div>
           </div>
