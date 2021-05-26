@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import {
-	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo,getLpPoolInfoApy
+	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo,getLpPoolInfoApy, bg
 } from '../../../lib/web3js/indexV2'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
@@ -37,13 +37,14 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 				if(!info.shareValue){
 					info.shareValue = 1; 
 				}
+				const total = bg(info.shares).multipliedBy(info.shareValue)
 				setLiquidity({
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
 					shareValue : info.shareValue,
-					percent : ((info.shares * info.shareValue) / info.poolLiquidity) * 100 ,
+					percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
 					shares : info.shares,
-					values : info.shares * info.shareValue,
+					values : total.toString(),
 					lpApy
 				})	
 			}
@@ -101,8 +102,7 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>Shares</span> </div>
 				</div>
 				<div className="odd claim-network">
-					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>
-						
+					<div className="text-title money"><DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
 				</div>
 				<div className="title-check">
 				</div>
