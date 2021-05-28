@@ -3,11 +3,13 @@ import WebSocket from "socket.io-client";
 
 class Oracle {
   symbol = 'BTCUSD'
+  timeType = 'min'
   index = 0.00
   kData = []
   ws = null
   paused = false;
   listeners = {}
+  already = false
 
   constructor(){
     makeAutoObservable(this,{
@@ -20,11 +22,17 @@ class Oracle {
 
   initWebSocket(){
     if(this.ws === null) {
-      this.ws = new WebSocket('wss://api.deri.finance', {
+      this.ws = new WebSocket('wss://oracle4.deri.finance', {
         transports: ['websocket'],
-        path: '/kline'
+        withCredentials: true
       })
-      this.ws.on('connect',() => console.log('ws is already connected'));
+      this.ws.on('connect',() => {
+        if(this.already){
+          this.ws.emit('get_kline_update', {'symbol': this.symbol, 'time_type': this.timeType})
+          console.log('ws is reconnected already')
+        }
+        console.log('ws is already connected');
+      });
     }    
   }
 
@@ -58,7 +66,13 @@ class Oracle {
         }
       }
     })
-    this.ws.emit('get_kline', {'symbol': symbol, 'time_type': timeType, 'bars': 1000})
+    if(symbol !== this.symbol){
+      this.unsubscribeBars(this.symbol);
+    }
+    this.setSymbol(symbol)
+    this.setTimeType(timeType);
+    this.ws.emit('get_kline_update', {'symbol': this.symbol, 'time_type': this.timeType})
+    this.already = true
   }
 
   addListener(id,listener){
@@ -69,9 +83,9 @@ class Oracle {
 
 
 
-  unsubscribeBars(uid){
-    this.ws.emit('un_get_kline', {
-      symbol : this.symbol, 'time_type' : 'min', bars : 1000
+  unsubscribeBars(symbol){
+    this.ws.emit('un_get_kline_update', {
+      symbol : symbol, 'time_type' : 'min'
     })
   }
 
@@ -133,6 +147,9 @@ class Oracle {
     this.symbol = symbol
   }
 
+  setTimeType(timeType){
+    this.timeType = timeType;
+  }
   setPause(paused){
     this.paused = paused
   }
