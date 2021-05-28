@@ -3,7 +3,8 @@ import {
   calculatePnl,
   calculateFundingRate,
   calculateLiquidityUsed,
-  calculateMaxWithdrawMargin,
+  calculateBTokenDynamicEquities,
+  isBToken0RatioValid,
 } from '../calculation';
 import { bg } from '../utils';
 import fetch from 'node-fetch'
@@ -77,5 +78,37 @@ describe('calculation', () => {
     const input2 = ['-29.99', '6999', '0.1', '1000', '0.1']
     const output2 = bg('2.0990001')
     expect(calculateLiquidityUsed(...input2)).toEqual(output2)
+  })
+  test('calculateBTokenDynamicEquities', () => {
+    const input = [{
+      liquidity: '976',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '501',
+      price: '42395.89',
+      discount: '0.8',
+      pnl: '477',
+    }]
+    const output = bg('19282180.632')
+    const totalDynamicEquity = calculateBTokenDynamicEquities(input)
+    expect(totalDynamicEquity).toEqual(output)
+  })
+  test('isBToken0RatioValid', () => {
+    const input = [{
+      liquidity: '976',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '501',
+      price: '42395.89',
+      discount: '0.8',
+      pnl: '477',
+    }]
+    const output = bg('19282180.632')
+    const res = isBToken0RatioValid(input, '0', '224', '0.2')
+    expect(totalDynamicEquity).toEqual(output)
   })
 })

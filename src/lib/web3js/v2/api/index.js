@@ -6,6 +6,8 @@ export {
 export {
   addLiquidity,
   removeLiquidity,
+  addLiquidityWithPrices,
+  removeLiquidityWithPrices,
 } from './mining_transaction_api'
 
 export {
@@ -33,4 +35,8 @@ export {
   withdrawMargin,
   tradeWithMargin,
   closePosition,
+  depositMarginWithPrices,
+  withdrawMarginWithPrices,
+  tradeWithMarginWithPrices,
+  closePositionWithPrices,
 } from './trade_transaction_api';

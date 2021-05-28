@@ -3,6 +3,7 @@ import RcSlider,{SliderTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css';
 import './slider.less'
 import classNames from 'classnames';
+import { bg } from '../../lib/web3js/v2';
 const { Handle } = RcSlider;
 
 
@@ -43,7 +44,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,isShareOtherSymbolMargin,marginHeld}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -51,6 +52,10 @@ export default function Slider({max = '--' ,start,onValueChange,freeze}){
   const [loaded, setLoaded] = useState(false);
 
   const onSliderChange = value => {
+    //如果共享margin，且当前没有仓位，不能往左拉做空
+    if(marginHeld && isShareOtherSymbolMargin && bg(value).lt(marginHeld)){
+      return ;
+    }
     setValue(value)
     onValueChange(value);
   }

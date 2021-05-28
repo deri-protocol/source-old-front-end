@@ -23,16 +23,16 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
   const remove = async () => {
     const max = bg(liqInfo.shares);
     const cur = bg(amount);
-    if(!isLpPool){
-      const balance = (+liqInfo.shares) - (+amount)
-      if (balance < 1 && balance !== 0) {
-        alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
-        return false;
-      }
-    }
     if (cur.gt(max)) {
       alert(`Your current max removable shares are  ${liqInfo.shares}`);
       return false;
+    }
+    if(!isLpPool){
+      const balance = (+liqInfo.shares) - (+amount)
+      if (balance < 1 && balance > 0) {
+        alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
+        return false;
+      }
     }
     if (+amount <= 0 || isNaN(amount)) {
       alert("Invalid Liquidity!");

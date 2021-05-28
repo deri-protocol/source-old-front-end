@@ -1,8 +1,10 @@
 import {addLiquidity2, removeLiquidity2 } from '../api/contractTransactionApiV2';
-import { 
-  addLiquidity as addLiquidityV2,
-  removeLiquidity as removeLiquidityV2
- } from '../v2';
+import {
+  // addLiquidity as addLiquidityV2,
+  // removeLiquidity as removeLiquidityV2
+  addLiquidityWithPrices as addLiquidityV2,
+  removeLiquidityWithPrices as removeLiquidityV2,
+} from '../v2';
 
 export const addLiquidity = async (
   chainId,

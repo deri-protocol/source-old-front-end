@@ -5,13 +5,16 @@ import {
   depositMargin2,
   withdrawMargin2,
 } from '../api/contractTransactionApiV2';
-
 import {
   unlock as unlockV2,
-  tradeWithMargin as tradeWithMarginV2,
-  closePosition as closePositionV2,
-  depositMargin as depositMarginV2,
-  withdrawMargin as withdrawMarginV2,
+  // tradeWithMargin as tradeWithMarginV2,
+  // closePosition as closePositionV2,
+  // depositMargin as depositMarginV2,
+  // withdrawMargin as withdrawMarginV2,
+  tradeWithMarginWithPrices as tradeWithMarginV2,
+  depositMarginWithPrices as depositMarginV2,
+  withdrawMarginWithPrices as withdrawMarginV2,
+  closePositionWithPrices as closePositionV2,
 } from '../v2';
 
 export const unlock = async (

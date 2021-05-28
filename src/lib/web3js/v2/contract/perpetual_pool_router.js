@@ -74,6 +74,58 @@ export class PerpetualPoolRouter extends ContractBase {
     );
   }
 
+  // with prices
+  async addLiquidityWithPrices(accountAddress, bTokenId, amount, priceInfos) {
+    if (!this.poolAddress) {
+      await this.pool()
+    }
+    return await this._transact(
+      'addLiquidityWithPrices',
+      [bTokenId, naturalToDeri(amount), priceInfos],
+      accountAddress
+    );
+  }
+  async removeLiquidityWithPrices(accountAddress, bTokenId, amount, priceInfos) {
+    return await this._transact(
+      'removeLiquidityWithPrices',
+      [bTokenId, naturalToDeri(amount), priceInfos],
+      accountAddress
+    );
+  }
+
+  async addMarginWithPrices(accountAddress, bTokenId, amount, priceInfos) {
+    if (!this.poolAddress) {
+      await this.pool()
+    }
+    return await this._transact(
+      'addMarginWithPrices',
+      [bTokenId, naturalToDeri(amount), priceInfos],
+      accountAddress
+    );
+  }
+
+  async removeMarginWithPrices(accountAddress, bTokenId, amount, priceInfos) {
+    if (!this.poolAddress) {
+      await this.pool()
+    }
+    return await this._transact(
+      'removeMarginWithPrices',
+      [bTokenId, naturalToDeri(amount), priceInfos],
+      accountAddress
+    );
+  }
+
+  async tradeWithPrices(accountAddress, symbolId, amount, priceInfos) {
+    if (!this.poolAddress) {
+      await this.pool()
+    }
+    return await this._transact(
+      'tradeWithPrices',
+      [symbolId, naturalToDeri(amount), priceInfos],
+      accountAddress
+    );
+  }
+
   // async liquidate(acountAddress) {
   //   if (!this.poolAddress) {
   //     await this.pool()

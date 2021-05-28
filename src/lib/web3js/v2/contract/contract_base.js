@@ -1,7 +1,7 @@
 import { metaMaskWeb3, web3Factory } from '../factory';
 import { numberToHex } from '../utils';
 
-const MAX_GAS_AMOUNT = 532731;
+const MAX_GAS_AMOUNT = 832731;
 
 export class ContractBase {
   constructor(chainId, contractAddress, useInfura) {
@@ -41,7 +41,7 @@ export class ContractBase {
   async _estimatedGas(method, args = [], accountAddress) {
     await this._init()
     let gas = 0;
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 2; i++) {
       try {
         gas = await this.contract.methods[method](...args).estimateGas({
           from: accountAddress,
@@ -51,8 +51,7 @@ export class ContractBase {
       } catch (err) {
       }
     }
-    if (gas == 0) gas = MAX_GAS_AMOUNT;
-    if (gas > MAX_GAS_AMOUNT) gas = MAX_GAS_AMOUNT;
+    if (gas == 0 || gas > 10000000) gas = MAX_GAS_AMOUNT;
     return gas;
   }
 
@@ -75,13 +74,12 @@ export class ContractBase {
   }
   async _transact(method, args, accountAddress) {
     await this._init()
-    //const gas = await this._estimatedGas(method, args, accountAddress)
-    console.log('account', accountAddress)
+    const gas = await this._estimatedGas(method, args, accountAddress)
     let txRaw = [
       {
         from: accountAddress,
         to: this.contractAddress,
-        // gas: numberToHex(gas),
+        gas: numberToHex(gas),
         value: numberToHex('0'),
         data: this.contract.methods[method](...args).encodeABI(),
       },

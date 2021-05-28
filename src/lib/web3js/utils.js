@@ -469,7 +469,7 @@ export const getOracleInfo = async (chainId, poolAddress) => {
   while (retry > 0) {
     res = await fetch(url, { mode: 'cors' });
     //if (res && !res.timeout) {
-    if (res) {
+    if (res.ok) {
       break;
     }
     //console.log('get oracle info timeout')

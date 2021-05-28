@@ -12,3 +12,8 @@ export {
   calculateLiquidityUsed,
   processFundingRate,
 } from './funding_rate'
+
+export {
+  calculateBTokenDynamicEquities,
+  isBToken0RatioValid,
+} from './liquidity'

@@ -76,7 +76,8 @@ export default class Trading {
       amount : computed,
       fundingRateTip : computed,
       direction : computed,
-      volumeDisplay : computed
+      volumeDisplay : computed,
+      isShareOtherSymbolMargin : computed
     })
     this.configInfo = new Config();
     this.oracle = new Oracle();
@@ -287,6 +288,12 @@ export default class Trading {
   }
 
   setMargin(margin){
+    console.log('before margin ',margin)
+    console.log('margin held',this.position.marginHeld)
+    if(this.isShareOtherSymbolMargin){
+      margin = bg(margin).minus(this.position.marginHeld).toString()
+    }
+    console.log('after margin ',margin)
     this.margin =  margin
     if(this.contract){
       const volume = (+margin) / ((+this.index) * (+this.contract.multiplier) * (+this.contract.minInitialMarginRatio))      
@@ -320,7 +327,7 @@ export default class Trading {
       //合同价值
       let curVolume = Math.abs(this.volume);
       const originVolume = Math.abs(this.volumeDisplay);
-      //如果不是通过marge 算出来的volume
+      //如果不是通过margin 算出来的volume
       if(this.margin === '') {       
         if(this.userSelectedDirection === 'long') {
           if((+this.position.volume) > 0) {
@@ -336,17 +343,25 @@ export default class Trading {
           }
         }
       }
-      const contractValue = Math.abs(originVolume) * this.index * this.contract.multiplier
+      const contractValue = Math.abs(curVolume) * this.index * this.contract.multiplier
       const dynBalance = (+this.position.margin) + (+this.position.unrealizedPnl)
       const margin = contractValue * this.contract.minInitialMarginRatio  
-      const totalMagin = margin + (+this.position.marginHeld)    
+      let totalMargin =  margin
+      //如果当前symbol 仓位 为0 且总的marginHeld 大于0
+      if(this.isShareOtherSymbolMargin){
+        totalMargin = bg(margin).plus(this.position.marginHeld).toString() 
+      }
+      // console.log('volume ',curVolume);
+      // console.log('dynBalance ',dynBalance)
+      // console.log('margin ',margin)
+      // console.log('total margin ',totalMargin)
       const leverage = (+contractValue / +dynBalance).toFixed(1);
-      const balance = ((+dynBalance) - (+totalMagin)).toFixed(2)
+      const balance = ((+dynBalance) - (+totalMargin)).toFixed(2)
       const available = balance > 0 ? balance : 0
       const exchanged = (originVolume * (+this.contract.multiplier)).toFixed(4)
       return {
         dynBalance, 
-        margin , 
+        margin : totalMargin, 
         available,      
         exchanged,      
         leverage,
@@ -385,6 +400,10 @@ export default class Trading {
       }
     }
     return 0
+  }
+
+  get isShareOtherSymbolMargin() {
+    return bg(this.position.volume).isZero() && bg(this.position.marginHeld).gt(0)
   }
 
   //资金费率

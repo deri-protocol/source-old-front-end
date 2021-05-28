@@ -292,7 +292,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} isShareOtherSymbolMargin={trading.isShareOtherSymbolMargin} marginHeld={trading.position.marginHeld}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
