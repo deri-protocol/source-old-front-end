@@ -37,3 +37,18 @@ export function isCakeLP(address){
   return address === '0x73feaa1eE314F8c655E354234017bE2193C9E24E'
 }
 
+export function sessionStorageKey(version){
+  return `${version}-current-trading-pool`
+}
+
+export function storeConfig(version,config){
+  if(config){
+    const key = sessionStorageKey(version);
+    sessionStorage.setItem(key,JSON.stringify(config))
+  }
+}
+
+export function getConfigFromStore(version){
+  return JSON.parse(sessionStorage.getItem(sessionStorageKey(version)))
+}
+

@@ -16,27 +16,27 @@ export const calculatePnl = (price, volume, multiplier, cost) => {
   return volume.times(price).times(multiplier).minus(cost);
 }
 
-export const calculateMaxWithdrawMargin = (
-  price,
-  volume,
-  margin,
-  cost,
-  multiplier,
-  minInitialMarginRatio
-) => {
-  if (volume.eq(0)) {
-    return margin;
-  }
-  const held = calculateMarginHeld(
-    price,
-    volume,
-    multiplier,
-    minInitialMarginRatio
-  );
-  const pnl = calculatePnl(price, volume, multiplier, cost);
-  const withdrawable = max(margin.plus(pnl).minus(held.times(1.02)), bg(0));
-  return withdrawable;
-};
+// export const calculateMaxWithdrawMargin = (
+//   price,
+//   volume,
+//   margin,
+//   cost,
+//   multiplier,
+//   minInitialMarginRatio
+// ) => {
+//   if (volume.eq(0)) {
+//     return margin;
+//   }
+//   const held = calculateMarginHeld(
+//     price,
+//     volume,
+//     multiplier,
+//     minInitialMarginRatio
+//   );
+//   const pnl = calculatePnl(price, volume, multiplier, cost);
+//   const withdrawable = max(margin.plus(pnl).minus(held.times(1.02)), bg(0));
+//   return withdrawable;
+// };
 
 export const calculateLiquidationPrice = (
   volume,
@@ -54,32 +54,26 @@ export const calculateLiquidationPrice = (
 };
 
 export const isOrderValid = (
-  price,
+  //price,
   margin,
-  volume,
+  marginHeld,
   liquidity,
-  tradersNetVolume,
-  multiplier,
-  minPoolMarginRatio,
-  minInitialMarginRatio,
-  newVolume,
-  amount
+  liquidityUsed,
+  // multiplier,
+  // minPoolMarginRatio,
+  // newVolume,
 ) => {
-  const minMargin = volume
-    .plus(newVolume)
-    .abs()
-    .times(price)
-    .times(multiplier)
-    .times(minInitialMarginRatio);
-  const poolMaxVolume = liquidity
-    .div(minPoolMarginRatio)
-    .div(price)
-    .div(multiplier);
-  if (margin.plus(amount).gte(minMargin)) {
-    if (
-      newVolume.lte(poolMaxVolume.minus(tradersNetVolume)) &&
-      newVolume.gte(poolMaxVolume.negated().minus(tradersNetVolume))
-    ) {
+  const minMargin = marginHeld;
+  // const poolMaxVolume = liquidity.minus(liquidityUsed)
+  //   .div(minPoolMarginRatio)
+  //   .div(price)
+  //   .div(multiplier);
+  if (margin.gte(minMargin)) {
+    // if (
+    //   newVolume.lte(poolMaxVolume) &&
+    //   newVolume.gte(poolMaxVolume.negated())
+    // ) {
+    if (liquidity.minus(liquidityUsed).gte(0)) {
       return { success: true };
     }
     return { success: false, error: 'Pool insufficient liquidity' };

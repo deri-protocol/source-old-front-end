@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { closePosition, getWalletBalance, getPoolBTokensBySymbolId } from "../../lib/web3js/indexV2";
+import { closePosition, getWalletBalance, getPoolBTokensBySymbolId, bg } from "../../lib/web3js/indexV2";
 import className from 'classnames'
 import withModal from '../hoc/withModal';
 import DepositMargin from './Dialog/DepositMargin';
@@ -22,6 +22,7 @@ function Position({wallet,trading,version}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
+  const [availableBalance, setAvailableBalance] = useState('');
   const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false)
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
@@ -29,7 +30,7 @@ function Position({wallet,trading,version}){
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId)
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e=> console.log(e))
       if(balance){
         setBalance(balance)
       }
@@ -64,6 +65,7 @@ function Position({wallet,trading,version}){
   }
 
   const afterDepositAndWithdraw = () => {
+    refreshBalance();
   }
 
   const onCloseBalanceList = () => {
@@ -101,9 +103,10 @@ function Position({wallet,trading,version}){
   useEffect(() => {
     if(trading.position){
       const {position} = trading
-      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) ? '--' : 'SHORT') 
+      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
       setDirection(direction)      
-      setBalanceContract((+position.margin) + (+position.unrealizedPnl))
+      setBalanceContract(bg(position.margin).plus(position.unrealizedPnl).toString())
+      setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())
     }
     return () => {};
   }, [trading.position.volume,trading.position.margin,trading.position.unrealizedPnl]);
@@ -211,6 +214,7 @@ function Position({wallet,trading,version}){
       spec={trading.config}
       afterWithdraw={afterWithdraw}
       position={trading.position}
+      availableBalance={availableBalance}
       className='trading-dialog'
       />
     <BalanceListDialog

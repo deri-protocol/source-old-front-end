@@ -10,13 +10,13 @@ const TIMEOUT=20000
 describe('PToken', () => {
   let poolAddress, pToken, account, account2
   beforeAll(() => {
-    poolAddress = '0x7dB32101081B17E105283820b2Ed3659DFE21470'
+    poolAddress = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
     pToken = new PToken('97', '0xeBA1c76F7A773B8210130f068798839F84392241', true)
     account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
     account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'
   })
   test('pool()', async() => {
-    const output = '0x7dB32101081B17E105283820b2Ed3659DFE21470'
+    const output = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
     expect(await pToken.pool()).toEqual(output)
   }, TIMEOUT)
   test('exists()', async() => {

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 function Version({wallet,version}){
   const switchVersion = () => {
-    if(!wallet.supportV2){
+    if(wallet.isConnected() && !wallet.supportV2){
       version.setCurrent('v1')
       alert('Deri v2 just support BSC chain');
       return;

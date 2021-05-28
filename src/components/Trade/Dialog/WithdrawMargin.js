@@ -3,31 +3,32 @@ import { withdrawMargin } from "../../../lib/web3js/indexV2";
 import Button from '../../Button/Button';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { bg } from '../../../utils/utils';
+import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance}){
+export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance,nested}){
   const [available, setAvailable] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
   const [pending, setPending] = useState(false);
+  useDisableScroll(nested)
 
 
   const calculateBalance = async () => {
-    if(wallet.isConnected() && position && position.margin && position.unrealizedPnl){      
+    if(wallet.isConnected() && availableBalance){      
       //v2 直接给
-      const balance =  availableBalance ? availableBalance : ((+position.margin )+ (+position.unrealizedPnl) - (+position.marginHeld)).toFixed(2)
+      const balance =  availableBalance
       setAvailable(balance)
       const pos = balance.indexOf('.');
       if(pos > 0){
         setDecimal(balance.substring(pos + 1,pos+3));
       } else {
         setDecimal('00')
-      }
-      
+      }      
     }
   }
 
   const removeAll = () => {
-    setAmount(availableBalance ? availableBalance : position.margin)
+    setAmount(availableBalance)
   }
 
   const close = () => {
@@ -117,7 +118,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 <span className='max-btn-left'> </span>
               </div>}
               <div className='add-margin-btn'>
-                <Button className='margin-btn' btnText='WITHDRAW' click={withdraw}/>
+                <Button className='margin-btn' btnText='WITHDRAW' click={withdraw} checkApprove={true} wallet={wallet} spec={spec}/>
               </div>
             </div>
           </div>

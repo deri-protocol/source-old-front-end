@@ -10,7 +10,7 @@ const TIMEOUT=20000
 describe('LToken', () => {
   let poolAddress, lToken, account, account2
   beforeAll(() => {
-    poolAddress = '0x7dB32101081B17E105283820b2Ed3659DFE21470'
+    poolAddress = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
     lToken = new LToken('97', '0x61162b0c9665Ce27a53b59E79C1B7A929cc3bB57', true)
     account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
     account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'
@@ -20,7 +20,7 @@ describe('LToken', () => {
     expect(await lToken.balanceOf(account)).toEqual(output)
   }, TIMEOUT)
   test('pool()', async() => {
-    const output = '0x7dB32101081B17E105283820b2Ed3659DFE21470'
+    const output = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
     expect(await lToken.pool()).toEqual(output)
   }, TIMEOUT)
   test('exists()', async() => {

@@ -4,6 +4,7 @@ import Button from '../../../Button/Button';
 import Modal from 'react-modal'
 import { addLiquidity, getWalletBalance, bg, addLpLiquidity } from '../../../../lib/web3js/indexV2';
 import useSpecification from '../../../../hooks/useSpecification';
+import useDisableScroll from '../../../../hooks/useDisableScroll';
 
 
 
@@ -12,6 +13,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
   const [decimal, setDecimal] = useState('00');
   const [addValue, setAddValue] = useState('')
   const spec = useSpecification({wallet,address,symbolId});
+  useDisableScroll();
 
 
   const input = (e) => {

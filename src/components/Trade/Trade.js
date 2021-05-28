@@ -21,6 +21,7 @@ function Trade({wallet = {},trading,version}){
   const [transFee, setTransFee] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
+  const [slideFreeze, setSlideFreeze] = useState(true);
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
@@ -65,7 +66,7 @@ function Trade({wallet = {},trading,version}){
 
   //交易费用
   const loadTransactionFee = async () => {
-    if(hasConnectWallet() && hasSpec()) {
+    if(hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
       const transFee = await getEstimatedFee(wallet.detail.chainId,spec.pool,Math.abs(trading.volumeDisplay),spec.symbolId);
       if(!isNaN(transFee)){
         setTransFee((+transFee).toFixed(2));
@@ -75,10 +76,11 @@ function Trade({wallet = {},trading,version}){
 
   //计算流动性的变化
   const calcLiquidityUsed = async () => {
-    if(hasConnectWallet() && hasSpec()) {
+    if(hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
       const {detail} = wallet
+      const volume = direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay
       const curLiqUsed = await getLiquidityUsed(detail.chainId,spec.pool,spec.symbolId)
-      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,trading.volumeDisplay,spec.symbolId)
+      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId,spec.pool,volume,spec.symbolId)
       if(curLiqUsed && afterLiqUsed){
         setLiqUsedPair({curLiqUsed : curLiqUsed.liquidityUsed0,afterLiqUsed : afterLiqUsed.liquidityUsed1})
       }
@@ -87,8 +89,9 @@ function Trade({wallet = {},trading,version}){
 
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
-    if(hasConnectWallet() && hasSpec()){
-      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,trading.volumeDisplay,spec.symbolId);
+    if(hasConnectWallet() && hasSpec() && trading.volumeDisplay){
+      const volume = direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay
+      const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,volume,spec.symbolId);
       if(fundingRateAfter){
         setFundingRateAfter(fundingRateAfter.fundingRate1);
       }
@@ -146,14 +149,11 @@ function Trade({wallet = {},trading,version}){
   }, [trading.position.volume]);
 
   useEffect(() => {
-    if(trading.volume !==''){
+    if(trading.volume !== '') {
+      trading.pause();
       calcFundingRateAfter();
       calcLiquidityUsed();
       loadTransactionFee();
-    }
-
-    if(trading.volume !== '') {
-      trading.pause();
     } else if(wallet.detail.account){
       trading.resume()
     }
@@ -182,9 +182,7 @@ function Trade({wallet = {},trading,version}){
 
 
   useEffect(() => {
-    if(wallet.detail.account){
-      trading.init(wallet,version)
-    }
+    trading.init(wallet,version)
   },[wallet.detail.account,version.current])
 
 
@@ -194,6 +192,13 @@ function Trade({wallet = {},trading,version}){
     }
     return () => {    };
   }, [trading.margin]);
+
+  useEffect(() => {
+    if(trading.index && wallet.isConnected() && wallet.supportChain) {
+      setSlideFreeze(false)
+    }
+    return () => {};
+  }, [wallet.detail.account,trading.index]);
 
 
    
@@ -265,11 +270,17 @@ function Trade({wallet = {},trading,version}){
               </span>
             </div>
             <div className='box-margin'>
-              <span> Margin </span>
+              {version.isV2 ? <span> Total Margin </span> : <span>Margin</span>}
               <span className='margin'>
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>
+            {version.isV2 && <div>
+              <span>Position margin</span>
+              <span className='margin'>
+                <DeriNumberFormat value={ trading.amount.marginHeldBySymbol} allowZero={true}  decimalScale={2}/>
+              </span>
+              </div>}
             <div className='available-balance'>
               <span className='available-balance pc'> Available Balance </span>
               <span className='available-balance mobile'>Avail Bal</span>
@@ -281,7 +292,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={!trading.index}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
@@ -295,7 +306,7 @@ function Trade({wallet = {},trading,version}){
         <div className='text-info'>
           <div className='title-enter'>Liquidity Used</div>
           <div className='text-enter'>
-            <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%'/> -> <DeriNumberFormat value={ liqUsedPair.afterLiqUsed }  decimalScale={2}  suffix='%'/>
+            <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2}/> -> <DeriNumberFormat value={ liqUsedPair.afterLiqUsed }  decimalScale={2}  suffix='%'/>
           </div>
         </div>
         <div className='text-info'>
@@ -325,6 +336,7 @@ function Trade({wallet = {},trading,version}){
                 position={trading.position}
                 trading={trading}
                 symbolId={trading.config && trading.config.symbolId}
+                bTokenId={trading.config && trading.config.bTokenId}
                 version={version}
        />
     </div>
@@ -338,7 +350,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
-                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,version}){
+                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version}){
   const [isApprove, setIsApprove] = useState(true);
   const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
@@ -353,7 +365,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
   const approve = async () => {
     const {detail} = wallet
-    const res = await unlock(detail.chainId,spec.pool,detail.account);
+    const res = await unlock(detail.chainId,spec.pool,detail.account,bTokenId);
     if(res.success){
       setIsApprove(true);
       trading.refresh();
@@ -379,14 +391,14 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   const loadApprove = async () => {
     if(hasConnectWallet() && spec){
       const {detail} = wallet
-      const result = await isUnlocked(detail.chainId,spec.pool,detail.account,symbolId).catch(e => console.log(e))
+      const result = await isUnlocked(detail.chainId,spec.pool,detail.account,bTokenId).catch(e => console.log(e))
       setIsApprove(result);
     }
   }
 
   const loadBalance = async () => {
     if(wallet.isConnected() && spec){
-      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account)
+      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account,bTokenId).catch(e => console.log(e))
       if(balance){
         setBalance(balance)
       }
@@ -488,4 +500,3 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 }
 
 export default inject('wallet','trading','version')(observer(Trade))
-// export default Trade

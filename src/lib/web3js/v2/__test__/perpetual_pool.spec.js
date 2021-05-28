@@ -10,7 +10,7 @@ const TIMEOUT=20000
 describe('PerpetualPool', () => {
   let perpetualPool
   beforeAll(() => {
-    perpetualPool = new PerpetualPool('97', '0x7dB32101081B17E105283820b2Ed3659DFE21470', true)
+    perpetualPool = new PerpetualPool('97', '0x19EC6281749C06Ed9647134c57257AcA1508bFA8', true)
   })
   test('getLengths()', async() => {
     const output = 10 

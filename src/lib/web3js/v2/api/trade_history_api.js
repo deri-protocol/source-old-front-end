@@ -106,59 +106,66 @@ export const getTradeHistory = async (
   accountAddress,
   symbolId
 ) => {
-  let tradeFromBlock, tradeHistory = [];
-  const res = await fetchJson(
-    `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}/${symbolId}`
-  );
-  if (res && res.success) {
-    tradeFromBlock = parseInt(res.data.tradeHistoryBlock);
-    if (res.data.tradeHistory && Array.isArray(res.data.tradeHistory)) {
-      tradeHistory = res.data.tradeHistory;
+  try {
+    let tradeFromBlock, tradeHistory = [];
+    const res = await fetchJson(
+      `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}/${symbolId}`
+    );
+    if (res && res.success) {
+      tradeFromBlock = parseInt(res.data.tradeHistoryBlock);
+      if (res.data.tradeHistory && Array.isArray(res.data.tradeHistory)) {
+        tradeHistory = res.data.tradeHistory;
+      }
     }
-  }
-  tradeHistory = tradeHistory
-    .filter((i) => i)
-    .map((i) => {
-      return {
-        direction: i.direction.trim(),
-        //baseToken: i.baseToken.trim(),
-        symbolId: i.symbolId,
-        price: deriToNatural(i.price).toString(),
-        notional: deriToNatural(i.notional).toString(),
-        volume: deriToNatural(i.volume).toString(),
-        transactionFee: deriToNatural(i.transactionFee).toString(),
-        transactionHash: i.transactionHash,
-        time: i.time.toString(),
-      };
-    });
-    //console.log('tradeHistory1',tradeHistory)
-  if (tradeFromBlock !== 0) {
-    // console.log(tradeFromBlock, liquidateFromBlock)
-    const [tradeHistoryOnline] = await Promise.all([
-      getTradeHistoryOnline(
-        chainId,
-        poolAddress,
-        accountAddress,
-        symbolId,
-        tradeFromBlock + 1
-      ),
-    ]);
-    const result = tradeHistoryOnline.concat(tradeHistory);
-    return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
-  } else {
+    if (tradeHistory.length > 0) {
+      tradeHistory = tradeHistory
+        .filter((i) => i)
+        .map((i) => {
+          return {
+            direction: i.direction.trim(),
+            //baseToken: i.baseToken.trim(),
+            symbolId: i.symbolId,
+            price: deriToNatural(i.price).toString(),
+            notional: deriToNatural(i.notional).toString(),
+            volume: deriToNatural(i.volume).toString(),
+            transactionFee: deriToNatural(i.transactionFee).toString(),
+            transactionHash: i.transactionHash,
+            time: i.time.toString(),
+          };
+        });
+    }
+      //console.log('tradeHistory1',tradeHistory)
+    if (tradeFromBlock !== 0) {
+      // console.log(tradeFromBlock, liquidateFromBlock)
+      const [tradeHistoryOnline] = await Promise.all([
+        getTradeHistoryOnline(
+          chainId,
+          poolAddress,
+          accountAddress,
+          symbolId,
+          tradeFromBlock + 1
+        ),
+      ]);
+      const result = tradeHistoryOnline.concat(tradeHistory);
+      return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+    } else {
 
-    const {initialBlock} = getPoolConfig(poolAddress, null, symbolId)
-    tradeFromBlock = parseInt(initialBlock);
-    const [tradeHistoryOnline] = await Promise.all([
-      getTradeHistoryOnline(
-        chainId,
-        poolAddress,
-        accountAddress,
-        symbolId,
-        tradeFromBlock + 1
-      ),
-    ]);
-    const result = tradeHistoryOnline;
-    return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+      const {initialBlock} = getPoolConfig(poolAddress, null, symbolId)
+      tradeFromBlock = parseInt(initialBlock);
+      const [tradeHistoryOnline] = await Promise.all([
+        getTradeHistoryOnline(
+          chainId,
+          poolAddress,
+          accountAddress,
+          symbolId,
+          tradeFromBlock + 1
+        ),
+      ]);
+      const result = tradeHistoryOnline;
+      return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
+    }
+  } catch(err) {
+    console.log(err)
   }
+  return []
 };

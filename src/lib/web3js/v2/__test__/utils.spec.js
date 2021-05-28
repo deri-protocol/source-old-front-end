@@ -28,6 +28,7 @@ import { getAnnualBlockNumberConfig } from '../config'
 global.fetch = fetch
 
 const TIMEOUT=20000
+const POOL_ADDRESS='0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
 
 describe('utils', () => {
   test('toWei()', () => {
@@ -94,19 +95,19 @@ describe('utils', () => {
   });
 
   test('getOracleUrl()', () => {
-    const [input, output] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '0'], 'https://oracle2.deri.finance/price?symbol=BTCUSD'];
+    const [input, output] = [[POOL_ADDRESS, '0'], 'https://oracle4.deri.finance/price?symbol=BTCUSD'];
     expect(getOracleUrl(...input)).toEqual(output);
-    const [input3, output3] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
+    const [input3, output3] = [[POOL_ADDRESS, '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
     expect(getOracleUrl(...input3)).toEqual(output3);
   });
   test('getOracleInfo()', async() => {
-    const [input, output] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '0'], {symbol: 'BTCUSD', priceLength: 23}];
+    const [input, output] = [[POOL_ADDRESS, '0'], {symbol: 'BTCUSD', priceLength: 23}];
     const res = await getOracleInfo(...input)
     expect(res.symbol).toEqual(output.symbol);
     expect(res.price.length).toEqual(output.priceLength);
   }, TIMEOUT)
   test('getOraclePrice()', async() => {
-    const [input, output] = [['0x7dB32101081B17E105283820b2Ed3659DFE21470', '0'], {priceLength: 5}];
+    const [input, output] = [[POOL_ADDRESS, '0'], {priceLength: 5}];
     const res = await getOraclePrice(...input)
     expect(res.split('.')[0].length).toEqual(output.priceLength);
   }, TIMEOUT)

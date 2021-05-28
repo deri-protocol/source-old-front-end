@@ -8,7 +8,7 @@ export default class Position {
  
 
    async load(wallet,spec,callback){
-     if(spec && spec.pool){
+     if(wallet && wallet.isConnected() && wallet.supportChain && spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       if(position){
         if(callback){
@@ -25,13 +25,13 @@ export default class Position {
       this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)      
       if(wallet){
         this.wallet= wallet; 
-        }
-        if(spec){
-          this.spec = spec
-        }
-        if(callback){
-          this.callback = callback;
-        }
+      }
+      if(spec){
+        this.spec = spec
+      }
+      if(callback){
+        this.callback = callback;
+      }
      }
    }
 

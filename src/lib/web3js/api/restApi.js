@@ -11,7 +11,7 @@ const getHttpBase = () => {
 };
 
 const fetchJson = async (url) => {
-  const resp = await fetch(url);
+  const resp = await fetch(url,{mode : 'cors'});
   return await resp.json();
 };
 

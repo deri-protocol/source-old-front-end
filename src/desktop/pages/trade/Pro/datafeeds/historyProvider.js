@@ -13,12 +13,14 @@ const history = {}
 //   transports: ['websocket'],
 //   path: '/kline'
 // })
-const socket = io('wss://api.deri.finance', {
-  transports: ['websocket'],
-  path: '/kline'
+
+const socket = io('wss://oracle4.deri.finance', {
+    transports: ['websocket'],
+    withCredentials: true
 })
+
 var bars = []
-var param = {}
+var param = null
 var ws_first
 var ws_onHistoryCallback
 var ws_onResetCacheNeededCallback
@@ -62,9 +64,8 @@ export default {
         ws_time = 'min'
         break
     }
-    param = {'symbol': trade, 'time_type': ws_time, 'bars': 1000}
-
-    socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 1000})
+    param = {'symbol': trade, 'time_type': ws_time,from : from, to : to}
+    socket.emit('get_kline', param)
   },
   subscribeBars: function (symbolInfo, resolution, updateCb, uid, resetCache) {
     let trade = symbolInfo.name
@@ -95,7 +96,7 @@ export default {
         ws_time = 'min'
         break
     }
-    param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
+    // param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
     // socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
     var newSub = {
       uid,
@@ -108,7 +109,7 @@ export default {
     // resetCache()
   },
   unsubscribeBars: function (uid) {
-    var subIndex = _subs.findIndex(e => e.uid === uid)
+    var subIndex = _subs.findIndex(e => e.uid === uid)  
     if (subIndex === -1) {
     // console.log("No subscription found for ",uid)
       return
@@ -121,6 +122,10 @@ export default {
   }
 }
 socket.on('connect', data => {
+  //代表断开重连
+  if(param){
+    socket.emit('get_kline', param)
+  }
   console.log('socket,connect')
 })
 socket.on('kline_update', data => {
@@ -140,8 +145,9 @@ socket.on('kline_update', data => {
 })
 
 socket.on('kline_history', data => {
-  console.log('data', data)
+  let current = param.symbol;
   bars = data.map(el => {
+    current = el.symbol;
     return {
       time: el.time, // TradingView requires bar time in ms
       low: Number(el.low),
@@ -159,13 +165,15 @@ socket.on('kline_history', data => {
     }
   }
   const len = bars.length
-  if (len) {
-    if (ws_to * 1000 > bars[len - 1].time) {
-      ws_onHistoryCallback(bars, {noData: false})
+  if(param.symbol.toUpperCase() === current.toUpperCase()){
+    if (len) {
+      if (ws_to * 1000 > bars[len - 1].time) {
+        ws_onHistoryCallback(bars, {noData: false})
+      } else {
+        ws_onHistoryCallback([], {noData: true})
+      }
     } else {
-      ws_onHistoryCallback([], {noData: true})
+      ws_onHistoryCallback(bars, {noData: true})
     }
-  } else {
-    ws_onHistoryCallback(bars, {noData: true})
   }
 })

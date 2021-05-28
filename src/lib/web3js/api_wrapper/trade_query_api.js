@@ -5,11 +5,11 @@ import {
   getEstimatedFee as getEstimatedFee2,
   getEstimatedFundingRate as getEstimatedFundingRate2,
   getEstimatedLiquidityUsed as getEstimatedLiquidityUsed2,
+  getWalletBalance as getWalletBalance2,
 } from '../api/contractQueryApi'
 
 import {
   getSpecification2,
-  getWalletBalance2,
   getFundingRate2,
   getLiquidityUsed2,
   getFundingRateCache2,

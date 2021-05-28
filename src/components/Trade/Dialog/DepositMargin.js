@@ -1,13 +1,15 @@
 import React, { useState ,useEffect} from 'react'
-import {  getWalletBalance, depositMargin, bg } from "../../../lib/web3js/indexV2";
+import { depositMargin, bg } from "../../../lib/web3js/indexV2";
 import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
+import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function DepositMargin({wallet,spec = {},onClose,balance,afterDeposit}){
+export default function DepositMargin({wallet,spec = {},onClose,balance,afterDeposit,nested}){
   const [integer, setInteger] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
   const [pending, setPending] = useState(false);
+  useDisableScroll(nested);
 
   const onChange = event => {
     const {value} = event.target
@@ -112,6 +114,9 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                 <Button
                   className='margin-btn'
                   btnText='DEPOSIT'
+                  checkApprove={true}
+                  wallet={wallet}
+                  spec={spec}
                   click={() => deposit(amount)}
                 />                  
               </div>

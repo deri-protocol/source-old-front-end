@@ -11,7 +11,7 @@ export const getRestServerConfig = (env = 'dev') => {
     // for test
     //return 'https://apitest.deri.finance';
     //return 'http://localhost:8082';
-    return 'http://47.52.225.179';
+    return 'https://alphaapi.deri.finance';
   }
 };
 

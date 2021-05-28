@@ -9,7 +9,7 @@ import {
   calculateFundingRate,
   processFundingRate,
 } from '../calculation';
-import { getOraclePrice, bg } from '../utils'
+import { getOraclePrice, bg, min, max } from '../utils'
 import { fundingRateCache, priceCache } from '../api/api_globals';
 
 export const getSpecification = async (
@@ -19,102 +19,138 @@ export const getSpecification = async (
   symbolId,
   useInfura,
 ) => {
-  const {symbol, bTokenSymbol } = getPoolConfig(poolAddress, bTokenId, symbolId)
-  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
-  const [symbolInfo, parameterInfo] = await Promise.all([
-    perpetualPool.getSymbol(symbolId),
-    perpetualPool.getParameters(),
-  ])
-  const { multiplier, feeRatio, fundingRateCoefficient} = symbolInfo
-  const {
-    minPoolMarginRatio,
-    minInitialMarginRatio,
-    minMaintenanceMarginRatio,
-    minLiquidationReward,
-    maxLiquidationReward,
-    liquidationCutRatio,
-    protocolFeeCollectRatio,
-  } = parameterInfo
+  try {
+    const {symbol, bTokenSymbol } = getPoolConfig(poolAddress, bTokenId, symbolId)
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+    const [symbolInfo, parameterInfo] = await Promise.all([
+      perpetualPool.getSymbol(symbolId),
+      perpetualPool.getParameters(),
+    ])
+    const { multiplier, feeRatio, fundingRateCoefficient} = symbolInfo
+    const {
+      minPoolMarginRatio,
+      minInitialMarginRatio,
+      minMaintenanceMarginRatio,
+      minLiquidationReward,
+      maxLiquidationReward,
+      liquidationCutRatio,
+      protocolFeeCollectRatio,
+    } = parameterInfo
+    return {
+      symbol: symbol,
+      bSymbol: bTokenSymbol,
+      multiplier: multiplier.toString(),
+      feeRatio: feeRatio.toString(),
+      fundingRateCoefficient: fundingRateCoefficient.toString(),
+      minPoolMarginRatio: minPoolMarginRatio.toString(),
+      minInitialMarginRatio: minInitialMarginRatio.toString(),
+      minMaintenanceMarginRatio: minMaintenanceMarginRatio.toString(),
+      //minAddLiquidity: minAddLiquidity.toString(),
+      //redemptionFeeRatio: redemptionFeeRatio.toString(),
+      minLiquidationReward: minLiquidationReward.toString(),
+      maxLiquidationReward: maxLiquidationReward.toString(),
+      liquidationCutRatio: liquidationCutRatio.toString(),
+      protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
+    }
+  } catch (err) {
+    console.log(err)
+  }
   return {
-    symbol: symbol,
-    bSymbol: bTokenSymbol,
-    multiplier: multiplier.toString(),
-    feeRatio: feeRatio.toString(),
-    fundingRateCoefficient: fundingRateCoefficient.toString(),
-    minPoolMarginRatio: minPoolMarginRatio.toString(),
-    minInitialMarginRatio: minInitialMarginRatio.toString(),
-    minMaintenanceMarginRatio: minMaintenanceMarginRatio.toString(),
-    //minAddLiquidity: minAddLiquidity.toString(),
-    //redemptionFeeRatio: redemptionFeeRatio.toString(),
-    minLiquidationReward: minLiquidationReward.toString(),
-    maxLiquidationReward: maxLiquidationReward.toString(),
-    liquidationCutRatio: liquidationCutRatio.toString(),
-    protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
+    symbol: '',
+    bSymbol: '',
+    multiplier: '',
+    feeRatio: '',
+    fundingRateCoefficient: '',
+    minPoolMarginRatio: '',
+    minInitialMarginRatio: '',
+    minMaintenanceMarginRatio: '',
+    minLiquidationReward: '',
+    maxLiquidationReward: '',
+    liquidationCutRatio: '',
+    protocolFeeCollectRatio: '',
   }
 };
 
 export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId, useInfura) => {
-  const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
-  //const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
-  let bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
-  //let symbolIdList = symbolConfigList.map((i) => i.symbolId)
-  //console.log('bTokenList', bTokenList)
-  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
-  const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
-  const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
-  const [price, symbolInfo, parameterInfo, positionInfo ] = await Promise.all([
-    getOraclePrice(poolAddress, symbolId),
-    perpetualPool.getSymbol(symbolId),
-    perpetualPool.getParameters(),
-    pToken.getPosition(accountAddress, symbolId),
-    //pToken.getMargin(accountAddress, symbolId),
-  ])
-  priceCache.set(poolAddress, symbolId, price)
-  const { volume, cost } = positionInfo
-  const { multiplier } = symbolInfo
-  const {
-    minInitialMarginRatio,
-    minMaintenanceMarginRatio,
-  } = parameterInfo
-  const margins = await pToken.getMargins(accountAddress)
-  let promises = []
-  for (let i=0; i<bTokenIdList.length; i++) {
-    promises.push(perpetualPool.getBToken(bTokenIdList[i]))
-  }
-  const bTokens = await Promise.all(promises)
-  const margin = bTokens.reduce((accum, a, index) => {
-    return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
-  }, bg(0))
+  try {
+    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
+    const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+    //console.log('bTokenList', bTokenList)
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
+    const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
+    const [price, symbolInfo, parameterInfo, positionInfo, margins, positions ] = await Promise.all([
+      getOraclePrice(poolAddress, symbolId),
+      perpetualPool.getSymbol(symbolId),
+      perpetualPool.getParameters(),
+      pToken.getPosition(accountAddress, symbolId),
+      pToken.getMargins(accountAddress),
+      pToken.getPositions(accountAddress),
+      //pToken.getMargin(accountAddress, symbolId),
+    ])
+    priceCache.set(poolAddress, symbolId, price)
+    const { volume, cost } = positionInfo
+    const { multiplier, price:internalPrice } = symbolInfo
+    const {
+      minInitialMarginRatio,
+      minMaintenanceMarginRatio,
+    } = parameterInfo
+    let promises = []
+    for (let i=0; i<bTokenIdList.length; i++) {
+      promises.push(perpetualPool.getBToken(bTokenIdList[i]))
+    }
+    const bTokens = await Promise.all(promises)
+    const margin = bTokens.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
+    }, bg(0))
 
-  // promises = []
-  // for (let i=0; i<symbolIdList.length; i++) {
-  //   promises.push(perpetualPool.getSymbol(symbolIdList[i]))
-  // }
-  // const symbols = await Promise.all(promises)
-  // //console.log('symbols', symbols[0].price.toString(), symbols[0].multiplier.toString(), symbols[1].price.toString(), symbols[1].multiplier.toString())
-  // const marginHeld = symbols.reduce((accum, a, index) => {
-  //   return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
-  // }, bg(0))
- return {
-   volume: volume.toString(),
-   averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
-   margin: margin.toString(),
-   marginHeld: calculateMarginHeld(
-     price,
-     volume,
-     multiplier,
-     minInitialMarginRatio
-   ).toString(),
-   //marginHeld: marginHeld.toString(),
-   unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
-   liquidationPrice: calculateLiquidationPrice(
-     volume,
-     margin,
-     cost,
-     multiplier,
-     minMaintenanceMarginRatio
-   ).toString(),
- };
+    promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+    const marginHeld = symbols.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
+    }, bg(0))
+    const marginHeldBySymbol = bg(volume).abs().times(multiplier).times(internalPrice).times(minInitialMarginRatio)
+    //console.log('margin', margin.toString(), marginHeld.toString())
+    const unrealizedPnl = symbols.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
+    }, bg(0))
+
+    const costTotal = positions.reduce((accum, a) => {
+      //console.log(index, a.cost.toString())
+      return accum.plus(bg(a.cost))
+    }, bg(0))
+    //console.log('cost', costTotal.toString())
+  return {
+      volume: volume.toString(),
+      averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
+      margin: margin.toString(),
+      marginHeld: marginHeld.toString(),
+      marginHeldBySymbol: marginHeldBySymbol.toString(),
+      unrealizedPnl: unrealizedPnl.toString(),
+      liquidationPrice: calculateLiquidationPrice(
+        volume,
+        margin,
+        costTotal,
+        multiplier,
+        minMaintenanceMarginRatio
+      ).toString(),
+    };
+  } catch(err) {
+    console.log(err)
+  }
+  return {
+    volume: '',
+    averageEntryPrice: '',
+    margin: '',
+    marginHeld: '',
+    unrealizedPnl: '',
+    liquidationPrice: '',
+  };
 }
 
 export const getWalletBalance = async (
@@ -184,11 +220,11 @@ const _getFundingRate = async(chainId, poolAddress, symbolId, useInfura) => {
     promiseList.push(perpetualPool.getBToken(i))
   }
   const bTokenInfoList = await Promise.all(promiseList)
-  //console.log('bTokenInfoList', bTokenInfoList[0].discount.toString(), bTokenInfoList[1].discount.toString())
-  const liquidity = bTokenInfoList.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.discount).plus(i.pnl)), bg(0))
-  //console.log('liquidity', liquidity.toString())
+  const liquidity = bTokenInfoList.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.discount).times(i.price)), bg(0))
+  const pnl = bTokenInfoList.reduce((accum, i) => accum.plus(i.pnl), bg(0))
+  //console.log('pnl', pnl.toString())
 
-  const [price, symbolInfo, parameterInfo] = await Promise.all([
+  const [price, symbolInfo, parameterInfo ] = await Promise.all([
     getOraclePrice(poolAddress, symbolId),
     perpetualPool.getSymbol(symbolId),
     perpetualPool.getParameters(),
@@ -205,39 +241,63 @@ const _getFundingRate = async(chainId, poolAddress, symbolId, useInfura) => {
   ]
   const fundingRatePerBlock = calculateFundingRate(...fundingRateArgs)
   const fundingRate = processFundingRate(chainId, fundingRatePerBlock)
-  const liquidityUsedArgs = [
-    tradersNetVolume,
-    price,
-    multiplier,
-    liquidity,
-    minPoolMarginRatio,
-  ]
-  const liquidityUsed = calculateLiquidityUsed(...liquidityUsedArgs)
+  // const liquidityUsedArgs = [
+  //   tradersNetVolume,
+  //   price,
+  //   multiplier,
+  //   liquidity,
+  //   minPoolMarginRatio,
+  // ]
+  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+  let symbolIdList = symbolConfigList.map((i) => i.symbolId)
+  let promises = []
+  for (let i=0; i<symbolIdList.length; i++) {
+    promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+  }
+  const symbols = await Promise.all(promises)
+  //console.log('margin', margin.toString(), marginHeld.toString())
+  const liquidityUsedInAmount = symbols.reduce((accum, a) => {
+    return accum.plus(bg(a.tradersNetVolume).times(a.price).times(a.multiplier).times(minPoolMarginRatio))
+  }, bg(0))
+
+  //const liquidityUsed = liquidityUsedInAmount.div(liquidity)
   const res = {
     price,
     multiplier: multiplier.toString(),
     feeRatio: feeRatio.toString(),
     tradersNetVolume: tradersNetVolume.toString(),
     liquidity: liquidity.toString(),
+    pnl: pnl.toString(),
     fundingRateCoefficient: fundingRateCoefficient.toString(),
     minPoolMarginRatio: minPoolMarginRatio.toString(),
     fundingRatePerBlock: fundingRatePerBlock,
     fundingRate: fundingRate,
-    liquidityUsed: liquidityUsed,
+    liquidityUsed: liquidityUsedInAmount.div(liquidity.plus(pnl)).abs(),
   }
   fundingRateCache.set(chainId, poolAddress, symbolId, res)
   return res
 }
 
 export const getFundingRate = async (chainId, poolAddress, symbolId, useInfura) => {
-  const res = await _getFundingRate(chainId, poolAddress, symbolId, useInfura)
-  const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res
+  try {
+    const res = await _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+    const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res
+    return {
+      fundingRate0: fundingRate.times(100).toString(),
+      fundingRatePerBlock: fundingRatePerBlock.toString(),
+      liquidity: liquidity.toString(),
+      volume: '-',
+      tradersNetVolume: tradersNetVolume.toString()
+    };
+  } catch(err) {
+    console.log(err)
+  }
   return {
-    fundingRate0: fundingRate.toString(),
-    fundingRatePerBlock: fundingRatePerBlock.toString(),
-    liquidity: liquidity.toString(),
-    volume: '-',
-    tradersNetVolume: tradersNetVolume.toString()
+    fundingRate0: '',
+    fundingRatePerBlock: '',
+    liquidity: '',
+    volume: '',
+    tradersNetVolume: '',
   };
 }
 
@@ -248,21 +308,28 @@ export const getEstimatedFundingRate = async (
   symbolId,
   useInfura,
 ) => {
-  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
-  if (!res) {
-    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  try {
+    let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+    if (!res) {
+      res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+    }
+    const args = [
+      bg(res.tradersNetVolume).plus(newNetVolume).toString(),
+      res.price,
+      res.multiplier,
+      res.liquidity,
+      res.fundingRateCoefficient,
+    ]
+    let fundingRate1 = calculateFundingRate(...args)
+    fundingRate1 = processFundingRate(chainId, fundingRate1)
+    return {
+      fundingRate1: fundingRate1.times(100).toString()
+    }
+  } catch(err) {
+    console.log(err)
   }
-  const args = [
-    bg(res.tradersNetVolume).plus(newNetVolume).toString(),
-    res.price,
-    res.multiplier,
-    res.liquidity,
-    res.fundingRateCoefficient,
-  ]
-  let fundingRate1 = calculateFundingRate(...args)
-  fundingRate1 = processFundingRate(chainId, fundingRate1)
   return {
-    fundingRate1: fundingRate1.toString()
+    fundingRate1: '',
   }
 }
 
@@ -272,13 +339,20 @@ export const getLiquidityUsed = async (
   symbolId,
   useInfura,
 ) => {
-  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
-  if (!res) {
-    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  try {
+    let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+    if (!res) {
+      res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+    }
+    return {
+      liquidityUsed0: res.liquidityUsed.times(100).toString(),
+    };
+  } catch(err) {
+    console.log(err)
   }
   return {
-    liquidityUsed0: res.liquidityUsed.toString(),
-  };
+    liquidityUsed0: '',
+  }
 };
 
 export const getEstimatedLiquidityUsed = async (
@@ -288,76 +362,108 @@ export const getEstimatedLiquidityUsed = async (
   symbolId,
   useInfura,
 ) => {
-  let res = fundingRateCache.get(chainId, poolAddress, symbolId)
-  if (!res) {
-    res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+  try {
+    let res = fundingRateCache.get(chainId, poolAddress, symbolId)
+    if (!res) {
+      res = _getFundingRate(chainId, poolAddress, symbolId, useInfura)
+    }
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+    // const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
+    // const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
+    // const { volume } = pToken.getPosition(accountAddress, symbolId);
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    let symbolIdList = symbolConfigList.map((i) => i.symbolId)
+    let promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+    let liquidityUsed0 = symbols.reduce((accum, a, index) => {
+      if (index === parseInt(symbolId)) {
+        return accum.plus(bg(a.price).times(a.multiplier).times(a.tradersNetVolume.plus(newNetVolume)).abs())
+      } else {
+        return accum.plus(bg(a.price).times(a.multiplier).times(a.tradersNetVolume).abs())
+      }
+    }, bg(0))
+    liquidityUsed0 = liquidityUsed0.times(res.minPoolMarginRatio)
+    //const liquidityUsed = bg(newNetVolume).times(res.price).times(res.multiplier).times(res.minPoolMarginRatio).div(res.liquidity)
+    const liquidityUsed1 = liquidityUsed0.div(bg(res.liquidity).plus(res.pnl))
+    return {
+      liquidityUsed1: liquidityUsed1.times(100).toString()
+    }
+  } catch(err) {
+    console.log(err)
   }
-  const args = [
-    bg(res.tradersNetVolume).plus(newNetVolume).toString(),
-    res.price,
-    res.multiplier,
-    res.liquidity,
-    res.minPoolMarginRatio,
-  ]
-  const liquidityUsed1 = calculateLiquidityUsed(...args)
   return {
-    liquidityUsed1: liquidityUsed1.toString()
+    liquidityUsed1: '',
   }
 }
 
 
 export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddress, symbolId, useInfura) => {
-  const bTokensConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
-  const symbolsConfigList = getFilteredPoolConfigList(poolAddress, '0')
-  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
-  const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
-  let bTokenList = bTokensConfigList.map((i) => {
-    return {bTokenId: i.bTokenId, bTokenSymbol: i.bTokenSymbol, bTokenAddress: i.bToken}
-  })
-  let promiseList = []
-  for (let i=0; i<bTokenList.length; i++) {
-    promiseList.push(bTokenFactory(chainId, bTokenList[i].bTokenAddress, useInfura).balanceOf(accountAddress))
-  }
-  const resultList = await Promise.all(promiseList)
-  for (let i=0; i<bTokenList.length; i++) {
-    bTokenList[i].walletBalance = resultList[i].toString()
-  }
-
-  let bTokenIdList = bTokensConfigList.map((i) => i.bTokenId)
-  let symbolIdList = symbolsConfigList.map((i) => i.symbolId)
-  const [margins, positions, parameterInfo] = await Promise.all([
-    pToken.getMargins(accountAddress),
-    pToken.getPositions(accountAddress),
-    perpetualPool.getParameters(),
-  ]);
-  const { minInitialMarginRatio } = parameterInfo;
-  let promises = []
-  for (let i=0; i<bTokenIdList.length; i++) {
-    promises.push(perpetualPool.getBToken(bTokenIdList[i]))
-  }
-  const bTokens = await Promise.all(promises)
-  const margin = bTokens.reduce((accum, a, index) => {
-    return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
-  }, bg(0))
-  //console.log('margin', margin.toString())
-  promises = []
-  for (let i=0; i<symbolIdList.length; i++) {
-    promises.push(perpetualPool.getSymbol(symbolIdList[i]))
-  }
-  const symbols = await Promise.all(promises)
-  //console.log('symbols', symbols[0].price.toString(), symbols[0].multiplier.toString(), symbols[1].price.toString(), symbols[1].multiplier.toString())
-  const marginHeld = symbols.reduce((accum, a, index) => {
-    return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
-  }, bg(0))
-  //console.log('marginHeld', marginHeld.toString())
-  bTokenList = bTokenList.map((i, index) => {
-    if(!isNaN(parseFloat(bTokens[index].price)) || bTokens[index].price !== '0') {
-      i.availableBalance = margin.minus(marginHeld).div(bTokens[index].price).toString()
-    } else {
-      i.availableBalance = '-'
+  try {
+    const bTokensConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+    const symbolsConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
+    const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
+    let bTokenList = bTokensConfigList.map((i) => {
+      return {bTokenId: i.bTokenId, bTokenSymbol: i.bTokenSymbol, bTokenAddress: i.bToken}
+    })
+    let promiseList = []
+    for (let i=0; i<bTokenList.length; i++) {
+      promiseList.push(bTokenFactory(chainId, bTokenList[i].bTokenAddress, useInfura).balanceOf(accountAddress))
     }
-    return i
-  })
-  return bTokenList
+    const resultList = await Promise.all(promiseList)
+    for (let i=0; i<bTokenList.length; i++) {
+      bTokenList[i].walletBalance = resultList[i].toString()
+    }
+
+    let bTokenIdList = bTokensConfigList.map((i) => i.bTokenId)
+    let symbolIdList = symbolsConfigList.map((i) => i.symbolId)
+    const [margins, positions, parameterInfo] = await Promise.all([
+      pToken.getMargins(accountAddress),
+      pToken.getPositions(accountAddress),
+      perpetualPool.getParameters(),
+    ]);
+    const { minInitialMarginRatio } = parameterInfo;
+
+    let promises = []
+    for (let i=0; i<bTokenIdList.length; i++) {
+      promises.push(perpetualPool.getBToken(bTokenIdList[i]))
+    }
+    const bTokens = await Promise.all(promises)
+    const margin = bTokens.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
+    }, bg(0))
+    //console.log('margin', margin.toString())
+
+    promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+    const marginHeld = symbols.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).abs().times(minInitialMarginRatio))
+    }, bg(0))
+    //console.log('marginHeld', marginHeld.toString())
+
+    const pnl = symbols.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
+    }, bg(0))
+    //console.log('pnl', pnl.toString())
+
+    bTokenList = bTokenList.map((i, index) => {
+      if(!isNaN(parseFloat(bTokens[index].price)) || bTokens[index].price !== '0') {
+        i.availableBalance = max(min(margin.minus(marginHeld).plus(pnl).div(bTokens[index].price).div(bTokens[index].discount), margins[index]), bg(0)).toString()
+      } else {
+        i.availableBalance = '-'
+      }
+      return i
+    })
+    return bTokenList
+  } catch(err) {
+    console.log(err)
+  }
+  return []
 }

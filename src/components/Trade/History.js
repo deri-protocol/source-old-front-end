@@ -26,7 +26,7 @@ function History({wallet ,trading}){
         }
         const find = trading.config
         if(find){
-          item.baseTokenText = item.baseToken && ` ${find.symbol} / ${find.bTokenSymbol}`
+          item.baseTokenText = item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol
         }
         return item;
       })
@@ -46,8 +46,8 @@ function History({wallet ,trading}){
           <div className='history-box' key={index}>
           <div className='direction-bToken-price'>
             <span className='direction'>
-              <span className={`${his.direction}`}>{ his.directionText }</span>
-              <span>{ his.baseTokenText }</span>  
+              <span className={`${his.direction}`}> { his.directionText }</span>
+              <span className='basetoken'>{ his.baseTokenText }</span>  
               <HistoryLine wallet={wallet} his={his}/>    
             </span>
             <span className='history-text time'>{dateFormat.asString('yyyy-MM-dd hh:mm:ss',new Date(parseInt(his.time)))}</span>

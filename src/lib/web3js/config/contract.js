@@ -223,18 +223,6 @@ export const getClpContractAddressConfig = (env = 'dev') => {
     ];
   } else {
     return [
-      {
-        pool: '0x7aad5ADF82d8B85c826c91924AcdACafAAA945f5',
-        bToken: '0x76340AB22aECAaa8f52D5341d2df404CBA966039',
-        pToken: '0x0000000000000000000000000000000000000000',
-        lToken: '0xd2138766005FAB46E20e6F7e1C4C32A375CfAC56',
-        dToken: '0x0000000000000000000000000000000000000000',
-        MiningVault: '0x0000000000000000000000000000000000000000',
-        initialBlock: '8309032',
-        chainId: '97',
-        bTokenSymbol: 'CAKE-LP',
-        symbol: '--',
-      },
     ];
   }
 };
@@ -303,19 +291,6 @@ export const getLpContractAddressConfig = (env = 'dev') => {
     ];
   } else {
     return [
-      {
-        pool: '0x7aad5ADF82d8B85c826c91924AcdACafAAA945f5',
-        bToken: '0x76340AB22aECAaa8f52D5341d2df404CBA966039',
-        pToken: '0x0000000000000000000000000000000000000000',
-        lToken: '0xd2138766005FAB46E20e6F7e1C4C32A375CfAC56',
-        dToken: '0x0000000000000000000000000000000000000000',
-        MiningVault: '0x0000000000000000000000000000000000000000',
-        initialBlock: '8309032',
-        chainId: '97',
-        bTokenSymbol: 'CAKE-LP',
-        symbol: '--',
-        type: 'clp',
-      },
     ];
   }
 };

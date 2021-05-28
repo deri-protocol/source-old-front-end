@@ -13,6 +13,7 @@ import removeMarginIcon from '../../../../assets/img/remove-margin.svg'
 import addMarginIcon from '../../../../assets/img/add-margin.svg'
 import marginDetailIcon from '../../../../assets/img/margin-detail.png'
 import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
+import { bg } from '../../../../lib/web3js/v2';
 
 
 
@@ -28,7 +29,8 @@ function Position({wallet,trading,version}){
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
-
+  const [balanceContract, setBalanceContract] = useState('');
+  const [availableBalance, setAvailableBalance] = useState('');
 
   const afterWithdraw =() => {
     refreshBalance();
@@ -51,7 +53,7 @@ function Position({wallet,trading,version}){
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId)
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e => console.log(e))
       if(balance){
         setBalance(balance)
       }
@@ -74,13 +76,17 @@ function Position({wallet,trading,version}){
     }
   }
 
-  // useEffect(() => {
-  //   if(wallet.detail.account){
-  //     trading.init(wallet)
-  //   }
-  //   return () => {
-  //   };
-  // }, [wallet.detail.account]);
+  useEffect(() => {
+    if(trading.position){
+      const {position} = trading
+      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
+      setDirection(direction)      
+      setBalanceContract(bg(position.margin).plus(position.unrealizedPnl).toString())
+      setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())
+    }
+    return () => {};
+  }, [trading.position.volume,trading.position.margin,trading.position.unrealizedPnl]);
+
 
   useEffect(() => {
     loadBalance();
@@ -123,7 +129,7 @@ function Position({wallet,trading,version}){
       <div><DeriNumberFormat value={trading.position.averageEntryPrice}  decimalScale={2}/></div>
       <div className={direction}>{direction}</div>
       <div>
-        <DeriNumberFormat allowZero={true} value={(+trading.position.margin) + (+trading.position.unrealizedPnl)}  decimalScale={2}/>
+        <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
         {version.isV1 ? <span>
         <span
           className='open-add'
@@ -159,6 +165,7 @@ function Position({wallet,trading,version}){
         onClose={onCloseWithdraw}
         spec={trading.config}
         afterWithdraw={afterWithdraw}
+        availableBalance={availableBalance}
         position={trading.position}
         className='trading-dialog'
         />

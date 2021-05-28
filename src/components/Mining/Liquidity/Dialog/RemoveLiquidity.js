@@ -2,11 +2,13 @@ import React, { useState ,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
+import useDisableScroll from '../../../../hooks/useDisableScroll';
 
 export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit}){  
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('0');
   const [decimal, setDecimal] = useState('00');
+  useDisableScroll();
 
 
   const addAll = () => {
@@ -53,7 +55,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
 
   useEffect(() => {    
     if(liqInfo && liqInfo.shares){
-      const balance = liqInfo.shares
+      const balance = (+liqInfo.shares).toFixed(2);
       const decimal = balance.substring(balance.indexOf('.') +1 ,balance.indexOf('.') + 3)
       setBalance(balance);
       setDecimal(decimal)

@@ -3,7 +3,7 @@ import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
-function TradingView({wallet,trading}){
+function TradingView({version,trading}){
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 
@@ -16,18 +16,11 @@ function TradingView({wallet,trading}){
     };
   }, [trading.index]);
 
-  // useEffect(() => {
-  //   if(wallet.detail.account){
-  //     trading.init(wallet);
-  //   }
-  //   return () => {};
-  // }, [wallet.detail.account]);
-
   return (
     <div id="trading-view">
       <div className='right-top'>
         <div className='symbol-basetoken-text'>
-          {(trading.config && trading.config.symbol) || 'BTCUSD'} / {(trading.config && trading.config.bTokenSymbol) || 'USDT'} (10X)
+          {version.isV1 ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>Index Price</div>
@@ -36,7 +29,7 @@ function TradingView({wallet,trading}){
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >Funding Rate Annual</span>  </div>
           <div className='trade-dashboard-value'> 
-          <span className='funding-per'> 
+          <span className='funding-per' title={trading.fundingRateTip}> 
             <DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
           </span>
           </div>
@@ -57,4 +50,4 @@ function TradingView({wallet,trading}){
   )
 }
 
-export default  inject('trading')(observer(TradingView))
+export default  inject('trading','version')(observer(TradingView))

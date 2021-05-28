@@ -448,19 +448,15 @@ export const getOracleUrl = (chainId, poolAddress) => {
   if (env === 'prod' || env === 'production') {
     // for production
     if (symbol) {
-      if (symbol !== 'BTCUSD') {
-        return addSymbolParam('https://oracle3.deri.finance/price', symbol);
-      } else {
-        return addSymbolParam('https://oracle.deri.finance/price', symbol);
-      }
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
     }
-    return 'https://oracle.deri.finance/price';
+    return 'https://oracle4.deri.finance/price';
   } else {
     if (symbol) {
-      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
     }
     // for test
-    return 'https://oracle2.deri.finance/price';
+    return 'https://oracle4.deri.finance/price';
   }
 };
 
@@ -471,7 +467,7 @@ export const getOracleInfo = async (chainId, poolAddress) => {
   //let timeout = 1000;
   let res;
   while (retry > 0) {
-    res = await fetch(url);
+    res = await fetch(url, { mode: 'cors' });
     //if (res && !res.timeout) {
     if (res) {
       break;

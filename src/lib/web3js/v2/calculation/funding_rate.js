@@ -17,10 +17,10 @@ export const calculateLiquidityUsed = (
     )
   ) {
     return bg(tradersNetVolume)
-      .times(bg(price))
-      .times(bg(multiplier))
-      .times(bg(poolMarginRatio))
-      .div(bg(liquidity))
+      .times(price)
+      .times(multiplier)
+      .times(poolMarginRatio)
+      .div(liquidity)
       .abs();
   } else {
     const args = [

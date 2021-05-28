@@ -3,11 +3,13 @@ import WebSocket from "socket.io-client";
 
 class Oracle {
   symbol = 'BTCUSD'
+  timeType = 'min'
   index = 0.00
   kData = []
   ws = null
   paused = false;
   listeners = {}
+  already = false
 
   constructor(){
     makeAutoObservable(this,{
@@ -18,24 +20,25 @@ class Oracle {
     this.initWebSocket()
   }
 
+
   initWebSocket(){
     if(this.ws === null) {
-      this.ws = new WebSocket('wss://api.deri.finance', {
+      this.ws = new WebSocket('wss://oracle4.deri.finance', {        
         transports: ['websocket'],
-        path: '/kline'
+        withCredentials: true
       })
-      this.ws.on('connect',() => console.log('ws is already connected'));
+      this.ws.on('connect',() => {
+        if(this.already){
+          this.ws.emit('get_kline_update', {'symbol': this.symbol, 'time_type': this.timeType})
+          console.log('ws is reconnected already')
+        }
+        console.log('ws is already connected');
+      });
     }    
   }
 
-  // loadIndex(symbol){
-  //   this.resume();
-  //   this.setSymbol(symbol)
-  //   this.ws.emit('get_kline', {'symbol': symbol, 'time_type': 'min', 'bars': 10})
-  // }
 
   load(symbol,timeType = 'min'){
-    this.setSymbol(symbol)
     this.ws.on('kline_update',data => {
       const obj = {}
       let time = data.time
@@ -58,7 +61,13 @@ class Oracle {
         }
       }
     })
-    this.ws.emit('get_kline', {'symbol': symbol, 'time_type': timeType, 'bars': 1000})
+    if(symbol !== this.symbol){
+      this.unsubscribeBars(this.symbol);
+    }
+    this.setSymbol(symbol)
+    this.setTimeType(timeType);
+    this.ws.emit('get_kline_update', {'symbol': this.symbol, 'time_type': this.timeType})
+    this.already = true
   }
 
   addListener(id,listener){
@@ -69,13 +78,14 @@ class Oracle {
 
 
 
-  unsubscribeBars(uid){
-    this.ws.emit('un_get_kline', {
-      symbol : this.symbol, 'time_type' : 'min', bars : 1000
+  unsubscribeBars(symbol){
+    this.ws.emit('un_get_kline_update', {
+      symbol : symbol, 'time_type' : 'min'
     })
   }
 
 
+  //暂不用
   loadHistory(symbol,timeType,callback){
     this.ws.on('kline_history', data => {
       const history = data.map(el => {
@@ -131,6 +141,10 @@ class Oracle {
 
   setSymbol(symbol){
     this.symbol = symbol
+  }
+
+  setTimeType(timeType){
+    this.timeType = timeType;
   }
 
   setPause(paused){

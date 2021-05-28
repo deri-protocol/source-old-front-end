@@ -6,6 +6,7 @@ import removeMarginIcon from '../../../assets/img/remove-margin.svg'
 import addMarginIcon from '../../../assets/img/add-margin.svg'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { getPoolBTokensBySymbolId } from '../../../lib/web3js/v2';
+import useDisableScroll from '../../../hooks/useDisableScroll';
 
 const AddMarginDialog = withModal(DepositMargin)
 const RemoveMarginDialog = withModal(WithdrawMagin)
@@ -18,6 +19,9 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balance, setBalance] = useState('');
   const [availableBalance, setAvailableBalance] = useState('');
+  const [bTokenId, setBTokenId] = useState('');
+  const [bTokenSymbol, setBTokenSymbol] = useState('');
+  useDisableScroll()
 
   const closeAddMargin = () => setAddModalIsOpen(false)
 
@@ -27,13 +31,16 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
     afterDepositAndWithdraw();
     onClose();
   }
-  const addMargin = (balance,bTokenId) => {                              
+  const addMargin = (balance,bTokenId,symbolId) => {                              
     setBalance(balance);
+    setBTokenId(bTokenId);
+    setBTokenSymbol(symbolId);
     setAddModalIsOpen(true)
-    spec.bTokenId = bTokenId
   }
-  const removeMargin = (availableBalance) => {
-    setAvailableBalance(availableBalance);
+  const removeMargin = (availableBalance,bTokenId,symbolId) => {
+    setAvailableBalance(availableBalance);    
+    setBTokenId(bTokenId);
+    setBTokenSymbol(symbolId);
     setRemoveModalIsOpen(true);
   }
 
@@ -60,10 +67,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
   useEffect(() => {
     loadBalanceList();
     window.scrollTo(0, 0);
-    document.querySelector('body').style.overflow = 'hidden'
-    return () => {
-      document.querySelector('body').style.overflow = 'auto'
-    };
+    return () => {};
   }, [wallet.detail.account,spec]);
 
   return(
@@ -96,11 +100,11 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                       <span
                         className='add-margin'
                         id='openAddMargin'
-                        onClick={() => addMargin(item.walletBalance,item.bTokenId)}> 
+                        onClick={() => addMargin(item.walletBalance,item.bTokenId,item.bTokenSymbol)}> 
                         <img src={removeMarginIcon} alt='add margin'/> Add
                       </span>
                       <span className='remove-margin'
-                        onClick={() => removeMargin(item.availableBalance)}>
+                        onClick={() => removeMargin(item.availableBalance,item.bTokenId,item.bTokenSymbol)}>
                         <img src={addMarginIcon} alt='add margin'/> Remove
                       </span>
                     </span>
@@ -112,10 +116,10 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
           </div>
         </div>
       </div>
-      <AddMarginDialog  wallet={wallet} onClose={closeAddMargin} balance={balance} spec={spec} 
-                        position={position} modalIsOpen={addModalIsOpen} afterDeposit={afterDeposit} className='trading-dialog'/>
-      <RemoveMarginDialog wallet={wallet} onClose={closeRemoveMargin} spec={spec} 
-                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} availableBalance={availableBalance} className='trading-dialog'/>
+      <AddMarginDialog  wallet={wallet} onClose={closeAddMargin} balance={balance} spec={{...spec,bTokenId,bTokenSymbol}} 
+                        position={position} modalIsOpen={addModalIsOpen} afterDeposit={afterDeposit} className='trading-dialog' nested={true}/>
+      <RemoveMarginDialog wallet={wallet} onClose={closeRemoveMargin} spec={{...spec,bTokenId,bTokenSymbol}} 
+                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} availableBalance={availableBalance} className='trading-dialog' nested={true}/>
     </>
   )
 }

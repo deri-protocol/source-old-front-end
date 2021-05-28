@@ -10,24 +10,33 @@ export const getLiquidityInfo = async (
   bTokenId,
   useInfura,
 ) => {
-  const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId)
-  const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
+  try {
+    const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId)
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
+    const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
-  const [bTokenInfo, lTokenAsset] = await Promise.all([
-    perpetualPool.getBToken(bTokenId),
-    lToken.getAsset(accountAddress, bTokenId),
-  ])
-  const { liquidity: poolLiquidity } = bTokenInfo;
-  const { liquidity } = lTokenAsset
+    const [bTokenInfo, lTokenAsset] = await Promise.all([
+      perpetualPool.getBToken(bTokenId),
+      lToken.getAsset(accountAddress, bTokenId),
+    ])
+    const { liquidity: poolLiquidity } = bTokenInfo;
+    const { liquidity } = lTokenAsset
+    return {
+      //totalSupply: lTokenTotalSupply.toString(),
+      poolLiquidity: poolLiquidity.toString(),
+      // shares: liquidity.toString(),
+      // shareValue: '1',
+      // maxRemovableShares: liquidity.toString()
+      shares: liquidity.toString(),
+      maxRemovableShares: liquidity.toString()
+    };
+  } catch (err) {
+    console.log(err)
+  }
   return {
-    //totalSupply: lTokenTotalSupply.toString(),
-    poolLiquidity: poolLiquidity.toString(),
-    // shares: liquidity.toString(),
-    // shareValue: '1',
-    // maxRemovableShares: liquidity.toString()
-    shares: liquidity.toString(),
-    maxRemovableShares: liquidity.toString()
+    poolLiquidity: '',
+    hares: '',
+    maxRemovableShares: '',
   };
 };
 
@@ -52,4 +61,8 @@ export const getPoolLiquidity = async (chainId, poolAddress, bTokenId, useInfura
   } catch (err) {
     console.log(err);
   }
+  return {
+    liquidity: '',
+    symbol:'',
+  };
 };

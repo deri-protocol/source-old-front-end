@@ -3,10 +3,13 @@ import {Link} from 'react-router-dom'
 import { getUserInfoAll,getUserInfoInPool ,getPoolInfoApy} from '../../../lib/web3js/indexV2';
 import { useHistory } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { storeConfig, eqInNumber } from '../../../utils/utils';
+import Config from '../../../model/Config';
+
+const configInfo = new Config();
 
 
-
-function Liquidity({wallet = {},trading,chainId,address,symbol}) {
+function Liquidity({wallet = {},version,chainId,address,symbolId}) {
   const [userInfoInPool,setUserInfoInPool] = useState({})
   const [tradeSummary, setTradeSummary] = useState({});
   const history = useHistory();
@@ -26,8 +29,9 @@ function Liquidity({wallet = {},trading,chainId,address,symbol}) {
   }
   
   const toTrade = () => {
-    trading.switch({chainId : chainId,pool : address,symbol : symbol})
-    // sessionStorage.setItem('current-trading-pool',JSON.stringify())
+    const configs = configInfo.load(version);
+    const config = version.isV1 ? configs.find(c => eqInNumber(c.pool,address)) : configs.find(c => eqInNumber(c.pool,address) && c.symbolId === symbolId)
+    storeConfig(version.current,config)
     history.push('/lite')
   }
 
@@ -73,4 +77,4 @@ function Liquidity({wallet = {},trading,chainId,address,symbol}) {
     </div> 
   )
 }
-export default inject('trading')(observer(Liquidity))
+export default inject('version')(observer(Liquidity))

@@ -13,7 +13,8 @@ class Wallet {
     makeAutoObservable(this,{
       detail : observable,
       setDetail : action,
-      supportV2 : computed   
+      supportV2 : computed,
+      supportChain : computed   
     })
   }
 
@@ -55,6 +56,10 @@ class Wallet {
 
   get supportV2() {
     return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97)
+  }
+
+  get supportChain(){
+    return this.detail.supported
   }
 
 }

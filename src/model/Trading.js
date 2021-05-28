@@ -4,8 +4,9 @@ import Position from "./Position";
 import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
-import { eqInNumber } from "../utils/utils";
+import { eqInNumber, storeConfig, getConfigFromStore } from "../utils/utils";
 import { getFundingRate } from "../lib/web3js/indexV2";
+import { bg } from "../lib/web3js/v2";
 
 /**
  * 交易模型
@@ -61,7 +62,6 @@ export default class Trading {
       position : observable,
       history : observable,
       contract : observable,
-      paused : observable,
       userSelectedDirection : observable,
       setWallet :action,
       setConfigs : action,
@@ -73,7 +73,6 @@ export default class Trading {
       setUserSelectedDirection : action,
       setFundingRate : action,
       setHistory : action,
-      setPaused : action,
       amount : computed,
       fundingRateTip : computed,
       direction : computed,
@@ -89,20 +88,29 @@ export default class Trading {
   /**
    * 初始化
    */
-  async init(wallet,version){
-    //配置信息，如chainId、pool address、symbol、baseToken等
-    const all = await this.configInfo.load(version);
-    //version 可选项
+  async init(wallet,version){    
     if(version){
       this.version = version
     }
-    if(!this.wallet || wallet.detail.account !== this.wallet.detail.account){
+    const all = await this.configInfo.load(version);
+    //如果连上钱包，有可能当前链不支持
+    if(wallet && wallet.isConnected()){
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
-      const defaultConfig = this.getDefaultConfig(this.configs,wallet);
+      let defaultConfig = this.getDefaultConfig(this.configs,wallet);
+      //如果还是为空，则默认用所有config的第一条
+      if(!defaultConfig){
+        defaultConfig = all.length > 0 ? all[0] : {}
+      }
       this.setConfig(defaultConfig);
-      this.onConfigChange(this.wallet,this.config,true)
+    } 
+    //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
+    if(!wallet.isConnected() && this.configs.length === 0 && all.length > 0){
+      let defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+      defaultConfig = defaultConfig ? defaultConfig : all[0]
+      this.setConfig(defaultConfig)
     }
+    this.loadByConfig(this.wallet,this.config,true)
     this.setVolume('')
   }
 
@@ -114,9 +122,9 @@ export default class Trading {
       changed = this.version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
     }
     if(cur){
-      this.setConfig(cur)
       this.pause();
-      this.onConfigChange(this.wallet,cur,changed);  
+      this.setConfig(cur)
+      this.loadByConfig(this.wallet,cur,changed);  
       if(changed){
         this.store(cur)
       }    
@@ -125,14 +133,14 @@ export default class Trading {
     }
   }
 
-  async onConfigChange(wallet,config,symbolChanged){
+  async loadByConfig(wallet,config,symbolChanged){
      //position
      this.positionInfo.load(wallet,config,position => {       
         this.setPosition(position);
      })
 
      //切换指数
-    if(symbolChanged){
+    if(symbolChanged && config){
       this.oracle.unsubscribeBars();
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
@@ -140,56 +148,73 @@ export default class Trading {
       this.oracle.load(config.symbol)
     }
      //contract
-     const contract = await this.contractInfo.load(wallet,config)
-     this.setContract(contract)
+     const contract = await this.contractInfo.load(wallet,config)    
 
      //funding rate
      const fundingRate = await this.loadFundingRate(wallet,config)
-     this.setFundingRate(fundingRate)
-
+     
      //history
      const history = await this.historyInfo.load(wallet,config);
-     this.setHistory(history);
+
+     if(contract){
+      this.setContract(contract)
+     }
+
+     if(fundingRate){
+      this.setFundingRate(fundingRate)
+     }
+
+     if(history){
+      this.setHistory(history);
+     }
   }
 
 
-  getDefaultConfig(all = [],wallet){
-    //优先使用session storage 的
-    if(all.length > 0){    
-      const fromStore = this.getFromStore();
-      if(fromStore && eqInNumber(wallet.detail.chainId,fromStore.chainId)){
-        return fromStore;
-      } else {
-        return all[0]
+    //优先使用session storage 的，如果缓存跟用户当前链一直，则命中缓存，否则取当前配置第一条
+    getDefaultConfig(configs = [],wallet){
+      let defaultConfig = null;
+      if(configs.length > 0){    
+        const fromStore = this.getFromStore();
+        if(fromStore && eqInNumber(wallet.detail.chainId,fromStore.chainId)){
+          defaultConfig = fromStore;
+        }
+        if(defaultConfig){
+          //虽然从缓存获得config ，需要判断池子地址是否一致，否则用可用config的第一条
+          const pos = configs.findIndex(c => c.pool === defaultConfig.pool);
+          if(pos === -1){
+            defaultConfig = configs[0];
+          }
+        } else {
+          defaultConfig = configs[0]
+        }   
       }
+      return defaultConfig;    
     }
-    return {}    
-  }
 
-  sessionStorageKey(){
-    return `${this.version.current}-current-trading-pool`
-  }
+ 
 
   //存起来
   store(config){
-    if(config){
-      const key = this.sessionStorageKey();
-      sessionStorage.setItem(key,JSON.stringify(config))
-    }
+    storeConfig(this.version.current,config)
   }
 
   getFromStore(){
-    return JSON.parse(sessionStorage.getItem(this.sessionStorageKey()))
+    return getConfigFromStore(this.version.current)
   }
 
   async refresh(){
     this.pause()
     const position = await this.positionInfo.load(this.wallet,this.config);
-    this.setPosition(position)
     this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
-    const fundingRate = await this.loadFundingRate(this.wallet,this.config)
-    this.setFundingRate(fundingRate)
+    const fundingRate = await this.loadFundingRate(this.wallet,this.config)   
     const history = await this.historyInfo.load(this.wallet,this.config)
+
+    if(fundingRate){
+      this.setFundingRate(fundingRate)      
+    }
+    if(position){
+      this.setPosition(position)
+    }
     if(history){
       this.setHistory(history)
     }
@@ -262,12 +287,11 @@ export default class Trading {
   }
 
   setMargin(margin){
-    this.margin = margin
+    this.margin =  margin
     if(this.contract){
       const volume = (+margin) / ((+this.index) * (+this.contract.multiplier) * (+this.contract.minInitialMarginRatio))      
       if(!isNaN(volume)){
         this.setVolume(Math.abs(volume))
-        console.log('volume ',volume)
       }
     }
   }
@@ -291,7 +315,8 @@ export default class Trading {
   
   //计算available balance、contract value、
   get amount(){
-    if(this.index && this.position && this.contract && this.volume !== ''){
+    //用户输入的时候
+    if(this.index && this.position && this.contract && this.contract.multiplier && this.volume !== ''){
       //合同价值
       let curVolume = Math.abs(this.volume);
       const originVolume = Math.abs(this.volumeDisplay);
@@ -311,27 +336,30 @@ export default class Trading {
           }
         }
       }
-      const contractValue = Math.abs(curVolume) * this.index * this.contract.multiplier
+      const contractValue = Math.abs(originVolume) * this.index * this.contract.multiplier
       const dynBalance = (+this.position.margin) + (+this.position.unrealizedPnl)
-      const margin = contractValue * this.contract.minInitialMarginRatio
+      const margin = contractValue * this.contract.minInitialMarginRatio  
+      const totalMagin = margin + (+this.position.marginHeld)    
       const leverage = (+contractValue / +dynBalance).toFixed(1);
-      const balance = ((+dynBalance) - (+margin)).toFixed(2)
+      const balance = ((+dynBalance) - (+totalMagin)).toFixed(2)
       const available = balance > 0 ? balance : 0
       const exchanged = (originVolume * (+this.contract.multiplier)).toFixed(4)
       return {
-        dynBalance, //动态余额
-        margin,         //存入保证金
-        available,      //可用余额
-        exchanged,      //换算的值
-        leverage,        //杠杆
+        dynBalance, 
+        margin , 
+        available,      
+        exchanged,      
+        leverage,
+        marginHeldBySymbol : margin
       }
     } else if(this.position && this.position.margin){
-      const dynBalance = ((+this.position.margin) + (+this.position.unrealizedPnl)).toFixed(2)
-      const margin = (+this.position.marginHeld).toFixed(2)
-      const available = ((+dynBalance) - (+margin)).toFixed(2)
+      const dynBalance = bg(this.position.margin).plus(this.position.unrealizedPnl).toString()
+      const margin = this.position.marginHeld
+      const available = bg(dynBalance).minus(margin).toString();
       return {
         dynBalance,
         margin,
+        marginHeldBySymbol : this.position.marginHeldBySymbol,
         available,
       }
     }
@@ -361,9 +389,12 @@ export default class Trading {
 
   //资金费率
   async loadFundingRate(wallet,config){
-    if(wallet && config){    
-      const res = await getFundingRate(wallet.detail.chainId,config.pool,config.symbolId)
-      return res;
+    if(config){
+      const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
+      if(config){    
+        const res = await getFundingRate(chainId,config.pool,config.symbolId)
+        return res;
+      }
     }
   }
 
