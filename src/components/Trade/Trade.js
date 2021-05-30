@@ -10,6 +10,7 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
+import { bg } from '../../lib/web3js/v2';
 
 
 
@@ -22,9 +23,11 @@ function Trade({wallet = {},trading,version}){
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
+  const [amount, setAmount] = useState({})
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
+
 
 
   //是否有 spec
@@ -40,7 +43,7 @@ function Trade({wallet = {},trading,version}){
   }
 
   const onSlide = value => {    
-    trading.setMargin(value);
+    trading.setSlideMargin(value);
   }
 
   //refresh cache
@@ -119,7 +122,7 @@ function Trade({wallet = {},trading,version}){
   }
 
   const volumeChange = event => {
-    trading.setMargin('')
+    trading.setSlideMargin('')
     let {value} = event.target
     if(value === '0'){
       value = ''
@@ -149,7 +152,7 @@ function Trade({wallet = {},trading,version}){
   }, [trading.position.volume]);
 
   useEffect(() => {
-    if(trading.volume !== '') {
+    if(trading.volumeDisplay !== '') {
       trading.pause();
       calcFundingRateAfter();
       calcLiquidityUsed();
@@ -159,7 +162,7 @@ function Trade({wallet = {},trading,version}){
     }
 
     return () => {};
-  }, [trading.volume]);
+  }, [trading.volumeDisplay]);
 
 
   useEffect(() => {
@@ -200,7 +203,19 @@ function Trade({wallet = {},trading,version}){
     return () => {};
   }, [wallet.detail.account,trading.index]);
 
-
+  // useEffect(() => {
+  //   const amount = trading.amount;
+  //   const increment = trading.amountIncrement;
+  //   const volume = bg(amount.volume || 0).plus(increment.volume || 0)
+  //   amount.volume = volume.isZero() ? '' : volume
+  //   amount.margin = bg(amount.margin).plus(increment.margin).toString()
+  //   //v2
+  //   if(amount.currentSymbolMarginHeld){
+  //     amount.currentSymbolMarginHeld = bg(amount.currentSymbolMarginHeld).plus(increment.margin).toString()
+  //   }
+  //   amount.available = bg(amount.available).minus(bg(increment.margin)).toString();
+  //   setAmount(amount)
+  // },[trading.amount,trading.amountIncrement])
    
   return (
     <div className='trade-info'>
@@ -278,7 +293,7 @@ function Trade({wallet = {},trading,version}){
             {version.isV2 && <div>
               <span>Position margin</span>
               <span className='margin'>
-                <DeriNumberFormat value={ trading.amount.marginHeldBySymbol} allowZero={true}  decimalScale={2}/>
+                <DeriNumberFormat value={ trading.amount.currentSymbolMarginHeld} allowZero={true}  decimalScale={2}/>
               </span>
               </div>}
             <div className='available-balance'>
@@ -292,7 +307,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} isShareOtherSymbolMargin={trading.isShareOtherSymbolMargin} marginHeld={trading.position.marginHeld}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>

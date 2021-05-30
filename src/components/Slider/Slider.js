@@ -44,18 +44,19 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze,isShareOtherSymbolMargin,marginHeld}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const [marks, setMarks] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const [sliding,setSliding] = useState(false)
 
   const onSliderChange = value => {
-    //如果共享margin，且当前没有仓位，不能往左拉做空
-    if(marginHeld && isShareOtherSymbolMargin && bg(value).lt(marginHeld)){
-      return ;
-    }
+    // if(incrementValue.abs().gt(currentSymbolMarginHeld)) {
+    //   return false;
+    // }
+    setSliding(true)
     setValue(value)
     onValueChange(value);
   }
@@ -90,10 +91,12 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,isShareOt
   }, [max]);
 
   useEffect(() => {
-    if(isNaN(start)){
-      setValue(0)
-    } else {
-      setValue(start)
+    if(!sliding) {
+      if(isNaN(start)){
+        setValue(0)
+      } else {
+        setValue(start)
+      }
     }
     return () => {      
     };

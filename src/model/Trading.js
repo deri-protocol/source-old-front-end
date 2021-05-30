@@ -42,11 +42,10 @@ export default class Trading {
   wallet = null;
   configs = [] 
   config = null;
-  fundingRate = '--' 
-  index = null
+  index = ''
   volume = ''
   paused = false
-  margin = ''
+  slideIncrementMargin = 0
   position = {}
   contract = {}
   fundingRate = {}
@@ -57,7 +56,7 @@ export default class Trading {
     makeObservable(this,{
       index : observable,
       volume : observable,
-      margin : observable,
+      slideIncrementMargin : observable,
       fundingRate : observable,
       position : observable,
       history : observable,
@@ -73,11 +72,14 @@ export default class Trading {
       setUserSelectedDirection : action,
       setFundingRate : action,
       setHistory : action,
+      setSlideMargin : action,
       amount : computed,
+      amountIncrement : computed,
       fundingRateTip : computed,
       direction : computed,
       volumeDisplay : computed,
-      isShareOtherSymbolMargin : computed
+      isNegative : computed,
+      isPositive : computed
     })
     this.configInfo = new Config();
     this.oracle = new Oracle();
@@ -287,41 +289,91 @@ export default class Trading {
     this.userSelectedDirection = direction
   }
 
-  setMargin(margin){
-    console.log('before margin ',margin)
-    console.log('margin held',this.position.marginHeld)
-    if(this.isShareOtherSymbolMargin){
-      margin = bg(margin).minus(this.position.marginHeld).toString()
-    }
-    console.log('after margin ',margin)
-    this.margin =  margin
-    if(this.contract){
-      const volume = (+margin) / ((+this.index) * (+this.contract.multiplier) * (+this.contract.minInitialMarginRatio))      
-      if(!isNaN(volume)){
-        this.setVolume(Math.abs(volume))
-      }
-    }
+  setSlideMargin(slideIncrementMargin){
+    this.slideIncrementMargin =  slideIncrementMargin
+    const position = this.position;
+    const increment = bg(slideIncrementMargin).minus(bg(position.marginHeld))
+    increment.gt(0)  ? this.setUserSelectedDirection('long') : this.setUserSelectedDirection('short');
+    const volume = increment.abs().dividedBy(this.index * this.contract.multiplier * this.contract.minInitialMarginRatio);
+    this.setVolume(volume.integerValue().toString())
   }
 
+
   get volumeDisplay(){
-    if(this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
+    if(this.volume === 0 || this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
       return '';
-    } else if(this.margin !== '') {
-        if((+this.volume) > Math.abs(+this.position.volume)) {
-          const result = parseInt(Math.abs(this.volume) - Math.abs(this.position.volume))
-          return result
-        } else {
-          const result = parseInt(Math.abs(this.position.volume) - Math.abs(this.volume));          
-          return result
-        }
     } else {
       return this.volume
     }
   }
 
+  get amountIncrement(){
+    //根据增量的marginHeld反推volume
+    if(this.slideIncrementMargin){
+      const incrementVolume = bg(this.slideIncrementMargin).dividedBy((bg(this.index).multipliedBy(bg(this.contract.multiplier)).multipliedBy(bg(this.contract.minInitialMarginRatio))))
+      const incrementMargin = bg(this.amount.margin).plus(this.incrementMargin).toString()
+      // const incrementAvailable = bg(this.amount.available).plus(this)
+      console.log('incrementMargin',incrementMargin)
+      let currentSymbolIncrementMargin  = this.position.marginHeldBySymbol || 0 
+      currentSymbolIncrementMargin =  bg(currentSymbolIncrementMargin).plus(this.incrementMargin)
+      return {
+        volume : incrementVolume.integerValue().toString(),
+        margin : this.slideIncrementMargin,
+        currentSymbolIncrementMargin :  currentSymbolIncrementMargin.toString()
+      }
+    }
+    return {
+      volume : 0,
+      margin : 0,
+      currentSymbolIncrementMargin : 0
+    }
+  }
+
   
-  //计算available balance、contract value、
+
   get amount(){
+    const position = this.position
+    const contract = this.contract;
+    const volume = this.volume === '' || isNaN(this.volume) ? 0 : this.volume
+    //current symbol marginHel --> v2
+    let {margin, marginHeldBySymbol:currentSymbolMarginHeld  } = position
+    // increment marginHeld = volume * index * multiplier * minInitalMarginRatio
+    let incrementMarginHeld = bg(volume).multipliedBy(bg(this.index)).multipliedBy(bg(contract.multiplier))
+                                  .multipliedBy(bg(contract.minInitialMarginRatio));
+    // total marginHeld = current position marginHeld + increment marginHeld (default)
+    let totalMarginHeld = bg(position.marginHeld).plus(incrementMarginHeld)
+    //v2 
+    if(currentSymbolMarginHeld){
+      currentSymbolMarginHeld = bg(currentSymbolMarginHeld).plus(incrementMarginHeld).toString();
+    }
+    //如果当前仓位为正仓用户做空或者当前仓位为负仓用户做多，总仓位相减,取绝对值
+    if(this.isPositive && this.userSelectedDirection === 'short' || 
+      this.isNegative && this.userSelectedDirection === 'long'){
+      //total marginHeld 必须大于等于 当前symbol的仓位的marginHeld,只针对v2，v1没有marginHeldBySymbol，下面判断不会为真，取了个巧
+      if(incrementMarginHeld.abs().gt(currentSymbolMarginHeld)) {
+        incrementMarginHeld = currentSymbolMarginHeld
+      }
+      totalMarginHeld = bg(position.marginHeld).minus(incrementMarginHeld);
+      totalMarginHeld = totalMarginHeld.isNegative() ? bg(0) : totalMarginHeld.abs();
+      currentSymbolMarginHeld = bg(currentSymbolMarginHeld).minus(incrementMarginHeld)
+      currentSymbolMarginHeld = currentSymbolMarginHeld.isNegative() ? 0 : currentSymbolMarginHeld.abs().toString()
+    }
+    totalMarginHeld = totalMarginHeld.gt(margin) ? margin : totalMarginHeld.toString()
+    let available = bg(margin).minus(totalMarginHeld).toString()
+    const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
+
+    return {
+      volume : this.volume,
+      dynBalance : margin,
+      margin : totalMarginHeld,
+      available : available,
+      exchanged : exchanged,
+      currentSymbolMarginHeld
+    }
+  }
+
+  //计算available balance、contract value、
+  get amount_old(){
     //用户输入的时候
     if(this.index && this.position && this.contract && this.contract.multiplier && this.volume !== ''){
       //合同价值
@@ -348,9 +400,9 @@ export default class Trading {
       const margin = contractValue * this.contract.minInitialMarginRatio  
       let totalMargin =  margin
       //如果当前symbol 仓位 为0 且总的marginHeld 大于0
-      if(this.isShareOtherSymbolMargin){
+      // if(this.isShareOtherSymbolMargin){
         totalMargin = bg(margin).plus(this.position.marginHeld).toString() 
-      }
+      // }
       // console.log('volume ',curVolume);
       // console.log('dynBalance ',dynBalance)
       // console.log('margin ',margin)
@@ -400,6 +452,16 @@ export default class Trading {
       }
     }
     return 0
+  }
+
+  //正仓
+  get isPositive(){
+    return bg(this.position.volume).gt(0);
+  }
+
+  //负仓
+  get isNegative(){
+    return bg(this.position.volume).isNegative();
   }
 
   get isShareOtherSymbolMargin() {
