@@ -51,7 +51,7 @@ export default function Menu({closeMenu}){
               </li>
               <li>
                 <a
-                  href="https://github.com/peckshield/publications/blob/master/audit_reports/PeckShield-Audit-Report-Deri-v1.0.pdf"
+                  href="https://docs.deri.finance/code-audits"
                   >Code Audit</a
                 >
               </li>

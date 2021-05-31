@@ -35,7 +35,7 @@ export default function Menu() {
                 <a href="https://github.com/deri-finance/whitepaper/blob/master/deri_whitepaper.pdf">Whitepaper</a>
               </li>
               <li>
-                <a href="https://github.com/peckshield/publications/blob/master/audit_reports/PeckShield-Audit-Report-Deri-v1.0.pdf">Code Audit</a>
+                <a href="https://docs.deri.finance/code-audits">Code Audit</a>
               </li>
               <li>
                 <a href="http://deri.finance/#/team">Team</a>
