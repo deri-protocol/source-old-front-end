@@ -1,8 +1,9 @@
 import { bg } from '../utils'
-import {
-  LToken,
-} from '../contract/l_token'
+// import {
+//   LToken,
+// } from '../contract/l_token'
 import fetch from 'node-fetch'
+import { lTokenFactory } from '../factory'
 global.fetch = fetch
 
 const TIMEOUT=20000
@@ -11,7 +12,8 @@ describe('LToken', () => {
   let poolAddress, lToken, account, account2
   beforeAll(() => {
     poolAddress = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
-    lToken = new LToken('97', '0x61162b0c9665Ce27a53b59E79C1B7A929cc3bB57', true)
+    //lToken = new LToken('97', '0x61162b0c9665Ce27a53b59E79C1B7A929cc3bB57', true)
+    lToken = lTokenFactory('97', poolAddress, true)
     account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
     account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'
   })

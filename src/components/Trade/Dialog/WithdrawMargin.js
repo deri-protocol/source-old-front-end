@@ -43,7 +43,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
   }
 
   const withdraw = async () => {
-    const max = (+position.volume) === 0 ? bg(position.margin) : bg(available)
+    const max = bg(available)
     const curAmount = bg(amount)    
     if(curAmount.gt(max)) {
       alert("under margin");
@@ -54,7 +54,8 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
       return;
     }
     setPending(true);
-    const res = await withdrawMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount,spec.bTokenId);
+    const isMax = max.eq(amount)
+    const res = await withdrawMargin(wallet.detail.chainId,spec.pool,wallet.detail.account,amount,spec.bTokenId,isMax);
     if(res.success){
       afterWithdraw();
       onClose();

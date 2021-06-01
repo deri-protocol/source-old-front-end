@@ -16,4 +16,5 @@ export {
 export {
   calculateBTokenDynamicEquities,
   isBToken0RatioValid,
+  isPoolMarginRatioValid,
 } from './liquidity'

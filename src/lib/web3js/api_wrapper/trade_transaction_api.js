@@ -50,11 +50,12 @@ export const withdrawMargin = async (
   accountAddress,
   amount,
   bTokenId,
+  isMaximum,
 ) => {
   if(bTokenId === undefined) {
     return withdrawMargin2(chainId, poolAddress, accountAddress, amount)
   } else {
-    return withdrawMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId)
+    return withdrawMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId, isMaximum)
   }
 };
 

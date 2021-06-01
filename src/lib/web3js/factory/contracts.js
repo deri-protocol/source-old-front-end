@@ -15,7 +15,7 @@ import { ClpPool } from '../contract/clp_pool';
 import { Clp2Pool } from '../contract/clp2_pool';
 import { DeriContract } from '../contract/deri';
 import { WormholeContract } from '../contract/wormhole';
-import { getLpContractAddress } from '../utils';
+//import { getLpContractAddress } from '../utils';
 // import { getPoolBaseSymbolList } from '../utils'
 
 export const databaseFactory = (() => {

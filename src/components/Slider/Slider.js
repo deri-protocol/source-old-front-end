@@ -44,7 +44,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,totalMarginHeld,inputing,originMarginHeld}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -53,12 +53,12 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
   const [sliding,setSliding] = useState(false)
 
   const onSliderChange = value => {
-    // if(incrementValue.abs().gt(currentSymbolMarginHeld)) {
-    //   return false;
-    // }
-    setSliding(true)
-    setValue(value)
-    onValueChange(value);
+    const rest = bg(originMarginHeld).minus(currentSymbolMarginHeld);    
+    if(rest.abs().lt(value)) {      
+      onValueChange(value);
+      setSliding(true)
+      setValue(value)
+    }
   }
 
 
@@ -100,7 +100,13 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
     }
     return () => {      
     };
-  }, [start]);
+  }, [start,inputing]);
+
+  // useEffect(() => {
+  //   inputing && setSliding(true)
+  //   return () => {};
+  // }, [start]);
+
 
   const clazz =classNames('deri-slider',{controlled : loaded})
 

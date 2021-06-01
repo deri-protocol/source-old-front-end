@@ -7,13 +7,46 @@ export const calculateBTokenDynamicEquities = (bTokens) => {
   return totalDynamicEquity
 }
 
-export const isBToken0RatioValid = (bTokens, bTokenId, newLiquidity, bToken0Ratio) => {
+export const isBToken0RatioValid = (bTokens, bTokenId, amount, bToken0Ratio) => {
+  bTokens[bTokenId].liquidity = bg(bTokens[bTokenId].liquidity).plus(amount)
   const totalDynamicEquity = calculateBTokenDynamicEquities(bTokens)
-  const b = bTokens[bTokenId]
-  const dynamicEquity = bg(b.liquidity + newLiquidity).times(b.price).times(b.discount).plus(b.pnl)
-  if (dynamicEquity.div(totalDynamicEquity).times('0.99').gt(bToken0Ratio)) {
-    return { success: false, error: 'Trader insufficient bToken0' };
+  const b = bTokens['0']
+  const dynamicEquity = bg(b.liquidity).times(b.price).times(b.discount).plus(b.pnl)
+  //console.log('estimatedBToken0Ratio',dynamicEquity.div(totalDynamicEquity).toString())
+  // use 1 as efficient
+  if (
+    !totalDynamicEquity.eq(0) &&
+    dynamicEquity.div(totalDynamicEquity).times('1').lt(bToken0Ratio)
+  ) {
+    return { success: false, error: 'Trader has insufficient bToken0' };
   } else {
-    return { success: true }
+    return { success: true };
+  }
+}
+
+export const isPoolMarginRatioValid = (bTokens, bTokenId, amount, userLiquidity, symbols, poolMarginRatio) => {
+  if (bg(amount).gte(userLiquidity)) {
+    bTokens[bTokenId].liquidity = bg(bTokens[bTokenId].liquidity).minus(userLiquidity)
+  } else {
+    bTokens[bTokenId].liquidity = bg(bTokens[bTokenId].liquidity).minus(amount)
+  }
+  let totalDynamicEquity = calculateBTokenDynamicEquities(bTokens)
+  let totalCost = bg(0)
+  for (let i=0; i<symbols.length; i++) {
+    const s = symbols[i]
+    if (!bg(s.tradersNetVolume).eq(0)) {
+      const cost = bg(s.tradersNetVolume).times(s.price).times(s.multiplier)
+      totalDynamicEquity = totalDynamicEquity.plus(s.tradersNetCost).minus(cost)
+      totalCost = totalCost.plus(cost.abs())
+    }
+  }
+  //console.log(totalDynamicEquity.toString(), totalCost.toString())
+  if (
+    !totalCost.eq(0) &&
+    totalDynamicEquity.div(totalCost).times('1').lt(poolMarginRatio)
+  ) {
+    return { success: false, error: 'Trader has insufficient liquidity' };
+  } else {
+    return { success: true };
   }
 }

@@ -1,6 +1,6 @@
 // == func
-const np = () => {}
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+// const np = () => {}
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const fetchWithTimeout = (url, options = {}) => {
   const { timeout = 1200, ...fetchOptions } = options

@@ -6,7 +6,7 @@ import {
   pTokenFactory,
   perpetualPoolFactory,
 } from '../factory';
-import { getOraclePrice, getOracleInfo, bg } from '../utils';
+import { getOracleInfo, bg } from '../utils';
 
 export const unlock = async (chainId, poolAddress, accountAddress, bTokenId) => {
    const { bToken: bTokenAddress } = getPoolConfig(poolAddress, bTokenId);
@@ -33,7 +33,7 @@ export const depositMargin = async (
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
-     const tx = await perpetualPoolRouter.addMarginWithPrices(accountAddress, bTokenId, amount);
+     const tx = await perpetualPoolRouter.addMargin(accountAddress, bTokenId, amount);
      res = { success: true, transaction: tx };
    } catch (err) {
      res = { success: false, error: err };
@@ -47,12 +47,13 @@ export const withdrawMargin = async (
   accountAddress,
   amount,
   bTokenId,
+  isMaximum = false,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
-     const tx = await perpetualPoolRouter.removeMarginWithPrices(accountAddress, bTokenId, amount);
+     const tx = await perpetualPoolRouter.removeMargin(accountAddress, bTokenId, amount, isMaximum);
      res = { success: true, transaction: tx };
    } catch (err) {
      res = { success: false, error: err };
@@ -66,22 +67,21 @@ export const tradeWithMargin = async (
   accountAddress,
   newVolume,
   symbolId,
-  useInfura,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress);
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
-   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
-   const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
-   const [price, symbolInfo, parameterInfo, positions] = await Promise.all([
-     getOraclePrice(poolAddress, symbolId),
-     perpetualPool.getSymbol(symbolId),
+   const pToken = pTokenFactory(chainId, pTokenAddress);
+   const [parameterInfo, positions] = await Promise.all([
+    //  getOraclePrice(poolAddress, symbolId),
+    //  perpetualPool.getSymbol(symbolId),
      perpetualPool.getParameters(),
      pToken.getPositions(accountAddress),
      //pToken.getMargin(accountAddress, symbolId),
    ]);
 
-   const { multiplier } = symbolInfo;
+   //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
@@ -96,8 +96,7 @@ export const tradeWithMargin = async (
       return accum.plus(bg(i.price).times(i.discount).times(margins[index]))
     }, bg(0))
 
-    const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount)), bg(0))
-    //console.log('liquidity', liquidity.toString())
+    const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
     const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
     let symbolIdList = symbolConfigList.map((i) => i.symbolId)
     promises = []
@@ -125,14 +124,11 @@ export const tradeWithMargin = async (
     liquidityUsed = liquidityUsed.times(minPoolMarginRatio)
     //console.log('liquidityUsed', liquidityUsed.toString())
 
-    const pnl = bTokens.reduce((accum, i) => accum.plus(i.pnl), bg(0))
-    console.log('pnl', pnl.toString())
-
    const orderValidation = isOrderValid(
      //price,
      margin,
      marginHeld,
-     liquidity.plus(pnl),
+     liquidity,
      liquidityUsed,
      //multiplier,
      //minPoolMarginRatio,
@@ -141,7 +137,7 @@ export const tradeWithMargin = async (
    let res;
    if (orderValidation.success) {
     try {
-      const tx = await perpetualPoolRouter.tradeWithPrices(accountAddress, symbolId, newVolume);
+      const tx = await perpetualPoolRouter.trade(accountAddress, symbolId, newVolume);
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
@@ -161,7 +157,7 @@ export const closePosition = async (chainId, poolAddress, accountAddress, symbol
    let res;
    if (!volume.eq(0)) {
     try {
-      const tx = await perpetualPoolRouter.tradeWithPrices(accountAddress, symbolId, newVolume);
+      const tx = await perpetualPoolRouter.trade(accountAddress, symbolId, newVolume);
       res = { success: true, transaction: tx };
     } catch (err) {
       res = { success: false, error: err };
@@ -206,6 +202,7 @@ export const withdrawMarginWithPrices = async (
   accountAddress,
   amount,
   bTokenId,
+  isMaximum = false,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
    const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
@@ -219,7 +216,7 @@ export const withdrawMarginWithPrices = async (
      const priceInfos = prices.map((p, index) => {
        return [symbolList[index], p.timestamp, p.price, parseInt(p.v).toString(), p.r, p.s]
      })
-     const tx = await perpetualPoolRouter.removeMarginWithPrices(accountAddress, bTokenId, amount, priceInfos);
+     const tx = await perpetualPoolRouter.removeMarginWithPrices(accountAddress, bTokenId, amount, priceInfos, isMaximum);
      res = { success: true, transaction: tx };
    } catch (err) {
      res = { success: false, error: err };
@@ -233,23 +230,23 @@ export const tradeWithMarginWithPrices = async (
   accountAddress,
   newVolume,
   symbolId,
-  useInfura,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress);
    const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
-   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
+   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
-   const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
-   const [price, symbolInfo, parameterInfo, positions] = await Promise.all([
-     getOraclePrice(poolAddress, symbolId),
-     perpetualPool.getSymbol(symbolId),
+   const pToken = pTokenFactory(chainId, pTokenAddress);
+   //const [price, symbolInfo, parameterInfo, positions] = await Promise.all([
+   const [parameterInfo, positions] = await Promise.all([
+    //  getOraclePrice(poolAddress, symbolId),
+    //  perpetualPool.getSymbol(symbolId),
      perpetualPool.getParameters(),
      pToken.getPositions(accountAddress),
      //pToken.getMargin(accountAddress, symbolId),
    ]);
 
-   const { multiplier } = symbolInfo;
+   //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
@@ -264,7 +261,7 @@ export const tradeWithMarginWithPrices = async (
       return accum.plus(bg(i.price).times(i.discount).times(margins[index]))
     }, bg(0))
 
-    const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount)), bg(0))
+    const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
     //console.log('liquidity', liquidity.toString())
     const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
     let symbolIdList = symbolConfigList.map((i) => i.symbolId)
@@ -293,14 +290,14 @@ export const tradeWithMarginWithPrices = async (
     liquidityUsed = liquidityUsed.times(minPoolMarginRatio)
     //console.log('liquidityUsed', liquidityUsed.toString())
 
-    const pnl = bTokens.reduce((accum, i) => accum.plus(i.pnl), bg(0))
-    console.log('pnl', pnl.toString())
+    // const pnl = bTokens.reduce((accum, i) => accum.plus(i.pnl), bg(0))
+    // console.log('pnl', pnl.toString())
 
    const orderValidation = isOrderValid(
      //price,
      margin,
      marginHeld,
-     liquidity.plus(pnl),
+     liquidity,
      liquidityUsed,
      //multiplier,
      //minPoolMarginRatio,

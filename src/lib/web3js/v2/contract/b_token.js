@@ -1,9 +1,8 @@
 import { ContractBase } from './contract_base'
 import { bTokenAbi } from './abis';
 import { deriToNatural, bg } from '../utils'
+import { MAX_VALUE } from '../config'
 
-export const MAX_VALUE =
-  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 
 export class BToken extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {

@@ -3,7 +3,6 @@ import {
   toWei,
   fromWei,
   numberToHex,
-  fetchWithTimeout,
   max,
   min,
   toHex,
@@ -24,7 +23,6 @@ import {
   validateArgs,
 } from '../utils'
 import fetch from 'node-fetch'
-import { getAnnualBlockNumberConfig } from '../config'
 global.fetch = fetch
 
 const TIMEOUT=20000

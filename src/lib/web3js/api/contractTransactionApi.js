@@ -149,7 +149,7 @@ export const withdrawMargin = async (
  */
 export const mint = async (chainId, poolAddress, accountAddress, amount) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
-  const pPool = perpetualPoolFactory(chainId, poolAddress);
+  //const pPool = perpetualPoolFactory(chainId, poolAddress);
   //pPool.setAccount(accountAddress);
   const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
   //bToken.setAccount(accountAddress);

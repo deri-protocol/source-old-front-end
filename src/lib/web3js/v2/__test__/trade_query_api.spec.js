@@ -116,14 +116,14 @@ describe('Trade query api', () => {
     expect(await getEstimatedFundingRate(...input)).toEqual(output)
   }, TIMEOUT)
   it('getLiquidityUsed()', async() => {
-    const input = ['97', POOL_ADDRESS,'0', true]
+    const input = ['97', POOL_ADDRESS,'1', true]
     const output = {
       liquidityUsed0: '0.04846',
     };
     expect(await getLiquidityUsed(...input)).toEqual(output)
   }, TIMEOUT)
   it('getEstimatedLiquidityUsed()', async() => {
-    const input = ['97', POOL_ADDRESS,'8', '0', true]
+    const input = ['97', POOL_ADDRESS,'8', '1', true]
     const output = {
       liquidityUsed1: '0.0493'
     };

@@ -1,9 +1,7 @@
-import { bg } from '../utils'
 import {
   PerpetualPoolRouter
 } from '../contract/perpetual_pool_router'
 import fetch from 'node-fetch'
-import { perpetualPoolRouterAbi } from '../contract/abis'
 global.fetch = fetch
 
 const TIMEOUT=20000

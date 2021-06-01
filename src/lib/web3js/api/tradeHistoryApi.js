@@ -1,6 +1,6 @@
 import {
   getPoolContractAddress,
-  naturalToDeri,
+  //naturalToDeri,
   deriToNatural,
   hexToString,
   toChecksumAddress,
@@ -168,7 +168,8 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
   const keyMeta = `${chainId}.${poolAddress}.${toChecksumAddress(
     accountAddress
   )}.trade`;
-  const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
+  //const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
+  const [res] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const count = hexToNumber(res);
   try {
     if (count && count >= 0) {
@@ -313,7 +314,8 @@ const getLiquidateHistoryOffline = async (
   const keyMeta = `${chainId}.${poolAddress}.${toChecksumAddress(
     accountAddress
   )}.liquidate`;
-  const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
+  //const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
+  const [res] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const count = hexToNumber(res);
   try {
     if (count && count >= 0) {

@@ -40,7 +40,7 @@ export const getLiquidityInfo = async (
   };
 };
 
-export const getPoolLiquidity = async (chainId, poolAddress, bTokenId, useInfura=false) => {
+export const getPoolLiquidity = async (chainId, poolAddress, bTokenId) => {
   // const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
   // const res = await perpetualPool.getBToken(bTokenId)
   // return res.liquidity.toString()

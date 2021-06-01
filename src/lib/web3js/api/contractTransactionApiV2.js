@@ -19,10 +19,10 @@ import {
   removeClp2Liquidity,
 } from './clp2PoolApi'
 import { wsInstance } from './apiGlobals'
-import { getRestServerConfig, DeriEnv, getRedisWorkerQueneConfig } from '../config'
+import { getRestServerConfig, DeriEnv } from '../config'
 
 const wsOnPromise = (ws, event) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     ws.on(event, function(data){
       resolve(JSON.parse(data))
     })

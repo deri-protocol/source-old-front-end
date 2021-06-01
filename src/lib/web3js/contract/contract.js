@@ -61,10 +61,8 @@ export class Contract {
     };
   }
   async _transact(method, args, accountAddress) {
-    const [gas, gasPrice] = await Promise.all([
-      this._estimatedGas(method, args, accountAddress),
-      this.web3.eth.getGasPrice(),
-    ]);
+    const gas = await this._estimatedGas(method, args, accountAddress)
+      //this.web3.eth.getGasPrice(),
     let txRaw = [
       {
         from: accountAddress,

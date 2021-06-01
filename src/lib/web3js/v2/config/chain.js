@@ -46,7 +46,7 @@ export const getChainProviderUrls = (chainId) => {
       chainId: '256',
     },
   ];
-  
+
   const res = chainProviderUrls.filter((i) => i.chainId  === chainId)
   //console.log('res',res)
   if (res.length > 0) {
@@ -66,3 +66,7 @@ export const getAnnualBlockNumberConfig = () => {
     256: '10511369',
   };
 };
+
+export const MAX_VALUE =
+  '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+

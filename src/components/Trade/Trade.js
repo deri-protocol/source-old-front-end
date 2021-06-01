@@ -23,7 +23,7 @@ function Trade({wallet = {},trading,version}){
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
-  const [amount, setAmount] = useState({})
+  const [inputing, setInputing] = useState(false)
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
@@ -38,12 +38,20 @@ function Trade({wallet = {},trading,version}){
 
   const directionChange = direction => {
     trading.setVolume('')
+    setInputing(true)
     trading.setUserSelectedDirection(direction)
     setDirection(direction)
   }
 
-  const onSlide = value => {    
+  const onSlide = value => {  
     trading.setSlideMargin(value);
+    const increment = value - trading.position.marginHeld
+    console.log('incremnt ',increment)
+    if(direction === 'long' && increment < 0) {
+      makeLongOrShort(-1)
+    } else if(direction === 'short' && increment < 0){
+      makeLongOrShort(1)
+    }
   }
 
   //refresh cache
@@ -61,8 +69,10 @@ function Trade({wallet = {},trading,version}){
   const makeLongOrShort = (volume) => {
     if(volume >= 0){
       setDirection('long')
+      // trading.setUserSelectedDirection('long')
     } else {
       setDirection('short')
+      // trading.setUserSelectedDirection('short')
     }    
   }
 
@@ -122,12 +132,13 @@ function Trade({wallet = {},trading,version}){
   }
 
   const volumeChange = event => {
-    trading.setSlideMargin('')
+    // trading.setSlideMargin('')
     let {value} = event.target
     if(value === '0'){
       value = ''
     }
     trading.setVolume(value)
+    setInputing(true)
   }
 
   //完成交易
@@ -221,7 +232,7 @@ function Trade({wallet = {},trading,version}){
     <div className='trade-info'>
     <div className='trade-peration'>
       <div className='check-baseToken'>
-        <SymbolSelector setSpec={setSpec} spec={spec}/>
+        <SymbolSelector setSpec={setSpec} spec={spec} afterChanged={() => setInputing(true)}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
@@ -285,13 +296,13 @@ function Trade({wallet = {},trading,version}){
               </span>
             </div>
             <div className='box-margin'>
-              {version.isV2 ? <span> Total Margin </span> : <span>Margin</span>}
+              {version.isV2 ? <span> Total Held Margin </span> : <span>Margin</span>}
               <span className='margin'>
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>
             {version.isV2 && <div>
-              <span>Position margin</span>
+              <span>Margin of this Position</span>
               <span className='margin'>
                 <DeriNumberFormat value={ trading.amount.currentSymbolMarginHeld} allowZero={true}  decimalScale={2}/>
               </span>
@@ -307,7 +318,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={version.isV2 ? true : slideFreeze} totalMarginHeld={trading.amount.margin} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} inputing={inputing} originMarginHeld={trading.position.marginHeld}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>

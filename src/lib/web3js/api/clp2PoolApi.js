@@ -36,7 +36,7 @@ export const addClp2Liquidity = async (
   const { bTokenAddress } = getClp2ContractAddress(chainId, poolAddress);
   if (bTokenAddress) {
     const clp2Pool = clp2PoolFactory(chainId, poolAddress);
-    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+    //const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
     try {
       const tx = await clp2Pool.addLiquidity(accountAddress, amount);
       res = { success: true, transaction: tx };
@@ -59,7 +59,7 @@ export const removeClp2Liquidity = async (
   const { bTokenAddress } = getClp2ContractAddress(chainId, poolAddress);
   if (bTokenAddress) {
     const clp2Pool = clp2PoolFactory(chainId, poolAddress);
-    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+    //const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
     try {
       const tx = await clp2Pool.removeLiquidity(accountAddress, amount);
       res = { success: true, transaction: tx };

@@ -66,7 +66,7 @@ export const addSlpLiquidity = async (
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
     //slpPool.setAccount(accountAddress);
-    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+    //const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
     //bToken.setAccount(accountAddress);
     try {
       const tx = await slpPool.addLiquidity(accountAddress, amount);
@@ -105,7 +105,7 @@ export const removeSlpLiquidity = async (
   if (bTokenAddress) {
     const slpPool = slpPoolFactory(chainId, poolAddress);
     //slpPool.setAccount(accountAddress);
-    const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+    //const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
     //bToken.setAccount(accountAddress);
     try {
       const tx = await slpPool.removeLiquidity(accountAddress, amount);

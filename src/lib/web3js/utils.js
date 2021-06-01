@@ -127,23 +127,23 @@ export const hasInvalidArgsValue = (...args) =>
 // language
 export const isObject = (obj) => typeof obj === 'object';
 
-const np = () => {}
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+//const np = () => {}
+//const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 // fetchWithTimeout
-const fetchWithTimeout = (url, delay=2000, options={}, onTimeout=np) => {
-  const timer = new Promise((resolve) => {
-    setTimeout(resolve, delay, {
-      timeout: true,
-    });
-  });
-  return Promise.race([fetch(url, options), timer]).then((response) => {
-    if (response.timeout) {
-      onTimeout();
-    }
-    return response;
-  });
-};
+// const fetchWithTimeout = (url, delay=2000, options={}, onTimeout=np) => {
+//   const timer = new Promise((resolve) => {
+//     setTimeout(resolve, delay, {
+//       timeout: true,
+//     });
+//   });
+//   return Promise.race([fetch(url, options), timer]).then((response) => {
+//     if (response.timeout) {
+//       onTimeout();
+//     }
+//     return response;
+//   });
+// };
 
 // http
 export const checkHttpServerIsAlive = async (url) => {
@@ -302,9 +302,9 @@ export const getPoolContractAddress = (chainId, poolAddress) => {
       initialBlock: pool[0].initialBlock,
     };
   }
-  console.log(
-    `getPoolContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
-  );
+  // console.log(
+  //   `getPoolContractAddress(): contract address is not found: ${chainId} ${poolAddress}`
+  // );
   return [];
 };
 
@@ -483,16 +483,12 @@ export const getOracleInfo = async (chainId, poolAddress) => {
 };
 
 export const getBTCUSDPrice = async (chainId, poolAddress) => {
-  try {
-    const responseJson = await getOracleInfo(chainId, poolAddress)
-    let price = responseJson.price
-    if (!price) {
-      price = '0';
-    }
-    return deriToNatural(responseJson.price).toString();
-  } catch (err) {
-    throw err
+  const responseJson = await getOracleInfo(chainId, poolAddress);
+  let price = responseJson.price;
+  if (!price) {
+    price = '0';
   }
+  return deriToNatural(responseJson.price).toString();
 };
 export const getOraclePrice = getBTCUSDPrice;
 

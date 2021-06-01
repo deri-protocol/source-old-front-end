@@ -1,8 +1,9 @@
 import { bg } from '../utils'
-import {
-  PToken,
-} from '../contract/p_token'
+// import {
+//   PToken,
+// } from '../contract/p_token'
 import fetch from 'node-fetch'
+import { pTokenFactory } from '../factory'
 global.fetch = fetch
 
 const TIMEOUT=20000
@@ -11,7 +12,8 @@ describe('PToken', () => {
   let poolAddress, pToken, account, account2
   beforeAll(() => {
     poolAddress = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
-    pToken = new PToken('97', '0xeBA1c76F7A773B8210130f068798839F84392241', true)
+    pToken =  pTokenFactory('97', poolAddress, true)
+    //pToken =  new PToken('97', '0xeBA1c76F7A773B8210130f068798839F84392241', true)
     account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
     account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'
   })

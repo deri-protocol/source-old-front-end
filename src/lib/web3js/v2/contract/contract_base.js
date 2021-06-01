@@ -48,7 +48,8 @@ export class ContractBase {
         });
         gas = parseInt(gas * 1.25);
         break;
-      } catch (err) {
+      } catch (error) {
+        // ignore the metamask error
       }
     }
     if (gas == 0 || gas > 10000000) gas = MAX_GAS_AMOUNT;

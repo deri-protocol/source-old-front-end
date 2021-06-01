@@ -1,6 +1,7 @@
 import { ContractBase } from './contract_base'
 import { perpetualPoolRouterAbi} from './abis';
-import { naturalToDeri, bg } from '../utils'
+import { naturalToDeri } from '../utils'
+import { MAX_VALUE } from '../config';
 
 export class PerpetualPoolRouter extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
@@ -33,12 +34,20 @@ export class PerpetualPoolRouter extends ContractBase {
     );
   }
 
-  async removeLiquidity(accountAddress, bTokenId, amount) {
-    return await this._transact(
-      'removeLiquidity',
-      [bTokenId, naturalToDeri(amount)],
-      accountAddress
-    );
+  async removeLiquidity(accountAddress, bTokenId, amount, isMaximum) {
+    if (isMaximum) {
+      return await this._transact(
+        'removeLiquidity',
+        [bTokenId, MAX_VALUE],
+        accountAddress
+      );
+    } else {
+      return await this._transact(
+        'removeLiquidity',
+        [bTokenId, naturalToDeri(amount)],
+        accountAddress
+      );
+    }
   }
 
   async addMargin(accountAddress, bTokenId, amount) {
@@ -52,15 +61,23 @@ export class PerpetualPoolRouter extends ContractBase {
     );
   }
 
-  async removeMargin(accountAddress, bTokenId, amount) {
+  async removeMargin(accountAddress, bTokenId, amount, isMaximum) {
     if (!this.poolAddress) {
       await this.pool()
     }
-    return await this._transact(
-      'removeMargin',
-      [bTokenId, naturalToDeri(amount)],
-      accountAddress
-    );
+    if (isMaximum) {
+      return await this._transact(
+        'removeMargin',
+        [bTokenId, MAX_VALUE],
+        accountAddress
+      );
+    } else {
+      return await this._transact(
+        'removeMargin',
+        [bTokenId, naturalToDeri(amount)],
+        accountAddress
+      );
+    }
   }
 
   async trade(accountAddress, symbolId, amount) {
@@ -85,12 +102,20 @@ export class PerpetualPoolRouter extends ContractBase {
       accountAddress
     );
   }
-  async removeLiquidityWithPrices(accountAddress, bTokenId, amount, priceInfos) {
-    return await this._transact(
-      'removeLiquidityWithPrices',
-      [bTokenId, naturalToDeri(amount), priceInfos],
-      accountAddress
-    );
+  async removeLiquidityWithPrices(accountAddress, bTokenId, amount, priceInfos, isMaximum) {
+    if (isMaximum) {
+      return await this._transact(
+        'removeLiquidityWithPrices',
+        [bTokenId, MAX_VALUE, priceInfos],
+        accountAddress
+      );
+    } else {
+      return await this._transact(
+        'removeLiquidityWithPrices',
+        [bTokenId, naturalToDeri(amount), priceInfos],
+        accountAddress
+      );
+    }
   }
 
   async addMarginWithPrices(accountAddress, bTokenId, amount, priceInfos) {
@@ -104,15 +129,23 @@ export class PerpetualPoolRouter extends ContractBase {
     );
   }
 
-  async removeMarginWithPrices(accountAddress, bTokenId, amount, priceInfos) {
+  async removeMarginWithPrices(accountAddress, bTokenId, amount, priceInfos, isMaximum) {
     if (!this.poolAddress) {
       await this.pool()
     }
-    return await this._transact(
-      'removeMarginWithPrices',
-      [bTokenId, naturalToDeri(amount), priceInfos],
-      accountAddress
-    );
+    if (isMaximum) {
+      return await this._transact(
+        'removeMarginWithPrices',
+        [bTokenId, MAX_VALUE, priceInfos],
+        accountAddress
+      );
+    } else {
+      return await this._transact(
+        'removeMarginWithPrices',
+        [bTokenId, naturalToDeri(amount), priceInfos],
+        accountAddress
+      );
+    }
   }
 
   async tradeWithPrices(accountAddress, symbolId, amount, priceInfos) {

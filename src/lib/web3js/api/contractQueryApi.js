@@ -62,7 +62,7 @@ import {
 export const getSpecification = async (
   chainId,
   poolAddress,
-  accountAddress,
+  //accountAddress,
 ) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);

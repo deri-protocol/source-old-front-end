@@ -2,7 +2,38 @@ import { DeriEnv } from "../../config";
 
 export const getPoolConfigList = (env = 'dev') => {
   if (env === 'prod') {
-    return [];
+    return [
+      {
+        pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+        pToken: '0x2AA5865BF556ab3f6Cd9405e565099f70234dF05',
+        lToken: '0x6f8F1C2781b555B63F1A1BE85BF99aEe27d87cB2',
+        router: '0xC9C234243f48Fa05A993c29B4F5f93048f5b07E4',
+        bToken: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+        bTokenId: '0',
+        initialBlock: '7884650',
+        bTokenSymbol: 'BUSD',
+        symbol: 'BTCUSD',
+        symbolId: '0',
+        unit: 'BTC',
+        chainId: '56',
+        version: 'v2',
+      },
+      {
+        pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+        pToken: '0x2AA5865BF556ab3f6Cd9405e565099f70234dF05',
+        lToken: '0x6f8F1C2781b555B63F1A1BE85BF99aEe27d87cB2',
+        router: '0xC9C234243f48Fa05A993c29B4F5f93048f5b07E4',
+        bToken: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+        bTokenId: '0',
+        initialBlock: '7884650',
+        bTokenSymbol: 'BUSD',
+        symbol: 'ETHUSD',
+        symbolId: '1',
+        unit: 'ETH',
+        chainId: '56',
+        version: 'v2',
+      }
+    ];
   } else {
     return [
       {

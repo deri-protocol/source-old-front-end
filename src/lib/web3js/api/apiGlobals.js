@@ -1,6 +1,5 @@
 import { perpetualPoolFactory } from '../factory/contracts';
 import { getBTCUSDPrice } from '../utils';
-import { getUserWormholeSignature } from './contractQueryApi';
 import { io } from 'socket.io-client';
 
 /** @module apiCache */

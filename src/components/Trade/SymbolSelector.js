@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react"
 import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
 import classNames from 'classnames';
 
-function SymbolSelector({trading,version,setSpec,spec}) {
+function SymbolSelector({trading,version,setSpec,spec,afterChanged}) {
   const [dropdown, setDropdown] = useState(false);  
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
 
@@ -22,7 +22,8 @@ function SymbolSelector({trading,version,setSpec,spec}) {
       trading.pause();
       setSpec(selected)
       trading.switch(selected);
-      setDropdown(false)    
+      setDropdown(false)
+      afterChanged()    
     } 
   }
 

@@ -5,6 +5,7 @@ import {
   calculateLiquidityUsed,
   calculateBTokenDynamicEquities,
   isBToken0RatioValid,
+  isPoolMarginRatioValid,
 } from '../calculation';
 import { bg } from '../utils';
 import fetch from 'node-fetch'
@@ -103,12 +104,95 @@ describe('calculation', () => {
       pnl: '57',
     }, {
       liquidity: '501',
-      price: '42395.89',
+      price: '22395.89',
       discount: '0.8',
       pnl: '477',
     }]
-    const output = bg('19282180.632')
-    const res = isBToken0RatioValid(input, '0', '224', '0.2')
-    expect(totalDynamicEquity).toEqual(output)
+    const res = isBToken0RatioValid(input, '1', '10', '0.2')
+    expect(res.success).toEqual(true)
+    const input2 = [{
+      liquidity: '976',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '501',
+      price: '22395.89',
+      discount: '0.8',
+      pnl: '477',
+    }]
+    const res2 = isBToken0RatioValid(input2, '1', '11', '0.2')
+    expect(res2.success).toEqual(false)
+    const input3 = [{
+      liquidity: '976',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '501',
+      price: '22395.89',
+      discount: '0.8',
+      pnl: '477',
+    }]
+    const res3 = isBToken0RatioValid(input3, '0', '11', '0.2')
+    expect(res3.success).toEqual(true)
+  })
+  test('isPoolMarginRatioValid', () => {
+    const bTokens = [{
+      liquidity: '16',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '16',
+      price: '22395.89',
+      discount: '0.8',
+      pnl: '3215',
+    }]
+    const symbols = [{
+      symbol: 'BTCUSD',
+      multiplier: bg(0.0001),
+      feeRatio: bg(0.0001),
+      price: bg(36379.845),
+      tradersNetVolume: bg(20313),
+      tradersNetCost: bg(493.5695935),
+    }, {
+      symbol: 'IMEME',
+      multiplier: bg(0.01),
+      feeRatio: bg(0.0001),
+      price: bg(60.845),
+      tradersNetVolume: bg(832),
+      tradersNetCost: bg(12.6741221),
+    }]
+    const res = isPoolMarginRatioValid(bTokens, '1', '10', '11', symbols, '1')
+    expect(res.success).toEqual(true)
+    const bTokens2 = [{
+      liquidity: '16',
+      price: '2345.67',
+      discount: '1',
+      pnl: '57',
+    }, {
+      liquidity: '16',
+      price: '22395.89',
+      discount: '0.8',
+      pnl: '3215',
+    }]
+    const symbols2 = [{
+      symbol: 'BTCUSD',
+      multiplier: bg(0.0001),
+      feeRatio: bg(0.0001),
+      price: bg(36379.845),
+      tradersNetVolume: bg(20313),
+      tradersNetCost: bg(493.5695935),
+    }, {
+      symbol: 'IMEME',
+      multiplier: bg(0.01),
+      feeRatio: bg(0.0001),
+      price: bg(60.845),
+      tradersNetVolume: bg(832),
+      tradersNetCost: bg(12.5741221),
+    }]
+    const res2 = isPoolMarginRatioValid(bTokens2, '1', '10', '11', symbols2, '1')
+    expect(res2.success).toEqual(false)
   })
 })

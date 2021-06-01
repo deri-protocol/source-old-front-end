@@ -4,16 +4,16 @@ export const priceCache = (function(){
     get(poolAddress, symbolId) {
       const key = `${poolAddress}.${symbolId}`
       if (Object.keys(_prices).includes(key)) {
-        const [price, timestamp] = _prices[key].split('|')
+        const [price, ] = _prices[key].split('|')
         //if (parseInt(timestamp) - Date.now() < 10000) {
           return price
         //}
       }
       console.log('please init priceCache first')
     },
-    update(chainId, poolAddress, symbolId) {
-      // place holder
-    },
+    // update(chainId, poolAddress, symbolId) {
+    //   // place holder
+    // },
     set(poolAddress, symbolId, val) {
       if (!isNaN(parseFloat(val))) {
         const timestamp = Date.now().toString()

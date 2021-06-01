@@ -1,4 +1,4 @@
-import { bg, max, min } from '../utils';
+import { bg, max } from '../utils';
 
 export const calculateEntryPrice = (volume, cost, multiplier) =>
   volume.eq(0) ? bg(0) : cost.div(volume).div(multiplier);
@@ -76,7 +76,7 @@ export const isOrderValid = (
     if (liquidity.minus(liquidityUsed).gte(0)) {
       return { success: true };
     }
-    return { success: false, error: 'Pool insufficient liquidity' };
+    return { success: false, error: 'Pool has insufficient liquidity' };
   }
-  return { success: false, error: 'Trader insufficient margin' };
+  return { success: false, error: 'Trader has insufficient margin' };
 };

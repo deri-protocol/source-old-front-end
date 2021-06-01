@@ -32,6 +32,7 @@ export const removeLiquidity = async (
   accountAddress,
   amount,
   bTokenId,
+  isMaximum,
 ) => {
   if (bTokenId === undefined) {
     return removeLiquidity2(chainId, poolAddress, accountAddress, amount);
@@ -42,6 +43,7 @@ export const removeLiquidity = async (
       accountAddress,
       amount,
       bTokenId,
+      isMaximum,
     );
   }
 }
