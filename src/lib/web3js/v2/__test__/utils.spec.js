@@ -11,8 +11,8 @@ import {
   hexToString,
   hexToNumber,
   hexToNumberString,
-  getOracleUrl,
-  getOracleInfo,
+  // getOracleUrl,
+  // getOracleInfo,
   getOraclePrice,
   normalizeChainId,
   normalizeAddress,
@@ -26,7 +26,6 @@ import fetch from 'node-fetch'
 global.fetch = fetch
 
 const TIMEOUT=20000
-const POOL_ADDRESS='0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
 
 describe('utils', () => {
   test('toWei()', () => {
@@ -92,21 +91,22 @@ describe('utils', () => {
     expect(hexToNumberString(input)).toEqual(output);
   });
 
-  test('getOracleUrl()', () => {
-    const [input, output] = [[POOL_ADDRESS, '0'], 'https://oracle4.deri.finance/price?symbol=BTCUSD'];
-    expect(getOracleUrl(...input)).toEqual(output);
-    const [input3, output3] = [[POOL_ADDRESS, '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
-    expect(getOracleUrl(...input3)).toEqual(output3);
-  });
-  test('getOracleInfo()', async() => {
-    const [input, output] = [[POOL_ADDRESS, '0'], {symbol: 'BTCUSD', priceLength: 23}];
-    const res = await getOracleInfo(...input)
-    expect(res.symbol).toEqual(output.symbol);
-    expect(res.price.length).toEqual(output.priceLength);
-  }, TIMEOUT)
+  // test('getOracleUrl()', () => {
+  //   const [input, output] = [[POOL_ADDRESS, '0'], 'https://oracle4.deri.finance/price?symbol=BTCUSD'];
+  //   expect(getOracleUrl(...input)).toEqual(output);
+  //   const [input3, output3] = [[POOL_ADDRESS, '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
+  //   expect(getOracleUrl(...input3)).toEqual(output3);
+  // });
+  // test('getOracleInfo()', async() => {
+  //   const [input, output] = [[POOL_ADDRESS, '0'], {symbol: 'BTCUSD', priceLength: 23}];
+  //   const res = await getOracleInfo(...input)
+  //   expect(res.symbol).toEqual(output.symbol);
+  //   expect(res.price.length).toEqual(output.priceLength);
+  // }, TIMEOUT)
   test('getOraclePrice()', async() => {
-    const [input, output] = [[POOL_ADDRESS, '0'], {priceLength: 5}];
+    const [input, output] = [[97, 'BTCUSD', true], {priceLength: 5}];
     const res = await getOraclePrice(...input)
+    //console.log(res)
     expect(res.split('.')[0].length).toEqual(output.priceLength);
   }, TIMEOUT)
   test('checkHttpServerIsAlive()', async() => {

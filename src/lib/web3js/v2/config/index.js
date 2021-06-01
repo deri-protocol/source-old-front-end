@@ -4,3 +4,7 @@ export {
   getFilteredPoolConfigList,
   getPoolConfig,
 } from './contract';
+export {
+  getOracleConfigList,
+  getOracleConfig,
+} from './oracle'

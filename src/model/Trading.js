@@ -293,15 +293,10 @@ export default class Trading {
     if(slideIncrementMargin !== ''){
       this.slideIncrementMargin =  slideIncrementMargin
       const position = this.position;
-      const increment = bg(slideIncrementMargin).minus(bg(position.marginHeld))
-      // if(this.userSelectedDirection === 'long') {
-      //   increment.gt(0)  ? this.setUserSelectedDirection('long') : this.setUserSelectedDirection('short');
-      // } else {
-      //   increment.gt(0)  ? this.setUserSelectedDirection('short') : this.setUserSelectedDirection('long');
-      // }
-      
-      const volume = increment.abs().dividedBy(this.index * this.contract.multiplier * this.contract.minInitialMarginRatio);
-      this.setVolume(volume.integerValue().toString())
+      const increment = Math.abs(slideIncrementMargin - position.marginHeld)
+      const volume = increment / (this.index * this.contract.multiplier * this.contract.minInitialMarginRatio);
+      console.log('volume ',volume)
+      this.setVolume(volume.toFixed(0))
     }
   }
 
@@ -342,39 +337,36 @@ export default class Trading {
     const position = this.position
     const contract = this.contract;
     const volume = this.volume === '' || isNaN(this.volume) ? 0 : this.volume
-    //current symbol marginHel --> v2
-    let {margin, marginHeldBySymbol:currentSymbolMarginHeld} = position
-    const baseLine = bg(position.marginHeld).minus(position.marginHeldBySymbol)
-    let incrementMarginHeld = bg(volume).multipliedBy(bg(this.index)).multipliedBy(bg(contract.multiplier))
-                                  .multipliedBy(bg(contract.minInitialMarginRatio));
-    let totalMarginHeld = bg(position.marginHeld) ;
+    let {margin, marginHeldBySymbol:currentSymbolMarginHeld,marginHeld,unrealizedPnl} = position
+    //v2
+    const otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld);
+    const contractValue = volume * this.index * contract.multiplier;
+    const incrementMarginHeld = contractValue * contract.minInitialMarginRatio 
+    let totalMarginHeld = bg(marginHeld) ;
+
     //如果当前仓位为正仓用户做空或者当前仓位为负仓用户做多，总仓位相减,取绝对值
-    if((this.isPositive && this.userSelectedDirection === 'short') || 
-      (this.isNegative && this.userSelectedDirection === 'long')){
+    if((this.isPositive && this.userSelectedDirection === 'short') || (this.isNegative && this.userSelectedDirection === 'long')){
       totalMarginHeld = totalMarginHeld.minus(incrementMarginHeld);
-      if(totalMarginHeld.lt(baseLine)){
-        totalMarginHeld =  baseLine.plus(baseLine.minus(totalMarginHeld).abs())        
+      if(totalMarginHeld.lt(otherMarginHeld)){
+        totalMarginHeld =  otherMarginHeld.plus(otherMarginHeld.minus(totalMarginHeld).abs())        
       } 
-      //v2 
       currentSymbolMarginHeld = bg(currentSymbolMarginHeld).minus(incrementMarginHeld).abs().toString()
-      if(currentSymbolMarginHeld && bg(currentSymbolMarginHeld).lt(baseLine)) {
-        currentSymbolMarginHeld = baseLine.plus(currentSymbolMarginHeld).minus(baseLine).toString()
+      if(currentSymbolMarginHeld && bg(currentSymbolMarginHeld).lt(otherMarginHeld)) {
+        currentSymbolMarginHeld = otherMarginHeld.plus(currentSymbolMarginHeld).minus(otherMarginHeld).toString()
       }
     } else {
-      totalMarginHeld = bg(position.marginHeld).plus(incrementMarginHeld)
-      //v2 
+      totalMarginHeld = bg(marginHeld).plus(incrementMarginHeld)
       if(currentSymbolMarginHeld){
         currentSymbolMarginHeld = bg(currentSymbolMarginHeld).plus(incrementMarginHeld).toString();
       }
     }
     
-    totalMarginHeld = totalMarginHeld.gt(margin) ? margin : totalMarginHeld.abs().toString()
-    let available = bg(margin).minus(totalMarginHeld).toString()
+    totalMarginHeld = totalMarginHeld.gt(margin) ? margin : totalMarginHeld.toFixed(2)
+    let available = bg(margin).minus(totalMarginHeld).toFixed(2)
     const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
-    const contractValue = Math.abs(volume) * this.index * contract.multiplier
-    const dynBalance = (+position.margin) + (+position.unrealizedPnl)
+    const dynBalance = bg(margin).plus(unrealizedPnl).toFixed(2);
     const leverage = (+contractValue / +dynBalance).toFixed(1);
-    margin = bg(margin).plus(position.unrealizedPnl).toString()
+    margin = margin ? bg(margin).plus(position.unrealizedPnl).toFixed(2) : ''
 
     return {
       volume : this.volume,
@@ -418,10 +410,6 @@ export default class Trading {
       // if(this.isShareOtherSymbolMargin){
         totalMargin = bg(margin).plus(this.position.marginHeld).toString() 
       // }
-      // console.log('volume ',curVolume);
-      // console.log('dynBalance ',dynBalance)
-      // console.log('margin ',margin)
-      // console.log('total margin ',totalMargin)
       const leverage = (+contractValue / +dynBalance).toFixed(1);
       const balance = ((+dynBalance) - (+totalMargin)).toFixed(2)
       const available = balance > 0 ? balance : 0

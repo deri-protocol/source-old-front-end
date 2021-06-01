@@ -23,7 +23,7 @@ class Oracle {
 
   initWebSocket(){
     if(this.ws === null) {
-      this.ws = new WebSocket('wss://oracle4.deri.finance', {        
+      this.ws = new WebSocket('wss://oracle2.deri.finance', {        
         transports: ['websocket'],
         withCredentials: true
       })
@@ -39,6 +39,7 @@ class Oracle {
 
 
   load(symbol,timeType = 'min'){
+    symbol = symbol+'_V2'
     this.ws.on('kline_update',data => {
       const obj = {}
       let time = data.time

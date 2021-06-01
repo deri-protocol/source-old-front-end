@@ -5,8 +5,9 @@ import {
   BToken,
   LToken,
   PToken,
+  WooOracle,
 } from './contract';
-import { getChainProviderUrl } from './utils';
+import { getChainProviderUrl } from './utils/chain';
 
 export const metaMaskWeb3 = (function () {
   let web3Instance = null;
@@ -108,3 +109,15 @@ export const pTokenFactory = (function () {
   };
 })();
 
+export const wooOracleFactory = (function () {
+  const instanceMap = {};
+  return (chainId, address, symbol, useInfura) => {
+    const key = useInfura ? `${address}.useInfura` : address;
+    if (Object.keys(instanceMap).includes(key)) {
+      return instanceMap[key];
+    } else {
+      instanceMap[key] = new WooOracle(chainId, address, symbol, useInfura);
+      return instanceMap[key];
+    }
+  };
+})();

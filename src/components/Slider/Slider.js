@@ -44,7 +44,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,totalMarginHeld,inputing,originMarginHeld}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,totalMarginHeld,inputing,originMarginHeld,direction}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -53,11 +53,22 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
   const [sliding,setSliding] = useState(false)
 
   const onSliderChange = value => {
-    const rest = bg(originMarginHeld).minus(currentSymbolMarginHeld);    
-    if(rest.abs().lt(value)) {      
-      onValueChange(value);
-      setSliding(true)
-      setValue(value)
+    setValue(value)
+    setSliding(true)
+    const switchDirection = (direction === 'long' && (value - originMarginHeld  < 0) ) || ( direction === 'short' && (value - originMarginHeld > 0))
+    onValueChange(value,switchDirection);
+  }
+
+  const onAfterChange = value=> {
+    //v2 才有值
+    if(currentSymbolMarginHeld){
+      const rest = bg(originMarginHeld).minus(currentSymbolMarginHeld);    
+      if(bg(value).lt(rest)) {
+        const switchDirection = (direction === 'long' && (value - originMarginHeld  < 0) ) || ( direction === 'short' && (value - originMarginHeld > 0))
+        setValue(rest)
+        onValueChange(rest,switchDirection);
+      }
+      setSliding(false)
     }
   }
 
@@ -119,6 +130,7 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
         max={limit}
         value={value}
         onChange={onSliderChange}
+        onAfterChange={onAfterChange}
         disabled={disabled}
         overlay={value}
         step={0.01}

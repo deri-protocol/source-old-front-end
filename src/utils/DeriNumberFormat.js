@@ -6,7 +6,7 @@ export default function DeriNumberFormat(props){
 
   useEffect(() => {
     const {allowZero,...others} = props 
-    if((props.value || ((Math.abs(props.value)) === 0 && allowZero === true))) {
+    if(((props.value && props.value !== '' && props.value !== 'NaN')|| ((Math.abs(props.value)) === 0 && allowZero === true))) {
       setRenderablity(<NumberFormat {...others} displayType = 'text' />)
     } 
     return () => {};

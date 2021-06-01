@@ -14,7 +14,7 @@ const history = {}
 //   path: '/kline'
 // })
 
-const socket = io('wss://oracle4.deri.finance', {
+const socket = io('wss://oracle2.deri.finance', {
     transports: ['websocket'],
     withCredentials: true
 })

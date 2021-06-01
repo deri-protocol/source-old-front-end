@@ -1,6 +1,8 @@
-import { getPoolConfig } from '../config';
+import { getPoolConfig, getOracleConfig } from '../config';
 import { DeriEnv } from '../../config'
-import { deriToNatural } from './convert';
+import { wooOracleFactory } from '../factory'
+import { deriToNatural } from './convert'
+import { normalizeChainId } from './validate'
 
 export const getOracleUrl = (poolAddress, symbolId) => {
   const env = DeriEnv.get();
@@ -39,11 +41,20 @@ export const getOracleInfo = async (poolAddress, symbolId) => {
   return await res.json();
 };
 
-export const getOraclePrice = async (poolAddress, symbolId) => {
-  const responseJson = await getOracleInfo(poolAddress, symbolId);
-  let price = responseJson.price;
-  if (!price) {
-    price = '0';
+// export const getOraclePrice = async (poolAddress, symbolId) => {
+//   const responseJson = await getOracleInfo(poolAddress, symbolId);
+//   let price = responseJson.price;
+//   if (!price) {
+//     price = '0';
+//   }
+//   return deriToNatural(responseJson.price).toString();
+// };
+
+export const getOraclePrice = async(chainId, symbol, useInfura=false) => {
+  chainId = normalizeChainId(chainId)
+  const config = getOracleConfig(chainId, symbol)
+  if (config && config.address) {
+    const wooOracle = wooOracleFactory(chainId, config.address, symbol, useInfura)
+    return deriToNatural(await wooOracle.getPrice()).toString()
   }
-  return deriToNatural(responseJson.price).toString();
-};
+}

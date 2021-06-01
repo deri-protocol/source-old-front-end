@@ -11,6 +11,7 @@ import { BalanceList } from './Dialog/BalanceList';
 import addMarginIcon  from '../../assets/img/add-margin.svg'
 import removeMarginIcon from '../../assets/img/remove-margin.svg'
 import marginDetailIcon from '../../assets/img/margin-detail.png'
+import pnlIcon from '../../assets/img/pnl-detail.png'
 
 
 
@@ -187,7 +188,10 @@ function Position({wallet,trading,version}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text'>Unrealized PnL</div>
-        <div className='info-num'><DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/></div>
+        <div className='info-num'>
+          <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{version.isV2 &&<span className='pnl-list'><img src={pnlIcon} alt='unrealizePnl'/></span>}
+          
+        </div>
       </div>
       <div className='info-right'></div>
     </div>

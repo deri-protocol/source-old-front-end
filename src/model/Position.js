@@ -6,6 +6,15 @@ export default class Position {
    wallet = null;
    spec = null
  
+   mockPositionInfo = {
+    averageEntryPrice: "",
+    liquidationPrice: "",
+    margin: "20000",
+    marginHeld: "10068.26538",
+    marginHeldBySymbol : "293.16152",
+    unrealizedPnl: "3.1311",
+    volume: "800",
+   }
 
    async load(wallet,spec,callback){
      if(wallet && wallet.isConnected() && wallet.supportChain && spec && spec.pool){

@@ -39,19 +39,20 @@ function Trade({wallet = {},trading,version}){
   const directionChange = direction => {
     trading.setVolume('')
     setInputing(true)
-    trading.setUserSelectedDirection(direction)
     setDirection(direction)
   }
 
-  const onSlide = value => {  
-    trading.setSlideMargin(value);
-    const increment = value - trading.position.marginHeld
-    console.log('incremnt ',increment)
-    if(direction === 'long' && increment < 0) {
-      makeLongOrShort(-1)
-    } else if(direction === 'short' && increment < 0){
-      makeLongOrShort(1)
+  const switchDirection = () => {
+    if(direction === 'long') {
+      setDirection('short')
+    } else {
+      setDirection('long')
     }
+  }
+
+  const onSlide = (value,needSwitchDirection) => {  
+    trading.setSlideMargin(value);
+    needSwitchDirection && switchDirection();
   }
 
   //refresh cache
@@ -69,10 +70,8 @@ function Trade({wallet = {},trading,version}){
   const makeLongOrShort = (volume) => {
     if(volume >= 0){
       setDirection('long')
-      // trading.setUserSelectedDirection('long')
     } else {
       setDirection('short')
-      // trading.setUserSelectedDirection('short')
     }    
   }
 
@@ -157,7 +156,6 @@ function Trade({wallet = {},trading,version}){
   useEffect(() => {
     if(trading.position && trading.position.volume){
       makeLongOrShort((+trading.position.volume))
-      trading.setUserSelectedDirection((+trading.position.volume) > 0 ? 'long' : 'short')
     }
     return () => {};
   }, [trading.position.volume]);
@@ -213,6 +211,11 @@ function Trade({wallet = {},trading,version}){
     }
     return () => {};
   }, [wallet.detail.account,trading.index]);
+
+  useEffect(() => {
+    trading.setUserSelectedDirection(direction)
+    return () => {};
+  }, [direction]);
 
   // useEffect(() => {
   //   const amount = trading.amount;
@@ -318,7 +321,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={version.isV2 ? true : slideFreeze} totalMarginHeld={trading.amount.margin} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} inputing={inputing} originMarginHeld={trading.position.marginHeld}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={version.isV2 ? false : slideFreeze} totalMarginHeld={trading.amount.margin} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} inputing={inputing} originMarginHeld={trading.position.marginHeld} direction = {direction}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
