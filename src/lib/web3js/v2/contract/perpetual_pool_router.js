@@ -1,7 +1,7 @@
 import { ContractBase } from './contract_base'
 import { perpetualPoolRouterAbi} from './abis';
 import { naturalToDeri } from '../utils'
-import { MAX_VALUE } from '../config';
+import { MAX_INT256 } from '../config';
 
 export class PerpetualPoolRouter extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
@@ -38,7 +38,7 @@ export class PerpetualPoolRouter extends ContractBase {
     if (isMaximum) {
       return await this._transact(
         'removeLiquidity',
-        [bTokenId, MAX_VALUE],
+        [bTokenId, MAX_INT256],
         accountAddress
       );
     } else {
@@ -66,9 +66,10 @@ export class PerpetualPoolRouter extends ContractBase {
       await this.pool()
     }
     if (isMaximum) {
+      console.log('->', MAX_INT256)
       return await this._transact(
         'removeMargin',
-        [bTokenId, MAX_VALUE],
+        [bTokenId, MAX_INT256],
         accountAddress
       );
     } else {
@@ -106,7 +107,7 @@ export class PerpetualPoolRouter extends ContractBase {
     if (isMaximum) {
       return await this._transact(
         'removeLiquidityWithPrices',
-        [bTokenId, MAX_VALUE, priceInfos],
+        [bTokenId, MAX_INT256, priceInfos],
         accountAddress
       );
     } else {
@@ -136,7 +137,7 @@ export class PerpetualPoolRouter extends ContractBase {
     if (isMaximum) {
       return await this._transact(
         'removeMarginWithPrices',
-        [bTokenId, MAX_VALUE, priceInfos],
+        [bTokenId, MAX_INT256, priceInfos],
         accountAddress
       );
     } else {

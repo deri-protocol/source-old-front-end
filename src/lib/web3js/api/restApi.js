@@ -24,7 +24,6 @@ const fetchJson = async (url) => {
  * @returns {Object}
  */
 export const getSpecification2 = async (chainId, poolAddress) => {
-  console.log('hit');
   const res = await fetchJson(`${getHttpBase()}/specification/${poolAddress}`);
   if (res && res.success) {
     return res.data;

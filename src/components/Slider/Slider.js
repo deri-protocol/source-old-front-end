@@ -3,7 +3,7 @@ import RcSlider,{SliderTooltip} from 'rc-slider'
 import 'rc-slider/assets/index.css';
 import './slider.less'
 import classNames from 'classnames';
-import { bg } from '../../lib/web3js/v2';
+import { bg } from '../../lib/web3js/indexV2';
 const { Handle } = RcSlider;
 
 
@@ -44,7 +44,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,totalMarginHeld,inputing,originMarginHeld,direction}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,originMarginHeld}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -52,11 +52,11 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
   const [loaded, setLoaded] = useState(false);
   const [sliding,setSliding] = useState(false)
 
-  const onSliderChange = value => {
-    setValue(value)
+
+  const onSliderChange = newValue => {
     setSliding(true)
-    const switchDirection = (direction === 'long' && (value - originMarginHeld  < 0) ) || ( direction === 'short' && (value - originMarginHeld > 0))
-    onValueChange(value,switchDirection);
+    setValue(newValue)
+    onValueChange(newValue,false);
   }
 
   const onAfterChange = value=> {
@@ -64,9 +64,8 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
     if(currentSymbolMarginHeld){
       const rest = bg(originMarginHeld).minus(currentSymbolMarginHeld);    
       if(bg(value).lt(rest)) {
-        const switchDirection = (direction === 'long' && (value - originMarginHeld  < 0) ) || ( direction === 'short' && (value - originMarginHeld > 0))
         setValue(rest)
-        onValueChange(rest,switchDirection);
+        onValueChange(rest);
       }
       setSliding(false)
     }
@@ -111,12 +110,7 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
     }
     return () => {      
     };
-  }, [start,inputing]);
-
-  // useEffect(() => {
-  //   inputing && setSliding(true)
-  //   return () => {};
-  // }, [start]);
+  }, [start]);
 
 
   const clazz =classNames('deri-slider',{controlled : loaded})

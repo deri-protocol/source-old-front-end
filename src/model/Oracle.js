@@ -39,7 +39,7 @@ class Oracle {
 
 
   load(symbol,timeType = 'min'){
-    symbol = symbol+'_V2'
+    // symbol = symbol+'_V2'
     this.ws.on('kline_update',data => {
       const obj = {}
       let time = data.time

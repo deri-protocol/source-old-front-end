@@ -1,6 +1,8 @@
 
 
 import BigNumber from 'bignumber.js'
+const versionKey = 'deri-current-version'
+
 export function bg(value, base = 0) {
   if (base == 0) {
     return BigNumber(value);
@@ -39,6 +41,15 @@ export function isCakeLP(address){
 
 export function sessionStorageKey(version){
   return `${version}-current-trading-pool`
+}
+
+
+export function storeVersion(version){
+  sessionStorage.setItem(versionKey,version)
+}
+
+export function restoreVersion(){
+  return sessionStorage.getItem(versionKey)
 }
 
 export function storeConfig(version,config){

@@ -1,4 +1,4 @@
-export { getChainProviderUrls, getAnnualBlockNumberConfig, MAX_VALUE } from './chain';
+export { getChainProviderUrls, getAnnualBlockNumberConfig, MAX_UINT256, MAX_INT256 } from './chain';
 export {
   getPoolConfigList,
   getFilteredPoolConfigList,

@@ -13,7 +13,9 @@ import removeMarginIcon from '../../../../assets/img/remove-margin.svg'
 import addMarginIcon from '../../../../assets/img/add-margin.svg'
 import marginDetailIcon from '../../../../assets/img/margin-detail.png'
 import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
-import { bg } from '../../../../lib/web3js/v2';
+import { bg } from '../../../../lib/web3js/indexV2';
+import pnlIcon from '../../../../assets/img/pnl-detail.png'
+
 
 
 
@@ -145,7 +147,18 @@ function Position({wallet,trading,version}){
       </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</span>)}       
       </div>
       <div><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
-      <div><DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={8}/></div>
+      <div>        
+        <span className='pnl-list'>
+          <DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={8}/>{version.isV2 && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
+            {version.isV2 && <div className='pnl-box'>
+              {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item,index) =>(
+                <div className='unrealizePnl-item' key={index}>
+                  <span>{item[0]}</span><span>{item[1]}</span>
+                </div>
+              ))}
+            </div>}
+        </span> 
+      </div>
       <div><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
     </div>
     <div className='p-box tbody'></div>

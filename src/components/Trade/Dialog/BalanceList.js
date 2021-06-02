@@ -5,7 +5,7 @@ import WithdrawMagin from './WithdrawMargin';
 import removeMarginIcon from '../../../assets/img/remove-margin.svg'
 import addMarginIcon from '../../../assets/img/add-margin.svg'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
-import { getPoolBTokensBySymbolId } from '../../../lib/web3js/v2';
+import { getPoolBTokensBySymbolId } from '../../../lib/web3js/indexV2';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
 const AddMarginDialog = withModal(DepositMargin)
@@ -76,7 +76,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
-              <div className='title'>Balance in contract</div>
+              <div className='title'>BALANCE IN CONTRACT</div>
               <div className='close' data-dismiss='modal' onClick={closeCurrent}>
                 <span>&times;</span>
               </div>

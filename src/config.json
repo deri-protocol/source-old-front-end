@@ -27,23 +27,11 @@
   },
   "dev" : {
     "chainInfo" : {
-      "3" : {
-        "name" : "Ropsten",
-        "text" : "ROPSTEN",
-        "symbol" : "ETH",
-        "viewUrl" : "https://ropsten.etherscan.io/"
-      },
       "97" : {
         "name" : "Bsc-testnet",
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/"
-      },
-      "256" : {
-        "name" : "Heco-testnet",
-        "text" : "HECO TESTNET",
-        "symbol" : "HT",
-        "viewUrl" : "https://scan-testnet.hecochain.com/"
       }
     },
     "oracle" : {

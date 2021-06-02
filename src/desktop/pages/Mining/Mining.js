@@ -14,10 +14,10 @@ const {chainInfo} = config[env]
 
 function Mining({wallet}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
-	const {chainId,symbol,baseToken,address,type} =  useParams();
+	const {version,chainId,symbol,baseToken,address,type} =  useParams();
 	const query = useQuery();
 	const networkText = chainInfo[chainId].text;
-	const props = {chainId,symbol,baseToken,address,wallet,type}
+	const props = {version,chainId,symbol,baseToken,address,wallet,type}
 	if(query.has('baseTokenId')) {
 		props['baseTokenId'] = query.get('baseTokenId')
 	}

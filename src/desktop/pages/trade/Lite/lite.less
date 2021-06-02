@@ -548,12 +548,42 @@
         font-style: normal;
         font-weight: 500;
         color: #FFFFFF;
+        position: relative;
 
         .pnl-list {
-          margin-left: 6px;
+          vertical-align: middle;
           img {
+            margin-left: 6px;
             vertical-align: middle;
+            cursor: pointer;
           }
+          .pnl-box {
+            position: absolute;
+            width: 200px;
+            display: none;
+            z-index: 1;
+            top: 2px;
+            left: 324px;
+            background-color: #2c2d31;
+            border: 1px solid #AAAAAA;
+            color: #AAAAAA;
+            border-radius: 10px;
+            font-size: 14px;
+            .unrealizePnl-item {
+              margin: 10px 0;
+              span {
+                padding: 10px;
+                margin-left: 10px;
+              }
+              span:last-child {
+                color: #fff;
+              }
+            }
+          }
+        }
+
+        .pnl-list:hover .pnl-box {
+          display: block;
         }
 
         .info-left {
@@ -1177,13 +1207,15 @@
       border : 0;
 
       .modal-header {
+        font-size: 15px;
+        color: #d4e05c;
+        padding-left: 30px;
+        font-family: Tachyon, sans-serif;
+        letter-spacing: 2px;
         height: 54px;
         background: #0D0E0F;
         line-height: 54px;
         padding: 0 30px;
-        font-size: 15px;
-        color: #D4E05C;
-        font-family: Tachyon, sans-serif;
         display: flex;
         justify-content: space-between;
         align-items: center;

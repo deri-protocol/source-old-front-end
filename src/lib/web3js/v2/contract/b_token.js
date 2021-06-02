@@ -1,7 +1,7 @@
 import { ContractBase } from './contract_base'
 import { bTokenAbi } from './abis';
 import { deriToNatural, bg } from '../utils'
-import { MAX_VALUE } from '../config'
+import { MAX_UINT256} from '../config'
 
 
 export class BToken extends ContractBase {
@@ -56,7 +56,7 @@ export class BToken extends ContractBase {
   async unlock(accountAddress, poolAddress) {
     return await this._transact(
       'approve',
-      [poolAddress, MAX_VALUE],
+      [poolAddress, MAX_UINT256],
       accountAddress
     );
   }

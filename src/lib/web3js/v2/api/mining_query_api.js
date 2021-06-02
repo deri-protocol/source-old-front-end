@@ -1,6 +1,7 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
-import { getPoolConfig } from '../config'
-import { deriToNatural } from '../utils'
+import { getPoolConfig, getFilteredPoolConfigList} from '../config'
+import { bg, deriToNatural } from '../utils'
+import { calculateMaxRemovableLiquidity } from '../calculation'
 import { databaseFactory } from '../../factory/contracts';
 
 export const getLiquidityInfo = async (
@@ -15,12 +16,46 @@ export const getLiquidityInfo = async (
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
     const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
-    const [bTokenInfo, lTokenAsset] = await Promise.all([
+    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
+    const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+
+    const [parameterInfo, bTokenInfo, lTokenAsset ] = await Promise.all([
+      perpetualPool.getParameters(),
       perpetualPool.getBToken(bTokenId),
       lToken.getAsset(accountAddress, bTokenId),
     ])
+    const { minPoolMarginRatio } = parameterInfo
+    let promises = []
+    for (let i=0; i<bTokenIdList.length; i++) {
+      promises.push(perpetualPool.getBToken(bTokenIdList[i]))
+    }
+    const bTokens = await Promise.all(promises)
+
+    promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+
+    const cost = symbols.reduce((accum, s) => {
+        return accum.plus(bg(s.tradersNetVolume).times(s.price).times(s.multiplier).abs())
+    }, bg(0))
+    const pnl = symbols.reduce((accum, s) => {
+        return accum.plus(bg(s.tradersNetVolume).times(s.price).times(s.multiplier).minus(s.tradersNetCost))
+    }, bg(0))
+    const restLiquidity = bTokens.reduce((accum, b, index) => {
+      if (index === parseInt(bTokenId)) {
+        return accum.plus(b.pnl)
+      } else {
+        return accum.plus(bg(b.liquidity).times(b.price).times(b.discount).plus(b.pnl))
+      }
+    }, bg(0))
+
     const { liquidity: poolLiquidity } = bTokenInfo;
     const { liquidity } = lTokenAsset
+    const maxRemovableShares = calculateMaxRemovableLiquidity(bTokens[bTokenId], liquidity, cost, pnl, restLiquidity, minPoolMarginRatio)
     return {
       //totalSupply: lTokenTotalSupply.toString(),
       poolLiquidity: poolLiquidity.toString(),
@@ -28,14 +63,14 @@ export const getLiquidityInfo = async (
       // shareValue: '1',
       // maxRemovableShares: liquidity.toString()
       shares: liquidity.toString(),
-      maxRemovableShares: liquidity.toString()
+      maxRemovableShares: maxRemovableShares.toString()
     };
   } catch (err) {
     console.log(err)
   }
   return {
     poolLiquidity: '',
-    hares: '',
+    shares: '',
     maxRemovableShares: '',
   };
 };

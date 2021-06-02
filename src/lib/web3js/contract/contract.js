@@ -27,7 +27,7 @@ export class Contract {
 
   async _estimatedGas(method, args = [], accountAddress) {
     let gas = 0;
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 2; i++) {
       try {
         gas = await this.contract.methods[method](...args).estimateGas({
           from: accountAddress,

@@ -23,7 +23,6 @@ function SymbolSelector({trading,version,setSpec,spec,afterChanged}) {
       setSpec(selected)
       trading.switch(selected);
       setDropdown(false)
-      afterChanged()    
     } 
   }
 

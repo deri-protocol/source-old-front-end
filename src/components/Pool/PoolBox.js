@@ -31,7 +31,7 @@ function PoolBox({wallet,version,pool}){
         setButtonElement(<button>CLAIM</button>)
       }
     } else {
-      let url = `/mining/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`
+      let url = `/mining/${pool.version}/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`
       if(pool.bTokenId){
         url = `${url}?baseTokenId=${pool.bTokenId}`
       }

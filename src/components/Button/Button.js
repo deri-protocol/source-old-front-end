@@ -1,5 +1,5 @@
 import {useState,useRef,useEffect} from 'react';
-import { isUnlocked, unlock } from '../../lib/web3js/v2';
+import { isUnlocked, unlock } from '../../lib/web3js/indexV2';
 export default function Button({btnText,className,disabled,click,afterClick,checkApprove,wallet,spec}){
   const [status, setStatus] = useState(disabled ? 'disabled' : 'enabled');
   const [isApproved, setIsApproved] = useState(true);
@@ -31,7 +31,7 @@ export default function Button({btnText,className,disabled,click,afterClick,chec
   }
 
   const loadApproveStatus = async () => {
-    if(checkApprove && wallet && wallet.detail.account && spec.bTokenId){
+    if(checkApprove && wallet && wallet.detail.account){
       const res = await isUnlocked(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
       setIsApproved(res);
     }

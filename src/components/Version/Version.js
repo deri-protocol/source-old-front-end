@@ -8,7 +8,7 @@ function Version({wallet,version}){
   const switchVersion = () => {
     if(wallet.isConnected() && !wallet.supportV2){
       version.setCurrent('v1')
-      alert('Deri v2 just support BSC chain');
+      alert('No V2 pool on this network yet');
       return;
     }
     version.switch()

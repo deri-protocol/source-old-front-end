@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable camelcase */
 import {io} from 'socket.io-client'
+import { restoreVersion } from '../../../../../utils/utils'
 // function s(){
 //   data = [];
 // }
@@ -31,7 +32,7 @@ export default {
   history,
 
   getBars: function (symbolInfo, resolution, from, to, first, onHistoryCallback) {
-    let trade = symbolInfo.name
+    let trade = restoreVersion() === 'v2' ? `${symbolInfo.name}_V2` : symbolInfo.name
     let ws_time
     ws_first = first
     ws_to = to
@@ -98,14 +99,14 @@ export default {
     }
     // param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
     // socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
-    var newSub = {
-      uid,
-      resolution,
-      symbolInfo,
-      lastBar: history[symbolInfo.name].lastBar,
-      listener: updateCb
-    }
-    _subs.push(newSub)
+    // var newSub = {
+    //   uid,
+    //   resolution,
+    //   symbolInfo,
+    //   lastBar: history[symbolInfo.name].lastBar,
+    //   listener: updateCb
+    // }
+    // _subs.push(newSub)
     // resetCache()
   },
   unsubscribeBars: function (uid) {

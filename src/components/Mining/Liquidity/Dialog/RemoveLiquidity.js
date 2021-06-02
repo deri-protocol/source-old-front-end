@@ -54,8 +54,8 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
 
 
   useEffect(() => {    
-    if(liqInfo && liqInfo.shares){
-      const balance = (+liqInfo.shares).toFixed(2);
+    if(liqInfo && liqInfo.formatShares){
+      const balance = liqInfo.formatShares;
       const decimal = balance.substring(balance.indexOf('.') +1 ,balance.indexOf('.') + 3)
       setBalance(balance);
       setDecimal(decimal)

@@ -10,7 +10,6 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
-import { bg } from '../../lib/web3js/v2';
 
 
 
@@ -23,7 +22,7 @@ function Trade({wallet = {},trading,version}){
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
-  const [inputing, setInputing] = useState(false)
+  const [inputing, setInputing] = useState(false);
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
@@ -38,7 +37,6 @@ function Trade({wallet = {},trading,version}){
 
   const directionChange = direction => {
     trading.setVolume('')
-    setInputing(true)
     setDirection(direction)
   }
 
@@ -102,7 +100,7 @@ function Trade({wallet = {},trading,version}){
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
     if(hasConnectWallet() && hasSpec() && trading.volumeDisplay){
-      const volume = direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay
+      const volume = (direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay)
       const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId,spec.pool,volume,spec.symbolId);
       if(fundingRateAfter){
         setFundingRateAfter(fundingRateAfter.fundingRate1);
@@ -117,12 +115,6 @@ function Trade({wallet = {},trading,version}){
     target.setAttribute('class','contrant-input inputFamliy')
   }
 
-  const onBlur = event => {
-    const target =event.target;
-    if(target.value === '') {
-      target.setAttribute('class','contrant-input')
-    }    
-  }
 
   const onKeyPress = evt => {
     if (evt.which < 48 || evt.which > 57){
@@ -130,14 +122,22 @@ function Trade({wallet = {},trading,version}){
     }
   }
 
-  const volumeChange = event => {
-    // trading.setSlideMargin('')
+  const volumeChange = event => {    
     let {value} = event.target
     if(value === '0'){
       value = ''
     }
     trading.setVolume(value)
-    setInputing(true)
+    setInputing(true)    
+  }
+
+ 
+  const onBlur = event => {
+    const target =event.target;
+    if(target.value === '') {
+      target.setAttribute('class','contrant-input')
+    }
+    setInputing(false)    
   }
 
   //完成交易
@@ -213,29 +213,38 @@ function Trade({wallet = {},trading,version}){
   }, [wallet.detail.account,trading.index]);
 
   useEffect(() => {
+    //不作用于键盘输入，只作用于slider
+    if(!inputing) {
+      if(trading.position.volume > 0){
+        if(trading.volume < 0){
+          setDirection('short')
+        } else {
+          setDirection('long')
+        }
+      } else if(trading.position.volume < 0) {
+        if(trading.volume > 0){
+          setDirection('short')
+        } else {
+          setDirection('long')
+        }
+      }
+    }
+    return () => {};
+  }, [trading.volume,inputing]);
+
+
+  useEffect(() => {
     trading.setUserSelectedDirection(direction)
     return () => {};
   }, [direction]);
 
-  // useEffect(() => {
-  //   const amount = trading.amount;
-  //   const increment = trading.amountIncrement;
-  //   const volume = bg(amount.volume || 0).plus(increment.volume || 0)
-  //   amount.volume = volume.isZero() ? '' : volume
-  //   amount.margin = bg(amount.margin).plus(increment.margin).toString()
-  //   //v2
-  //   if(amount.currentSymbolMarginHeld){
-  //     amount.currentSymbolMarginHeld = bg(amount.currentSymbolMarginHeld).plus(increment.margin).toString()
-  //   }
-  //   amount.available = bg(amount.available).minus(bg(increment.margin)).toString();
-  //   setAmount(amount)
-  // },[trading.amount,trading.amountIncrement])
+
    
   return (
     <div className='trade-info'>
     <div className='trade-peration'>
       <div className='check-baseToken'>
-        <SymbolSelector setSpec={setSpec} spec={spec} afterChanged={() => setInputing(true)}/>
+        <SymbolSelector setSpec={setSpec} spec={spec}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
@@ -321,7 +330,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={version.isV2 ? false : slideFreeze} totalMarginHeld={trading.amount.margin} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} inputing={inputing} originMarginHeld={trading.position.marginHeld} direction = {direction}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} originMarginHeld={trading.position.marginHeld}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>
@@ -341,7 +350,7 @@ function Trade({wallet = {},trading,version}){
         <div className='text-info'>
           <div className='title-enter'>Funding Rate Impact</div>
           <div className='text-enter'>
-            <DeriNumberFormat value={ trading.fundingRate.fundingRate0 }  suffix='%' allowNegative={false} decimalScale={4}/> -> <DeriNumberFormat value={ fundingRateAfter }  allowNegative={false} decimalScale={4} suffix='%' />
+            <DeriNumberFormat value={ trading.fundingRate.fundingRate0 }  suffix='%' decimalScale={4}/> -> <DeriNumberFormat value={ fundingRateAfter }  decimalScale={4} suffix='%' />
           </div>
         </div>
         <div className='text-info'>

@@ -448,26 +448,26 @@ export const getOracleUrl = (chainId, poolAddress) => {
   if (env === 'prod' || env === 'production') {
     // for production
     if (symbol) {
-      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
+      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
     }
-    return 'https://oracle4.deri.finance/price';
+    return 'https://oracle2.deri.finance/price';
   } else {
     if (symbol) {
-      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
+      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
     }
     // for test
-    return 'https://oracle4.deri.finance/price';
+    return 'https://oracle2.deri.finance/price';
   }
 };
 
 export const getOracleInfo = async (chainId, poolAddress) => {
   let url = getOracleUrl(chainId, poolAddress);
-  //console.log('oracle url', url);
-  let retry = 5;
+  console.log('oracle url', url);
+  let retry = 2;
   //let timeout = 1000;
   let res;
   while (retry > 0) {
-    res = await fetch(url, { mode: 'cors' });
+    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
     //if (res && !res.timeout) {
     if (res.ok) {
       break;
@@ -477,7 +477,7 @@ export const getOracleInfo = async (chainId, poolAddress) => {
     //timeout += 800;
   }
   if (retry === 0 && !res) {
-    throw new Error(`fetch oracle info error: exceed max retry(5).`);
+    throw new Error(`fetch oracle info error: exceed max retry(2).`);
   }
   return await res.json();
 };

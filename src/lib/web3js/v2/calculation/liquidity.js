@@ -1,4 +1,4 @@
-import { bg } from '../utils'
+import { bg, max, min } from '../utils'
 
 export const calculateBTokenDynamicEquities = (bTokens) => {
   //const dynamicEquities = bTokens.map((b) => bg(b.liquidity).times(b.price).times(b.discount).plus(b.pnl))
@@ -50,3 +50,32 @@ export const isPoolMarginRatioValid = (bTokens, bTokenId, amount, userLiquidity,
     return { success: true };
   }
 }
+
+
+export const calculateMaxRemovableLiquidity = (
+  bToken,
+  userLiquidity,
+  cost,
+  pnl,
+  restLiquidity,
+  minPoolMarginRatio,
+) => {
+  if (bg(cost).eq(0)) {
+    return userLiquidity;
+  } else {
+    return max(
+      min(
+        bToken.liquidity.minus(
+          minPoolMarginRatio
+            .times(cost)
+            .plus(pnl)
+            .minus(restLiquidity)
+            .div(bToken.price)
+            .div(bToken.discount)
+        ).times('0.98'),
+        userLiquidity
+      ),
+      bg(0)
+    );
+  }
+};

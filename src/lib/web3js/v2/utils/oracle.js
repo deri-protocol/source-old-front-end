@@ -29,7 +29,7 @@ export const getOracleInfo = async (poolAddress, symbolId) => {
   let retry = 2;
   let res;
   while (retry > 0) {
-    res = await fetch(url, { mode: 'cors' });
+    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
     if (res.ok) {
       break;
     }

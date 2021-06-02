@@ -36,14 +36,16 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				}
 			}
 			if(info){
-				if(version.isV1) {
-					const total = bg(info.shares).multipliedBy(info.shareValue)
+				const shares = bg(info.shares)
+				if(version === 'v1') {
+					const total = shares.multipliedBy(info.shareValue)
 					setLiquidity({
 						total :  (+info.poolLiquidity),
 						apy : (+apyPool.apy) * 100,
 						shareValue : info.shareValue,
 						percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
-						shares : info.shares,
+						shares : shares.toString(),
+						formatShares : shares.toFixed(2),
 						values : total.toString(),
 						lpApy,
 						unit : 'shares',
@@ -53,8 +55,9 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					setLiquidity({
 						total : (+info.poolLiquidity),
 						apy : (+apyPool.apy) * 100,
-						shares : info.shares,
-						percent : bg(info.shares).dividedBy(info.poolLiquidity).multipliedBy(100).toString(),
+						shares : shares.toString(),
+						formatShares : shares.toFixed(2),
+						percent : shares.dividedBy(info.poolLiquidity).multipliedBy(100).toString(),
 						unit : baseToken,
 						sharesTitle : 'My Liquidity'
 					})
@@ -97,12 +100,13 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				<div className="odd text">
 						<div className="text-title">APY</div>
 						<div className='text-num' >
-							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}><DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-							{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? 'SUSHI-APY' : 'CAKE-APY'}> 
-							<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
+							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}>
+								<DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
+								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? 'SUSHI-APY' : 'CAKE-APY'}> 
+								<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
 				</div>	
-				{version.isV1 && <div className="odd text">
+				{version === 'v1' && <div className="odd text">
 					<div className="text-title">Liquidity Share Value</div>
 					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						
 				</div>}
@@ -112,14 +116,14 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				</div>
 				<div className="odd text">
 						<div className="text-title">{liquidity.sharesTitle} </div>
-						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.shares  } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
+						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.formatShares } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
-				{version.isV2 && <div className="odd text">
+				{version === 'v2' && <div className="odd text">
 					<div className="title-check ">
 					</div>
 				</div>}
 				<div className="odd claim-network">
-					<div className="text-title money">{version.isV1 && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
+					<div className="text-title money">{version === 'v1' && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
 				</div>
 				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
 	</div>
@@ -254,11 +258,11 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} 
-											address={address} wallet={wallet} unit={version.isV1 ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
+											address={address} wallet={wallet} unit={version === 'v1' ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
 			}			
 			{buttonElment}
   </div>
   )
 }
 
-export default inject('wallet','version')(observer(Liquidity))
+export default inject('wallet')(observer(Liquidity))

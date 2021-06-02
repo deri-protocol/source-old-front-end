@@ -67,6 +67,8 @@ export const getAnnualBlockNumberConfig = () => {
   };
 };
 
-export const MAX_VALUE =
+export const MAX_UINT256 =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+export const MAX_INT256 =
+  '0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 

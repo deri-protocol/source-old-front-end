@@ -35,7 +35,7 @@ export class PTokenContract extends Contract {
         margin: bg(0),
         lastUpdateTimestamp: bg(0),
       };
-      console.log(`getPositionInfo: ${err}`);
+      //console.log(`getPositionInfo: ${err}`);
     }
     return result;
   }
