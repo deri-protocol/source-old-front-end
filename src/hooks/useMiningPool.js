@@ -15,7 +15,7 @@ const {chainInfo} = config[env]
 
 export default function useMiningPool(){
   const [loaded,setLoaded] = useState(false)
-  const [pools, setPools] = useState([])
+  const [pools, setPools] = useState([])    
 
 
   useEffect(() => {

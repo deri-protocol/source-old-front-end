@@ -13,10 +13,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 function Liquidity({wallet,chainId,baseToken,address,type}) {
   const [liquidity,setLiquidity] = useState({})
   const [bToken,setBToken] = useState(baseToken)
-
 	const isLpPool = (type === 'lp')
-	
-
 	const loadLiquidityInfo = async () => {
 		const apyPool = await getPoolInfoApy(chainId,address)
 		const pooLiquidity = await getPoolLiquidity(chainId,address);
@@ -42,7 +39,7 @@ function Liquidity({wallet,chainId,baseToken,address,type}) {
 					total :  (+info.poolLiquidity),
 					apy : (+apyPool.apy) * 100,
 					shareValue : info.shareValue,
-					percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
+					percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString(),
 					shares : info.shares,
 					values : total.toString(),
 					lpApy

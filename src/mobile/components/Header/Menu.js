@@ -34,8 +34,7 @@ export default function Menu({closeMenu}){
           </li>
           <li>
             <a  rel='noreferrer' href="https://governance.deri.finance/"
-              >Governance</a
-            >
+              >Governance</a>
           </li>
           <li>
             <a  rel='noreferrer' href="https://bridge.deri.finance/">Bridge</a>
@@ -46,14 +45,12 @@ export default function Menu({closeMenu}){
               <li>
                 <a
                   href="https://github.com/deri-finance/whitepaper/blob/master/deri_whitepaper.pdf"
-                  >Whitepaper</a
-                >
+                  >Whitepaper</a>
               </li>
               <li>
                 <a
                   href="https://docs.deri.finance/code-audits"
-                  >Code Audit</a
-                >
+                  >Code Audit</a>
               </li>
               <li>
                 <a href="https://deri.finance/#/team">Team</a>
