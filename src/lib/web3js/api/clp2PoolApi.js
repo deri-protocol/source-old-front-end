@@ -20,6 +20,7 @@ export const getClp2LiquidityInfo = async (
       poolLiquidity: liquidity.toString(),
       bTokenBalance: bTokenBalance.toString(),
       shares: shares.toString(),
+      shareValue: '1',
     };
   }
   console.log('no Clp2Pool address, please check');

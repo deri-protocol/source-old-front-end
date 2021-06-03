@@ -136,11 +136,12 @@ export class PerpetualPool extends Contract {
     const oracle = await getOracleInfo(this.chainId, this.contractAddress);
     let signed = [oracle.timestamp, oracle.price, oracle.v, oracle.r, oracle.s];
 
-    const [gas, gasPrice] = await Promise.all([
-      this._estimatedGas(method, [...args, ...signed], accountAddress),
-      this.web3.eth.getGasPrice(),
-    ]);
-    console.log(`gasPrice ${gasPrice / 1000000000} GW`);
+    // const [gas, gasPrice] = await Promise.all([
+    //   this._estimatedGas(method, [...args, ...signed], accountAddress),
+    //   this.web3.eth.getGasPrice(),
+    // ]);
+    //console.log(`gasPrice ${gasPrice / 1000000000} GW`);
+    const gas = await this._estimatedGas(method, [...args, ...signed], accountAddress)
 
     //gasPrice: Web3.utils.numberToHex(gasPrice),
     let txRaw = [

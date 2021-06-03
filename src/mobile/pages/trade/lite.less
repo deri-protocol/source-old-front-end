@@ -381,6 +381,15 @@
 
             .contrant-info {
               font-size: 0.12rem;
+              width: 1.6rem;
+
+              .v2-margin{
+                display: flex;
+                flex-direction: column;    
+                .pc {
+                  display: none;
+                }  
+              }
 
               div {
                 display: flex;
@@ -398,10 +407,8 @@
                 .balance-contract-num {
                   font-size: 0.15rem;
                   color: @text;
-                  line-height: 36px;
                   font-weight: bold;
                   position: relative;
-                  top: 10px;
                 }
               }
               .available-balance.pc {
@@ -785,6 +792,7 @@
     .contract-info {
       width: 100%;
       margin-top: 35px;
+
 
       .conntract-header {
         margin-left: 0.4rem;
@@ -1193,7 +1201,7 @@
         }
         .balance-list .row.header {
           color: #AAAAAA;
-          font-size: 0.18rem;
+          font-size: 0.16rem;
         }
         .balance-list .row span {
           display: inline-block;

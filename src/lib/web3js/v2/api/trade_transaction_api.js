@@ -84,7 +84,7 @@ export const tradeWithMargin = async (
    //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId).sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    const margins = await pToken.getMargins(accountAddress)
     let promises = []
@@ -97,7 +97,7 @@ export const tradeWithMargin = async (
     }, bg(0))
 
     const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     let symbolIdList = symbolConfigList.map((i) => i.symbolId)
     promises = []
     for (let i=0; i<symbolIdList.length; i++) {
@@ -177,7 +177,7 @@ export const depositMarginWithPrices = async (
   bTokenId,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -205,7 +205,7 @@ export const withdrawMarginWithPrices = async (
   isMaximum = false,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress, bTokenId);
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -232,7 +232,7 @@ export const tradeWithMarginWithPrices = async (
   symbolId,
 ) => {
    const { router: routerAddress } = getPoolConfig(poolAddress);
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
@@ -249,7 +249,7 @@ export const tradeWithMarginWithPrices = async (
    //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId).sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    const margins = await pToken.getMargins(accountAddress)
     let promises = []
@@ -263,7 +263,7 @@ export const tradeWithMarginWithPrices = async (
 
     const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
     //console.log('liquidity', liquidity.toString())
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     let symbolIdList = symbolConfigList.map((i) => i.symbolId)
     promises = []
     for (let i=0; i<symbolIdList.length; i++) {
@@ -326,7 +326,7 @@ export const tradeWithMarginWithPrices = async (
 
 export const closePositionWithPrices = async (chainId, poolAddress, accountAddress, symbolId) => {
    const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig(poolAddress);
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const pToken = pTokenFactory(chainId, pTokenAddress)
    const { volume } = await pToken.getPosition(accountAddress, symbolId)

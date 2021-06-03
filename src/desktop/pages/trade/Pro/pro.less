@@ -325,6 +325,18 @@
                 color: @title;
                 .contrant-info {
                   font-size: 12px;
+
+                  .v2-margin{
+                    display: flex;
+                    flex-direction: column;  
+                    .box-margin {
+                      display: flex;
+                    }
+                    .mobile {
+                      display: none;
+                    }    
+                  }
+
                   div {
                     display: flex;
                     justify-content: space-between;
@@ -336,13 +348,11 @@
                   }
                   .balance-contract {
                     padding-top: 0px;
+                    height: 16px;
                     .balance-contract-num {
                       font-size: 15px;
                       color: #fff;
-                      line-height: 36px;
                       font-weight: bold;
-                      position: relative;
-                      top: 10px;
                     }
                   }
                   .available-balance-num {
@@ -424,6 +434,8 @@
 
         .contract-info {
           width: 535px;
+
+
 
           .conntract-header {
             margin: 20px 0 12px;
@@ -599,6 +611,9 @@
         }
         .pos-his-info {
           .position-box {
+            .p-box.theader {
+              height: 40px;
+            }
 
             .pnl-list {
               vertical-align: middle;
@@ -613,7 +628,7 @@
                 display: none;
                 z-index: 1;
                 top: 2px;
-                right: 64px;
+                right: 5px;
                 background-color: #2c2d31;
                 border: 1px solid #AAAAAA;
                 color: #AAAAAA;

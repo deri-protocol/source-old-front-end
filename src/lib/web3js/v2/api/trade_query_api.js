@@ -70,10 +70,11 @@ export const getSpecification = async (
 
 export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId, useInfura) => {
   try {
-    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId).sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
     const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+    const symbolList = symbolConfigList.map((i) => i.symbol)
     //console.log('bTokenList', bTokenList)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
     const {pToken: pTokenAddress, symbol } = getPoolConfig(poolAddress, null, symbolId)
@@ -109,10 +110,15 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
       promises.push(perpetualPool.getSymbol(symbolIdList[i]))
     }
     const symbols = await Promise.all(promises)
-    const marginHeld = symbols.reduce((accum, a, index) => {
-      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
+    promises = []
+    for (let i=0; i<symbolList.length; i++) {
+      promises.push(getOraclePrice(chainId, symbolList[i], useInfura))
+    }
+    const symbolPrices = await Promise.all(promises)
+    const marginHeld = symbols.reduce((accum, s, index) => {
+      return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
     }, bg(0))
-    const marginHeldBySymbol = bg(volume).abs().times(multiplier).times(price).times(minInitialMarginRatio)
+    const marginHeldBySymbol = bg(volume).abs().times(multiplier).times(symbolPrices[symbolId]).times(minInitialMarginRatio)
     //console.log('margin', margin.toString(), marginHeld.toString())
     //
     //const unrealizedPnl = bg(positions[symbolId].volume).times(price).times(multiplier).minus(positions[symbolId].cost)
@@ -135,6 +141,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
     }, bg(0))
     //console.log('cost', costTotal.toString())
   return {
+      price: symbolPrices[symbolId],
       volume: volume.toString(),
       averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
       margin: margin.toString(),
@@ -228,9 +235,9 @@ export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
 
 const _getFundingRate = async(chainId, poolAddress, symbolId, useInfura) => {
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  const poolconfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
+  const poolConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId).sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
   const {symbol} = getPoolConfig(poolAddress, null, symbolId)
-  let bTokenIdList = poolconfigList.map((i) => i.bTokenId)
+  let bTokenIdList = poolConfigList.map((i) => i.bTokenId)
   let promiseList = []
   for (let i=0; i<bTokenIdList.length; i++) {
     promiseList.push(perpetualPool.getBToken(i))
@@ -265,7 +272,7 @@ const _getFundingRate = async(chainId, poolAddress, symbolId, useInfura) => {
   //   liquidity,
   //   minPoolMarginRatio,
   // ]
-  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
   let symbolIdList = symbolConfigList.map((i) => i.symbolId)
   let promises = []
   for (let i=0; i<symbolIdList.length; i++) {
@@ -388,7 +395,7 @@ export const getEstimatedLiquidityUsed = async (
     // const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
     // const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
     // const { volume } = pToken.getPosition(accountAddress, symbolId);
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     let symbolIdList = symbolConfigList.map((i) => i.symbolId)
     let promises = []
     for (let i=0; i<symbolIdList.length; i++) {
@@ -419,8 +426,8 @@ export const getEstimatedLiquidityUsed = async (
 
 export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddress, symbolId, useInfura) => {
   try {
-    const bTokensConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId)
-    const symbolsConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const bTokensConfigList = getFilteredPoolConfigList(poolAddress, null, symbolId).sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
+    const symbolsConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
     const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
     const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);

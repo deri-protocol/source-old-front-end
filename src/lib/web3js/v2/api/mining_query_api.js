@@ -16,8 +16,8 @@ export const getLiquidityInfo = async (
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
     const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
-    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
+    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
     const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
     const symbolIdList = symbolConfigList.map((i) => i.symbolId)
 

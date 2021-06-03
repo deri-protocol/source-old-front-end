@@ -110,8 +110,7 @@ function Position({wallet,trading,version}){
       <div>Average Entry Price</div>
       <div>Direction</div>
       <div>
-        Balance in Contract<br />
-        (Dynamic Balance)
+        {version.isV1 ?  <>Balance in Contract <br/> (Dynamic Balance)</> : 'Dynamic Effective Bal '}
       </div>
       <div>Margin</div>
       <div>Unrealized PnL</div>

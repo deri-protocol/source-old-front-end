@@ -58,7 +58,7 @@ const getTradeHistoryOnline = async (
   fromBlock
 ) => {
 
-  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
   const symbolIdList = symbolConfigList.map((i) => i.symbolId)
   //console.log('symbolIdList', symbolIdList);
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);

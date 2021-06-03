@@ -13,7 +13,7 @@ export const addLiquidity = async (
    const {router:routerAddress} = getPoolConfig(poolAddress, bTokenId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
@@ -51,14 +51,14 @@ export const removeLiquidity = async (
    const lToken = lTokenFactory(chainId, lTokenAddress);
    const lTokenAsset = await lToken.getAsset(accountAddress, bTokenId)
   const { liquidity:userLiquidity } = lTokenAsset
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
     promises.push(perpetualPool.getBToken(bTokenIdList[i]))
    }
    const bTokens = await Promise.all(promises)
-   const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0')
+   const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
    let symbolIdList = symbolConfigList.map((i) => i.symbolId)
    promises = []
    for (let i=0; i<symbolIdList.length; i++) {
@@ -89,10 +89,10 @@ export const addLiquidityWithPrices = async (
   bTokenId,
 ) => {
    const {router:routerAddress} = getPoolConfig(poolAddress, bTokenId)
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
@@ -137,7 +137,7 @@ export const removeLiquidityWithPrices = async (
    const lToken = lTokenFactory(chainId, lTokenAddress);
    const lTokenAsset = await lToken.getAsset(accountAddress, bTokenId)
    const { liquidity:userLiquidity } = lTokenAsset
-   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0')
+   const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
@@ -146,7 +146,7 @@ export const removeLiquidityWithPrices = async (
    const bTokens = await Promise.all(promises)
    promises = []
 
-   const symbolList = getFilteredPoolConfigList(poolAddress, '0').map(c => c.symbolId)
+   const symbolList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId)).map(c => c.symbolId)
    for (let i=0; i<symbolList.length; i++) {
      promises.push(perpetualPool.getSymbol(symbolList[i]))
    }

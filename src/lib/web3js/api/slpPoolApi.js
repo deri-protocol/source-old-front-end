@@ -35,6 +35,7 @@ export const getSlpLiquidityInfo = async (
       poolLiquidity: liquidity.toString(),
       bTokenBalance: bTokenBalance.toString(),
       shares: shares.toString(),
+      shareValue: '1',
     };
   }
   console.log('no SlpPool address, please check');

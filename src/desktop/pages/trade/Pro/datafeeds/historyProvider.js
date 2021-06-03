@@ -116,11 +116,11 @@ export default {
     // console.log("No subscription found for ",uid)
       return
     }
-    var sub = _subs[subIndex]
-    socket.emit('un_get_kline', param)
-    window.sub_index -= 1
-    //   socket.emit('SubRemove', {subs: [sub.channelString]})
-    _subs.splice(subIndex, 1)
+    // var sub = _subs[subIndex]
+    // socket.emit('un_get_kline', param)
+    // window.sub_index -= 1
+    // //   socket.emit('SubRemove', {subs: [sub.channelString]})
+    // _subs.splice(subIndex, 1)
   }
 }
 socket.on('connect', data => {
@@ -142,7 +142,7 @@ socket.on('kline_update', data => {
     obj.volume = Number(data.volume)
     const sub = _subs[_subs.length - 1] || {}
     sub.listener && sub.listener(obj)
-    // sub.lastBar = obj
+    sub.lastBar = obj
   }
 })
 

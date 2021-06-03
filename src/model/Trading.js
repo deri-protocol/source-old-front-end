@@ -74,7 +74,6 @@ export default class Trading {
       setHistory : action,
       setSlideMargin : action,
       amount : computed,
-      // amountIncrement : computed,
       fundingRateTip : computed,
       direction : computed,
       volumeDisplay : computed,
@@ -302,7 +301,7 @@ export default class Trading {
 
 
   get volumeDisplay(){
-    if(this.volume === 0 || this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
+    if(Math.abs(this.volume) === 0 || this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
       return '';
     } else {
       return Math.abs(this.volume)
@@ -317,7 +316,7 @@ export default class Trading {
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld,marginHeld,unrealizedPnl} = position
     //v2
     const otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld);
-    const contractValue = volume * this.index * contract.multiplier;
+    const contractValue = volume * position.price * contract.multiplier;
     const incrementMarginHeld = contractValue * contract.minInitialMarginRatio
     let totalMarginHeld = bg(marginHeld) ;
 
@@ -334,15 +333,19 @@ export default class Trading {
         currentSymbolMarginHeld = bg(currentSymbolMarginHeld).plus(incrementMarginHeld).toString();
       }
     }
-    
-    totalMarginHeld = totalMarginHeld.gt(margin) ? margin : totalMarginHeld.toFixed(2)
-    let available = bg(margin).minus(totalMarginHeld).toFixed(2)
-    const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
-    const dynBalance = margin && bg(margin).plus(unrealizedPnl).toFixed(2);
-    const totalVolume = this.userSelectedDirection === 'short' ? (-this.volumeDisplay + (+position.volume)) : ((+this.volumeDisplay) +  (+position.volume))    
-    const totalContractValue = totalVolume * this.index * contract.multiplier
-    const leverage = Math.abs(totalContractValue / (+dynBalance)).toFixed(1);
 
+    const dynBalance = margin && bg(margin).plus(unrealizedPnl).toFixed(2);    
+    //总保证金和当前symbol保证金不能超过余额
+    totalMarginHeld = totalMarginHeld.gt(dynBalance) ? dynBalance : totalMarginHeld.toFixed(2)
+    if(currentSymbolMarginHeld){
+      currentSymbolMarginHeld = currentSymbolMarginHeld > dynBalance ? dynBalance : currentSymbolMarginHeld.toString();
+    }
+    let available = bg(dynBalance).minus(totalMarginHeld).toFixed(2)
+    const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
+    const totalVolume = this.userSelectedDirection === 'short' ? (-this.volumeDisplay + (+position.volume)) : ((+this.volumeDisplay) +  (+position.volume))    
+    const totalContractValue = totalVolume * position.price * contract.multiplier
+    const leverage = Math.abs(totalContractValue / (+dynBalance)).toFixed(1);
+    available = available < 0 ? 0 : available
     return {
       volume : this.volume,
       dynBalance : dynBalance,

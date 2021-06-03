@@ -427,8 +427,22 @@
             align-items: center;
             font-weight: 500;
 
+
+            .v2 {
+              .margin span ,.balance-contract-num span,.available-balance-num span{
+                cursor: pointer;
+                border-bottom: 1px dotted #aaaaaa;
+              }
+            }
+            .v2 {
+              .margin span{
+                border-bottom: 1px dotted #569BDA;
+              }
+            }
+
             .contrant-info {
               font-size: 12px;
+
 
               div {
                 display: flex;
@@ -441,16 +455,22 @@
                 }
               }
 
+              .balance-contract.v1 {
+                margin-bottom: 4px;
+              }
+
               .balance-contract {
                 padding-top: 0px;
+                
 
                 .balance-contract-num {
                   font-size: 15px;
                   color: @text;
-                  line-height: 36px;
                   font-weight: bold;
-                  position: relative;
-                  top: 10px;
+                }
+                .balance-contract-num.v1{
+                  display: flex;
+                  align-items: flex-end;
                 }
               }
 
@@ -594,7 +614,6 @@
           width: 372px;
 
           .balance-con {
-            width: 151px;
             line-height: 20px;
           }
 
@@ -850,11 +869,24 @@
       background: #1b1c22;
     }
 
+
     .contract-info {
       width: 575px;
       border-radius: 0px 20px 20px 0;
       background: #232529;
       height: 100%;
+
+
+      .v2-margin{
+        display: flex;
+        flex-direction: column;      
+      }
+      .v2-margin.pc {
+        display: block;
+      }
+      .v2-margin.mobile {
+        display: none;
+      }
 
       .conntract-header {
         margin: 35px 86px;

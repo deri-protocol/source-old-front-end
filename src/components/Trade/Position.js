@@ -147,8 +147,7 @@ function Position({wallet,trading,version}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text balance-con'>
-          Balance in Contract
-          (Dynamic Balance)
+          {version.isV1 ?  <>Balance in Contract <br/> (Dynamic Balance)</> : 'Dynamic Effective Bal '}
         </div>
         <div className='info-num'> 
           <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />
