@@ -16,6 +16,7 @@ const history = {}
 // })
 
 const socket = io('wss://oracle2.deri.finance', {
+// const socket = io('wss://oracle4.deri.finance', {
     transports: ['websocket'],
     withCredentials: true
 })
@@ -97,17 +98,17 @@ export default {
         ws_time = 'min'
         break
     }
-    // param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
-    // socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
-    // var newSub = {
-    //   uid,
-    //   resolution,
-    //   symbolInfo,
-    //   lastBar: history[symbolInfo.name].lastBar,
-    //   listener: updateCb
-    // }
-    // _subs.push(newSub)
-    // resetCache()
+    param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
+    socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
+    var newSub = {
+      uid,
+      resolution,
+      symbolInfo,
+      lastBar: history[symbolInfo.name] && history[symbolInfo.name].lastBar,
+      listener: updateCb
+    }
+    _subs.push(newSub)
+    resetCache()
   },
   unsubscribeBars: function (uid) {
     var subIndex = _subs.findIndex(e => e.uid === uid)  

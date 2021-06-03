@@ -147,7 +147,6 @@ class Oracle {
   setTimeType(timeType){
     this.timeType = timeType;
   }
-
   setPause(paused){
     this.paused = paused
   }

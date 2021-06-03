@@ -296,7 +296,6 @@ export default class Trading {
       const position = this.position;
       const increment = slideIncrementMargin - position.marginHeld
       const volume = increment / (this.index * this.contract.multiplier * this.contract.minInitialMarginRatio);
-      console.log('volume ',volume)
       this.setVolume(volume.toFixed(0))
     }
   }

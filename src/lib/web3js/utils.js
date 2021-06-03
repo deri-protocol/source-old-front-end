@@ -453,10 +453,10 @@ export const getOracleUrl = (chainId, poolAddress) => {
     return 'https://oracle2.deri.finance/price';
   } else {
     if (symbol) {
-      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
     }
     // for test
-    return 'https://oracle2.deri.finance/price';
+    return 'https://oracle4.deri.finance/price';
   }
 };
 

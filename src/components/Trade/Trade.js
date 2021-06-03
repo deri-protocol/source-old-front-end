@@ -50,6 +50,7 @@ function Trade({wallet = {},trading,version}){
 
   const onSlide = (value,needSwitchDirection) => {  
     trading.setSlideMargin(value);
+    setInputing(false)    
     needSwitchDirection && switchDirection();
   }
 
@@ -137,7 +138,6 @@ function Trade({wallet = {},trading,version}){
     if(target.value === '') {
       target.setAttribute('class','contrant-input')
     }
-    setInputing(false)    
   }
 
   //完成交易
