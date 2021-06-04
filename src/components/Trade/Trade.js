@@ -328,7 +328,7 @@ function Trade({wallet = {},trading,version}){
             {version.isV2 && <>
               <div className='box-margin'>Margin</div>
               <div className='box-margin'>
-                <span >&nbsp;- total Held </span>
+                <span >&nbsp;- total held </span>
                 <span className='margin' title='Margin held by all positions'><DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/></span>
               </div>
               <div>
