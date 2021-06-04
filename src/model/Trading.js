@@ -402,10 +402,19 @@ export default class Trading {
   }
 
   get fundingRateTip(){
-    if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-      return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
-      `\n(1 Long contract pays 1 short contract ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} per block)`        
+  
+    if(this.version && this.version.isV2){
+      if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
+        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n1 Long contract pays 1 short contract (${this.fundingRate.fundingRatePerBlock} * ${this.position.price} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} per block`        
+      }
+    }else{
+      if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
+        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n(1 Long contract pays 1 short contract ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} per block)`        
+      }
     }
+    
     return ''
   }
 
