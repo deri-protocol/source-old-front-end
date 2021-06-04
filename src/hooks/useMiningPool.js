@@ -35,10 +35,8 @@ export default function useMiningPool(version){
     // })
     let arr = getContractAddressConfig(env,version.current)
     let symbol_obj = arr.filter((i) => i.version === 'v2').map((i) => [i.pool, i.symbol]).reduce((ac, i) => { ac[i[0]] = ac[i[0]]||[]; ac[i[0]].push(i[1]); return ac}, {})
-    let arr2 = arr.filter((i) => i.version === 'v2').filter((i,index, self) => self.map(i => i.bTokenId).indexOf(i.bTokenId) == index).map(i => { i.symbol = [...new Set(symbol_obj[i.pool])].join(','); return i})
-    console.log('arr2----------------',arr2)
+    let arr2 = arr.filter((i) => i.version === 'v2').filter((i,index, self) => self.map(i => i.bTokenId).indexOf(i.bTokenId) == index).map(i => { i.symbol = [...new Set(symbol_obj[i.pool])].join(','); return i})    
     let arre = getContractAddressConfig(env,'v1')
-    console.log('arre',arre)
     const configs = arr2.concat(arre).map(async config =>  {
       const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {}

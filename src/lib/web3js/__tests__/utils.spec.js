@@ -64,7 +64,7 @@ describe('utils', () => {
     const [input, output] = [['97','0xFFe402106E8F73F0A44C7350C2b734e048f448f2'], 'https://oracle2.deri.finance/price?symbol=BTCUSD'];
     expect(getOracleUrl(...input)).toEqual(output);
     DeriEnv.set('prod')
-    const [input2, output2] = [['56','0x639a9C2fAe976D089dCcc2ffAE51Ef1dd04B7985'], 'https://oracle.deri.finance/price?symbol=BTCUSD'];
+    const [input2, output2] = [['56','0xAf081e1426f64e74117aD5F695D2A80482679DE5'], 'https://oracle.deri.finance/price?symbol=BTCUSD'];
     expect(getOracleUrl(...input2)).toEqual(output2);
     const [input3, output3] = [['56','0x011346B81e5326904B5B76A11dECAf2c67eFFc23'], 'https://oracle3.deri.finance/price?symbol=COIN'];
     expect(getOracleUrl(...input3)).toEqual(output3);

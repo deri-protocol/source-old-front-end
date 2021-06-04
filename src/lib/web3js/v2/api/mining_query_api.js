@@ -1,6 +1,7 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
 import { getPoolConfig, getFilteredPoolConfigList} from '../config'
 import { bg, deriToNatural } from '../utils'
+import { getNetworkName } from '../../utils'
 import { calculateMaxRemovableLiquidity } from '../calculation'
 import { databaseFactory } from '../../factory/contracts';
 
@@ -76,15 +77,11 @@ export const getLiquidityInfo = async (
 };
 
 export const getPoolLiquidity = async (chainId, poolAddress, bTokenId) => {
-  // const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-  // const res = await perpetualPool.getBToken(bTokenId)
-  // return res.liquidity.toString()
-
   // use the dev database
   const db = databaseFactory();
   try {
     const res = await db
-      .getValues([`${chainId}.${poolAddress}.${bTokenId}.liquidity`])
+      .getValues([`${chainId}.${poolAddress}.liquidity${bTokenId}`])
       .catch((err) => console.log('getPoolLiquidity', err));
     if (res) {
       const [liquidity] = res;
@@ -100,4 +97,28 @@ export const getPoolLiquidity = async (chainId, poolAddress, bTokenId) => {
     liquidity: '',
     symbol:'',
   };
+};
+
+export const getPoolInfoApy = async (chainId, poolAddress, bTokenId) => {
+  const db = databaseFactory(true);
+  try {
+    const poolNetwork = getNetworkName(chainId);
+    const res = await db
+      .getValues([
+        `${poolNetwork}.${poolAddress}.apy${bTokenId}`,
+        `${poolNetwork}.${poolAddress}.volume.1h`,
+        `${poolNetwork}.${poolAddress}.volume.24h`,
+      ])
+      .catch((err) => console.log('getPoolInfoApy', err));
+    if (res) {
+      const [apy, volume1h, volume24h] = res;
+      return {
+        apy: deriToNatural(apy).toString(),
+        volume1h: deriToNatural(volume1h).toString(),
+        volume24h: deriToNatural(volume24h).toString(),
+      };
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };

@@ -293,8 +293,9 @@ export default class Trading {
     if(slideIncrementMargin !== ''){
       this.slideIncrementMargin =  slideIncrementMargin
       const position = this.position;
+      const price = position.price || this.index
       const increment = slideIncrementMargin - position.marginHeld
-      const volume = increment / (this.index * this.contract.multiplier * this.contract.minInitialMarginRatio);
+      const volume = increment / (price * this.contract.multiplier * this.contract.minInitialMarginRatio);
       this.setVolume(volume.toFixed(0))
     }
   }
@@ -313,10 +314,11 @@ export default class Trading {
     const position = this.position
     const contract = this.contract;
     const volume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
-    let {margin, marginHeldBySymbol:currentSymbolMarginHeld,marginHeld,unrealizedPnl} = position
+    let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
+    const price = position.price || this.index
     //v2
-    const otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld);
-    const contractValue = volume * position.price * contract.multiplier;
+    const otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld)
+    const contractValue = volume * price * contract.multiplier;
     const incrementMarginHeld = contractValue * contract.minInitialMarginRatio
     let totalMarginHeld = bg(marginHeld) ;
 
@@ -343,7 +345,7 @@ export default class Trading {
     let available = bg(dynBalance).minus(totalMarginHeld).toFixed(2)
     const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
     const totalVolume = this.userSelectedDirection === 'short' ? (-this.volumeDisplay + (+position.volume)) : ((+this.volumeDisplay) +  (+position.volume))    
-    const totalContractValue = totalVolume * position.price * contract.multiplier
+    const totalContractValue = totalVolume * price * contract.multiplier
     const leverage = Math.abs(totalContractValue / (+dynBalance)).toFixed(1);
     available = available < 0 ? 0 : available
     return {

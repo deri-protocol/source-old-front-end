@@ -41,7 +41,7 @@ export {
   getUserInfoHarvest,
   getUserInfoTotal,
   getUserInfoAll,
-  getPoolInfoApy,
+  //getPoolInfoApy,
   getLpPoolInfoApy,
   getUserInfoInPool,
   getUserInfoAllForAirDrop,

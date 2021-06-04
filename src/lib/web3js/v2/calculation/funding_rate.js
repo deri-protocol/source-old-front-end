@@ -50,7 +50,7 @@ export const calculateFundingRate = (
       fundingRateCoefficient
     )
   ) {
-    return bg(tradersNetVolume)
+    return bg(liquidity).eq(0) ? bg(0) : bg(tradersNetVolume)
       .times(price)
       .times(price)
       .times(multiplier)

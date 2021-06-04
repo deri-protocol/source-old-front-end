@@ -328,7 +328,7 @@ function Trade({wallet = {},trading,version}){
             {version.isV2 && <>
               <div className='box-margin'>Margin</div>
               <div className='box-margin'>
-                <span >&nbsp;- total Held </span>
+                <span >&nbsp;- total held </span>
                 <span className='margin' title='Margin held by all positions'><DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/></span>
               </div>
               <div>
@@ -540,13 +540,13 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         className='trading-dialog'
       />}
         <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
-        <button className='short-submit'  onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
+        <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
       </>)
     } else if(emptyVolume) {
       actionElement = <Button className='btn btn-danger short-submit' disabled btnText='ENTER VOLUME'/>
     }
   } else {
-    actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' click={connect}/>
+    actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' click={connect} />
   }
   return (
     <div className='submit-btn'>

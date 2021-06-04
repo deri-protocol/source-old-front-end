@@ -130,7 +130,7 @@ export const getTradeHistory = async (chainId, poolAddress, accountAddress) => {
         liquidateFromBlock + 1
       ),
     ]);
-    const result = tradeHistoryOnline 
+    const result = tradeHistoryOnline
       .concat(liquidateHistoryOnline)
       .concat(tradeHistoryOffline)
       .concat(liquidateHistoryOffline);

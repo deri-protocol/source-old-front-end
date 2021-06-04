@@ -20,7 +20,7 @@ export const getContractAddressConfig = (env = 'dev') => {
     // console.log('!!! production !!!')
     return [
       {
-        pool: '0x639a9C2fAe976D089dCcc2ffAE51Ef1dd04B7985',
+        pool: '0xAf081e1426f64e74117aD5F695D2A80482679DE5',
         bToken: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
         pToken: '0x3c11c4990447F0AD575eBd74E8cD17bf61848A15',
         lToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',

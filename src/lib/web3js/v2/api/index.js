@@ -1,6 +1,7 @@
 export {
   getLiquidityInfo,
   getPoolLiquidity,
+  getPoolInfoApy,
 } from './mining_query_api'
 
 export {

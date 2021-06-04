@@ -40,7 +40,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						total :  (+info.poolLiquidity),
 						apy : (+apyPool.apy) * 100,
 						shareValue : info.shareValue,
-						percent : total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() ,
+						percent : info.poolLiquidity > 0 ? total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() : 0,
 						shares : shares.toString(),
 						formatShares : shares.toFixed(2),
 						values : total.toString(),
@@ -54,7 +54,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						apy : (+apyPool.apy) * 100,
 						shares : shares.toString(),
 						formatShares : shares.toFixed(2),
-						percent : shares.dividedBy(info.poolLiquidity).multipliedBy(100).toString(),
+						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toString() : 0,
 						unit : baseToken,
 						sharesTitle : 'My Liquidity'
 					})

@@ -77,11 +77,9 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
     const symbolList = symbolConfigList.map((i) => i.symbol)
     //console.log('bTokenList', bTokenList)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura);
-    const {pToken: pTokenAddress, symbol } = getPoolConfig(poolAddress, null, symbolId)
+    const {pToken: pTokenAddress } = getPoolConfig(poolAddress, null, symbolId)
     const pToken = pTokenFactory(chainId, pTokenAddress, useInfura);
-    const [price, symbolInfo, parameterInfo, positionInfo, margins, positions ] = await Promise.all([
-      //getOraclePrice(poolAddress, symbolId),
-      getOraclePrice(chainId, symbol, useInfura),
+    const [symbolInfo, parameterInfo, positionInfo, margins, positions ] = await Promise.all([
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getParameters(),
       pToken.getPosition(accountAddress, symbolId),
@@ -89,7 +87,6 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
       pToken.getPositions(accountAddress),
       //pToken.getMargin(accountAddress, symbolId),
     ])
-    priceCache.set(poolAddress, symbolId, price)
     const { volume, cost } = positionInfo
     const { multiplier } = symbolInfo
     const {
@@ -115,6 +112,8 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
       promises.push(getOraclePrice(chainId, symbolList[i], useInfura))
     }
     const symbolPrices = await Promise.all(promises)
+    const price = symbolPrices[symbolId]
+    priceCache.set(poolAddress, symbolId, price)
     const marginHeld = symbols.reduce((accum, s, index) => {
       return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
     }, bg(0))
@@ -123,25 +122,25 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
     //
     //const unrealizedPnl = bg(positions[symbolId].volume).times(price).times(multiplier).minus(positions[symbolId].cost)
     const unrealizedPnl = symbols.reduce((accum, s, index) => {
-      return accum.plus(bg(s.price).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost))
+      return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost))
     }, bg(0))
     const unrealizedPnlList = symbols.map((s, index) => {
-      return [s.symbol, bg(s.price).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost).toString()]
+      return [s.symbol, bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost).toString()]
     })
 
     const totalCost = positions.reduce((accum, a) => {
       return accum.plus(bg(a.cost))
     }, bg(0))
-    const dynamicCost = symbols.reduce((accum, a, index) => {
+    const dynamicCost = symbols.reduce((accum, s, index) => {
       if (index !== parseInt(symbolId)) {
-        return accum.plus(bg(positions[index].volume).times(a.price).times(a.multiplier))
+        return accum.plus(bg(positions[index].volume).times(symbolPrices[index]).times(s.multiplier))
       } else {
         return accum
       }
     }, bg(0))
     //console.log('cost', costTotal.toString())
   return {
-      price: symbolPrices[symbolId],
+      price: price,
       volume: volume.toString(),
       averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
       margin: margin.toString(),
