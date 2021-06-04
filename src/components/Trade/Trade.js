@@ -308,14 +308,14 @@ function Trade({wallet = {},trading,version}){
               </>}
               {/* v2 */}
               {version.isV2 && <>                
-                <span className='balance-contract-text pc' >
+                <span className='balance-contract-text pc' title='Discounted Margin + Unrealized PnL'>
                   Dynamic Effective Bal
                 </span>
-                <span className='balance-contract-text mobile'>
+                <span className='balance-contract-text mobile' title='Discounted Margin + Unrealized PnL'>
                   Dyn. Eff. Bal
                 </span>
               </>}
-              <span className={`balance-contract-num ${version.current}`} title='Discounted Margin + Unrealized PnL'>
+              <span className={`balance-contract-num ${version.current}`}>
                 <DeriNumberFormat value={ trading.amount.dynBalance } allowZero={true}  decimalScale={2}/>
               </span>
             </div>
@@ -328,19 +328,19 @@ function Trade({wallet = {},trading,version}){
             {version.isV2 && <>
               <div className='box-margin'>Margin</div>
               <div className='box-margin'>
-                <span >&nbsp;- total held </span>
-                <span className='margin' title='Margin held by all positions'><DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/></span>
+                <span className='total-held' title='Margin held by all positions'>&nbsp;- total held </span>
+                <span className='margin' ><DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/></span>
               </div>
               <div>
-                <span >&nbsp;- for this pos </span>
-                <span className='margin' title='Margin held by this position'><DeriNumberFormat value={ trading.amount.currentSymbolMarginHeld} allowZero={true}  decimalScale={2}/></span>
+                <span className='pos-held' title='Margin held by this position' >&nbsp;- for this pos </span>
+                <span className='margin' ><DeriNumberFormat value={ trading.amount.currentSymbolMarginHeld} allowZero={true}  decimalScale={2}/></span>
               </div>
             </>
             }
             <div className='available-balance'>
-              <span className='available-balance pc' > Available Balance </span>
+              <span className='available-balance pc' title='Dynamic Effective Bal - Margin Total Held' > Available Balance </span>
               <span className='available-balance mobile' >Avail. Bal</span>
-              <span className='available-balance-num' title='Dynamic Effective Bal - Margin Total Held'>
+              <span className='available-balance-num'>
                 <DeriNumberFormat value={ trading.amount.available } allowZero={true}  decimalScale={2} />
               </span>
             </div>

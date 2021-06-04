@@ -15,7 +15,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
   const [bToken,setBToken] = useState(baseToken)
 	const isLpPool = (type === 'lp')
 	const loadLiquidityInfo = async () => {
-		const apyPool = await getPoolInfoApy(chainId,address)
+		const apyPool = await getPoolInfoApy(chainId,address,baseTokenId)
 		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId);
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
 			let info = null;

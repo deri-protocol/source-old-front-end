@@ -328,11 +328,11 @@ export default class Trading {
       if(totalMarginHeld.lt(otherMarginHeld)){
         totalMarginHeld =  otherMarginHeld.plus(otherMarginHeld.minus(totalMarginHeld).abs())        
       } 
-      currentSymbolMarginHeld = bg(currentSymbolMarginHeld).minus(incrementMarginHeld).abs().toString()
+      currentSymbolMarginHeld = bg(currentSymbolMarginHeld).minus(incrementMarginHeld).abs().toFixed(2)
     } else {
       totalMarginHeld = bg(marginHeld).plus(incrementMarginHeld)
       if(currentSymbolMarginHeld){
-        currentSymbolMarginHeld = bg(currentSymbolMarginHeld).plus(incrementMarginHeld).toString();
+        currentSymbolMarginHeld = bg(currentSymbolMarginHeld).plus(incrementMarginHeld).toFixed(2);
       }
     }
 
@@ -340,7 +340,7 @@ export default class Trading {
     //总保证金和当前symbol保证金不能超过余额
     totalMarginHeld = totalMarginHeld.gt(dynBalance) ? dynBalance : totalMarginHeld.toFixed(2)
     if(currentSymbolMarginHeld){
-      currentSymbolMarginHeld = currentSymbolMarginHeld > dynBalance ? dynBalance : currentSymbolMarginHeld.toString();
+      currentSymbolMarginHeld = (+currentSymbolMarginHeld) > (+dynBalance) ? dynBalance : (+currentSymbolMarginHeld).toFixed(2);
     }
     let available = bg(dynBalance).minus(totalMarginHeld).toFixed(2)
     const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
