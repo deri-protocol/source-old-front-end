@@ -15,8 +15,8 @@ const history = {}
 //   path: '/kline'
 // })
 
-const socket = io('wss://oracle2.deri.finance', {
-// const socket = io('wss://oracle4.deri.finance', {
+// const socket = io('wss://oracle2.deri.finance', {
+const socket = io('wss://oracle4.deri.finance', {
     transports: ['websocket'],
     withCredentials: true
 })
@@ -37,7 +37,6 @@ export default {
     let ws_time
     ws_first = first
     ws_to = to
-    console.log('from, to', from, to)
     // ws_onResetCacheNeededCallback = onResetCacheNeededCallback;
     ws_onHistoryCallback = onHistoryCallback
     switch (true) {

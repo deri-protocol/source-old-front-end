@@ -104,7 +104,7 @@ export default function Claim({wallet,miningClaim,tradingClaim}){
 				</div>
 				<div className='odd text'>
 						<div className='text-title'>Unclaimed DERI</div>
-						<div className='text-num'>{ claimed ? 0 : claimInfo.unclaimed }</div>
+						<div className='text-num'>{ claimed ? 0 : (+claimInfo.unclaimed).toFixed(2) }</div>
 				</div>
 				{tradingClaim && 
 				<div className='odd text'>

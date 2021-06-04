@@ -12,7 +12,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
 
 
   const addAll = () => {
-    setAmount(liqInfo.shares)
+    setAmount(liqInfo.totalShares)
   }
 
   const onChange = e => {
@@ -21,14 +21,14 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
   }
 
   const remove = async () => {
-    const max = bg(liqInfo.shares);
+    const max = bg(liqInfo.totalShares);
     const cur = bg(amount);
     if (cur.gt(max)) {
-      alert(`Your current max removable shares are  ${liqInfo.shares}`);
+      alert(`Your current max removable shares are  ${liqInfo.totalShares}`);
       return false;
     }
     if(!isLpPool){
-      const balance = (+liqInfo.shares) - (+amount)
+      const balance = (+liqInfo.totalShares) - (+amount)
       if (balance < 1 && balance > 0) {
         alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
         return false;
@@ -61,7 +61,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
       setDecimal(decimal)
     }
     return () => {};
-  }, [liqInfo.shares]);
+  }, [liqInfo.totalShares]);
 
   
   
@@ -105,7 +105,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
               </div>
               <div className='max'>
                 <span>MAX REMOVEABLE:</span>
-                <span className='max-num'>{liqInfo.shares}</span>
+                <span className='max-num'>{liqInfo.totalShares}</span>
                 <span className='max-btn-left' onClick={addAll}>REMOVE ALL</span>
               </div>
               <div className='add-margin-btn'>

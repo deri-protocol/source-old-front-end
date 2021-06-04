@@ -39,12 +39,12 @@ export default function useMiningPool(version){
     let arre = getContractAddressConfig(env,'v1')
     const configs = arr2.concat(arre).map(async config =>  {
       const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
-      const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {}
+      const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
       const pool = config.pool || ''
       return Object.assign(config,{ 
         network : chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
-        apy :  (+apyPool.apy) * 100,
+        apy :  ((+apyPool.apy) * 100).toFixed(2),
         pool : formatAddress(pool),
         address : pool,
         type : 'perpetual',
@@ -59,7 +59,7 @@ export default function useMiningPool(version){
       let label;
       if(isLP(config.pool)){
         let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
-        lpApy = (+lapy.apy2) * 100;           
+        lpApy = ((+lapy.apy2) * 100).toFixed(2);           
       }
       if(isSushiLP(config.pool)){
         label = 'SUSHI-APY'
@@ -70,7 +70,7 @@ export default function useMiningPool(version){
       return Object.assign(config,{
         network : chainInfo[config.chainId].name,
         liquidity : liqInfo.liquidity,
-        apy : (+apyPool.apy) * 100,
+        apy : ((+apyPool.apy) * 100).toFixed(2),
         pool : formatAddress(pool),
         lpApy : lpApy,
         address : pool,

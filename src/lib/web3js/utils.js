@@ -448,9 +448,9 @@ export const getOracleUrl = (chainId, poolAddress) => {
   if (env === 'prod' || env === 'production') {
     // for production
     if (symbol) {
-      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
     }
-    return 'https://oracle2.deri.finance/price';
+    return 'https://oracle4.deri.finance/price';
   } else {
     if (symbol) {
       return addSymbolParam('https://oracle2.deri.finance/price', symbol);
@@ -462,7 +462,7 @@ export const getOracleUrl = (chainId, poolAddress) => {
 
 export const getOracleInfo = async (chainId, poolAddress) => {
   let url = getOracleUrl(chainId, poolAddress);
-  console.log('oracle url', url);
+  //console.log('oracle url', url);
   let retry = 2;
   //let timeout = 1000;
   let res;

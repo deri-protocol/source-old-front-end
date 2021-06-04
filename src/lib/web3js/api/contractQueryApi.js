@@ -83,8 +83,13 @@ export const getSpecification = async (
     liquidationCutRatio,
     priceDelayAllowance,
   } = await pPool.getParameters();
-  const symbol = await pPool.symbol();
+  let symbol = await pPool.symbol();
   const bSymbolRaw = await bToken.symbol();
+
+  // fix symbol BTCUSD issue, will remove later
+  if (poolAddress === '0xA2D7316Bc60AA9463DfB78379d25E77371990507') {
+    symbol = 'iMEME'
+  }
 
   return {
     addresses: poolAddress,

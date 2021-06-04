@@ -43,7 +43,7 @@ export const getLiquidityInfo = async (
     const cost = symbols.reduce((accum, s) => {
         return accum.plus(bg(s.tradersNetVolume).times(s.price).times(s.multiplier).abs())
     }, bg(0))
-    const pnl = symbols.reduce((accum, s) => {
+    const totalPnl = symbols.reduce((accum, s) => {
         return accum.plus(bg(s.tradersNetVolume).times(s.price).times(s.multiplier).minus(s.tradersNetCost))
     }, bg(0))
     const restLiquidity = bTokens.reduce((accum, b, index) => {
@@ -55,8 +55,8 @@ export const getLiquidityInfo = async (
     }, bg(0))
 
     const { liquidity: poolLiquidity } = bTokenInfo;
-    const { liquidity } = lTokenAsset
-    const maxRemovableShares = calculateMaxRemovableLiquidity(bTokens[bTokenId], liquidity, cost, pnl, restLiquidity, minPoolMarginRatio)
+    const { liquidity, pnl } = lTokenAsset
+    const maxRemovableShares = calculateMaxRemovableLiquidity(bTokens[bTokenId], liquidity, cost, totalPnl, restLiquidity, minPoolMarginRatio)
     return {
       //totalSupply: lTokenTotalSupply.toString(),
       poolLiquidity: poolLiquidity.toString(),
@@ -64,6 +64,7 @@ export const getLiquidityInfo = async (
       // shareValue: '1',
       // maxRemovableShares: liquidity.toString()
       shares: liquidity.toString(),
+      pnl: pnl.toString(),
       maxRemovableShares: maxRemovableShares.toString()
     };
   } catch (err) {
@@ -72,6 +73,7 @@ export const getLiquidityInfo = async (
   return {
     poolLiquidity: '',
     shares: '',
+    pnl: '',
     maxRemovableShares: '',
   };
 };

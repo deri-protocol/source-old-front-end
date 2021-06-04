@@ -38,12 +38,13 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					const total = shares.multipliedBy(info.shareValue)
 					setLiquidity({
 						total :  (+info.poolLiquidity),
-						apy : (+apyPool.apy) * 100,
+						apy : ((+apyPool.apy) * 100).toFixed(2),
 						shareValue : info.shareValue,
-						percent : info.poolLiquidity > 0 ? total.dividedBy(info.poolLiquidity).multipliedBy(100).toString() : 0,
-						shares : shares.toString(),
+						percent : info.poolLiquidity > 0 ? total.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
+						shares : shares.toFixed(2),
 						formatShares : shares.toFixed(2),
-						values : total.toString(),
+						totalShares : bg(shares).toString(),
+						values : total.toFixed(2),
 						lpApy,
 						unit : 'shares',
 						sharesTitle : 'Staked Balance'
@@ -51,12 +52,14 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				} else {
 					setLiquidity({
 						total : (+info.poolLiquidity),
-						apy : (+apyPool.apy) * 100,
+						apy : ((+apyPool.apy) * 100).toFixed(2),
+						pnl : (+info.pnl).toFixed(2),
 						shares : shares.toString(),
 						formatShares : shares.toFixed(2),
-						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toString() : 0,
+						totalShares : bg(shares).plus(info.pnl).toString(),
+						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
-						sharesTitle : 'My Liquidity'
+						sharesTitle : 'My Liquidity',
 					})
 				}	
 			}
@@ -100,7 +103,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}>
 								<DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
 								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? 'SUSHI-APY' : 'CAKE-APY'}> 
-								<DeriNumberFormat value={ liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
+								<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
 				</div>	
 				{version === 'v1' && <div className="odd text">
@@ -116,8 +119,8 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.formatShares } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
 				{version === 'v2' && <div className="odd text">
-					<div className="title-check ">
-					</div>
+					<div className='text-title'>Mining PnL</div>
+					<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
 				<div className="odd claim-network">
 					<div className="text-title money">{version === 'v1' && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						

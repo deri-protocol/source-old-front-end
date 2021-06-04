@@ -141,9 +141,9 @@ function Trade({wallet = {},trading,version}){
   }
 
   //完成交易
-  const afterTrade = () => {
-    trading.refresh()
+  const afterTrade = (keepVolume) => {
     trading.setVolume('')
+    trading.refresh()
   }
   
   useEffect(() => {
@@ -408,7 +408,6 @@ const BalanceListDialog = withModal(BalanceList)
 function Operator({hasConnectWallet,wallet,spec,volume,available,
                   baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version}){
   const [isApprove, setIsApprove] = useState(true);
-  const [noBalance, setNoBalance] = useState(false);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
   const [depositIsOpen, setDeposiIsOpen] = useState(false);
@@ -425,6 +424,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
     if(res.success){
       setIsApprove(true);
       trading.refresh();
+      loadApprove();
     } else {
       setIsApprove(false)
       alert('Approve faild')
@@ -432,14 +432,14 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   }
 
 
-  const afterDeposit = async () => {    
+  const afterDeposit = async () => { 
+    trading.refresh();
     setDeposiIsOpen(false);
-    afterTrade()
   }
 
   const afterDepositAndWithdraw = () => {
+    trading.refresh();
     setDeposiIsOpen(false);
-    afterTrade()
   }
 
 
@@ -468,17 +468,6 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
     return () => {};
   }, [wallet.detail.account,spec,available]);
 
-  useEffect(() => {
-    if(!depositIsOpen && !confirmIsOpen){
-      if((+available) > 0){
-        setNoBalance(false)
-      } else {
-        setNoBalance(true)
-      }
-    }
-    return () => {
-    };
-  }, [available]);
 
   useEffect(() => {
     setEmptyVolume(!volume)
@@ -515,14 +504,14 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   if(hasConnectWallet()){
     if(!isApprove) {
       actionElement = <Button className='approve' btnText='APPROVE' click={approve}/>
-    } else if(noBalance && available !== undefined) {
+    } else if(!available || (+available) <= 0) {
       actionElement = (<>
       {version.isV2 
       ?
        <BalanceListDialog
         wallet={wallet}
         modalIsOpen={depositIsOpen}
-        onClose={() => setDeposiIsOpen(false)}
+        onClose={afterDepositAndWithdraw}
         spec={trading.config}
         afterDepositAndWithdraw={afterDepositAndWithdraw}
         position={trading.position}
