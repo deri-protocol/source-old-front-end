@@ -23,6 +23,7 @@ function Trade({wallet = {},trading,version}){
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
+  const [stopCalculate, setStopCalculate] = useState(false)
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
@@ -53,6 +54,7 @@ function Trade({wallet = {},trading,version}){
     setInputing(false)    
     needSwitchDirection && switchDirection();
   }
+
 
   //refresh cache
   const refreshCache = () => {
@@ -141,7 +143,7 @@ function Trade({wallet = {},trading,version}){
   }
 
   //完成交易
-  const afterTrade = (keepVolume) => {
+  const afterTrade = () => {
     trading.setVolume('')
     trading.refresh()
   }
@@ -161,7 +163,7 @@ function Trade({wallet = {},trading,version}){
   }, [trading.position.volume]);
 
   useEffect(() => {
-    if(trading.volumeDisplay !== '') {
+    if(!stopCalculate && trading.volumeDisplay !== '') {
       trading.pause();
       calcFundingRateAfter();
       calcLiquidityUsed();
@@ -171,7 +173,7 @@ function Trade({wallet = {},trading,version}){
     }
 
     return () => {};
-  }, [trading.volumeDisplay]);
+  }, [trading.volumeDisplay,stopCalculate]);
 
 
   useEffect(() => {
@@ -348,7 +350,7 @@ function Trade({wallet = {},trading,version}){
         </div>
       </div>
       <div className='slider mt-13'>
-        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} originMarginHeld={trading.position.marginHeld}/>
+        <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} originMarginHeld={trading.position.marginHeld} setStopCalculate={(value) => setStopCalculate(value)}/>
       </div>
       <div className='title-margin'>Margin</div>
       <div className='enterInfo'>

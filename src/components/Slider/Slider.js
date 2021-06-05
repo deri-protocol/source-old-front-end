@@ -44,7 +44,7 @@ const initDefaultMarks = (max) => {
   return mark;
 }
 
-export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,originMarginHeld}){
+export default function Slider({max = '--' ,start,onValueChange,freeze,currentSymbolMarginHeld,originMarginHeld,setStopCalculate}){
   const [limit, setLimit] = useState(0);
   const [value, setValue] = useState(0);
   const [disabled, setDisabled] = useState(false);
@@ -55,6 +55,7 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
 
   const onSliderChange = newValue => {
     setSliding(true)
+    setStopCalculate(true)
     setValue(newValue)
     onValueChange(newValue,false);
   }
@@ -67,8 +68,9 @@ export default function Slider({max = '--' ,start,onValueChange,freeze,currentSy
         setValue(rest)
         onValueChange(rest);
       }
-      setSliding(false)
     }
+    setSliding(false)
+    setStopCalculate(false)
   }
 
 
