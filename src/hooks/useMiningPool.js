@@ -39,9 +39,10 @@ export default function useMiningPool(version){
     let symbol_obj = arr.filter((i) => i.version === 'v2').map((i) => [i.pool, i.symbol]).reduce((ac, i) => { ac[i[0]] = ac[i[0]]||[]; ac[i[0]].push(i[1]); return ac}, {})
     let arr2 = arr.filter((i) => i.version === 'v2').filter((i,index, self) => self.map(i => i.bTokenId).indexOf(i.bTokenId) == index).map(i => { i.symbol = [...new Set(symbol_obj[i.pool])].join(','); return i})
     let arre = getContractAddressConfig(env,'v1')
-    const v1Pools = arre.map(mapConfig)
-    const v2Pools = arr2.map(mapConfig);
-    const configs = v1Pools.concat(v2Pools)
+    // const v1Pools = arre.map(mapConfig)
+    // const v2Pools = arr2.map(mapConfig);
+    const configs = arr2.concat(arre).map(mapConfig);
+
     const slpConfig = getLpContractAddressConfig(env).map(async config => {
       const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
@@ -81,9 +82,11 @@ export default function useMiningPool(version){
         buttonText : 'CLAIM'
       }
       // pools.push(airDrop)
-      setPools(pools);
-      setV1Pools(v1Pools);
+      const v1Pools = pools.filter(p => p.version === 'v1')
+      const v2Pools = pools.filter(p => p.version === 'v2')
       setV2Pools(v2Pools);
+      setV1Pools(v1Pools);
+      setPools(pools);
       setLoaded(true)
     })
     return () => pools.length = 0
