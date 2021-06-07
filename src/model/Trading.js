@@ -317,7 +317,8 @@ export default class Trading {
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
     const price = position.price || this.index
     //v2
-    const otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld)
+    let otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld)
+    otherMarginHeld = otherMarginHeld.isNaN() ? bg(0) : otherMarginHeld;
     const contractValue = volume * price * contract.multiplier;
     const incrementMarginHeld = contractValue * contract.minInitialMarginRatio
     let totalMarginHeld = bg(marginHeld) ;
