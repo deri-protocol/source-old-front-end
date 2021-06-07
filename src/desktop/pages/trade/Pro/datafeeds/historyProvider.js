@@ -97,8 +97,8 @@ export default {
         ws_time = 'min'
         break
     }
-    param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
-    socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
+    param = {'symbol': trade, 'time_type': ws_time,updated : true}
+    socket.emit('get_kline_update', param)
     var newSub = {
       uid,
       resolution,
@@ -115,17 +115,17 @@ export default {
     // console.log("No subscription found for ",uid)
       return
     }
-    // var sub = _subs[subIndex]
-    // socket.emit('un_get_kline', param)
-    // window.sub_index -= 1
-    // //   socket.emit('SubRemove', {subs: [sub.channelString]})
+    var sub = _subs[subIndex]
+    socket.emit('get_kline_update', param)
+    window.sub_index -= 1
+    //   socket.emit('SubRemove', {subs: [sub.channelString]})
     // _subs.splice(subIndex, 1)
   }
 }
 socket.on('connect', data => {
   //代表断开重连
-  if(param){
-    socket.emit('get_kline', param)
+  if(param && param.updated){
+    socket.emit('get_kline_update', param)
   }
   console.log('socket,connect')
 })
@@ -167,14 +167,16 @@ socket.on('kline_history', data => {
   }
   const len = bars.length
   if(param.symbol.toUpperCase() === current.toUpperCase()){
-    if (len) {
-      if (ws_to * 1000 > bars[len - 1].time) {
-        ws_onHistoryCallback(bars, {noData: false})
-      } else {
-        ws_onHistoryCallback([], {noData: true})
-      }
-    } else {
-      ws_onHistoryCallback(bars, {noData: true})
-    }
+    const options = {noData : bars.length > 0 ? false : true}
+    ws_onHistoryCallback(bars,options)
+    // if (len) {
+    //   if (ws_to * 1000 > bars[len - 1].time) {
+    //     ws_onHistoryCallback(bars, {noData: false})
+    //   } else {
+    //     ws_onHistoryCallback([], {noData: true})
+    //   }
+    // } else {
+    //   ws_onHistoryCallback(bars, {noData: true})
+    // }
   }
 })
