@@ -55,8 +55,10 @@ export const getLiquidityInfo = async (
     }, bg(0))
 
     const { liquidity: poolLiquidity } = bTokenInfo;
-    const { liquidity, pnl } = lTokenAsset
+    const { liquidity, pnl, lastCumulativePnl } = lTokenAsset
     const maxRemovableShares = calculateMaxRemovableLiquidity(bTokens[bTokenId], liquidity, cost, totalPnl, restLiquidity, minPoolMarginRatio)
+    const approximatePnl = pnl.plus(bg(bTokens[bTokenId].cumulativePnl).minus(lastCumulativePnl).times(liquidity))
+    //console.log("approximatePnl", approximatePnl.toString())
     return {
       //totalSupply: lTokenTotalSupply.toString(),
       poolLiquidity: poolLiquidity.toString(),
@@ -64,7 +66,7 @@ export const getLiquidityInfo = async (
       // shareValue: '1',
       // maxRemovableShares: liquidity.toString()
       shares: liquidity.toString(),
-      pnl: pnl.toString(),
+      pnl: approximatePnl.toString(),
       maxRemovableShares: maxRemovableShares.toString()
     };
   } catch (err) {
