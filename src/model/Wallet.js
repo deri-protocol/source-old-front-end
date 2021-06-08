@@ -1,5 +1,5 @@
 
-import {getUserWalletBalance ,DeriEnv,connectWallet} from "../lib/web3js/indexV2";
+import {getUserWalletBalance ,DeriEnv,connectWallet, isUnlocked, unlock } from "../lib/web3js/indexV2";
 import config from '../config.json'
 import { formatBalance, eqInNumber } from "../utils/utils";
 import { observable, computed, action, makeAutoObservable } from "mobx";
@@ -14,11 +14,28 @@ class Wallet {
       detail : observable,
       setDetail : action,
       supportV2 : computed,
-      supportChain : computed   
+      supportChain : computed
     })
   }
 
   isConnected = () => !!this.detail.account;
+
+
+  async isApproved(pool,bTokenId){
+    if(this.detail.chainId){
+      const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId)
+      this.detail.isApproved = isApproved;
+      this.setDetail(this.detail)
+      return isApproved;
+    }
+  }
+
+  approve = async (pool,bTokenId) => {
+    if(this.detail.chainId){
+      const approved = await unlock(this.detail.chainId,pool,this.detail.account,bTokenId);
+      return approved
+    }
+  }
 
   connect =  async () => {
     const res = await connectWallet();
@@ -61,6 +78,7 @@ class Wallet {
   get supportChain(){
     return this.detail.supported
   }
+
 
 }
 
