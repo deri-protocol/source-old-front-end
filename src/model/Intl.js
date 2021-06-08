@@ -1,5 +1,5 @@
-import { makeObservable, observable, action, computed } from "mobx";
-import {computedAsync} from 'computed-async-mobx'
+import { makeObservable, observable, action, computed, flow } from "mobx";
+import {computedAsync, promisedComputed} from 'computed-async-mobx'
 import LoadableComponent from "../utils/LoadableComponent";
 
 export default class Intl {
@@ -8,7 +8,6 @@ export default class Intl {
     makeObservable(this,{
       locale : observable,
       setLocale : action,
-      dict : computed
     })
   }
 
@@ -16,17 +15,9 @@ export default class Intl {
     this.locale = locale;
   }
 
-  dictFile = computedAsync({
-    init : {},
-    fetch : async () => {
-      const dict = await import(`../locales/${this.locale}.json`)
-      return dict
-    }
+  fetchDict = flow(function* (){
+    const dict = yield import(`../locales/${this.locale}.json`)
+    this.dict = dict.default;
+    return this.dict
   })
-
-  get dict(){
-    return this.dictFile.value;
-  }
-
-
 }
