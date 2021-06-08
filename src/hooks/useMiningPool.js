@@ -82,7 +82,7 @@ export default function useMiningPool(version){
         buttonText : 'CLAIM'
       }
       // pools.push(airDrop)
-      const v1Pools = pools.filter(p => p.version === 'v1')
+      const v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
       const v2Pools = pools.filter(p => p.version === 'v2')
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
