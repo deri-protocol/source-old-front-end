@@ -23,6 +23,7 @@
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "classnames": "^2.3.1",
     "computed-async-mobx": "^6.1.0",
+    "cross-env": "^7.0.3",
     "css-loader": "4.3.0",
     "date-format": "^3.0.0",
     "dotenv": "8.2.0",
@@ -91,7 +92,7 @@
   "scripts": {
     "start": "node scripts/start.js cross-env NODE_ENV=development",
     "build": "node scripts/build.js cross-env NODE_ENV=production",
-    "build_alphatest": "node scripts/build.js cross-env NODE_ENV=test",
+    "build_testnet": "cross-env NODE_ENV=development node scripts/build.js",
     "test": "node scripts/test.js cross-env NODE_ENV=test",
     "start_p": "node scripts/start.js cross-env NODE_ENV=production"
   },
