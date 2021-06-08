@@ -4,7 +4,7 @@ import Menu  from './Menu';
 import Account from '../../../components/Account/Account';
 
 
-export default function Nav (){
+export default function Nav ({dict}){
   return (
     <div className="nav">
       <Menu/>

@@ -1,6 +1,10 @@
 {
   "header" : {
-
+    "mining" : "Mining",
+    "trade" : "Trade",
+    "governance" : "Governance",
+    "bridge" : "Bridge",
+    "docs" : "Docs"
   },
   "mining" : {
 
