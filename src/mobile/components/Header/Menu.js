@@ -44,7 +44,7 @@ export default function Menu({closeMenu}){
             <ul className="ref-box">
               <li>
                 <a
-                  href="https://github.com/deri-finance/whitepaper/blob/master/deri_whitepaper.pdf"
+                  href="https://docs.deri.finance/whitepaper"
                   >Whitepaper</a>
               </li>
               <li>
