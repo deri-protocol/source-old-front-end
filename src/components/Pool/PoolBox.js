@@ -21,14 +21,28 @@ function PoolBox({wallet,version,pool}){
   const connectWallet = () => {
     wallet.connect()
   }
-  
+  const claimAirdrop = async () =>{
+    let info =  await getUserInfoAllForAirDrop(wallet.detail.account)
+    if(!info.valid){
+      alert('No DERI to claim');
+      return;
+    }
+    if(wallet.detail.chainId != info.chainId){
+      alert('Please switch to BSC to claim DERI')
+      return;
+    }
+    let res = await mintAirdrop(info.chainId,wallet.detail.account)
+    if(!res.success){
+      alert("Claim failed")
+    }
+  }
 
   useEffect(() => {
     if(pool && pool.airdrop){
       if(!wallet.isConnected()) {
         setButtonElement(<Button btnText='Connect Wallet' click={connectWallet}></Button>)
       } else {
-        setButtonElement(<button>CLAIM</button>)
+        setButtonElement(<Button btnText='CLAIM' click={claimAirdrop}></Button>)
       }
     } else {
       let url = `/mining/${pool.version || 'v1'}/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`

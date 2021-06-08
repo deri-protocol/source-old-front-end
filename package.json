@@ -92,7 +92,7 @@
   "scripts": {
     "start": "node scripts/start.js cross-env NODE_ENV=development",
     "build": "node scripts/build.js cross-env NODE_ENV=production",
-    "build_testnet": "cross-env NODE_ENV=development node scripts/build.js",
+    "build_testnet": "cross-env NODE_ENV=development node scripts/build_testnet.js",
     "test": "node scripts/test.js cross-env NODE_ENV=test",
     "start_p": "node scripts/start.js cross-env NODE_ENV=production"
   },
