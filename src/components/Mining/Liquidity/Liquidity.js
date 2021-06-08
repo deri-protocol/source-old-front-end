@@ -120,7 +120,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				</div>
 				{version === 'v2' && <div className="odd text">
 					<div className='text-title'>Mining PnL</div>
-					<div className="text-num"><DeriNumberFormat allowZero={true} prefix='≈ '  value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
+					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true}  value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
 				<div className="odd claim-network">
 					<div className="text-title money">{version === 'v1' && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
