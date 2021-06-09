@@ -16,8 +16,8 @@ export default class Intl {
   }
 
   fetchDict = flow(function* (){
-    const dict = yield import(`../locales/${this.locale}.json`)
-    this.dict = dict.default;
-    return this.dict
+    // const dict = yield import(`../locales/${this.locale}.json`)
+    // this.dict = dict.default;
+    // return this.dict
   })
 }
