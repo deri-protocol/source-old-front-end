@@ -110,7 +110,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                     </span>
                   </div>
                 ))}
-                {placeholdList.map(item => <div className='row'></div>)}
+                {placeholdList.map((item,index) => <div className='row' key={index}></div>)}
               </div>
             </div>
           </div>
