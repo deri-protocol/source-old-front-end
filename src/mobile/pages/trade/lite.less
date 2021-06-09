@@ -836,6 +836,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  width: initial;
+
 
   .modal-content {
     width: 3.4rem;
@@ -1130,14 +1132,16 @@
   .modal-dialog {
     position: fixed;
     left: 0;
-    top: 0.35rem;
-    // transform: translate(-50%, -50%);
+    top: 0.5rem;
+    transform: translate(0px, 0px);
     font-family: Korolev,sans-serif;
     .modal-content {
       position: relative;
       display: inline-block;
       width: initial;
       height: initial;
+      border : 0;
+
 
       .modal-header {
         height: 0.54rem;
@@ -1151,6 +1155,7 @@
         justify-content: space-between;
         align-items: center;
         border-radius: 0.2rem 0.2rem 0 0;
+        border : 0;
 
 
         .close {
@@ -1181,6 +1186,8 @@
           padding : 0 0.1rem;
           font-size: 0.16rem;
           white-space: nowrap;
+          color : #fff;
+          font-weight: 400;
 
           .pc {
             display: none
