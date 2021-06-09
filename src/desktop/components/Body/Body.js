@@ -9,6 +9,7 @@ const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite'))
 const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro')) 
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
+const Home = LoadableComponent(() => import('../../pages/Home/Home'))
 
 @withRouter
 class Body extends React.Component {
@@ -17,6 +18,7 @@ class Body extends React.Component {
     return (
       <div className='body'>
         <Switch >
+          <Route exact path='/home' component={Home}></Route>
           <Route exact path='/'>
             <Redirect to='/lite'/>
           </Route>
