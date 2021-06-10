@@ -14,7 +14,7 @@ import SymbolSelector from './SymbolSelector';
 
 
 
-function Trade({wallet = {},trading,version}){
+function Trade({wallet = {},trading,version,lang}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
@@ -300,21 +300,21 @@ function Trade({wallet = {},trading,version}){
               {/* v1 */}
               {version.isV1 && <>                
                 <span className='balance-contract-text pc v1'>
-                  Balance in Contract<br/>
-                  (Dynamic Balance)
+                  {lang['balance-in-contract']}<br/>
+                    ({lang['dynamic-balance']})
                 </span>
                 <span className='balance-contract-text mobile v1'>
-                  Balance in Contract<br/>
-                  (Dyn Bal.)
+                {lang['balance-in-contract']}<br/>
+                  ({lang['dynamic-balance']})
                 </span>
               </>}
               {/* v2 */}
               {version.isV2 && <>                
                 <span className='balance-contract-text pc' title='Discounted Margin + Unrealized PnL'>
-                  Dynamic Effective Bal
+                {lang['dynamic-effective-balance']}
                 </span>
                 <span className='balance-contract-text mobile' title='Discounted Margin + Unrealized PnL'>
-                  Dyn. Eff. Bal
+                {lang['dynamic-effective-balance']}
                 </span>
               </>}
               <span className={`balance-contract-num ${version.current}`}>

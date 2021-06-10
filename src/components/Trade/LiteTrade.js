@@ -5,9 +5,11 @@ import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 import Trade from './Trade';
 import { inject, observer } from 'mobx-react';
+import useLang from '../../hooks/useLang';
 
-function LiteTrade({wallet,trading,isPro}){
+function LiteTrade({wallet,trading,isPro,intl}){
   const [curTab, setCurTab] = useState('trade');
+  const dict = useLang(intl.dict,'lite')
 
 
   // useEffect(() => {
@@ -44,7 +46,7 @@ function LiteTrade({wallet,trading,isPro}){
             </>}
           </div>
         </div>
-        <Trade/>
+        <Trade lang={dict}/>
         <Position/>
         <History wallet ={wallet} spec={trading.config} specs={trading.configs} />
         <ContractInfo />   
@@ -52,4 +54,4 @@ function LiteTrade({wallet,trading,isPro}){
   )
 }
 
-export default inject('wallet','trading')(observer(LiteTrade))
+export default inject('wallet','trading','intl')(observer(LiteTrade))

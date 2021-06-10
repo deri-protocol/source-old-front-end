@@ -4,7 +4,7 @@ import logo from '../../../assets/img/logo.png'
 import { useRouteMatch } from 'react-router-dom'
 import Version from '../../../components/Version/Version'
 
-export default function Menu() {
+function Menu({lang}) {
   const isMining = useRouteMatch('/mining') ? true : false
   const isLite = useRouteMatch('/lite') ? true : false
   const isPro = useRouteMatch('/pro') ? true : false;
@@ -14,13 +14,12 @@ export default function Menu() {
       <div className="logo">
         <a href="http://deri.finance" rel='noreferrer' target="_blank">
           <img src={logo} alt="" />
-          {/* <img src={deri} alt="" /> */}
         </a>
       </div>
       <div className="mean">
         <ul>
           <li>
-            <Link to="/mining" className={isMining ? 'selected' : ''}>Mining</Link>
+            <Link to="/mining" className={isMining ? 'selected' : ''}>{lang.mining}</Link>
           </li>
           <li><Link to='/lite' className={isLite || isPro ? 'selected' : ''}>Trade</Link></li>
           <li>
@@ -58,3 +57,4 @@ export default function Menu() {
     </div>
   )
 }
+export default Menu

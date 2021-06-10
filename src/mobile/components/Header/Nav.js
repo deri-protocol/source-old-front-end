@@ -5,6 +5,7 @@ import logo from '../../img/deri-logo.png'
 import Menu from './Menu'; 
 import './header.less'
 import Version from '../../../components/Version/Version';
+import  LanguageSelector from '../../../components/LanguageSelector/LanguageSelector';
 
 export default function Nav(){
   const [styles, setStyles] = useState({})
@@ -12,7 +13,6 @@ export default function Nav(){
   const closeMenu = () => setStyles({left : '-110%'})
 
   return (
-    <>
       <div className="nav">
         <img className="menu-icon" src={menuIcon} onClick={showMenu}/>
         <div className='menu-left' style={styles}>
@@ -21,8 +21,10 @@ export default function Nav(){
         <a className="logo" href="https://deri.finance/">
           <img src={logo} alt=""/>
         </a>
-        <Version/>
-      </div>
-    </> 
+        <div className='nav-right'>
+          <LanguageSelector/>
+          <Version/>
+        </div>
+      </div> 
   )
 }

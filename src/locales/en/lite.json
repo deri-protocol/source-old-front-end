@@ -1,0 +1,10 @@
+{
+  "balance-in-contract" : "Balance in Contract",
+  "dynamic-balance" : "Dynamic Balance",
+  "margin" : "Margin",
+  "available-balance" : "Available Balance",
+
+  "dynamic-effective-balance" : "Dynamic Effective Bal",
+  "total-held" : "total held",
+  "for-this-pos" : "for this pos"
+}
