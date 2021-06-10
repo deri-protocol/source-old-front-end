@@ -66,7 +66,8 @@ export default function Team() {
                 <ul>
                   <li>Computer Science BS from University of Washington</li>
                   <li>Former Software Engineer at Amazon, AMD</li>
-                  <li>Early crypto investor Co-founder of a crypto marketing service agency</li>
+                  <li>Early crypto investor</li>
+                  <li>Co-founder of a crypto marketing service agency</li>
                 </ul>
               </div>
             </div>

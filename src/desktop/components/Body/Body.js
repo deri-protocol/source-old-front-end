@@ -14,7 +14,6 @@ const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 
 @withRouter
 class Body extends React.Component {
-
   render(){
     return (
       <div className='body'>
