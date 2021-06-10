@@ -15,6 +15,8 @@ const history = {}
 //   path: '/kline'
 // })
 
+let onRealtimeCallback = null;
+
 // const socket = io('wss://oracle2.deri.finance', {
 const socket = io('wss://oracle4.deri.finance', {
     transports: ['websocket'],
@@ -65,7 +67,9 @@ export default {
         ws_time = 'min'
         break
     }
+    socket.emit('un_get_kline',param)
     param = {'symbol': trade, 'time_type': ws_time,from : from, to : to}
+
     socket.emit('get_kline', param)
   },
   subscribeBars: function (symbolInfo, resolution, updateCb, uid, resetCache) {
@@ -97,35 +101,37 @@ export default {
         ws_time = 'min'
         break
     }
-    param = {'symbol': trade, 'time_type': ws_time, 'bars': 200}
-    socket.emit('get_kline', {'symbol': trade, 'time_type': ws_time, 'bars': 200})
-    var newSub = {
-      uid,
-      resolution,
-      symbolInfo,
-      lastBar: history[symbolInfo.name] && history[symbolInfo.name].lastBar,
-      listener: updateCb
-    }
-    _subs.push(newSub)
-    resetCache()
+    param = {'symbol': trade, 'time_type': ws_time,updated : true}
+    onRealtimeCallback = updateCb;
+
+    // socket.emit('get_kline_update', param)
+    // var newSub = {
+    //   uid,
+    //   resolution,
+    //   symbolInfo,
+    //   lastBar: history[symbolInfo.name] && history[symbolInfo.name].lastBar,
+    //   listener: updateCb
+    // }
+    // _subs.push(newSub)
+    // resetCache()
   },
   unsubscribeBars: function (uid) {
-    var subIndex = _subs.findIndex(e => e.uid === uid)  
-    if (subIndex === -1) {
+    // var subIndex = _subs.findIndex(e => e.uid === uid)  
+    // if (subIndex === -1) {
     // console.log("No subscription found for ",uid)
-      return
-    }
+    //   return
+    // }
     // var sub = _subs[subIndex]
     // socket.emit('un_get_kline', param)
     // window.sub_index -= 1
-    // //   socket.emit('SubRemove', {subs: [sub.channelString]})
+    //   socket.emit('SubRemove', {subs: [sub.channelString]})
     // _subs.splice(subIndex, 1)
   }
 }
 socket.on('connect', data => {
   //代表断开重连
-  if(param){
-    socket.emit('get_kline', param)
+  if(param && param.updated){
+    socket.emit('get_kline_update', param)
   }
   console.log('socket,connect')
 })
@@ -139,9 +145,9 @@ socket.on('kline_update', data => {
     obj.open = Number(data.open)
     obj.close = Number(data.close)
     obj.volume = Number(data.volume)
-    const sub = _subs[_subs.length - 1] || {}
-    sub.listener && sub.listener(obj)
-    sub.lastBar = obj
+    // const sub = _subs[_subs.length - 1] || {}
+    onRealtimeCallback && onRealtimeCallback(obj)
+    // sub.lastBar = obj
   }
 })
 
@@ -167,14 +173,16 @@ socket.on('kline_history', data => {
   }
   const len = bars.length
   if(param.symbol.toUpperCase() === current.toUpperCase()){
-    if (len) {
-      if (ws_to * 1000 > bars[len - 1].time) {
-        ws_onHistoryCallback(bars, {noData: false})
-      } else {
-        ws_onHistoryCallback([], {noData: true})
-      }
-    } else {
-      ws_onHistoryCallback(bars, {noData: true})
-    }
+    const options = {noData : bars.length > 0 ? false : true}
+    ws_onHistoryCallback(bars,options)
+    // if (len) {
+    //   if (ws_to * 1000 > bars[len - 1].time) {
+    //     ws_onHistoryCallback(bars, {noData: false})
+    //   } else {
+    //     ws_onHistoryCallback([], {noData: true})
+    //   }
+    // } else {
+    //   ws_onHistoryCallback(bars, {noData: true})
+    // }
   }
 })

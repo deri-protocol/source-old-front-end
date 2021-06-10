@@ -86,7 +86,7 @@ export default function useMiningPool(version){
       const v2Pools = pools.filter(p => p.version === 'v2')
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
-      pools.push(airDrop)
+      // pools.push(airDrop)
       setPools(pools);
       setLoaded(true)
     })

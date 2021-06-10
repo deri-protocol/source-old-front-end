@@ -32,13 +32,13 @@ export default function Button({btnText,className,disabled,click,afterClick,chec
 
   const loadApproveStatus = async () => {
     if(checkApprove && wallet && wallet.detail.account){
-      const res = await isUnlocked(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
+      const res = await wallet.isApproved(spec.pool,spec.bTokenId)
       setIsApproved(res);
     }
   }
   const approve = async () => {
     beforeAction();
-    const res = await unlock(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId);
+    const res = await wallet.approve(spec.pool,spec.bTokenId);
     if(res.success){
       setIsApproved(true);
     } else {

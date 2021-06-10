@@ -421,11 +421,10 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   }
 
   const approve = async () => {
-    const {detail} = wallet
-    const res = await unlock(detail.chainId,spec.pool,detail.account,bTokenId);
+    // const res = await unlock(detail.chainId,spec.pool,detail.account,bTokenId);
+    const res = await wallet.approve(spec.pool,bTokenId)
     if(res.success){
       setIsApprove(true);
-      trading.refresh();
       loadApprove();
     } else {
       setIsApprove(false)
@@ -448,8 +447,9 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   //load Approve status
   const loadApprove = async () => {
     if(hasConnectWallet() && spec){
-      const {detail} = wallet
-      const result = await isUnlocked(detail.chainId,spec.pool,detail.account,bTokenId).catch(e => console.log(e))
+      // const {detail} = wallet
+      // const result = await isUnlocked(detail.chainId,spec.pool,detail.account,bTokenId).catch(e => console.log(e))
+      const result = await wallet.isApproved(spec.pool,bTokenId)
       setIsApprove(result);
     }
   }
@@ -482,7 +482,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       loadApprove();
     }
     return () => {};
-  }, [spec]);
+  }, [wallet.detail.isApproved,spec]);
 
 
   let actionElement =(<>
@@ -534,7 +534,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
       </>)
     } else if(emptyVolume) {
-      actionElement = <Button className='btn btn-danger short-submit' disabled btnText='ENTER VOLUME'/>
+      actionElement = <button className='btn btn-danger short-submit' >ENTER VOLUME</button>
     }
   } else {
     actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' click={connect} />
