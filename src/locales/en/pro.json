@@ -1,3 +1,9 @@
 {
-  
+  "total-net-position" : "Total Net Position",
+  "min" : "min",
+  "hour" : "hour",
+  "day" : "day",
+  "week" : "week",
+  "current-position-uppercase" : "CURRENT POSITION",
+  "trade-history" : "TRADE HISTORY"
 }

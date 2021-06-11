@@ -22,7 +22,7 @@ class Wallet {
 
 
   async isApproved(pool,bTokenId){
-    if(this.detail.chainId){
+    if(this.detail.chainId && this.supportChain){
       const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId)
       this.detail.isApproved = isApproved;
       this.setDetail(this.detail)

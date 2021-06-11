@@ -249,7 +249,7 @@ function Trade({wallet = {},trading,version,lang}){
         <SymbolSelector setSpec={setSpec} spec={spec}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
-            Index Price: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
+            {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
           </div>
           <div className='funding-rate'>
             <span>Funding Rate Annual: &nbsp;</span>
@@ -267,13 +267,13 @@ function Trade({wallet = {},trading,version,lang}){
         </div>
       </div>
       <div className={directionClazz}>
-        <div className='check-long' onClick={() => directionChange('long')}>LONG / BUY</div>
-        <div className='check-short' onClick={() => directionChange('short')}>SHORT / SELL</div>
+        <div className='check-long' onClick={() => directionChange('long')}>{lang['long-buy']}</div>
+        <div className='check-short' onClick={() => directionChange('short')}>{lang['short-sell']}</div>
       </div>
       <div className='the-input'>
         <div className='left'>
           <div className='current-position'>
-            <span>Current Position</span>
+            <span>{lang['current-position']}</span>
             <span className='position-text'><DeriNumberFormat value={trading.position.volume} allowZero={true}/></span>
           </div>
           <div className='contrant'>            
@@ -286,10 +286,10 @@ function Trade({wallet = {},trading,version,lang}){
               onChange={event =>  volumeChange(event) }
               value={trading.volumeDisplay}
               className={volumeClazz}
-              placeholder='Contract Volume'
+              placeholder={lang['contract-volume']}
             />
             <div className='title-volume' >
-              Contract Volume
+              {lang['contract-volume']}
             </div>
           </div>          
           {!!trading.volumeDisplay && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix ='= ' suffix={` ${spec.unit}`}/></div>}
@@ -310,10 +310,10 @@ function Trade({wallet = {},trading,version,lang}){
               </>}
               {/* v2 */}
               {version.isV2 && <>                
-                <span className='balance-contract-text pc' title='Discounted Margin + Unrealized PnL'>
+                <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                 {lang['dynamic-effective-balance']}
                 </span>
-                <span className='balance-contract-text mobile' title='Discounted Margin + Unrealized PnL'>
+                <span className='balance-contract-text mobile' title={lang['dynamic-effective-balance-title']}>
                 {lang['dynamic-effective-balance']}
                 </span>
               </>}
@@ -322,26 +322,26 @@ function Trade({wallet = {},trading,version,lang}){
               </span>
             </div>
             {version.isV1 && <div className='box-margin'>
-               <span>Margin</span> 
+               <span>{lang['margin']}</span> 
               <span className='margin'>
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>}
             {version.isV2 && <>
-              <div className='box-margin'>Margin</div>
+              <div className='box-margin'>{lang['margin']}</div>
               <div className='box-margin'>
-                <span className='total-held' title='Margin held by all positions'>&nbsp;- total held </span>
+                <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']} </span>
                 <span className='margin' ><DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/></span>
               </div>
               <div>
-                <span className='pos-held' title='Margin held by this position' >&nbsp;- for this pos </span>
+                <span className='pos-held' title={lang['for-this-pos-title']} >&nbsp;- {lang['for-this-pos']} </span>
                 <span className='margin' ><DeriNumberFormat value={ trading.amount.currentSymbolMarginHeld} allowZero={true}  decimalScale={2}/></span>
               </div>
             </>
             }
             <div className='available-balance'>
-              <span className='available-balance pc' title='Dynamic Effective Bal - Margin Total Held' > Available Balance </span>
-              <span className='available-balance mobile' >Avail. Bal</span>
+              <span className='available-balance pc' title={lang['available-balance-title']} > {lang['available-balance']} </span>
+              <span className='available-balance mobile' >{lang['available-balance']}</span>
               <span className='available-balance-num'>
                 <DeriNumberFormat value={ trading.amount.available } allowZero={true}  decimalScale={2} />
               </span>
@@ -352,29 +352,29 @@ function Trade({wallet = {},trading,version,lang}){
       <div className='slider mt-13'>
         <Slider max={trading.amount.dynBalance} onValueChange={onSlide} start={trading.amount.margin} freeze={slideFreeze} currentSymbolMarginHeld={trading.position.marginHeldBySymbol} originMarginHeld={trading.position.marginHeld} setStopCalculate={(value) => setStopCalculate(value)}/>
       </div>
-      <div className='title-margin'>Margin</div>
+      <div className='title-margin'>{lang['margin']}</div>
       <div className='enterInfo'>
         {!!trading.volumeDisplay && <>
         <div className='text-info'>
-          <div className='title-enter pool'>Pool Liquidity</div>
+          <div className='title-enter pool'>{lang['pool-liquidity']}</div>
           <div className='text-enter poolL'>
             <DeriNumberFormat value={ trading.fundingRate.liquidity } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } /> 
           </div>
         </div>
         <div className='text-info'>
-          <div className='title-enter'>Liquidity Used</div>
+          <div className='title-enter'>{lang['liquidity-used']}</div>
           <div className='text-enter'>
             <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2}/> -> <DeriNumberFormat value={ liqUsedPair.afterLiqUsed }  decimalScale={2}  suffix='%'/>
           </div>
         </div>
         <div className='text-info'>
-          <div className='title-enter'>Funding Rate Impact</div>
+          <div className='title-enter'>{lang['funding-rate-impact']}</div>
           <div className='text-enter'>
             <DeriNumberFormat value={ trading.fundingRate.fundingRate0 }  suffix='%' decimalScale={4}/> -> <DeriNumberFormat value={ fundingRateAfter }  decimalScale={4} suffix='%' />
           </div>
         </div>
         <div className='text-info'>
-          <div className='title-enter'>Transaction Fee</div>
+          <div className='title-enter'>{lang['transaction-fee']}</div>
           <div className='text-enter'>
             <DeriNumberFormat value={ transFee } allowZero={true} decimalScale={2} suffix={` ${spec.bTokenSymbol}` } />             
           </div>
@@ -396,6 +396,7 @@ function Trade({wallet = {},trading,version,lang}){
                 symbolId={trading.config && trading.config.symbolId}
                 bTokenId={trading.config && trading.config.bTokenId}
                 version={version}
+                lang={lang}
        />
     </div>
   </div>
@@ -408,7 +409,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
-                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version}){
+                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version,lang}){
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -499,13 +500,14 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     transFee={transFee}
                     afterTrade={afterTrade}
                     direction={direction}
+                    lang={lang}
                     />
-    <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>TRADE</button>
+                  <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)
 
   if(hasConnectWallet()){
     if(!isApprove) {
-      actionElement = <Button className='approve' btnText='APPROVE' click={approve}/>
+      actionElement = <Button className='approve' btnText={lang['approve']} click={approve}/>
     } else if(!available || (+available) <= 0) {
       actionElement = (<>
       {version.isV2 
@@ -519,7 +521,8 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         position={trading.position}
         overlay={{background : '#1b1c22',top : 80}}
         className='balance-list-dialog'
-       />
+        lang={lang}
+        />
       :
       <DepositDialog 
         wallet={wallet}
@@ -529,15 +532,16 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         balance={balance}
         afterDeposit={afterDeposit}
         className='trading-dialog'
-      />}
-        <div className="noMargin-text">You have no fund in contract. Please deposit first.</div>
-        <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>DEPOSIT</button>
+        lang={lang}
+        />}
+        <div className="noMargin-text">{lang['no-margin-tip']}</div>
+        <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>{lang['deposit']}</button>
       </>)
     } else if(emptyVolume) {
-      actionElement = <button className='btn btn-danger short-submit' >ENTER VOLUME</button>
+      actionElement = <button className='btn btn-danger short-submit' >{lang['enter-volume']}</button>
     }
   } else {
-    actionElement = <Button className='btn btn-danger connect' btnText='Connect Wallet' click={connect} />
+    actionElement = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} />
   }
   return (
     <div className='submit-btn'>

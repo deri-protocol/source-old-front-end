@@ -4,12 +4,12 @@ import './lite.less'
 
 
 
-export default function Lite(){
+export default function Lite({lang}){
 
   return (
     <div className='trade-body lite'>
       <Tab lite={true}/>
-      <LiteTrade /> 
+      <LiteTrade lang={lang}/> 
     </div>
   )
 }

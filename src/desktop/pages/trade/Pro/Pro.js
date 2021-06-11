@@ -9,7 +9,7 @@ import './pro.less'
 
 
 
-function Pro({wallet}){
+function Pro({wallet,lang}){
 
 
   useEffect(() => {
@@ -26,11 +26,11 @@ function Pro({wallet}){
       <Tab/>
       <div className='trade-pro'>
         <div className='left'>
-          <LiteTrade isPro={true}/>
+          <LiteTrade isPro={true} lang={lang}/>
         </div>
         <div className='right'>
-          <TradingView wallet={wallet}/>
-          <Reference/>
+          <TradingView wallet={wallet} lang={lang}/>
+          <Reference lang={lang}/>
         </div>
     </div> 
   </div>
