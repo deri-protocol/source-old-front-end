@@ -32,6 +32,12 @@
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/"
+      },
+      "80001" : {
+        "name" : "Matic-Testnet",
+        "text" : "MATIC TESTNET",
+        "symbol" : "MATIC",
+        "viewUrl" : "https://explorer-mumbai.maticvigil.com/"
       }
     },
     "oracle" : {
