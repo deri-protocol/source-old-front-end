@@ -2,7 +2,7 @@ import Web3 from 'web3';
 
 // validate
 export const normalizeChainId = (chainId) => {
-  const chainIds = ['1', '56', '128', '3', '42', '97', '256'];
+  const chainIds = ['1', '56', '128', '3', '42', '97', '256', '137', '80001'];
   let res = chainId ? chainId.toString() : chainId;
   if (chainId && chainIds.includes(res)) {
     return res;

@@ -10,7 +10,7 @@ const TIMEOUT=20000
 describe('BToken', () => {
   let poolAddress, bToken, account, account2
   beforeAll(() => {
-    poolAddress = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
+    poolAddress = '0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
     bToken = new BToken('97', '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF', true)
     account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
     account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'

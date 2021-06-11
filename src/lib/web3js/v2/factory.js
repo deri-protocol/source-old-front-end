@@ -6,6 +6,7 @@ import {
   LToken,
   PToken,
   WooOracle,
+  ChainlinkOracle,
 } from './contract';
 import { getChainProviderUrl } from './utils/chain';
 
@@ -109,14 +110,24 @@ export const pTokenFactory = (function () {
   };
 })();
 
-export const wooOracleFactory = (function () {
+export const oracleFactory = (function () {
   const instanceMap = {};
-  return (chainId, address, symbol, useInfura) => {
+  return (chainId, address, symbol, decimal, useInfura) => {
     const key = useInfura ? `${address}.useInfura` : address;
     if (Object.keys(instanceMap).includes(key)) {
       return instanceMap[key];
     } else {
-      instanceMap[key] = new WooOracle(chainId, address, symbol, useInfura);
+      if (['80001', '137'].includes(chainId)) {
+        instanceMap[key] = new ChainlinkOracle(
+          chainId,
+          address,
+          symbol,
+          decimal,
+          useInfura
+        );
+      } else {
+        instanceMap[key] = new WooOracle(chainId, address, symbol, decimal, useInfura);
+      }
       return instanceMap[key];
     }
   };

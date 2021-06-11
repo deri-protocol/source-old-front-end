@@ -2,7 +2,7 @@ export const getChainProviderUrls = (chainId) => {
   const chainProviderUrls = [
     {
       provider_urls: [
-        "https://mainnet.infura.io/v3/d0e6582644a845ee8d7c3c18683fec06",
+        'https://mainnet.infura.io/v3/d0e6582644a845ee8d7c3c18683fec06',
       ],
       chainId: '1',
     },
@@ -17,6 +17,17 @@ export const getChainProviderUrls = (chainId) => {
     {
       provider_urls: ['https://http-mainnet.hecochain.com'],
       chainId: '128',
+    },
+    {
+      provider_urls: [
+        'https://rpc-mainnet.matic.network',
+        'https://rpc-mainnet.maticvigil.com',
+        'https://rpc-mainnet.matic.quiknode.pro',
+        'https://matic-mainnet.chainstacklabs.com',
+        'https://matic-mainnet-full-rpc.bwarelabs.com',
+        'https://matic-mainnet-archive-rpc.bwarelabs.com',
+      ],
+      chainId: '137',
     },
     {
       provider_urls: [
@@ -44,6 +55,15 @@ export const getChainProviderUrls = (chainId) => {
     {
       provider_urls: ['https://http-testnet.hecochain.com'],
       chainId: '256',
+    },
+    {
+      provider_urls: [
+        'https://rpc-mumbai.matic.today',
+        'https://rpc-mumbai.maticvigil.com',
+        'https://matic-mumbai.chainstacklabs.com',
+        'https://matic-testnet-archive-rpc.bwarelabs.com',
+      ],
+      chainId: '80001',
     },
   ];
 

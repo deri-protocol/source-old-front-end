@@ -1,6 +1,6 @@
 import { getPoolConfig, getOracleConfig } from '../config';
 import { DeriEnv } from '../../config'
-import { wooOracleFactory } from '../factory'
+import { oracleFactory } from '../factory'
 import { deriToNatural } from './convert'
 import { normalizeChainId } from './validate'
 
@@ -54,7 +54,7 @@ export const getOraclePrice = async(chainId, symbol, useInfura=false) => {
   chainId = normalizeChainId(chainId)
   const config = getOracleConfig(chainId, symbol)
   if (config && config.address) {
-    const wooOracle = wooOracleFactory(chainId, config.address, symbol, useInfura)
-    return deriToNatural(await wooOracle.getPrice()).toString()
+    const oracle = oracleFactory(chainId, config.address, symbol, config.decimal, useInfura)
+    return await oracle.getPrice()
   }
 }
