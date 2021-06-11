@@ -72,7 +72,7 @@ class Wallet {
   }
 
   get supportV2() {
-    return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97)
+    return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97) || eqInNumber(this.detail.chainId,80001)
   }
 
   get supportChain(){
