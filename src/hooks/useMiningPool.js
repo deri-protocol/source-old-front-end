@@ -35,23 +35,13 @@ export default function useMiningPool(version){
         buttonText : 'STAKING'        
       })
     }
-    // let arr = getContractAddressConfig(env,version.current)
-    // let symbol_obj = arr.filter((i) => i.version === 'v2').map((i) => [i.pool, i.symbol]).reduce((ac, i) => { ac[i[0]] = ac[i[0]]||[]; ac[i[0]].push(i[1]); return ac}, {})
-    // let arr2 = arr.filter((i) => i.version === 'v2').filter((i,index, self) => {
-    //   return self.map(i => i.bTokenId).indexOf(i.bTokenId) == index
-    // }).map(i => { 
-    //   i.symbol = [...new Set(symbol_obj[i.pool])].join(','); 
-    //   return i
-    // })
-    // let arre = getContractAddressConfig(env,'v1')
-    // const configs = arr2.concat(arre).map(mapConfig);
     let configs = getContractAddressConfig(env,version.current);
     let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
     configs = configs.reduce((total,config) => {
       const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol)
-      if(pos > -1) {
+      if(pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
         total.push(config)
@@ -59,7 +49,7 @@ export default function useMiningPool(version){
       return total;
     },all);
     if(version.isV2){
-      configs = configs.concat(v1Configs).map(mapConfig)
+      configs = configs.map(mapConfig)
     } else {
       configs =v1Configs.map(mapConfig)
     }
