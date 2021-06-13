@@ -1,6 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import './footer.less'
-export default function Footer(){
+import { inject, observer } from 'mobx-react';
+import useLang from '../../../hooks/useLang'
+
+function Footer({intl}){
+  const lang = useLang(intl.dict,'footer');
   
   return (
     <div className="footer">
@@ -10,22 +14,22 @@ export default function Footer(){
         <div className="left">
           <div>
             <span>
-              <router-link to='/lite'>App</router-link>  
+              <router-link to='/lite'>{lang['app']}</router-link>  
             </span>
             <span className="mt_27">
-              <a href="https://docs.deri.finance/">Docs</a> 
+              <a href="https://docs.deri.finance/">{lang['docs']}</a> 
             </span>
             <span className="mt_27">
-                <a href="http://deri.finance/#/team">Team</a>
+                <a href="http://deri.finance/#/team">{lang['team']}</a>
             </span>
             <span className="mt_27">
-              <a href="https://docs.deri.finance/faq">FAQ</a>
+              <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
             </span>
           </div>
-          <div className="mt_19">© 2021 Deri Protocol</div>
+          <div className="mt_19">© 2021 {lang['deri-protocol']}</div>
         </div>
         <div className="right">
-          <span> Visit us on </span>
+          <span> {lang['visit-us-on']}</span>
           <a target="_blank" rel='noreferrer' className="iocn_a" >
             <div className="circle">
               <div className='wechat'>
@@ -80,3 +84,4 @@ export default function Footer(){
     </div>
   </div>)
 }
+export default inject('intl')(observer(Footer))

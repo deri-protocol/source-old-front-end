@@ -23,7 +23,7 @@ function Pro({wallet,lang}){
 
   return (
     <div className='trade-body'>
-      <Tab/>
+      <Tab lang={lang}/>
       <div className='trade-pro'>
         <div className='left'>
           <LiteTrade isPro={true} lang={lang}/>

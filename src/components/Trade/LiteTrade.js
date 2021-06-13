@@ -9,17 +9,6 @@ import useLang from '../../hooks/useLang';
 
 function LiteTrade({wallet,trading,isPro,lang}){
   const [curTab, setCurTab] = useState('trade');
-  // const dict = useLang(intl.dict,'lite')
-
-
-  // useEffect(() => {
-  //   if(wallet.detail.account){
-  //     trading.init(wallet)
-  //   }
-  // },[wallet.detail.account])
-
-
-
   const switchTab = current => setCurTab(current);
   const tradeClassName = classNames('trade-position',curTab)
 
@@ -29,27 +18,27 @@ function LiteTrade({wallet,trading,isPro,lang}){
         <div className='header-top'>
           <div className='header'>
             <span className='trade'  onClick={() => switchTab('trade')}>
-              TRADE
+              {lang['trade']}
             </span>
             {!isPro && <>
             <span
               className='pc position' onClick={() => switchTab('position')}>
-              MY POSITION
+              {lang['my-position']}
             </span>
             <span
               className='mobile position' onClick={() => switchTab('position')}>
-              POSITION
+              {lang['my-position']}
             </span>
             <span className='history' onClick={() => switchTab('history')}>
-              HISTORY
+              {lang['history']}
             </span>
             </>}
           </div>
         </div>
         <Trade lang={lang}/>
-        <Position/>
-        <History wallet ={wallet} spec={trading.config} specs={trading.configs} />
-        <ContractInfo />   
+        <Position lang={lang}/>
+        <History wallet ={wallet} spec={trading.config} specs={trading.configs} lang={lang} />
+        <ContractInfo lang={lang}/>   
     </div> 
   )
 }

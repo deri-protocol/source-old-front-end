@@ -1,12 +1,22 @@
 import React from 'react'
 import { inject, observer } from 'mobx-react';
+import { isMobile } from 'react-device-detect';
 
 const withLanguage =  Component => {
   class WithLanguage extends React.Component {
     render(){
       const {intl,...props} = this.props
+      const {dict} = intl
+      //如果当前终端为移动端，判断是否存在移动端特殊语言包，如果有覆盖默认的语言包
+      if(isMobile){
+        for(let item in dict){
+          if(dict[item].mobile){
+            Object.assign(dict[item],dict[item].mobile)
+          }
+        }
+      }
       return (
-      <Component {...props} dict={intl.dict}/>
+      <Component {...props} dict={dict}/>
       )
     }
   }

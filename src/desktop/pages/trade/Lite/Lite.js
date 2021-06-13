@@ -8,7 +8,7 @@ export default function Lite({lang}){
 
   return (
     <div className='trade-body lite'>
-      <Tab lite={true}/>
+      <Tab lite={true} lang={lang}/>
       <LiteTrade lang={lang}/> 
     </div>
   )

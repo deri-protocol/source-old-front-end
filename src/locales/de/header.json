@@ -1,0 +1,13 @@
+{
+  "mining" : "Bergbau",
+  "trade" : "Handel",
+  "governance" : "Führung",
+  "bridge" : "Brücke",
+  "docs" : "Dokumente",
+  "team" : "Mannschaft",
+  "faq" : "FAQ",
+  "code-audit" : "Code Prüfung",
+  "github" : "Github",
+  "guide" : "Leiten",
+  "whitepaper" : "weißes Papier"
+}
