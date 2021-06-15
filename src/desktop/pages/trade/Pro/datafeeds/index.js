@@ -51,8 +51,7 @@ export default {
   },
   getBars: function (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) {
     if (from > 0 && to > 0) {
-      const localResolutions = localStorage.getItem("localResolutions") || resolution;      
-      historyProvider.getBars(symbolInfo, localResolutions, from, to, firstDataRequest,onHistoryCallback,onErrorCallback)
+      historyProvider.getBars(symbolInfo, resolution, from, to, firstDataRequest,onHistoryCallback,onErrorCallback)
     }        
   },
   subscribeBars: (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
