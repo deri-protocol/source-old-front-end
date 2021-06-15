@@ -23,7 +23,7 @@ class Oracle {
 
   initWebSocket(){
     if(this.ws === null) {
-      this.ws = new WebSocket('wss://oracle4.deri.finance', {        
+      this.ws = new WebSocket(process.env.REACT_APP_WSS_URL, {        
         transports: ['websocket'],
         withCredentials: true
       })

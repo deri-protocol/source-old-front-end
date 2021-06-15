@@ -63,3 +63,10 @@ export function getConfigFromStore(version){
   return JSON.parse(sessionStorage.getItem(sessionStorageKey(version)))
 }
 
+export function storeChain(chainInfo){
+  sessionStorage.setItem('current-chain',JSON.stringify(chainInfo))
+}
+export function restoreChain(){
+  return JSON.parse(sessionStorage.getItem('current-chain'));
+}
+

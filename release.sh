@@ -1,4 +1,4 @@
-echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/app@main > .env.production
+echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/app@main >> .env.production
 yarn build --nomaps
 cp -R build/* ../app
 cd ../app

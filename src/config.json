@@ -8,6 +8,7 @@
         "viewUrl" : "https://etherscan.io/"
       },
       "56" : {
+        "code" : "BSC",
         "name" : "bsc",
         "text" : "BSC",
         "symbol" : "BNB",
@@ -28,14 +29,16 @@
   "dev" : {
     "chainInfo" : {
       "97" : {
+        "code" : "BSC",
         "name" : "Bsc-testnet",
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/"
       },
       "80001" : {
-        "name" : "Matic-Testnet",
-        "text" : "MATIC TESTNET",
+        "code" : "POLYGON",
+        "name" : "POLYGON-Testnet",
+        "text" : "POLYGON TESTNET",
         "symbol" : "MATIC",
         "viewUrl" : "https://explorer-mumbai.maticvigil.com/"
       }

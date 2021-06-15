@@ -1,5 +1,5 @@
 source ~/.bashrc
-echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/testnet@main > .env.production
+echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/testnet@main >> .env.production
 npm run build_testnet --nomaps --env=development
 cp -R build/* ../testnet
 cd ../testnet
