@@ -1,5 +1,7 @@
-export default function Bridge(){
+import Bridge from '../../../components/Bridge/Bridge'
+import './Bridge.less'
+export default function Bridge_des(){
   return(
-    <div></div>
+    <Bridge />
   )
 }
