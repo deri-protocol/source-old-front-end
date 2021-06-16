@@ -1,4 +1,6 @@
-echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/app@main >> .env.production
+echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/app@main > .env.production
+echo REACT_APP_WSS_URL=wss://oracle4.deri.finance >> .env.production
+echo REACT_APP_REST_SERVER_URL=https://api.deri.finance >> .env.production
 yarn build --nomaps
 cp -R build/* ../app
 cd ../app

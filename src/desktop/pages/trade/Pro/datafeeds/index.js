@@ -50,7 +50,7 @@ export default {
     }, 0);
   },
   getBars: function (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) {
-    if (from > 0 && to > 0) {     
+    if (from > 0 && to > 0) {
       historyProvider.getBars(symbolInfo, resolution, from, to, firstDataRequest,onHistoryCallback,onErrorCallback)
     }        
   },
