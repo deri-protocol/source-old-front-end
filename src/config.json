@@ -11,7 +11,8 @@
         "name" : "bsc",
         "text" : "BSC",
         "symbol" : "BNB",
-        "viewUrl" : "https://bscscan.com/"
+        "viewUrl" : "https://bscscan.com/",
+        "supportV2" : true
       },
       "128" : {
         "name" : "heco",
@@ -27,7 +28,8 @@
         "name" : "Bsc-testnet",
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
-        "viewUrl" : "https://testnet.bscscan.com/"
+        "viewUrl" : "https://testnet.bscscan.com/",
+        "supportV2" : true
       },
       "3" : {
         "name" :  "Ropsten-Testnet",

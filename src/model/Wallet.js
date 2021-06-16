@@ -23,7 +23,7 @@ class Wallet {
 
   async isApproved(pool,bTokenId){
     if(this.detail.chainId && this.supportChain){
-      const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId)
+      const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId).catch(e => console.error('load approve error'))
       this.detail.isApproved = isApproved;
       this.setDetail(this.detail)
       return isApproved;
@@ -72,7 +72,7 @@ class Wallet {
   }
 
   get supportV2() {
-    return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97)
+    return this.detail.supportV2
   }
 
   get supportChain(){

@@ -396,7 +396,7 @@ export default class Trading {
     if(config){
       const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
       if(config){    
-        const res = await getFundingRate(chainId,config.pool,config.symbolId)
+        const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
         return res;
       }
     }

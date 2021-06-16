@@ -31,7 +31,7 @@ function Position({wallet,trading,version,lang}){
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e=> console.log(e))
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e=> console.error('load balance error,maybe network is wrong'))
       if(balance){
         setBalance(balance)
       }

@@ -456,7 +456,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
 
   const loadBalance = async () => {
     if(wallet.isConnected() && spec){
-      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account,bTokenId).catch(e => console.log(e))
+      const balance = await getWalletBalance(wallet.detail.chainId,spec.pool,wallet.detail.account,bTokenId).catch(e => console.error('getWalletBalance was error,maybe network is Wrong'))
       if(balance){
         setBalance(balance)
       }
