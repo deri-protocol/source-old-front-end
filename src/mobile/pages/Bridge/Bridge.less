@@ -11,23 +11,20 @@
   color: #AAAAAA;
   font-family: Korolev, sans-serif;
   .bridge_info{
-    width: 575px;
-    height: 646px;
-    border-radius: 20px;
+    width: 100%;
     flex-wrap: wrap;
     display: flex;
     background: #2c2d31;
     .header_top{
       display: flex;
       background: #1c1c22;
-      width: 575px;
+      width: 100%;
       .header{
         height: 54px;
         width: 100%;
         color: #D4E05C;
-        border-radius: 20px 20px 0px 0px;
         line-height: 54px;
-        font-size: 15px;
+        font-size: 0.15rem;
         font-weight: 400;
         font-family: Tachyon, sans-serif;
         letter-spacing: 2px;
@@ -40,9 +37,8 @@
       }
     }
     .box_content{
-      height: 592px;
-      width: 575px;
-      padding: 20px 20px;
+      width: 100%;
+      padding:calc(10 * 100vh/812) calc(10 * 100vh/812);;
       position: relative;
       .H6{
         color: #ccc;
@@ -169,13 +165,11 @@
         }
       }
       .Fromto{
-        height: 163px;
         width: 100%;
         margin-bottom: 30px;
         margin-top: 30px;
         margin-left: 13px;
         .wallet_choose_box_outer{
-          float: left;
           .wallet_choose_box{
             position: relative;
             width: 200px;
@@ -184,7 +178,6 @@
             border-radius: 10px;
             background-color: #252628;
             box-shadow: 2px 2px 6px 3px rgb(0 0 0 / 40%);
-            float: left;
             .box_shaow{
               position: absolute;
               width: 100%;
@@ -227,6 +220,7 @@
                 .wallet_ul_button_text{
                   width: 150px;
                   height: 45px;
+                  font-size: 0.16rem;
                   display: flex;
                   align-items: center;
                   float: left;
@@ -290,17 +284,18 @@
         }
         .arrow{
           width: 88px;
-          height: 163px;
-          float: left;
           .wallet_choose_box_center{
             width: 88px;
-            height: 135px;
             display: flex;
+            height: 50px;
+            margin-left: 50px;
             align-items: center;
             justify-content: center;
+            transform: rotate(90deg);
             img{
               width: 33.96px;
               height: 33.96px;
+
             }
             
           }
@@ -309,6 +304,7 @@
       .Amount_line{
         height: 65px;
         margin-bottom: 32px;
+        margin-left: 10px;
         .Amount_input{
           position: relative;
           width: 250px;
@@ -390,7 +386,7 @@
       .message_box{
         float: left;
         margin-bottom: 31px;
-        width: 514px;
+        width: 100%;
         height: 36px;
         #message{
           width: 100%;

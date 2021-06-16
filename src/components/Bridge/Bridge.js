@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
 import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
-import { DeriEnv,mintDeri,freeze,getDeriBalance,getUserWormholeSignature,unlockDeri,isDeriUnlocked, } from "../../lib/web3js/indexV2";
+import { DeriEnv,mintDeri,freeze,getDeriBalance,bg,getUserWormholeSignature,unlockDeri,isDeriUnlocked, } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button';
 import arrow from './img/arrow.png'
 import ETH from './img/ETH.png'
 import BSC from './img/BSC.png'
-import HECO from './img/HECO2.png'
+import HECO from './img/HECO.png'
 import exclamatory_green from './img/exclamatory_green.png'
 import exclamatory_red from './img/exclamatory_red.png'
 import exclamatory_yellow from './img/exclamatory_yellow.png'
@@ -14,8 +14,10 @@ import drop from './img/drop-down.png'
 import classNames from 'classnames'
 function Bridge({ wallet = {},lang }) {
   const isdev = DeriEnv.get() == 'dev' ? true : false;
-  const [amount, setAmount] = useState();
-  const [Initialize, setInitialize] = useState(isdev ?
+  const [amount, setAmount] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [initialize, setInitialize] = useState(isdev ?
     {
       from_chainId: 97,
       from_network: lang['bsc-testnet'],
@@ -30,29 +32,12 @@ function Bridge({ wallet = {},lang }) {
   const [dropdown, setDropdown] = useState(false);
   const [dropdownList_from, setDropdownList_from] = useState(false);
   const [dropdownList_to, setDropdownList_to] = useState(false);
-  const [From_img, setFrom_img] = useState(isNetwork(Initialize.from_chainId,lang).img);
-  const [To_img, setTo_img] = useState(isNetwork(Initialize.to_chainId,lang).img);
+  const [From_img, setFrom_img] = useState(isNetwork(initialize.from_chainId,lang).img);
+  const [To_img, setTo_img] = useState(isNetwork(initialize.to_chainId,lang).img);
   const [isFromConnected, setIsFromConnected] = useState();
   const [isToConnected, setIsToConnected] = useState();
-  const [AmountMessage, setAmountMessage] = useState([
-    {
-      text: `1. ${lang['sending-deri-to-wormhole']}`,
-      is_finished: 'is_finished',
-      status:'finished',
-      color:'',
-    },
-    {
-      text: `2. ${lang['waiting-for-bridge to sign']}`,
-      is_finished: '',
-      status:'',
-      color:'',
-    }
-  ]);
-  const [message, setmessage] = useState({
-    img:exclamatory_green,
-    text:`${lang['send-finished-one']} HECO ${lang['send-finished-two']}`,
-    color:'message_green',
-  });
+  const [AmountMessage, setAmountMessage] = useState([]);
+  const [message, setMessage] = useState({});
   const selectClass = classNames('dropdown-menu', { 'show': dropdown })
   const selectListClassFrom = classNames('wallet_lis_from', { 'show': dropdownList_from })
   const selectListClassTo = classNames('wallet_lis_to', { 'show': dropdownList_to })
@@ -65,40 +50,37 @@ function Bridge({ wallet = {},lang }) {
     setDropdownList_from(!dropdownList_from)
   }
   const showListTo= () =>{
-    setDropdownList_from(!dropdownList_to)
+    setDropdownList_to(!dropdownList_to)
   }
-
   const select_from = obj =>{
-    let Init =  JSON.parse(JSON.stringify(Initialize));
+    let Init =  JSON.parse(JSON.stringify(initialize));
     if(Init.to_chainId == obj.id){
-      Init.from_chainId = Initialize.to_chainId;
-      Init.from_network = Initialize.to_network;
-      Init.to_chainId = Initialize.from_chainId;
-      Init.to_network = Initialize.from_network;
+      Init.from_chainId = initialize.to_chainId;
+      Init.from_network = initialize.to_network;
+      Init.to_chainId = initialize.from_chainId;
+      Init.to_network = initialize.from_network;
     }else{
       Init.from_chainId = obj.id;
       Init.from_network = obj.text;
     }
     setInitialize(Init)
-    setFrom_img(isNetwork(Init.from_chainId,lang).img)
-    setTo_img(isNetwork(Init.to_chainId,lang).img)
     setDropdownList_from(!dropdownList_from)
   }
+
   const select_to = obj =>{
-    let Init =  JSON.parse(JSON.stringify(Initialize));
+    let Init =  JSON.parse(JSON.stringify(initialize));
     if(Init.from_chainId == obj.id){
-      Init.from_chainId = Initialize.to_chainId;
-      Init.from_network = Initialize.to_network;
-      Init.to_chainId = Initialize.from_chainId;
-      Init.to_network = Initialize.from_network;
+      Init.from_chainId = initialize.to_chainId;
+      Init.from_network = initialize.to_network;
+      Init.to_chainId = initialize.from_chainId;
+      Init.to_network = initialize.from_network;
     }else{
       Init.to_chainId = obj.id;
       Init.to_network = obj.text;
     }
     setInitialize(Init)
-    setFrom_img(isNetwork(Init.from_chainId,lang).img)
-    setTo_img(isNetwork(Init.to_chainId,lang).img)
     setDropdownList_to(!dropdownList_to)
+
   }
   const onFocus = event => {
     const target =event.target;
@@ -122,10 +104,41 @@ function Bridge({ wallet = {},lang }) {
       setIsFromConnected(isCon.isFromConnected);
       setIsToConnected(isCon.isToConnected)
     }
-  }, [[wallet.detail]])
+  }, [wallet.detail])
+
+  useEffect(() =>{
+    setFrom_img(isNetwork(initialize.from_chainId,lang).img)
+    setTo_img(isNetwork(initialize.to_chainId,lang).img)
+    let isCon = isConnected()
+    setIsFromConnected(isCon.isFromConnected);
+    setIsToConnected(isCon.isToConnected)
+  },[initialize])
+
+  const getValid = async () => {
+    if(hasConnectWallet()){
+      let res = await getUserWormholeSignature(wallet.detail.account);
+      if(res.valid){
+        setInitialize({
+          from_chainId: res.fromChainId,
+          from_network: isNetwork(res.fromChainId,lang).netWork,
+          to_chainId: res.toChainId,
+          to_network: isNetwork(res.toChainId,lang).netWork,
+        })
+        setFrom_img(isNetwork(res.fromChainId,lang).img)
+        setTo_img(isNetwork(res.toChainId,lang).img)
+        setAmount(bg(res.amount,-18))
+        setSending(res.valid)
+      }
+    }
+  }
+  useEffect(() => {
+    if(hasConnectWallet()){
+      getValid()
+    }
+  },[wallet.detail])
   const isConnected = () => {
-    let isFromConnected = hasConnectWallet ? (wallet.detail.chainId == Initialize.from_chainId ? true : false) : false;
-    let isToConnected = hasConnectWallet ? (wallet.detail.chainId == Initialize.to_chainId ? true : false) : false;
+    let isFromConnected = hasConnectWallet ? (wallet.detail.chainId == initialize.from_chainId ? true : false) : false;
+    let isToConnected = hasConnectWallet ? (wallet.detail.chainId == initialize.to_chainId ? true : false) : false;
     return {
       isFromConnected,
       isToConnected
@@ -231,10 +244,10 @@ function Bridge({ wallet = {},lang }) {
                 <div className='wallet_ul'>
                   <div className='wallet_ul_button'>
                     <div className='wallet_ul_button_text'>
-                      {Initialize.from_network}
+                      {initialize.from_network}
                     </div>
                     <div className='drop-down-outer'>
-                      <img src={drop} onClick={showListFrom} />
+                      <img className={sending?'':'img_show'} src={drop} onClick={showListFrom} />
                     </div>
                     <ul className='wallet_lis_from' className={selectListClassFrom}>
                       <div className='ul_shadow'></div>
@@ -267,10 +280,10 @@ function Bridge({ wallet = {},lang }) {
                 <div className='wallet_ul'>
                   <div className='wallet_ul_button'>
                     <div className='wallet_ul_button_text'>
-                      {Initialize.to_network}
+                      {initialize.to_network}
                     </div>
                     <div className='drop-down-outer'>
-                      <img src={drop} onClick={showListTo} />
+                      <img className={sending?'':'img_show'} src={drop} onClick={showListTo} />
                     </div>
                     <ul className='wallet_lis_to' className={selectListClassTo}>
                       <div className='ul_shadow'></div>
@@ -300,19 +313,21 @@ function Bridge({ wallet = {},lang }) {
               onFocus={onFocus}
               onBlur={onBlur}
               onChange={event =>  amountChange(event) }
+              value={amount}
+              disabled = {sending?true:false}
               />
               <div className='input_message'>{lang['amount']}</div>
             </div>
             <div className="Amount_message">
               {AmountMessage.map((item,index) => <div className='Amount_message_line' key={index}>
                 <span className={item.color}>{item.text}</span>
-                <span className={item.is_finished}>{item.status}</span>
+                <span className={item.is_finished} class='status'>{item.status}</span>
               </div> )} 
             </div>
           </div>
           <div className='message_box'>
             <div id='message' className={message.color}>
-              <img src={message.img} className='exclamatory' />
+              {showMessage?<img src={message.img} className='exclamatory' />:""} 
               <div className="text">{ message.text }</div>
             </div>
           </div>
@@ -320,25 +335,32 @@ function Bridge({ wallet = {},lang }) {
                     wallet={wallet}
                     lang={lang}
                     amount={amount}
-                    Initialize={Initialize}
-                    setAmountMessage = {setAmountMessage}
+                    initialize={initialize}
+                    setAmountMessage={setAmountMessage}
+                    setMessage={setMessage}
+                    setSending={setSending}
+                    setShowMessage={setShowMessage}
+                    isFromConnected={isFromConnected}
+                    isToConnected={isToConnected}
            />
         </div>
       </div>
     </div>
   )
 }
-function Operator({hasConnectWallet,wallet,amount,lang,Initialize,setAmountMessage}){
+function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessage,setMessage,setSending,setShowMessage,isFromConnected,isToConnected}){
   const [isApprove, setIsApprove] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [balance, setBalance] = useState(0);
+  const [isClickClaim, setIsClickClaim] = useState(false);
+  const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['approve']}></Button>);  
   const connect = () => {
     wallet.connect()
   }
   const valid = async () =>{
     if(hasConnectWallet()){
       let res = await getUserWormholeSignature(wallet.detail.account);
-      setIsValid(res.valid) 
+      setIsValid(res.valid)
     }
   }
   const getBalance = async () =>{
@@ -348,29 +370,138 @@ function Operator({hasConnectWallet,wallet,amount,lang,Initialize,setAmountMessa
     }
     
   }
-  const send = async (amount) =>{
-    if(amount == undefined){
+  const send = async () =>{
+    if(amount == '' || amount == 0){
       alert(lang['amount-must-be-greater-than-zero'])
       return;
     }
-    if(amount > balance){
+    if(+amount > balance){
       alert(lang['there-is-not-enough-amount'])
       return;
     }
-    let res =  await mintDeri(wallet.detail.chainId,wallet.detail.account,amount)
+    if(!isFromConnected){
+      alert(`${lang['send-finished-one']} ${isNetwork(initialize.from_chainId,lang).netWork} ${lang['send-finished-two']}`)
+      return;
+    }
+    setSending(true)
+    setShowMessage(true)
+    setMessage({
+      img:exclamatory_yellow,
+      text:`${lang['this-step-do-not-close']}`,
+      color:'message_yellow'
+    })
+    setAmountMessage([
+      {
+        'text': `1. ${lang['sending-deri-to-wormhole']}`,
+        'is_finished': '',
+        'status': '',
+        'color': ''
+      },
+      {
+        'text': `${lang['processing']}`,
+        'is_finished': '',
+        'status': '',
+        'color': 'is_processing'
+      }
+    ])
+    let res =  await freeze(wallet.detail.chainId,wallet.detail.account,initialize.to_chainId,amount)
     if(res.success){
-
+      setActionElement( <Button className='btn  btn-danger short-submit' disabled btnText={lang['processing']}></Button>)
+      setAmountMessage([
+        {
+          'text': `1. ${lang['sending-deri-to-wormhole']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `2. ${lang['waiting-for-bridge-to-sign']}`,
+          'is_finished': '',
+          'status': '',
+          'color': ''
+        },
+        {
+          'text': `${lang['processing']}`,
+          'is_finished': '',
+          'status': '',
+          'color': 'is_processing'
+        }
+      ])
+      window.setInterval(()=>{
+        valid()
+      },3000)
+    }else{
+      setAmountMessage([])
+      setMessage({})
+      setSending(false)
+      setMessage({
+        img:exclamatory_red,
+        text:`${lang['this-step-do-not-close']}`,
+        color:'message_red'
+      })
     }
   }
   const claim = async () =>{
-    // if(Initialize.to_chainId != wallet.detail.chainId) {
-    //   alert(`${lang['send-finished-one']} ${isNetwork(Initialize.to_chainId).netWork} ${lang['send-finished-two']}`)
-    //   return;
-    // }
-    let res = await freeze(wallet.detail.chainId,wallet.detail.account,'256',100)
+    if(!isToConnected){
+      alert(`${lang['send-finished-one']} ${isNetwork(initialize.to_chainId,lang).netWork} ${lang['send-finished-two']}`)
+      return;
+    }
+    setShowMessage(true)
+    setMessage({
+      img:exclamatory_yellow,
+      text:`${lang['this-step-do-not-close']}`,
+      color:'message_yellow'
+    })
+    setAmountMessage([
+      {
+        'text': `1. ${lang['claim-deri-ing']}`,
+        'is_finished': '',
+        'status': '',
+        'color': ''
+      },
+      {
+        'text': `${lang['processing']}`,
+        'is_finished': '',
+        'status': '',
+        'color': 'is_processing'
+      }
+    ]
+      
+    )
+    let res = await mintDeri(wallet.detail.chainId,wallet.detail.account)
+    if(res.success){
+      setIsClickClaim(true)
+      setActionElement( <Button className='btn  btn-danger short-submit' disabled btnText={lang['processing']}></Button>)
+      setAmountMessage([
+        {
+          'text': `1. ${lang['claim-deri-ing']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `2. ${lang['waiting-for-bridge-to-sync']}`,
+          'is_finished': '',
+          'status': '',
+          'color': ''
+        },
+        {
+          'text': `${lang['processing']}`,
+          'is_finished': '',
+          'status': '',
+          'color': 'is_processing'
+        }
+      ])
+      window.setInterval(()=>{
+        valid()
+      },3000)
+    }else{
+      alert(`${lang['claim-faild']}`)
+      setAmountMessage([])
+    }
+    
   }
   const approve = async () => {
-    // const res = await unlock(detail.chainId,spec.pool,detail.account,bTokenId);
     const res = await unlockDeri(wallet.detail.chainId,wallet.detail.account)
     if(res.success){
       setIsApprove(true);
@@ -389,34 +520,87 @@ function Operator({hasConnectWallet,wallet,amount,lang,Initialize,setAmountMessa
   useEffect(() => {
     if(hasConnectWallet()){
       loadApprove();
+      valid()
+      getBalance()
     }
-  }, [[wallet.detail]]); 
+  }, [wallet.detail,initialize]); 
   useEffect(() => {
-    if(hasConnectWallet()){
-      valid();
-    }
-  }, [[wallet.detail]]); 
-  useEffect(() => {
-    if(hasConnectWallet()){
-      getBalance();
-    }
-  }, [[wallet.detail]]); 
-
-  let actionElement =(<>
-     <Button className='btn' btnText={lang['approve']}></Button>
-  </>)
-  
-  if(hasConnectWallet()){
     if(isValid){
-      actionElement = <Button className='btn' btnText={lang['claim']} click={claim}/>
-    } else if(!isApprove){
-      actionElement = <Button className='btn' btnText={lang['approve']} click={approve}/>
-    } else {
-      actionElement = <Button className='btn' btnText={lang['send']} click={() => {send(amount)}}></Button>
+      if(initialize.to_chainId != wallet.detail.chainId){
+        setMessage({
+          img:exclamatory_green,
+          text:`${lang['send-finished-one']} ${isNetwork(initialize.to_chainId,lang).netWork} ${lang['send-finished-two']}`,
+          color:'message_green'
+        })
+      }
+      setAmountMessage([
+        {
+          'text': `1. ${lang['sending-deri-to-wormhole']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `2. ${lang['waiting-for-bridge-to-sign']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `3. ${lang['bridge-signed']}`,
+          'is_finished': '',
+          'status': '',
+          'color': 'is_finished'
+        },
+      ])
+
+    }else if(isClickClaim){
+      setAmountMessage([
+        {
+          'text': `1. ${lang['sending-deri-to-wormhole']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `2. ${lang['waiting-for-bridge-to-sign']}`,
+          'is_finished': 'is_finished',
+          'status': 'finished',
+          'color': ''
+        },
+        {
+          'text': `3. ${lang['done']}`,
+          'is_finished': '',
+          'status': '',
+          'color': 'is_finished'
+        },
+      ])
+      setSending(false)
+    }else{
+      setAmountMessage([])
+      setShowMessage(false)
     }
-  } else {
-    actionElement = <Button className='btn' btnText={lang['connect-wallet']} click={connect}></Button>
-  }
+  }, [isValid,initialize]); 
+
+  
+  
+  
+  useEffect(()=>{
+    let element;
+    if(hasConnectWallet()){
+      if(isValid){
+        element =  <Button className='btn' btnText={lang['claim']} click={claim}/>
+      } else if(!isApprove){
+        element = <Button className='btn' btnText={lang['approve']} click={approve}/>
+      } else {
+        element = <Button className='btn' btnText={lang['send']} click={send}></Button>
+      }
+    } else {
+      element = <Button className='btn' btnText={lang['connect-wallet']} click={connect}></Button>
+    }
+    setActionElement(element)
+  },[isValid,wallet.detail,isApprove,amount,initialize])
+
   return (
     <div className='button'>
      {actionElement}

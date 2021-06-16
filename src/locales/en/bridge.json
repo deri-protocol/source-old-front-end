@@ -21,7 +21,7 @@
   "processing":"processing...",
   "finished":"finished",
   "this-step-do-not-close":"This step takes several or over 10 minutes. Do not close this page...",
-  "waiting-for-bridge to sign":"Waiting for bridge to sign ...",
+  "waiting-for-bridge-to-sign":"Waiting for bridge to sign ...",
   "bridge-signed":"Bridge signed.",
   "send-finished-one":"Please switch your wallet network to",
   "send-finished-two":"to claim your DERI.",
@@ -30,6 +30,7 @@
   "done":"Done!",
   "back":"BACK",
   "approve-faild":"Approve faild",
+  "claim-faild":"Claim faild",
   "amount-must-be-greater-than-zero":"Amount must be greater than zero",
   "there-is-not-enough-amount":"There is not enough Amount"
 }
