@@ -19,10 +19,6 @@
         "symbol" : "HT",
         "viewUrl" : "https://hecoscan.xyz/"
       }
-    },
-    "oracle" : {
-      "COIN" : "https://oracle3.deri.finance/price",
-      "BTCUSD" : "https://oracle.deri.finance/price"
     }
   },
   "dev" : {
@@ -32,11 +28,19 @@
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/"
+      },
+      "3" : {
+        "name" :  "Ropsten-Testnet",
+        "text" : "ROPSTEN TESTNET",
+        "symbol" : "ETH",
+        "viewUrl" : "https://ropsten.etherscan.io"
+      },
+      "256" : {
+        "name" : "heco-testnet",
+        "text" : "HECO TESTNET",
+        "symbol" : "HT",
+        "viewUrl" : "https://scan-testnet.hecochain.com"
       }
-    },
-    "oracle" : {
-      "COIN" : "https://oracle2.deri.finance/price",
-      "BTCUSD" : "https://oracle2.deri.finance/price"      
     }
   }
 }
