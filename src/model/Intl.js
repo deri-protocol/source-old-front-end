@@ -33,6 +33,10 @@ export default class Intl {
       setLocale : action,
       dict : computed
     })
+    const language = navigator.language
+    if(language){
+      this.setLocale(language.split('-')[0]);
+    }
   }
 
   setLocale(locale){
