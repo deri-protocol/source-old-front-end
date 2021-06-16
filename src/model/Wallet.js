@@ -72,6 +72,10 @@ class Wallet {
     this.detail = detail;
   }
 
+  refresh(){
+    this.loadWalletBalance(this.detail.chainId,this.detail.account);
+  }
+
   get supportV2() {
     return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97) || eqInNumber(this.detail.chainId,80001)
   }

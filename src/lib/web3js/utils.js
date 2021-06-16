@@ -196,8 +196,14 @@ export const getNetworkName = (chainId) => {
     case '256':
       poolNetwork = 'hecotestnet';
       break;
+    case '137':
+      poolNetwork = 'matic';
+      break;
+    case '80001':
+      poolNetwork = 'mumbai';
+      break;
     default:
-      throw new Error('The networkId is not valid');
+      throw new Error(`The networkId is not valid for chainId ${chainId}`);
   }
   return poolNetwork;
 };

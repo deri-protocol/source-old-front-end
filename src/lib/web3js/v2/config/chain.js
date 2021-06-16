@@ -1,3 +1,4 @@
+// add a new chain: validateChainId, getChainProviderUrls, getNetworkName, getAnnualBlockNumberConfig
 export const getChainProviderUrls = (chainId) => {
   const chainProviderUrls = [
     {
@@ -84,6 +85,8 @@ export const getAnnualBlockNumberConfig = () => {
     3: '2367422',
     97: '10497304',
     256: '10511369',
+    137: '15063056',
+    80001: '15063056',
   };
 };
 

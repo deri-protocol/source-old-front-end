@@ -145,7 +145,8 @@ function Trade({wallet = {},trading,version}){
   //完成交易
   const afterTrade = () => {
     trading.setVolume('')
-    trading.refresh()
+    trading.refresh();
+    wallet.refresh();
   }
   
   useEffect(() => {

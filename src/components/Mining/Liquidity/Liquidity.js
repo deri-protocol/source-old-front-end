@@ -207,6 +207,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 		// loadLiquidity()
 		loadBalance();
 		loadLiqidityInfo();
+		wallet.refresh()
 	}
 
 	const removeLiquidity = () => {
