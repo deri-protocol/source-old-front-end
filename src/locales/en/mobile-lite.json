@@ -1,8 +1,11 @@
 {
   "balance-in-contract" : "Balance in Contract",
-  "dynamic-balance" : "Dyn Bal",
-  "available-balance" : "Avail Bal",
-  "dynamic-effective-balance" : "Dyn.Eff.Bal",
+  "dynamic-balance" : "Dyn. Bal",
+  "available-balance" : "Avail. Bal",
+  "dynamic-effective-balance" : "Dyn. Eff. Bal",
   "transaction-fee" : "Fee",
-  "my-position" : "Position"
+  "my-position" : "Position",
+
+  "index" : "Index",
+  "funding" : "Funding"
 }
