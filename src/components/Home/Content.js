@@ -24,37 +24,35 @@ import Kryptos from './img/Kryptos.png'
 import LD from './img/LD.png'
 import LotusCapital from './img/LotusCapital.png'
 import Arbitragers from './img/Arbitragers.png'
-export default function Title() {
+export default function Content({lang}) {
   return (
     <div>
       <div className='index_part1'>
         <img src={deri_background} />
         <div className='index_part1-1 px1200'>
-          <div className='index_part1-2'>THE</div>
-          <div className='index_part1-3'>DEFI WAY</div>
-          <div className='index_part1-4'>TO TRADE DERIVATIVES </div>
+          <div className='index_part1-2'>{lang['the']}</div>
+          <div className='index_part1-3'>{lang['defi-way']}</div>
+          <div className='index_part1-4'>{lang['to-trade-derivatives']}</div>
         </div>
       </div>
       <div className='index_part2 px1200'>
         <div className='index_part2-center'>
           <div className="index_part2-L">
-            <div>
-              <span className="key">DERI Protocol </span>
-              is a decentralized
+            <div className='index_part2_L-text'>
+              <span className="key">{lang['deri-protocol']} </span>
+              {lang['deri-describe']}
             </div>
-            <div>protocol to exchange risk exposures</div>
-            <div>precisely and capital-efficiently.</div>
           </div>
           <div className='index_part2-R'>
-            <div> <span>We are on </span> 
-              <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" class="Body-link">SUSHI</a>
-              <span> and </span> 
-              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" class="Body-link">PANCAKE</a> !
+            <div> <span>{lang['we-are-on']} </span> 
+              <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" class="Body-link">{lang['sushi']}</a>
+              <span> {lang['and']} </span> 
+              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" class="Body-link">{lang['pancake']}</a> !
             </div>
-            <div> <span> Read our </span> 
-              <a href="https://docs.deri.finance/whitepaper" class="Body-link">Whitepaper</a>
-              <span> and PeckShield </span> 
-              <a href="https://docs.deri.finance/code-audits" class="Body-link">audit report</a> .
+            <div> <span> {lang['read-our']} </span> 
+              <a href="https://docs.deri.finance/whitepaper" class="Body-link">{lang['whitepaper']}</a>
+              <span> {lang['and-peckshield']} </span> 
+              <a href="https://docs.deri.finance/code-audits" class="Body-link">{lang['audit-report']}</a> .
             </div>
           </div>
         </div>
@@ -62,13 +60,13 @@ export default function Title() {
       <div className='index_part3 px1200 big_square'>
         <div className='top_pater'>
           <div className='bottom_square'></div>
-          <div className='label H2'>DEFINING FEATURES</div>
+          <div className='label H2'>{lang['defining-features']}</div>
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
                 <img src={Completely} className='box_label_img' />
-                <div className="box_lable H3">Completely On-Chain</div>
-                <div className="box_note">Exchanging mechanism fully implemented within Ethereum smart contracts</div>
+                <div className="box_lable H3">{lang['completely-on-chain']}</div>
+                <div className="box_note">{lang['ex-me-fu-im-wi-eth-sm-con']}</div>
               </div>
               <img src={Completely_b} className='box_background' />
               <div className='box_bottom'></div>
@@ -76,8 +74,8 @@ export default function Title() {
             <div className='box right_box'>
               <div className='box_top'>
                 <img src={RealDerivatives} className='box_label_img' />
-                <div className="box_lable H3">Real Derivatives</div>
-                <div className="box_note">Get risk exposures precisely and capital-efficiently</div>
+                <div className="box_lable H3">{lang['real-derivatives']}</div>
+                <div className="box_note">{lang['get-ri-ex-pr-and-cap-eff']}</div>
               </div>
               <img src={RealDerivatives_b} className='box_background' />
               <div className='box_bottom'></div>
@@ -87,8 +85,8 @@ export default function Title() {
             <div className='box left_box'>
               <div className='box_top'>
                 <img src={Composability} className='box_label_img' />
-                <div className="box_lable H3">Composability</div>
-                <div className="box_note">Risk exposures tokenized as NFTs to be utilized as lego blocks</div>
+                <div className="box_lable H3">{lang['composability']}</div>
+                <div className="box_note">{lang['ri-ex-to-as-nft-to-be-ut-as-le-bl']}</div>
               </div>
               <img src={Composability_b} className='box_background' />
               <div className='box_bottom'></div>
@@ -96,8 +94,8 @@ export default function Title() {
             <div className='box right_box'>
               <div className='box_top'>
                 <img src={ETHBSCHECO} className='box_label_img' />
-                <div className="box_lable H3">ETH + BSC + HECO</div>
-                <div className="box_note">Three chains, one ecosystem</div>
+                <div className="box_lable H3">{lang['eth-bsc-heco']}</div>
+                <div className="box_note">{lang['three-chains-one-ecosystem']}</div>
               </div>
               <img src={ETHBSCHECO_b} className='box_background' />
               <div className='box_bottom'></div>
@@ -108,21 +106,21 @@ export default function Title() {
       <div className='index_part4 px1200 big_square'>
         <div className='top_pater'>
           <div className='bottom_square'></div>
-          <div className='label H2'>ROLES IN DERI</div>
+          <div className='label H2'>{lang['roles-in-deri']}</div>
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
                 <img src={LiquidityProviders} className='box_label_img' />
-                <div className="box_lable H3">Liquidity Providers</div>
-                <div className="box_note">Liquidity providers provide liquidity to the pools to gain transaction fee, funding fee and DERI award etc.</div>
+                <div className="box_lable H3">{lang['liquidity-providers']}</div>
+                <div className="box_note">{lang['liquidity-providers-roles']}</div>
               </div>
               <div className='box_bottom'></div>
             </div>
             <div className='box right_box'>
               <div className='box_top'>
                 <img src={Traders} className='box_label_img' />
-                <div className="box_lable H3">Traders</div>
-                <div className="box_note">With Deri Protocol, traders are able to acquire the targeted risk exposures precisely and capital-efficiently.</div>
+                <div className="box_lable H3">{lang['traders']}</div>
+                <div className="box_note">{lang['traders-roles']}</div>
               </div>
               <div className='box_bottom'></div>
             </div>
@@ -131,16 +129,16 @@ export default function Title() {
             <div className='box left_box'>
               <div className='box_top'>
                 <img src={Arbitragers} className='box_label_img' />
-                <div className="box_lable H3">Arbitragers</div>
-                <div className="box_note">Arbitragers are a special type of traders induced by funding fee arbitrage to balance the two sides of long and short positions.</div>
+                <div className="box_lable H3">{lang['arbitragers']}</div>
+                <div className="box_note">{lang['arbitragers-roles']}</div>
               </div>
               <div className='box_bottom'></div>
             </div>
             <div className='box right_box'>
               <div className='box_top'>
                 <img src={Positionliquidators} className='box_label_img' />
-                <div className="box_lable H3">Position Liquidators</div>
-                <div className="box_note">Positions touching their liquidation lines are liquidated by Position Liquidators, who share the positions' remaining margin as reward.</div>
+                <div className="box_lable H3">{lang['position-liquidators']}</div>
+                <div className="box_note">{lang['position-liquidators-roles']}</div>
               </div>
               <div className='box_bottom'></div>
             </div>
@@ -148,7 +146,7 @@ export default function Title() {
         </div>
       </div>
       <div className='index_part5 pics'>
-        <div className="label H2">INVESTORS</div>
+        <div className="label H2">{lang['investors']}</div>
         <div className='pic_inline'>
           <div className='pic'>
             <img src={FBG} />
@@ -180,7 +178,7 @@ export default function Title() {
         </div>
       </div>
       <div className='index_part6 pics'>
-        <div className="label H2">PARTNERS</div>
+        <div className="label H2">{lang['partners']}</div>
         <div className='pic_inline'>
           <div className='pic'>
             <img src={BASIS} />

@@ -1,9 +1,9 @@
 import Team from '../../../components/Team/Team';
 import './team.less'
-export default function Team_desktop(){
+export default function Team_desktop({lang}){
   return(
     <div className='team_box'>
-      <Team />
+      <Team lang={lang} />
     </div>
   )
 }

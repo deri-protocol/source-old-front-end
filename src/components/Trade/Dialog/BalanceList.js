@@ -11,7 +11,7 @@ import useDisableScroll from '../../../hooks/useDisableScroll';
 const AddMarginDialog = withModal(DepositMargin)
 const RemoveMarginDialog = withModal(WithdrawMagin)
 
-export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClose}){  
+export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClose,lang}){  
   const [depositAndWithdragList, setDepositAndWithdragList] = useState([]);
   const limit = parseInt((document.body.offsetHeight - 140)/54)
   const [placeholdList, setPlaceholdList] = useState(Array.from({length : limit}));
@@ -76,7 +76,7 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>
-              <div className='title'>BALANCE IN CONTRACT</div>
+              <div className='title'>{lang['balance-in-contract-uppercase']}</div>
               <div className='close' data-dismiss='modal' onClick={closeCurrent}>
                 <span>&times;</span>
               </div>
@@ -84,12 +84,12 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
             <div className='modal-body'>
               <div className='balance-list'>
                 <div className='row header'>
-                  <span className='btoken pc'>Base Token</span>
-                  <span className='btoken mobile'>B Token</span>
-                  <span className='w-balance pc'>Wallet Balance</span>
-                  <span className='w-balance mobile'>Wal Bal</span>
-                  <span className='avail-balance pc'>Available Balance</span>
-                  <span className='avail-balance mobile'>Avail Bal</span>
+                  <span className='btoken pc'>{lang['base-token']}</span>
+                  <span className='btoken mobile'>{lang['base-token']}</span>
+                  <span className='w-balance pc'>{lang['wallet-balance']}</span>
+                  <span className='w-balance mobile'>{lang['wallet-balance']}</span>
+                  <span className='avail-balance pc'>{lang['available-balance']}</span>
+                  <span className='avail-balance mobile'>{lang['available-balance']}</span>
                 </div>
                 {depositAndWithdragList.map((item,index) => (                  
                   <div className='row' key={index}>
@@ -101,25 +101,25 @@ export function BalanceList({wallet,spec,afterDepositAndWithdraw,position,onClos
                         className='add-margin'
                         id='openAddMargin'
                         onClick={() => addMargin(item.walletBalance,item.bTokenId,item.bTokenSymbol)}> 
-                        <img src={removeMarginIcon} alt='add margin'/> Add
+                        <img src={removeMarginIcon} alt={lang['add-margin']}/> {lang['add']}
                       </span>
                       <span className='remove-margin'
                         onClick={() => removeMargin(item.availableBalance,item.bTokenId,item.bTokenSymbol)}>
-                        <img src={addMarginIcon} alt='add margin'/> Remove
+                        <img src={addMarginIcon} alt={lang['remove-margin']}/> {lang['remove']}
                       </span>
                     </span>
                   </div>
                 ))}
-                {placeholdList.map(item => <div className='row'></div>)}
+                {placeholdList.map((item,index) => <div className='row' key={index}></div>)}
               </div>
             </div>
           </div>
         </div>
       </div>
       <AddMarginDialog  wallet={wallet} onClose={closeAddMargin} balance={balance} spec={{...spec,bTokenId,bTokenSymbol}} 
-                        position={position} modalIsOpen={addModalIsOpen} afterDeposit={afterDeposit} className='trading-dialog' nested={true}/>
+                        position={position} modalIsOpen={addModalIsOpen} afterDeposit={afterDeposit} className='trading-dialog' nested={true} lang={lang}/>
       <RemoveMarginDialog wallet={wallet} onClose={closeRemoveMargin} spec={{...spec,bTokenId,bTokenSymbol}} 
-                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} availableBalance={availableBalance} className='trading-dialog' nested={true}/>
+                          position={position} modalIsOpen={removeModalIsOpen} afterWithdraw={afterWithdraw} availableBalance={availableBalance} className='trading-dialog' nested={true}  lang={lang}/>
     </>
   )
 }

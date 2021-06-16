@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 import classNames from 'classnames';
 
 
-export default function Tab({lite}){
+export default function Tab({lite = false,lang}){
   const history = useHistory();
   // const [isLite, setIsLite] = useState(true);
 
@@ -19,8 +19,8 @@ export default function Tab({lite}){
 
   return (
     <div className={clazz}>
-      <div className='lite' onClick={() => redirect('/lite')} >LITE</div>
-      <div className='pro' onClick={() => redirect('/pro')}> PRO
+      <div className='lite' onClick={() => redirect('/lite')} >{lang['lite']}</div>
+      <div className='pro' onClick={() => redirect('/pro')}> {lang['pro']}
       </div>
     </div>
   )

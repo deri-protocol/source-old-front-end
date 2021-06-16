@@ -1,0 +1,13 @@
+{
+  "mining" : "Mining",
+  "trade" : "Trade",
+  "governance" : "Governance",
+  "bridge" : "Bridge",
+  "docs" : "Docs",
+  "team" : "Team",
+  "faq" : "FAQ",
+  "code-audit" : "Code Audit",
+  "github" : "Github",
+  "guide" : "Guide",
+  "whitepaper" : "Whitepaper"
+}

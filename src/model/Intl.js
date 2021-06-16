@@ -1,13 +1,37 @@
-import { makeObservable, observable, action, computed, flow } from "mobx";
-import {computedAsync, promisedComputed} from 'computed-async-mobx'
-import LoadableComponent from "../utils/LoadableComponent";
+import { makeObservable, observable, action, computed } from "mobx";
+
+const cache = {}
+
+function importAll(r){
+  return r.keys().forEach(key => {
+    const path = key.split('/')
+    const lang = path[1]
+    const page = path[2].split('.')[0].toLowerCase()
+    if(!cache[lang]) {
+      cache[lang] = {}
+    }
+    
+    if(/mobile-/.test(page)){
+      const pageName= page.split('-')[1]
+      if(!cache[lang][pageName]){
+        cache[lang][pageName] = {}
+      }
+      cache[lang][pageName]['mobile'] = r(key)
+    } else {
+      cache[lang][page] = r(key)
+    }
+  });
+}
+
+importAll(require.context(`../locales/`,true,/\.json$/))
 
 export default class Intl {
-  locale = 'en-US'
+  locale = 'en'
   constructor(){
     makeObservable(this,{
       locale : observable,
       setLocale : action,
+      dict : computed
     })
   }
 
@@ -15,9 +39,7 @@ export default class Intl {
     this.locale = locale;
   }
 
-  fetchDict = flow(function* (){
-    // const dict = yield import(`../locales/${this.locale}.json`)
-    // this.dict = dict.default;
-    // return this.dict
-  })
+  get dict(){         
+    return cache[this.locale]
+  }
 }

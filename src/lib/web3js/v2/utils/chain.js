@@ -9,7 +9,11 @@ export const getChainProviderUrl = async (chainId) => {
   chainId = normalizeChainId(chainId);
   const urls = getChainProviderUrls(chainId);
   if (urls.length > 0) {
-    return await getAliveHttpServer(urls);
+    if (['56', '128', '97', '256'].includes(chainId)) {
+      return await getAliveHttpServer(urls);
+    } else {
+      return urls[0]
+    }
   } else {
     throw new Error(
       `Cannot find the chain provider url with chainId: ${chainId}`

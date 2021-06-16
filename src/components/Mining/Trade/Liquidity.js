@@ -9,7 +9,7 @@ import Config from '../../../model/Config';
 const configInfo = new Config();
 
 
-function Liquidity({wallet = {},version,chainId,address,symbolId}) {
+function Liquidity({wallet = {},version,chainId,address,symbolId,lang}) {
   const [userInfoInPool,setUserInfoInPool] = useState({})
   const [tradeSummary, setTradeSummary] = useState({});
   const history = useHistory();
@@ -45,13 +45,13 @@ function Liquidity({wallet = {},version,chainId,address,symbolId}) {
 
   return(
     <div className="liquidity-box">
-      <div className="odd title">Trade to Earn DERI</div>
+      <div className="odd title">{lang['trade-to-earn-deri']}</div>
         <div className="odd text">
-            <div className="text-title">Total Trading Volume in Current Hour</div>
+            <div className="text-title">{lang['total-trading-volume-in-current-hour']}</div>
             <div className="text-num">{ tradeSummary.totalTradingVolumeCurrent || 0}</div>
         </div>
         <div className="odd text">
-            <div className="text-title">My Trading Volume in Current Hour</div>
+            <div className="text-title">{lang['my-trading-volume-in-current-hour']}</div>
             <div className="text-num">{ userInfoInPool.myTradingVolumeCurrent || 0 }</div>
         </div>
         <div className="odd text">
@@ -71,7 +71,7 @@ function Liquidity({wallet = {},version,chainId,address,symbolId}) {
         </div>
         <div className="claim-btn">
             <button className="claim" onClick={toTrade}>
-              TRADE
+              {lang['trade']}
             </button>
         </div>
     </div> 

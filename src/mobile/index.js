@@ -1,5 +1,5 @@
 import  {useEffect } from 'react'
-import Header from './components/Header/Nav'
+import Header from './components/Header/Header'
 import Body from './components/Body/Body'
 import Footer from './components/Footer/Footer'
 import './style/index.less'

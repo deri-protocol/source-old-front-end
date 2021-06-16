@@ -8,7 +8,7 @@ import useDisableScroll from '../../../../hooks/useDisableScroll';
 
 
 
-export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool,baseTokenId,symbolId}){
+export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,balance,isLpPool,baseTokenId,symbolId,lang}){
   const [amount, setAmount] = useState('0');
   const [decimal, setDecimal] = useState('00');
   const [addValue, setAddValue] = useState('')
@@ -29,15 +29,15 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
     const max = bg(balance)
     const cur = bg(addValue);
     if(cur.gt(max)) {
-      alert("not sufficient funds");
+      alert(lang['not-sufficient-funds']);
       return false;
     }
     if(spec && (+addValue) < (+spec.minAddLiquidity)) {
-      alert(`The input liquidity shall not be less than ${spec.minAddLiquidity}`);
+      alert(`${lang['the-input-liquidity-shall-not-be-less-than']} ${spec.minAddLiquidity}`);
       return false;
     }
     if(addValue <=0 || isNaN(addValue)){
-      alert("It has to be greater than zero");
+      alert(lang['it-has-to-be-greater-than-zero']);
       return false;
     }
     let res =  null;
@@ -48,7 +48,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
     }
     
     if (!res ||  !res.success) {
-      alert("failure of transaction");
+      alert(lang['failure-of-transaction']);
     }
     return true;
   }
@@ -66,14 +66,14 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
     <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <div className='title'>ADD LIQUIDITY</div>
+            <div className='title'>{lang['add-liquidity']}</div>
             <div className='close' onClick={onClose}>
               <span>&times;</span>
             </div>
           </div>
           <div className='modal-body'>
             <div className='margin-box-info'>
-              <div>Wallet Balance</div>
+              <div>{lang['wallet-balance']}</div>
               <div className='money'>
                 <span> 
                   <span className='bt-balance'>
@@ -87,11 +87,11 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
               <div className='enter-margin'>
                 <div className='input-margin'>
                   <div className='box'>
-                    <div className='amount' style={{display : addValue ? 'block' : 'none'}}>LIQUIDITY</div>
+                    <div className='amount' style={{display : addValue ? 'block' : 'none'}}>{lang['liquidity']}</div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder='LIQUIDITY'
+                      placeholder={lang['liquidity']}
                       value={addValue}
                       onChange={input}
                     />
@@ -100,11 +100,11 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
                 <div>{ baseToken }</div>
               </div>
               <div className='max'>
-                MAX: <span className='max-num'>{balance }</span>
-                <span className='max-btn-left' onClick={addAll}>ADD ALL</span>
+                {lang['max']}: <span className='max-num'>{balance }</span>
+                <span className='max-btn-left' onClick={addAll}>{lang['add-all']}</span>
               </div>
               <div className='add-margin-btn'>
-                <Button className='margin-btn' click={addLiq} btnText='ADD' afterClick={afterAdd}/>
+                <Button className='margin-btn' click={addLiq} btnText={lang['add']} afterClick={afterAdd}/>
               </div>
             </div>
           </div>    

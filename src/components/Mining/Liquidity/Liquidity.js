@@ -10,7 +10,7 @@ import withModal from '../../hoc/withModal';
 import { eqInNumber, isCakeLP, isLP, isSushiLP } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,symbolId}) {
+function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,symbolId,lang}) {
   const [liquidity,setLiquidity] = useState({})
   const [bToken,setBToken] = useState(baseToken)
 	const isLpPool = (type === 'lp')
@@ -47,7 +47,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						values : total.toFixed(2),
 						lpApy,
 						unit : 'shares',
-						sharesTitle : 'Staked Balance'
+						sharesTitle : lang['staked-balance']
 					})
 				} else {
 					setLiquidity({
@@ -59,7 +59,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						totalShares : bg(shares).plus(info.pnl).toString(),
 						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
-						sharesTitle : 'My Liquidity',
+						sharesTitle : lang['my-Liquidity'],
 					})
 				}	
 			}
@@ -92,26 +92,26 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 
   return (
     <div className="liquidity-box">
-      <div className="odd title">Provide { bToken } Earn DERI</div>
+      <div className="odd title">{lang['provider']} { bToken } {lang['earn-deri']}</div>
 				<div className="odd text">
-						<div className="text-title">Pool Total Liquidity</div>
+						<div className="text-title">{lang['pool-total-liquidity']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
 				</div>
 				<div className="odd text">
-						<div className="text-title">APY</div>
+						<div className="text-title">{lang['apy']}</div>
 						<div className='text-num' >
 							<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}>
 								<DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? 'SUSHI-APY' : 'CAKE-APY'}> 
+								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
 								<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
 				</div>	
 				{version === 'v1' && <div className="odd text">
-					<div className="text-title">Liquidity Share Value</div>
+					<div className="text-title">{lang['liquidity-share-value']}</div>
 					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						
 				</div>}
 				<div className="odd text">
-						<div className="text-title">My Liquidity Pencentage</div>
+						<div className="text-title">{lang['my-liquidity-pencentage']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.percent } decimalScale={2} suffix={'%'}/></div>
 				</div>
 				<div className="odd text">
@@ -119,13 +119,13 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.formatShares } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
 				{version === 'v2' && <div className="odd text">
-					<div className='text-title'>Mining PnL</div>
+					<div className='text-title'>{lang['mining-pnL']}</div>
 					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
 				<div className="odd claim-network">
 					<div className="text-title money">{version === 'v1' && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
 				</div>
-				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId}/>
+				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId} lang={lang}/>
 	</div>
   )
 }
@@ -135,7 +135,7 @@ const AddDialog = withModal(AddLiquidity)
 const RemoveDialog = withModal(RemoveLiquidity)
 
 //操作区
-const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loadLiqidityInfo,baseTokenId,symbolId})=> {
+const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loadLiqidityInfo,baseTokenId,symbolId,lang})=> {
 	const [isApproved,setIsApproved] = useState(false)
 	const [btnType, setBtnType] = useState('add')
 	const [isOpen, setIsOpen] = useState(false)
@@ -188,7 +188,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 		if(res && res.success){
 			setIsApproved(true)
 		} else {
-			alert(res.error ?  res.error.message || 'Approve failed' : 'Approve failed')
+			alert(res.error ?  res.error.message || lang['approve-failed'] : lang['approve-failed'])
 		}
   }
 
@@ -239,11 +239,11 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 		} else {
 			let el = null
 			if(!wallet.isConnected()){
-				el = <div className='approve'><Button className='approve-btn' click={connect} btnText='Connect Wallet'></Button></div>
+				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-callet']}></Button></div>
 			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
-				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText='Wrong Network'></Button></div>				
+				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']}></Button></div>				
 			} else if(!isApproved) {
-				el = <div className='approve'><Button className='approve-btn' click={approve} btnText='APPROVE'></Button></div>
+				el = <div className='approve'><Button className='approve-btn' click={approve} btnText={lang['approve']}></Button></div>
 			} 
 			setButtonElment(el)
 		}
@@ -256,9 +256,9 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 			{
 				btnType === 'add' 
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
-										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId}/> 
-				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo} 
-											address={address} wallet={wallet} unit={version === 'v1' ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId}/>
+										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
+				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
+											address={address} wallet={wallet} unit={version === 'v1' ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>

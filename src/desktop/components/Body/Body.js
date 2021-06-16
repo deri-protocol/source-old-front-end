@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter, Switch,Route,Redirect} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
+import withLanguage from '../../../components/hoc/withLanguage';
 
 
 
@@ -14,25 +15,28 @@ const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 
 @withRouter
+@withLanguage
 class Body extends React.Component {
   render(){
+    const {dict} = this.props
+
     return (
       <div className='body'>
         <Switch >
-          <Route exact path='/home' component={Home}></Route>
-          <Route exact path='/team' component={Team}></Route>
-          <Route exact path='/bridge' component={Bridge}></Route>
+          <Route exact path='/team' component={() => <Team lang={dict['team']} />}></Route>
+          <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
+          <Route exact path='/home' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/'>
             <Redirect to='/lite'/>
           </Route>
-          <Route exact path='/mining' component={Pool}/>
-          <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={Mining}/>
-          <Route exact path='/lite' component={Lite}/>
-          <Route exact path='/pro' component={Pro}/>
-          <Route component={Lite} />
+          <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
+          <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
+          <Route exact path='/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
+          <Route component={() => <Lite lang={dict['lite']}/>} />
         </Switch>
       </div>
     )
   }
 }
-export default Body;
+export default Body

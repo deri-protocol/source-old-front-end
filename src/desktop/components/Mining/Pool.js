@@ -4,12 +4,12 @@ import './pool.less'
 import { inject, observer } from 'mobx-react';
 
 
-function Pool({version}){
+function Pool({version,lang}){
   const [loaded,pools] = useMiningPool(version);
   return (
     <div className="mining-info">
       <div className="pools">
-        {pools.map((pool,index) => <PoolBox pool={pool} key={index}/>)}
+        {pools.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
         {!loaded && <div className="loading">
           <span
             className="spinner spinner-border spinner-border-sm">

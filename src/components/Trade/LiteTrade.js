@@ -5,19 +5,10 @@ import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 import Trade from './Trade';
 import { inject, observer } from 'mobx-react';
+import useLang from '../../hooks/useLang';
 
-function LiteTrade({wallet,trading,isPro}){
+function LiteTrade({wallet,trading,isPro,lang}){
   const [curTab, setCurTab] = useState('trade');
-
-
-  // useEffect(() => {
-  //   if(wallet.detail.account){
-  //     trading.init(wallet)
-  //   }
-  // },[wallet.detail.account])
-
-
-
   const switchTab = current => setCurTab(current);
   const tradeClassName = classNames('trade-position',curTab)
 
@@ -27,27 +18,27 @@ function LiteTrade({wallet,trading,isPro}){
         <div className='header-top'>
           <div className='header'>
             <span className='trade'  onClick={() => switchTab('trade')}>
-              TRADE
+              {lang['trade']}
             </span>
             {!isPro && <>
             <span
               className='pc position' onClick={() => switchTab('position')}>
-              MY POSITION
+              {lang['my-position']}
             </span>
             <span
               className='mobile position' onClick={() => switchTab('position')}>
-              POSITION
+              {lang['my-position']}
             </span>
             <span className='history' onClick={() => switchTab('history')}>
-              HISTORY
+              {lang['history']}
             </span>
             </>}
           </div>
         </div>
-        <Trade/>
-        <Position/>
-        <History wallet ={wallet} spec={trading.config} specs={trading.configs} />
-        <ContractInfo />   
+        <Trade lang={lang}/>
+        <Position lang={lang}/>
+        <History wallet ={wallet} spec={trading.config} specs={trading.configs} lang={lang} />
+        <ContractInfo lang={lang}/>   
     </div> 
   )
 }

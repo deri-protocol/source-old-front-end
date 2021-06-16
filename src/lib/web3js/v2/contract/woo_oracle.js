@@ -1,11 +1,13 @@
 import { ContractBase } from "./contract_base";
 import { wooOracleAbi } from './abis';
+import { bg } from '../utils';
 
 export class WooOracle extends ContractBase {
-  constructor(chainId, address, symbol, useInfura) {
+  constructor(chainId, address, symbol, decimal, useInfura) {
     super(chainId, address, useInfura)
     this.contractAbi = wooOracleAbi
     this.symbol = symbol
+    this.decimal = decimal
   }
   async _init() {
     if (!this.web3) {
@@ -15,6 +17,7 @@ export class WooOracle extends ContractBase {
   }
 
   async getPrice() {
-    return await this._call('_I_');
+    const res = await this._call('_I_')
+    return bg(res, `-${this.decimal}`).toString();
   }
 }
