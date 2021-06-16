@@ -137,7 +137,7 @@ export default class Trading {
 
   async loadByConfig(wallet,config,symbolChanged){
      //position
-     const position = this.positionInfo.load(wallet,config,position => {       
+     const position = await this.positionInfo.load(wallet,config,position => {       
         this.setPosition(position);
      })
 
