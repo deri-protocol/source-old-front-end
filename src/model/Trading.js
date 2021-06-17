@@ -147,11 +147,11 @@ export default class Trading {
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
-      //默认不依赖k先依赖，用仓位的价格
+      
       if(position){
-        this.setIndex(position.price)
+        this.setIndex(position.price);
       }
-      const symbol = this.version.isV2 ? `${config.symbol}_V2_${restoreChain().code}` : config.symbol
+      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
       this.oracle.load(symbol)
     }
      //contract
