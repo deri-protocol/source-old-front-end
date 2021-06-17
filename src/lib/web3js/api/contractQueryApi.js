@@ -533,14 +533,7 @@ export const isDeriUnlocked = async (chainId, accountAddress) => {
   const { wormholeAddress, deriAddress } = getDeriContractAddress(chainId);
   const deri = deriFactory(chainId, deriAddress, wormholeAddress);
   //deri.setAccount(accountAddress).setPool(wormholeAddress);
-  let res;
-  try {
-    const tx = await deri.isUnlocked(accountAddress);
-    res = { success: true, transaction: tx };
-  } catch (error) {
-    res = { success: false, error };
-  }
-  return res;
+  return await deri.isUnlocked(accountAddress);
 };
 
 /**

@@ -12,7 +12,7 @@ describe('perpetualPoolRouter', () => {
     perpetualPoolRouter = new PerpetualPoolRouter('97', '0xaDEe3A9149ee1FBa712aB081c5A6067D613571C1', true)
   })
   test('pool()', async() => {
-    const output = '0x19EC6281749C06Ed9647134c57257AcA1508bFA8'
+    const output = '0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
     expect(await perpetualPoolRouter.pool()).toEqual(output)
   }, TIMEOUT)
 })
