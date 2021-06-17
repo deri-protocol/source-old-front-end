@@ -7,11 +7,13 @@ export const getOracleConfigList = () => {
         chainId: '56',
         symbol: 'BTCUSD',
         address: '0xe3C58d202D4047Ba227e437b79871d51982deEb7',
+        decimal: '18',
       },
       {
         chainId: '56',
         symbol: 'ETHUSD',
         address: '0x9BA8966B706c905E594AcbB946Ad5e29509f45EB',
+        decimal: '18',
       },
     ];
   } else {
