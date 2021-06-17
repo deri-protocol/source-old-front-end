@@ -30,9 +30,11 @@ export default function Content({lang}) {
       <div className='index_part1'>
         <img src={deri_background} />
         <div className='index_part1-1 px1200'>
-          <div className='index_part1-2'>{lang['the']}</div>
-          <div className='index_part1-3'>{lang['defi-way']}</div>
-          <div className='index_part1-4'>{lang['to-trade-derivatives']}</div>
+          <div>
+            <div className='index_part1-2'>{lang['the']}</div>
+            <div className='index_part1-3'>{lang['defi-way']}</div>
+            <div className='index_part1-4'>{lang['to-trade-derivatives']}</div>
+          </div>
         </div>
       </div>
       <div className='index_part2 px1200'>
