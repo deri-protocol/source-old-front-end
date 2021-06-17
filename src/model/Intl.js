@@ -1,4 +1,5 @@
 import { makeObservable, observable, action, computed } from "mobx";
+import { restoreLocale, storeLocale } from "../utils/utils";
 
 const cache = {}
 
@@ -34,13 +35,17 @@ export default class Intl {
       dict : computed
     })
     const language = navigator.language
-    if(language){
-      this.setLocale(language.split('-')[0]);
+    const locale = restoreLocale()
+    if(locale){
+      this.locale = locale;
+    } else if(language){
+      this.locale = language.split('-')[0];
     }
   }
 
   setLocale(locale){
     this.locale = locale;
+    storeLocale(locale)
   }
 
   get dict(){         

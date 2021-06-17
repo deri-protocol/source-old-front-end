@@ -63,3 +63,11 @@ export function getConfigFromStore(version){
   return JSON.parse(sessionStorage.getItem(sessionStorageKey(version)))
 }
 
+export function storeLocale(locale){
+  sessionStorage.setItem('current-locale',locale)
+}
+
+export function restoreLocale(){
+  return sessionStorage.getItem('current-locale')
+}
+
