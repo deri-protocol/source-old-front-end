@@ -137,7 +137,7 @@ export default class Trading {
 
   async loadByConfig(wallet,config,symbolChanged){
      //position
-     this.positionInfo.load(wallet,config,position => {       
+     const position = await this.positionInfo.load(wallet,config,position => {       
         this.setPosition(position);
      })
 
@@ -147,6 +147,10 @@ export default class Trading {
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
+      
+      if(position){
+        this.setIndex(position.price);
+      }
       const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
       this.oracle.load(symbol)
     }

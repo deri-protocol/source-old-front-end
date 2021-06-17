@@ -618,6 +618,7 @@
 
             .pnl-list {
               vertical-align: middle;
+              position: relative;
               img {
                 margin-left: 6px;
                 vertical-align: middle;
@@ -628,8 +629,8 @@
                 width: 200px;
                 display: none;
                 z-index: 1;
-                top: 2px;
-                right: 60px;
+                top: 32px;
+                left: 0px;
                 background-color: #2c2d31;
                 border: 1px solid #AAAAAA;
                 color: #AAAAAA;
@@ -637,9 +638,9 @@
                 font-size: 14px;
                 .unrealizePnl-item {
                   margin: 10px 0;
-                  span {
-                    padding: 10px;
-                    margin-left: 10px;
+
+                  span:first-child {                    
+                    margin-left: 20px;
                   }
                   span:last-child {
                     color: #fff;

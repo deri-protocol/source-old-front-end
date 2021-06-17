@@ -15,7 +15,7 @@ import fetch from 'node-fetch'
 global.fetch = fetch
 
 const TIMEOUT=20000
-const POOL_ADDRESS="0x19EC6281749C06Ed9647134c57257AcA1508bFA8"
+const POOL_ADDRESS='0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
 
 describe('Trade query api', () => {
   it('getSpecification()', async() => {

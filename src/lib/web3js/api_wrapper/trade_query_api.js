@@ -1,6 +1,7 @@
 import {
   getPositionInfo as getPositionInfo2,
   isUnlocked as isUnlocked2,
+  isDeriUnlocked,
   getEstimatedMargin as getEstimatedMargin2,
   getEstimatedFee as getEstimatedFee2,
   getEstimatedFundingRate as getEstimatedFundingRate2,
@@ -65,7 +66,9 @@ export const getWalletBalance = async (
 }
 
 export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => { 
-  if (bTokenId === undefined) {
+  if (accountAddress === undefined) {
+    return isDeriUnlocked(chainId, poolAddress)
+  } else if (bTokenId === undefined) {
     return isUnlocked2(chainId, poolAddress, accountAddress)
   } else {
     return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId)

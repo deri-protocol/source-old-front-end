@@ -196,8 +196,14 @@ export const getNetworkName = (chainId) => {
     case '256':
       poolNetwork = 'hecotestnet';
       break;
+    case '137':
+      poolNetwork = 'matic';
+      break;
+    case '80001':
+      poolNetwork = 'mumbai';
+      break;
     default:
-      throw new Error('The networkId is not valid');
+      throw new Error(`The networkId is not valid for chainId ${chainId}`);
   }
   return poolNetwork;
 };
@@ -508,7 +514,7 @@ export const format = (bigNumber) =>
   bigNumber.toFormat().replaceAll(',', '').toString();
 
 export const normalizeChainId = (chainId) => {
-  const chainIds = ['1', '56', '128', '3', '42', '97', '256']
+  const chainIds = ['1', '56', '128', '3', '42', '97', '256', '137', '80001']
   let res = chainId ? chainId.toString() : chainId;
   if (chainId && chainIds.includes(res)) {
     return res;

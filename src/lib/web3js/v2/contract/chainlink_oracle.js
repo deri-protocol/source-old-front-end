@@ -1,11 +1,11 @@
 import { ContractBase } from "./contract_base";
-import { wooOracleAbi } from './abis';
-import { bg } from '../utils';
+import { chainlinkOracleAbi } from './abis';
+import { bg } from "../utils";
 
-export class WooOracle extends ContractBase {
+export class ChainlinkOracle extends ContractBase {
   constructor(chainId, address, symbol, decimal, useInfura) {
     super(chainId, address, useInfura)
-    this.contractAbi = wooOracleAbi
+    this.contractAbi = chainlinkOracleAbi
     this.symbol = symbol
     this.decimal = decimal
   }
@@ -16,8 +16,11 @@ export class WooOracle extends ContractBase {
     }
   }
 
+  // decimals refers https://docs.chain.link/docs/matic-addresses
   async getPrice() {
-    const res = await this._call('_I_')
-    return bg(res, `-${this.decimal}`).toString();
+    const res = await this._call('latestRoundData');
+    if (res && res.answer) {
+      return bg(res.answer, `-${this.decimal}`).toString()
+    }
   }
 }

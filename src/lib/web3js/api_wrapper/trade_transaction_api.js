@@ -1,4 +1,4 @@
-import { unlock as unlock2 } from '../api/contractTransactionApi';
+import { unlock as unlock2, unlockDeri } from '../api/contractTransactionApi';
 import {
   tradeWithMargin2,
   closePosition2,
@@ -23,10 +23,12 @@ export const unlock = async (
   accountAddress,
   bTokenId
 ) => {
-  if(bTokenId === undefined) {
-    return unlock2(chainId, poolAddress, accountAddress)
+  if (accountAddress === undefined) {
+    return unlockDeri(chainId, poolAddress);
+  } else if (bTokenId === undefined) {
+    return unlock2(chainId, poolAddress, accountAddress);
   } else {
-    return unlockV2(chainId, poolAddress, accountAddress, bTokenId)
+    return unlockV2(chainId, poolAddress, accountAddress, bTokenId);
   }
 };
 
@@ -35,12 +37,18 @@ export const depositMargin = async (
   poolAddress,
   accountAddress,
   amount,
-  bTokenId,
+  bTokenId
 ) => {
-  if(bTokenId === undefined) {
-    return depositMargin2(chainId, poolAddress, accountAddress, amount)
+  if (bTokenId === undefined) {
+    return depositMargin2(chainId, poolAddress, accountAddress, amount);
   } else {
-    return depositMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId)
+    return depositMarginV2(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount,
+      bTokenId
+    );
   }
 };
 
@@ -50,12 +58,19 @@ export const withdrawMargin = async (
   accountAddress,
   amount,
   bTokenId,
-  isMaximum,
+  isMaximum
 ) => {
-  if(bTokenId === undefined) {
-    return withdrawMargin2(chainId, poolAddress, accountAddress, amount)
+  if (bTokenId === undefined) {
+    return withdrawMargin2(chainId, poolAddress, accountAddress, amount);
   } else {
-    return withdrawMarginV2(chainId, poolAddress, accountAddress, amount, bTokenId, isMaximum)
+    return withdrawMarginV2(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount,
+      bTokenId,
+      isMaximum
+    );
   }
 };
 
@@ -64,12 +79,18 @@ export const tradeWithMargin = async (
   poolAddress,
   accountAddress,
   newVolume,
-  symbolId,
+  symbolId
 ) => {
-  if(symbolId === undefined) {
-    return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume)
+  if (symbolId === undefined) {
+    return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume);
   } else {
-    return tradeWithMarginV2(chainId, poolAddress, accountAddress, newVolume, symbolId)
+    return tradeWithMarginV2(
+      chainId,
+      poolAddress,
+      accountAddress,
+      newVolume,
+      symbolId
+    );
   }
 };
 
@@ -77,11 +98,11 @@ export const closePosition = async (
   chainId,
   poolAddress,
   accountAddress,
-  symbolId,
+  symbolId
 ) => {
-  if(symbolId === undefined) {
-    return closePosition2(chainId, poolAddress, accountAddress)
+  if (symbolId === undefined) {
+    return closePosition2(chainId, poolAddress, accountAddress);
   } else {
-    return closePositionV2(chainId, poolAddress, accountAddress, symbolId)
+    return closePositionV2(chainId, poolAddress, accountAddress, symbolId);
   }
 };
