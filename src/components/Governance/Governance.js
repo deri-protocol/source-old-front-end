@@ -79,8 +79,7 @@ function Governance({ wallet = {}, lang }) {
         <div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name='option' value='0' id='I' />
-              <label for="I">I: $AKITA</label>
+              <input type="radio" name='option' value='0' id='I' /> <label for="I">I: $AKITA</label>
             </div>
             <div className={name}>
               <div className="I-per">
@@ -90,8 +89,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="1" id='II' />
-              <label for="II">II: $ASS</label>
+              <input type="radio" name="network" value="1" id='II' /> <label for="II">II: $ASS</label>
             </div>
             <div className={name}>
               <div className="II-per">
@@ -101,8 +99,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="2" id='III' />
-              <label for="III">III: $BAN</label>
+              <input type="radio" name="network" value="2" id='III' /> <label for="III">III: $BAN</label>
             </div>
             <div className={name}>
               <div className="III-per">
@@ -112,8 +109,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="3" id='IV' />
-              <label for="IV">IV: $CUMMIES</label>
+              <input type="radio" name="network" value="3" id='IV' /> <label for="IV">IV: $CUMMIES</label>
             </div>
             <div className={name}>
               <div className="IV-per">
@@ -123,8 +119,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="4" id='V' />
-              <label for="V">V: $ERC20</label>
+              <input type="radio" name="network" value="4" id='V' /> <label for="V">V: $ERC20</label>
             </div>
             <div className={name}>
               <div className="V-per">
@@ -134,8 +129,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="5" id='VI' />
-              <label for="VI">VI: $HOGE</label>
+              <input type="radio" name="network" value="5" id='VI' /> <label for="VI">VI: $HOGE</label>
             </div>
             <div className={name}>
               <div className="VI-per">
@@ -145,8 +139,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="6" id='VII' />
-              <label for="VII">VII: $HOKK</label>
+              <input type="radio" name="network" value="6" id='VII' /> <label for="VII">VII: $HOKK</label>
             </div>
             <div className={name}>
               <div className="VII-per">
@@ -156,8 +149,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="7" id='VIII' />
-              <label for="VIII">VIII: $KISHU</label>
+              <input type="radio" name="network" value="7" id='VIII' /> <label for="VIII">VIII: $KISHU</label>
             </div>
             <div className={name}>
               <div className="VIII-per">
@@ -167,8 +159,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="8" id='IX' />
-              <label for="IX">IX: $LABRA</label>
+              <input type="radio" name="network" value="8" id='IX' /> <label for="IX">IX: $LABRA</label>
             </div>
             <div className={name}>
               <div className="IX-per">
@@ -178,8 +169,7 @@ function Governance({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name="network" value="9" id='X' />
-              <label for="X">X: $SAFEMARS </label>
+              <input type="radio" name="network" value="9" id='X' /> <label for="X">X: $SAFEMARS </label>
             </div>
             <div className={name}>
               <div className="X-per">

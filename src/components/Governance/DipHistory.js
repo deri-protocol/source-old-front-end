@@ -26,8 +26,7 @@ function DipHistory({ wallet = {}, lang }) {
         <div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name='option' value='0' id='I' />
-              <label for="I">I</label>
+              <input type="radio" name='option' value='0' id='I' /> <label for="I">I</label>
             </div>
             <div className='prele_eth'>
               <div className="pre_eth">
@@ -37,8 +36,7 @@ function DipHistory({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name='option' value='0' id='II' />
-              <label for="II">II</label>
+              <input type="radio" name='option' value='0' id='II' /> <label for="II">II</label>
             </div>
             <div className='prele_bsc'>
               <div className="pre_bsc">
@@ -48,8 +46,7 @@ function DipHistory({ wallet = {}, lang }) {
           </div>
           <div className='fle'>
             <div className='rad'>
-              <input type="radio" name='option' value='0' id='III' />
-              <label for="III">III</label>
+              <input type="radio" name='option' value='0' id='III' /> <label for="III">III</label>
             </div>
             <div className='prele_heco'>
               <div className="pre_heco">

@@ -4,17 +4,18 @@ import Body from './components/Body/Body'
 import Footer from './components/Footer/Footer'
 import './style/index.less'
 import useWindowSize from '../hooks/useWindowSize';
-
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 export default function Mobile (){
   const winSize = useWindowSize();
-  
+  const location = useLocation();
+  const curRouterClass = location.pathname.substring(1)
   useEffect(() => {
     document.querySelector('html').setAttribute('style',`font-size : ${winSize.width /375 * 100}px`) 
     return () => {}
   }, [winSize])
 
   return (
-    <div className='mobile'>
+    <div className={`mobile ${curRouterClass}`}>
       <Header></Header>
       <Body></Body>
       <Footer></Footer>

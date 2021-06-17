@@ -27,7 +27,7 @@ class Body extends React.Component {
         <Switch >
           <Route exact path='/team' component={() => <Team lang={dict['team']} />}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
-          <Route exact path='/home' component={() => <Home lang={dict['home']}/>}></Route>
+          <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/'>
