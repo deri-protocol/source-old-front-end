@@ -18,9 +18,9 @@ export {
   // getEstimatedLiquidityUsed,
   isDeriUnlocked,
   getUserWormholeSignature,
-  getDeriBalance,
   // getFundingRate,
   //getPositionInfo,
+  getDeriBalance,
 } from './api/contractQueryApi';
 export {
   //unlock,
@@ -64,8 +64,7 @@ getSlpLiquidityInfo2 as getSlpLiquidityInfo,
 getSlpWalletBalance2 as getSlpWalletBalance,
 getClpLiquidityInfo2 as getClpLiquidityInfo,
 getClpWalletBalance2 as getClpWalletBalance,
-// getDeriBalance2 as getDeriBalance,
-
+//getDeriBalance2 as getDeriBalance,
 //getTradeHistory2 as getTradeHistory,
 } from './api/restApi';
 
