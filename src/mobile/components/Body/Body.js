@@ -9,6 +9,8 @@ const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Pool = LoadableComponent(() => import('../../components/Mining/Pool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
+const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
+const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
 @withRouter
 @withLanguage
 class Body extends React.Component {
@@ -22,6 +24,8 @@ class Body extends React.Component {
           <Route exact path='/home' component={()=><Home lang={dict['home']}/>}></Route>
           <Route exact path='/team' component={()=><Team lang={dict['team']}/>}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
+          <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>

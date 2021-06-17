@@ -170,7 +170,7 @@ function Bridge({ wallet = {},lang }) {
       },
       three: {
         text: lang['heco'],
-        id: 126
+        id: 128
       }
     }
     const netWork_text_to = isdev ?
@@ -199,7 +199,7 @@ function Bridge({ wallet = {},lang }) {
       },
       three: {
         text: lang['heco'],
-        id: 126
+        id: 128
       }
     }
   return (
@@ -406,7 +406,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     ])
     let res =  await freeze(wallet.detail.chainId,wallet.detail.account,initialize.to_chainId,amount)
     if(res.success){
-      setActionElement( <Button className='btn  btn-danger short-submit' disabled btnText={lang['processing']}></Button>)
+      setActionElement( <button className='btn  btn-danger short-submit' >{lang['processing']}</button>)
       setAmountMessage([
         {
           'text': `1. ${lang['sending-deri-to-wormhole']}`,
@@ -471,7 +471,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     let res = await mintDeri(wallet.detail.chainId,wallet.detail.account)
     if(res.success){
       setIsClickClaim(true)
-      setActionElement( <Button className='btn  btn-danger short-submit' disabled btnText={lang['processing']}></Button>)
+      setActionElement( <button className='btn  btn-danger short-submit' >{lang['processing']}</button>)
       setAmountMessage([
         {
           'text': `1. ${lang['claim-deri-ing']}`,
@@ -514,7 +514,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   const loadApprove = async () => {
     if(hasConnectWallet()){
       const result = await isDeriUnlocked(wallet.detail.chainId,wallet.detail.account)
-      setIsApprove(result.transaction);
+      setIsApprove(result);
     }
   }
   useEffect(() => {

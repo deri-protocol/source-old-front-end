@@ -8,6 +8,11 @@ function Menu({lang}) {
   const isMining = useRouteMatch('/mining') ? true : false
   const isLite = useRouteMatch('/lite') ? true : false
   const isPro = useRouteMatch('/pro') ? true : false;
+  const isBridge = useRouteMatch('/bridge') ? true : false;
+  const isGovernance = useRouteMatch('/governance') ? true : false;
+  const isTeam = useRouteMatch('/team') ? true : false;
+
+  
 
   return (
     <div className="nav-menu">
