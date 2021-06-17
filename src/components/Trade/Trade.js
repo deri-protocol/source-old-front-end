@@ -498,6 +498,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     transFee={transFee}
                     afterTrade={afterTrade}
                     direction={direction}
+                    lang={lang}
                     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>TRADE</button>
   </>)
@@ -518,6 +519,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         position={trading.position}
         overlay={{background : '#1b1c22',top : 80}}
         className='balance-list-dialog'
+        lang={lang}
        />
       :
       <DepositDialog 
@@ -528,6 +530,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         balance={balance}
         afterDeposit={afterDeposit}
         className='trading-dialog'
+        lang={lang}
       />}
         <div className="noMargin-text">{lang['no-margin-tip']}</div>
         <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>{lang['deposit']}</button>

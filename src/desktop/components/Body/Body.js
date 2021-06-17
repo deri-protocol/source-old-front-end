@@ -3,6 +3,7 @@ import { withRouter, Switch,Route,Redirect} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
 import withLanguage from '../../../components/hoc/withLanguage';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -20,8 +21,7 @@ const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHis
 @withLanguage
 class Body extends React.Component {
   render(){
-    const {dict} = this.props
-
+    const {dict} = this.props  
     return (
       <div className='body'>
         <Switch >

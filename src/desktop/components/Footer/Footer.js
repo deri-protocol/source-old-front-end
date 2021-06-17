@@ -8,44 +8,44 @@ function Footer({intl}){
   
   return (
     <div className="footer">
-    <div className="footer_info">
+    <div className="footer-info">
       <div className="hr"></div>
-      <div className="footer_box">
+      <div className="footer-box">
         <div className="left">
           <div>
             <span>
               <router-link to='/lite'>{lang['app']}</router-link>  
             </span>
-            <span className="mt_27">
+            <span className="mt-27">
               <a href="https://docs.deri.finance/">{lang['docs']}</a> 
             </span>
-            <span className="mt_27">
+            <span className="mt-27">
                 <a href="http://deri.finance/#/team">{lang['team']}</a>
             </span>
-            <span className="mt_27">
+            <span className="mt-27">
               <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
             </span>
           </div>
-          <div className="mt_19">© 2021 {lang['deri-protocol']}</div>
+          <div className="mt-19">© 2021 {lang['deri-protocol']}</div>
         </div>
         <div className="right">
           <span> {lang['visit-us-on']}</span>
-          <a target="_blank" rel='noreferrer' className="iocn_a" >
+          <a target="_blank" rel='noreferrer' className="iocn-a" >
             <div className="circle">
               <div className='wechat'>
-                <div className='down_box'></div>
+                <div className='down-box'></div>
               </div>
               <div className="fa fa-wechat"></div>
             </div>
           </a>
-          <a target="_blank" rel='noreferrer' className="iocn_a" href="mailto: service@deri.finance">
+          <a target="_blank" rel='noreferrer' className="iocn-a" href="mailto: service@deri.finance">
             <div className="circle">
               <div className="fa fa-envelope"></div>
             </div>
           </a>
           <a
             target="_blank"
-            className="iocn_a"
+            className="iocn-a"
             href="https://deri-protocol.medium.com"
             rel='noreferrer' 
           >
@@ -55,7 +55,7 @@ function Footer({intl}){
           </a>
           <a
             target="_blank"
-            className="iocn_a"
+            className="iocn-a"
             href="https://twitter.com/DeriProtocol"
             rel='noreferrer' 
           >
@@ -66,7 +66,7 @@ function Footer({intl}){
 
           <a
             target="_blank"
-            className="iocn_a"
+            className="iocn-a"
             href="https://github.com/deri-finance"
             rel='noreferrer' 
           >
@@ -74,7 +74,7 @@ function Footer({intl}){
               <div className="fa fa-github"></div>
             </div>
           </a>
-          <a rel='noreferrer'  target="_blank" className="iocn_a" href="https://t.me/DeriProtocol">
+          <a rel='noreferrer'  target="_blank" className="iocn-a" href="https://t.me/DeriProtocol">
             <div className="circle">
               <div className="fa fa-paper-plane"></div>
             </div>

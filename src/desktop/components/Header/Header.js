@@ -6,17 +6,20 @@ import LanguageSelector  from '../../../components/LanguageSelector/LanguageSele
 import useLang from '../../../hooks/useLang';
 import { inject, observer } from 'mobx-react';
 import { useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 function Header ({intl}){
   const lang = useLang(intl.dict,'header')
-  const isHome = useRouteMatch('/home')
   return (
     <div className="nav">
+      <div className='nav-container'>
       <Menu lang={lang}/>                            
       <div className='nav-right'>
         <Account/>
+        <div className='use-deri'><Link to='/lite' target='_blank'>USE DERI</Link></div>
         <LanguageSelector/>
+      </div>
       </div>
     </div>
   )
