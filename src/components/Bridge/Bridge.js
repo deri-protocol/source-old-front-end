@@ -411,7 +411,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
         {
           'text': `1. ${lang['sending-deri-to-wormhole']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status': lang['finished'],
           'color': ''
         },
         {
@@ -476,7 +476,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
         {
           'text': `1. ${lang['claim-deri-ing']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status': lang['finished'],
           'color': ''
         },
         {
@@ -538,13 +538,13 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
         {
           'text': `1. ${lang['sending-deri-to-wormhole']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status': lang['finished'],
           'color': ''
         },
         {
           'text': `2. ${lang['waiting-for-bridge-to-sign']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status': lang['finished'],
           'color': ''
         },
         {
@@ -560,13 +560,13 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
         {
           'text': `1. ${lang['sending-deri-to-wormhole']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status':lang['finished'],
           'color': ''
         },
         {
           'text': `2. ${lang['waiting-for-bridge-to-sign']}`,
           'is_finished': 'is_finished',
-          'status': 'finished',
+          'status': lang['finished'],
           'color': ''
         },
         {
