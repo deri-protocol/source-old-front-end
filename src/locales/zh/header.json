@@ -11,5 +11,8 @@
   "guide" : "指南",
   "whitepaper" : "白皮书",
 
-  "use-deri":"USE DERI"
+  "use-deri":"USE DERI",
+
+  "unsupported-chain-id" : "不支持网络ID",
+  "connect-wallet" : "连接钱包"
 }

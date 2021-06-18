@@ -57,7 +57,7 @@ export default function TradeConfirm({wallet,spec,onClose,direction,volume,posit
               </div>
               <div className='text'>
                 <div className='text-title'>{lang['direction']}</div>
-                <div className='text-num'><span className={direction}>{direction}</span></div>
+                <div className='text-num'><span className={direction}>{lang[direction.toLowerCase()]}</span></div>
               </div>
               <div className='text'>
                 <div className='text-title'>{lang['trade-price-estimated']}</div>

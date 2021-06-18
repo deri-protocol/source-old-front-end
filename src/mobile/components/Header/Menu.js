@@ -5,7 +5,7 @@ import logo from '../../img/deri-logo.png'
 import menuDown from '../../img/menu-down.png'
 import './menu.less'
 
-export default function Menu({closeMenu,lang}){
+export default function Menu({closeMenu,lang,locale}){
   const isMining =  useRouteMatch('/mining') ? true : false
   const isTrade = useRouteMatch('/lite') ? true : false
 
@@ -19,7 +19,7 @@ export default function Menu({closeMenu,lang}){
   return (
     <div className='menu'>
       <div className="top">
-        <a className="logo" href="https://deri.finance/">
+        <a className="logo" href={`https://deri.finance/#index?locale=${locale}`}>
           <img src={logo} alt=""/>
         </a>
         <span className="close-menu" click="close" onClick={closeMenu}></span>
@@ -27,17 +27,16 @@ export default function Menu({closeMenu,lang}){
       <div className="ul">
         <ul>
           <li className={isMining ? 'selected' :'' }>
-            <Link to="/mining">{lang['mining']}</Link>
+            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`}>{lang['mining']}</a>
           </li>
           <li className={isTrade ? 'selected' : ''}>
-          <Link to="/lite"> {lang['trade']} </Link>
+          <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`}> {lang['trade']} </a>
           </li>
           <li>
-            <a  rel='noreferrer' href="https://governance.deri.finance/"
-              >{lang['governance']}</a>
+            <a  rel='noreferrer' href={`https://governance.deri.finance/#governance?locale=${locale}`}>{lang['governance']}</a>
           </li>
           <li>
-            <a  rel='noreferrer' href="https://bridge.deri.finance/">{lang['bridge']}</a>
+            <a  rel='noreferrer' href={`https://bridge.deri.finance/#bridge?locale=${locale}`}>{lang['bridge']}</a>
           </li>
           <li className="ref">
             {lang['docs']} <img  src={menuDown} alt=""/>
@@ -53,7 +52,7 @@ export default function Menu({closeMenu,lang}){
                   >{lang['code-audit']}</a>
               </li>
               <li>
-                <a href="https://deri.finance/#/team">{lang['team']}</a>
+                <a href={`http://deri.finance/#/team?locale=${locale}`}>{lang['team']}</a>
               </li>
               <li>
                 <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
