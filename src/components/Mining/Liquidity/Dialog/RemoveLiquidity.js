@@ -109,7 +109,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <span className='max-btn-left' onClick={addAll}>{lang['remove-all']}</span>
               </div>
               <div className='add-margin-btn'>
-                <Button click={remove} className='margin-btn' btnText={lang['remove']} afterClick={afterRemove}/>
+                <Button click={remove} className='margin-btn' btnText={lang['remove']} afterClick={afterRemove} lang={lang}/>
               </div>
             </div>
           </div>    

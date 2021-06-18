@@ -589,14 +589,14 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     let element;
     if(hasConnectWallet()){
       if(isValid){
-        element =  <Button className='btn' btnText={lang['claim']} click={claim}/>
+        element =  <Button className='btn' btnText={lang['claim']} click={claim} lang={lang}/>
       } else if(!isApprove){
-        element = <Button className='btn' btnText={lang['approve']} click={approve}/>
+        element = <Button className='btn' btnText={lang['approve']} click={approve} lang={lang}/>
       } else {
-        element = <Button className='btn' btnText={lang['send']} click={send}></Button>
+        element = <Button className='btn' btnText={lang['send']} click={send} lang={lang}></Button>
       }
     } else {
-      element = <Button className='btn' btnText={lang['connect-wallet']} click={connect}></Button>
+      element = <Button className='btn' btnText={lang['connect-wallet']} click={connect} lang={lang}></Button>
     }
     setActionElement(element)
   },[isValid,wallet.detail,isApprove,amount,initialize])

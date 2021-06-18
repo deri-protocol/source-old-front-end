@@ -80,7 +80,8 @@
   "volume-price" : "Volume @ Price",
   "notional" : "Notional",
   "liquidation" : "LIQUIDATION",
-  "time":"Time",
-  "price":"Price",
-  "volume":"Volume"
+  "time" : "Time",
+  "price" : "Price",
+  "volume" : "Volume",
+  "pending" : "PENDING"
 }

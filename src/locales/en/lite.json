@@ -82,5 +82,6 @@
   "liquidation" : "LIQUIDATION",
   "time":"Time",
   "price":"Price",
-  "volume":"Volume"
+  "volume":"Volume",
+  "pending" : "PENDING"
 }

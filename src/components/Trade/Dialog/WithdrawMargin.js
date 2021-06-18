@@ -119,7 +119,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 <span className='max-btn-left'> </span>
               </div>}
               <div className='add-margin-btn'>
-                <Button className='margin-btn' btnText={lang['withdraw']} lang={lang} click={withdraw} checkApprove={true} wallet={wallet} spec={spec}/>
+                <Button className='margin-btn' btnText={lang['withdraw']} lang={lang} click={withdraw} checkApprove={true} wallet={wallet} spec={spec}  />
               </div>
             </div>
           </div>

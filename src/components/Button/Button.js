@@ -68,7 +68,7 @@ export default function Button({btnText,className,disabled,click,afterClick,chec
             style={{display : 'none' ,marginRight : '2'}}>
           </span>
         </span>
-          {pending ? 'PENDING' : (isApproved ? btnText : lang['approve'])  }
+          {pending ? lang['pending'] : (isApproved ? btnText : lang['approve'])  }
         </button>
   )
 }

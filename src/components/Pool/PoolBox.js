@@ -40,9 +40,9 @@ function PoolBox({wallet,version,pool,lang}){
   useEffect(() => {
     if(pool && pool.airdrop){
       if(!wallet.isConnected()) {
-        setButtonElement(<Button btnText={lang['connect-wallet']} click={connectWallet}></Button>)
+        setButtonElement(<Button btnText={lang['connect-wallet']} click={connectWallet} lang={lang}></Button>)
       } else {
-        setButtonElement(<Button btnText={lang['claim']} click={claimAirdrop}></Button>)
+        setButtonElement(<Button btnText={lang['claim']} click={claimAirdrop} lang={lang}></Button>)
       }
     } else {
       let url = `/mining/${pool.version || 'v1'}/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`
