@@ -311,10 +311,10 @@ function Trade({wallet = {},trading,version,lang}){
               </>}
               {/* v2 */}
               {version.isV2 && <>                
-                <span className='balance-contract-text pc' title='Discounted Margin + Unrealized PnL'>
+                <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
                 </span>
-                <span className='balance-contract-text mobile' title='Discounted Margin + Unrealized PnL'>
+                <span className='balance-contract-text mobile' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}                  
                 </span>
               </>}
@@ -500,12 +500,12 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     direction={direction}
                     lang={lang}
                     />
-    <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>TRADE</button>
+    <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)
 
   if(hasConnectWallet()){
     if(!isApprove) {
-      actionElement = <Button className='approve' btnText={lang['approve']} click={approve}/>
+      actionElement = <Button className='approve' btnText={lang['approve']} click={approve} lang={lang}/>
     } else if(!available || (+available) <= 0) {
       actionElement = (<>
       {version.isV2 
@@ -539,7 +539,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       actionElement = <button className='btn btn-danger short-submit' >{lang['enter-volume']}</button>
     }
   } else {
-    actionElement = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} />
+    actionElement = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
   }
   return (
     <div className='submit-btn'>

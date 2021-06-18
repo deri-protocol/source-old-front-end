@@ -77,7 +77,7 @@ export default function TradeConfirm({wallet,spec,onClose,direction,volume,posit
             <div className='modal-footer'>
               <div className='long-btn' v-if='confirm'>
                 <button className='cancel' onClick={close}>{lang['cancel']}</button>
-                <Button className='confirm' btnText={lang['ok']} click={trade} />
+                <Button className='confirm' btnText={lang['ok']} click={trade} lang={lang}/>
               </div>
             </div>
           </div>

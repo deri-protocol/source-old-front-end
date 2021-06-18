@@ -87,8 +87,8 @@ function Position({wallet,trading,version,lang}){
   }
 
   const directionClass = className('Direction','info-num',{
-    'LONG' : direction === 'LONG',
-    'SHORT' : direction === 'SHORT'
+    'LONG' : (+trading.position.volume) > 0,
+    'SHORT' : (+trading.position.volume) < 0
   })
 
 
@@ -133,7 +133,7 @@ function Position({wallet,trading,version,lang}){
             aria-hidden='true'
             style={{display: isLiquidation ? 'block' : 'none'}}
           ></span>
-          <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> Close
+          <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> {lang['close']}
         </div>
       </div>
     </div>

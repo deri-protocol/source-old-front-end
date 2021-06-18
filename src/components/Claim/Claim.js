@@ -115,7 +115,7 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 						{miningClaim && <div className='text-title'>{lang['your-deri-is-on']} { config.text } . {lang['connect-to']} { config.text } {lang['to-claim']}.</div>}
 				</div>
 				<div className='claim-btn'>
-					<Button btnText={btnText} click={click} className='claim'/>					
+					<Button btnText={btnText} click={click} className='claim' lang={lang}/>					
 				</div>
       </div>
   ) 

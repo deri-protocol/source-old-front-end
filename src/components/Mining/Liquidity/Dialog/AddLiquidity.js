@@ -104,7 +104,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
                 <span className='max-btn-left' onClick={addAll}>{lang['add-all']}</span>
               </div>
               <div className='add-margin-btn'>
-                <Button className='margin-btn' click={addLiq} btnText={lang['add']} afterClick={afterAdd}/>
+                <Button className='margin-btn' click={addLiq} btnText={lang['add']} afterClick={afterAdd} lang={lang}/>
               </div>
             </div>
           </div>    

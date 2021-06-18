@@ -1,15 +1,15 @@
 {
-  "mining" : "Bergbau",
+  "mining" : "Minen",
   "trade" : "Handel",
-  "governance" : "Führung",
+  "governance" : "Governance",
   "bridge" : "Brücke",
-  "docs" : "Dokumente",
-  "team" : "Mannschaft",
+  "docs" : "Docs",
+  "team" : "Team",
   "faq" : "FAQ",
-  "code-audit" : "Code Prüfung",
+  "code-audit" : "Auditberichte",
   "github" : "Github",
-  "guide" : "Leiten",
-  "whitepaper" : "weißes Papier",
+  "guide" : "Anleitung",
+  "whitepaper" : "Whitepaper",
   
   "use-deri":"USE DERI"
 }

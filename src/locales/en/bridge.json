@@ -29,7 +29,7 @@
   "waiting-for-bridge-to-sync":"Waiting for Bridge to sync ..",
   "done":"Done!",
   "back":"BACK",
-  "pending":"Pending",
+  "pending":"PENDING",
   "approve-faild":"Approve faild",
   "claim-faild":"Claim faild",
   "amount-must-be-greater-than-zero":"Amount must be greater than zero",
