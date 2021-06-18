@@ -1,6 +1,5 @@
 @h:100vh/812;
 .mobile {
-
   .nav{
     position: fixed;
     width: 100%;
@@ -11,7 +10,9 @@
     flex-direction: row;
     justify-content: space-between;
     z-index: 2;
-
+    .trade{
+      display: none;
+    }
     .menu-icon {
       height: 0.16rem;
       width: 0.24rem;
@@ -57,4 +58,29 @@
     border: 0;
   }
   
+}
+.index,.team{
+  .lang-picker .lang-box{
+    left: -1rem !important;
+  }
+  .nav{
+    .trade{
+      display: block;
+      font-size: 1.72414vh;
+      font-weight: 500;
+      letter-spacing: .26667vw;
+      padding: .73892vh;
+      box-sizing: border-box;
+      color: #fff;
+      float: right;
+      height: 3.20197vh;
+      background-color: #246cad;
+      border-radius: 1.60099vh;
+      text-align: center;
+      line-height:  1.72414vh;
+    }
+    .version{
+      display: none;
+    }
+  }
 }
