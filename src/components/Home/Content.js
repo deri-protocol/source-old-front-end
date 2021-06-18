@@ -177,6 +177,8 @@ export default function Content({lang}) {
           <div className='pic'>
             <img src={GSR} />
           </div>
+          <div className='pic'>
+          </div>
         </div>
       </div>
       <div className='index_part6 pics'>

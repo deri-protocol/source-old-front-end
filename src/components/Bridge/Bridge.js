@@ -527,6 +527,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   useEffect(() => {
     if(isValid){
       if(initialize.to_chainId != wallet.detail.chainId){
+        setShowMessage(true)
         setMessage({
           img:exclamatory_green,
           text:`${lang['send-finished-one']} ${isNetwork(initialize.to_chainId,lang).netWork} ${lang['send-finished-two']}`,
@@ -589,14 +590,14 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     let element;
     if(hasConnectWallet()){
       if(isValid){
-        element =  <Button className='btn' btnText={lang['claim']} click={claim}/>
+        element =  <Button className='btn' lang={lang} btnText={lang['claim']} click={claim}/>
       } else if(!isApprove){
-        element = <Button className='btn' btnText={lang['approve']} click={approve}/>
+        element = <Button className='btn' lang={lang} btnText={lang['approve']} click={approve}/>
       } else {
-        element = <Button className='btn' btnText={lang['send']} click={send}></Button>
+        element = <Button className='btn' lang={lang} btnText={lang['send']} click={send}></Button>
       }
     } else {
-      element = <Button className='btn' btnText={lang['connect-wallet']} click={connect}></Button>
+      element = <Button className='btn' lang={lang} btnText={lang['connect-wallet']} click={connect}></Button>
     }
     setActionElement(element)
   },[isValid,wallet.detail,isApprove,amount,initialize])
