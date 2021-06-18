@@ -5,9 +5,9 @@ import { useRouteMatch } from 'react-router-dom'
 import Version from '../../../components/Version/Version'
 
 function Menu({lang}) {
-  const isLite = useRouteMatch('/lite') ? true : false 
-  const isPro = useRouteMatch('/pro')  ? true : false
-  const isMining = useRouteMatch('/mining')  ? true : false;
+  const isLite = useRouteMatch('/lite')
+  const isPro = useRouteMatch('/pro')
+  const isMining = useRouteMatch('/mining')
   const isApp = isLite || isPro || isMining
   return (
     <div className="nav-menu">
