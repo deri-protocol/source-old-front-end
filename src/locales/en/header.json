@@ -9,5 +9,8 @@
   "code-audit" : "Code Audit",
   "github" : "Github",
   "guide" : "Guide",
-  "whitepaper" : "Whitepaper"
+  "whitepaper" : "Whitepaper",
+
+  "unsupported-chain-id" : "Unsupported Chain ID",
+  "connect-wallet" : "Connect Wallet"
 }
