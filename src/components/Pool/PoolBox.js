@@ -58,7 +58,7 @@ function PoolBox({wallet,version,pool,lang}){
       }
       setButtonElement(        
           <button onClick={() => gotoMining(url)}>
-            STAKING
+            {lang['staking']}
           </button>
         )
     }    

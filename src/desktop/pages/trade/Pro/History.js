@@ -10,18 +10,17 @@ import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function History({wallet,trading}) {
+function History({wallet,trading,lang}) {
   const [history, setHistory] = useState([]);
 
   async function loadHistory (){
     if(wallet.isConnected() && trading.config && trading.history.length > 0){
       const his = trading.history.map(item => {
-        item.directionText = item.direction === 'LONG' ? 'LONG / BUY' : 'SHORT / SELL'
-        item.directionText = 'LONG / BUY' 
+        item.directionText =  lang['long-buy']
         if(item.direction === 'SHORT') {
-          item.directionText = 'SHORT / SELL'
+          item.directionText =  lang['short-sell']
         } else if (item.direction === 'Liquidation') {
-          item.directionText = 'LIQUIDATION'
+          item.directionText = lang['liquidation']
         }
         return item;
       })
@@ -40,13 +39,13 @@ function History({wallet,trading}) {
   return (
     <div className='history-box'>
       <div className='p-box theader'>
-        <div className='td'>Time</div>
-        <div>Direction</div>
-        <div>Base Token</div>
-        <div>Price</div>
-        <div>Volume</div>
-        <div>Notional</div>
-        <div>Transaction Fee</div>
+        <div className='td'>{lang['time']}</div>
+        <div>{lang['direction']}</div>
+        <div>{lang['base-token']}</div>
+        <div>{lang['price']}</div>
+        <div>{lang['volume']}</div>
+        <div>{lang['notional']}</div>
+        <div>{lang['transaction-fee']}</div>
       </div>
       {history.map((his,index) => {
         return (

@@ -104,7 +104,7 @@ function Position({wallet,trading,version,lang}){
   useEffect(() => {
     if(trading.position){
       const {position} = trading
-      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
+      const direction = (+position.volume) > 0 ? lang['long'] : (eqInNumber(position.volume, 0) || !position.volume ? '--' : lang['short']) 
       setDirection(direction)      
       setBalanceContract(bg(position.margin).plus(position.unrealizedPnl).toString())
       setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())

@@ -496,7 +496,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
         valid()
       },3000)
     }else{
-      alert(`${lang['claim-faild']}`)
+      alert(lang['claim-faild'])
       setAmountMessage([])
     }
     

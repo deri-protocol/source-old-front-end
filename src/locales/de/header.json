@@ -9,5 +9,7 @@
   "code-audit" : "Code Prüfung",
   "github" : "Github",
   "guide" : "Leiten",
-  "whitepaper" : "weißes Papier"
+  "whitepaper" : "weißes Papier",
+  
+  "use-deri":"USE DERI"
 }

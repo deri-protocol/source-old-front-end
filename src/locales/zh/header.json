@@ -9,5 +9,7 @@
   "code-audit" : "代码审计",
   "github" : "Github",
   "guide" : "指南",
-  "whitepaper" : "白皮书"
+  "whitepaper" : "白皮书",
+
+  "use-deri":"USE DERI"
 }

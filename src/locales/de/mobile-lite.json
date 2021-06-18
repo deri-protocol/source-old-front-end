@@ -4,5 +4,8 @@
   "available-balance" : "Avail Bal",
   "dynamic-effective-balance" : "Dyn.Eff.Bal",
   "transaction-fee" : "Fee",
-  "my-position" : "POSITION"
+  "my-position" : "POSITION",
+
+  "index" : "Index",
+  "funding" : "Funding"
 }

@@ -1,8 +1,8 @@
 {
-  "app" : "App",
-  "docs" : "Docs",
-  "team" : "Team",
-  "faq" : "FAQ",
-  "visit-us-on" : "Visit us on",
-  "deri-protocol" : "Deri Protocol"
+  "app" : "应用程序",
+  "docs" : "文档",
+  "team" : "团队",
+  "faq" : "问答",
+  "visit-us-on" : "联系方式",
+  "deri-protocol" : "Deri 协议"
 }

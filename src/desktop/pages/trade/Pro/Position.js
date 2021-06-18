@@ -143,7 +143,7 @@ function Position({wallet,trading,version,lang}){
           onClick={() => setRemoveModalIsOpen(true)}>
           <img src={addMarginIcon} alt='add margin'/>
         </span>
-      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</span>)}       
+      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> {lang['detail']}</span>)}       
       </div>
       <div><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
       <div>        

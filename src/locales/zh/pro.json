@@ -1,11 +1,11 @@
 {
-  "total-net-position" : "Total Net Position",
-  "min" : "min",
-  "hour" : "hour",
-  "day" : "day",
-  "week" : "week",
-  "current-position" : "CURRENT POSITION",
-  "trade-history" : "TRADE HISTORY",
-  "pool-total-liquidity" : "Pool Total liquidity",
-  "position-info" : "POSITION INFO"
+  "total-net-position" : "总净仓位",
+  "min" : "分钟",
+  "hour" : "小时",
+  "day" : "天",
+  "week" : "周",
+  "current-position" : "当前仓位",
+  "trade-history" : "交易记录",
+  "pool-total-liquidity" : "池总流动性",
+  "position-info" : "仓位信息"
 }

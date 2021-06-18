@@ -18,11 +18,11 @@ function History({wallet ,trading,lang}){
     if(wallet.isConnected() && trading.configs && trading.config){
       const all = trading.history
       const his = all.map(item => {
-        item.directionText = 'LONG / BUY' 
+        item.directionText = lang['long-buy']
         if(item.direction === 'SHORT') {
-          item.directionText = 'SHORT / SELL'
+          item.directionText = lang['short-sell']
         } else if (item.direction === 'Liquidation') {
-          item.directionText = 'LIQUIDATION'
+          item.directionText = lang['liquidation']
         }
         const find = trading.config
         if(find){

@@ -17,7 +17,7 @@ function Header ({intl}){
       <Menu lang={lang}/>                            
       <div className='nav-right'>
         <Account/>
-        <div className='use-deri'><Link to='/lite' target='_blank'>USE DERI</Link></div>
+        <div className='use-deri'><Link to='/lite' target='_blank'>{lang["use-deri"]}</Link></div>
         <LanguageSelector/>
       </div>
       </div>

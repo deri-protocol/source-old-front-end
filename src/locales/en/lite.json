@@ -3,7 +3,9 @@
   "pro" : "PRO",
   "trade" : "TRADE",
   "long-buy" : "LONG / BUY",
+  "long":"LONG",
   "short-sell" : "SHORT / SELL",
+  "short":"SHORT",
   "current-position" : "Current Position",
   "contract-volume" : "Contract Volume",
   "index-price" : "Index Price",
@@ -77,5 +79,8 @@
   "history" : "HISTORY",
   "volume-price" : "Volume @ Price",
   "notional" : "Notional",
-  "liquidation" : "LIQUIDATION"
+  "liquidation" : "LIQUIDATION",
+  "time":"Time",
+  "price":"Price",
+  "volume":"Volume"
 }
