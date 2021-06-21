@@ -30,8 +30,9 @@ class Body extends React.Component {
           <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
-          <Route exact path='/'>
-            <Redirect to='/lite'/>
+          <Route exact path='/' render={() => {
+            return /^app/.test(window.location.href) ? <Redirect to='/lite'/> : <Redirect to='/index'/>
+          }}>            
           </Route>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>

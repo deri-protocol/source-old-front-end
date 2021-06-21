@@ -532,7 +532,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
         className='trading-dialog'
         lang={lang}
       />}
-        <div className="noMargin-text">{lang['no-margin-tip']}</div>
+        <div className="noMargin-text">{(+trading.margin) === 0 ? lang['no-margin-tip'] : lang['not-enough-margin-tip'] }</div>
         <button className='short-submit'   onClick={() => setDeposiIsOpen(true)}>{lang['deposit']}</button>
       </>)
     } else if(emptyVolume) {

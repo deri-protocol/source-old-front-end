@@ -97,7 +97,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder='Amount'
+                      placeholder={lang['amount']}
                       value={amount}
                       onChange={onChange}
                     />
