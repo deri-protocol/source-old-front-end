@@ -53,7 +53,7 @@
   "deposit-margin" : "存入保证金",
   "max" : "最大可移除",
   "add-all" : "添加所有",
-  "amount" : "总额",
+  "amount" : "数量",
   "add-margin" : "添加保证金",
   "remove-margin" : "移除保证金",
   "insufficient-balance-in-wallet" : "钱包余额不足",
