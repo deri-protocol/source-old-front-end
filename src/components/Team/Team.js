@@ -7,7 +7,7 @@ export default function Team({lang}) {
   return (
     <div>
       <div className='team_part1'>
-        <div className='label '>{lang['team']}</div>
+        <div className='label '>{lang['team']}</div>  
         <div className='team_pc'>
           <div>{lang['team-describe']}</div>
         </div>
@@ -26,7 +26,11 @@ export default function Team({lang}) {
                 <ul>
                   <li>{lang['co-founder-and-ceo']}</li>
                   <li>{lang['ceo-school']}</li>
-                  <li>{lang['ceo-worked']}</li>
+                  <li>
+                    {lang['ceo-worked-one']}<br/>
+                    {lang['ceo-worked-two']}<br/>
+                    {lang['ceo-worked-three']}
+                  </li>
                   <li>{lang['c-f-a-qu-he-fund-fo-on-tr-and-cr-de']}</li>
                   <li>
                     <a className='link' href="https://twitter.com/0x_alpha" >{lang['ceo-twitter']}: https://twitter.com/0x_alpha</a>

@@ -11,5 +11,7 @@
   "guide" : "Anleitung",
   "whitepaper" : "Whitepaper",
   
-  "use-deri":"USE DERI"
+  "use-deri":"BENUTZE DERI",
+  "unsupported-chain-id" : "Nicht unterstützte Netzwerk-ID",
+  "connect-wallet" : "Wallet Verbinden"
 }

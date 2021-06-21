@@ -321,6 +321,7 @@ function Bridge({ wallet = {},lang }) {
             <div className="Amount_message">
               {AmountMessage.map((item,index) => <div className='Amount_message_line' key={index}>
                 <span className={item.color}>{item.text}</span>
+                <br className='pc'/>
                 <span className={item.is_finished} class='status'>{item.status}</span>
               </div> )} 
             </div>
