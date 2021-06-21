@@ -37,6 +37,7 @@
   "liquidity-used" : "Liquidity Used",
   "funding-rate-impact" : "Funding Rate Impact",
   "no-margin-tip" : "You have no fund in contract. Please deposit first.",
+  "not-enough-margin-tip" : "Trading volume exceeds leverage limit. Please deposit more fund.",
   "confirm" : "CONFIRM",
   "of-contracts" : "of Contracts",
   "position-after-execution" : "Position after execution",

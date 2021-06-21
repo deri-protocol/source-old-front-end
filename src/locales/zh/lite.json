@@ -37,6 +37,7 @@
   "liquidity-used" : "流动性使用率",
   "funding-rate-impact" : "资金费率影响因素",
   "no-margin-tip" : "账户里还没有资金，请先存入。",
+  "not-enough-margin-tip" : "账户资金不足，请存入更多的资金",
   "confirm" : "确认",
   "of-contracts" : "合约数量",
   "position-after-execution" : "持仓数量",

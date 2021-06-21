@@ -89,7 +89,7 @@ export default function useMiningPool(version){
         airdrop : true,
         buttonText : 'CLAIM'
       }
-      // pools.push(airDrop)
+      pools.push(airDrop)
       setPools(pools);
       setLoaded(true)
     })
