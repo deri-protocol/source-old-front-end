@@ -46,7 +46,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						totalShares : bg(shares).toString(),
 						values : total.toFixed(2),
 						lpApy,
-						unit : 'shares',
+						unit : lang['shares'],
 						sharesTitle : lang['staked-balance']
 					})
 				} else {
@@ -258,7 +258,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
-											address={address} wallet={wallet} unit={version === 'v1' ? 'shares' :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
+											address={address} wallet={wallet} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>

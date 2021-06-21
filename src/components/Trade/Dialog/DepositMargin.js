@@ -87,8 +87,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                   style={{fontSize :'14px',marginLeft: '10px',marginTop: '10px'}}>
                     {spec.bTokenSymbol}
                   </span>
-                  </span
-                >
+                  </span>
                 <span className='add'></span>
               </div>
               <div className='enter-margin'>
@@ -113,7 +112,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
               <div className='add-margin-btn'>
                 <Button
                   className='margin-btn'
-                  btnText='DEPOSIT'
+                  btnText={lang['deposit']}
                   checkApprove={true}
                   wallet={wallet}
                   spec={spec}

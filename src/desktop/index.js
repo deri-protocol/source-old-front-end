@@ -4,12 +4,12 @@ import Footer from './components/Footer/Footer'
 import { useLocation } from 'react-router-dom'
 import './style/index.css'
 
-export default function Desktop ({lang}){
+export default function Desktop ({locale}){
   console.log('welcome Deri desktop app')
   const location = useLocation();
   const curRouterClass = location.pathname.substring(1)
   return (
-    <div className={`desktop ${curRouterClass} ${lang}`}>
+    <div className={`desktop ${curRouterClass} ${locale}`}>
       <Header></Header>
       <Body></Body>
       <Footer></Footer>

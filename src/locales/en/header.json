@@ -10,7 +10,7 @@
   "github" : "Github",
   "guide" : "Guide",
   "whitepaper" : "Whitepaper",
-
+  "use-deri":"USE DERI",
   "unsupported-chain-id" : "Unsupported Chain ID",
   "connect-wallet" : "Connect Wallet"
 }

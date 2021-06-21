@@ -286,7 +286,7 @@ function Trade({wallet = {},trading,version,lang}){
               onChange={event =>  volumeChange(event) }
               value={trading.volumeDisplay}
               className={volumeClazz}
-              placeholder='Contract Volume'
+              placeholder={lang['contract-volume']}
             />
             <div className='title-volume' >
               {lang['contract-volume']}
