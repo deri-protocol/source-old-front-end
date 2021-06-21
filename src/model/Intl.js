@@ -23,8 +23,8 @@ function importAll(r){
     }
   });
 }
-
-importAll(require.context(`../locales/`,true,/\.json$/))
+//lang.json 是语言包目录，需要排除在外
+importAll(require.context(`../locales/`,true,/^((?!lang).)*\.json$/))
 
 export default class Intl {
   locale = 'en'
