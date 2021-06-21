@@ -8,10 +8,10 @@ const MobileApp = LoadableComponent(() => import('./mobile/index'))
 
 function App({intl}) {
   if(isBrowser){
-    return <DesktopApp lang={intl.locale}/>
+    return <DesktopApp locale={intl.locale}/>
   }
   if(isMobile){
-    return <MobileApp lang={intl.locale}/>
+    return <MobileApp locale={intl.locale}/>
   }
 }
 
