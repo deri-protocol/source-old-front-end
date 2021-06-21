@@ -6,4 +6,6 @@
   /* margin: 0 auto; */
   display: block;
   margin: 0;
+  justify-content: center;
+  margin: 40px 0;
 }

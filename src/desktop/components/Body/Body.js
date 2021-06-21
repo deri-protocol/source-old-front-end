@@ -3,7 +3,6 @@ import { withRouter, Switch,Route,Redirect} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
 import withLanguage from '../../../components/hoc/withLanguage';
-import { useLocation } from 'react-router-dom';
 
 
 
