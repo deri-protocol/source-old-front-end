@@ -19,6 +19,7 @@ const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHis
 @withRouter
 @withLanguage
 class Body extends React.Component {
+
   render(){
     const {dict} = this.props  
     return (

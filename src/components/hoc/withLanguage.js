@@ -4,6 +4,17 @@ import { isMobile } from 'react-device-detect';
 
 const withLanguage =  Component => {
   class WithLanguage extends React.Component {
+
+    componentDidUpdate(prevProps) {
+      if (this.props.location !== prevProps.location) {
+        this.onRouteChanged(this.props.location);
+      }
+    }
+  
+    onRouteChanged(location) {
+      console.log(location)
+    }
+    
     render(){
       const {intl,...props} = this.props
       const {dict} = intl

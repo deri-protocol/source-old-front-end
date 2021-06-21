@@ -9,6 +9,7 @@ function Menu({lang,locale}) {
   const isPro = useRouteMatch('/pro')
   const isMining = useRouteMatch('/mining')
   const isApp = isLite || isPro || isMining  
+  const isProduction = process.env.NODE_ENV === 'production'
 
   return (
     <div className="nav-menu">
@@ -20,9 +21,18 @@ function Menu({lang,locale}) {
       <div className="mean">
         <ul>
           <li>
+            {isProduction 
+            ? 
             <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
+            :
+            <Link className='mining-item' to ='/mining'>{lang.mining}</Link>}            
           </li>
-          <li><a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a></li>
+          <li>
+            {isProduction
+            ? <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
+            : <Link className='mining-item' to ='/lite'>{lang.trade}</Link>         
+            }     
+          </li>       
           <li>
             <a target="_blank" rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/#governance?locale=${locale}`}>{lang.governance}</a>
           </li>
