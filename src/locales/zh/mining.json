@@ -67,6 +67,7 @@
   "max-removeable" : "最大可移除",
   "remove-all" : "移除全部",
   "remove" : "移除",
+  "pending" : "进行中",
   "your-current-max-removable-shares-are" : "你目前最大可移除份额为",
   "staking-max-limit-tip" : "质押余额不能小于1。如果您要提取所有流动资金，请单击 \"MAX\"移除所有。",
   "invalid-liquidity" : "无效流动性!"

@@ -8,7 +8,7 @@
   "cake-apy" : "CAKE-APY",
   "address" : "Adresse",
   "staking" : "STAKING",
-  "my-liquidity-providing-harvest-in-current-epoch" : "Meine Liquiditätsbereitstellungerträge im aktuellen Zyklus",
+  "my-liquidity-providing-harvest-in-current-epoch" : "Meine Liquiditätserträge im aktuellen Zyklus",
   "my-trading-harvest-in-current-epoch" : "Meine Tradingerträge im aktuellen Zyklus",
   "current-epoch-remaining-time" : "Verbleibende Zeit des aktuellen Zyklus",
   "my-harvest-in-current-epoch-estimated" : "Meine Erträge im aktuellen Zyklus (geschätzt)",
@@ -67,6 +67,7 @@
   "max-removeable" : "MAX ENTFERNBAR",
   "remove-all" : "ALLES ENTFERNEN",
   "remove" : "ENTFERNEN",
+  "pending" : "AUSSTEHEND",
   "your-current-max-removable-shares-are" : "Ihre aktuellen max entfernbaren Anteile sind",
   "staking-max-limit-tip" : "Es ist nicht erlaubt, einen Stakingsaldo von weniger als 1 zu hinterlegen. Bitte klicken Sie auf \"MAX\" um alles zu entfernen, wenn Sie Ihre gesamte Liquidität abheben möchten.",
   "invalid-liquidity" : "Ungültige Liquidität!"

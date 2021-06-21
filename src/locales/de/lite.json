@@ -25,7 +25,7 @@
   "base-token" : "Basis Token",
   "symbol" : "Symbol",
   "multiplier" : "Multiplikator",
-  "funding-rate-coefficient" : "Förderquote Koeffizient",
+  "funding-rate-coefficient" : "Finanzierungsrate Koeffizient",
   "min-initial-margin-ratio" : "Min Ersteinschussquote",
   "min-maintenance-margin-ratio" : "Min Erhaltungsmarginquote",
   "transaction-fee" : "Transaktionsgebühr",
@@ -35,7 +35,7 @@
   "connect-wallet" : "WALLET VERBINDEN",
   "pool-liquidity" : "Pool-Liquidität",
   "liquidity-used" : "Genutzte Liquidität",
-  "funding-rate-impact" : "Auswirkung der Förderquote",
+  "funding-rate-impact" : "Auswirkung der Finanzierungsrate",
   "no-margin-tip" : "Sie haben kein Guthaben im Kontrakt. Zahlen Sie bitte zuerst ein.",
   "confirm" : "BESTÄTIGEN",
   "of-contracts" : "von Kontrakten",
@@ -66,9 +66,9 @@
   "it-has-to-be-greater-than-zero-tip" : "Der Wert muss größer als Null sein",
 
   "my-position" : "MEINE POSITION",
-  "position" : "Position",
+  "position" : "POSITION",
   "close" : "Schließen",
-  "average-entry-price" : "Durchschnittlicher Einstiegspreis",
+  "average-entry-price" : "Durchschn. Einstiegspreis",
   "detail" : "Detail",
   "direction" : "Richtung",
   "unrealized-pnl" : "Nicht realisierter PnL",
@@ -80,8 +80,8 @@
   "volume-price" : "Volumen @ Preis",
   "notional" : "Fiktiv",
   "liquidation" : "LIQUIDATION",
-  "time" : "Time",
+  "time" : "Zeit",
   "price" : "Preis",
   "volume" : "Volumen",
-  "pending" : "PENDING"
+  "pending" : "AUSSTEHEND"
 }

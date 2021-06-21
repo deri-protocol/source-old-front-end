@@ -10,16 +10,16 @@ import { useRouteMatch } from 'react-router-dom';
 
 
 function Header ({intl}){
-  const lang = useLang(intl.dict,'header')
+  const lang = useLang(intl.dict,'header');
   const isHome = useRouteMatch('/index');
-  const isTeam = useRouteMatch('/team')
+  const isTeam = useRouteMatch('/team');
   return (
     <div className="nav">
       <div className='nav-container'>
       <Menu lang={lang} locale={intl.locale}/>                            
       <div className='nav-right'>
         <Account lang={lang} ignoreWallet={isHome || isTeam}/>
-        <div className='use-deri'><Link to='/lite' target='_blank'>USE DERI</Link></div>
+        <div className='use-deri'><Link to='/lite' target='_blank'>{lang['use-deri']}</Link></div>
         <LanguageSelector/>
       </div>
       </div>

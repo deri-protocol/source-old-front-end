@@ -11,8 +11,7 @@
   "guide" : "Anleitung",
   "whitepaper" : "Whitepaper",
   
-  "use-deri":"USE DERI",
-
-  "unsupported-chain-id" : "不支持网络ID",
-  "connect-wallet" : "连接钱包"
+  "use-deri":"BENUTZE DERI",
+  "unsupported-chain-id" : "Nicht unterstützte Netzwerk-ID",
+  "connect-wallet" : "Wallet Verbinden"
 }

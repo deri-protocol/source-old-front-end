@@ -16,10 +16,10 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
   //claim deri
 	const claim = async () => {
 		if(!eqInNumber(wallet.detail.chainId,claimInfo.chainId)) {
-			alert(`${lang['deri-address-tip']} ${ config.text } . ${lang['connect-to']} ${ config.text } ${lang['to-claim']}.`)
+			alert(`${lang['your-deri-is-on']} ${ config.text } . ${lang['connect-to']} ${ config.text } ${lang['to-claim']}.`)
 			return ;
 		}
-		if (claimInfo.unclaimed === 0) {
+		if ((+claimInfo.unclaimed) === 0) {
 			alert(lang['no-deri-to-claim-yet']);
 			return;
 		}
