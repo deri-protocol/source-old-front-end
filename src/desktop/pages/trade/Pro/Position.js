@@ -128,7 +128,7 @@ function Position({wallet,trading,version,lang}){
         </span>
       </div>
       <div><DeriNumberFormat value={trading.position.averageEntryPrice}  decimalScale={2}/></div>
-      <div className={direction}>{direction}</div>
+      <div className={direction}>{direction && lang[direction.toLowerCase()]}</div>
       <div>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
         {version.isV1 ? <span>

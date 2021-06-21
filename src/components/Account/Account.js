@@ -41,7 +41,7 @@ function Account({wallet,ignoreWallet,lang}){
     setAccountText(wallet.detail)
     return () => {
     };
-  }, [wallet.detail.account,wallet.detail.formatBalance]);
+  }, [wallet.detail.account,wallet.detail.formatBalance,lang]);
 
 
   return (

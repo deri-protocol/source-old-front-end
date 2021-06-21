@@ -16,7 +16,7 @@ function Header ({intl}){
   return (
     <div className="nav">
       <div className='nav-container'>
-      <Menu lang={lang}/>                            
+      <Menu lang={lang} locale={intl.locale}/>                            
       <div className='nav-right'>
         <Account lang={lang} ignoreWallet={isHome || isTeam}/>
         <div className='use-deri'><Link to='/lite' target='_blank'>USE DERI</Link></div>

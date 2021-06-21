@@ -20,7 +20,7 @@ function Header({intl}){
       <div className="nav">
         <img className="menu-icon" src={menuIcon} onClick={showMenu}/>
         <div className='menu-left' style={styles}>
-          <Menu closeMenu={closeMenu} lang={Object.assign(header,footer)}/>
+          <Menu closeMenu={closeMenu} lang={Object.assign(header,footer)} locale={intl.locale}/>
         </div>
         <a className="logo" href="https://deri.finance/">
           <img src={logo} alt=""/>

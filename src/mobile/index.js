@@ -5,7 +5,7 @@ import Footer from './components/Footer/Footer'
 import './style/index.less'
 import useWindowSize from '../hooks/useWindowSize';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
-export default function Mobile (){
+export default function Mobile ({locale}){
   const winSize = useWindowSize();
   const location = useLocation();
   const curRouterClass = location.pathname.substring(1)
@@ -15,7 +15,7 @@ export default function Mobile (){
   }, [winSize])
 
   return (
-    <div className={`mobile ${curRouterClass}`}>
+    <div className={`mobile ${curRouterClass} ${locale}`}>
       <Header></Header>
       <Body></Body>
       <Footer></Footer>
