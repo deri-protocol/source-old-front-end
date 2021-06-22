@@ -37,6 +37,7 @@
   "liquidity-used" : "Genutzte Liquidität",
   "funding-rate-impact" : "Auswirkung der Finanzierungsrate",
   "no-margin-tip" : "Sie haben kein Guthaben im Kontrakt. Zahlen Sie bitte zuerst ein.",
+  "not-enough-margin-tip" : "Das Handelsvolumen übersteigt das Leverage-Limit. Bitte mehr Guthaben einzahlen",
   "confirm" : "BESTÄTIGEN",
   "of-contracts" : "von Kontrakten",
   "position-after-execution" : "Position nach Ausführung",

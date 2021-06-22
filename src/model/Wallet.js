@@ -18,6 +18,8 @@ class Wallet {
     })
   }
 
+  supportWeb3 = () => !!window.ethereum
+
   isConnected = () => !!this.detail.account;
 
 

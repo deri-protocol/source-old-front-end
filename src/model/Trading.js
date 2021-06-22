@@ -96,7 +96,7 @@ export default class Trading {
     }
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
-    if(wallet && wallet.isConnected()){
+    if(wallet.isConnected()){
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
       let defaultConfig = this.getDefaultConfig(this.configs,wallet);
@@ -107,10 +107,15 @@ export default class Trading {
       this.setConfig(defaultConfig);
     } 
     //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    if(!wallet.isConnected() && this.configs.length === 0 && all.length > 0){
-      let defaultConfig = all.find(c => c.symbol === 'BTCUSD')
-      defaultConfig = defaultConfig ? defaultConfig : all[0]
-      this.setConfig(defaultConfig)
+    if(!wallet.isConnected()){
+      //没有钱包插件
+      if(!wallet.supportWeb3()){
+        //默认用v2
+        version.setCurrent('v2')
+        const all = await this.configInfo.load(version);
+        const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+        this.setConfig(defaultConfig)
+      }
     }
     this.loadByConfig(this.wallet,this.config,true)
     this.setVolume('')
@@ -143,7 +148,8 @@ export default class Trading {
 
      //切换指数
     if(symbolChanged && config){
-      this.oracle.unsubscribeBars();
+      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
+      this.oracle.unsubscribeBars(symbol);
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
@@ -151,7 +157,6 @@ export default class Trading {
       if(position){
         this.setIndex(position.price);
       }
-      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
       this.oracle.load(symbol)
     }
      //contract
