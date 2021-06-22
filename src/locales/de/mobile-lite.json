@@ -5,6 +5,8 @@
   "dynamic-effective-balance" : "Dyn.Eff.Sal",
   "transaction-fee" : "Gebühr",
   "my-position" : "Position",
+  "base-token" : "B Token",
+  "wallet-balance" : "Wal. Guth",
 
   "index" : "Index",
   "funding" : "Funding"

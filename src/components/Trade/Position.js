@@ -153,7 +153,7 @@ function Position({wallet,trading,version,lang}){
           <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />
         </div>
       </div>
-      <div className='info-right'>
+      <div className={`info-right action ${version.current}`}>
       {version.isV1 ? <>
         <div
           className='add-margin'
