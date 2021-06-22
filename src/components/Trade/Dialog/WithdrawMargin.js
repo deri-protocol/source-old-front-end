@@ -105,7 +105,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                       className='margin-value'
                       value={amount}
                       onChange={onChange}
-                      placeholder='Amount'/>
+                      placeholder={lang['amount']}/>
                   </div>
                 </div>
                 <div>{ spec.baseToken }</div>

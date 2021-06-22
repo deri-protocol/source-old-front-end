@@ -26,7 +26,7 @@ function importAll(r){
 //lang.json 是语言包目录，需要排除在外
 importAll(require.context(`../locales/`,true,/^((?!lang).)*\.json$/))
 
-export default class Intl {
+class Intl {
   locale = 'en'
   constructor(){
     makeObservable(this,{
@@ -48,7 +48,13 @@ export default class Intl {
     storeLocale(locale)
   }
 
+  get(page,key){
+    return cache[this.locale][page][key]
+  }
+
   get dict(){         
     return cache[this.locale]
   }
 }
+
+export default new Intl();
