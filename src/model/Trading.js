@@ -413,16 +413,28 @@ export default class Trading {
   }
 
   get fundingRateTip(){
-  
+    console.log('Intl.locale----',Intl.locale)
     if(this.version && this.version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        if(Intl.locale == 'zh'){
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n ${Intl.get('lite','per-block')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+        }else{
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
         `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')}`        
+        }
+        
       }
     }else{
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        if(Intl.locale == 'zh'){
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
         `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')})`        
+        }else{
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','per-block')}) ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} `        
+        }
+        
       }
     }
     

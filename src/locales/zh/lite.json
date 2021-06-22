@@ -84,5 +84,9 @@
   "time":"日期",
   "price":"价格",
   "volume":"交易量",
-  "pending" : "进行中"
+  "pending" : "进行中",
+  "funding-rate-per-block" : "资金费率 (每一个区块)",
+  "1-long-contract-pays-1-short-contract" : "一手做多的合约付给一手做空的合约",
+  "index-price-camelize" : "指数价格",
+  "per-block" : "每一个区块"
 }

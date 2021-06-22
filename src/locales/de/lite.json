@@ -84,5 +84,9 @@
   "time" : "Zeit",
   "price" : "Preis",
   "volume" : "Volumen",
-  "pending" : "AUSSTEHEND"
+  "pending" : "AUSSTEHEND",
+  "funding-rate-per-block" : "Funding  Rate (per block)",
+  "1-long-contract-pays-1-short-contract" : "1 Long contract pays 1 short contract",
+  "index-price-camelize" : "IndexPrice",
+  "per-block" : "per block"
 }
