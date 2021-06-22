@@ -34,10 +34,10 @@ function Mining({wallet,lang}){
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
-									LIUQIDITY MINING
+								{lang['liquidity-mining']}
 							</div>
 							<div className='trade-mining' onClick={() => setCurrentTab('trade')} >
-									TRADING MINING
+								{lang['trading-mining']}
 							</div>
 					</div>
 			</div>

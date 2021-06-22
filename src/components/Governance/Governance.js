@@ -184,7 +184,7 @@ function Governance({ wallet = {}, lang }) {
         {lang['wallet-balance']}: -- DERI
       </div>
       <div className='width'>
-        <input type="number" className="deri-num" placeholder="Amount" onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" /> 
+        <input type="number" className="deri-num" placeholder={lang['amount']} onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" /> 
         <span className="basetoken">DERI</span> 
       </div>
       <div className='width'>
