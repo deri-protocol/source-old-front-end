@@ -1,4 +1,7 @@
 // add a new chain: validateChainId, getChainProviderUrls, getNetworkName, getAnnualBlockNumberConfig
+export const getChainIds = () => {
+  return ['1', '3', '56', '97', '128', '256', '137', '80001'];
+};
 export const getChainProviderUrls = (chainId) => {
   const chainProviderUrls = [
     {
@@ -78,18 +81,23 @@ export const getChainProviderUrls = (chainId) => {
 }
 
 export const getAnnualBlockNumberConfig = () => {
-  return {
-    1: '2367422',
-    56: '10497304',
-    128: '10511369',
-    3: '2367422',
-    97: '10497304',
-    256: '10511369',
-    137: '15063056',
-    80001: '15063056',
-  };
+  let chainBlockNumberList = [
+    '2367422',
+    '2367422',
+    '10497304',
+    '10497304',
+    '10511369',
+    '10511369',
+    '15063056',
+    '15063056',
+  ];
+  return getChainIds().reduce((accum, i, index) => {
+    accum[i] = chainBlockNumberList[index];
+    return accum;
+  }, {});
 };
 
+// MAX UINT/INT256
 export const MAX_UINT256 =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 export const MAX_INT256 =

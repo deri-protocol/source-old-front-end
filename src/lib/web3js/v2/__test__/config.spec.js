@@ -3,12 +3,39 @@ import {
   getPoolConfigList,
   getFilteredPoolConfigList,
   getPoolConfig,
+  getPoolConfig2,
+  getOracleConfigList,
+  getOracleConfig,
+  getAnnualBlockNumberConfig,
+  getChainIds,
 } from '../config';
-import fetch from 'node-fetch';
-global.fetch = fetch;
-const POOL_ADDRESS='0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
+import {
+  POOL_ADDRESS,
+  ROUTER_ADDRESS,
+  BTOKEN_ADDRESS,
+  BTCUSD_ORACLE_ADDRESS,
+  PTOKEN_ADDRESS,
+  LTOKEN_ADDRESS,
+} from './setup';
 
 describe('config', () => {
+  test('getChainIds()', () => {
+    const output = 8;
+    expect(getChainIds().length).toEqual(output);
+  });
+  test('getAnnualBlockNumberConfig()', () => {
+    const output = {
+      1: '2367422',
+      56: '10497304',
+      128: '10511369',
+      3: '2367422',
+      97: '10497304',
+      256: '10511369',
+      137: '15063056',
+      80001: '15063056',
+    };
+    expect(getAnnualBlockNumberConfig()).toEqual(output);
+  });
   test('getChainProviderUrls()', () => {
     const output = [
       'https://bsc-dataseed.binance.org',
@@ -18,11 +45,11 @@ describe('config', () => {
     expect(getChainProviderUrls('56')).toEqual(output);
   });
   test('getPoolConfigList()', () => {
-    const output = 6;
+    const output = 4;
     expect(getPoolConfigList('dev').length).toEqual(output);
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
-    const output = 3;
+    const output = 2;
     const arr1 = getPoolConfigList('dev')
     const arr2 = arr1.map(i => i.bTokenId)
     expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(output)
@@ -45,14 +72,14 @@ describe('config', () => {
       getFilteredPoolConfigList(
         POOL_ADDRESS,
       ).length
-    ).toEqual(6);
+    ).toEqual(4);
     expect(
       getFilteredPoolConfigList(
         POOL_ADDRESS,
         null,
         '1',
       ).length
-    ).toEqual(3);
+    ).toEqual(2);
   });
   test('getPoolconfig()', () => {
     expect(
@@ -61,24 +88,62 @@ describe('config', () => {
         '0',
         '1'
       ).bToken
-    ).toEqual('0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF');
+    ).toEqual(BTOKEN_ADDRESS);
     expect(
       getPoolConfig(
         POOL_ADDRESS,
         '0',
       ).router
-    ).toEqual('0x1061b8457A036b4A23C8C2346cC62C701e35E2c4');
+    ).toEqual(ROUTER_ADDRESS);
     expect(
       getPoolConfig(
         POOL_ADDRESS,
       ).router
-    ).toEqual('0x1061b8457A036b4A23C8C2346cC62C701e35E2c4');
+    ).toEqual(ROUTER_ADDRESS);
     expect(
       getPoolConfig(
         POOL_ADDRESS,
         null,
         '1',
       ).router
-    ).toEqual('0x1061b8457A036b4A23C8C2346cC62C701e35E2c4');
+    ).toEqual(ROUTER_ADDRESS);
   });
+  test('getOracleConfigList', () => {
+    const output = 4
+    expect(getOracleConfigList().length).toEqual(output)
+  })
+  test('getOracleConfig', () => {
+    const output = {
+      chainId: '97',
+      symbol: 'BTCUSD',
+      decimal: '18',
+      address: BTCUSD_ORACLE_ADDRESS,
+    };
+    expect(getOracleConfig('97', 'BTCUSD')).toEqual(output)
+  })
+  test('getPoolConfig2', () => {
+    const output = {
+      pool: POOL_ADDRESS,
+      pToken: PTOKEN_ADDRESS,
+      lToken: LTOKEN_ADDRESS,
+      router: ROUTER_ADDRESS,
+      initialBlock: '9516935',
+      chainId: '97',
+      bTokenId: '',
+      bTokenSymbol: '',
+      bToken: '',
+      symbolId: '',
+      symbol: '',
+      unit: '',
+      version: 'v2',
+      bTokenCount: 2,
+      symbolCount: 2,
+    };
+    const res = getPoolConfig2(POOL_ADDRESS)
+    expect(res).toEqual(output)
+    expect(res.bTokenCount).toEqual(2)
+    expect(res.symbolCount).toEqual(2)
+    expect(getPoolConfig2(POOL_ADDRESS, '0').bTokenSymbol).toEqual('BUSD')
+    expect(getPoolConfig2(POOL_ADDRESS, null, '1').symbol).toEqual('ETHUSD')
+  })
 });

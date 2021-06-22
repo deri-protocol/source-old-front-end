@@ -1,12 +1,12 @@
-import { getPoolConfig, getOracleConfig } from '../config';
-import { DeriEnv } from '../../config'
-import { oracleFactory } from '../factory'
-import { deriToNatural } from './convert'
-import { normalizeChainId } from './validate'
+import { getOracleConfig } from '../config/oracle';
+import { getPoolConfig2 } from '../config/pool';
+import { oracleFactory } from '../factory';
+import { normalizeChainId } from './validate';
+import { DeriEnv } from '../../config';
 
 export const getOracleUrl = (poolAddress, symbolId) => {
   const env = DeriEnv.get();
-  const { symbol } = getPoolConfig(poolAddress, null, symbolId);
+  const { symbol } = getPoolConfig2(poolAddress, null, symbolId);
   const addSymbolParam = (url, symbol = 'BTCUSD') => `${url}?symbol=${symbol}`;
   if (env === 'prod' || env === 'production') {
     // for production
@@ -50,11 +50,20 @@ export const getOracleInfo = async (poolAddress, symbolId) => {
 //   return deriToNatural(responseJson.price).toString();
 // };
 
-export const getOraclePrice = async(chainId, symbol, useInfura=false) => {
-  chainId = normalizeChainId(chainId)
-  const config = getOracleConfig(chainId, symbol)
+export const getOraclePrice = async (chainId, symbol, useInfura = false) => {
+  chainId = normalizeChainId(chainId);
+  const config = getOracleConfig(chainId, symbol);
   if (config && config.address) {
-    const oracle = oracleFactory(chainId, config.address, symbol, config.decimal, useInfura)
-    return await oracle.getPrice()
+    if (!config.decimal) {
+      throw new Error('getOraclePrice: decimal is empty', config.decimal);
+    }
+    const oracle = oracleFactory(
+      chainId,
+      config.address,
+      symbol,
+      config.decimal,
+      useInfura
+    );
+    return await oracle.getPrice();
   }
-}
+};

@@ -2,18 +2,19 @@ import { bg } from '../utils'
 import {
   BToken,
 } from '../contract/b_token'
-import fetch from 'node-fetch'
-global.fetch = fetch
+import {
+  TIMEOUT,
+  POOL_ADDRESS,
+  BTOKEN_ADDRESS,
+  ACCOUNT2_ADDRESS,
+  ACCOUNT_ADDRESS,
+} from './setup';
 
-const TIMEOUT=20000
 
 describe('BToken', () => {
-  let poolAddress, bToken, account, account2
+  let bToken
   beforeAll(() => {
-    poolAddress = '0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
-    bToken = new BToken('97', '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF', true)
-    account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
-    account2 = '0xf07cC941818ccD0620D30c06bD403C138691bfDB'
+    bToken = new BToken('97', BTOKEN_ADDRESS, true)
   })
   test('symbol()', async() => {
     const output = 'BUSD'
@@ -21,14 +22,14 @@ describe('BToken', () => {
   }, TIMEOUT)
   test('balanceOf()', async() => {
     const output = bg('47380')
-    expect(await bToken.balanceOf(account)).toEqual(output)
+    expect(await bToken.balanceOf(ACCOUNT_ADDRESS)).toEqual(output)
   }, TIMEOUT)
   test('totalSupply()', async() => {
     const output = bg('1090000')
     expect(await bToken.totalSupply()).toEqual(output)
   }, TIMEOUT)
   test('isUnlocked()', async() => {
-    expect(await bToken.isUnlocked(account, poolAddress)).toEqual(true)
-    expect(await bToken.isUnlocked(account2, poolAddress)).toEqual(false)
+    expect(await bToken.isUnlocked(ACCOUNT_ADDRESS, POOL_ADDRESS)).toEqual(true)
+    expect(await bToken.isUnlocked(ACCOUNT2_ADDRESS, POOL_ADDRESS)).toEqual(false)
   }, TIMEOUT)
 })

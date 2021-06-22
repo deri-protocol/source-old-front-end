@@ -4,11 +4,10 @@ import { deriToNatural, bg } from '../utils'
 
 export class PerpetualPool extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, useInfura)
-    this.contractAbi = perpetualPoolAbi
+    super(chainId, contractAddress, perpetualPoolAbi, useInfura)
 
-    this.bTokenLength = 0
-    this.symbolLength = 0
+    this.bTokenCount= 0
+    this.symbolCount= 0
 
     this.lTokenAddress = ''
     this.pTokenAddress = ''
@@ -16,12 +15,6 @@ export class PerpetualPool extends ContractBase {
     this.protocolFeeCollector = ''
 
     this.protocolFeeAccrued = 0
-  }
-  async _init() {
-    if (!this.web3) {
-      await super._init()
-      this.contract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress)
-    }
   }
 
   async _update() {
@@ -37,8 +30,8 @@ export class PerpetualPool extends ContractBase {
       const res = await this._call('getLengths')
       //console.log(res[0])
       if (res[0] && res[1]) {
-        this.bTokenLength = parseInt(res[0])
-        this.symbolLength = parseInt(res[1])
+        this.bTokenCount= parseInt(res[0])
+        this.symbolCount= parseInt(res[1])
       }
     } catch(err) {
       throw new Error(`PerpetualPool#_getLength error: ${err}`)

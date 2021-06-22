@@ -11,14 +11,7 @@ const processAsset = (res) => {
 }
 export class LToken extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, useInfura)
-    this.contractAbi = lTokenAbi
-  }
-  async _init() {
-    if (!this.web3) {
-      await super._init()
-      this.contract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress)
-    }
+    super(chainId, contractAddress, lTokenAbi, useInfura)
   }
 
   // === query ===
@@ -36,6 +29,8 @@ export class LToken extends ContractBase {
     if (Array.isArray(res)) {
       return processAsset(res)
     } else {
+      console.log('address', this.contractAddress)
+      console.log('res', res)
       throw new Error(`LToken#getAsset: invalid result with (${accountAddress} ${bTokenId})`)
     }
   }

@@ -31,7 +31,7 @@ class Body extends React.Component {
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => {
-            return /^app/.test(window.location.href) ? <Redirect to='/lite'/> : <Redirect to='/index'/>
+            return /https?:\/\/app/.test(window.location.href) ? <Redirect to='/lite'/> : <Redirect to='/index'/>
           }}>            
           </Route>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>

@@ -1,58 +1,30 @@
 import {
-  bg,
-  toWei,
-  fromWei,
-  numberToHex,
+  DeriEnv,
   max,
   min,
-  toHex,
+  bg,
   toNatural,
+  toHex,
   toChecksumAddress,
   hexToString,
   hexToNumber,
   hexToNumberString,
-  // getOracleUrl,
-  // getOracleInfo,
+  getOracleUrl,
+  getOracleInfo,
   getOraclePrice,
-  normalizeChainId,
-  normalizeAddress,
   checkHttpServerIsAlive,
   getAliveHttpServer,
+  getLatestRPCServer,
   getChainProviderUrl,
-  getAnnualBlockNumber,
-  validateArgs,
-  catchError,
-} from '../utils'
-import { TIMEOUT, ACCOUNT_ADDRESS} from './setup';
+  normalizeChainId,
+} from '../indexV2';
+import fetch from 'node-fetch'
+import { normalizeAddress } from '../utils';
+global.fetch = fetch
+
+const TIMEOUT=20000
 
 describe('utils', () => {
-  test('toWei()', () => {
-    const input = "1"
-    const output = "1000000000000000000"
-    expect(toWei(input)).toEqual(output)
-  })
-  test('fromWei()', () => {
-    const input = "1120000000000000000"
-    const output = "1.12"
-    expect(fromWei(input)).toEqual(output)
-  })
-  test('numberToHex()', () => {
-    const input = "17"
-    const output = "0x11"
-    expect(numberToHex(input)).toEqual(output)
-  })
-  // test('fetchWithDelay()', async() => {
-  //   const input = 'http://www.baidu.com'
-  //   const output = true
-  //   const res = await fetchWithTimeout(input)
-  //   expect(res.ok).toEqual(output)
-  //   // const input2 = 'https://bsc-dataseed.binance.org'
-  //   // const output2 = true
-  //   // expect((await fetchWithTimeout(input2, {timeout:10})).timeout).toEqual(output2)
-  //   // const input3 = 'https://test.justfortestonly.org'
-  //   // const output3 = true
-  //   // expect((await fetchWithTimeout(input3, {timeout:1})).timeout).toEqual(output3)
-  // })
   test('max()', () => {
     const [input, output] = [[bg(11), bg(3)], bg(11)];
     expect(max(...input)).toEqual(output);
@@ -72,7 +44,7 @@ describe('utils', () => {
   test('toChecksumAddress()', () => {
     const [input, output] = [
       '0xffe85d82409c5b9d734066c134b0c2ccdd68c4df',
-      ACCOUNT_ADDRESS,
+      '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF',
     ];
     expect(toChecksumAddress(input)).toEqual(output);
   });
@@ -89,10 +61,25 @@ describe('utils', () => {
     expect(hexToNumberString(input)).toEqual(output);
   });
 
+  test('getOracleUrl()', () => {
+    const [input, output] = [['97','0x372b640A00a0A6B73381e9363A39644a712cCc37'], 'https://oracle2.deri.finance/price?symbol=BTCUSD'];
+    expect(getOracleUrl(...input)).toEqual(output);
+    DeriEnv.set('prod')
+    const [input2, output2] = [['56','0xAf081e1426f64e74117aD5F695D2A80482679DE5'], 'https://oracle4.deri.finance/price?symbol=BTCUSD'];
+    expect(getOracleUrl(...input2)).toEqual(output2);
+    const [input3, output3] = [['56','0x011346B81e5326904B5B76A11dECAf2c67eFFc23'], 'https://oracle4.deri.finance/price?symbol=COIN'];
+    expect(getOracleUrl(...input3)).toEqual(output3);
+    DeriEnv.set('dev')
+  });
+  test('getOracleInfo()', async() => {
+    const [input, output] = [['97','0x372b640A00a0A6B73381e9363A39644a712cCc37'], {symbol: 'BTCUSD', priceLength: 23}];
+    const res = await getOracleInfo(...input)
+    expect(res.symbol).toEqual(output.symbol);
+    expect(res.price.length).toEqual(output.priceLength);
+  }, TIMEOUT)
   test('getOraclePrice()', async() => {
-    const [input, output] = [[97, 'BTCUSD', true], {priceLength: 5}];
+    const [input, output] = [['97','0xFFe402106E8F73F0A44C7350C2b734e048f448f2'], {priceLength: 5}];
     const res = await getOraclePrice(...input)
-    //console.log(res)
     expect(res.split('.')[0].length).toEqual(output.priceLength);
   }, TIMEOUT)
   test('checkHttpServerIsAlive()', async() => {
@@ -109,8 +96,43 @@ describe('utils', () => {
     const input = '97'
     const res = await getChainProviderUrl(input)
     expect(res).toMatch(/data-seed-prebsc-\d-s\d\.binance\.org/);
-  })
-  test('normalizeChainId()', () => {
+  }, TIMEOUT)
+  test('getLatestRPCServer() Database', async() => {
+    const input = [
+      'https://data-seed-prebsc-4-s1.binance.org:8545/',
+      'https://data-seed-prebsc-1-s2.binance.org:8545/',
+      'https://data-seed-prebsc-1-s3.binance.org:8545/',
+      'https://data-seed-prebsc-2-s1.binance.org:8545/',
+      'https://data-seed-prebsc-2-s2.binance.org:8545/',
+      'https://data-seed-prebsc-2-s3.binance.org:8545/',
+    ];
+    const res = await getLatestRPCServer(input)
+    expect(res).toMatch(/data-seed-prebsc-\d-s\d\.binance\.org/);
+  }, TIMEOUT)
+  test('getLatestRPCServer() BSC', async() => {
+    const input = [
+      'https://bsc-dataseed.binance.org',
+      'https://bsc-dataseed1.defibit.io/',
+      'https://bsc-dataseed1.ninicoin.io/',
+    ];
+    const res = await getLatestRPCServer(input)
+    expect(res).toMatch(/bsc-dataseed/);
+  }, TIMEOUT)
+  test('getLatestRPCServer() ETH', async() => {
+    const input = [
+      'https://mainnet.infura.io/v3/ec73e2f0c79a42c0997ee535364de584',
+    ];
+    const res = await getLatestRPCServer(input)
+    expect(res).toMatch(/mainnet\.infura\.io/);
+  }, TIMEOUT)
+  test('getLatestRPCServer() HECO', async() => {
+    const input = [
+      'https://http-mainnet.hecochain.com'
+    ];
+    const res = await getLatestRPCServer(input)
+    expect(res).toMatch(/hecochain\.com/);
+  }, TIMEOUT)
+  test('normalizeChainId()', async() => {
     expect(normalizeChainId(1)).toEqual('1');
     expect(normalizeChainId('56')).toEqual('56')
     expect(normalizeChainId(128)).toEqual('128')
@@ -118,19 +140,19 @@ describe('utils', () => {
     function withInvalidChainId() {
       return normalizeChainId('43')
     }
-    expect(withInvalidChainId).toThrow(/invalid chainId/);
+    expect(withInvalidChainId).toThrowError(/invalid chainId/);
 
     function withEmptyChainId() {
       return normalizeChainId('')
     }
-    expect(withEmptyChainId).toThrow(/invalid chainId/);
+    expect(withEmptyChainId).toThrowError(/invalid chainId/);
 
     function withNullChainId() {
       return normalizeChainId()
     }
     expect(withNullChainId).toThrow(/invalid chainId/);
   })
-  test('normalizeAddress()', () => {
+  test('normalizeAddress()', async() => {
     expect(normalizeAddress('0x2baa211d7e62593ba379df362f23e7b813d760ad')).toEqual('0x2bAa211D7E62593bA379dF362F23e7B813d760Ad');
 
     function withInvalidAddress() {
@@ -138,29 +160,4 @@ describe('utils', () => {
     }
     expect(withInvalidAddress).toThrowError(/invalid address/);
   })
-  test('getAnnualBlockNumber()', () => {
-    expect(getAnnualBlockNumber('1')).toEqual(2367422);
-    expect(getAnnualBlockNumber('56')).toEqual(10497304);
-    expect(getAnnualBlockNumber('97')).toEqual(10497304);
-  })
-  test('validateArgs()', () => {
-    expect(validateArgs('1')).toEqual(true);
-    expect(validateArgs(1.99)).toEqual(true);
-    expect(validateArgs(undefined)).toEqual(false);
-  })
-  test('catchError()', () => {
-    const testFunc1 = () => {
-      return '1'
-    }
-    expect(catchError(testFunc1, 'testFunc1()', '0')).toEqual('1');
-    const testFunc2 = () => {
-      const res = Math.random()
-      if (res > 1) {
-        return res
-      } else {
-        throw new Error('Hi, this is a test error')
-      }
-    }
-    expect(catchError(testFunc2, 'testFunc2()', 666)).toEqual(666);
-  })
-})
+});

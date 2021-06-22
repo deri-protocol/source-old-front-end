@@ -2,28 +2,34 @@ import { bg } from '../utils'
 import {
   PerpetualPool,
 } from '../contract/perpetual_pool'
-import fetch from 'node-fetch'
-global.fetch = fetch
-
-const TIMEOUT=20000
+import {
+  TIMEOUT,
+  POOL_ADDRESS,
+  LTOKEN_ADDRESS,
+  PTOKEN_ADDRESS,
+  ROUTER_ADDRESS,
+  PROTOCOL_FEE_COLLECTOR,
+  BTCUSD_ORACLE_ADDRESS,
+  BTOKEN_ADDRESS,
+} from './setup';
 
 describe('PerpetualPool', () => {
   let perpetualPool
   beforeAll(() => {
-    perpetualPool = new PerpetualPool('97', '0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5', true)
+    perpetualPool = new PerpetualPool('97', POOL_ADDRESS, true)
   })
   test('getLengths()', async() => {
     const output = 10 
     await perpetualPool.getLengths()
-    expect(perpetualPool.bTokenLength).toEqual(output)
-    expect(perpetualPool.symbolLength).toEqual(output)
+    expect(perpetualPool.bTokenCount).toEqual(output)
+    expect(perpetualPool.symbolCount).toEqual(output)
   }, TIMEOUT)
   test('getAddresses()', async() => {
     const output = {
-      lTokenAddress: '0x61162b0c9665Ce27a53b59E79C1B7A929cc3bB57',
-      pTokenAddress: '0xeBA1c76F7A773B8210130f068798839F84392241',
-      routerAddress: '0xaDEe3A9149ee1FBa712aB081c5A6067D613571C1',
-      protocolFeeCollector: '0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
+      lTokenAddress: LTOKEN_ADDRESS,
+      pTokenAddress: PTOKEN_ADDRESS,
+      routerAddress: ROUTER_ADDRESS,
+      protocolFeeCollector: PROTOCOL_FEE_COLLECTOR,
     };
     await perpetualPool.getAddresses()
     expect(perpetualPool.lTokenAddress).toEqual(output.lTokenAddress)
@@ -38,8 +44,8 @@ describe('PerpetualPool', () => {
       minPoolMarginRatio: bg(1),
       minInitialMarginRatio: bg(0.1),
       minMaintenanceMarginRatio: bg('0.05'),
-      minLiquidationReward: bg('10'),
-      maxLiquidationReward: bg('200'),
+      minLiquidationReward: bg('0'),
+      maxLiquidationReward: bg('1000'),
       liquidationCutRatio: bg('0.5'),
       protocolFeeCollectRatio: bg(0.2),
     }
@@ -54,7 +60,7 @@ describe('PerpetualPool', () => {
   test('getBToken()', async() => {
     const input = '0'
     const output = {
-      bTokenAddress: '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF',
+      bTokenAddress: BTOKEN_ADDRESS,
       swapperAddress: '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF',
       oracleAddress: '0x0000000000000000000000000000000000000000',
       decimals: '18',
@@ -75,7 +81,7 @@ describe('PerpetualPool', () => {
     const input = '0'
     const output = {
       symbol: 'BTCUSD',
-      oracleAddress: '0x3050D5360382B7f1dbe6895Dd5645a9cf38F14f0',
+      oracleAddress: BTCUSD_ORACLE_ADDRESS,
       multiplier: bg(0.0001),
       feeRatio: bg(0.0001),
       fundingRateCoefficient: bg(0.00001),

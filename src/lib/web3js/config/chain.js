@@ -1,3 +1,6 @@
+export const getChainIds = () => {
+  return ['1', '3', '56', '97', '128', '256', '137', '80001'];
+};
 export const ChainProviderUrls = [
   {
     provider_urls: [
