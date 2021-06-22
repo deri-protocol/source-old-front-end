@@ -412,29 +412,27 @@ export default class Trading {
     }
   }
 
-  get fundingRateTip(){
-    console.log('Intl.locale----',Intl.locale)
+  get fundingRateTip(){    
     if(this.version && this.version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        if(Intl.locale == 'zh'){
+        if(Intl.locale === 'zh'){
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n ${Intl.get('lite','per-block')}${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
-        }else{
+        `\n ${Intl.get('lite','per-block')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+        } else {
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
         `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')}`        
         }
         
       }
-    }else{
+    } else {
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        if(Intl.locale == 'zh'){
+        if(Intl.locale === 'zh'){
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n ${Intl.get('lite','per-block')})${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} `        
-        }else{
+        `\n${Intl.get('lite','per-block')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} `        
+        } else {
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')})`        
-        }
-        
+        `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')})`        
+        }        
       }
     }
     
