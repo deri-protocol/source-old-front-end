@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import './footer.less'
+import './zh-footer.less'
 import { inject, observer } from 'mobx-react';
 import useLang from '../../../hooks/useLang'
 

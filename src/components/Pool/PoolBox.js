@@ -80,7 +80,7 @@ function PoolBox({wallet,version,pool,lang}){
             <div className="pool-detail">
               <div className="base-token">{pool.bTokenSymbol}</div>
               <div>
-                <span>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
+                <span className='title'>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
                 <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.lpApy ? 7 : 0}/>
               </div>
               <div>

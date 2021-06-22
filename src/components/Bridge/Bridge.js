@@ -12,6 +12,7 @@ import exclamatory_red from './img/exclamatory_red.png'
 import exclamatory_yellow from './img/exclamatory_yellow.png'
 import drop from './img/drop-down.png'
 import classNames from 'classnames'
+import './zh-bridge.less'
 function Bridge({ wallet = {},lang }) {
   const isdev = DeriEnv.get() == 'dev' ? true : false;
   const [amount, setAmount] = useState('');

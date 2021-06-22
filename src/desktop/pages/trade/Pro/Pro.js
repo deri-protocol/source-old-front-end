@@ -5,7 +5,9 @@ import { inject, observer } from 'mobx-react'
 import LiteTrade from '../../../../components/Trade/LiteTrade'
 import Tab from '../Tab/Tab'
 import '../Lite/lite.less'
+import '../Lite/zh-lite.less'
 import './pro.less'
+import './zh-pro.less'
 
 
 

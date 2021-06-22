@@ -5,6 +5,7 @@ import TradeMining from "../../../components/Mining/Trade/TradeMining";
 import {DeriEnv} from '../../../lib/web3js/indexV2'
 import config from '../../../config.json'
 import './mining.less'
+import './zh-mining.less'
 import classnames from "classnames";
 import { inject, observer } from 'mobx-react';
 import useQuery from '../../../hooks/useQuery'

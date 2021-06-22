@@ -3,6 +3,7 @@ import CEO from './img/0xAlpha.png'
 import CTO from './img/Richard.png'
 import Janice from './img/Janice.png'
 import Jason from './img/Jason.png'
+import './zh-team.less'
 export default function Team({lang}) {
   return (
     <div>

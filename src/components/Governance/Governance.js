@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
+
 function Governance({ wallet = {}, lang }) {
   const [chainId, setChainId] = useState(56)
   const [name, setClass] = useState('bsc')

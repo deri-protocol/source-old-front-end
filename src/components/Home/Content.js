@@ -24,6 +24,7 @@ import Kryptos from './img/Kryptos.png'
 import LD from './img/LD.png'
 import LotusCapital from './img/LotusCapital.png'
 import Arbitragers from './img/Arbitragers.png'
+import "./zh-home.less"
 export default function Content({lang}) {
   return (
     <div>
