@@ -5,15 +5,8 @@ import { MAX_INT256 } from '../config';
 
 export class PerpetualPoolRouter extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, useInfura)
-    this.contractAbi = perpetualPoolRouterAbi
+    super(chainId, contractAddress, perpetualPoolRouterAbi, useInfura)
     this.poolAddress = ''
-  }
-  async _init() {
-    if (!this.web3) {
-      await super._init()
-      this.contract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress)
-    }
   }
 
   // === query ===

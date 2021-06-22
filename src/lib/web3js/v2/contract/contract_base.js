@@ -4,18 +4,23 @@ import { numberToHex } from '../utils';
 const MAX_GAS_AMOUNT = 832731;
 
 export class ContractBase {
-  constructor(chainId, contractAddress, useInfura) {
+  constructor(chainId, contractAddress, contractAbi, useInfura) {
     this.chainId = chainId;
     this.contractAddress = contractAddress;
+    this.contractAbi = contractAbi;
     this.useInfura = useInfura
   }
 
   async _init() {
     if (this.useInfura) {
-      this.web3 = await web3Factory.getOrSet(this.chainId);
+      this.web3 = await web3Factory.get(this.chainId);
     } else {
       this.web3 = metaMaskWeb3();
     }
+    this.contract = new this.web3.eth.Contract(
+      this.contractAbi,
+      this.contractAddress
+    );
   }
 
   async _call(method, args = []) {
@@ -29,11 +34,15 @@ export class ContractBase {
       } catch(err) {
         retry -= 1
         this.web3 = null
-        console.log(err)
+        if (err.toString().includes('Invalid JSON RPC response')) {
+          console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);
+        } else if (err.toString().includes("Returned values aren't valid,")) {
+          console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
+        }
       }
     }
     if (retry === 0 && !res) {
-      console.log(`method call '${method} ${args}' failed with max retry 3.`)
+      throw new Error(`The contract(${this.contractAddress}) '${method}(${args})' failed with max retry 2.`)
     }
     return res
   }

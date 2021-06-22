@@ -4,16 +4,9 @@ import { bg } from "../utils";
 
 export class ChainlinkOracle extends ContractBase {
   constructor(chainId, address, symbol, decimal, useInfura) {
-    super(chainId, address, useInfura)
-    this.contractAbi = chainlinkOracleAbi
+    super(chainId, address, chainlinkOracleAbi, useInfura)
     this.symbol = symbol
     this.decimal = decimal
-  }
-  async _init() {
-    if (!this.web3) {
-      await super._init()
-      this.contract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress)
-    }
   }
 
   // decimals refers https://docs.chain.link/docs/matic-addresses

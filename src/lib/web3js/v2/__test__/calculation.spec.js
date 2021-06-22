@@ -8,8 +8,6 @@ import {
   isPoolMarginRatioValid,
 } from '../calculation';
 import { bg } from '../utils';
-import fetch from 'node-fetch'
-global.fetch = fetch
 
 describe('calculation', () => {
   // test('calculateFundingRatePerBlock', () => {
@@ -63,7 +61,7 @@ describe('calculation', () => {
   test('calculateFundingRate()', () => {
     // price, volume, multiplier, cost
     const input = ['36.97', '7000', '0.1', '1000', '0.0001']
-    const output = bg('1.81153')
+    const output = bg('0.0025879')
     expect(calculateFundingRate(...input)).toEqual(output)
 
     function withInvalidArgs() {

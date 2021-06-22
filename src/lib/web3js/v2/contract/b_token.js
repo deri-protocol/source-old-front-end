@@ -6,19 +6,8 @@ import { MAX_UINT256} from '../config'
 
 export class BToken extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, useInfura);
-    this.contractAbi = bTokenAbi;
+    super(chainId, contractAddress, bTokenAbi, useInfura);
   }
-  async _init() {
-    if (!this.web3) {
-      await super._init();
-      this.contract = new this.web3.eth.Contract(
-        this.contractAbi,
-        this.contractAddress
-      );
-    }
-  }
-
   // === query ===
   async symbol() {
     return await this._call('symbol');

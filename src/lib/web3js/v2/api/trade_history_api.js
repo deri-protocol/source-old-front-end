@@ -1,6 +1,6 @@
 import { deriToNatural } from '../utils';
 import { perpetualPoolFactory } from '../factory';
-import { getFilteredPoolConfigList, getPoolConfig} from '../config'
+import { getPoolConfig2, getSymbolIdList} from '../config'
 
 import { getRestServerConfig, DeriEnv } from '../../config';
 
@@ -58,8 +58,7 @@ const getTradeHistoryOnline = async (
   fromBlock
 ) => {
 
-  const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
-  const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+  const symbolIdList = getSymbolIdList(poolAddress)
   //console.log('symbolIdList', symbolIdList);
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
   const toBlock = await perpetualPool._getBlockInfo('latest');
@@ -150,7 +149,7 @@ export const getTradeHistory = async (
       return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
     } else {
 
-      const {initialBlock} = getPoolConfig(poolAddress, null, symbolId)
+      const {initialBlock} = getPoolConfig2(poolAddress)
       tradeFromBlock = parseInt(initialBlock);
       const [tradeHistoryOnline] = await Promise.all([
         getTradeHistoryOnline(
@@ -165,7 +164,7 @@ export const getTradeHistory = async (
       return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
     }
   } catch(err) {
-    console.log(err)
+    console.log(`getTradeHistory(${chainId}, ${poolAddress}, ${accountAddress}, ${symbolId}): ${err}`)
   }
   return []
 };

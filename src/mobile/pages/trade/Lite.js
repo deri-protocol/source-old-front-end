@@ -1,6 +1,7 @@
 
 import LiteTrade from "../../../components/Trade/LiteTrade";
 import './lite.less'
+import './zh-lite.less'
 import './de-lite.less'
 
 function Lite({lang}){

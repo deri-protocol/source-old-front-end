@@ -29,13 +29,15 @@ export const metaMaskWeb3 = (function () {
 export const web3Factory = (function () {
   const web3InstanceMap = {};
   return {
-    async getOrSet(chainId) {
+    async get(chainId) {
       if (Object.keys(web3InstanceMap).includes(chainId)) {
         return web3InstanceMap[chainId];
       }
-      console.log(
-        `==== web3Factory(${chainId}), please caution the access limits ===`
-      );
+      if (['1', '3', '42'].includes(chainId)) {
+        console.log(
+          `==== web3Factory(${chainId}), please caution the access limits ===`
+        );
+      }
       const providerUrl = await getChainProviderUrl(chainId);
       web3InstanceMap[chainId] = new Web3(
         new Web3.providers.HttpProvider(providerUrl)

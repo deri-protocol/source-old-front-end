@@ -50,16 +50,4 @@ export class BTokenContract extends Contract {
     ]);
     return bg(res, -decimals);
   }
-
-  // for slp pool use
-  // async balanceOf(poolAddress) {
-  //   //const res = await this._call('balanceOf', [poolAddress])
-  //   let result
-  //   const [res, decimals] = await Promise.all([
-  //     this._balance(this.poolAddress),
-  //     this.decimals(),
-  //   ])
-  //   result = bg(res, -decimals)
-  //   return result
-  // }
 }
