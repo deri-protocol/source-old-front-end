@@ -50,12 +50,12 @@ export default function Content({lang}) {
             <div> <span>{lang['we-are-on']} </span> 
               <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" class="Body-link">{lang['sushi']}</a>
               <span> {lang['and']} </span> 
-              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" class="Body-link">{lang['pancake']}</a> !
+              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" class="Body-link">{lang['pancake']}</a> 
             </div>
             <div> <span> {lang['read-our']} </span> 
               <a href="https://docs.deri.finance/whitepaper" class="Body-link">{lang['whitepaper']}</a>
               <span> {lang['and-peckshield']} </span> 
-              <a href="https://docs.deri.finance/code-audits" class="Body-link">{lang['audit-report']}</a> .
+              <a href="https://docs.deri.finance/code-audits" class="Body-link">{lang['audit-report']}</a> 
             </div>
           </div>
         </div>
