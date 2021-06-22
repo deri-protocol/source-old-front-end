@@ -35,7 +35,7 @@
   "connect-wallet" : "连接钱包",
   "pool-liquidity" : "流动性池",
   "liquidity-used" : "流动性使用率",
-  "funding-rate-impact" : "资金费率影响因素",
+  "funding-rate-impact" : "资金费率的影响",
   "no-margin-tip" : "账户里还没有资金，请先存入。",
   "not-enough-margin-tip" : "账户资金不足，请存入更多的资金",
   "confirm" : "确认",
@@ -47,7 +47,7 @@
   "ok" : "确认",
 
   "deposit" : "存款",
-  "balance-in-contract-uppercase" : "合约最大余额",
+  "balance-in-contract-uppercase" : "账户保证金",
   "wallet-balance" : "钱包余额",
   "add" : "添加",
   "remove" : "移除",
@@ -79,7 +79,7 @@
 
   "history" : "历史记录",
   "volume-price" : "交易量@价格",
-  "notional" : "名义",
+  "notional" : "价值",
   "liquidation" : "清算",
   "time":"日期",
   "price":"价格",

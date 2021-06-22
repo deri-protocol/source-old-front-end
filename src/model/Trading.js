@@ -7,6 +7,7 @@ import Config from "./Config";
 import { eqInNumber, storeConfig, getConfigFromStore } from "../utils/utils";
 import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
+import Intl from "./Intl";
 
 /**
  * 交易模型
@@ -415,13 +416,13 @@ export default class Trading {
   
     if(this.version && this.version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n1 Long contract pays 1 short contract (${this.fundingRate.fundingRatePerBlock} * IndexPrice * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} per block`        
+        return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')}`        
       }
     }else{
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n(1 Long contract pays 1 short contract ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} per block)`        
+        return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')})`        
       }
     }
     
