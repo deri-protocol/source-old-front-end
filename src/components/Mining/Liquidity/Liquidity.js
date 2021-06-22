@@ -92,7 +92,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 
   return (
     <div className="liquidity-box">
-      <div className="odd title">{lang['provider']} { bToken } {lang['earn-deri']}</div>
+      <div className="odd title">{lang['provide']} { bToken } {lang['earn-deri']}</div>
 				<div className="odd text">
 						<div className="text-title">{lang['pool-total-liquidity']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
