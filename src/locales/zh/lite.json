@@ -28,7 +28,7 @@
   "funding-rate-coefficient" : "资金费率系数",
   "min-initial-margin-ratio" : "最小初始保证金率",
   "min-maintenance-margin-ratio" : "最小维持保证金率",
-  "transaction-fee" : "交易费",
+  "transaction-fee" : "交易手续费",
   "enter-volume" : "输入开仓数量",
   "approve" : "授权",
   "approve-failed" : "授权失败",
