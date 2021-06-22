@@ -26,8 +26,8 @@ function Header({intl}){
           <img src={logo} alt=""/>
         </a>
         <div className='nav-right'>
-          <a href='https://app.deri.finacne'><div className='trade'>{header['trade']}</div></a> 
           <LanguageSelector/>
+          <a href='https://app.deri.finacne'><div className='trade'>{header['trade']}</div></a> 
           <Version/>
         </div>
       </div> 
