@@ -66,6 +66,14 @@ export default function Menu({closeMenu,lang,locale}){
               </li>
             </ul>
           </li>
+          <li className="ref">
+            {lang['more']} <img  src={menuDown} alt=""/>
+            <ul className="ref-box">
+              <li>
+                <Link to='/broker'>{lang.broker}</Link>
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
       <div className="m-footer">
