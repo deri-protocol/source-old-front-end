@@ -3,9 +3,14 @@ import './footer.less'
 import './zh-footer.less'
 import { inject, observer } from 'mobx-react';
 import useLang from '../../../hooks/useLang'
+import { useRouteMatch } from 'react-router-dom';
 
 function Footer({intl}){
   const lang = useLang(intl.dict,'footer');
+  const isLite = useRouteMatch('/lite')
+  const isPro = useRouteMatch('/pro')
+  const isMining = useRouteMatch('/mining')
+  const isApp = isLite || isPro || isMining  
   
   return (
     <div className="footer">
@@ -15,7 +20,7 @@ function Footer({intl}){
         <div className="left">
           <div>
             <span>
-              <router-link to='/lite'>{lang['app']}</router-link>  
+              <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${intl.locale}`} target={isApp ? '' : '_blank'} className='mt-27'>{lang['app']}</a>  
             </span>
             <span className="mt-27">
               <a href="https://docs.deri.finance/">{lang['docs']}</a> 
