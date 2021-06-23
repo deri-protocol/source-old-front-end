@@ -21,19 +21,21 @@ echo 'copy to '$repo
 cp -R build/* $repo
 git -C $repo add .
 git -C $repo commit -m 'release bridge'
-read -r -p  "execute git push?[Y/n]" input
-case $input in
-    [yY][eE][sS]|[yY])
-printf '\e[1;34m%-6s\e[m\n' "git push origin main"
-git -C $repo push origin main
-exit
- ;;
-     [nN][oO]|[nN])
- echo "No"
- exit
-        ;;
- *)
- printf '\e[1;34m%-6s\e[m\n' "Invalid input..."
- exit
- ;;
- esac
+if [ $1 !='silence' ]; then
+  read -r -p  "execute git push?[Y/n]" input
+  case $input in
+      [yY][eE][sS]|[yY])
+  printf '\e[1;34m%-6s\e[m\n' "git push origin main"
+  git -C $repo push origin main
+  exit
+  ;;
+      [nN][oO]|[nN])
+  echo "No"
+  exit
+          ;;
+  *)
+  printf '\e[1;34m%-6s\e[m\n' "Invalid input..."
+  exit
+  ;;
+  esac
+fi
