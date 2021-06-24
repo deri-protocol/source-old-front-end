@@ -1,6 +1,6 @@
 #!/bin/bash
 build_dir='./build'
-repo=$HOME/work/bridge
+repo=/tmp/build/bridge
 if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
   yarn build --nomaps

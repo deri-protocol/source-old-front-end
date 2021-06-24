@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build_dir='./build'
-repo=$HOME/work/governance
+repo=/tmp/build/governance
 if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
   yarn build --nomaps

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 build_dir='./build'
-repo=$HOME/work/deri-finance.github.io
+repo=/tmp/build/deri-finance.github.io
 if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
   yarn build --nomaps
