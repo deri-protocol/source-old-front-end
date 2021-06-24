@@ -1,5 +1,5 @@
 #!/bin/bash
-build_dir='./build'
+build_dir=$PWD/build
 repo=/tmp/build/bridge
 if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
@@ -21,7 +21,7 @@ echo 'copy to '$repo
 cp -R build/* $repo
 git -C $repo add .
 git -C $repo commit -m 'release bridge'
-if [ $1 !='silence' ]; then
+if [ "$1" != "silence" ]; then 
   read -r -p  "execute git push?[Y/n]" input
   case $input in
       [yY][eE][sS]|[yY])
@@ -38,4 +38,6 @@ if [ $1 !='silence' ]; then
   exit
   ;;
   esac
+else
+  git -C $repo push origin main
 fi

@@ -21,7 +21,7 @@ function History({wallet ,trading,lang}){
         item.directionText = lang['long-buy']
         if(item.direction === 'SHORT') {
           item.directionText = lang['short-sell']
-        } else if (item.direction === 'Liquidation') {
+        } else if (item.direction.toUpperCase() === lang['liquidation']) {
           item.directionText = lang['liquidation']
         }
         const find = trading.config

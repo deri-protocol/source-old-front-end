@@ -12,14 +12,15 @@ import { useRouteMatch } from 'react-router-dom';
 
 function Header ({intl}){
   const lang = useLang(intl.dict,'header');
-  const isHome = useRouteMatch('/index');
+  const isIndex = useRouteMatch('/index');
   const isTeam = useRouteMatch('/team');
+  const showWallet = !isIndex && !isTeam
   return (
     <div className="nav">
       <div className='nav-container'>
       <Menu lang={lang} locale={intl.locale}/>                            
       <div className='nav-right'>
-        <Account lang={lang} ignoreWallet={isHome || isTeam}/>
+        {showWallet && <Account lang={lang}/>}
         <div className='use-deri'><Link to='/lite' target='_blank'>{lang['use-deri']}</Link></div>
         <LanguageSelector/>
       </div>

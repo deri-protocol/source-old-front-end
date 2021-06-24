@@ -29,7 +29,7 @@ export default function Content({lang}) {
   return (
     <div>
       <div className='index_part1'>
-        <img src={deri_background} />
+        <img src={deri_background} alt=''/>
         <div className='index_part1-1 px1200'>
           <div className='index_part1-1_title'>
             <div className='index_part1-2'>{lang['the']}</div>
@@ -48,14 +48,14 @@ export default function Content({lang}) {
           </div>
           <div className='index_part2-R'>
             <div> <span>{lang['we-are-on']} </span> 
-              <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" class="Body-link">{lang['sushi']}</a>
+              <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" className="Body-link">{lang['sushi']}</a>
               <span> {lang['and']} </span> 
-              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" class="Body-link">{lang['pancake']}</a> 
+              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" className="Body-link">{lang['pancake']}</a> 
             </div>
             <div> <span> {lang['read-our']} </span> 
-              <a href="https://docs.deri.finance/whitepaper" class="Body-link">{lang['whitepaper']}</a>
+              <a href="https://docs.deri.finance/whitepaper" className="Body-link">{lang['whitepaper']}</a>
               <span> {lang['and-peckshield']} </span> 
-              <a href="https://docs.deri.finance/code-audits" class="Body-link">{lang['audit-report']}</a> 
+              <a href="https://docs.deri.finance/code-audits" className="Body-link">{lang['audit-report']}</a> 
             </div>
           </div>
         </div>
@@ -67,16 +67,16 @@ export default function Content({lang}) {
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
-                <img src={Completely} className='box_label_img' />
+                <img src={Completely} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['completely-on-chain']}</div>
                 <div className="box_note">{lang['ex-me-fu-im-wi-eth-sm-con']}</div>
               </div>
-              <img src={Completely_b} className='box_background' />
+              <img src={Completely_b} className='box_background' alt=''/>
               <div className='box_bottom'></div>
             </div>
             <div className='box right_box'>
               <div className='box_top'>
-                <img src={RealDerivatives} className='box_label_img' />
+                <img src={RealDerivatives} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['real-derivatives']}</div>
                 <div className="box_note">{lang['get-ri-ex-pr-and-cap-eff']}</div>
               </div>
@@ -87,7 +87,7 @@ export default function Content({lang}) {
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
-                <img src={Composability} className='box_label_img' />
+                <img src={Composability} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['composability']}</div>
                 <div className="box_note">{lang['ri-ex-to-as-nft-to-be-ut-as-le-bl']}</div>
               </div>
@@ -96,11 +96,11 @@ export default function Content({lang}) {
             </div>
             <div className='box right_box'>
               <div className='box_top'>
-                <img src={ETHBSCHECO} className='box_label_img' />
+                <img src={ETHBSCHECO} className='box_label_img' alt='' />
                 <div className="box_lable H3">{lang['eth-bsc-heco']}</div>
                 <div className="box_note">{lang['three-chains-one-ecosystem']}</div>
               </div>
-              <img src={ETHBSCHECO_b} className='box_background' />
+              <img src={ETHBSCHECO_b} className='box_background' alt=''/>
               <div className='box_bottom'></div>
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function Content({lang}) {
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
-                <img src={LiquidityProviders} className='box_label_img' />
+                <img src={LiquidityProviders} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['liquidity-providers']}</div>
                 <div className="box_note">{lang['liquidity-providers-roles']}</div>
               </div>
@@ -121,7 +121,7 @@ export default function Content({lang}) {
             </div>
             <div className='box right_box'>
               <div className='box_top'>
-                <img src={Traders} className='box_label_img' />
+                <img src={Traders} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['traders']}</div>
                 <div className="box_note">{lang['traders-roles']}</div>
               </div>
@@ -131,7 +131,7 @@ export default function Content({lang}) {
           <div className='line_of_box'>
             <div className='box left_box'>
               <div className='box_top'>
-                <img src={Arbitragers} className='box_label_img' />
+                <img src={Arbitragers} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['arbitragers']}</div>
                 <div className="box_note">{lang['arbitragers-roles']}</div>
               </div>
@@ -139,7 +139,7 @@ export default function Content({lang}) {
             </div>
             <div className='box right_box'>
               <div className='box_top'>
-                <img src={Positionliquidators} className='box_label_img' />
+                <img src={Positionliquidators} className='box_label_img' alt=''/>
                 <div className="box_lable H3">{lang['position-liquidators']}</div>
                 <div className="box_note">{lang['position-liquidators-roles']}</div>
               </div>
@@ -152,31 +152,31 @@ export default function Content({lang}) {
         <div className="label H2">{lang['investors']}</div>
         <div className='pic_inline'>
           <div className='pic'>
-            <img src={FBG} />
+            <img src={FBG} alt=''/>
           </div>
           <div className='pic'>
-            <img src={BIXIN} />
+            <img src={BIXIN} alt=''/>
           </div>
           <div className='pic'>
-            <img src={LotusCapital} />
+            <img src={LotusCapital} alt=''/>
           </div>
           <div className='pic'>
-            <img src={BlackRange} />
+            <img src={BlackRange} alt=''/>
           </div>
           <div className='pic'>
-            <img src={LD} />
+            <img src={LD} alt=''/>
           </div>
           <div className='pic'>
-            <img src={Kryptos} />
+            <img src={Kryptos} alt=''/>
           </div>
           <div className='pic'>
-            <img src={AKG} />
+            <img src={AKG} alt=''/>
           </div>
           <div className='pic'>
-            <img src={CDF} />
+            <img src={CDF} alt=''/>
           </div>
           <div className='pic'>
-            <img src={GSR} />
+            <img src={GSR} alt=''/>
           </div>
           <div className='pic'>
           </div>
@@ -186,13 +186,13 @@ export default function Content({lang}) {
         <div className="label H2">{lang['partners']}</div>
         <div className='pic_inline'>
           <div className='pic'>
-            <img src={BASIS} />
+            <img src={BASIS} alt=''/>
           </div>
           <div className='pic'>
-            <img src={BIXIN} />
+            <img src={BIXIN} alt=''/>
           </div>
           <div className='pic'>
-            <img src={AutoFarm} />
+            <img src={AutoFarm} alt=''/>
           </div>
           <div className='pic'>
             {/* <img src={AutoFarm} /> */}
