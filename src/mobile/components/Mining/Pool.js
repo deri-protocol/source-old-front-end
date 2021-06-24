@@ -1,5 +1,6 @@
 import React from 'react'
 import './pool.less'
+import './zh-pool.less'
 import PoolBox from '../../../components/Pool/PoolBox';
 import useMiningPool from '../../../hooks/useMiningPool';
 import { inject, observer } from 'mobx-react';

@@ -20,5 +20,5 @@ printf '\e[1;34m%-6s\e[m\n' "release governance.deri.finance success"
 printf '\e[1;34m%-6s\e[m\n' "all site release success " 
 
 printf '\e[1;34m%-6s\e[m\n' "clear build dir"
-rm -rf ./build 
+rm -rf ./build/* 
 

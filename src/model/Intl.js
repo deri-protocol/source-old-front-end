@@ -1,5 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx";
 import { restoreLocale, storeLocale } from "../utils/utils";
+import supportedCatalog from '../locales/lang.json'
+
 
 const cache = {}
 
@@ -35,11 +37,12 @@ class Intl {
       dict : computed
     })
     const language = navigator.language
+    const prefix = language && language.split('-')[0]
     const locale = restoreLocale()
     if(locale){
       this.locale = locale;
-    } else if(language){
-      this.locale = language.split('-')[0];
+    } else if(prefix && Object.keys(supportedCatalog).includes(prefix)){
+      this.locale = prefix
     }
   }
 
