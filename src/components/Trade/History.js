@@ -11,18 +11,18 @@ import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function History({wallet ,trading}){
+function History({wallet ,trading,lang}){
   const [history, setHistory] = useState([]);  
 
   async function loadHistory (){
     if(wallet.isConnected() && trading.configs && trading.config){
       const all = trading.history
       const his = all.map(item => {
-        item.directionText = 'LONG / BUY' 
+        item.directionText = lang['long-buy']
         if(item.direction === 'SHORT') {
-          item.directionText = 'SHORT / SELL'
-        } else if (item.direction === 'Liquidation') {
-          item.directionText = 'LIQUIDATION'
+          item.directionText = lang['short-sell']
+        } else if (item.direction.toUpperCase() === lang['liquidation']) {
+          item.directionText = lang['liquidation']
         }
         const find = trading.config
         if(find){
@@ -54,16 +54,16 @@ function History({wallet ,trading}){
           </div>
           <div className='time-price-volume'>
             <div className='history-price'>
-              <div className='history-title'>Volume @ Price</div>
+              <div className='history-title'>{lang['volume-price']}</div>
               <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
             </div>
           <div className='notional'>
-              <div className='history-title'>Notional</div>
+              <div className='history-title'>{lang['notional']}</div>
               <div className='history-text'><DeriNumberFormat value={ his.notional} decimalScale={4}/></div>
             </div>
           <div className='history-fee'>
-            <div className='history-title pc'>Transaction Fee</div>
-              <div className='history-title mobile'>Fee</div>
+            <div className='history-title pc'>{lang['transaction-fee']}</div>
+              <div className='history-title mobile'>{lang['transaction-fee']}</div>
               <div className='history-text'><DeriNumberFormat value={ his.transactionFee } decimalScale={4}/></div>            
             </div>
           </div>        

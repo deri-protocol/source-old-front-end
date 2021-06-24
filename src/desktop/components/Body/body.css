@@ -2,3 +2,9 @@
   display: flex;
   margin: 40px auto;
 }
+.index .body{
+  /* margin: 0 auto; */
+  display: block;
+  margin: 0;
+  justify-content: center;
+}

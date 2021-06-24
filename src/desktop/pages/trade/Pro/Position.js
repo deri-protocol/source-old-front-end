@@ -24,7 +24,7 @@ const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Position({wallet,trading,version}){
+function Position({wallet,trading,version,lang}){
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
@@ -69,11 +69,11 @@ function Position({wallet,trading,version}){
       refreshBalance();
     } else {            
       if(typeof res.error === 'string') {
-        alert(res.error || 'Liquidation failed')
+        alert(res.error || lang['liquidation-failed'])
       } else if(typeof res.error === 'object'){
-        alert(res.error.errorMessage || 'Liquidation failed')
+        alert(res.error.errorMessage || lang['liquidation-failed'])
       } else {
-        alert('Close position failed')
+        alert(lang['close-position-failed'])
       }
     }
   }
@@ -106,15 +106,15 @@ function Position({wallet,trading,version}){
   return (
     <div className='position-box' >
     <div className='p-box theader'>
-      <div>Position</div>
-      <div>Average Entry Price</div>
-      <div>Direction</div>
+      <div>{lang['position']}</div>
+      <div>{lang['average-entry-price']}</div>
+      <div>{lang['direction']}</div>
       <div>
-        {version.isV1 ?  <>Balance in Contract <br/> (Dynamic Balance)</> : 'Dynamic Effective Bal '}
+        {version.isV1 ?  <>{lang['balance-in-contract']} <br/> ({lang['dynamic-balance']})</> :  lang['dynamic-effective-balance']}
       </div>
-      <div>Margin</div>
-      <div>Unrealized PnL</div>
-      <div>Liquidation Price</div>
+      <div>{lang['margin']}</div>
+      <div>{lang['unrealized-pnl']}</div>
+      <div>{lang['liquidation-price']}</div>
     </div>
     <div className='p-box tbody'>
       <div>
@@ -128,7 +128,7 @@ function Position({wallet,trading,version}){
         </span>
       </div>
       <div><DeriNumberFormat value={trading.position.averageEntryPrice}  decimalScale={2}/></div>
-      <div className={direction}>{direction}</div>
+      <div className={direction}>{direction && lang[direction.toLowerCase()]}</div>
       <div>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
         {version.isV1 ? <span>
@@ -143,7 +143,7 @@ function Position({wallet,trading,version}){
           onClick={() => setRemoveModalIsOpen(true)}>
           <img src={addMarginIcon} alt='add margin'/>
         </span>
-      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</span>)}       
+      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> {lang['detail']}</span>)}       
       </div>
       <div><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
       <div>        
@@ -170,6 +170,7 @@ function Position({wallet,trading,version}){
         afterDeposit={afterDeposit}
         balance={balance}
         className='trading-dialog'
+        lang={lang}
       />
       <WithDrawDialog
         wallet={wallet}
@@ -180,6 +181,7 @@ function Position({wallet,trading,version}){
         availableBalance={availableBalance}
         position={trading.position}
         className='trading-dialog'
+        lang={lang}
         />
 
       <BalanceListDialog
@@ -191,6 +193,7 @@ function Position({wallet,trading,version}){
         position={trading.position}
         overlay={{background : '#1b1c22',top : 80}}
         className='balance-list-dialog'
+        lang={lang}
       />
   </div>
   )

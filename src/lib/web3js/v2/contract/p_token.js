@@ -11,14 +11,7 @@ const processPosition = (res) => {
 }
 export class PToken extends ContractBase {
   constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, useInfura)
-    this.contractAbi = pTokenAbi
-  }
-  async _init() {
-    if (!this.web3) {
-      await super._init()
-      this.contract = new this.web3.eth.Contract(this.contractAbi, this.contractAddress)
-    }
+    super(chainId, contractAddress, pTokenAbi, useInfura)
   }
 
   // === query ===

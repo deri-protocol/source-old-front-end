@@ -4,7 +4,7 @@ import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/i
 import Button from '../../../Button/Button';
 import useDisableScroll from '../../../../hooks/useDisableScroll';
 
-export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit}){  
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit,lang}){  
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('0');
   const [decimal, setDecimal] = useState('00');
@@ -24,18 +24,18 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     const max = bg(liqInfo.totalShares);
     const cur = bg(amount);
     if (cur.gt(max)) {
-      alert(`Your current max removable shares are  ${liqInfo.totalShares}`);
+      alert(`${lang['your-current-max-removable-shares-are']}  ${liqInfo.totalShares}`);
       return false;
     }
     if(!isLpPool){
       const balance = (+liqInfo.totalShares) - (+amount)
       if (balance < 1 && balance > 0) {
-        alert('Leaving staking balance of smaller than 1 is not allowed. Please click "MAX" to remove all if you are to withdraw all of your liquidity.');
+        alert(lang['staking-max-limit-tip']);
         return false;
       }
     }
     if (+amount <= 0 || isNaN(amount)) {
-      alert("Invalid Liquidity!");
+      alert(lang['invalid-liquidity']);
       return false;
     }
     let res = null;
@@ -46,7 +46,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     }
     
     if(!res || !res.success){
-      alert("failure of transaction");
+      alert(lang['failure-of-transaction']);
       return false; 
     }
     return true;
@@ -69,14 +69,14 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <div className='title'>REMOVE LIQUIDITY</div>
+            <div className='title'>{lang['remove-liquidity']}</div>
             <div className='close' data-dismiss='modal' onClick={onClose}>
               <span>&times;</span>
             </div>
           </div>
           <div className='modal-body'>          
             <div className='margin-box-info'>
-              <div>Shares Available</div>
+              <div> {lang['shares-available']}</div>
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
@@ -90,12 +90,12 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <div className='input-margin'>
                   <div className='box'>
                     <div className='amount' style={{display : amount ? 'block' : 'none'}}>
-                      LIQUIDITY SHARES
+                      {lang['liquidity-shares']}
                     </div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder='LIQUIDITY SHARES'
+                      placeholder={lang['liquidity-shares']}
                       value={amount}
                       onChange={onChange}
                     />
@@ -104,12 +104,12 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <div>{unit}</div>
               </div>
               <div className='max'>
-                <span>MAX REMOVEABLE:</span>
+                <span>{lang['max-removeable']}</span>
                 <span className='max-num'>{liqInfo.totalShares}</span>
-                <span className='max-btn-left' onClick={addAll}>REMOVE ALL</span>
+                <span className='max-btn-left' onClick={addAll}>{lang['remove-all']}</span>
               </div>
               <div className='add-margin-btn'>
-                <Button click={remove} className='margin-btn' btnText='REMOVE' afterClick={afterRemove}/>
+                <Button click={remove} className='margin-btn' btnText={lang['remove']} afterClick={afterRemove} lang={lang}/>
               </div>
             </div>
           </div>    

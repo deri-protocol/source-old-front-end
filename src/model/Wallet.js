@@ -18,12 +18,14 @@ class Wallet {
     })
   }
 
+  supportWeb3 = () => !!window.ethereum
+
   isConnected = () => !!this.detail.account;
 
 
   async isApproved(pool,bTokenId){
-    if(this.detail.chainId){
-      const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId)
+    if(this.detail.chainId && this.supportChain){
+      const isApproved = await isUnlocked(this.detail.chainId,pool,this.detail.account,bTokenId).catch(e => console.error('load approve error'))
       this.detail.isApproved = isApproved;
       this.setDetail(this.detail)
       return isApproved;
@@ -77,7 +79,7 @@ class Wallet {
   }
 
   get supportV2() {
-    return eqInNumber(this.detail.chainId,56) || eqInNumber(this.detail.chainId,97) || eqInNumber(this.detail.chainId,80001)
+    return this.detail.supportV2
   }
 
   get supportChain(){

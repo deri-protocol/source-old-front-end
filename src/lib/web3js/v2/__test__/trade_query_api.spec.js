@@ -11,11 +11,7 @@ import {
   getEstimatedLiquidityUsed,
   getEstimatedFee,
 } from '../api'
-import fetch from 'node-fetch'
-global.fetch = fetch
-
-const TIMEOUT=20000
-const POOL_ADDRESS='0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5'
+import { TIMEOUT, POOL_ADDRESS } from './setup';
 
 describe('Trade query api', () => {
   it('getSpecification()', async() => {
@@ -30,9 +26,9 @@ describe('Trade query api', () => {
       minMaintenanceMarginRatio: '0.05',
       //minAddLiquidity: minAddLiquidity.toString(),
       //redemptionFeeRatio: redemptionFeeRatio.toString(),
-      fundingRateCoefficient: '0.00005',
-      minLiquidationReward: '10',
-      maxLiquidationReward: '200',
+      fundingRateCoefficient: '0.0000005',
+      minLiquidationReward: '0',
+      maxLiquidationReward: '1000',
       liquidationCutRatio: '0.5',
       protocolFeeCollectRatio: '0.2',
     }
@@ -40,7 +36,7 @@ describe('Trade query api', () => {
   }, TIMEOUT)
   it('getWalletBalance()', async() => {
     const input = ['97', POOL_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '0', true]
-    const output = '47280.77'
+    const output = '25549.931346801965144065'
     expect(await getWalletBalance(...input)).toEqual(output)
   }, TIMEOUT)
   it('getPoolBTokenBySymbol()', async() => {
@@ -50,21 +46,14 @@ describe('Trade query api', () => {
         bTokenAddress: '0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF',
         bTokenId: '0',
         bTokenSymbol: 'BUSD',
-        walletBalance: '47280.77',
-        availableBalance: '59.03813922590304798',
-      },
-      {
-        bTokenAddress: '0x5f59b256e411CB222D1790a08De492f4b6dA6E62',
-        bTokenId: '1',
-        bTokenSymbol: 'BETH',
-        walletBalance: '19',
-        availableBalance: '0.013510640452692212',
+        walletBalance: '25549.931346801965144065',
+        availableBalance: '9996.63687604',
       },
       {
         bTokenAddress: '0xd2F37BADdB702FF778aA038C63b7068054d93508',
-        bTokenId: '2',
+        bTokenId: '1',
         bTokenSymbol: 'AUTO',
-        walletBalance: '0',
+        walletBalance: '2000',
         availableBalance: '0',
       },
     ];
@@ -73,11 +62,17 @@ describe('Trade query api', () => {
   it('getPositionInfo()', async() => {
     const input = ['97', POOL_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '0', true]
     const output = {
-      volume: '7',
-      averageEntryPrice: '40842.95',
-      margin: '34132.72219767423',
+      volume: '10',
+      averageEntryPrice: '33463.92',
+      margin: '9999.98326804',
       marginHeld: '2.8704363625',
+      marginHeldBySymbol: '0',
       unrealizedPnl: '0.114298625',
+      price: '40081.55',
+      unrealizedPnlList: [
+        ['BTCUSD', '0.386275'],
+        ['ETHUSD', '0'],
+      ],
       liquidationPrice: '0',
     };
     expect(await getPositionInfo(...input)).toEqual(output)

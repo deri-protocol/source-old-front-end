@@ -1,0 +1,17 @@
+{
+  "mining" : "Minen",
+  "trade" : "Trade",
+  "governance" : "Governance",
+  "bridge" : "Brücke",
+  "docs" : "Docs",
+  "team" : "Team",
+  "faq" : "FAQ",
+  "code-audit" : "Auditberichte",
+  "github" : "Github",
+  "guide" : "Anleitung",
+  "whitepaper" : "Whitepaper",
+  
+  "use-deri":"BENUTZE DERI",
+  "unsupported-chain-id" : "Nicht unterstützte Netzwerk-ID",
+  "connect-wallet" : "Wallet Verbinden"
+}

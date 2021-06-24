@@ -1,5 +1,6 @@
 import React from 'react'
 import Modal from 'react-modal/lib/components/Modal';
+import { inject, observer } from 'mobx-react';
 
 const withModal = Component => {
   const appElement = document.getElementById('root')
@@ -31,7 +32,7 @@ const withModal = Component => {
       const overlayMerged = Object.assign(customizeStyle.overlay,{...overlay})
       const mergedStyle = Object.assign(customizeStyle,{overlay :overlayMerged})
       return (
-        <Modal isOpen={modalIsOpen} style={mergedStyle} appElement={appElement}>
+        <Modal isOpen={modalIsOpen} style={mergedStyle} appElement={appElement} portalClassName={this.props.intl.locale}>
           <div className={className}>
             <Component {...this.props} className={className} onClose={this.props.onClose}/>
           </div>
@@ -40,6 +41,6 @@ const withModal = Component => {
     }
   }
 
-  return WithModal;
+  return inject('intl')(observer(WithModal)) ;
 }
 export default withModal;

@@ -1,3 +1,5 @@
+import { getChainIds } from './chain';
+
 /** @module config */
 
 /**
@@ -68,7 +70,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0x43CA6D7129d7F490d5B91B4D14D7c877D15A92dA',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        initialBlock: '11949433',
+        initialBlock: '12548746',
         bTokenSymbol: 'USDT',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -82,7 +84,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0xeC27d4c53C2E29F1113A9667c0B19442df83c1f1',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        initialBlock: '11860070',
+        initialBlock: '12548827',
         bTokenSymbol: 'BAC',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -96,7 +98,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         lToken: '0x90fE976Cbb48E0761A84DDA2974024377994a997',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
-        initialBlock: '2557914',
+        initialBlock: '5220431',
         bTokenSymbol: 'HUSD',
         symbol: 'BTCUSD',
         unit: 'BTC',
@@ -106,7 +108,6 @@ export const getContractAddressConfig = (env = 'dev') => {
     ];
   }
   // develop environment
-  // console.log('-- test ---')
   return [
     {
       pool: '0x372b640A00a0A6B73381e9363A39644a712cCc37',
@@ -186,8 +187,7 @@ export const getClpContractAddressConfig = (env = 'dev') => {
       },
     ];
   } else {
-    return [
-    ];
+    return [];
   }
 };
 export const getClp2ContractAddressConfig = (env = 'dev') => {
@@ -204,12 +204,12 @@ export const getClp2ContractAddressConfig = (env = 'dev') => {
         chainId: '56',
         bTokenSymbol: 'CAKE-LP SYRUP',
         symbol: '--',
-      }
-    ]
+      },
+    ];
   } else {
-    return []
+    return [];
   }
-}
+};
 
 export const getLpContractAddressConfig = (env = 'dev') => {
   if (env === 'prod') {
@@ -254,26 +254,26 @@ export const getLpContractAddressConfig = (env = 'dev') => {
       },
     ];
   } else {
-    return [
-    ];
+    return [];
   }
 };
 
-export const getMiningVaultRouterContractAddress= (chainId) => {
+export const getMiningVaultRouterContractAddress = (chainId) => {
   const configs = [
-      {
-        MiningVaultRouter: '0x8d5613451Dc0592388f98d7Ab1ce5A732561936e',
-        chainId: '56'
-      }
-    ]
-  const filteredConfig = configs.filter((i) => i.chainId === chainId)
+    {
+      MiningVaultRouter: '0x8d5613451Dc0592388f98d7Ab1ce5A732561936e',
+      chainId: '56',
+    },
+  ];
+  const filteredConfig = configs.filter((i) => i.chainId === chainId);
   if (filteredConfig.length > 0) {
-    return filteredConfig[0].MiningVaultRouter
+    return filteredConfig[0].MiningVaultRouter;
   } else {
-    throw new Error(`getMiningVaultRouterAddressConfig: no address for chainId ${chainId}`)
+    throw new Error(
+      `getMiningVaultRouterAddressConfig: no address for chainId ${chainId}`
+    );
   }
-
-}
+};
 
 /**
  * Get the Deri contract address list based on the deri environment variable
@@ -330,13 +330,19 @@ export const getDeriContractAddressConfig = (env = 'dev') => {
   ];
 };
 
-export const getAnnualBlockNumberConfig = () => ({
-  1: '2367422',
-  56: '10497304',
-  128: '10511369',
-  3: '2367422',
-  97: '10497304',
-  256: '10511369',
-  137: '15063056',
-  80001: '15063056',
-});
+export const getAnnualBlockNumberConfig = () => {
+  const chainBlockNumberList = [
+    '2367422',
+    '2367422',
+    '10497304',
+    '10497304',
+    '10511369',
+    '10511369',
+    '15063056',
+    '15063056',
+  ];
+  return getChainIds().reduce((accum, i, index) => {
+    accum[i] = chainBlockNumberList[index];
+    return accum;
+  }, {});
+};

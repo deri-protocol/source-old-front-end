@@ -5,11 +5,13 @@ import { inject, observer } from 'mobx-react'
 import LiteTrade from '../../../../components/Trade/LiteTrade'
 import Tab from '../Tab/Tab'
 import '../Lite/lite.less'
+import '../Lite/zh-lite.less'
 import './pro.less'
+import './zh-pro.less'
 
 
 
-function Pro({wallet}){
+function Pro({wallet,lang}){
 
 
   useEffect(() => {
@@ -23,14 +25,14 @@ function Pro({wallet}){
 
   return (
     <div className='trade-body'>
-      <Tab/>
+      <Tab lang={lang}/>
       <div className='trade-pro'>
         <div className='left'>
-          <LiteTrade isPro={true}/>
+          <LiteTrade isPro={true} lang={lang}/>
         </div>
         <div className='right'>
-          <TradingView wallet={wallet}/>
-          <Reference/>
+          <TradingView wallet={wallet} lang={lang}/>
+          <Reference lang={lang}/>
         </div>
     </div> 
   </div>

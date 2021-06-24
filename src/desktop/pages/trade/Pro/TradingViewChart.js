@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
-function TradingViewChart({symbol}){
+function TradingViewChart({symbol,lang,intl}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [deriWidget, setDeriWidget] = useState(null);
@@ -22,7 +22,7 @@ function TradingViewChart({symbol}){
       container_id: defaultProps.containerId,
       library_path: `/charting_library/`,      
       custom_css_url : `/style/tradingview-overide.css`,
-      locale: 'en',
+      locale: intl.locale,
       disabled_features: [
         "header_widget",
         "timeframes_toolbar",
@@ -86,13 +86,13 @@ function TradingViewChart({symbol}){
   return(
     <div id='tradingview'>
       <div className={activedClass}>
-          <span className='tab-btn one' onClick={() => changeTime('1','one')} >1min</span>
-          <span className='tab-btn five' onClick={() => changeTime('5','five')}>5min</span>
-          <span className='tab-btn fifteen' onClick={() => changeTime('15','fifteen')}>15min</span>
-          <span className='tab-btn thirty' onClick={() => changeTime('30','thirty')}>30min</span>
-          <span className='tab-btn sixty' onClick={() => changeTime('60','sixty')}>1hour</span>
-          <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1day</span>
-          <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1week</span>
+          <span className='tab-btn one' onClick={() => changeTime('1','one')} >1{lang['min']}</span>
+          <span className='tab-btn five' onClick={() => changeTime('5','five')}>5{lang['min']}</span>
+          <span className='tab-btn fifteen' onClick={() => changeTime('15','fifteen')}>15{lang['min']}</span>
+          <span className='tab-btn thirty' onClick={() => changeTime('30','thirty')}>30{lang['min']}</span>
+          <span className='tab-btn sixty' onClick={() => changeTime('60','sixty')}>1{lang['hour']}</span>
+          <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1{lang['day']}</span>
+          <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1{lang['week']}</span>
       </div>
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
@@ -104,4 +104,4 @@ function TradingViewChart({symbol}){
   </div>
   )
 }
-export default inject('trading')(observer(TradingViewChart))
+export default inject('intl','trading')(observer(TradingViewChart))

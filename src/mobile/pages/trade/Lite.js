@@ -1,14 +1,16 @@
 
 import LiteTrade from "../../../components/Trade/LiteTrade";
 import './lite.less'
+import './zh-lite.less'
+import './de-lite.less'
 
-function Trade(){
+function Lite({lang}){
 
   return (
     <div className='trade-body'>
-      <LiteTrade/>  
+      <LiteTrade lang={lang}/>  
     </div>    
   )
 }
 
-export default Trade
+export default Lite

@@ -19,7 +19,7 @@ const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
-function Position({wallet,trading,version}){
+function Position({wallet,trading,version,lang}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
@@ -31,7 +31,7 @@ function Position({wallet,trading,version}){
 
   const loadBalance = async () => {
     if(wallet.isConnected() && trading.config){
-      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e=> console.log(e))
+      const balance = await getWalletBalance(wallet.detail.chainId,trading.config.pool,wallet.detail.account,trading.config.bTokenId).catch(e=> console.error('load balance error,maybe network is wrong'))
       if(balance){
         setBalance(balance)
       }
@@ -46,11 +46,11 @@ function Position({wallet,trading,version}){
       refreshBalance()
     } else {      
       if(typeof res.error === 'string') {
-        alert(res.error || 'Liquidation failed')
+        alert(res.error || lang['liquidation-failed'])
       } else if(typeof res.error === 'object'){
-        alert(res.error.errorMessage || 'Liquidation failed')
+        alert(res.error.errorMessage || lang['liquidation-failed'])
       } else {
-        alert('Close position failed')
+        alert(lang['close-position-failed'])
       }      
     }
   }
@@ -87,8 +87,8 @@ function Position({wallet,trading,version}){
   }
 
   const directionClass = className('Direction','info-num',{
-    'LONG' : direction === 'LONG',
-    'SHORT' : direction === 'SHORT'
+    'LONG' : (+trading.position.volume) > 0,
+    'SHORT' : (+trading.position.volume) < 0
   })
 
 
@@ -104,7 +104,7 @@ function Position({wallet,trading,version}){
   useEffect(() => {
     if(trading.position){
       const {position} = trading
-      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
+      const direction = (+position.volume) > 0 ? lang['long'] : (eqInNumber(position.volume, 0) || !position.volume ? '--' : lang['short']) 
       setDirection(direction)      
       setBalanceContract(bg(position.margin).plus(position.unrealizedPnl).toString())
       setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())
@@ -118,7 +118,7 @@ function Position({wallet,trading,version}){
     <div className='position-info'>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Position</div>
+        <div className='title-text'>{lang['position']}</div>
         <div className='info-num'>{ trading.position.volume}</div>
       </div>
       <div className='info-right'>
@@ -133,13 +133,13 @@ function Position({wallet,trading,version}){
             aria-hidden='true'
             style={{display: isLiquidation ? 'block' : 'none'}}
           ></span>
-          <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> Close
+          <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> {lang['close']}
         </div>
       </div>
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Average Entry Price</div>
+        <div className='title-text'>{lang['average-entry-price']}</div>
         <div className='info-num'><DeriNumberFormat value={ trading.position.averageEntryPrice } decimalScale={2} /></div>
       </div>
       <div className='info-right'></div>
@@ -147,46 +147,46 @@ function Position({wallet,trading,version}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text balance-con'>
-          {version.isV1 ?  <>Balance in Contract <br/> (Dynamic Balance)</> : 'Dynamic Effective Bal '}
+          {version.isV1 ?  <>{lang['balance-in-contract']}<br/> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
         </div>
         <div className='info-num'> 
           <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />
         </div>
       </div>
-      <div className='info-right'>
+      <div className={`info-right action ${version.current}`}>
       {version.isV1 ? <>
         <div
           className='add-margin'
           id='openAddMargin'
           onClick={() => setAddModalIsOpen(true)}
         > 
-          <img src={removeMarginIcon} alt='add margin'/> Add
+          <img src={removeMarginIcon} alt='add margin'/> {lang['add']}
         </div>
         <div className='remove-margin'
           onClick={() => setRemoveModalIsOpen(true)}>
-          <img src={addMarginIcon} alt='add margin'/> Remove
+          <img src={addMarginIcon} alt='add margin'/> {lang['remove']}
         </div>
-      </> : (<div onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> Detail</div>)}
+      </> : (<div onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> {lang['detail']}</div>)}
         
       </div>
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Direction</div>
+        <div className='title-text'>{lang['direction']}</div>
         <div className={directionClass} >{direction}</div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Margin</div>
+        <div className='title-text'>{lang['margin']}</div>
         <div className='info-num'><DeriNumberFormat value={ trading.position.marginHeld }  decimalScale={2}/></div>
       </div>
       <div className='info-right'></div>
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Unrealized PnL</div>
+        <div className='title-text'>{lang['unrealized-pnl']}</div>
         <div className='info-num'>
           <span className='pnl-list'>
             <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{version.isV2 && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
@@ -204,7 +204,7 @@ function Position({wallet,trading,version}){
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>Liquidation Price</div>
+        <div className='title-text'>{lang['liquidation-price']}</div>
         <div className='info-num'><DeriNumberFormat decimalScale = {2} value={trading.position.liquidationPrice} /></div>
       </div>
       <div className='info-right'></div>
@@ -217,6 +217,7 @@ function Position({wallet,trading,version}){
        afterDeposit={afterDeposit}
        balance={balance}
        className='trading-dialog'
+       lang={lang}
     />
     <WithDrawDialog
       wallet={wallet}
@@ -227,6 +228,7 @@ function Position({wallet,trading,version}){
       position={trading.position}
       availableBalance={availableBalance}
       className='trading-dialog'
+      lang={lang}
       />
     <BalanceListDialog
       wallet={wallet}
@@ -237,7 +239,8 @@ function Position({wallet,trading,version}){
       position={trading.position}
       overlay={{background : '#1b1c22',top : 80}}
       className='balance-list-dialog'
-    />
+      lang={lang}
+      />
   </div>
   )
 }

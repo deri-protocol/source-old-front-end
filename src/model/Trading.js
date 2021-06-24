@@ -7,6 +7,7 @@ import Config from "./Config";
 import { eqInNumber, storeConfig, getConfigFromStore, restoreChain } from "../utils/utils";
 import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
+import Intl from "./Intl";
 
 /**
  * 交易模型
@@ -96,7 +97,7 @@ export default class Trading {
     }
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
-    if(wallet && wallet.isConnected()){
+    if(wallet.isConnected()){
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId,c.chainId)))
       let defaultConfig = this.getDefaultConfig(this.configs,wallet);
@@ -107,10 +108,15 @@ export default class Trading {
       this.setConfig(defaultConfig);
     } 
     //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    if(!wallet.isConnected() && this.configs.length === 0 && all.length > 0){
-      let defaultConfig = all.find(c => c.symbol === 'BTCUSD')
-      defaultConfig = defaultConfig ? defaultConfig : all[0]
-      this.setConfig(defaultConfig)
+    if(!wallet.isConnected()){
+      //没有钱包插件
+      if(!wallet.supportWeb3()){
+        //默认用v2
+        version.setCurrent('v2')
+        const all = await this.configInfo.load(version);
+        const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+        this.setConfig(defaultConfig)
+      }
     }
     this.loadByConfig(this.wallet,this.config,true)
     this.setVolume('')
@@ -143,7 +149,8 @@ export default class Trading {
 
      //切换指数
     if(symbolChanged && config){
-      this.oracle.unsubscribeBars();
+      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
+      this.oracle.unsubscribeBars(symbol);
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
@@ -151,7 +158,6 @@ export default class Trading {
       if(position){
         this.setIndex(position.price);
       }
-      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
       this.oracle.load(symbol)
     }
      //contract
@@ -400,23 +406,33 @@ export default class Trading {
     if(config){
       const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
       if(config){    
-        const res = await getFundingRate(chainId,config.pool,config.symbolId)
+        const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
         return res;
       }
     }
   }
 
-  get fundingRateTip(){
-  
+  get fundingRateTip(){    
     if(this.version && this.version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n1 Long contract pays 1 short contract (${this.fundingRate.fundingRatePerBlock} * IndexPrice * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} per block`        
+        if(Intl.locale === 'zh'){
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n ${Intl.get('lite','per-block')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+        } else {
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')}`        
+        }
+        
       }
-    }else{
+    } else {
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
-        return `Funding  Rate (per block) = ${this.fundingRate.fundingRatePerBlock}` +
-        `\n(1 Long contract pays 1 short contract ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} per block)`        
+        if(Intl.locale === 'zh'){
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','per-block')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} `        
+        } else {
+          return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +
+        `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingRatePerBlock} ${this.config.bTokenSymbol} ${Intl.get('lite','per-block')})`        
+        }        
       }
     }
     

@@ -4,7 +4,7 @@ import NumberFormat from 'react-number-format';
 import Button from '../../Button/Button';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function DepositMargin({wallet,spec = {},onClose,balance,afterDeposit,nested}){
+export default function DepositMargin({wallet,spec = {},onClose,balance,afterDeposit,nested,lang}){
   const [integer, setInteger] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
@@ -24,11 +24,11 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
     const maxBalance = bg(balance)
     const curBalance = bg(amount);
     if (curBalance.gt(maxBalance)) {
-      alert("Insufficient balance in wallet");
+      alert(lang['insufficient-balance-in-wallet']);
       return;
     }
     if ((+amount) <= 0 || isNaN(amount)) {
-      alert("It has to be greater than zero");
+      alert(lang['it-has-to-be-greater-than-zero-tip']);
       return;
     }
     setPending(true)
@@ -37,7 +37,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
       afterDeposit();
       onClose();
     } else {
-      alert('Deposit failed')
+      alert(lang['deposit-failed'])
     }
     setPending(false)
   }
@@ -69,14 +69,14 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
       <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <div className='title'>DEPOSIT MARGIN</div>
+            <div className='title'>{lang['deposit-margin']}</div>
             <div className='close' data-dismiss='modal' onClick={close}>
               <span>&times;</span>
             </div>
           </div>
           <div className='modal-body'>
             <div className='margin-box-info'>
-              <div>Wallet Balance</div>
+              <div>{lang['wallet-balance']}</div>
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
@@ -87,18 +87,17 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                   style={{fontSize :'14px',marginLeft: '10px',marginTop: '10px'}}>
                     {spec.bTokenSymbol}
                   </span>
-                  </span
-                >
+                  </span>
                 <span className='add'></span>
               </div>
               <div className='enter-margin'>
                 <div className='input-margin'>
                   <div className='box'>
-                    <div className='amount' style={{display : amount !=='' ? 'block' : 'none'}}>AMOUNT</div>
+                    <div className='amount' style={{display : amount !=='' ? 'block' : 'none'}}>{lang['amount']}</div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder='Amount'
+                      placeholder={lang['amount']}
                       value={amount}
                       onChange={onChange}
                     />
@@ -107,16 +106,17 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                 <div>{ spec.bTokenSymbol }</div>
               </div>
               <div className='max'>
-                MAX: <span className='max-num'>{ balance }</span>
-                <span className='max-btn-left' onClick={addAll} >ADD ALL</span>
+                {lang['max']}: <span className='max-num'>{ balance }</span>
+                <span className='max-btn-left' onClick={addAll} >{lang['add-all']}</span>
               </div>
               <div className='add-margin-btn'>
                 <Button
                   className='margin-btn'
-                  btnText='DEPOSIT'
+                  btnText={lang['deposit']}
                   checkApprove={true}
                   wallet={wallet}
                   spec={spec}
+                  lang={lang}
                   click={() => deposit(amount)}
                 />                  
               </div>

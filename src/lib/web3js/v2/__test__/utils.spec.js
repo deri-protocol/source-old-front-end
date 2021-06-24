@@ -21,11 +21,9 @@ import {
   getChainProviderUrl,
   getAnnualBlockNumber,
   validateArgs,
+  catchError,
 } from '../utils'
-import fetch from 'node-fetch'
-global.fetch = fetch
-
-const TIMEOUT=20000
+import { TIMEOUT, ACCOUNT_ADDRESS} from './setup';
 
 describe('utils', () => {
   test('toWei()', () => {
@@ -74,7 +72,7 @@ describe('utils', () => {
   test('toChecksumAddress()', () => {
     const [input, output] = [
       '0xffe85d82409c5b9d734066c134b0c2ccdd68c4df',
-      '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF',
+      ACCOUNT_ADDRESS,
     ];
     expect(toChecksumAddress(input)).toEqual(output);
   });
@@ -91,18 +89,6 @@ describe('utils', () => {
     expect(hexToNumberString(input)).toEqual(output);
   });
 
-  // test('getOracleUrl()', () => {
-  //   const [input, output] = [[POOL_ADDRESS, '0'], 'https://oracle4.deri.finance/price?symbol=BTCUSD'];
-  //   expect(getOracleUrl(...input)).toEqual(output);
-  //   const [input3, output3] = [[POOL_ADDRESS, '1'], 'https://oracle4.deri.finance/price?symbol=ETHUSD'];
-  //   expect(getOracleUrl(...input3)).toEqual(output3);
-  // });
-  // test('getOracleInfo()', async() => {
-  //   const [input, output] = [[POOL_ADDRESS, '0'], {symbol: 'BTCUSD', priceLength: 23}];
-  //   const res = await getOracleInfo(...input)
-  //   expect(res.symbol).toEqual(output.symbol);
-  //   expect(res.price.length).toEqual(output.priceLength);
-  // }, TIMEOUT)
   test('getOraclePrice()', async() => {
     const [input, output] = [[97, 'BTCUSD', true], {priceLength: 5}];
     const res = await getOraclePrice(...input)
@@ -161,5 +147,20 @@ describe('utils', () => {
     expect(validateArgs('1')).toEqual(true);
     expect(validateArgs(1.99)).toEqual(true);
     expect(validateArgs(undefined)).toEqual(false);
+  })
+  test('catchError()', () => {
+    const testFunc1 = () => {
+      return '1'
+    }
+    expect(catchError(testFunc1, 'testFunc1()', '0')).toEqual('1');
+    const testFunc2 = () => {
+      const res = Math.random()
+      if (res > 1) {
+        return res
+      } else {
+        throw new Error('Hi, this is a test error')
+      }
+    }
+    expect(catchError(testFunc2, 'testFunc2()', 666)).toEqual(666);
   })
 })

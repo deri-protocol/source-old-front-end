@@ -1,17 +1,18 @@
+import React, { useState, useEffect } from 'react'
 import {isBrowser,isMobile} from 'react-device-detect'
 import LoadableComponent from './utils/LoadableComponent';
+import { inject, observer } from 'mobx-react';
 
 const DesktopApp = LoadableComponent(() => import('./desktop/index'))
 const MobileApp = LoadableComponent(() => import('./mobile/index'))
 
-function App() {
-  
+function App({intl}) {
   if(isBrowser){
-    return <DesktopApp/>
+    return <DesktopApp locale={intl.locale}/>
   }
   if(isMobile){
-    return <MobileApp/>
+    return <MobileApp locale={intl.locale}/>
   }
 }
 
-export default App;
+export default inject('intl')(observer(App)) ;

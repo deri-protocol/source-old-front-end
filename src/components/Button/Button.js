@@ -1,6 +1,5 @@
 import {useState,useRef,useEffect} from 'react';
-import { isUnlocked, unlock } from '../../lib/web3js/indexV2';
-export default function Button({btnText,className,disabled,click,afterClick,checkApprove,wallet,spec}){
+export default function Button({btnText,className,disabled,click,afterClick,checkApprove,wallet,spec,lang}){
   const [status, setStatus] = useState(disabled ? 'disabled' : 'enabled');
   const [isApproved, setIsApproved] = useState(true);
   const [pending, setPending] = useState(false);
@@ -43,7 +42,7 @@ export default function Button({btnText,className,disabled,click,afterClick,chec
       setIsApproved(true);
     } else {
       setIsApproved(false)
-      alert('Approve faild')
+      alert(lang['approve-failed'])
     }
     afterAction();
   }
@@ -69,7 +68,7 @@ export default function Button({btnText,className,disabled,click,afterClick,chec
             style={{display : 'none' ,marginRight : '2'}}>
           </span>
         </span>
-          {pending ? 'PENDING' : (isApproved ? btnText : 'APPROVE')  }
+          {pending ? lang['pending'] : (isApproved ? btnText : lang['approve'])  }
         </button>
   )
 }

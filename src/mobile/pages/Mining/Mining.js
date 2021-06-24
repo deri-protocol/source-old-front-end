@@ -12,12 +12,12 @@ import useQuery from '../../../hooks/useQuery'
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-function Mining({wallet}){
+function Mining({wallet,lang}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
 	const {version,chainId,baseToken,address,type} =  useParams();
 	const query = useQuery();
 	const networkText = chainInfo[chainId].text;
-	const props = {version,chainId,baseToken,address,wallet,type}
+	const props = {version,chainId,baseToken,address,wallet,type,lang}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	if(query.has('baseTokenId')) {
 		props['baseTokenId'] = query.get('baseTokenId')
@@ -34,10 +34,10 @@ function Mining({wallet}){
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
-									LIUQIDITY MINING
+								{lang['liquidity-mining']}
 							</div>
 							<div className='trade-mining' onClick={() => setCurrentTab('trade')} >
-									TRADING MINING
+								{lang['trading-mining']}
 							</div>
 					</div>
 			</div>

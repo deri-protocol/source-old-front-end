@@ -1,0 +1,80 @@
+.lang-picker {
+  padding-left: 20px;
+  position: relative;
+  line-height: 82px;
+  width: 80px;
+  img {
+    cursor: pointer;
+  }
+
+  .lang-box.show {
+    display: block;
+  }
+
+  .lang-box {
+    top: 83px;
+    right: 0;
+    position: absolute;
+    width: 158px;
+    background-color: #0D0E0F;
+    color: #aaaaaa;
+    padding-left: 20px;
+    display: none;
+    border-radius: 6px;
+    z-index: 2;
+    .lang-item:hover {
+      color : #ffffff;
+    }
+
+    .lang-item.selected {
+      color : #ffffff;
+      cursor: pointer;
+    }
+    .lang-item {
+      text-align: left;
+      line-height: 50px;
+      cursor: pointer;     
+    }
+    
+  }
+}
+.mobile {
+  .lang-picker {
+    padding-left: -0.8rem;
+    position: relative;
+    line-height: 0.8rem;
+    display : flex;
+    align-items: center;
+    font-size: 0.16rem;
+    width: 0.8rem;
+    img {
+      cursor: pointer;
+    }
+
+    }
+    .lang-box.show {
+      display: block;
+    }
+    .lang-box {
+      top: 0.35rem;
+      left: -0.8rem;
+      position: absolute;
+      background-color: #0D0E0F;
+      color: #aaaaaa;
+      padding-left: 0.2rem;
+      display: none;
+
+      .lang-item:hover {
+        color : #ffffff;
+        cursor: pointer;
+      }
+  
+      .lang-item.selected {
+        color : #ffffff;
+      }
+      .lang-item {
+        text-align: left;
+        line-height: 0.5rem;        
+      }      
+  }
+}

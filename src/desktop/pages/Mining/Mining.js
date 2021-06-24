@@ -5,6 +5,7 @@ import TradeMining from "../../../components/Mining/Trade/TradeMining";
 import {DeriEnv} from '../../../lib/web3js/indexV2'
 import config from '../../../config.json'
 import './mining.less'
+import './zh-mining.less'
 import classnames from "classnames";
 import { inject, observer } from 'mobx-react';
 import useQuery from '../../../hooks/useQuery'
@@ -12,12 +13,12 @@ import useQuery from '../../../hooks/useQuery'
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-function Mining({wallet}){
+function Mining({wallet,lang}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
 	const {version,chainId,symbol,baseToken,address,type} =  useParams();
 	const query = useQuery();
 	const networkText = chainInfo[chainId].text;
-	const props = {version,chainId,symbol,baseToken,address,wallet,type}
+	const props = {version,chainId,symbol,baseToken,address,wallet,type,lang}
 	if(query.has('baseTokenId')) {
 		props['baseTokenId'] = query.get('baseTokenId')
 	}
@@ -33,10 +34,10 @@ function Mining({wallet}){
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
-									LIUQIDITY MINING
+									{lang['liquidity-mining']}
 							</div>
 							<div className='trade-mining' onClick={() => setCurrentTab('trade')} >
-									TRADING MINING
+								{lang['trading-mining']}
 							</div>
 					</div>
 			</div>

@@ -5,7 +5,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { bg } from '../../../utils/utils';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance,nested}){
+export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance,nested,lang}){
   const [available, setAvailable] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
@@ -46,11 +46,11 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
     const max = bg(available)
     const curAmount = bg(amount)    
     if(curAmount.gt(max)) {
-      alert("under margin");
+      alert(lang['under-margin']);
       return;
     }
     if ((+amount) <= 0 || isNaN(amount)) {
-      alert("It has to be greater than zero");
+      alert(lang['it-has-to-be-greater-than-zero-tip']);
       return;
     }
     setPending(true);
@@ -80,14 +80,14 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
       <div className='modal-dialog'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <div className='title'>WITHDRAW MARGIN</div>
+            <div className='title'>{lang['withdraw-margin']}</div>
             <div className='close' onClick={close}>
               <span>&times;</span>
             </div>
           </div>
           <div className='modal-body'>
             <div className='margin-box-info'>
-              <div>Available Balance</div>
+              <div>{lang['available-balance']}</div>
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
@@ -99,27 +99,27 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
               <div className='enter-margin remv'>
                 <div className='input-margin'>
                   <div className='box'>
-                    <div className='amount' style={{display : amount !=='' ? 'block' : 'none'}}>AMOUNT</div>
+                    <div className='amount' style={{display : amount !=='' ? 'block' : 'none'}}>{lang['amount']}</div>
                     <input
                       type='number'
                       className='margin-value'
                       value={amount}
                       onChange={onChange}
-                      placeholder='Amount'/>
+                      placeholder={lang['amount']}/>
                   </div>
                 </div>
                 <div>{ spec.baseToken }</div>
               </div>
               {(+position.volume) === 0 && <div className='max'>
-                MAX: <span className='max-num'>{ available ? available : position.margin }</span>
-                <span className='max-btn-left' onClick={removeAll}>REMOVE ALL</span>
+                {lang['max']}: <span className='max-num'>{ available ? available : position.margin }</span>
+                <span className='max-btn-left' onClick={removeAll}>{lang['remove-all']}</span>
               </div>}
               {(+position.volume) > 0 && <div className='max'>
                 <span className='max-num'></span>
                 <span className='max-btn-left'> </span>
               </div>}
               <div className='add-margin-btn'>
-                <Button className='margin-btn' btnText='WITHDRAW' click={withdraw} checkApprove={true} wallet={wallet} spec={spec}/>
+                <Button className='margin-btn' btnText={lang['withdraw']} lang={lang} click={withdraw} checkApprove={true} wallet={wallet} spec={spec}  />
               </div>
             </div>
           </div>

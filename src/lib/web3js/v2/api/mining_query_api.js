@@ -1,5 +1,5 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
-import { getPoolConfig, getFilteredPoolConfigList} from '../config'
+import { getPoolConfig2, getBTokenIdList, getSymbolIdList} from '../config'
 import { bg, deriToNatural } from '../utils'
 import { getNetworkName } from '../../utils'
 import { calculateMaxRemovableLiquidity } from '../calculation'
@@ -13,14 +13,12 @@ export const getLiquidityInfo = async (
   useInfura,
 ) => {
   try {
-    const {lToken:lTokenAddress} = getPoolConfig(poolAddress, bTokenId)
+    const {lToken:lTokenAddress} = getPoolConfig2(poolAddress, bTokenId)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
     const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
 
-    const bTokenConfigList = getFilteredPoolConfigList(poolAddress, null, '0').sort((i, j) => parseInt(i.bTokenId) - parseInt(j.bTokenId))
-    const symbolConfigList = getFilteredPoolConfigList(poolAddress, '0').sort((i, j) => parseInt(i.symbolId) - parseInt(j.symbolId))
-    const bTokenIdList = bTokenConfigList.map((i) => i.bTokenId)
-    const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+    const bTokenIdList = getBTokenIdList(poolAddress)
+    const symbolIdList = getSymbolIdList(poolAddress)
 
     const [parameterInfo, bTokenInfo, lTokenAsset ] = await Promise.all([
       perpetualPool.getParameters(),
@@ -70,7 +68,7 @@ export const getLiquidityInfo = async (
       maxRemovableShares: maxRemovableShares.toString()
     };
   } catch (err) {
-    console.log(err)
+    console.log(`${err}`)
   }
   return {
     poolLiquidity: '',
@@ -95,7 +93,7 @@ export const getPoolLiquidity = async (chainId, poolAddress, bTokenId) => {
       };
     }
   } catch (err) {
-    console.log(err);
+    console.log(`${err}`)
   }
   return {
     liquidity: '',
@@ -123,6 +121,6 @@ export const getPoolInfoApy = async (chainId, poolAddress, bTokenId) => {
       };
     }
   } catch (err) {
-    console.log(err);
+    console.log(`${err}`)
   }
 };

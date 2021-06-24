@@ -1,0 +1,11 @@
+{
+  "total-net-position" : "Net Position gesamt",
+  "min" : "Min",
+  "hour" : "Std.",
+  "day" : "Tag",
+  "week" : "Woche",
+  "current-position" : "AKTUELLE POSITION",
+  "trade-history" : "TRADING-HISTORIE",
+  "pool-total-liquidity" : "Pool Gesamtliquidität",
+  "position-info" : "POSITION INFO"
+}

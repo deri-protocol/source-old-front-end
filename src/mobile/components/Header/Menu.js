@@ -5,7 +5,7 @@ import logo from '../../img/deri-logo.png'
 import menuDown from '../../img/menu-down.png'
 import './menu.less'
 
-export default function Menu({closeMenu}){
+export default function Menu({closeMenu,lang,locale}){
   const isMining =  useRouteMatch('/mining') ? true : false
   const isTrade = useRouteMatch('/lite') ? true : false
 
@@ -19,7 +19,7 @@ export default function Menu({closeMenu}){
   return (
     <div className='menu'>
       <div className="top">
-        <a className="logo" href="https://deri.finance/">
+        <a className="logo" href={`https://deri.finance/#index?locale=${locale}`}>
           <img src={logo} alt=""/>
         </a>
         <span className="close-menu" click="close" onClick={closeMenu}></span>
@@ -27,43 +27,42 @@ export default function Menu({closeMenu}){
       <div className="ul">
         <ul>
           <li className={isMining ? 'selected' :'' }>
-            <Link to="/mining">Mining</Link>
+            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`}>{lang['mining']}</a>
           </li>
           <li className={isTrade ? 'selected' : ''}>
-          <Link to="/lite"> Trade </Link>
+          <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`}> {lang['trade']} </a>
           </li>
           <li>
-            <a  rel='noreferrer' href="https://governance.deri.finance/"
-              >Governance</a>
+            <a  rel='noreferrer' href={`https://governance.deri.finance/#governance?locale=${locale}`}>{lang['governance']}</a>
           </li>
           <li>
-            <a  rel='noreferrer' href="https://bridge.deri.finance/">Bridge</a>
+            <a  rel='noreferrer' href={`https://bridge.deri.finance/#bridge?locale=${locale}`}>{lang['bridge']}</a>
           </li>
           <li className="ref">
-            Docs <img  src={menuDown} alt=""/>
+            {lang['docs']} <img  src={menuDown} alt=""/>
             <ul className="ref-box">
               <li>
                 <a
                   href="https://docs.deri.finance/whitepaper"
-                  >Whitepaper</a>
+                  >{lang['whitepaper']}</a>
               </li>
               <li>
                 <a
                   href="https://docs.deri.finance/code-audits"
-                  >Code Audit</a>
+                  >{lang['code-audit']}</a>
               </li>
               <li>
-                <a href="https://deri.finance/#/team">Team</a>
+                <a href={`http://deri.finance/#/team?locale=${locale}`}>{lang['team']}</a>
               </li>
               <li>
-                <a href="https://docs.deri.finance/faq">FAQ</a>
+                <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
               </li>
               <li>
-                <a href="https://docs.deri.finance/">Guide</a>
+                <a href="https://docs.deri.finance/">{lang['guide']}</a>
               </li>
 
               <li>
-                <a href="https://github.com/deri-finance/">Github</a>
+                <a href="https://github.com/deri-finance/">{lang['github']}</a>
               </li>
             </ul>
           </li>
@@ -122,7 +121,7 @@ export default function Menu({closeMenu}){
             </a>
         </div>
 
-        <div className="banquan">© 2021 Deri Protocol</div>
+        <div className="banquan">© 2021 {lang['deri-protocol']}</div>
       </div>
   </div>
   )

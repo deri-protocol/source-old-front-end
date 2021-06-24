@@ -87,17 +87,16 @@ export default function useMiningPool(version){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '29700',
+        liquidity : '4100',
         symbol : '--',
         airdrop : true,
         buttonText : 'CLAIM'
       }
-      // pools.push(airDrop)
+      pools.push(airDrop)
       const v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
       const v2Pools = pools.filter(p => p.version === 'v2')
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
-      // pools.push(airDrop)
       setPools(pools);
       setLoaded(true)
     })

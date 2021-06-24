@@ -10,6 +10,7 @@ import {
   getLpContractAddressConfig,
   getAnnualBlockNumberConfig,
   getDeriContractAddressConfig,
+  getChainIds,
 } from './config';
 
 /** @module utils */
@@ -130,21 +131,6 @@ export const isObject = (obj) => typeof obj === 'object';
 //const np = () => {}
 //const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
-// fetchWithTimeout
-// const fetchWithTimeout = (url, delay=2000, options={}, onTimeout=np) => {
-//   const timer = new Promise((resolve) => {
-//     setTimeout(resolve, delay, {
-//       timeout: true,
-//     });
-//   });
-//   return Promise.race([fetch(url, options), timer]).then((response) => {
-//     if (response.timeout) {
-//       onTimeout();
-//     }
-//     return response;
-//   });
-// };
-
 // http
 export const checkHttpServerIsAlive = async (url) => {
   try {
@@ -158,14 +144,60 @@ export const checkHttpServerIsAlive = async (url) => {
   }
   return false;
 };
+
+const shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+};
+
 export const getAliveHttpServer = async (urls = []) => {
+  urls = shuffleArray(urls)
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
     if (await checkHttpServerIsAlive(url)) {
+      //console.log(url)
       return url;
     }
   }
   throw new Error('No alive http server in urls', urls);
+};
+
+const getBlockNumber = async (url) => {
+  let res = { url: url, blockNumber: -1, duration: Number.MAX_SAFE_INTEGER,};
+  try {
+    const web3 = new Web3(new Web3.providers.HttpProvider(url))
+    const startTime = Date.now()
+    res.blockNumber = await web3.eth.getBlockNumber()
+    res.duration = Date.now() - startTime
+  } catch (err) {
+    console.log(`getBlockNumber(${url}) error: ${err}`)
+  }
+  return res
+};
+
+export const getLatestRPCServer = async (urls = []) => {
+  urls = shuffleArray(urls)
+  let promises = []
+  for (let i = 0; i < urls.length; i++) {
+    promises.push(getBlockNumber(urls[i]));
+  }
+  let blockNumbers = await Promise.all(promises)
+  blockNumbers = blockNumbers.sort((a, b) => a.duration - b.duration)
+  //console.log('blockNumbers',  blockNumbers)
+  const latestBlockNumber = blockNumbers.reduce((a, b) => b.blockNumber !== -1 ? a > b.blockNumber ? a : b.blockNumber : a, 0)
+  const index = blockNumbers.findIndex((b) => b.blockNumber === latestBlockNumber);
+  const res = blockNumbers[index].url
+  //console.log(res)
+  if (res.startsWith('http')) {
+    return res
+  } else {
+    throw new Error(`getLatestRPCServer(): cannot find alive RPC server in ${urls}`)
+  }
 };
 
 // ethereum chain
@@ -502,7 +534,7 @@ export const getChainProviderUrl = async(chainId) => {
   chainId = normalizeChainId(chainId);
   const urls = getChainProviderUrlsConfig(chainId)
   if (urls.length > 0) {
-    return await getAliveHttpServer(urls)
+    return await getLatestRPCServer(urls)
   } else {
     throw new Error(
       `Cannot find the chain provider url with chainId: ${chainId}`
@@ -514,7 +546,7 @@ export const format = (bigNumber) =>
   bigNumber.toFormat().replaceAll(',', '').toString();
 
 export const normalizeChainId = (chainId) => {
-  const chainIds = ['1', '56', '128', '3', '42', '97', '256', '137', '80001']
+  const chainIds = getChainIds()
   let res = chainId ? chainId.toString() : chainId;
   if (chainId && chainIds.includes(res)) {
     return res;
