@@ -6,12 +6,12 @@ import useLang from '../../../hooks/useLang';
 
 function Footer({intl}){  
   const lang = useLang(intl.dict,'footer')
-  const isHome = useRouteMatch('/index');
+  const isIndex = useRouteMatch('/index');
   const isTeam = useRouteMatch('/team')
-  
+  const showWallet = !isIndex && !isTeam
   return(
     <div className="footer">
-      <Account lang={lang} ignoreWallet={isHome || isTeam}/>
+      {showWallet && <Account lang={lang}/>}
     </div>
   )
 }
