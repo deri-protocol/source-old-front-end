@@ -4,11 +4,11 @@ echo PUBLIC_URL=/ > .env.development
 echo REACT_APP_WSS_URL=wss://oracle2.deri.finance >> .env.development
 echo REACT_APP_REST_SERVER_URL=https://testnetapi.deri.finance >> .env.development
 npm run build_testnet --nomaps --env=development
-repo=/tmp/build/app
+repo=/tmp/build/testnet
 
 if [ ! -d $repo ]; then
-  printf '\e[1;34m%-6s\e[m\n' "bridge repo is not exit ,clone it from git@github.com:deri-finance/app.git" 
-  git clone git@github.com:deri-finance/app.git $repo -b main
+  printf '\e[1;34m%-6s\e[m\n' "app repo is not exit ,clone it from git@github.com:deri-finance/testnet.git" 
+  git clone git@github.com:deri-finance/testnet.git $repo -b main
 fi
 
 printf '\e[1;34m%-6s\e[m\n' 'git checkout main branch and fetch '
@@ -23,7 +23,7 @@ cp $repo/manifest.json $repo/manifest.bak.json
 printf '\e[1;34m%-6s\e[m\n' 'copy to '$repo
 cp -R build/* $repo
 git -C $repo add .
-git -C $repo commit -m 'release app'
+git -C $repo commit -m 'release testnet'
 if [ "$1" != "silence" ]; then
   read -r -p  "execute git push?[Y/n]" input
   case $input in

@@ -80,7 +80,7 @@ export default function Content({lang}) {
                 <div className="box_lable H3">{lang['real-derivatives']}</div>
                 <div className="box_note">{lang['get-ri-ex-pr-and-cap-eff']}</div>
               </div>
-              <img src={RealDerivatives_b} className='box_background' />
+              <img src={RealDerivatives_b} className='box_background' alt=''/>
               <div className='box_bottom'></div>
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function Content({lang}) {
                 <div className="box_lable H3">{lang['composability']}</div>
                 <div className="box_note">{lang['ri-ex-to-as-nft-to-be-ut-as-le-bl']}</div>
               </div>
-              <img src={Composability_b} className='box_background' />
+              <img src={Composability_b} className='box_background' alt=''/>
               <div className='box_bottom'></div>
             </div>
             <div className='box right_box'>
