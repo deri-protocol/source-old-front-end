@@ -16,7 +16,7 @@
   "available-balance" : "可用余额",
   "available-balance-title" : "动态有效余额-持有的总保证金",
   "dynamic-effective-balance" : "动态有效余额",
-  "dynamic-effective-balance-title" : "折算保证金 -> 总折算保证金",
+  "dynamic-effective-balance-title" : "总折算保证金+未兑现盈亏",
   "total-held" : "总持仓",
   "total-held-title" : "全部持仓冻结的保证金",
   "for-this-pos" : "本仓位",
