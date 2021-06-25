@@ -66,6 +66,7 @@ getClpLiquidityInfo2 as getClpLiquidityInfo,
 getClpWalletBalance2 as getClpWalletBalance,
 //getDeriBalance2 as getDeriBalance,
 //getTradeHistory2 as getTradeHistory,
+fetchRestApi,
 } from './api/restApi';
 
 // export {
@@ -85,4 +86,5 @@ export {
   getPoolConfigList,
   getFilteredPoolConfigList,
   getPoolBTokensBySymbolId,
+  setBroker,
 } from './v2';

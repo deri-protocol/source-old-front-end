@@ -9,7 +9,9 @@ export const getChainProviderUrl = async (chainId) => {
   chainId = normalizeChainId(chainId);
   const urls = getChainProviderUrls(chainId);
   if (urls.length > 0) {
-    return await getLatestRPCServer(urls);
+   const url =  await getLatestRPCServer(urls);
+   // console.log('url', url)
+   return url
   } else {
     throw new Error(
       `Cannot find the chain provider url with chainId: ${chainId}`

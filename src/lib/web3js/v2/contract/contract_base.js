@@ -12,15 +12,18 @@ export class ContractBase {
   }
 
   async _init() {
-    if (this.useInfura) {
-      this.web3 = await web3Factory.get(this.chainId);
-    } else {
-      this.web3 = metaMaskWeb3();
+    // update when web3 instance is null
+    if (!this.web3) {
+      if (this.useInfura) {
+        this.web3 = await web3Factory.get(this.chainId);
+      } else {
+        this.web3 = metaMaskWeb3();
+      }
+      this.contract = new this.web3.eth.Contract(
+        this.contractAbi,
+        this.contractAddress
+      );
     }
-    this.contract = new this.web3.eth.Contract(
-      this.contractAbi,
-      this.contractAddress
-    );
   }
 
   async _call(method, args = []) {
@@ -33,6 +36,7 @@ export class ContractBase {
         break
       } catch(err) {
         retry -= 1
+        // remove web3 instance to re-init
         this.web3 = null
         if (err.toString().includes('Invalid JSON RPC response')) {
           console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);

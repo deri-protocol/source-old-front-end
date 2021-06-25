@@ -9,6 +9,7 @@ import {
   getAnnualBlockNumberConfig,
   getChainIds,
 } from '../config';
+import { getBrokerConfig } from '../config/broker';
 import {
   POOL_ADDRESS,
   ROUTER_ADDRESS,
@@ -16,6 +17,7 @@ import {
   BTCUSD_ORACLE_ADDRESS,
   PTOKEN_ADDRESS,
   LTOKEN_ADDRESS,
+  BROKER_MANAGER_ADDRESS,
 } from './setup';
 
 describe('config', () => {
@@ -45,7 +47,7 @@ describe('config', () => {
     expect(getChainProviderUrls('56')).toEqual(output);
   });
   test('getPoolConfigList()', () => {
-    const output = 4;
+    const output = 6;
     expect(getPoolConfigList('dev').length).toEqual(output);
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
@@ -120,6 +122,13 @@ describe('config', () => {
       address: BTCUSD_ORACLE_ADDRESS,
     };
     expect(getOracleConfig('97', 'BTCUSD')).toEqual(output)
+  })
+  test('getBrokerConfig', () => {
+    const output = {
+      chainId: '97',
+      address: BROKER_MANAGER_ADDRESS,
+    };
+    expect(getBrokerConfig('97')).toEqual(output)
   })
   test('getPoolConfig2', () => {
     const output = {

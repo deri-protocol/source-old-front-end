@@ -10,6 +10,7 @@ const Pool = LoadableComponent(() => import('../../components/Mining/Pool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
+const BrokerBind = LoadableComponent(() => import('../../pages/Broker/Broker-bind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
 @withRouter
@@ -26,6 +27,7 @@ class Body extends React.Component {
           <Route exact path='/team' component={()=><Team lang={dict['team']}/>}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
+          <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => {

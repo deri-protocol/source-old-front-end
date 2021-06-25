@@ -72,6 +72,9 @@ export default function Menu({closeMenu,lang,locale}){
               <li>
                 <Link to='/broker'>{lang.broker}</Link>
               </li>
+              <li>
+                <Link to='/brokerbind'>{lang['broker-bind']}</Link>
+              </li>
             </ul>
           </li>
         </ul>

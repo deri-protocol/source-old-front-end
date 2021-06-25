@@ -1,245 +1,134 @@
-import React, { useState ,useEffect} from 'react'
-import {inject,observer} from 'mobx-react'
-
+import React, { useState, useEffect } from 'react'
+import { inject, observer } from 'mobx-react'
+import dateFormat from 'date-format'
 import {
-  mintDToken
+  mintDToken,
+  fetchRestApi,
 } from "../../lib/web3js/indexV2";
 import useClaimInfo from "../../hooks/useClaimInfo";
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import Button from '../Button/Button';
 import { eqInNumber } from '../../utils/utils';
 import useConfig from "../../hooks/useConfig";
-function Broker({wallet={},lang}){
-  const [claimInfo,claimInfoInterval] = useClaimInfo(wallet);
-  const config = useConfig(claimInfo.chainId) 
-  const [firstDeri,setFirstDeri] = useState(10000.251);
-  const [secondDeri,setSecondDeri] = useState(8000.251);
-  const [thirdDeri,setThirdDeri] = useState(7000.251);
-  const [yourDeri,setTourDeri] = useState(55);
-  const [yourRew,setYourRew] = useState(550);
-  const [sumPage,setSumPage] = useState(1);
-  const [currentPage,setCurrentPage] = useState(1);
-  const [totList,setTotList] = useState([
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc...AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-    {
-      time:'2021-6-5',
-      address:'0xAdrc... AerR',
-      volume:20,
-      deri:Math.random()*1000
-    },
-  ])
-  const [list,setList] = useState([]);
+function Broker({ wallet = {}, lang }) {
+  const [claimInfo, claimInfoInterval] = useClaimInfo(wallet);
+  const config = useConfig(claimInfo.chainId)
+  const [firstDeri, setFirstDeri] = useState('--');
+  const [secondDeri, setSecondDeri] = useState('--');
+  const [thirdDeri, setThirdDeri] = useState('--');
+  const [yourDeri, setYourDeri] = useState('--');
+  const [yourRank, setYourRank] = useState('--');
+  const [sumPage, setSumPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totList, setTotList] = useState([])
+  const [list, setList] = useState([]);
+
+  const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
+  const rewardList = async () => {
+    // let path = `/broker/${wallet.detail.account}/reward_list`
+    let path = '/broker/0x0000000000000000000000000000000000000001/reward_list'
+    let res = await fetchRestApi(path)
+    if (res.data) {
+      res.data.map(item => {
+        item.trader_invite_timestamp = item.trader_invite_timestamp * 1000
+        item.trader_address = item.trader_address.slice(0, 6) +
+          "..." +
+          item.trader_address.slice(item.trader_address.length - 4, item.trader_address.length)
+      })
+      setTotList(res.data)
+    }
+
+  }
+
+  const topList = async () => {
+    let path = '/broker/top3_reward_list'
+    let res = await fetchRestApi(path)
+    if (res.data) {
+      res.data.map(item => {
+        if (item.rank === 1) {
+          setFirstDeri(item.deri_reward)
+        } else if (item.rank === 2) {
+          setSecondDeri(item.deri_reward)
+        } else if (item.rank === 3) {
+          setThirdDeri(item.deri_reward)
+        }
+      })
+    }
+  }
+
+  const totalReward = async () => {
+    let path = `/broker/${wallet.detail.account}/total_reward`
+    // let path = '/broker/0x0000000000000000000000000000000000000001/total_reward'
+    let res = await fetchRestApi(path)
+    if (res.data) {
+      if (res.data.hasOwnProperty('deri_reward')) {
+        setYourDeri(res.data.deri_reward)
+        setYourRank(res.data.rank)
+      } else {
+        setYourDeri(0)
+        setYourRank('>999')
+      }
+    }
+  }
 
   const mintDeri = async () => {
-    if(!eqInNumber(wallet.detail.chainId,claimInfo.chainId)) {
-			alert(`${lang['your-deri-is-on']} ${ config.text } . ${lang['connect-to']} ${ config.text } ${lang['to-claim']}.`)
-			return ;
-		}
-		if ((+claimInfo.unclaimed) === 0) {
-			alert(lang['no-deri-to-claim-yet']);
-			return;
-		}
-		let now = parseInt(Date.now() / 1000) % (3600 * 8);
-		if (now < 1800) {
-			alert(lang['claiming-DERI-is-disabled-during-first-30-minutes-of-each-epoch']);
-			return;
-		}
-		const res = await mintDToken(wallet.detail.chainId,wallet.detail.account)
-		if(res.success){
-			clearInterval(claimInfoInterval);
-			return true;
-		} else {
-			alert(lang['claim-failed'])
-			return false;
-		}
+    if ((+claimInfo.unclaimed) === 0) {
+      alert(lang['no-deri-to-claim']);
+      return;
+    }
+    if (!eqInNumber(wallet.detail.chainId, claimInfo.chainId)) {
+      alert(`${lang['your-deri-is-on']} ${config.text}  ${lang['connect-to']} ${config.text} ${lang['to-claim']}.`)
+      return;
+    }
+    let now = parseInt(Date.now() / 1000) % (3600 * 8);
+    if (now < 1800) {
+      alert(lang['claiming-DERI-is-disabled-during-first-30-minutes-of-each-epoch']);
+      return;
+    }
+    const res = await mintDToken(wallet.detail.chainId, wallet.detail.account)
+    if (res.success) {
+      clearInterval(claimInfoInterval);
+      return true;
+    } else {
+      alert(lang['claim-failed'])
+      return false;
+    }
   }
 
   const upPage = () => {
     let page = currentPage
-    if(page!=1){
-      page -=1;
+    if (page != 1) {
+      page -= 1;
     }
     setCurrentPage(page)
   }
 
   const downPage = () => {
     let page = currentPage
-    if(page < sumPage){
-      page +=1;
+    if (page < sumPage) {
+      page += 1;
     }
     setCurrentPage(page)
   }
 
-  useEffect(()=>{
-    let sum_page = totList.length / 10;
-    sum_page = Math.ceil(sum_page)
-    let data =  totList.slice((currentPage-1)*10,currentPage*10)
-    setSumPage(sum_page);
-    setList(data)
+  useEffect(() => {
+    if (totList.length) {
+      let sum_page = totList.length / 10;
+      sum_page = Math.ceil(sum_page)
+      let data = totList.slice((currentPage - 1) * 10, currentPage * 10)
+      setSumPage(sum_page);
+      setList(data);
+    }
 
-  },[wallet.detail,totList,currentPage])
-  return(
+  }, [wallet.detail, totList, currentPage])
+  useEffect(() => {
+    if(hasConnectWallet()){
+      rewardList();
+      topList();
+      totalReward();
+    }
+  }, [wallet.detail])
+  return (
     <div className='broker'>
       <div className='title'>
         {lang['title-one']}
@@ -260,7 +149,7 @@ function Broker({wallet={},lang}){
               </div>
             </div>
             <div className='rewards-three'>
-            <div className='num'>
+              <div className='num'>
                 <span>
                   <DeriNumberFormat value={thirdDeri} displayType='text' thousandSeparator={true} decimalScale='2' />
                 </span>  DERI
@@ -272,10 +161,10 @@ function Broker({wallet={},lang}){
           </div>
           <div className='rewards-right'>
             <div className='rewards-two'>
-            <div className='num'>
+              <div className='num'>
                 <span>
-                 
-                 <DeriNumberFormat value={secondDeri} displayType='text' thousandSeparator={true} decimalScale='2' />
+
+                  <DeriNumberFormat value={secondDeri} displayType='text' thousandSeparator={true} decimalScale='2' />
                 </span> DERI
               </div>
               <div className='one'>
@@ -283,13 +172,13 @@ function Broker({wallet={},lang}){
               </div>
             </div>
             <div className='rewards-frou'>
-            <div className='num'>
+              <div className='num'>
                 <span>
-                {yourRew}
-                </span> 
+                  {yourRank}
+                </span>
               </div>
               <div className='one'>
-                 {lang['your-rewards']}
+                {lang['your-rewards']}
               </div>
             </div>
           </div>
@@ -298,26 +187,20 @@ function Broker({wallet={},lang}){
       </div>
       <div className='process'>
         <div className='invite'>
-        </div>
-        <div className='proce'></div>
-        <div className='bind'></div>
-        <div className='proce'></div>
-        <div className='earn'></div>
-      </div>
-      <div className='prpcess-title'>
-        <div>
           {lang['invute-friends']}
         </div>
-        <div className='bind-center'>
+        <div className='proce'></div>
+        <div className='bind'>
           {lang['bind-address']}
         </div>
-        <div>
+        <div className='proce'></div>
+        <div className='earn'>
           {lang['earn-deri']}
         </div>
       </div>
       <div className='rules'>
         <div>
-          
+
         </div>
         <div>
           <a>{lang['detailed-rules']} >></a>
@@ -340,7 +223,7 @@ function Broker({wallet={},lang}){
               </div>
               <div className='unclaimed-deri'>
                 <div className='claimed-num'>
-                  <DeriNumberFormat value={yourDeri} displayType='text' thousandSeparator={true} decimalScale='2' />
+                  <DeriNumberFormat value={(+yourDeri).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
                 </div>
                 <div className='unclaimed-num'>
                   <DeriNumberFormat value={(+claimInfo.unclaimed).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
@@ -353,24 +236,32 @@ function Broker({wallet={},lang}){
           </div>
           <div className='address-list'>
             <div className='list-title'>
-              <div>{lang['time-invited']}</div>
-              <div>{lang['friends-add']}</div>
-              <div>{lang['contract-vol']}</div>
-              <div>{lang['deri-minted']}</div>
+              <div className='time-invited'>{lang['time-invited']}</div>
+              <div className='friends-add'>{lang['friends-add']}</div>
+              <div className='contract-vol'>{lang['contract-vol']}</div>
+              <div className='deri-minted'>{lang['deri-minted']}</div>
             </div>
-            {list.map((list,index) => <div className='list-box' key={index} >
-              <div className='time'>{list.time}</div>
-              <div className='address'>{list.address}</div>
-              <div className='volume'>{list.volume}</div>
-              <div className='deri'>
-              <DeriNumberFormat value={list.deri} displayType='text' thousandSeparator={true} decimalScale='2' />
+            {list.map((list, index) => <div className='list-box' key={index} >
+              <div className='time'>
+                {dateFormat.asString('yyyy-MM-dd hh:mm', new Date(parseInt(list.trader_invite_timestamp)))}
               </div>
-            </div> )}
+              <div className='address'>{list.trader_address}</div>
+              <div className='volume'>{list.trader_volume}</div>
+              <div className='deri'>
+                <DeriNumberFormat value={list.deri_reward} displayType='text' thousandSeparator={true} decimalScale='2' />
+              </div>
+            </div>)}
           </div>
           <div className='page-of'>
-            <div onClick={upPage}>← </div>
+            <div onClick={upPage}><svg xmlns="http://www.w3.org/2000/svg" width="9.6" height="8" viewBox="0 0 9.6 8">
+              <path id="路径_3" data-name="路径 3" d="M3186.224,481.353a.4.4,0,1,1,.552.58l-3.069,2.91h7.993a.4.4,0,1,1,0,.8h-7.98l3.056,2.91a.4.4,0,0,1-.552.58l-3.49-3.324a.8.8,0,0,1,.007-1.138Z" transform="translate(-3182.5 -481.243)" fill="#aaa" />
+            </svg>
+            </div>
             <div className='page'>{lang['page']} {currentPage} {lang['of']} {sumPage}</div>
-            <div onClick={downPage}> →</div>
+            <div onClick={downPage}><svg xmlns="http://www.w3.org/2000/svg" width="9.6" height="8" viewBox="0 0 9.6 8">
+              <path id="路径_4" data-name="路径 4" d="M3268.376,481.353a.4.4,0,0,0-.552.58l3.069,2.91H3262.9a.4.4,0,0,0,0,.8h7.98l-3.056,2.91a.4.4,0,0,0,.552.58l3.49-3.324a.8.8,0,0,0-.007-1.138Z" transform="translate(-3262.5 -481.243)" fill="#aaa" />
+            </svg>
+            </div>
           </div>
         </div>
       </div>

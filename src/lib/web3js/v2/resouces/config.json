@@ -26,7 +26,8 @@
             "unit": "ETH"
           }
         ],
-        "chainId": "56"
+        "chainId": "56",
+        "version": "v2"
       }
     ],
     "oracle": [
@@ -42,6 +43,8 @@
         "address": "0x9BA8966B706c905E594AcbB946Ad5e29509f45EB",
         "decimal": "18"
       }
+    ],
+    "broker": [
     ]
   },
   "dev": {
@@ -76,7 +79,36 @@
             "unit": "ETH"
           }
         ],
-        "chainId": "97"
+        "chainId": "97",
+        "version": "v2"
+      },
+      {
+        "pool": "0x35a85396e7A8a9E85170fbb589ce085abcAd8266",
+        "pToken": "0x3495f770eC0dc8701d2b89454047A8521306E070",
+        "lToken": "0xeFCbBF65100FC2C2b96E92c9AbFfeC384177943e",
+        "router": "0x4861a9958B65eA8146B89Af929a80c352c905270",
+        "initialBlock": "14917984",
+        "bTokens": [
+          {
+            "bToken": "0x1BD7B233B054AD4D1FBb767eEa628f28fdE314c6",
+            "bTokenSymbol": "USDT",
+            "bTokenId": "0"
+          }
+        ],
+        "symbols": [
+          {
+            "symbol": "ETHUSD",
+            "symbolId": "0",
+            "unit": "ETH"
+          },
+          {
+            "symbol": "MATICUSD",
+            "symbolId": "1",
+            "unit": "MATIC"
+          }
+        ],
+        "chainId": "80001",
+        "version": "v2"
       }
     ],
     "oracle": [
@@ -103,6 +135,12 @@
         "symbol":  "MATICUSD",
         "address": "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada",
         "decimal": "8"
+      }
+    ],
+    "broker": [
+      {
+        "chainId": "97",
+        "address": "0xe4101EC5F4EF144e97DdE7542A605c8813a975Fc"
       }
     ]
   }

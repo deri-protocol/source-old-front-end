@@ -89,7 +89,7 @@ function Bridge({ wallet = {},lang }) {
   }
  
   const onBlur = event => {
-    const target =event.target;
+    const target = event.target;
     if(target.value === '') {
       target.setAttribute('class','contrant-input')
     }
