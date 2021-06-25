@@ -1,6 +1,6 @@
 import {
   getChainProviderUrls,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
 } from '../config/chain';
 import { normalizeChainId } from './validate';
 import { getLatestRPCServer } from './network';
@@ -9,15 +9,17 @@ export const getChainProviderUrl = async (chainId) => {
   chainId = normalizeChainId(chainId);
   const urls = getChainProviderUrls(chainId);
   if (urls.length > 0) {
-    return await getLatestRPCServer(urls);
+   const url =  await getLatestRPCServer(urls);
+   // console.log('url', url)
+   return url
   } else {
     throw new Error(
       `Cannot find the chain provider url with chainId: ${chainId}`
     );
   }
 };
-export const getAnnualBlockNumber = (chainId) => {
-  const blockNumbers = getAnnualBlockNumberConfig();
+export const getDailyBlockNumber = (chainId) => {
+  const blockNumbers = getDailyBlockNumberConfig();
   if (blockNumbers[chainId]) {
     return parseInt(blockNumbers[chainId]);
   } else {

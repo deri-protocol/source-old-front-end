@@ -6,9 +6,10 @@ import {
   getPoolConfig2,
   getOracleConfigList,
   getOracleConfig,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
   getChainIds,
 } from '../config';
+import { getBrokerConfig } from '../config/broker';
 import {
   POOL_ADDRESS,
   ROUTER_ADDRESS,
@@ -16,6 +17,7 @@ import {
   BTCUSD_ORACLE_ADDRESS,
   PTOKEN_ADDRESS,
   LTOKEN_ADDRESS,
+  BROKER_MANAGER_ADDRESS,
 } from './setup';
 
 describe('config', () => {
@@ -23,7 +25,7 @@ describe('config', () => {
     const output = 8;
     expect(getChainIds().length).toEqual(output);
   });
-  test('getAnnualBlockNumberConfig()', () => {
+  test('getDailyBlockNumberConfig()', () => {
     const output = {
       1: '2367422',
       56: '10497304',
@@ -34,7 +36,7 @@ describe('config', () => {
       137: '15063056',
       80001: '15063056',
     };
-    expect(getAnnualBlockNumberConfig()).toEqual(output);
+    expect(getDailyBlockNumberConfig()).toEqual(output);
   });
   test('getChainProviderUrls()', () => {
     const output = [
@@ -45,7 +47,7 @@ describe('config', () => {
     expect(getChainProviderUrls('56')).toEqual(output);
   });
   test('getPoolConfigList()', () => {
-    const output = 4;
+    const output = 6;
     expect(getPoolConfigList('dev').length).toEqual(output);
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
@@ -120,6 +122,13 @@ describe('config', () => {
       address: BTCUSD_ORACLE_ADDRESS,
     };
     expect(getOracleConfig('97', 'BTCUSD')).toEqual(output)
+  })
+  test('getBrokerConfig', () => {
+    const output = {
+      chainId: '97',
+      address: BROKER_MANAGER_ADDRESS,
+    };
+    expect(getBrokerConfig('97')).toEqual(output)
   })
   test('getPoolConfig2', () => {
     const output = {

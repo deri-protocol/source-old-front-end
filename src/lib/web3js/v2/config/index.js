@@ -1,7 +1,7 @@
 export {
   getChainIds,
   getChainProviderUrls,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
   MAX_UINT256,
   MAX_INT256,
 } from './chain';
@@ -17,3 +17,4 @@ export {
   getSymbolIdList,
 } from './pool';
 export { getOracleConfigList, getOracleConfig } from './oracle';
+export { getBrokerConfigList, getBrokerConfig } from './broker';

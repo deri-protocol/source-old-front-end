@@ -7,6 +7,7 @@ import {
   PToken,
   WooOracle,
   ChainlinkOracle,
+  BrokerManager,
 } from './contract';
 import { getChainProviderUrl } from './utils/chain';
 
@@ -130,6 +131,19 @@ export const oracleFactory = (function () {
       } else {
         instanceMap[key] = new WooOracle(chainId, address, symbol, decimal, useInfura);
       }
+      return instanceMap[key];
+    }
+  };
+})();
+
+export const brokerManagerFactory = (function () {
+  const instanceMap = {};
+  return (chainId, address, useInfura) => {
+    const key = useInfura ? `${address}.useInfura` : address;
+    if (Object.keys(instanceMap).includes(key)) {
+      return instanceMap[key];
+    } else {
+      instanceMap[key] = new BrokerManager(chainId, address, useInfura);
       return instanceMap[key];
     }
   };

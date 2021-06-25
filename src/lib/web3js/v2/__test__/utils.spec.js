@@ -19,7 +19,7 @@ import {
   checkHttpServerIsAlive,
   getAliveHttpServer,
   getChainProviderUrl,
-  getAnnualBlockNumber,
+  getDailyBlockNumber,
   validateArgs,
   catchError,
 } from '../utils'
@@ -138,10 +138,10 @@ describe('utils', () => {
     }
     expect(withInvalidAddress).toThrowError(/invalid address/);
   })
-  test('getAnnualBlockNumber()', () => {
-    expect(getAnnualBlockNumber('1')).toEqual(2367422);
-    expect(getAnnualBlockNumber('56')).toEqual(10497304);
-    expect(getAnnualBlockNumber('97')).toEqual(10497304);
+  test('getDailyBlockNumber()', () => {
+    expect(getDailyBlockNumber('1')).toEqual(2367422);
+    expect(getDailyBlockNumber('56')).toEqual(10497304);
+    expect(getDailyBlockNumber('97')).toEqual(10497304);
   })
   test('validateArgs()', () => {
     expect(validateArgs('1')).toEqual(true);

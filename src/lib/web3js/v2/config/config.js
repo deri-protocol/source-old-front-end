@@ -27,7 +27,7 @@ const validateConfig = (config) => {
   });
   validateIsArray(config['symbols'], 'symbols');
   config['symbols'].forEach((prop) => {
-    validateObjectKeyExist(['symbolId', 'symbol'], prop, 'bToken');
+    validateObjectKeyExist(['symbolId', 'symbol'], prop, 'symbol');
   });
 };
 
@@ -43,6 +43,7 @@ const getJsonConfig = () => {
   if (['prod', 'dev'].includes(env)) {
     //console.log(env)
     if (configs[env]) {
+      //console.log(configs[env])
       // pools
       const pools = configs[env].pools;
       if (pools && Array.isArray(pools)) {
@@ -52,6 +53,8 @@ const getJsonConfig = () => {
         }
       }
       //console.log(configs[env])
+      validateObjectKeyExist(['oracle'], configs[env], 'oracle')
+      validateObjectKeyExist(['broker'], configs[env], 'broker')
       return configs[env];
     }
   }

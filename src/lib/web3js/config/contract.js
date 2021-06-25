@@ -330,16 +330,16 @@ export const getDeriContractAddressConfig = (env = 'dev') => {
   ];
 };
 
-export const getAnnualBlockNumberConfig = () => {
+export const getDailyBlockNumberConfig = () => {
   const chainBlockNumberList = [
-    '2367422',
-    '2367422',
-    '10497304',
-    '10497304',
-    '10511369',
-    '10511369',
-    '15063056',
-    '15063056',
+    '6486',
+    '6486',
+    '28759',
+    '28759',
+    '28798',
+    '28798',
+    '41268',
+    '41268',
   ];
   return getChainIds().reduce((accum, i, index) => {
     accum[i] = chainBlockNumberList[index];

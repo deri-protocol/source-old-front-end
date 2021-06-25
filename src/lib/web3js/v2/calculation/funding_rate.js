@@ -1,4 +1,4 @@
-import { bg, getAnnualBlockNumber, validateArgs } from '../utils';
+import { bg, getDailyBlockNumber, validateArgs } from '../utils';
 
 export const calculateLiquidityUsed = (
   tradersNetVolume,
@@ -70,7 +70,7 @@ export const calculateFundingRate = (
 };
 
 export const processFundingRate = (chainId, fundingRate) => {
-  const annualBlockCount = getAnnualBlockNumber(chainId);
+  const annualBlockCount = getDailyBlockNumber(chainId);
   //console.log(annualBlockCount);
   return bg(fundingRate).times(annualBlockCount);
 };

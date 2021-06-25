@@ -15,6 +15,10 @@ const fetchJson = async (url) => {
   return await resp.json();
 };
 
+export const fetchRestApi = async(path) => {
+  return await fetchJson(`${getHttpBase()}${path}`);
+};
+
 /**
  * Get specification from REST API, please refer {@link getSpecification}
  * @async
