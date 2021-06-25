@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable camelcase */
 import {io} from 'socket.io-client'
-import { restoreVersion, restoreChain } from '../../../../../utils/utils'
+import { restoreVersion, restoreChain, getFormatSymbol } from '../../../../../utils/utils'
 // function s(){
 //   data = [];
 // }
@@ -31,8 +31,9 @@ var ws_onResetCacheNeededCallback
 var ws_to
 window.sub_index = 0
 var _subs = []
+
 function getSymbol(symbolInfo){
-  return restoreVersion() === 'v2' ? `${symbolInfo.name}_V2` : symbolInfo.name
+  return getFormatSymbol(symbolInfo.name)
 }
 export default {
   history,

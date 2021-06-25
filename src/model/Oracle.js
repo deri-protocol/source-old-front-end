@@ -105,26 +105,7 @@ class Oracle {
       }
     })
     this.ws.emit('get_kline', {'symbol': symbol, 'time_type': timeType, 'bars': 1000})
-    // this.emit(symbol);
   }
-
-  // start(symbol){
-  //   this.initWebSocket();
-  //   this.loadIndex(symbol);
-  //   this.ws.on('kline_update',data => {
-  //     const obj = {}
-  //     let time = data.time
-  //     if (data.symbol === this.symbol) {
-  //       obj.time = time 
-  //       obj.low = Number(data.low)
-  //       obj.high = Number(data.high)
-  //       obj.open = Number(data.open)
-  //       obj.close = Number(data.close)
-  //       obj.volume = Number(data.volume)
-  //       this.setIndex(obj.close)
-  //     }
-  //   })
-  // }
 
   resume(){
     this.setPause(false)
