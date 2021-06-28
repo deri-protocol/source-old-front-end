@@ -17,7 +17,6 @@ class Oracle {
       kData : observable,
       setIndex : action,
     })
-    this.initWebSocket()
   }
 
 
@@ -40,6 +39,7 @@ class Oracle {
 
   load(symbol,timeType = 'min'){
     // symbol = symbol+'_V2'
+    this.initWebSocket()
     this.ws.on('kline_update',data => {
       const obj = {}
       let time = data.time
@@ -80,9 +80,11 @@ class Oracle {
 
 
   unsubscribeBars(symbol){
-    this.ws.emit('un_get_kline_update', {
-      symbol : symbol, 'time_type' : 'min'
-    })
+    if(this.ws){
+      this.ws.emit('un_get_kline_update', {
+        symbol : symbol, 'time_type' : 'min'
+      })
+    }
   }
 
 
