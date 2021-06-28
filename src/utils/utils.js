@@ -80,6 +80,7 @@ export function restoreLocale(){
 
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  // return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  return restoreVersion() === 'v2' ? `${symbol}_V2` : symbol
 }
 
