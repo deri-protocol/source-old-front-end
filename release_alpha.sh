@@ -6,7 +6,7 @@ yarn build --nomaps
 repo=/tmp/build/alphatest
 
 if [ ! -d $repo ]; then
-  printf '\e[1;34m%-6s\e[m\n' "bridge repo is not exit ,clone it from git@github.com:deri-finance/alphatest.git" 
+  printf '\e[1;34m%-6s\e[m\n' "alphatest app repo is not exit ,clone it from git@github.com:deri-finance/alphatest.git" 
   git clone git@github.com:deri-finance/alphatest.git $repo -b main
 fi
 
