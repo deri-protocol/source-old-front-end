@@ -3,6 +3,7 @@ import { withRouter, Switch,Route,Redirect} from 'react-router-dom'
 import LoadableComponent from '../../../utils/LoadableComponent'
 import './body.css'
 import withLanguage from '../../../components/hoc/withLanguage';
+import IndexRoute from '../../../components/IndexRoute/IndexRoute';
 
 
 
@@ -30,18 +31,7 @@ class Body extends React.Component {
           <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
-          <Route exact path='/' render={() => {
-            const url = window.location.href;
-            if(/https?:\/\/app/.test(url)) {
-              return  <Redirect to='/lite'/> 
-            } else if(/https?:\/\/governance/.test(url)) {
-              return  <Redirect to='/governance'/> 
-            } else if(/https?:\/\/bridge/.test(url)) {
-              return  <Redirect to='/bridge'/> 
-            } 
-            return <Redirect to='/index'/>
-          }}>            
-          </Route>
+          <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
           <Route exact path='/lite' component={() => <Lite lang={dict['lite']}/>}/>
