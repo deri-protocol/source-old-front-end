@@ -31,5 +31,6 @@
   "please-enter-a-correct-address":"请输入正确的地址",
   "brokder-addr-cannot-be-the-same-as-trader":"不能与交易地址为同一地址",
   "cannot-bind-twice":"不能重复绑定",
-  "please-enter-address":"请输入地址"
+  "please-enter-address":"请输入地址",
+  "brokers-address":"经纪人地址"
 }
