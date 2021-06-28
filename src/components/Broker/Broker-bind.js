@@ -47,6 +47,7 @@ function Bind({wallet={},lang}){
     if(res.data){
       if(res.data.length){
         setIsBind(true)
+        setAddress(res.data[0].broker_address)
       }else{
         setIsBind(false)
       }

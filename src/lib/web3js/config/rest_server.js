@@ -7,7 +7,7 @@ export const getRestServerConfig = (env = 'dev') => {
   if (env === 'prod' || env === 'production') {
     // for production
     return (process && process.env && process.env.REACT_APP_REST_SERVER_URL) || 'https://api.deri.finance';
-    //return 'https://alphaapi.deri.finance';
+    // return 'https://alphaapi.deri.finance';
   } else {
     // for test
     return 'https://testnetapi.deri.finance';
