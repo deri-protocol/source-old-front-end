@@ -36,14 +36,10 @@ function Mining({wallet,lang}){
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
 									{lang['liquidity-mining']}
 							</div>
-							<div className='trade-mining' onClick={() => setCurrentTab('trade')} >
-								{lang['trading-mining']}
-							</div>
 					</div>
 			</div>
 			<div className='pool-info'>
 					<LiquidityMining {...props}/>
-					<TradeMining {...props}/>
 			</div>
 		</div>
 	)

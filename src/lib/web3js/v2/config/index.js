@@ -1,7 +1,7 @@
 export {
   getChainIds,
   getChainProviderUrls,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
   MAX_UINT256,
   MAX_INT256,
 } from './chain';

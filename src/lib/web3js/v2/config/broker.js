@@ -2,7 +2,7 @@ import { getConfig } from './config';
 
 export const getBrokerConfigList = () => {
   const config = getConfig()
-  return config.broker
+  return config.brokerManager
 };
 
 export const getBrokerConfig = (chainId) => {

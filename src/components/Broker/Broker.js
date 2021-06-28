@@ -25,8 +25,7 @@ function Broker({ wallet = {}, lang }) {
 
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const rewardList = async () => {
-    // let path = `/broker/${wallet.detail.account}/reward_list`
-    let path = '/broker/0x0000000000000000000000000000000000000001/reward_list'
+    let path = `/broker/${wallet.detail.account}/reward_list`
     let res = await fetchRestApi(path)
     if (res.data) {
       res.data.map(item => {
@@ -44,21 +43,26 @@ function Broker({ wallet = {}, lang }) {
     let path = '/broker/top3_reward_list'
     let res = await fetchRestApi(path)
     if (res.data) {
-      res.data.map(item => {
-        if (item.rank === 1) {
-          setFirstDeri(item.deri_reward)
-        } else if (item.rank === 2) {
-          setSecondDeri(item.deri_reward)
-        } else if (item.rank === 3) {
-          setThirdDeri(item.deri_reward)
-        }
-      })
+      if(res.data.length){
+        res.data.map(item => {
+          if (item.rank === 1) {
+            setFirstDeri(item.deri_reward)
+          } else if (item.rank === 2) {
+            setSecondDeri(item.deri_reward)
+          } else if (item.rank === 3) {
+            setThirdDeri(item.deri_reward)
+          }
+        })
+      }else{
+        setFirstDeri(0)
+        setSecondDeri(0)
+        setThirdDeri(0)
+      }
     }
   }
 
   const totalReward = async () => {
     let path = `/broker/${wallet.detail.account}/total_reward`
-    // let path = '/broker/0x0000000000000000000000000000000000000001/total_reward'
     let res = await fetchRestApi(path)
     if (res.data) {
       if (res.data.hasOwnProperty('deri_reward')) {
@@ -163,7 +167,6 @@ function Broker({ wallet = {}, lang }) {
             <div className='rewards-two'>
               <div className='num'>
                 <span>
-
                   <DeriNumberFormat value={secondDeri} displayType='text' thousandSeparator={true} decimalScale='2' />
                 </span> DERI
               </div>

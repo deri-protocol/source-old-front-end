@@ -54,7 +54,7 @@ const getJsonConfig = () => {
       }
       //console.log(configs[env])
       validateObjectKeyExist(['oracle'], configs[env], 'oracle')
-      validateObjectKeyExist(['broker'], configs[env], 'broker')
+      validateObjectKeyExist(['brokerManager'], configs[env], 'brokerManager')
       return configs[env];
     }
   }

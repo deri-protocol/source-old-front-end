@@ -41,6 +41,7 @@ export {
   tradeWithMarginWithPrices,
   closePositionWithPrices,
 } from './trade_transaction_api';
-export{
-  setBroker,
+
+export {
+  setBroker
 } from './broker_api'

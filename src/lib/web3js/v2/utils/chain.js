@@ -1,6 +1,6 @@
 import {
   getChainProviderUrls,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
 } from '../config/chain';
 import { normalizeChainId } from './validate';
 import { getLatestRPCServer } from './network';
@@ -18,8 +18,8 @@ export const getChainProviderUrl = async (chainId) => {
     );
   }
 };
-export const getAnnualBlockNumber = (chainId) => {
-  const blockNumbers = getAnnualBlockNumberConfig();
+export const getDailyBlockNumber = (chainId) => {
+  const blockNumbers = getDailyBlockNumberConfig();
   if (blockNumbers[chainId]) {
     return parseInt(blockNumbers[chainId]);
   } else {

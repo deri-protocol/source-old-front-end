@@ -8,7 +8,7 @@ import {
   getClpContractAddressConfig,
   getClp2ContractAddressConfig,
   getLpContractAddressConfig,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
   getDeriContractAddressConfig,
   getChainIds,
 } from './config';
@@ -370,8 +370,8 @@ export const getMiningVaultContractAddress = (chainId) => {
 //   }
 // };
 
-export const getAnnualBlockNumber = (chainId) => {
-  const blockNumbers = getAnnualBlockNumberConfig();
+export const getDailyBlockNumber = (chainId) => {
+  const blockNumbers = getDailyBlockNumberConfig();
   if (blockNumbers[chainId]) {
     return parseInt(blockNumbers[chainId]);
   }

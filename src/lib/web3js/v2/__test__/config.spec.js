@@ -6,7 +6,7 @@ import {
   getPoolConfig2,
   getOracleConfigList,
   getOracleConfig,
-  getAnnualBlockNumberConfig,
+  getDailyBlockNumberConfig,
   getChainIds,
 } from '../config';
 import { getBrokerConfig } from '../config/broker';
@@ -25,18 +25,18 @@ describe('config', () => {
     const output = 8;
     expect(getChainIds().length).toEqual(output);
   });
-  test('getAnnualBlockNumberConfig()', () => {
+  test('getDailyBlockNumberConfig()', () => {
     const output = {
-      1: '2367422',
-      56: '10497304',
-      128: '10511369',
-      3: '2367422',
-      97: '10497304',
-      256: '10511369',
-      137: '15063056',
-      80001: '15063056',
+      1: '6486',
+      56: '28759',
+      128: '28798',
+      3: '6486',
+      97: '28759',
+      256: '28798',
+      137: '41268',
+      80001: '41268',
     };
-    expect(getAnnualBlockNumberConfig()).toEqual(output);
+    expect(getDailyBlockNumberConfig()).toEqual(output);
   });
   test('getChainProviderUrls()', () => {
     const output = [

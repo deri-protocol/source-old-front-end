@@ -1,4 +1,4 @@
-// add a new chain: validateChainId, getChainProviderUrls, getNetworkName, getAnnualBlockNumberConfig
+// add a new chain: validateChainId, getChainProviderUrls, getNetworkName, getDailyBlockNumberConfig
 export const getChainIds = () => {
   return ['1', '3', '56', '97', '128', '256', '137', '80001'];
 };
@@ -80,16 +80,26 @@ export const getChainProviderUrls = (chainId) => {
   }
 }
 
-export const getAnnualBlockNumberConfig = () => {
+export const getDailyBlockNumberConfig = () => {
+  // let chainBlockNumberList = [
+  //   '2367422',
+  //   '2367422',
+  //   '10497304',
+  //   '10497304',
+  //   '10511369',
+  //   '10511369',
+  //   '15063056',
+  //   '15063056',
+  // ];
   let chainBlockNumberList = [
-    '2367422',
-    '2367422',
-    '10497304',
-    '10497304',
-    '10511369',
-    '10511369',
-    '15063056',
-    '15063056',
+    '6486',
+    '6486',
+    '28759',
+    '28759',
+    '28798',
+    '28798',
+    '41268',
+    '41268',
   ];
   return getChainIds().reduce((accum, i, index) => {
     accum[i] = chainBlockNumberList[index];

@@ -19,15 +19,15 @@ function Bind({wallet={},lang}){
       }
       let bindAddress = address.toLocaleLowerCase();
       if(bindAddress.length != 42 || bindAddress.indexOf('0x') != 0){
-        alert(lang['please-enter-the-correct-address']) 
+        alert(lang['please-enter-a-correct-address']) 
         return;
       }
       if(bindAddress === wallet.detail.account){
-        alert(lang['you-cant-act-as-a-broker']) 
+        alert(lang['brokder-addr-cannot-be-the-same-as-trader']) 
         return;
       }
       if(isBind){
-        alert(lang['you-cant-repeat-binding']) 
+        alert(lang['cannot-bind-twice']) 
         return;
       }
       let res = await setBroker(wallet.detail.chainId,wallet.detail.account,address)

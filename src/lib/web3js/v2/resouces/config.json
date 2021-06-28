@@ -44,7 +44,15 @@
         "decimal": "18"
       }
     ],
-    "broker": [
+    "brokerManager": [
+      {
+        "chainId": "56",
+        "address": "0xE9e9B83aE47b109bA21e16B1b5Ba382F83A81650"
+      },
+      {
+        "chainId": "137",
+        "address": "0x2d3Aa0E1aAECe2e3a8b90b042821f02e9D94a86f"
+      }
     ]
   },
   "dev": {
@@ -137,7 +145,7 @@
         "decimal": "8"
       }
     ],
-    "broker": [
+    "brokerManager": [
       {
         "chainId": "97",
         "address": "0xe4101EC5F4EF144e97DdE7542A605c8813a975Fc"
