@@ -38,6 +38,6 @@
   "cannot-bind-twice":"不能重复绑定",
   "please-enter-address":"请输入地址",
   "your-total-claimed-deri-title":"已领取DERI总量(包含经纪人挖矿+流动性挖矿)",
-  "your-total-unclaimed-deri-title":"未领取DERI总量=(包含经纪人挖矿+流动性挖矿)",
+  "your-total-unclaimed-deri-title":"未领取DERI总量(包含经纪人挖矿+流动性挖矿)",
   "brokers-address":"经纪人地址"
 }
