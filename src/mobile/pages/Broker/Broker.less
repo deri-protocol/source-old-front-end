@@ -90,6 +90,9 @@
     color: #D4E05C;
     font-size: 0.12rem;
     padding: 0 20px;
+    a{
+      color: #D4E05C;
+    }
   }
   .my-harvest{
     width: 100%;
@@ -105,43 +108,42 @@
       display: flex;
       align-items: center;
       padding-left: 20px;
+      padding-right: 20px;
       box-sizing: border-box;
       color: #d4e05c;
+      justify-content: space-between;
       font-family: Tachyon,sans-serif;
       font-size: 0.15rem;
+      
     }
     .list{
       .my-deri{
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
         .claim-deri{
-          width: 65%;
-          height: 120px;
-          margin-top: 10px;
-          display: flex;
-          justify-content: space-between;
-          .claimed-deri,.unclaimed-deri{
-            font-size: 0.18rem;
-            margin-top: 20px;
-            color: #AAAAAA;
-            .claimed-num,.unclaimed-num{
-              font-size: 0.21rem;
-              color: #fff;
-              min-width: 50px;
-              height: 27px;
-            }
-            .unclaimed-title{
-              margin-top: 30px;
-            }
-            .unclaimed-num{
-              margin-top: 24px;
+          width: 100%;
+          margin-top: 20px;
+          box-sizing: border-box;
+          padding: 0 10px;
+          .claimed-deri{
+            .claimed-title,.unclaimed-title{
+              display: flex;
+              justify-content: space-between;
+              margin-top: 10px;
+              color: #AAAAAA;
+              font-size: 0.15rem;
+              font-family: "Korolev";
+              font-weight: 500;
+              .deri-text{
+                color: #fff;
+              }
             }
           }
         }
         .button{
-          margin-top: 70px;
+          margin-top: 20px;
+          margin-bottom: 20px;
+          text-align: center;
           .btn{
+            min-width: 100px;
             height: 40px;
             background: #202124;
             border: 0;
@@ -180,6 +182,52 @@
         }
         .address{
           width: 32%;
+          position: relative;
+          .view:hover .view-space{
+            display: block;
+          }
+          .view:hover .right-arrow {
+            display: block;
+          }
+          .view {
+            position: absolute;
+            left: -115px;
+            top: 2px;
+            width: 2.3rem;
+            display: flex;
+            justify-content: flex-end;
+  
+            .view-space {
+              background-color: #000;
+              padding: 2px;             
+              font-size: 0.14rem;
+              white-space: nowrap;
+              border-radius: 4px;
+              display: none;
+              cursor: pointer;
+              a {
+                color : #fff;            
+              }
+            }
+  
+            .view-arrow {
+              img {
+                padding : 0 0 2px;
+                cursor: pointer;
+              }
+            }
+  
+            .right-arrow {            
+              height: 14px;
+              display: none;
+              img {
+                width: 14px;
+                vertical-align: middle;
+                left: -1px;
+                position: relative;
+              }
+            }
+          }
         }
         .volume{
           width: 25%;
@@ -215,13 +263,15 @@
 .de{
   .broker{
     .my-harvest{
+      .address-list .list-title{
+        padding: 0;
+      }
     .list{
         .my-deri{
           .claim-deri{
             .claimed-deri,.unclaimed-deri{
-              font-size: 0.15rem;
-              .claimed-num,.unclaimed-num{
-                font-size: 0.18rem;
+              .unclaimed-title{
+                font-size: 0.1rem !important;
               }
             }
           }

@@ -17,6 +17,7 @@ const version = new Version();
 if(process.env.NODE_ENV === 'production') {
   DeriEnv.set('prod')
 }
+DeriEnv.set('prod')
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>

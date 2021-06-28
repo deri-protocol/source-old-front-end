@@ -5,7 +5,7 @@ import {
   fetchRestApi,
   setBroker,
 } from "../../lib/web3js/indexV2";
-function Bind({wallet={},lang}){
+function BrokerBind({wallet={},lang}){
   const [address,setAddress] = useState()
   const [isBind,setIsBind] = useState(true)
   
@@ -83,4 +83,4 @@ function Bind({wallet={},lang}){
     </div>
   )
 }
-export default inject('wallet')(observer(Bind))
+export default inject('wallet')(observer(BrokerBind))

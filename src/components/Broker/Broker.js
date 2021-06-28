@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react'
+import rightArrow from '../../assets/img/play-button.png'
 import dateFormat from 'date-format'
+import config from '../../config.json'
 import {
   mintDToken,
   fetchRestApi,
+  DeriEnv
 } from "../../lib/web3js/indexV2";
+import classNames from 'classnames';
 import useClaimInfo from "../../hooks/useClaimInfo";
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import Button from '../Button/Button';
 import { eqInNumber } from '../../utils/utils';
 import useConfig from "../../hooks/useConfig";
+const chainConfig = config[DeriEnv.get()]['chainInfo'];
 function Broker({ wallet = {}, lang }) {
   const [claimInfo, claimInfoInterval] = useClaimInfo(wallet);
   const config = useConfig(claimInfo.chainId)
@@ -22,22 +27,36 @@ function Broker({ wallet = {}, lang }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totList, setTotList] = useState([])
   const [list, setList] = useState([]);
-
+  const [remainingTime, setRemainingTime] = useState('')
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const rewardList = async () => {
     let path = `/broker/${wallet.detail.account}/reward_list`
     let res = await fetchRestApi(path)
     if (res.data) {
-      res.data.map(item => {
-        item.trader_invite_timestamp = item.trader_invite_timestamp * 1000
-        item.trader_address = item.trader_address.slice(0, 6) +
+      let data = res.data.map(item => {
+        let obj = {}
+        obj.address = item.trader_address
+        obj.trader_volume = item.trader_volume
+        obj.deri_reward = item.deri_reward;
+        obj.trader_invite_timestamp = item.trader_invite_timestamp * 1000
+        obj.trader_address = item.trader_address.slice(0, 6) +
           "..." +
           item.trader_address.slice(item.trader_address.length - 4, item.trader_address.length)
+        return obj
       })
-      setTotList(res.data)
+      setTotList(data)
     }
-
   }
+
+  const brokerEpoch = async ()=>{
+    let path = `/broker/${wallet.detail.account}/get_harvest_deri`
+    let res = await fetchRestApi(path)
+    if(res.data){
+      setYourDeri(res.data.deri_reward)
+    }
+  }
+
+  
 
   const topList = async () => {
     let path = '/broker/top3_reward_list'
@@ -66,10 +85,8 @@ function Broker({ wallet = {}, lang }) {
     let res = await fetchRestApi(path)
     if (res.data) {
       if (res.data.hasOwnProperty('deri_reward')) {
-        setYourDeri(res.data.deri_reward)
         setYourRank(res.data.rank)
       } else {
-        setYourDeri(0)
         setYourRank('>999')
       }
     }
@@ -132,6 +149,33 @@ function Broker({ wallet = {}, lang }) {
       totalReward();
     }
   }, [wallet.detail])
+  useEffect(() => {
+    let intervalEpoch = null;
+    intervalEpoch = window.setInterval(brokerEpoch(),1000 * 60 *3);
+    return () => {
+      intervalEpoch && clearInterval(intervalEpoch);
+		}
+  },[wallet.detail.account])
+
+  useEffect(() => {
+		let interval = null;
+			//计数器
+			interval = window.setInterval(() => {
+				let period = 3600 * 8;
+				let current = parseInt(Date.now()/1000);
+				let epochBegin = parseInt(current / period)*period;
+				let dis = (epochBegin + period - current);
+				let h = parseInt(dis / 3600);
+				let m = parseInt((dis % 3600)/60)
+				let s = parseInt(dis % 60) 
+				setRemainingTime(`${h} ${lang['h']} ${m} ${lang['m']} ${s} ${lang['s']}`);
+			},1000);
+    return () => {
+      interval && clearInterval(interval);
+		};
+		
+  }, [wallet.detail.account]);
+
   return (
     <div className='broker'>
       <div className='title'>
@@ -206,7 +250,7 @@ function Broker({ wallet = {}, lang }) {
 
         </div>
         <div>
-          <a>{lang['detailed-rules']} >></a>
+          <a target='_blank' href='https://docs.deri.finance/guides/mining#mining-by-brokerage-mining-0-01deri-per-contract-or-distributed-per-volume-weight-if-breaching-the-hourly-upper-limit'>{lang['detailed-rules']} >></a>
         </div>
       </div>
       <div className='my-harvest'>
@@ -217,19 +261,38 @@ function Broker({ wallet = {}, lang }) {
           <div className='my-deri'>
             <div className='claim-deri'>
               <div className='claimed-deri'>
-                <div className='claimed-title'>
-                  {lang['claimed-deri']}
+                <div className='unclaimed-title'>
+                  <span  title={lang['your-total-unclaimed-deri-title']}>
+                    {lang['current-epoch-remaining-time']}
+                  </span>
+                  <span className='deri-text'>
+                  {remainingTime}
+                  </span>
                 </div>
                 <div className='unclaimed-title'>
-                  {lang['unclaimed-deri']}
+                  <span  title={lang['your-total-unclaimed-deri-title']}>
+                    {lang['my-trading-volume-in-current-hour']} 
+                  </span>
+                  <span className='deri-text'>
+                  <DeriNumberFormat value={(+yourDeri).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />  DERI
+                 
+                  </span>
                 </div>
-              </div>
-              <div className='unclaimed-deri'>
-                <div className='claimed-num'>
-                  <DeriNumberFormat value={(+yourDeri).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
+                <div className='claimed-title'>
+                  <span className='hover-title' title={lang['your-total-claimed-deri-title']}>
+                  {lang['claimed-deri']}
+                  </span>
+                  <span className='deri-text'>
+                    <DeriNumberFormat value={(+claimInfo.claimed).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
+                  </span>
                 </div>
-                <div className='unclaimed-num'>
+                <div className='unclaimed-title'>
+                  <span className='hover-title' title={lang['your-total-unclaimed-deri-title']}>
+                    {lang['unclaimed-deri']}
+                  </span>
+                  <span className='deri-text'>
                   <DeriNumberFormat value={(+claimInfo.unclaimed).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
+                  </span>
                 </div>
               </div>
             </div>
@@ -240,7 +303,9 @@ function Broker({ wallet = {}, lang }) {
           <div className='address-list'>
             <div className='list-title'>
               <div className='time-invited'>{lang['time-invited']}</div>
-              <div className='friends-add'>{lang['friends-add']}</div>
+              <div className='friends-add'>
+                {lang['friends-add']}
+              </div>
               <div className='contract-vol'>{lang['contract-vol']}</div>
               <div className='deri-minted'>{lang['deri-minted']}</div>
             </div>
@@ -248,7 +313,24 @@ function Broker({ wallet = {}, lang }) {
               <div className='time'>
                 {dateFormat.asString('yyyy-MM-dd hh:mm', new Date(parseInt(list.trader_invite_timestamp)))}
               </div>
-              <div className='address'>{list.trader_address}</div>
+              <div className='address'>
+              {list.trader_address}
+              <span className='view'>
+                  <span className='view-space'>
+                    <a target='_blank' rel='noreferrer' href=''>
+                    View at {chainConfig[wallet.detail.chainId]['viewUrl']}
+                    </a>
+                  </span>
+                  <span className='right-arrow'>
+                    <img alt='' src={rightArrow}/>
+                  </span>
+                  <span className='view-arrow'>
+                    <a target='_blank' rel='noreferrer' href={`${chainConfig[wallet.detail.chainId]['viewUrl']}address/${list.address}`}>
+                      <img rel='noreferrer' alt='' src="data:image/svg+xml;base64,DQo8c3ZnIGZpbGw9Im5vbmUiIGhlaWdodD0iMTAiIHdpZHRoPSIxMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNOC42NzYuNjQyYS42NS42NSAwIDAwLS4wNzIuMDA2SDQuNzkzYS42NS42NSAwIDAwLS41Ny45NzUuNjUuNjUgMCAwMC41Ny4zMjJINy4xMkwuNDM4IDguNjE0YS42NDcuNjQ3IDAgMDAuMjg2IDEuMDk2LjY1LjY1IDAgMDAuNjMyLS4xNzlMOC4wNCAyLjg2MXYyLjMyNGEuNjQ4LjY0OCAwIDAwLjk3Ny41Ny42NDguNjQ4IDAgMDAuMzIyLS41N1YxLjM4YS42NDcuNjQ3IDAgMDAtLjY2Mi0uNzM3eiIgZmlsbD0iI0FBQUFBQSIvPg0KPC9zdmc+DQoNCg=="/>
+                    </a>
+                  </span>
+                </span>
+              </div>
               <div className='volume'>{list.trader_volume}</div>
               <div className='deri'>
                 <DeriNumberFormat value={list.deri_reward} displayType='text' thousandSeparator={true} decimalScale='2' />
