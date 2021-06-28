@@ -27,7 +27,7 @@ function Header({intl}){
         </a>
         <div className='nav-right'>
           <LanguageSelector/>
-          <a href='https://app.deri.finacne'><div className='trade'>{header['trade']}</div></a> 
+          <a href='https://app.deri.finance/#lite'><div className='trade'>{header['trade']}</div></a> 
           <Version/>
         </div>
       </div> 
