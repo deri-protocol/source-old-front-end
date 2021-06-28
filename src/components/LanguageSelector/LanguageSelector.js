@@ -8,7 +8,6 @@ import languages from '../../locales/lang.json'
 import classNames from 'classnames'
 
 function LanguageSelector({intl}){
-  // const [hidden, setHidden] = useState(false)
   const [show, setShow] = useState(false)
   const query = useQuery();
   const onClick = (lang,refresh) => {

@@ -1,7 +1,7 @@
 
 import {getUserWalletBalance ,DeriEnv,connectWallet, isUnlocked, unlock } from "../lib/web3js/indexV2";
 import config from '../config.json'
-import { formatBalance, eqInNumber } from "../utils/utils";
+import { formatBalance, eqInNumber, storeChain } from "../utils/utils";
 import { observable, computed, action, makeAutoObservable } from "mobx";
 
 
@@ -44,7 +44,7 @@ class Wallet {
     return new Promise(async (resolve,reject) => {
       if(res.success){
         const {chainId,account} = res
-        const wallet = await this.loadWalletBalance(chainId,account);        
+        const wallet = await this.loadWalletBalance(chainId,account);      
         resolve(wallet)
       } else {
         reject(null)
@@ -60,6 +60,7 @@ class Wallet {
     
     if(chainInfo[chainId]){
       Object.assign(detail,{...chainInfo[chainId],supported : true})
+      storeChain(chainInfo[chainId])
     }
     this.setDetail(detail)
     return detail;
@@ -71,6 +72,10 @@ class Wallet {
 
   setDetail(detail){
     this.detail = detail;
+  }
+
+  refresh(){
+    this.loadWalletBalance(this.detail.chainId,this.detail.account);
   }
 
   get supportV2() {

@@ -6,16 +6,19 @@ import { inject, observer } from 'mobx-react';
 
 
 function Pool({version,lang}){
-  const [loaded,pools] = useMiningPool(version);
+  const [loaded,pools,v1Pools,v2Pools] = useMiningPool(version);
   return (
     <div className="mining-info">
       <div className="pools">
-        {pools.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
+        {v2Pools.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
         {!loaded && <div className="loading">
           <span
             className="spinner spinner-border spinner-border-sm">
             </span>
           </div>}  
+      </div>
+      <div className='pools'>
+        {v1Pools.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
       </div>
     </div>
   )

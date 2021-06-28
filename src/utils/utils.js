@@ -63,11 +63,23 @@ export function getConfigFromStore(version){
   return JSON.parse(sessionStorage.getItem(sessionStorageKey(version)))
 }
 
+export function storeChain(chainInfo){
+  sessionStorage.setItem('current-chain',JSON.stringify(chainInfo))
+}
+export function restoreChain(){
+  return JSON.parse(sessionStorage.getItem('current-chain'));
+}
+
 export function storeLocale(locale){
   sessionStorage.setItem('current-locale',locale)
 }
 
 export function restoreLocale(){
   return sessionStorage.getItem('current-locale')
+}
+
+export function getFormatSymbol(symbol){
+  const curChain = restoreChain();
+  return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 

@@ -67,8 +67,9 @@ function TradingViewChart({symbol,lang,intl}){
   const  changeTime= (time,period) => {
     setActived(period)
     setCurrentInterval(time)
-    deriWidget.chart().refreshMarks()
-    deriWidget.activeChart().setResolution(time)        
+    deriWidget.activeChart().setResolution(time,() => {
+      deriWidget.chart().refreshMarks()
+    })        
   }
 
   useEffect(() => {

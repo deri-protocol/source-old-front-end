@@ -4,7 +4,7 @@ import Position from "./Position";
 import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
-import { eqInNumber, storeConfig, getConfigFromStore } from "../utils/utils";
+import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol } from "../utils/utils";
 import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
@@ -149,7 +149,7 @@ export default class Trading {
 
      //切换指数
     if(symbolChanged && config){
-      const symbol = this.version.isV2 ? `${config.symbol}_V2` : config.symbol
+      const symbol = getFormatSymbol(config.symbol)
       this.oracle.unsubscribeBars(symbol);
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)

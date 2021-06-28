@@ -243,12 +243,12 @@ function Bridge({ wallet = {},lang }) {
                 <img src={From_img} className='net_logo' />
                 <div className={isFromConnected ? 'is_connected connected' : 'is_connected'}>{isFromConnected ? lang['connected'] : lang['unconnected']}</div>
                 <div className='wallet_ul'>
-                  <div className='wallet_ul_button'>
+                  <div className='wallet_ul_button' onClick={showListFrom} >
                     <div className='wallet_ul_button_text'>
                       {initialize.from_network}
                     </div>
                     <div className='drop-down-outer'>
-                      <img className={sending?'':'img_show'} src={drop} onClick={showListFrom} />
+                      <img className={sending?'':'img_show'} src={drop}  />
                     </div>
                     <ul className='wallet_lis_from' className={selectListClassFrom}>
                       <div className='ul_shadow'></div>
@@ -279,12 +279,12 @@ function Bridge({ wallet = {},lang }) {
                 <img src={To_img} className='net_logo' />
                 <div className={isToConnected ? 'is_connected connected' : 'is_connected'}>{isToConnected ? lang['connected'] : lang['unconnected']}</div>
                 <div className='wallet_ul'>
-                  <div className='wallet_ul_button'>
+                  <div className='wallet_ul_button'  onClick={showListTo}>
                     <div className='wallet_ul_button_text'>
                       {initialize.to_network}
                     </div>
                     <div className='drop-down-outer'>
-                      <img className={sending?'':'img_show'} src={drop} onClick={showListTo} />
+                      <img className={sending?'':'img_show'} src={drop} />
                     </div>
                     <ul className='wallet_lis_to' className={selectListClassTo}>
                       <div className='ul_shadow'></div>

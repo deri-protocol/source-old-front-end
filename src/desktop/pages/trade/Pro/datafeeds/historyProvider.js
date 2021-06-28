@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable camelcase */
 import {io} from 'socket.io-client'
-import { restoreVersion } from '../../../../../utils/utils'
+import { restoreVersion, restoreChain, getFormatSymbol } from '../../../../../utils/utils'
 // function s(){
 //   data = [];
 // }
@@ -18,7 +18,7 @@ const history = {}
 let onRealtimeCallback = null;
 
 // const socket = io('wss://oracle2.deri.finance', {
-const socket = io('wss://oracle4.deri.finance', {
+const socket = io(process.env.REACT_APP_WSS_URL, {
     transports: ['websocket'],
     withCredentials: true
 })
@@ -31,11 +31,15 @@ var ws_onResetCacheNeededCallback
 var ws_to
 window.sub_index = 0
 var _subs = []
+
+function getSymbol(symbolInfo){
+  return getFormatSymbol(symbolInfo.name)
+}
 export default {
   history,
 
   getBars: function (symbolInfo, resolution, from, to, first, onHistoryCallback) {
-    let trade = restoreVersion() === 'v2' ? `${symbolInfo.name}_V2` : symbolInfo.name
+    let trade = getSymbol(symbolInfo);
     let ws_time
     ws_first = first
     ws_to = to
@@ -73,7 +77,7 @@ export default {
     socket.emit('get_kline', param)
   },
   subscribeBars: function (symbolInfo, resolution, updateCb, uid, resetCache) {
-    let trade = symbolInfo.name
+    let trade = getSymbol(symbolInfo);
     let ws_time
     switch (true) {
       case resolution == '1':
