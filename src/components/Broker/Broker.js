@@ -26,8 +26,10 @@ function Broker({ wallet = {}, lang }) {
   const [sumPage, setSumPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [totList, setTotList] = useState([])
+  const [claimed, setClaimed] = useState(false);
   const [list, setList] = useState([]);
   const [remainingTime, setRemainingTime] = useState('')
+
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const rewardList = async () => {
     let path = `/broker/${wallet.detail.account}/reward_list`
@@ -116,6 +118,15 @@ function Broker({ wallet = {}, lang }) {
     }
   }
 
+  const click = async () => {
+		if(wallet.isConnected()){
+			const res = await mintDeri();
+			if(res){
+				setClaimed(true)
+			}
+		} 
+	}
+  
   const upPage = () => {
     let page = currentPage
     if (page != 1) {
@@ -274,8 +285,7 @@ function Broker({ wallet = {}, lang }) {
                     {lang['my-trading-volume-in-current-hour']} 
                   </span>
                   <span className='deri-text'>
-                  <DeriNumberFormat value={(+yourDeri).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />  DERI
-                 
+                    <DeriNumberFormat value={(+yourDeri).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />  DERI
                   </span>
                 </div>
                 <div className='claimed-title'>
@@ -283,7 +293,7 @@ function Broker({ wallet = {}, lang }) {
                   {lang['claimed-deri']}
                   </span>
                   <span className='deri-text'>
-                    <DeriNumberFormat value={(+claimInfo.claimed).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
+                    {claimed ? ((+claimInfo.claimed) + (+claimInfo.unclaimed)).toFixed(2) : claimInfo.claimed }
                   </span>
                 </div>
                 <div className='unclaimed-title'>
@@ -291,13 +301,13 @@ function Broker({ wallet = {}, lang }) {
                     {lang['unclaimed-deri']}
                   </span>
                   <span className='deri-text'>
-                  <DeriNumberFormat value={(+claimInfo.unclaimed).toFixed(2)} displayType='text' thousandSeparator={true} decimalScale='2' />
+                  { claimed ? 0 : (+claimInfo.unclaimed).toFixed(2) }
                   </span>
                 </div>
               </div>
             </div>
             <div className='button'>
-              <Button className='btn' btnText={lang['claim']} lang={lang} click={mintDeri}></Button>
+              <Button className='btn' btnText={lang['claim']} lang={lang} click={click}></Button>
             </div>
           </div>
           <div className='address-list'>
