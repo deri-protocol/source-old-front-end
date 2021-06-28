@@ -23,13 +23,13 @@ function Menu({lang,locale}) {
           <li>
             {isProduction 
             ? 
-            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
+            <a  rel='noreferrer' href={`https://${window.location.host}/#mining?locale=${locale}`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
             :
             <Link className='mining-item' to ='/mining'>{lang.mining}</Link>}            
           </li>
           <li>
             {isProduction
-            ? <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
+            ? <a  rel='noreferrer' href={`https://${window.location.host}/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
             : <Link className='mining-item' to ='/lite'>{lang.trade}</Link>         
             }      
           </li>       
