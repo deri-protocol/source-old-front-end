@@ -28,7 +28,7 @@
   "claim":"BEANSPRUCHEN",
   "pending":"AUSSTEHEND",
   "address":"Adresse",
-  "bind-faild":"Bind faild",
+  "bind-faild":"Binden fehlgeschlagen",
   "h" : "h",
   "m" : "m",
   "s" : "s",
@@ -37,7 +37,7 @@
   "brokder-addr-cannot-be-the-same-as-trader":"Die Adresse des Brokers kann nicht mit der des Traders übereinstimmen",
   "please-enter-address":"Bitte Adresse eingeben",
   "cannot-bind-twice":"Keine doppelte Bindung möglich",
-  "your-total-claimed-deri-title":"Your total claimed DERI = brokerage mining + liquidity mining, if any",
-  "your-total-unclaimed-deri-title":"Your total unclaimed DERI = brokerage mining + liquidity mining, if any",
+  "your-total-claimed-deri-title":"Ihre insgesamt beanspruchten DERI = Brokerage Mining + Liquiditäts-Mining, falls vorhanden",
+  "your-total-unclaimed-deri-title":"Ihre insgesamt nicht beanspruchten DERI = Brokerage Mining + Liquiditäts-Mining, falls vorhanden",
   "brokers-address":"BROKER'S ADRESSE "
 }
