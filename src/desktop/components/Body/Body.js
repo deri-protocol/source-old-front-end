@@ -14,7 +14,7 @@ const Home = LoadableComponent(() => import('../../pages/Home/Home'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
-const BrokerBind = LoadableComponent(() => import('../../pages/Broker/Broker-bind'))
+const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
 
