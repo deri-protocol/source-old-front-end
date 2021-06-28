@@ -40,8 +40,8 @@ export default function useMiningPool(version){
 
     const all = []
     configs = configs.reduce((total,config) => {
-      const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol)
-      if(pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
+      const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
+      if(config.version === 'v2' && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
         total.push(config)
