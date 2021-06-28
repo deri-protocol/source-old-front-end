@@ -37,7 +37,7 @@
   "brokder-addr-cannot-be-the-same-as-trader":"不能与交易地址为同一地址",
   "cannot-bind-twice":"不能重复绑定",
   "please-enter-address":"请输入地址",
-  "your-total-claimed-deri-title":"Your total claimed DERI = brokerage mining + liquidity mining, if any",
-  "your-total-unclaimed-deri-title":"Your total unclaimed DERI = brokerage mining + liquidity mining, if any",
+  "your-total-claimed-deri-title":"已领取DERI总量(包含经纪人挖矿+流动性挖矿)",
+  "your-total-unclaimed-deri-title":"未领取DERI总量=(包含经纪人挖矿+流动性挖矿)",
   "brokers-address":"经纪人地址"
 }

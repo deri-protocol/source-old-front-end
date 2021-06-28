@@ -42,7 +42,6 @@ function Broker({ wallet = {}, lang }) {
         obj.trader_address = item.trader_address.slice(0, 6) +
           "..." +
           item.trader_address.slice(item.trader_address.length - 4, item.trader_address.length)
-        obj.trader_invite_timestamp = item.trader_invite_timestamp
         return obj
       })
       setTotList(data)
@@ -251,7 +250,7 @@ function Broker({ wallet = {}, lang }) {
 
         </div>
         <div>
-          <a>{lang['detailed-rules']} >></a>
+          <a target='_blank' href='https://docs.deri.finance/guides/mining#mining-by-brokerage-mining-0-01deri-per-contract-or-distributed-per-volume-weight-if-breaching-the-hourly-upper-limit'>{lang['detailed-rules']} >></a>
         </div>
       </div>
       <div className='my-harvest'>
