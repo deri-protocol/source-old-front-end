@@ -27,10 +27,10 @@ export default function Menu({closeMenu,lang,locale}){
       <div className="ul">
         <ul>
           <li className={isMining ? 'selected' :'' }>
-            <a  rel='noreferrer' href={`https://${window.location.host}/#mining?locale=${locale}`}>{lang['mining']}</a>
+            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`}>{lang['mining']}</a>
           </li>
           <li className={isTrade ? 'selected' : ''}>
-          <a  rel='noreferrer' href={`https://${window.location.host}/#lite?locale=${locale}`}> {lang['trade']} </a>
+          <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`}> {lang['trade']} </a>
           </li>
           <li>
             <a  rel='noreferrer' href={`https://governance.deri.finance/#governance?locale=${locale}`}>{lang['governance']}</a>
