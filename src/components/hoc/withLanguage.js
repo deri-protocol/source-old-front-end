@@ -12,7 +12,6 @@ const withLanguage =  Component => {
     }
   
     onRouteChanged(location) {
-      console.log(location)
     }
     
     render(){
