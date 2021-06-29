@@ -7,5 +7,5 @@
   "my-position" : "仓位",
 
   "index" : "指数价格",
-  "funding" : "资金费率年化"
+  "funding" : "日资金费率"
 }
