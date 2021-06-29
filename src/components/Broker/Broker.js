@@ -327,7 +327,7 @@ function Broker({ wallet = {}, lang }) {
               {list.trader_address}
               <span className='view'>
                   <span className='view-space'>
-                    <a target='_blank' rel='noreferrer' href=''>
+                    <a target='_blank' rel='noreferrer' href={`${chainConfig[wallet.detail.chainId]['viewUrl']}address/${list.address}`}>
                     View at {chainConfig[wallet.detail.chainId]['viewUrl']}
                     </a>
                   </span>
