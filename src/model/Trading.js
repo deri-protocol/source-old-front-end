@@ -215,19 +215,26 @@ export default class Trading {
     return getConfigFromStore(this.version.current)
   }
 
-  async refresh(){
-    this.pause()
-    const position = await this.positionInfo.load(this.wallet,this.config);
-    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+  async syncFundingRate(){
+    //资金费率和仓位同步
     const fundingRate = await this.loadFundingRate(this.wallet,this.config)   
-    const history = await this.historyInfo.load(this.wallet,this.config)
-
     if(fundingRate){
       this.setFundingRate(fundingRate)      
     }
+  }
+
+  async refresh(){
+    this.pause()
+    const position = await this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+      this.setPosition(position);
+      this.syncFundingRate();
+    });
     if(position){
       this.setPosition(position)
     }
+    this.syncFundingRate();
+    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+    const history = await this.historyInfo.load(this.wallet,this.config)
     if(history){
       this.setHistory(history)
     }

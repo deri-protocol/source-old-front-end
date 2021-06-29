@@ -7,6 +7,7 @@ import {
   PToken,
   WooOracle,
   ChainlinkOracle,
+  WrappedOracle,
   BrokerManager,
 } from './contract';
 import { getChainProviderUrl } from './utils/chain';
@@ -120,7 +121,7 @@ export const oracleFactory = (function () {
     if (Object.keys(instanceMap).includes(key)) {
       return instanceMap[key];
     } else {
-      if (['80001', '137'].includes(chainId)) {
+      if (['80001'].includes(chainId)) {
         instanceMap[key] = new ChainlinkOracle(
           chainId,
           address,
@@ -128,6 +129,8 @@ export const oracleFactory = (function () {
           decimal,
           useInfura
         );
+      } else if (['137'].includes(chainId)) {
+        instanceMap[key] = new WrappedOracle(chainId, address, symbol, decimal, useInfura);
       } else {
         instanceMap[key] = new WooOracle(chainId, address, symbol, decimal, useInfura);
       }

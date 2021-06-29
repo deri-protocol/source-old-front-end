@@ -78,11 +78,11 @@ export const getLatestRPCServer = async (urls = []) => {
   }
   let blockNumbers = await Promise.all(promises)
   blockNumbers = blockNumbers.sort((a, b) => a.duration - b.duration)
-  //console.log('blockNumbers',  blockNumbers)
+  // console.log('blockNumbers',  blockNumbers)
   const latestBlockNumber = blockNumbers.reduce((a, b) => b.blockNumber !== -1 ? a > b.blockNumber ? a : b.blockNumber : a, 0)
   const index = blockNumbers.findIndex((b) => b.blockNumber === latestBlockNumber);
   const res = blockNumbers[index].url
-  //console.log(res)
+  // console.log(res)
   if (res.startsWith('http')) {
     return res
   } else {
