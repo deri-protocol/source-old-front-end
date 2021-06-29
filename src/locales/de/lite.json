@@ -9,7 +9,7 @@
   "current-position" : "Aktuelle Position",
   "contract-volume" : "Kontraktmenge",
   "index-price" : "Indexpreis",
-  "funding-rate-annual" : "Förderquote Jährlich",
+  "funding-rate-annual" : "Finanzierungsrate Täglich",
   "balance-in-contract" : "Saldo im Kontrakt",
   "dynamic-balance" : "Dynamischer Saldo",
   "margin" : "Margin",
