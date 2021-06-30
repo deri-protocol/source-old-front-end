@@ -4,6 +4,7 @@ echo REACT_APP_REST_SERVER_URL=https://alphaapi.deri.finance >> .env.production
 
 yarn build --nomaps 
 repo=/tmp/build/alphatest
+rm -rf $repo
 
 if [ ! -d $repo ]; then
   printf '\e[1;34m%-6s\e[m\n' "alphatest app repo is not exit ,clone it from git@github.com:deri-finance/alphatest.git" 

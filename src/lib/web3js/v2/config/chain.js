@@ -113,5 +113,5 @@ export const getDailyBlockNumberConfig = () => {
 export const MAX_UINT256 =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
 export const MAX_INT256 =
-  '0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+  '0x9392ee8e921d5d073aff322e62439fcf32d7f344649470f90';
 

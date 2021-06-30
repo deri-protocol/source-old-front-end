@@ -6,6 +6,7 @@ if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
   yarn build --nomaps
 fi
+rm -rf $repo
 
 if [ ! -d $repo ]; then
   echo 'index repo is not exit ,clone it from git@github.com:deri-finance/deri-finance.github.io.git'

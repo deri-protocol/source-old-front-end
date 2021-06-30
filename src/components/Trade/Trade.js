@@ -505,7 +505,9 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   </>)
 
   if(hasConnectWallet()){
-    if(!isApprove) {
+    if(!trading.supportChain){
+      actionElement = <button className='approve wrong-network'>{lang['wrong-network']}</button>
+    }else if(!isApprove) {
       actionElement = <Button className='approve' btnText={lang['approve']} click={approve} lang={lang}/>
     } else if(!available || (+available) <= 0) {
       actionElement = (<>
