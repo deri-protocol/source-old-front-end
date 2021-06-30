@@ -33,8 +33,8 @@ describe('config', () => {
       3: '6486',
       97: '28759',
       256: '28798',
-      137: '41268',
-      80001: '41268',
+      137: '40405',
+      80001: '40405',
     };
     expect(getDailyBlockNumberConfig()).toEqual(output);
   });

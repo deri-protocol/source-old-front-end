@@ -338,8 +338,8 @@ export const getDailyBlockNumberConfig = () => {
     '28759',
     '28798',
     '28798',
-    '41268',
-    '41268',
+    '40405',
+    '40405',
   ];
   return getChainIds().reduce((accum, i, index) => {
     accum[i] = chainBlockNumberList[index];

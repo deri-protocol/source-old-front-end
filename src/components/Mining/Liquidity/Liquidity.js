@@ -33,11 +33,11 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				// }
 			}
 			if(info){
-				const shares = bg(info.shares)
+				const shares = info.shares ? bg(info.shares) : bg(0)
 				if(version === 'v1') {
-					const total = shares.multipliedBy(info.shareValue)
+					const total = shares.isNaN() ? shares.multipliedBy(info.shareValue) : bg(0)
 					setLiquidity({
-						total :  (+info.poolLiquidity),
+						total :  info.poolLiquidity,
 						apy : ((+apyPool.apy) * 100).toFixed(2),
 						shareValue : info.shareValue,
 						percent : info.poolLiquidity > 0 ? total.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
@@ -51,7 +51,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					})
 				} else {
 					setLiquidity({
-						total : (+info.poolLiquidity),
+						total : info.poolLiquidity,
 						apy : ((+apyPool.apy) * 100).toFixed(2),
 						pnl : (+info.pnl).toFixed(2),
 						shares : shares.toString(),
@@ -259,7 +259,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
-											address={address} wallet={wallet} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
+											address={address} wallet={wallet} version={version} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>
