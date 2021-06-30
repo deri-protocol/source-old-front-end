@@ -18,7 +18,7 @@ function Version({wallet,version}){
   useEffect(() => {
     if(wallet.detail.chainId){
       if(!wallet.supportV2){
-        version.setCurrent('v1',true)
+        version.setCurrent('v1')
       } else {
         if(!version.current){
           if(wallet.supportV2) {

@@ -6,7 +6,7 @@
   "transaction-fee" : "Fee",
   "my-position" : "POSITION",
   "index" : "Index",
-  "funding" : "Funding",
+  "funding" : "Funding(D)",
   "base-token" : "B Token",
   "wallet-balance" : "Wal. Bal"
 }
