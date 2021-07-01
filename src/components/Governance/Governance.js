@@ -17,11 +17,24 @@ function Governance({ wallet = {}, lang }) {
     nine: '0',
     ten: '0',
   })
+
+  const onFocus = event => {
+    const target =event.target;
+    target.setAttribute('class','deri-num inputFamliy')
+  }
+ 
+  const onBlur = event => {
+    const target = event.target;
+    if(target.value === '') {
+      target.setAttribute('class','deri-num')
+    }
+  }
+
   useEffect(() => {
     setChainId(wallet.detail.chainId)
   }, [wallet.detail])
-  useEffect(()=>{
-    if(chainId == '56'){
+  useEffect(() => {
+    if (chainId == '56') {
       setClass('bsc')
       setObj({
         one: '23',
@@ -35,7 +48,7 @@ function Governance({ wallet = {}, lang }) {
         nine: '0',
         ten: '0',
       })
-    }else if(chainId == '1'){
+    } else if (chainId == '1') {
       setClass('eth')
       setObj({
         one: '0',
@@ -49,7 +62,7 @@ function Governance({ wallet = {}, lang }) {
         nine: '0',
         ten: '0',
       })
-    }else if(chainId == '128'){
+    } else if (chainId == '128') {
       setClass('heco')
       setObj({
         one: '1',
@@ -64,7 +77,7 @@ function Governance({ wallet = {}, lang }) {
         ten: '0',
       })
     }
-  },[chainId,wallet.detail])
+  }, [chainId, wallet.detail])
   return (
     <div className='governance_box'>
       <div className='H2 DIP1'>
@@ -77,7 +90,7 @@ function Governance({ wallet = {}, lang }) {
         {lang['opction-title']}
       </div>
       <div className='radio'>
-        <div>
+        <div className='left'>
           <div className='fle'>
             <div className='rad'>
               <input type="radio" name='option' value='0' id='I' /> <label for="I">I: $AKITA</label>
@@ -128,6 +141,8 @@ function Governance({ wallet = {}, lang }) {
               </div>
             </div>
           </div>
+        </div>
+        <div className='right'>
           <div className='fle'>
             <div className='rad'>
               <input type="radio" name="network" value="5" id='VI' /> <label for="VI">VI: $HOGE</label>
@@ -180,50 +195,52 @@ function Governance({ wallet = {}, lang }) {
           </div>
         </div>
       </div>
-      <div className='width'>
+      {/* <div className='width'>
         {lang['wallet-balance']}: -- DERI
+      </div> */}
+      <div className='width input_c'>
+        <div className='contrant'>
+          <input 
+          type="number" 
+          className="deri-num" 
+          placeholder={lang['amount']} 
+          onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+          onFocus={onFocus}
+          onBlur={onBlur}
+           />
+          <span className="input_message">{lang['wallet-balance']}(DERI)</span>
+        </div>
       </div>
       <div className='width'>
-        <input type="number" className="deri-num" placeholder={lang['amount']} onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')" /> 
-        <span className="basetoken">DERI</span> 
-      </div>
-      <div className='width'>
-        <button  className="vote" disabled>
+        <button className="vote" disabled>
           {lang['vote']}
         </button>
       </div>
-      <div className='width'>
-        <span className="H2">{lang['vote-rules']}:</span>
-        <br/>
+      <div className='width rules'>
+        <span className="H2 rules-title">{lang['vote-rules']}:</span>
+        <br />
         <br/>
         1.{lang['vote-rules-one']}
-        <br/>
-        <br/>
+        <br />
         2.{lang['vote-rules-two']}
-        <br/>
-        <br/>
+        <br />
         3.{lang['vote-rules-three']}
-        <br/>
-        <br/>
+        <br />
         4.{lang['vote-rules-four']}
-        <br/>
-        <br/>
+        <br />
         {lang['all-the-deri-co-wi-be-re-to-be-min-again']}
       </div>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
+      <br />
+      <br />
+      <br />
+      <br />
       <div className='dip-list'>
         <div className='list-title'>
           <div>
-            <span className="title">{lang['dip-list']}</span><br />
-            <span>{lang['dip-list-title']}</span>
+            <div className="title H2">{lang['dip-list']}</div>
+            <div>{lang['dip-list-title']}</div>
+            <div className='history'> <Link to='/diphistory'>{lang['dip-list-dip1']} {lang['detail']}</Link></div>
           </div>
-        </div>
-        <div className='list-text'>
-          <span>{lang['dip-list-dip1']}</span>
-          <Link to='/diphistory'><button>{lang['detail']}</button></Link>
         </div>
       </div>
     </div>
