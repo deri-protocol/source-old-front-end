@@ -5,4 +5,5 @@ export * from './l_token';
 export * from './p_token';
 export * from './woo_oracle';
 export * from './chainlink_oracle';
+export * from './wrapped_oracle';
 export * from './broker_manager';

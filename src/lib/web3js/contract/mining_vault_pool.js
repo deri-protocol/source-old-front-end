@@ -7,16 +7,14 @@ const CONTRACT_ABI={"_format":"hh-sol-artifact-1","contractName":"Vault","source
 
 export class MiningVaultPool extends Contract {
   constructor(chainId, contractAddress, isProvider) {
-    super(chainId, contractAddress, isProvider);
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI['abi'],
-      this.contractAddress
-    );
+    super(chainId, contractAddress, CONTRACT_ABI['abi'], isProvider);
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI['abi'],
+    //   this.contractAddress
+    // );
   }
   async mintDToken(accountAddress, ...args) {
-    //return this._transact('claim', args)
-    // !this.accountAddress &&
-    //   console.log('please do setAccount(accountAddress) first');
+    await this._init()
     const gas = await this._estimatedGas(
       'claim',
       [accountAddress, ...args],

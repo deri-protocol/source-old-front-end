@@ -4,10 +4,11 @@ import LiquidityMining from "../../../components/Mining/Liquidity/LiquidityMinin
 import TradeMining from "../../../components/Mining/Trade/TradeMining";
 import {DeriEnv} from '../../../lib/web3js/indexV2'
 import config from '../../../config.json'
-import './mining.less'
 import classnames from "classnames";
 import { inject, observer } from 'mobx-react';
 import useQuery from '../../../hooks/useQuery'
+import './mining.less'
+import './de-mining.less'
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]

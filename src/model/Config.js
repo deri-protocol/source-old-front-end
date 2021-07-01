@@ -19,9 +19,8 @@ export default class Config {
       //v2 不需要展示base token,需要合并相同的base token
       if(version.isV2){
         configs = configs.reduce((total,cur) => {
-          const pos = total.findIndex(c => c.symbol === cur.symbol);
-          const poolPos = total.findIndex(c => c.pool === cur.pool)
-          if(pos === -1 || poolPos === -1){
+          const pos = total.findIndex(c => c.symbol === cur.symbol && c.pool === cur.pool);
+          if(pos === -1 ){
             total.push(cur)
           }
           return total;

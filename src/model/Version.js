@@ -11,8 +11,8 @@ export default class Version {
       isV1 : computed,
       isV2 : computed
     })
-    const versionFromSession = restoreVersion();
-    this.current = versionFromSession ? versionFromSession : null
+    // const versionFromSession = restoreVersion();
+    // this.current = versionFromSession ? this.setCurrent(versionFromSession) : null
   }
 
 

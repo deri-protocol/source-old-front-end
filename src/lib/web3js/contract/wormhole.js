@@ -7,11 +7,11 @@ const CONTRACT_ABI=[{"inputs":[{"internalType":"address","name":"tokenAddress_",
 
 export class WormholeContract extends Contract {
   constructor(chainId, contractAddress, useProvider) {
-    super(chainId, contractAddress, useProvider);
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI,
-      this.contractAddress
-    );
+    super(chainId, contractAddress, CONTRACT_ABI, useProvider);
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI,
+    //   this.contractAddress
+    // );
   }
   async freeze(accountAddress, amount, toChainId) {
     const { wormholeAddress: toWormholeAddress } = getDeriContractAddress(

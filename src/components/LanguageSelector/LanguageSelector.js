@@ -10,7 +10,7 @@ import classNames from 'classnames'
 function LanguageSelector({intl}){
   const [show, setShow] = useState(false)
   const query = useQuery();
-  const onClick = (lang,refresh) => {
+  const onClick = (event,lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
     if(refresh){
@@ -18,10 +18,11 @@ function LanguageSelector({intl}){
     }
   }
 
-  const onMouseOver = () => {
+  const onMouseOver = (event) => {
+    event.stopPropagation()
     setShow(true);
   } 
-  const onMouseOut = () => {
+  const onMouseOut = (event) => {
     setShow(false)
   }
   const langBoxClass = classNames('lang-box',{show : show})
@@ -35,10 +36,11 @@ function LanguageSelector({intl}){
   }, [intl])
   return (
     <div className='lang-picker' onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      <img src={languageIcon} alt='language selector'/>
+      <img src={languageIcon} alt='language selector'/>   
+      {/* <span className='locale'>{intl.locale}</span> */}
       <img src={arrowIcon} alt='selector' />
       <div className={langBoxClass} >
-        {Object.keys(languages).map((lang,index) => <div key={index} className={lang === intl.locale ? 'lang-item selected' : 'lang-item'} onClick={() => onClick(lang,true)}>{languages[lang]}</div>)}
+        {Object.keys(languages).map((lang,index) => <div key={index} className={lang === intl.locale ? 'lang-item selected' : 'lang-item'} onClick={(e) => onClick(e,lang,true)}>{languages[lang]}</div>)}
       </div>
     </div>
   )

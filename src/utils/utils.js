@@ -67,7 +67,7 @@ export function storeChain(chainInfo){
   sessionStorage.setItem('current-chain',JSON.stringify(chainInfo))
 }
 export function restoreChain(){
-  return JSON.parse(sessionStorage.getItem('current-chain'));
+  return JSON.parse(sessionStorage.getItem('current-chain')) || {code : ''};
 }
 
 export function storeLocale(locale){
@@ -80,7 +80,7 @@ export function restoreLocale(){
 
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  // return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
-  return restoreVersion() === 'v2' ? `${symbol}_V2` : symbol
+  return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  // return restoreVersion() === 'v2' ? `${symbol}_V2` : symbol
 }
 

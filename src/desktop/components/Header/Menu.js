@@ -10,7 +10,7 @@ function Menu({lang,locale}) {
   const isMining = useRouteMatch('/mining')
   const isApp = isLite || isPro || isMining  
   const isProduction = process.env.NODE_ENV === 'production'
-
+  const host = /^(app|alphatest|testnet)/.test(window.location.host) ?  window.location.host : 'app.deri.finance'
   return (
     <div className="nav-menu">
       <div className="logo">
@@ -23,13 +23,13 @@ function Menu({lang,locale}) {
           <li>
             {isProduction 
             ? 
-            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
+            <a  rel='noreferrer' href={`https://${host}/#mining?locale=${locale}`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
             :
             <Link className='mining-item' to ='/mining'>{lang.mining}</Link>}            
           </li>
           <li>
             {isProduction
-            ? <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
+            ? <a  rel='noreferrer' href={`https://${host}/#lite?locale=${locale}`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
             : <Link className='mining-item' to ='/lite'>{lang.trade}</Link>         
             }      
           </li>       
@@ -67,7 +67,7 @@ function Menu({lang,locale}) {
             <ul className="ref-box">
               <li>
                 {isProduction ? 
-                <a href='https://app.deri.finance/#/broker'>{lang.broker}</a>
+                <a href={`https://${host}/#/broker`}>{lang.broker}</a>
                 :
                 <Link to='/broker'>{lang.broker}</Link>
                 }                
@@ -75,7 +75,7 @@ function Menu({lang,locale}) {
               <li>
                 {isProduction
                 ?
-                <a href='https://app.deri.finance/#/brokerbind'>{lang['broker-bind']}</a>
+                <a href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
                 :
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
                 }                

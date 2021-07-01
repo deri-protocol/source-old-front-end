@@ -52,6 +52,7 @@ export default class Trading {
   fundingRate = {}
   history = []
   userSelectedDirection = 'long'
+  supportChain = true
 
   constructor(){
     makeObservable(this,{
@@ -63,6 +64,7 @@ export default class Trading {
       history : observable,
       contract : observable,
       userSelectedDirection : observable,
+      supportChain : observable,
       setWallet :action,
       setConfigs : action,
       setConfig : action,
@@ -71,6 +73,7 @@ export default class Trading {
       setPosition : action,
       setVolume : action,
       setUserSelectedDirection : action,
+      setSupportChain : action,
       setFundingRate : action,
       setHistory : action,
       setSlideMargin : action,
@@ -103,6 +106,8 @@ export default class Trading {
       let defaultConfig = this.getDefaultConfig(this.configs,wallet);
       //如果还是为空，则默认用所有config的第一条
       if(!defaultConfig){
+        //没有默认的配置，
+        this.setSupportChain(false);
         defaultConfig = all.length > 0 ? all[0] : {}
       }
       this.setConfig(defaultConfig);
@@ -215,19 +220,26 @@ export default class Trading {
     return getConfigFromStore(this.version.current)
   }
 
-  async refresh(){
-    this.pause()
-    const position = await this.positionInfo.load(this.wallet,this.config);
-    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+  async syncFundingRate(){
+    //资金费率和仓位同步
     const fundingRate = await this.loadFundingRate(this.wallet,this.config)   
-    const history = await this.historyInfo.load(this.wallet,this.config)
-
     if(fundingRate){
       this.setFundingRate(fundingRate)      
     }
+  }
+
+  async refresh(){
+    this.pause()
+    const position = await this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+      this.setPosition(position);
+      this.syncFundingRate();
+    });
     if(position){
       this.setPosition(position)
     }
+    this.syncFundingRate();
+    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+    const history = await this.historyInfo.load(this.wallet,this.config)
     if(history){
       this.setHistory(history)
     }
@@ -293,6 +305,10 @@ export default class Trading {
 
   setPaused(paused){
     this.paused = paused
+  }
+
+  setSupportChain(support){
+    this.supportChain = support;
   }
 
   setUserSelectedDirection(direction){

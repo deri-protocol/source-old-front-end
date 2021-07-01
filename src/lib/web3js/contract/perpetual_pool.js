@@ -19,8 +19,8 @@ const POOL_ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"
 
 export class PerpetualPool extends Contract {
   constructor(chainId, contractAddress, isProvider) {
-    super(chainId, contractAddress, isProvider);
-    this.contract = new this.web3.eth.Contract(POOL_ABI, this.contractAddress);
+    super(chainId, contractAddress, POOL_ABI, isProvider);
+    // this.contract = new this.web3.eth.Contract(POOL_ABI, this.contractAddress);
   }
 
   async symbol() {
@@ -131,6 +131,7 @@ export class PerpetualPool extends Contract {
   }
 
   async _transactPool(method, args = [], accountAddress) {
+    await this._init()
     // !this.accountAddress &&
     //   console.log('please do setAccount(accountAddress) first');
     const oracle = await getOracleInfo(this.chainId, this.contractAddress);
@@ -216,7 +217,7 @@ export class PerpetualPool extends Contract {
 
   async depositMargin(accountAddress, amount) {
     //await this.web3.eth.getAccounts(console.log)
-    console.log('depositMargin');
+    //console.log('depositMargin');
     let res;
     try {
       let tx = await this._transactPool(
@@ -232,15 +233,17 @@ export class PerpetualPool extends Contract {
     return res;
   }
   async _getBlockInfo(blockNumber) {
+    await this._init()
     return await this.web3.eth.getBlock(blockNumber);
   }
   async _getPastEvents(eventName, filter = {}, fromBlock = 0, to = 0) {
+    await this._init()
     let events = [];
     //let toBlock = await this._getBlockInfo("latest");
     //toBlock = toBlock.number;
     let amount;
-    if (this.chainId === '56') {
-      amount = 1999;
+    if (['56', '137', '97', '80001'].includes(this.chainId)) {
+      amount = 999;
     } else {
       amount = 4999;
     }
@@ -265,6 +268,7 @@ export class PerpetualPool extends Contract {
     return events;
   }
   async _getTimeStamp(blockNumber) {
+    await this._init()
     return await this.web3.eth.getBlock(blockNumber);
   }
   _calculateFee(volume, price, multiplier, feeRatio) {

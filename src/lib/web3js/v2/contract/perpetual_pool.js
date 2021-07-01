@@ -136,7 +136,7 @@ export class PerpetualPool extends ContractBase {
     let events = [];
     //let toBlock = await this._getBlockInfo("latest");
     let amount
-    if (['56', '97'].includes(this.chainId)) {
+    if (['56', '97','127', '80001'].includes(this.chainId)) {
       amount = 999
     } else {
       amount = 4999

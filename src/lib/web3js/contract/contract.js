@@ -4,15 +4,26 @@ import { metaMaskWeb3, web3Factory } from '../factory/web3';
 const MAX_GAS_AMOUNT = 532731;
 
 export class Contract {
-  constructor(chainId, contractAddress, isProvider) {
+  constructor(chainId, contractAddress, contractAbi, isProvider) {
     this.chainId = chainId;
     this.contractAddress = contractAddress;
-    if (isProvider) {
-      this.web3 = web3Factory(chainId);
-    } else {
-      this.web3 = metaMaskWeb3();
+    this.contractAbi = contractAbi;
+    this.isProvider = isProvider;
+  }
+  async _init() {
+    if (!this.web3) {
+      if (this.isProvider) {
+        this.web3 = await web3Factory(this.chainId);
+      } else {
+        this.web3 = metaMaskWeb3();
+      }
+      this.contract = new this.web3.eth.Contract(
+        this.contractAbi,
+        this.contractAddress
+      );
     }
   }
+
   setAccount(accountAddress) {
     this.accountAddress = accountAddress;
     return this;
@@ -22,7 +33,27 @@ export class Contract {
     return this;
   }
   async _call(method, args = []) {
-    return await this.contract.methods[method](...args).call();
+    let res
+    let retry = 2
+    while(retry > 0) {
+      try {
+        await this._init()
+        res = await this.contract.methods[method](...args).call();
+        break
+      } catch(err) {
+        retry -= 1
+        this.web3 = null
+        if (err.toString().includes('Invalid JSON RPC response')) {
+          console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);
+        } else if (err.toString().includes("Returned values aren't valid,")) {
+          console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
+        }
+      }
+    }
+    if (retry === 0 && !res) {
+      throw new Error(`The contract(${this.contractAddress}) '${method}(${args})' failed with max retry 2.`)
+    }
+    return res
   }
 
   async _estimatedGas(method, args = [], accountAddress) {
@@ -61,6 +92,7 @@ export class Contract {
     };
   }
   async _transact(method, args, accountAddress) {
+    await this._init()
     const gas = await this._estimatedGas(method, args, accountAddress)
       //this.web3.eth.getGasPrice(),
     let txRaw = [

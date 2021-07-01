@@ -52,7 +52,9 @@
   "trade" : "HANDELN",
 
   "wallet-balance" : "Wallet Guthaben",
-  "liquidity" : "LIQUIDITY",
+  "liquidity" : "LIQUIDITÄT",
+  "liquidity-available" : "Liquidität Anteile",
+
   "max" : "MAX",
   "add-all" : "ALLES HINZUFÜGEN",
   "add" : "HINZUFÜGEN",

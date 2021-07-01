@@ -1,9 +1,12 @@
 echo  PUBLIC_URL=/ > .env.production
-echo REACT_APP_WSS_URL=wss://oracle4.deri.finance >> .env.production
+echo REACT_APP_WSS_URL=wss://oracle2.deri.finance >> .env.production
 echo REACT_APP_REST_SERVER_URL=https://alphaapi.deri.finance >> .env.production
 
 yarn build --nomaps 
 repo=/tmp/build/alphatest
+# if [ $2 = 'clean' ]; then
+#   rm -rf $repo
+# fi
 
 if [ ! -d $repo ]; then
   printf '\e[1;34m%-6s\e[m\n' "alphatest app repo is not exit ,clone it from git@github.com:deri-finance/alphatest.git" 

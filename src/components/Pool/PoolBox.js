@@ -71,7 +71,7 @@ function PoolBox({wallet,version,pool,lang}){
         <div className="network">
           {pool.network && pool.network.toUpperCase()}
         </div>
-        <div className='pool-label'>{version.isV2 && pool.version === 'v1' && <img src={v1LabelImg} alt='v1'/>}{version.isV2 && pool.version === 'v2' && <img src={v2LabelImg} alt='v2'/>}</div>
+        <div className='pool-label'>{pool.version === 'v1' && <img src={v1LabelImg} alt='v1'/>}{ pool.version === 'v2' && <img src={v2LabelImg} alt='v2'/>}</div>
       </div>
       <div className="pool-info">
         <div className="info-center">

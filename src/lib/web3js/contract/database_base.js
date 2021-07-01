@@ -19,12 +19,6 @@ export class DatabaseBaseContract {
     if (!this.providerUrl) {
       this.providerUrl = await getLatestRPCServer(getDBProviderUrlsConfig());
       this._init();
-    // } else if (
-    //   this.providerUrl &&
-    //   !(await checkHttpServerIsAlive(this.providerUrl))
-    // ) {
-    //   this.providerUrl = await getLatestRPCServer(getDBProviderUrlsConfig());
-    //   this._init();
     }
   }
 
