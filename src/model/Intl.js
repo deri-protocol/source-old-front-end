@@ -48,8 +48,10 @@ class Intl {
   }
 
   setLocale(locale){
-    this.locale = locale;
-    storeLocale(locale)
+    if(locale){
+      this.locale = locale;
+      storeLocale(locale)
+    }
   }
 
   get(page,key){

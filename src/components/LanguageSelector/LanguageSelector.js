@@ -10,7 +10,7 @@ import classNames from 'classnames'
 function LanguageSelector({intl}){
   const [show, setShow] = useState(false)
   const query = useQuery();
-  const onClick = (event,lang,refresh) => {
+  const onClick = (lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
     if(refresh){
@@ -19,7 +19,6 @@ function LanguageSelector({intl}){
   }
 
   const onMouseOver = (event) => {
-    event.stopPropagation()
     setShow(true);
   } 
   const onMouseOut = (event) => {
@@ -40,7 +39,7 @@ function LanguageSelector({intl}){
       {/* <span className='locale'>{intl.locale}</span> */}
       <img src={arrowIcon} alt='selector' />
       <div className={langBoxClass} >
-        {Object.keys(languages).map((lang,index) => <div key={index} className={lang === intl.locale ? 'lang-item selected' : 'lang-item'} onClick={(e) => onClick(e,lang,true)}>{languages[lang]}</div>)}
+        {Object.keys(languages).map((lang,index) => <div key={index} className={lang === intl.locale ? 'lang-item selected' : 'lang-item'} onClick={(e) => onClick(lang,true)}>{languages[lang]}</div>)}
       </div>
     </div>
   )
