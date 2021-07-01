@@ -14,6 +14,8 @@ class Wallet {
       detail : observable,
       setDetail : action,
       supportV2 : computed,
+      supportV1 : computed,
+      supportAllVersion : computed,
       supportChain : computed
     })
   }
@@ -80,6 +82,14 @@ class Wallet {
 
   get supportV2() {
     return this.detail.supportV2
+  }
+
+  get supportV1(){
+    return this.detail.supportV1;
+  }
+
+  get supportAllVersion(){
+    return this.detail.supportV1 && this.detail.supportV2
   }
 
   get supportChain(){

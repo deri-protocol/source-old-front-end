@@ -7,7 +7,7 @@ repo=/tmp/build/app
 rm -rf $repo
 
 if [ ! -d $repo ]; then
-  printf '\e[1;34m%-6s\e[m\n' "bridge repo is not exit ,clone it from git@github.com:deri-finance/app.git" 
+  printf '\e[1;34m%-6s\e[m\n' "app repo is not exit ,clone it from git@github.com:deri-finance/app.git" 
   git clone git@github.com:deri-finance/app.git $repo -b main
 fi
 

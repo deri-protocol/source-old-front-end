@@ -8,7 +8,6 @@ import Version from '../../../components/Version/Version';
 import  LanguageSelector from '../../../components/LanguageSelector/LanguageSelector';
 import { inject, observer } from 'mobx-react';
 import useLang from '../../../hooks/useLang';
-import { useRouteMatch } from 'react-router-dom';
 
 function Header({intl}){
   const [styles, setStyles] = useState({})
@@ -16,9 +15,6 @@ function Header({intl}){
   const closeMenu = () => setStyles({left : '-110%'})
   const header = useLang(intl.dict,'header')
   const footer = useLang(intl.dict,'footer')
-  const isLite = useRouteMatch('/lite') 
-  const isPro = useRouteMatch('/pro')
-  const isApp = isLite || isPro
 
   return (
       <div className="nav">
@@ -32,7 +28,7 @@ function Header({intl}){
         <div className='nav-right'>
           <LanguageSelector/>
           <a href='https://app.deri.finance/#lite'><div className='trade'>{header['trade']}</div></a> 
-          {isApp && <Version/>}
+          <Version/>
         </div>
       </div> 
   )

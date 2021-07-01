@@ -8,7 +8,7 @@ repo=/tmp/build/testnet
 rm -rf $repo
 
 if [ ! -d $repo ]; then
-  printf '\e[1;34m%-6s\e[m\n' "app repo is not exit ,clone it from git@github.com:deri-finance/testnet.git" 
+  printf '\e[1;34m%-6s\e[m\n' "testnet app repo is not exit ,clone it from git@github.com:deri-finance/testnet.git" 
   git clone git@github.com:deri-finance/testnet.git $repo -b main
 fi
 

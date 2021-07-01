@@ -88,6 +88,5 @@
   "funding-rate-per-block" : "Finanzierungsrate  (pro block)",
   "1-long-contract-pays-1-short-contract" : "1 Long-Kontrakt zahlt 1 Short-Kontrakt",
   "index-price-camelize" : "Indexpreis",
-  "per-block" : "pro block",
-  "wrong-network" : "Nicht unterstützte Netzwerk-ID"
+  "per-block" : "pro block"
 }

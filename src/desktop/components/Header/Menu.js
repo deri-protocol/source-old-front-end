@@ -84,7 +84,7 @@ function Menu({lang,locale}) {
           </li>
         </ul>
       </div>
-      {(isLite || isPro ) && <Version/>}
+      <Version/>
     </div>
   )
 }
