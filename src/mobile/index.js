@@ -1,7 +1,7 @@
 import  {useEffect } from 'react'
 import Header from './components/Header/Header'
 import Body from './components/Body/Body'
-import Footer from './components/Footer/Footer'
+import Footer from './components/Footer/WalletPanel'
 import './style/index.less'
 import useWindowSize from '../hooks/useWindowSize';
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
