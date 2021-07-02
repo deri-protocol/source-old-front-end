@@ -4,27 +4,35 @@ import v2Img from '../../assets/img/v2.png'
 import { inject } from 'mobx-react';
 import { observer } from 'mobx-react-lite';
 import { useRouteMatch } from 'react-router-dom';
-import { restoreVersion } from '../../utils/utils';
+import useQuery from '../../hooks/useQuery';
 
 function Version({wallet,version}){
   const isLite = useRouteMatch('/lite')
   const isPro = useRouteMatch('/pro')
   const [enabled, setEnabled] = useState(false)
+  const query = useQuery();
+
+
 
   const switchVersion = () => {
-    if(wallet.isConnected() && !wallet.supportV2){
-      version.setCurrent('v1')
-      alert('No V2 pool on this network yet');
-      return;
-    }
+    const url = new URL(window.location.href);
     version.switch()
-    window.location.reload();
+    if(url.searchParams.has('version')){
+      url.searchParams.set('version',version.current);
+      window.location.href = url.toString();
+    } else {
+      url.searchParams.append('version',version.current);
+      window.location.href = url.toString();
+    }
   }
 
   useEffect(() => {
     if(wallet.detail.chainId){
-      const versionFromSession = restoreVersion();
-      if(!versionFromSession || !wallet.supportAllVersion) {
+      //如果url带有version参数优先使用
+      const url = new URL(window.location.href);
+      if(url.searchParams.has('version')){
+        version.setCurrent(url.searchParams.get('version'))
+      } else {
         if(wallet.supportV1 && !wallet.supportV2){
           version.setCurrent('v1')
         } else if(wallet.supportV2 && !wallet.supportV1){
@@ -32,12 +40,10 @@ function Version({wallet,version}){
         } else {
           version.setCurrent('v2')
         }
-      } else {
-        version.setCurrent(versionFromSession);
       }
     }
     return () => {};
-  }, [wallet.detail.chainId]);
+  }, [wallet.detail.chainId,window.location.href]);
 
   //处理是否显示版本切换功能
   useEffect(() => {

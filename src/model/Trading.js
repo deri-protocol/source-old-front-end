@@ -113,15 +113,12 @@ export default class Trading {
       this.setConfig(defaultConfig);
     } 
     //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    if(!wallet.isConnected()){
+    if(!wallet.isConnected() && !wallet.supportWeb3()){
       //没有钱包插件
-      if(!wallet.supportWeb3()){
-        //默认用v2
-        version.setCurrent('v2')
-        const all = await this.configInfo.load(version);
-        const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
-        this.setConfig(defaultConfig)
-      }
+      version.setCurrent('v2')
+      const all = await this.configInfo.load(version);
+      const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+      this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet,this.config,true)
     this.setVolume('')

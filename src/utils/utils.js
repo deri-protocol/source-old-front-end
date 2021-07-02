@@ -1,6 +1,7 @@
 
 
 import BigNumber from 'bignumber.js'
+import version from '../model/Version';
 const versionKey = 'deri-current-version'
 
 export function bg(value, base = 0) {
@@ -44,13 +45,13 @@ export function sessionStorageKey(version){
 }
 
 
-export function storeVersion(version){
-  sessionStorage.setItem(versionKey,version)
-}
+// export function storeVersion(version){
+//   sessionStorage.setItem(versionKey,version)
+// }
 
-export function restoreVersion(){
-  return sessionStorage.getItem(versionKey)
-}
+// export function restoreVersion(){
+//   return sessionStorage.getItem(versionKey)
+// }
 
 export function storeConfig(version,config){
   if(config){
@@ -80,7 +81,7 @@ export function restoreLocale(){
 
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
-  // return restoreVersion() === 'v2' ? `${symbol}_V2` : symbol
+  console.log(version.current)
+  return version.current === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 

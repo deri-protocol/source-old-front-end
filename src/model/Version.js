@@ -1,7 +1,7 @@
 import { makeAutoObservable, observable, action, computed } from "mobx";
 import { storeVersion, restoreVersion } from "../utils/utils";
 
-export default class Version {
+class Version {
   current = null;
 
   constructor(){
@@ -11,16 +11,11 @@ export default class Version {
       isV1 : computed,
       isV2 : computed
     })
-    // const versionFromSession = restoreVersion();
-    // this.current = versionFromSession && this.setCurrent(versionFromSession)
   }
 
 
-  setCurrent(version,notSave){
+  setCurrent(version){
     this.current = version;
-    if(!notSave){
-      storeVersion(version)
-    }
   }
 
   switch(){
@@ -39,3 +34,4 @@ export default class Version {
     return this.current === 'v2'
   }
 }
+export default new Version()
