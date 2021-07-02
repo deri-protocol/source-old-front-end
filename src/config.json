@@ -44,7 +44,8 @@
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/",
-        "supportV1" : true
+        "supportV1" : true,
+        "supportV2" : true
       },
       "80001" : {
         "code" : "POLYGON",

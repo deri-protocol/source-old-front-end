@@ -8,7 +8,7 @@ import { eqInNumber } from '../../utils/utils';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 
 export default function Claim({wallet,miningClaim,tradingClaim,lang}){
-	const [btnText, setBtnText] = useState('Collect Wallet')
+	const [btnText, setBtnText] = useState(lang['connect-wallet'])
 	const [claimed, setClaimed] = useState(false);
 	const [claimInfo,claimInfoInterval] = useClaimInfo(wallet);
 	const [remainingTime, setRemainingTime] = useState('')
@@ -44,6 +44,13 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 			const res = await claim();
 			if(res){
 				setClaimed(true)
+			}
+		} else {
+			try{
+				const result =await wallet.connect();
+				return result ? true : false
+			} catch (e){
+				return false
 			}
 		} 
 	}

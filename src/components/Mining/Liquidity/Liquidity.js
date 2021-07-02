@@ -194,7 +194,12 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 
 
 	const connect =  async () => {
-		await wallet.connect();
+		try {
+			const result = await wallet.connect();
+			return result ? true : false
+		} catch (e){
+			return false
+		}
 	}
 	
 	const addLiquidity = () => {
@@ -240,7 +245,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 		} else {
 			let el = null
 			if(!wallet.isConnected()){
-				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-callet']} lang={lang}></Button></div>
+				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-wallet']} lang={lang}></Button></div>
 			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
 				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']} lang={lang}></Button></div>				
 			} else if(!isApproved) {

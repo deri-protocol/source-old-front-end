@@ -46,9 +46,9 @@ function Position({wallet,trading,version,lang}){
       refreshBalance()
     } else {      
       if(typeof res.error === 'string') {
-        alert(res.error || lang['liquidation-failed'])
+        alert(res.error || lang['close-position-failed'])
       } else if(typeof res.error === 'object'){
-        alert(res.error.errorMessage || lang['liquidation-failed'])
+        alert(res.error.errorMessage || lang['close-position-failed'])
       } else {
         alert(lang['close-position-failed'])
       }      

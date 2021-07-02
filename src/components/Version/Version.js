@@ -29,6 +29,8 @@ function Version({wallet,version}){
           version.setCurrent('v1')
         } else if(wallet.supportV2 && !wallet.supportV1){
           version.setCurrent('v2')
+        } else {
+          version.setCurrent('v2')
         }
       } else {
         version.setCurrent(versionFromSession);

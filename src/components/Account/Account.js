@@ -2,10 +2,14 @@ import React,{useState,useEffect} from 'react';
 import { formatAddress } from '../../utils/utils';
 import './account.less'
 import { observer, inject } from 'mobx-react';
+import { useRouteMatch } from 'react-router-dom';
 
 
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
+  const isLite = useRouteMatch('/lite')
+  const isPro = useRouteMatch('/pro')
+  const isMiningDetail = useRouteMatch('/mining/:version/:chainId/:type/:symbol/:baseToken/:address')
 
   const setAccountText = (detail) => {
     //如果用户选择的网络正确
@@ -28,9 +32,13 @@ function Account({wallet,lang}){
         setAccountText(detail)
       }
     }
-    init();
+    const isApp = isLite || isPro || isMiningDetail
+
+    if(isApp){
+      init();
+    }
     return () => {}
-  }, [])
+  }, [window.location.href])
 
   useEffect(() => {
     setAccountText(wallet.detail)

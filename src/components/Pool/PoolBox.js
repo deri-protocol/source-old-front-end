@@ -63,7 +63,7 @@ function PoolBox({wallet,version,pool,lang}){
         )
     }    
     return () => {};
-  }, [pool]);
+  }, [pool,wallet.detail.chainId]);
 
   return(
     <div className="pool" >
