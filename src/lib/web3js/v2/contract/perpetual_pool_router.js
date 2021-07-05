@@ -4,8 +4,8 @@ import { naturalToDeri } from '../utils'
 import { MAX_INT256 } from '../config';
 
 export class PerpetualPoolRouter extends ContractBase {
-  constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, perpetualPoolRouterAbi, useInfura)
+  constructor(chainId, contractAddress) {
+    super(chainId, contractAddress, perpetualPoolRouterAbi)
     this.poolAddress = ''
   }
 
@@ -59,7 +59,7 @@ export class PerpetualPoolRouter extends ContractBase {
       await this.pool()
     }
     if (isMaximum) {
-      console.log('->', MAX_INT256)
+      //console.log('->', MAX_INT256)
       return await this._transact(
         'removeMargin',
         [bTokenId, MAX_INT256],

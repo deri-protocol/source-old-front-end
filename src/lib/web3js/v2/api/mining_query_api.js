@@ -1,5 +1,5 @@
 import { lTokenFactory, perpetualPoolFactory } from '../factory'
-import { getPoolConfig2, getBTokenIdList, getSymbolIdList} from '../config'
+import { getPoolConfig2, getPoolBTokenIdList, getPoolSymbolIdList} from '../config'
 import { bg, deriToNatural } from '../utils'
 import { getNetworkName } from '../../utils'
 import { calculateMaxRemovableLiquidity } from '../calculation'
@@ -10,15 +10,14 @@ export const getLiquidityInfo = async (
   poolAddress,
   accountAddress,
   bTokenId,
-  useInfura,
 ) => {
   try {
     const {lToken:lTokenAddress} = getPoolConfig2(poolAddress, bTokenId)
-    const perpetualPool = perpetualPoolFactory(chainId, poolAddress, useInfura)
-    const lToken = lTokenFactory(chainId, lTokenAddress, useInfura);
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress)
+    const lToken = lTokenFactory(chainId, lTokenAddress);
 
-    const bTokenIdList = getBTokenIdList(poolAddress)
-    const symbolIdList = getSymbolIdList(poolAddress)
+    const bTokenIdList = getPoolBTokenIdList(poolAddress)
+    const symbolIdList = getPoolSymbolIdList(poolAddress)
 
     const [parameterInfo, bTokenInfo, lTokenAsset ] = await Promise.all([
       perpetualPool.getParameters(),

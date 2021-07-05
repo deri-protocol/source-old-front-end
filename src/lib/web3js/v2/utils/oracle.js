@@ -50,7 +50,7 @@ export const getOracleInfo = async (poolAddress, symbolId) => {
 //   return deriToNatural(responseJson.price).toString();
 // };
 
-export const getOraclePrice = async (chainId, symbol, useInfura = false) => {
+export const getOraclePrice = async (chainId, symbol) => {
   chainId = normalizeChainId(chainId);
   const config = getOracleConfig(chainId, symbol);
   if (config && config.address) {
@@ -62,7 +62,6 @@ export const getOraclePrice = async (chainId, symbol, useInfura = false) => {
       config.address,
       symbol,
       config.decimal,
-      useInfura
     );
     return await oracle.getPrice();
   }

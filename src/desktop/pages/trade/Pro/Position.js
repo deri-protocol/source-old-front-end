@@ -114,6 +114,7 @@ function Position({wallet,trading,version,lang}){
       </div>
       <div>{lang['margin']}</div>
       <div>{lang['unrealized-pnl']}</div>
+      <div>{lang['funding-fee']}</div>
       <div>{lang['liquidation-price']}</div>
     </div>
     <div className='p-box tbody'>
@@ -158,6 +159,7 @@ function Position({wallet,trading,version,lang}){
             </div>}
         </span> 
       </div>
+      <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
       <div><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
     </div>
     <div className='p-box tbody'></div>

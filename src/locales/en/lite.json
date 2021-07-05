@@ -88,5 +88,6 @@
   "funding-rate-per-block" : "Funding  Rate (per block)",
   "1-long-contract-pays-1-short-contract" : "1 Long contract pays 1 short contract",
   "index-price-camelize" : "IndexPrice",
-  "per-block" : "per block"
+  "per-block" : "per block",
+  "funding-fee" : "Acc'd Funding Fee"
 }

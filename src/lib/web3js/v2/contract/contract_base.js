@@ -1,23 +1,23 @@
 import { metaMaskWeb3, web3Factory } from '../factory';
 import { numberToHex } from '../utils';
+import { isBrowser, isJsDom } from '../utils/convert';
 
 const MAX_GAS_AMOUNT = 832731;
 
 export class ContractBase {
-  constructor(chainId, contractAddress, contractAbi, useInfura) {
+  constructor(chainId, contractAddress, contractAbi) {
     this.chainId = chainId;
     this.contractAddress = contractAddress;
     this.contractAbi = contractAbi;
-    this.useInfura = useInfura
   }
 
   async _init() {
-    // update when web3 instance is null
+    // re-init web3 and contract when web3 instance is null
     if (!this.web3) {
-      if (this.useInfura) {
-        this.web3 = await web3Factory.get(this.chainId);
-      } else {
+      if (isBrowser() && !isJsDom()) {
         this.web3 = metaMaskWeb3();
+      } else {
+        this.web3 = await web3Factory.get(this.chainId);
       }
       this.contract = new this.web3.eth.Contract(
         this.contractAbi,

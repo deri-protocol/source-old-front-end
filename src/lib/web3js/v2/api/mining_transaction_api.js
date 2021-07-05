@@ -1,4 +1,4 @@
-import { getBTokenIdList, getPoolConfig2, getSymbolIdList } from '../config'
+import { getPoolBTokenIdList, getPoolConfig2, getPoolSymbolIdList } from '../config'
 import { perpetualPoolRouterFactory, perpetualPoolFactory, lTokenFactory } from '../factory'
 import { getOracleInfo } from '../utils'
 import { isBToken0RatioValid, isPoolMarginRatioValid } from '../calculation'
@@ -13,7 +13,7 @@ export const addLiquidity = async (
    const {router:routerAddress} = getPoolConfig2(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
-   const bTokenIdList = getBTokenIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
     promises.push(perpetualPool.getBToken(bTokenIdList[i]))
@@ -51,8 +51,8 @@ export const removeLiquidity = async (
    const lToken = lTokenFactory(chainId, lTokenAddress);
    const lTokenAsset = await lToken.getAsset(accountAddress, bTokenId)
    const { liquidity:userLiquidity } = lTokenAsset
-   const bTokenIdList = getBTokenIdList(poolAddress) 
-   let symbolIdList = getSymbolIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
+   let symbolIdList = getPoolSymbolIdList(poolAddress)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
     promises.push(perpetualPool.getBToken(bTokenIdList[i]))
@@ -87,8 +87,8 @@ export const addLiquidityWithPrices = async (
   bTokenId,
 ) => {
    const {router:routerAddress} = getPoolConfig2(poolAddress)
-   const symbolIdList = getSymbolIdList(poolAddress)
-   const bTokenIdList = getBTokenIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
    let promises = []
@@ -134,7 +134,7 @@ export const removeLiquidityWithPrices = async (
    const lToken = lTokenFactory(chainId, lTokenAddress);
    const lTokenAsset = await lToken.getAsset(accountAddress, bTokenId)
    const { liquidity:userLiquidity } = lTokenAsset
-   const bTokenIdList = getBTokenIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
    let promises = []
    for (let i=0; i<bTokenIdList.length; i++) {
     promises.push(perpetualPool.getBToken(bTokenIdList[i]))
@@ -142,7 +142,7 @@ export const removeLiquidityWithPrices = async (
    const bTokens = await Promise.all(promises)
    promises = []
 
-   const symbolIdList = getSymbolIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
    for (let i=0; i<symbolIdList.length; i++) {
      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
    }

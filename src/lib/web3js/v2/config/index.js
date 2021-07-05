@@ -11,10 +11,10 @@ export {
   // replaced by getConfigConfig2, will remove later
   getPoolConfig,
   getPoolConfig2,
-  getBTokenList,
-  getBTokenIdList,
-  getSymbolList,
-  getSymbolIdList,
+  getPoolBTokenList,
+  getPoolBTokenIdList,
+  getPoolSymbolList,
+  getPoolSymbolIdList,
 } from './pool';
 export { getOracleConfigList, getOracleConfig } from './oracle';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

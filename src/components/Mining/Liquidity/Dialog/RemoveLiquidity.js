@@ -43,7 +43,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     if(isLpPool){
       res = await removeLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
     } else {
-      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount,baseTokenId);
+      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount,baseTokenId,max.eq(cur));
     }
     
     if(!res || !res.success){

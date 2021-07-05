@@ -1,10 +1,10 @@
 import { ContractBase } from "./contract_base";
 import { wrappedOracleAbi } from './abis';
-import { bg, deriToNatural } from "../utils";
+import { deriToNatural } from "../utils";
 
 export class WrappedOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal, useInfura) {
-    super(chainId, address, wrappedOracleAbi, useInfura)
+  constructor(chainId, address, symbol, decimal) {
+    super(chainId, address, wrappedOracleAbi)
     this.symbol = symbol
     this.decimal = decimal
   }

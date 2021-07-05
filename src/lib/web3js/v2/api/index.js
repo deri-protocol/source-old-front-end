@@ -24,6 +24,7 @@ export {
   getEstimatedLiquidityUsed,
   getFundingRateCache,
   getPoolBTokensBySymbolId,
+  getFundingFee,
 } from './trade_query_api';
 
 export {

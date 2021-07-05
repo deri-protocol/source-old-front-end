@@ -19,6 +19,7 @@ export default class Position {
    async load(wallet,spec,callback){
      if(wallet && wallet.isConnected() && wallet.supportChain && spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
+      // const fundingFee = await getFun
       if(position){
         if(callback){
           callback(position)

@@ -2,6 +2,7 @@
 export const getChainIds = () => {
   return ['1', '3', '56', '97', '128', '256', '137', '80001'];
 };
+
 export const getChainProviderUrls = (chainId) => {
   const chainProviderUrls = [
     {
@@ -110,8 +111,10 @@ export const getDailyBlockNumberConfig = () => {
 };
 
 // MAX UINT/INT256
+// hex(2**256-1)
 export const MAX_UINT256 =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+// hex((2**255 -1) // 10**18)
 export const MAX_INT256 =
   '0x9392ee8e921d5d073aff322e62439fcf32d7f344649470f90';
 

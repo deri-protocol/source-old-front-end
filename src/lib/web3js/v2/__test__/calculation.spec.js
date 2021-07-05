@@ -6,8 +6,10 @@ import {
   calculateBTokenDynamicEquities,
   isBToken0RatioValid,
   isPoolMarginRatioValid,
+  calculateFundingFee,
 } from '../calculation';
 import { bg } from '../utils';
+import { TIMEOUT } from './setup';
 
 describe('calculation', () => {
   // test('calculateFundingRatePerBlock', () => {
@@ -193,4 +195,18 @@ describe('calculation', () => {
     const res2 = isPoolMarginRatioValid(bTokens2, '1', '10', '11', symbols2, '1')
     expect(res2.success).toEqual(false)
   })
+  test('calculateFundingFee', () => {
+    const input = ['1234', '3328', '0.001', '0.005', '56789', 0.009, 0.003, 123456, 987654, '0']
+    const output = '0'
+    expect(calculateFundingFee(...input).toString()).toEqual(output)
+    const input2 = ['1234', '3328', '0.001', '0.005', '56789', 0.009, 0.003, 123456, 987654, 199]
+    const output2 = '206945.70484791'
+    expect(calculateFundingFee(...input2).toFixed(8).toString()).toEqual(output2)
+    const input3 = ['1234', undefined, '0.001', '0.005', '56789', 0.009, 0.003, 123456, 987654, '111']
+    const output3 = 'NaN'
+    expect(calculateFundingFee(...input3).toString()).toEqual(output3)
+    const input4 = ['1234', '22', '0.001', '0.005', '0', 0.009, 0.003, 123456, 987654, '111']
+    const output4 = '0'
+    expect(calculateFundingFee(...input4).toString()).toEqual(output4)
+  }, TIMEOUT)
 })

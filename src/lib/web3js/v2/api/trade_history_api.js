@@ -1,6 +1,6 @@
 import { deriToNatural } from '../utils';
 import { perpetualPoolFactory } from '../factory';
-import { getPoolConfig2, getSymbolIdList} from '../config'
+import { getPoolConfig2, getPoolSymbolIdList} from '../config'
 
 import { getRestServerConfig, DeriEnv } from '../../config';
 
@@ -58,7 +58,7 @@ const getTradeHistoryOnline = async (
   fromBlock
 ) => {
 
-  const symbolIdList = getSymbolIdList(poolAddress)
+  const symbolIdList = getPoolSymbolIdList(poolAddress)
   //console.log('symbolIdList', symbolIdList);
   const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
   const toBlock = await perpetualPool._getBlockInfo('latest');

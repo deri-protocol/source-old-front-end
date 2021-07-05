@@ -5,45 +5,47 @@ import { inject } from 'mobx-react';
 import { observer } from 'mobx-react-lite';
 import { useRouteMatch } from 'react-router-dom';
 import useQuery from '../../hooks/useQuery';
+import { addParam, hasParam, getParam } from '../../utils/utils';
 
 function Version({wallet,version}){
   const isLite = useRouteMatch('/lite')
   const isPro = useRouteMatch('/pro')
   const [enabled, setEnabled] = useState(false)
-  const query = useQuery();
-
 
 
   const switchVersion = () => {
-    const url = new URL(window.location.href);
-    version.switch()
-    if(url.searchParams.has('version')){
-      url.searchParams.set('version',version.current);
-      window.location.href = url.toString();
-    } else {
-      url.searchParams.append('version',version.current);
-      window.location.href = url.toString();
-    }
+    version.switch();
+    const url = addParam('version',version.current);
+    window.location.href = url;
   }
 
+  // useEffect(() => {
+  //   //如果url带有version参数优先使用
+  //   if(hasParam('version')){
+  //     version.setCurrent(getParam('version'))
+  //   }
+  //   return () => {};
+  // }, [window.location.href]);
+
+
   useEffect(() => {
-    if(wallet.detail.chainId){
-      //如果url带有version参数优先使用
-      const url = new URL(window.location.href);
-      if(url.searchParams.has('version')){
-        version.setCurrent(url.searchParams.get('version'))
+    if(wallet.supportAllVersion){
+      if(hasParam('version')) {
+        version.setCurrent(getParam('version'))
       } else {
-        if(wallet.supportV1 && !wallet.supportV2){
-          version.setCurrent('v1')
-        } else if(wallet.supportV2 && !wallet.supportV1){
-          version.setCurrent('v2')
-        } else {
-          version.setCurrent('v2')
-        }
-      }
+        version.setCurrent('v2')
+      };
+    } else {
+      if(wallet.supportV1 && !wallet.supportV2){
+        version.setCurrent('v1')
+      } else if(wallet.supportV2 && !wallet.supportV1){
+        version.setCurrent('v2')
+      } else {
+        version.setCurrent('v1')
+      } 
     }
-    return () => {};
-  }, [wallet.detail.chainId,window.location.href]);
+    return () => {}
+  }, [wallet.detail.chainId])
 
   //处理是否显示版本切换功能
   useEffect(() => {

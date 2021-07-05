@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react'
 import useQuery from '../../hooks/useQuery'
 import languages from '../../locales/lang.json'
 import classNames from 'classnames'
+import { addParam, hasParam, getParam } from '../../utils/utils'
 
 function LanguageSelector({intl}){
   const [show, setShow] = useState(false)
@@ -14,22 +15,22 @@ function LanguageSelector({intl}){
     intl.setLocale(lang)
     setShow(false);
     if(refresh){
-      window.location.href = window.location.origin + window.location.hash.replace(/locale=\w+/,`locale=${lang}`)
+      window.location.href = addParam('locale',lang)
     }
   }
 
-  const onMouseOver = (event) => {
+  const onMouseOver = () => {
     setShow(true);
   } 
-  const onMouseOut = (event) => {
+  const onMouseOut = () => {
     setShow(false)
   }
   const langBoxClass = classNames('lang-box',{show : show})
   
 
   useEffect(() => {
-    if(query.has('locale')){
-      onClick(query.get('locale'))
+    if(hasParam('locale')){
+      onClick(getParam('locale'))
     }
     return () => {}
   }, [intl])
