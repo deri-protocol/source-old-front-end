@@ -10,8 +10,8 @@ const processAsset = (res) => {
   }
 }
 export class LToken extends ContractBase {
-  constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, lTokenAbi, useInfura)
+  constructor(chainId, contractAddress) {
+    super(chainId, contractAddress, lTokenAbi)
   }
 
   // === query ===

@@ -8,6 +8,7 @@ import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSym
 import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
+import version from './Version'
 
 /**
  * 交易模型
@@ -94,10 +95,7 @@ export default class Trading {
   /**
    * 初始化
    */
-  async init(wallet,version){    
-    if(version){
-      this.version = version
-    }
+  async init(wallet){    
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
@@ -128,8 +126,8 @@ export default class Trading {
     const cur = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
     let changed = false
-    if(this.version){
-      changed = this.version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
+    if(version){
+      changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
     }
     if(cur){
       this.pause();
@@ -210,11 +208,11 @@ export default class Trading {
 
   //存起来
   store(config){
-    storeConfig(this.version.current,config)
+    storeConfig(version.current,config)
   }
 
   getFromStore(){
-    return getConfigFromStore(this.version.current)
+    return getConfigFromStore(version.current)
   }
 
   async syncFundingRate(){
@@ -426,7 +424,7 @@ export default class Trading {
   }
 
   get fundingRateTip(){    
-    if(this.version && this.version.isV2){
+    if(version && version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
         if(Intl.locale === 'zh'){
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +

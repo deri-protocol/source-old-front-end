@@ -1,3 +1,4 @@
+import { DeriEnv } from '../../config';
 import {
   getChainProviderUrls,
   getPoolConfigList,
@@ -55,6 +56,11 @@ describe('config', () => {
     const arr1 = getPoolConfigList('dev')
     const arr2 = arr1.map(i => i.bTokenId)
     expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(output)
+    DeriEnv.set('prod')
+    const arr3 = getPoolConfigList('prod')
+    const arr4 = arr3.map(i => i.symbolId)
+    expect(arr4.length).toEqual(output)
+    DeriEnv.set('dev')
   });
   test('getFilteredPoolconfig()', () => {
     expect(

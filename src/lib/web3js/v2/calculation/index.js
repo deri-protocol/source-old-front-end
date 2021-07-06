@@ -11,6 +11,7 @@ export {
   calculateFundingRate,
   calculateLiquidityUsed,
   processFundingRate,
+  calculateFundingFee,
 } from './funding_rate'
 
 export {

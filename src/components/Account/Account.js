@@ -7,9 +7,13 @@ import { useRouteMatch } from 'react-router-dom';
 
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
-  const isLite = useRouteMatch('/lite')
-  const isPro = useRouteMatch('/pro')
-  const isMiningDetail = useRouteMatch('/mining/:version/:chainId/:type/:symbol/:baseToken/:address')
+  const isIndex = useRouteMatch('/index')
+  const isMining = useRouteMatch({path: '/mining',exact : true});
+  const isTeam = useRouteMatch('/team')
+
+  const notConnectWalletPage  = isIndex || isMining || isTeam
+  
+
 
   const setAccountText = (detail) => {
     //如果用户选择的网络正确
@@ -32,9 +36,9 @@ function Account({wallet,lang}){
         setAccountText(detail)
       }
     }
-    const isApp = isLite || isPro || isMiningDetail
+    // const isApp = isLite || isPro || isMiningDetail
 
-    if(isApp){
+    if(!notConnectWalletPage){
       init();
     }
     return () => {}
@@ -47,7 +51,7 @@ function Account({wallet,lang}){
   }, [wallet.detail.account,wallet.detail.formatBalance,lang]);
 
 
-  return (
+  return !notConnectWalletPage && (
     <div className="connect">
       <div className="network-text-logo">
         <i className={wallet.detail.symbol}></i>

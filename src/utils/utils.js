@@ -79,9 +79,28 @@ export function restoreLocale(){
   return sessionStorage.getItem('current-locale')
 }
 
+export function addParam(param,value,urlString = window.location.href){
+  const url = new URL(urlString);
+  if(url.searchParams.has(param)){
+    url.searchParams.set(param,value);
+  } else {
+    url.searchParams.append(param,value);
+  }
+  return  url.toString();
+}
+
+export function hasParam(param,urlString = window.location.href){
+  const url = new URL(urlString);
+  return url.searchParams.has(param);
+}
+
+export function getParam(param,urlString = window.location.href){
+  const url = new URL(urlString);
+  return url.searchParams.get(param);
+}
+
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  console.log(version.current)
   return version.current === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 

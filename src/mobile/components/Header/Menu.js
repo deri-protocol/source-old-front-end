@@ -20,7 +20,7 @@ export default function Menu({closeMenu,lang,locale}){
   return (
     <div className='menu'>
       <div className="top">
-        <a className="logo" href={`https://deri.finance/#index?locale=${locale}`}>
+        <a className="logo" href={`https://deri.finance/?locale=${locale}#index`}>
           <img src={logo} alt=""/>
         </a>
         <span className="close-menu" click="close" onClick={closeMenu}></span>
@@ -28,16 +28,16 @@ export default function Menu({closeMenu,lang,locale}){
       <div className="ul">
         <ul>
           <li className={isMining ? 'selected' :'' }>
-            <a  rel='noreferrer' href={`https://app.deri.finance/#mining?locale=${locale}`}>{lang['mining']}</a>
+            <a  rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#mining`}>{lang['mining']}</a>
           </li>
           <li className={isTrade ? 'selected' : ''}>
-          <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${locale}`}> {lang['trade']} </a>
+          <a  rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#lite`}> {lang['trade']} </a>
           </li>
           <li>
-            <a  rel='noreferrer' href={`https://governance.deri.finance/#governance?locale=${locale}`}>{lang['governance']}</a>
+            <a  rel='noreferrer' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang['governance']}</a>
           </li>
           <li>
-            <a  rel='noreferrer' href={`https://bridge.deri.finance/#bridge?locale=${locale}`}>{lang['bridge']}</a>
+            <a  rel='noreferrer' href={`https://bridge.deri.finance/?locale=${locale}#bridge`}>{lang['bridge']}</a>
           </li>
           <li className="ref">
             {lang['docs']} <img  src={menuDown} alt=""/>
@@ -53,7 +53,7 @@ export default function Menu({closeMenu,lang,locale}){
                   >{lang['code-audit']}</a>
               </li>
               <li>
-                <a href={`http://deri.finance/#/team?locale=${locale}`}>{lang['team']}</a>
+                <a href={`http://deri.finance/?locale=${locale}#/team`}>{lang['team']}</a>
               </li>
               <li>
                 <a href="https://docs.deri.finance/faq">{lang['faq']}</a>

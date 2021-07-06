@@ -3,8 +3,8 @@ import { chainlinkOracleAbi } from './abis';
 import { bg } from "../utils";
 
 export class ChainlinkOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal, useInfura) {
-    super(chainId, address, chainlinkOracleAbi, useInfura)
+  constructor(chainId, address, symbol, decimal) {
+    super(chainId, address, chainlinkOracleAbi)
     this.symbol = symbol
     this.decimal = decimal
   }

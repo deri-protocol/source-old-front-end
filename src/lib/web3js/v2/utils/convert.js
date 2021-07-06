@@ -58,3 +58,9 @@ export const naturalToDeri = (value) => bg(value, 18).toFixed(0);
 
 // == convert
 export const numberToHex = (value) => Web3.utils.numberToHex(value);
+
+
+// == utils
+export const isBrowser = () => typeof window !== 'undefined' && typeof window.document !== 'undefined'
+export const isNodejs = () => typeof process !== 'undefined' && process.versions != null && process.versions.node != null
+export const isJsDom = () => typeof window !== 'undefined' && navigator.userAgent.includes('jsdom')
