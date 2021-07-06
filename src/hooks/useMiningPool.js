@@ -8,12 +8,12 @@ import {
   getLpPoolInfoApy
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
-import { formatAddress, isLP,isSushiLP,isCakeLP } from '../utils/utils';
+import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function useMiningPool(){
+export default function useMiningPool(isNew){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
@@ -34,6 +34,28 @@ export default function useMiningPool(){
         type : 'perpetual',
         buttonText : 'STAKING'        
       })
+    }
+    const groupByNetwork = pools => {
+      const all = {}
+      pools.reduce((pool,total) => {
+        if(total[pool.chainId]){
+          total[pool.chainId]['list'].push(pool)
+        } else {
+          const poolInfo = {
+            info : {
+              network : pool.network,
+              symbol : pool.symbol,
+              address : pool.address,
+              pool : pool.pool,
+              version : pool.version
+            },
+            list : [pool]
+          }
+          total[pool.chainId] = poolInfo;
+        }
+        return total;
+      },all)
+      return all;
     }
     let configs = getContractAddressConfig(env,'v2');
     let v1Configs = getContractAddressConfig(env,'v1')
@@ -89,8 +111,15 @@ export default function useMiningPool(){
         buttonText : 'CLAIM'
       }
       // pools.push(airDrop)
-      const v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
-      const v2Pools = pools.filter(p => p.version === 'v2')
+      let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
+      let v2Pools = pools.filter(p => p.version === 'v2')
+      //新版本按照网络来分组
+      if(isNew){
+        v1Pools = groupByNetwork(v1Pools);
+        v2Pools = groupByNetwork(v2Pools);
+      }
+      console.log('v2',v2Pools)
+      console.log('v1',v1Pools)
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
       setPools(pools);
