@@ -1181,7 +1181,7 @@
           width : 3.75rem;
         }
         .balance-list .row {
-          height: 0.5rem;
+          display: flex;
           line-height: 0.5rem;
           padding : 0 0.1rem;
           font-size: 0.16rem;
@@ -1193,6 +1193,11 @@
             display: none
           }
 
+          .add-margin,.remove-margin {
+            background: url('../../../assets/img/btn-bg.png') center no-repeat;
+            width: 1.2rem;
+          }
+
           .btoken {
             width: 0.6rem;
           }
@@ -1200,6 +1205,8 @@
             width: 0.8rem;
           }
           .action {
+            white-space: break-spaces;
+            width: 1.2rem;
             span {
               margin-left: 0.08rem;
               cursor: pointer;
