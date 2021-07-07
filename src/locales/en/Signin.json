@@ -1,0 +1,19 @@
+{
+  "title-one":"DIVIDE UP THE PRIZE",
+  "title-two":"SHARE VALUE OF ",
+  "title-num":"100,000",
+  "title-three":" BUSD DERI POOL",
+  "header":"USER TASKS",
+  "sign-in":"SIGN IN",
+  "trade":"TRADE",
+  "claim-ptoken":"Claim Ptoken",
+  "go-trade":"Go Trade",
+  "approve":"APPROVE",
+  "claim":"CLAIM",
+  "pending":"PENDING...",
+  "approve-failed" : "Approve failed",
+  "claim-failed" : "Claim failed",
+  "sign-in-failed" : "Sign in failed",
+  "connect-wallet" : "CONNECT WALLET",
+  "activity-rules":"Activity Rules"
+}

@@ -78,7 +78,16 @@ function Menu({lang,locale}) {
                 <a href='https://app.deri.finance/#/brokerbind'>{lang['broker-bind']}</a>
                 :
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
-                }                
+                }
+                               
+              </li>
+              <li>
+                {isProduction
+                ?
+                <a href='https://app.deri.finance/#/signin'>{lang['signin']}</a>
+                :
+                <Link to='/signin'>{lang['signin']}</Link>
+                }     
               </li>
             </ul>
           </li>

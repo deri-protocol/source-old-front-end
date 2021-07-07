@@ -8,6 +8,7 @@ const Lite = LoadableComponent(()=>import('../../pages/trade/Lite'))
 const Home = LoadableComponent(() => import('../../pages/Home/Home'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Pool = LoadableComponent(() => import('../../components/Mining/Pool'))
+const Signin = LoadableComponent(() => import('../../pages/Signin/Signin'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
@@ -29,6 +30,7 @@ class Body extends React.Component {
           <Route exact path='/team' component={()=><Team lang={dict['team']}/>}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
+          <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>
           <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
