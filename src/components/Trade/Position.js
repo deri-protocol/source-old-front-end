@@ -204,7 +204,7 @@ function Position({wallet,trading,version,lang}){
     </div>
     <div className='info'>
       <div className='info-left'>
-        <div className='title-text'>{lang['funding-fee']}</div>
+        <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
         <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
       </div>
       <div className='info-right'></div>
