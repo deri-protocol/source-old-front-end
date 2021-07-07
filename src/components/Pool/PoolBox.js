@@ -10,9 +10,9 @@ import v2LabelImg from '../../assets/img/v2-label.png'
 import v1LabelImg from '../../assets/img/v1-label.png'
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function PoolBox({wallet,version,pool,lang}){
+function PoolBox({wallet,group = {},lang}){
   const [buttonElement, setButtonElement] = useState('');
-  const logoClassName = `logo ${pool.bTokenSymbol}`
+  const {pool,list} = group
   const history = useHistory();
 
   const gotoMining = url => {
@@ -63,48 +63,56 @@ function PoolBox({wallet,version,pool,lang}){
         )
     }    
     return () => {};
-  }, [pool,wallet.detail.chainId]);
+  }, [wallet.detail.chainId]);
 
   return(
     <div className="pool" >
       <div className="pool-header">
-        <div className="network">
-          {pool.network && pool.network.toUpperCase()}
+        <div className='left'>
+          <div className="network">
+            {pool.network && pool.network.toUpperCase()}
+          </div>
+          <div className='pool-desc'>
+            <div>
+                <span>{lang['symbol']}</span>
+                <span>{pool.symbol}</span>  
+            </div>
+            <div>
+              <span>{lang['address']}</span>
+                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId] && chainConfig[pool.chainId]['viewUrl']}/address/${pool.address || pool.pool}`}> 
+                  {pool.pool}
+                </a> : '--'}
+            </div>
+          </div>
         </div>
         <div className='pool-label'>{pool.version === 'v1' && <img src={v1LabelImg} alt='v1'/>}{ pool.version === 'v2' && <img src={v2LabelImg} alt='v2'/>}</div>
       </div>
       <div className="pool-info">
-        <div className="info-center">
+        {list.map(card =>(
+          <div className="info-center">
           <div className="top-info">
-            <div className={logoClassName} ></div>
+            <div className={`logo ${card.bTokenSymbol}`} ></div>
             <div className="pool-detail">
-              <div className="base-token">{pool.bTokenSymbol}</div>
+              <div className="base-token">{card.bTokenSymbol}</div>
               <div>
-                <span className='title'>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
-                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.lpApy ? 7 : 0}/>
+                <span className='title'>{card.airdrop ? lang['total'] : lang['pool-liq']}</span>
+                <DeriNumberFormat value={card.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0}/>
               </div>
               <div>
-                <span>{lang['symbol']}</span>
-                {pool.symbol}
+                
               </div>
               <div className="apy">
                 <span>{lang['apy']}</span>
                 <span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} title={ pool.lpApy && lang['deri-apy']}>
-                    {pool.apy ? <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
+                  <span className={card.lpApy ? 'sushi-apy-underline' : ''} title={ card.lpApy && lang['deri-apy']}>
+                    {card.apy ? <DeriNumberFormat value={card.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
                   </span>
-                  {pool.lpApy &&<>
+                  {card.lpApy &&<>
                   <span> + </span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                  <span className={card.lpApy ? 'sushi-apy-underline' : '' } title={ card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                   </>}
                 </span>
                 
-              </div>
-              <div className="pool-address">
-                <span>{lang['address']}</span>
-                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId]['viewUrl']}/address/${pool.address || pool.pool}`}> 
-                  {pool.pool}
-                </a> : '--'}
               </div>
             </div>
           </div>
@@ -112,6 +120,7 @@ function PoolBox({wallet,version,pool,lang}){
             {buttonElement}
           </div>
         </div>
+        ))}
       </div>
     </div>
   )

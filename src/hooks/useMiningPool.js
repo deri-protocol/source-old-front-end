@@ -37,17 +37,19 @@ export default function useMiningPool(isNew){
     }
     const groupByNetwork = pools => {
       const all = []
-      pools.reduce((pool,total) => {
-        if(total[pool.chainId]){
-          total[pool.chainId]['list'].push(pool)
+      pools.reduce((total,pool) => {
+        const find = total.find(item => eqInNumber(item['pool']['chainId'],pool['chainId']))
+        if(find){
+          find['list'].push(pool)
         } else {
           const poolInfo = {
-            info : {
+            pool : {
               network : pool.network,
               symbol : pool.symbol,
               address : pool.address,
               pool : pool.pool,
-              version : pool.version
+              version : pool.version,
+              chainId : pool.chainId
             },
             list : [pool]
           }
@@ -58,7 +60,7 @@ export default function useMiningPool(isNew){
       return all;
     }
     let configs = getContractAddressConfig(env,'v2');
-    let v1Configs = getContractAddressConfig(env,'v1')
+    // let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
     configs = configs.reduce((total,config) => {
