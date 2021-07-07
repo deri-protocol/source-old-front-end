@@ -36,7 +36,7 @@ export default function useMiningPool(isNew){
       })
     }
     const groupByNetwork = pools => {
-      const all = {}
+      const all = []
       pools.reduce((pool,total) => {
         if(total[pool.chainId]){
           total[pool.chainId]['list'].push(pool)
@@ -51,7 +51,7 @@ export default function useMiningPool(isNew){
             },
             list : [pool]
           }
-          total[pool.chainId] = poolInfo;
+          total.push(poolInfo)
         }
         return total;
       },all)
