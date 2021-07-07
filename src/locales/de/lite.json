@@ -89,5 +89,6 @@
   "1-long-contract-pays-1-short-contract" : "1 Long-Kontrakt zahlt 1 Short-Kontrakt",
   "index-price-camelize" : "Indexpreis",
   "per-block" : "pro block",
-  "funding-fee" : "Anf. Finanz. Gebühr"
+  "funding-fee" : "Anf. Finanz.",
+  "funding-fee-tip" : "+: Der Pool schuldet Ihnen \n -: Sie schulden dem Pool"
 }

@@ -89,5 +89,6 @@
   "1-long-contract-pays-1-short-contract" : "一手做多的合约付给一手做空的合约",
   "index-price-camelize" : "指数价格",
   "per-block" : "每一个区块",
-  "funding-fee" : "应付资金费"
+  "funding-fee" : "应收资金费",
+  "funding-fee-tip" : "+: 流动性池需要支付给你\n-: 你需要支付给流动性池"
 }

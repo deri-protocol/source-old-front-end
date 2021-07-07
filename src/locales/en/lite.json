@@ -89,5 +89,6 @@
   "1-long-contract-pays-1-short-contract" : "1 Long contract pays 1 short contract",
   "index-price-camelize" : "IndexPrice",
   "per-block" : "per block",
-  "funding-fee" : "Acc'd Funding Fee"
+  "funding-fee" : "Acc'd Funding",
+  "funding-fee-tip" : "+: the pool owes you\n-: you owe the pool"
 }
