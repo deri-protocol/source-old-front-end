@@ -8,10 +8,11 @@ import { useRouteMatch } from 'react-router-dom';
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
   const isIndex = useRouteMatch('/index')
+  const isRoot = useRouteMatch({path: '/',exact : true})
   const isMining = useRouteMatch({path: '/mining',exact : true});
   const isTeam = useRouteMatch('/team')
 
-  const notConnectWalletPage  = isIndex || isMining || isTeam
+  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot
   
 
 
