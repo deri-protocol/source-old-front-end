@@ -67,17 +67,17 @@ function Menu({lang,locale}) {
             <ul className="ref-box">
               <li>
                 {isProduction ? 
-                <a href={`https://${host}/#/broker`}>{lang.broker}</a>
+                <a className='broker-item' href={`https://${host}/#/broker`}>{lang.broker}</a>
                 :
-                <Link to='/broker'>{lang.broker}</Link>
+                <Link className='broker-item' to='/broker'>{lang.broker}</Link>
                 }                
               </li>
               <li>
                 {isProduction
                 ?
-                <a href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
+                <a className='broker-item' href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
                 :
-                <Link to='/brokerbind'>{lang['broker-bind']}</Link>
+                <Link className='brokerbind-item' to='/brokerbind'>{lang['broker-bind']}</Link>
                 }                
               </li>
             </ul>

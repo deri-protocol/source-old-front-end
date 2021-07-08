@@ -25,6 +25,9 @@
       width: 800px;
       margin: 0 auto ;
     }
+    .input_c{
+      height: 65px;
+    }
     .DIP1 {
       display: flex;
       width: 800px;
@@ -40,19 +43,22 @@
     }
 
     .radio {
-      width: 800px;
+      width: 830px;
       margin: 0 auto;
       margin-top: 30px;
-
+      padding-left: 32px;
+      display: flex;
+      justify-content: space-between;
+      .left{
+        width: 415px;
+      }
       .fle {
         display: flex;
         justify-content: space-between;
         height: 38px;
-
         .rad {
-          width: 220px;
+          width: 340px;
         }
-
         .bsc,
         .heco,
         .eth {
@@ -117,17 +123,59 @@
         }
       }
     }
-
-    .deri-num {
-      height: 50px;
-      width: 260px;
-      padding-left: 10px;
-      font-size: 20px;
-      border: 0;
-      color: #000;
-      background: #ffffff;
-      outline: none;
+    .contrant{
+      position: relative;
+      width: 250px;
+      height: 65px;
+      border-radius: 6px;
+      background-image: url('../../../assets/img/dark-button.png');
+      background-size: 100% 100%;
+      font-size: 14px;
+      float: left;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .deri-num {
+        box-sizing: border-box;
+        width: 237px;
+        height: 56px;
+        background: rgba(212, 224, 92, 0.05);
+        border: 0;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-left: 20px;
+        color: #D4E05C;
+        border-radius: 3px;
+        font-size: 20px;
+      }
+      .deri-num:focus {
+        font-size: 30px;
+        text-align: right;
+        padding-right: 15px;
+      }
+      .deri-num:focus+.input_message {
+        display: block;
+      }
+      .inputFamliy {
+        font-size: 30px;
+        text-align: right;
+        padding-right: 15px;
+        font-family: 'LED Calculator';
+      }
+      .inputFamliy+.input_message {
+        display: block;
+      }
+      .input_message{
+        position: absolute;
+        left: 20px;
+        top: 10px;
+        font-size: 10px;
+        line-height: 10px;
+        font-family: Korolev,sans-serif;
+        display: none;
+      }
     }
+    
 
     .basetoken {
       position: relative;
@@ -136,57 +184,47 @@
     }
 
     .vote {
-      background-image: linear-gradient(90deg, #09d3af 0%, #09b8c2 18%, #0965ff 100%);
-      border-radius: 24px;
-      height: 38px;
-      border: 0;
-      color: #fff;
-      width: 200px;
-      font-weight: 500;
+      display: initial;
+      width: 250px;
+      height: 50px;
+      background: #202124;
       margin-top: 20px;
-      font-size: 20px;
+      border: 0;
+      color: #ccc;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+      border-radius: 10px;
     }
-
+    .rules{
+      margin-top: 40px;
+      box-sizing: border-box;
+      .rules-title{
+        display: inline-block;
+      }
+    }
     .dip-list {
+      width: 800px;
+      margin: 0 auto;
       .list-title {
-        background-image: url(../../../components/Governance/img/DIP-list.jpg);
-        background-size: cover;
         height: 110px;
         display: flex;
-        align-items: center;
-        justify-content: center;
         border-radius: 5px;
-
         .title {
           font-family: Tachyon, sans-serif;
           font-weight: 300;
           font-size: 32px;
           letter-spacing: 2px;
+          margin-bottom: 12px;
+        }
+        .history{
+          margin-top: 10px;
+          a{
+            color: #D4E05C;
+          }
         }
       }
 
-      .list-text {
-        height: 60px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border: 2px solid #707070;
-        margin: 30px 0;
-        border-radius: 2px;
-        padding: 0 15px 0 15px;
-
-        button {
-          order: 0;
-          line-height: 30px;
-          text-align: center;
-          width: 71px;
-          height: 38px;
-          font-size: 14px;
-          font-weight: bold;
-          background-image: linear-gradient(90deg, #09d3af 0%, #09b8c2 18%, #0965ff 100%);
-          border-radius: 24px;
-        }
-      }
     }
   }
 }
