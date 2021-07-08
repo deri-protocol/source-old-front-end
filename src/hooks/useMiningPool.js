@@ -49,7 +49,12 @@ export default function useMiningPool(isNew){
               address : pool.address,
               formatAdd : pool.formatAdd,
               version : pool.version,
-              chainId : pool.chainId
+              chainId : pool.chainId,
+              airdrop : pool.airdrop,
+              type : pool.type,
+              bTokenSymbol : pool.bTokenSymbol,
+              bTokenId : pool.bTokenId,
+              symbolId : pool.symbolId
             },
             list : [pool]
           }
