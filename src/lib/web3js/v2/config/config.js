@@ -1,5 +1,5 @@
 import { DeriEnv } from '../../config';
-import jsonConfig from '../resouces/config.json';
+import jsonConfig from '../resources/config.json';
 import { validateObjectKeyExist, validateIsArray } from '../utils';
 
 const validateConfig = (config) => {

@@ -53,14 +53,15 @@ describe('config', () => {
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
     const output = 2;
-    const arr1 = getPoolConfigList('dev')
+    const arr1 = getPoolConfigList()
     const arr2 = arr1.map(i => i.bTokenId)
     expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(output)
     DeriEnv.set('prod')
-    const arr3 = getPoolConfigList('prod')
-    const arr4 = arr3.map(i => i.symbolId)
-    expect(arr4.length).toEqual(output)
+    const arr3 = getPoolConfigList()
     DeriEnv.set('dev')
+    const arr4 = arr3.map(i => i.symbolId)
+    expect(arr3.filter((i, index) => arr4.indexOf(i.symbolId) === index).length).toEqual(output)
+    //expect(arr4.length).toEqual(output)
   });
   test('getFilteredPoolconfig()', () => {
     expect(

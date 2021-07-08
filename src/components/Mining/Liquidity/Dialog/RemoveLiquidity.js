@@ -28,7 +28,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
       alert(`${lang['your-current-max-removable-shares-are']}  ${liqInfo.totalShares}`);
       return false;
     }
-    if(!isLpPool){
+    if(!isLpPool && version === 'v1'){
       const balance = (+liqInfo.totalShares) - (+amount)
       if (balance < 1 && balance > 0) {
         alert(lang['staking-max-limit-tip']);
