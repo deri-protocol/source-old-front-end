@@ -10,7 +10,8 @@ function Signin({wallet={},lang}){
     bTokenId:"0"
   }
   const [isApprove, setIsApprove] = useState(true);
-  const [isClaim,setIsClaim] = useState(false)
+  const [isClaim,setIsClaim] = useState(false);
+  const [isNowSign,setIsNowSign] = useState(false);
   const [actionElement,setActionElement] = useState(<Button className='btn'  btnText={lang['connect-wallet']}></Button>)
   const [isSignIn,setIsSignIn] =useState({
     'one':false,
@@ -37,7 +38,10 @@ function Signin({wallet={},lang}){
 
   const SignIn = async ()=>{
     if((+wallet.detail.formatBalance) < 0.2){
-      alert('aaa')
+      alert(lang['less-bnb'])
+    }
+    if(isNowSign){
+      alert('bbb')
     }
   }
 
@@ -51,8 +55,8 @@ function Signin({wallet={},lang}){
       setIsApprove(true);
       loadApprove();
     } else {
-      setIsApprove(false)
-      alert(lang['approve-failed'])
+      setIsApprove(false);
+      alert(lang['approve-failed']);
     }
   }
   
@@ -78,21 +82,15 @@ function Signin({wallet={},lang}){
       element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
     }
     setActionElement(element) 
-  },[wallet.detail,isApprove])
+  },[wallet.detail,isApprove,isSignIn,isClaim])
   
   return(
     <div className='signin'>
       <div className='title'>
-        <div className='h2'>
-          {lang['title-one']}
-        </div>
         <div>
-          {lang['title-two']}
-          <span className='title-num'>
-            {lang['title-num']}
-          </span>
           {lang['title-three']}
         </div>
+        
       </div>
       <div className='user-tasks'>
         <div className='header'>
@@ -140,12 +138,43 @@ function Signin({wallet={},lang}){
         </div>
         
       </div>
+      <div className='h2'>
+          {lang['title-one']}
+          <span className='title-num'>
+            {lang['title-num']}
+          </span>
+          <span className='in-deri'>
+            {lang['title-two']}
+          </span>
+          <div className='text'>
+          {lang['title-frou']}
+        </div>
+        </div>
       <div className='rules'>
         <div className='rules-title'>
-          {lang['activity-rules']}
+          {lang['who-are-eligibles']}
         </div>
-        <div>
-
+        
+        <div className='text'>
+          {lang['rules-one']}
+        </div>
+        <div className='text'>
+          {lang['rules-two']}
+        </div>
+        <div className='rules-title'>
+          {lang['how-to-participate']}
+        </div>
+        <div className='text'>
+          {lang['step-one']}
+        </div>
+        <div className='text'>
+          {lang['step-two']}
+        </div>
+        <div className='text'>
+          {lang['step-three']}
+        </div>
+        <div className='text'>
+          {lang['description']}
         </div>
       </div>
   </div>
