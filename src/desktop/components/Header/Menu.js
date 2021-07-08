@@ -80,6 +80,14 @@ function Menu({lang,locale}) {
                 <Link className='brokerbind-item' to='/brokerbind'>{lang['broker-bind']}</Link>
                 }                
               </li>
+              <li>
+                {isProduction
+                ?
+                <a className='oldpool-item' href={`https://${host}/#/brokerbind`}>{lang['old-pool']}</a>
+                :
+                <Link className='oldpool-item' to='/oldpool'>{lang['old-pool']}</Link>
+                }                
+              </li>
             </ul>
           </li>
         </ul>
