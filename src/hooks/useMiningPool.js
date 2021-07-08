@@ -94,7 +94,7 @@ export default function useMiningPool(isNew){
         network : chainInfo[config.chainId].name,
         liquidity : liqInfo.liquidity,
         apy : ((+apyPool.apy) * 100).toFixed(2),
-        pool : formatAddress(pool),
+        formatAdd : formatAddress(pool),
         lpApy : lpApy,
         address : pool,
         type : 'lp',
