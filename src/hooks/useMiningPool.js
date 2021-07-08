@@ -29,7 +29,7 @@ export default function useMiningPool(isNew){
         network : chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
         apy :  ((+apyPool.apy) * 100).toFixed(2),
-        pool : formatAddress(pool),
+        formatAdd : formatAddress(pool),
         address : pool,
         type : 'perpetual',
         buttonText : 'STAKING'        
@@ -38,8 +38,8 @@ export default function useMiningPool(isNew){
     const groupByNetwork = pools => {
       const all = []
       pools.reduce((total,pool) => {
-        const find = total.find(item => eqInNumber(item['pool']['chainId'],pool['chainId']))
-        if(find){
+        const find = total.find(item => eqInNumber(item['pool']['address'],pool['address']))
+        if(find && find.list.length < 5){
           find['list'].push(pool)
         } else {
           const poolInfo = {
@@ -47,7 +47,7 @@ export default function useMiningPool(isNew){
               network : pool.network,
               symbol : pool.symbol,
               address : pool.address,
-              pool : pool.pool,
+              formatAdd : pool.formatAdd,
               version : pool.version,
               chainId : pool.chainId
             },
@@ -82,7 +82,7 @@ export default function useMiningPool(isNew){
       let label;
       if(isLP(config.pool)){
         let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
-        lpApy = ((+lapy.apy2) * 100).toFixed(2);           
+        lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
       }
       if(isSushiLP(config.pool)){
         label = 'SUSHI-APY'
@@ -110,9 +110,10 @@ export default function useMiningPool(isNew){
         liquidity : '4100',
         symbol : '--',
         airdrop : true,
+        chainId : 56,
         buttonText : 'CLAIM'
       }
-      // pools.push(airDrop)
+      pools.push(airDrop)
       let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
       let v2Pools = pools.filter(p => p.version === 'v2')
       //新版本按照网络来分组

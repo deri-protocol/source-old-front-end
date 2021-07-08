@@ -8,6 +8,7 @@ import Button from '../Button/Button.js';
 import { eqInNumber } from '../../utils/utils.js';
 import v2LabelImg from '../../assets/img/v2-label.png'
 import v1LabelImg from '../../assets/img/v1-label.png'
+import classNames from 'classnames';
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
 function PoolBox({wallet,group = {},lang}){
@@ -65,8 +66,13 @@ function PoolBox({wallet,group = {},lang}){
     return () => {};
   }, [wallet.detail.chainId]);
 
+  const poolClass = classNames('pool',{
+    'only-one' : list.length === 1 ,
+    'full' : list.length === 5
+  })
+
   return(
-    <div className={`pool ${list.length ===1 ? 'only-one' : ''}`} >
+    <div className={poolClass} >
       <div className="pool-header">
         <div className='left'>
           <div className="network">
@@ -79,8 +85,8 @@ function PoolBox({wallet,group = {},lang}){
             </span>
             <span className='address'>
               <span className='address-label'>{lang['address']}:</span>
-                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId] && chainConfig[pool.chainId]['viewUrl']}/address/${pool.address || pool.pool}`}> 
-                  {pool.pool}
+                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId] && chainConfig[pool.chainId]['viewUrl']}/address/${pool.address}`}> 
+                  {pool.formatAdd}
                 </a> : '--'}
             </span>
           </div>

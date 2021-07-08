@@ -1,6 +1,5 @@
 .mining-info {
-  // min-width: 1201px;
-  width: 1227px;
+  width: 1205px;
   .mining-info-header,
   .mining-info-footer {
     display: flex;
@@ -32,7 +31,6 @@
 
   .pools {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
     max-width: 100%;
 
@@ -52,6 +50,11 @@
         }
     }
 
+    .full.pool{
+      margin-right: 0px;
+    }
+    
+
     .pool {
       color: #AAAAAA;
       position: relative;
@@ -62,6 +65,7 @@
       margin-top: 20px;
       border-radius: 20px;
       font-family: Korolev,sans-seri;
+      margin-right: 10px;
 
       .pool-header {
         height: 75px;
@@ -115,6 +119,7 @@
       .pool-info {
         display: flex;
         justify-content: space-between;
+        flex-wrap: wrap;
 
         .info:last-child{
           margin-right: 0px;
@@ -126,7 +131,7 @@
         }
 
         .info {
-          width: 236px;
+          width: 231px;
           text-align: center;
           border: 1px solid #707070;
           border-radius: 20px;
