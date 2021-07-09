@@ -18,6 +18,7 @@ export const getSpecification = async (
 ) => {
   try {
     const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, bTokenId, symbolId)
+    const bTokens = getPoolBTokenList(poolAddress)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     const [symbolInfo, parameterInfo] = await Promise.all([
       perpetualPool.getSymbol(symbolId),
@@ -35,7 +36,7 @@ export const getSpecification = async (
     } = parameterInfo
     return {
       symbol: symbol,
-      bSymbol: bTokenSymbol,
+      bSymbol: bTokens.map((b) => b.bTokenSymbol).join(','),
       multiplier: multiplier.toString(),
       feeRatio: feeRatio.toString(),
       fundingRateCoefficient: fundingRateCoefficient.toString(),

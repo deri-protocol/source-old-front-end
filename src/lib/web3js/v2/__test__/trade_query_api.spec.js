@@ -20,7 +20,7 @@ describe('Trade query api', () => {
     const input = ['97', POOL_ADDRESS, '0', '0', true]
     const output = {
       symbol: 'BTCUSD',
-      bSymbol: 'BUSD',
+      bSymbol: 'BUSD,AUTO,CAKE',
       multiplier: '0.0001',
       feeRatio: '0.0005',
       minPoolMarginRatio: '1',
