@@ -4,5 +4,6 @@
   "team" : "Team",
   "faq" : "FAQ",
   "visit-us-on" : "Besuche uns auf",
-  "deri-protocol" : "Deri Protocol"
+  "deri-protocol" : "Deri Protocol",
+  "unsupported-chain-id" : "Nicht unterstützte Netzwerk-ID"
 }

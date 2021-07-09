@@ -145,7 +145,7 @@ describe('Trade query api', () => {
     // const fundingFee = await getFundingFee('97', POOL_ADDRESS, ACCOUNT_ADDRESS, '0', true)
     // expect(fundingFee).toEqual(output)
     DeriEnv.set('prod')
-    const fundingFee2 = await getFundingFee('56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0x3fA3f80f18De2528755b9054E23525c0fbf597Fe', '1', true)
+    const fundingFee2 = await getFundingFee('56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0xFefC938c543751babc46cc1D662B982bd1636721', '0', true)
     DeriEnv.set('dev')
     expect(fundingFee2).toEqual(output)
   }, TIMEOUT)
