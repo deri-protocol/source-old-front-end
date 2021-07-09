@@ -1,7 +1,7 @@
-import { ContractBase } from './contract_base'
-import { perpetualPoolRouterAbi} from './abis';
-import { naturalToDeri } from '../utils'
-import { MAX_INT256 } from '../config';
+import { ContractBase } from '../contract_base'
+import { perpetualPoolRouterAbi} from '../abis';
+import { naturalToDeri } from '../../utils'
+import { MAX_INT256 } from '../../config';
 
 export class PerpetualPoolRouter extends ContractBase {
   constructor(chainId, contractAddress) {

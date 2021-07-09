@@ -1,6 +1,6 @@
-import { ContractBase } from './contract_base'
-import { pTokenAbi } from './abis';
-import { deriToNatural } from '../utils'
+import { ContractBase } from '../contract_base'
+import { pTokenLiteAbi } from '../abis';
+import { deriToNatural } from '../../utils'
 
 const processPosition = (res) => {
   return {
@@ -11,7 +11,7 @@ const processPosition = (res) => {
 }
 export class PToken extends ContractBase {
   constructor(chainId, contractAddress) {
-    super(chainId, contractAddress, pTokenAbi)
+    super(chainId, contractAddress, pTokenLiteAbi)
   }
 
   // === query ===
@@ -24,15 +24,12 @@ export class PToken extends ContractBase {
   async exists(accountAddress) {
     return await this._call('exists', [accountAddress]);
   }
-  async getMargin(accountAddress, symbolId) {
-    const res = await this._call('getMargin', [accountAddress, symbolId]);
-    return deriToNatural(res)
+  async ownerOf(tokenId) {
+    return await this._call('ownerOf', [tokenId]);
   }
-  async getMargins(accountAddress) {
-    const res = await this._call('getMargins', [accountAddress]);
-    if (Array.isArray(res)) {
-      return res.map((i) => deriToNatural(i))
-    }
+  async getMargin(accountAddress) {
+    const res = await this._call('getMargin', [accountAddress]);
+    return deriToNatural(res)
   }
   async getPosition(accountAddress, symbolId) {
     const res = await this._call('getPosition', [accountAddress, symbolId]);
@@ -42,11 +39,20 @@ export class PToken extends ContractBase {
       throw new Error(`PToken#getMargin: invalid result with (${accountAddress})`)
     }
   }
-  async getPositions(accountAddress) {
-    const res = await this._call('getPositions', [accountAddress]);
-    if (Array.isArray(res)) {
-      return res.map((i) => processPosition(i))
-    }
+  async getActiveSymbolIds() {
+    return await this._call('getActiveSymbolIds');
+  }
+  async isActiveSymbolId(symbolId) {
+    return await this._call('isActiveSymbolId', [symbolId]);
+  }
+  async isApprovedForAll(owner, operator) {
+    return await this._call('isApprovedForAll', [owner, operator]);
+  }
+  async getApproved(tokenId) {
+    return await this._call('getApproved', [tokenId]);
+  }
+  async getNumPositionHolders(symbolId) {
+    return await this._call('getNumPositionHolders', [symbolId]);
   }
 
   // === transaction ===

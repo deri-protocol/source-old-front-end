@@ -1,15 +1,11 @@
-import { bg } from '../utils'
-// import {
-//   PToken,
-// } from '../contract/p_token'
-import { pTokenFactory } from '../factory'
-import { TIMEOUT, ACCOUNT2_ADDRESS, ACCOUNT_ADDRESS, POOL_ADDRESS } from './setup'
+import { bg } from '../../utils'
+import { pTokenFactory } from '../../factory'
+import { TIMEOUT, ACCOUNT2_ADDRESS, ACCOUNT_ADDRESS, POOL_ADDRESS, PTOKEN_ADDRESS } from '../setup'
 
 describe('PToken', () => {
   let pToken
   beforeAll(() => {
-    pToken =  pTokenFactory('97', POOL_ADDRESS, true)
-    //pToken =  new PToken('97', '0xeBA1c76F7A773B8210130f068798839F84392241', true)
+    pToken =  pTokenFactory('97', PTOKEN_ADDRESS)
   })
   test('pool()', async() => {
     const output = POOL_ADDRESS
@@ -28,7 +24,7 @@ describe('PToken', () => {
     expect(await pToken.getMargin(ACCOUNT_ADDRESS, 0)).toEqual(output)
   }, TIMEOUT)
   test('getMargins()', async() => {
-    const output = 10
+    const output = 3
     const res = await pToken.getMargins(ACCOUNT_ADDRESS)
     expect(res.length).toEqual(output)
   }, TIMEOUT)
@@ -41,7 +37,7 @@ describe('PToken', () => {
     expect(await pToken.getPosition(ACCOUNT_ADDRESS, 0)).toEqual(output)
   }, TIMEOUT)
   test('getPositions()', async() => {
-    const output = 10
+    const output = 2
     const res = await pToken.getPositions(ACCOUNT_ADDRESS)
     expect(res.length).toEqual(output)
   }, TIMEOUT)

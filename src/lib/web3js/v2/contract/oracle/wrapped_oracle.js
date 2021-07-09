@@ -1,9 +1,9 @@
-import { ContractBase } from "./contract_base";
-import { wrappedOracleAbi } from './abis';
-import { deriToNatural } from "../utils";
+import { ContractBase } from "../contract_base";
+import { wrappedOracleAbi } from '../abis';
+import { deriToNatural } from "../../utils";
 
 export class WrappedOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal) {
+  constructor(chainId, address, symbol, decimal='18') {
     super(chainId, address, wrappedOracleAbi)
     this.symbol = symbol
     this.decimal = decimal

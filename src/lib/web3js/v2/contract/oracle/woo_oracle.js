@@ -1,9 +1,9 @@
-import { ContractBase } from "./contract_base";
-import { wooOracleAbi } from './abis';
-import { bg } from '../utils';
+import { ContractBase } from "../contract_base";
+import { wooOracleAbi } from '../abis';
+import { bg } from '../../utils';
 
 export class WooOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal) {
+  constructor(chainId, address, symbol, decimal='18') {
     super(chainId, address, wooOracleAbi)
     this.symbol = symbol
     this.decimal = decimal

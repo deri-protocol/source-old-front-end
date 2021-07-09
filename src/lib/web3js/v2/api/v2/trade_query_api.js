@@ -1,14 +1,14 @@
-import { perpetualPoolFactory, bTokenFactory, pTokenFactory } from '../factory';
-import { getPoolBTokenIdList, getPoolBTokenList, getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList} from '../config'
+import { perpetualPoolFactory, bTokenFactory, pTokenFactory } from '../../factory';
+import { getPoolBTokenIdList, getPoolBTokenList, getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList} from '../../config'
 import {
   calculateEntryPrice,
   calculateLiquidationPrice,
   calculateFundingRate,
   calculateFundingFee,
   processFundingRate,
-} from '../calculation';
-import { getOraclePrice, bg, min, max } from '../utils'
-import { fundingRateCache, priceCache } from '../api/api_globals';
+} from '../../calculation';
+import { getOraclePrice, bg, min, max } from '../../utils'
+import { fundingRateCache, priceCache } from '../api_globals';
 
 export const getSpecification = async (
   chainId,
@@ -18,7 +18,6 @@ export const getSpecification = async (
 ) => {
   try {
     const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, bTokenId, symbolId)
-    const bTokens = getPoolBTokenList(poolAddress)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     const [symbolInfo, parameterInfo] = await Promise.all([
       perpetualPool.getSymbol(symbolId),
@@ -36,7 +35,7 @@ export const getSpecification = async (
     } = parameterInfo
     return {
       symbol: symbol,
-      bSymbol: bTokens.map((b) => b.bTokenSymbol).join(','),
+      bSymbol: bTokenSymbol,
       multiplier: multiplier.toString(),
       feeRatio: feeRatio.toString(),
       fundingRateCoefficient: fundingRateCoefficient.toString(),
@@ -205,8 +204,8 @@ export const getWalletBalance = async (
 export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => {
   try {
     const { bToken: bTokenAddress } = getPoolConfig2(poolAddress, bTokenId);
-    const bToken = await bTokenFactory(chainId, bTokenAddress)
-    return bToken.isUnlocked(accountAddress, poolAddress)
+    const bToken = bTokenFactory(chainId, bTokenAddress)
+    return await bToken.isUnlocked(accountAddress, poolAddress)
   } catch(err) {
     console.log(`${err}`)
   }

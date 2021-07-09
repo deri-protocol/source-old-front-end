@@ -1,8 +1,25 @@
-export const catchError = (func, metthodName, defaultValue) => {
+import { depositMarginV2l } from "../api"
+
+export const catchApiError = async (func, args, methodName, defaultValue) => {
   try {
-    return func()
+    //console.log('args', args, methodName, defaultValue)
+    // console.log(await func(...args))
+    const res = await func(...args)
+    return res
   } catch (err) {
-    console.log(`${metthodName}: ${err}`)
+    console.log(`${methodName}:`, err)
+    //console.log(`${methodName}: ${err}`)
   }
   return defaultValue
 }
+
+export const catchTxApiError = async (func, args) => {
+  let res;
+  try {
+    const result = await func(...args);
+    res = { success: true, transaction: result };
+  } catch (err) {
+    res = { success: false, error: err };
+  }
+  return res;
+};

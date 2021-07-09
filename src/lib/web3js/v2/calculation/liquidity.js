@@ -79,3 +79,24 @@ export const calculateMaxRemovableLiquidity = (
     );
   }
 };
+
+// for v1 mining
+export const calculateShareValue = (lTokenTotalSupply, liquidity) =>
+  bg(lTokenTotalSupply).eq(0) ? bg(0) : bg(liquidity).div(lTokenTotalSupply);
+
+export const calculateMaxRemovableShares = (
+  lTokenBalance,
+  lTokenTotalSupply,
+  liquidity,
+  value,
+  cost,
+  minPoolMarginRatio,
+) => {
+  const shareValue = calculateShareValue(lTokenTotalSupply, liquidity);
+  const removable = bg(liquidity)
+    .plus(cost)
+    .minus(value)
+    .minus(bg(value).abs().times(minPoolMarginRatio));
+  const shares = max(min(bg(lTokenBalance), removable.div(shareValue)), bg(0));
+  return shares;
+};

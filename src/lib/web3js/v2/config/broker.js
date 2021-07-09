@@ -1,12 +1,12 @@
 import { getConfig } from './config';
 
-export const getBrokerConfigList = () => {
-  const config = getConfig()
+export const getBrokerConfigList = (version) => {
+  const config = getConfig(version)
   return config.brokerManager
 };
 
-export const getBrokerConfig = (chainId) => {
-  const filteredByChainId = getBrokerConfigList().filter((c) =>c.chainId === chainId);
+export const getBrokerConfig = (chainId, version) => {
+  const filteredByChainId = getBrokerConfigList(version).filter((c) =>c.chainId === chainId);
   if (filteredByChainId.length > 0) {
     return filteredByChainId[0];
   }

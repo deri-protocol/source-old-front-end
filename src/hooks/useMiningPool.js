@@ -70,7 +70,7 @@ export default function useMiningPool(isNew){
     const all = []
     configs = configs.reduce((total,config) => {
       const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
-      if(config.version === 'v2' && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
+      if((config.version === 'v2' || config.version === 'v2_lite')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
         total.push(config)
@@ -120,7 +120,7 @@ export default function useMiningPool(isNew){
       }
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
-      let v2Pools = pools.filter(p => p.version === 'v2')
+      let v2Pools = pools.filter(p => p.version === 'v2' || p.version === 'v2_lite')
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);

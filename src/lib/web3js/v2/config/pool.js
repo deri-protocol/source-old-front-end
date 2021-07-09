@@ -1,6 +1,6 @@
 import { getConfig } from './config';
 
-const expendPoolConfig = (config) => {
+const expendPoolConfigV2 = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -32,15 +32,47 @@ const expendPoolConfig = (config) => {
     .flat();
 };
 
-export const getPoolConfigList = () => {
-  const config = getConfig()
-  return expendPoolConfig(config)
+const expendPoolConfigV2Lite = (config) => {
+  const pools = config.pools;
+  //console.log(pools)
+  return pools
+    .map((pool) => {
+      let result = [];
+      for (let i = 0; i < pool.symbols.length; i++) {
+        const symbol = pool.symbols[i];
+        result.push({
+          pool: pool.pool,
+          pToken: pool.pToken,
+          lToken: pool.lToken,
+          router: pool.router,
+          initialBlock: pool.initialBlock,
+          chainId: pool.chainId,
+          bToken: pool.bToken,
+          bTokenSymbol: pool.bTokenSymbol,
+          symbol: symbol.symbol,
+          symbolId: symbol.symbolId,
+          unit: symbol.unit,
+          version: 'v2_lite',
+        });
+      }
+      return result;
+    })
+    .flat();
 };
 
-export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId) => {
+export const getPoolConfigList = (version='v2') => {
+  const config = getConfig(version)
+  if (version === 'v2') {
+    return expendPoolConfigV2(config)
+  } else if (version === 'v2_lite') {
+    return expendPoolConfigV2Lite(config)
+  }
+};
+
+export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId, version='v2') => {
   bTokenId = typeof bTokenId === 'number' ? bTokenId.toString() : bTokenId
   symbolId = typeof symbolId === 'number' ? symbolId.toString() : symbolId
-  const poolConfigList = getPoolConfigList()
+  const poolConfigList = getPoolConfigList(version)
   const check = bTokenId != null
     ? symbolId != null
       ? (i) =>
@@ -58,8 +90,8 @@ export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId) => {
   throw new Error(`Cannot find the pool config by poolAddress(${poolAddress}) bTokenId(${bTokenId}) and symbolId(${symbolId})`)
 }
 
-export const getPoolConfig = (poolAddress, bTokenId, symbolId) => {
-  const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId)
+export const getPoolConfig = (poolAddress, bTokenId, symbolId, version='v2') => {
+  const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId, version)
   return res[0]
 }
 
@@ -144,3 +176,14 @@ export const getPoolSymbolIdList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.symbols.map((b) => b.symbolId);
 };
+
+export const getPoolVersion = (poolAddress) => {
+  const pools = ['v2', 'v2_lite'].reduce((acc, version) => {
+    return acc.concat(getConfig(version)['pools'])
+  }, [])
+  //console.log('pools', pools)
+  const index = pools.findIndex((v) => v.pool === poolAddress)
+  if (index >= 0) {
+    return pools[index].version
+  }
+}

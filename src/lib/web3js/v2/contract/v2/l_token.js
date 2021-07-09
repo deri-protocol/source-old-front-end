@@ -1,6 +1,6 @@
-import { ContractBase } from './contract_base'
-import { lTokenAbi } from './abis';
-import { deriToNatural } from '../utils'
+import { ContractBase } from '../contract_base'
+import { lTokenAbi } from '../abis';
+import { deriToNatural } from '../../utils'
 
 const processAsset = (res) => {
   return {

@@ -1,7 +1,7 @@
-import { bg } from '../utils'
+import { bg } from '../../utils'
 import {
-  PerpetualPool,
-} from '../contract/perpetual_pool'
+  perpetualPoolFactory,
+} from '../../factory'
 import {
   TIMEOUT,
   POOL_ADDRESS,
@@ -11,18 +11,17 @@ import {
   PROTOCOL_FEE_COLLECTOR,
   BTCUSD_ORACLE_ADDRESS,
   BTOKEN_ADDRESS,
-} from './setup';
+} from '../setup';
 
 describe('PerpetualPool', () => {
   let perpetualPool
   beforeAll(() => {
-    perpetualPool = new PerpetualPool('97', POOL_ADDRESS, true)
+    perpetualPool = perpetualPoolFactory('97', POOL_ADDRESS)
   })
   test('getLengths()', async() => {
-    const output = 10 
     await perpetualPool.getLengths()
-    expect(perpetualPool.bTokenCount).toEqual(output)
-    expect(perpetualPool.symbolCount).toEqual(output)
+    expect(perpetualPool.bTokenCount).toEqual(3)
+    expect(perpetualPool.symbolCount).toEqual(2)
   }, TIMEOUT)
   test('getAddresses()', async() => {
     const output = {
@@ -96,13 +95,5 @@ describe('PerpetualPool', () => {
     const input = '0'
     const output = '0x3050D5360382B7f1dbe6895Dd5645a9cf38F14f0'
     expect(await perpetualPool.getSymbolOracle(input)).toEqual(output)
-  }, TIMEOUT)
-  test('getLastUpdatedBlockNumber', async() => {
-    const output = 10178982
-    expect(await perpetualPool.getLastUpdatedBlockNumber()).toBeGreaterThanOrEqual(output)
-  }, TIMEOUT)
-  test('getLatestBlockNumber', async() => {
-    const output = 10178982
-    expect(await perpetualPool.getLatestBlockNumber()).toBeGreaterThan(output)
   }, TIMEOUT)
 })

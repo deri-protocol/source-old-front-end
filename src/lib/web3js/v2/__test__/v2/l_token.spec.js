@@ -1,16 +1,17 @@
-import { bg } from '../utils'
-import { lTokenFactory } from '../factory'
+import { bg } from '../../utils'
+import { lTokenFactory } from '../../factory'
 import {
   TIMEOUT,
   POOL_ADDRESS,
   ACCOUNT2_ADDRESS,
   ACCOUNT_ADDRESS,
-} from './setup';
+  LTOKEN_ADDRESS,
+} from '../setup';
 
 describe('LToken', () => {
   let lToken
   beforeAll(() => {
-    lToken = lTokenFactory('97', POOL_ADDRESS, true)
+    lToken = lTokenFactory('97', LTOKEN_ADDRESS)
   })
   test('balanceOf()', async() => {
     const output = '1'
@@ -32,7 +33,7 @@ describe('LToken', () => {
     expect(await lToken.getAsset(ACCOUNT_ADDRESS, 0)).toEqual(output)
   }, TIMEOUT)
   test('getAssets()', async() => {
-    const output = 10
+    const output = 3
     const res = await lToken.getAssets(ACCOUNT_ADDRESS)
     expect(res.length).toEqual(output)
   }, TIMEOUT)

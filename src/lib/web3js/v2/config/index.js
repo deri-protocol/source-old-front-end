@@ -15,6 +15,7 @@ export {
   getPoolBTokenIdList,
   getPoolSymbolList,
   getPoolSymbolIdList,
+  getPoolVersion,
 } from './pool';
 export { getOracleConfigList, getOracleConfig } from './oracle';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

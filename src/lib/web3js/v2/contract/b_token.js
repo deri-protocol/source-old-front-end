@@ -1,12 +1,12 @@
 import { ContractBase } from './contract_base'
-import { bTokenAbi } from './abis';
+import { bTokenLiteAbi } from './abis';
 import { deriToNatural, bg } from '../utils'
 import { MAX_UINT256} from '../config'
 
 
 export class BToken extends ContractBase {
   constructor(chainId, contractAddress) {
-    super(chainId, contractAddress, bTokenAbi);
+    super(chainId, contractAddress, bTokenLiteAbi);
   }
   // === query ===
   async symbol() {

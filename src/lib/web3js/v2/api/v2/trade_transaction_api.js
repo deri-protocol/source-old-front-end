@@ -1,12 +1,12 @@
-import { isOrderValid } from '../calculation';
-import { getPoolConfig2, getPoolSymbolIdList, getPoolBTokenIdList } from '../config'
+import { isOrderValid } from '../../calculation';
+import { getPoolConfig2, getPoolSymbolIdList, getPoolBTokenIdList } from '../../config'
 import {
   bTokenFactory,
   perpetualPoolRouterFactory,
   pTokenFactory,
   perpetualPoolFactory,
-} from '../factory';
-import { getOracleInfo, bg } from '../utils';
+} from '../../factory';
+import { getOracleInfo, bg } from '../../utils';
 
 export const unlock = async (chainId, poolAddress, accountAddress, bTokenId) => {
    const { bToken: bTokenAddress } = getPoolConfig2(poolAddress, bTokenId);
@@ -113,7 +113,7 @@ export const tradeWithMargin = async (
     //console.log('margin', margin.toString(), marginHeld.toString())
     let liquidityUsed = symbols.reduce((accum, a, index) => {
       if (index === parseInt(symbolId)) {
-        return accum.plus(bg(a.tradersNetVolume.plus(newVolume)).times(a.price).times(a.multiplier).abs())
+        return accum.plus(bg(a.tradersNetVolume).plus(newVolume).times(a.price).times(a.multiplier).abs())
       } else {
         return accum.plus(bg(a.tradersNetVolume).times(a.price).times(a.multiplier).abs())
       }

@@ -1,9 +1,9 @@
-import { ContractBase } from "./contract_base";
-import { chainlinkOracleAbi } from './abis';
-import { bg } from "../utils";
+import { ContractBase } from "../contract_base";
+import { chainlinkOracleAbi } from '../abis';
+import { bg } from "../../utils";
 
 export class ChainlinkOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal) {
+  constructor(chainId, address, symbol, decimal='18') {
     super(chainId, address, chainlinkOracleAbi)
     this.symbol = symbol
     this.decimal = decimal

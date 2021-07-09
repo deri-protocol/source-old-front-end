@@ -9,6 +9,7 @@ import {
   getOracleConfig,
   getDailyBlockNumberConfig,
   getChainIds,
+  getPoolVersion,
 } from '../config';
 import { getBrokerConfig } from '../config/broker';
 import {
@@ -49,7 +50,7 @@ describe('config', () => {
   });
   test('getPoolConfigList()', () => {
     const output = 6;
-    expect(getPoolConfigList('dev').length).toEqual(output);
+    expect(getPoolConfigList().length).toEqual(output);
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
     const output = 2;
@@ -161,5 +162,49 @@ describe('config', () => {
     expect(res.symbolCount).toEqual(2)
     expect(getPoolConfig2(POOL_ADDRESS, '0').bTokenSymbol).toEqual('BUSD')
     expect(getPoolConfig2(POOL_ADDRESS, null, '1').symbol).toEqual('ETHUSD')
+  })
+  test('getOracleConfigList with v2_lite', () => {
+    const output = 2
+    expect(getOracleConfigList('v2_lite').length).toEqual(output)
+  })
+  test('getOracleConfig for v2_lite', () => {
+    const output = {
+      chainId: '97',
+      symbol: 'BTCUSD',
+      decimal: '18',
+      address: '0x78Db6d02EE87260a5D825B31616B5C29f927E430',
+    };
+    expect(getOracleConfig('97', 'BTCUSD', 'v2_lite')).toEqual(output)
+  })
+  test('getPoolconfig() for v2_lite', () => {
+    const poolLiteAddress = '0xb255702A263F1909f7De7569f57c9493Ac08EbfA'
+    expect(
+      getPoolConfig(
+        poolLiteAddress,
+        '0',
+        '1',
+        'v2_lite'
+      ).pToken
+    ).toEqual('0x5bB522009fFD7C44a05A3522120b7D3ddfDc5dDF');
+    expect(
+      getPoolConfig(
+        poolLiteAddress,
+        '0',
+        null,
+        'v2_lite'
+      ).bTokenSymbol
+    ).toEqual('BUSD');
+    expect(
+      getPoolConfig(
+        poolLiteAddress,
+        null,
+        null,
+        'v2_lite'
+      ).lToken
+    ).toEqual('0x0f21B3AFDF6bcfc418E8AaDB758E23626a431914');
+  });
+  test('getPoolVersion', () => {
+    expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
+    expect(getPoolVersion('0xb255702A263F1909f7De7569f57c9493Ac08EbfA')).toEqual('v2_lite')
   })
 });

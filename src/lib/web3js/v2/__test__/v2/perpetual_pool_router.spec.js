@@ -1,12 +1,12 @@
 import {
-  PerpetualPoolRouter
-} from '../contract/perpetual_pool_router'
-import {TIMEOUT, ROUTER_ADDRESS, POOL_ADDRESS} from './setup'
+  perpetualPoolRouterFactory
+} from '../../factory'
+import {TIMEOUT, ROUTER_ADDRESS, POOL_ADDRESS} from '../setup'
 
 describe('perpetualPoolRouter', () => {
   let perpetualPoolRouter
   beforeAll(() => {
-    perpetualPoolRouter = new PerpetualPoolRouter('97', ROUTER_ADDRESS, true)
+    perpetualPoolRouter = perpetualPoolRouterFactory('97', ROUTER_ADDRESS)
   })
   test('pool()', async() => {
     const output =  POOL_ADDRESS

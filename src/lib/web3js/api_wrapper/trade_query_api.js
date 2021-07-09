@@ -29,6 +29,20 @@ import {
   getFundingRate as getFundingRateV2,
   getLiquidityUsed as getLiquidityUsedV2,
   getFundingRateCache as getFundingRateCacheV2,
+
+  getPositionInfoV2l,
+  isUnlockedV2l,
+  getEstimatedMarginV2l,
+  getEstimatedFeeV2l,
+  getEstimatedFundingRateV2l,
+  getEstimatedLiquidityUsedV2l,
+  getSpecificationV2l,
+  getWalletBalanceV2l,
+  getFundingRateV2l,
+  getLiquidityUsedV2l,
+  getFundingRateCacheV2l,
+
+  getPoolVersion,
 } from '../v2'
 
 
@@ -38,6 +52,9 @@ export const getSpecification = async (
   bTokenId,
   symbolId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getSpecificationV2l(chainId, poolAddress, symbolId)
+  }
   if (symbolId === undefined) {
     return getSpecification2(chainId, poolAddress)
   } else {
@@ -46,6 +63,9 @@ export const getSpecification = async (
 }
 
 export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getPositionInfoV2l(chainId, poolAddress, symbolId)
+  }
   if (symbolId === undefined) {
     return getPositionInfo2(chainId, poolAddress, accountAddress)
   } else {
@@ -58,6 +78,9 @@ export const getWalletBalance = async (
   accountAddress,
   bTokenId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getWalletBalanceV2l(chainId, poolAddress, accountAddress)
+  }
   if (bTokenId === undefined) {
     return getWalletBalance2(chainId, poolAddress, accountAddress)
   } else {
@@ -66,6 +89,9 @@ export const getWalletBalance = async (
 }
 
 export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => { 
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return isUnlockedV2l(chainId, poolAddress, accountAddress)
+  }
   if (accountAddress === undefined) {
     return isDeriUnlocked(chainId, poolAddress)
   } else if (bTokenId === undefined) {
@@ -76,6 +102,9 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId)
 }
 
 export const getEstimatedFee = async (chainId, poolAddress, volume, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getEstimatedFeeV2l(chainId, poolAddress, volume, symbolId)
+  }
   if (symbolId === undefined) {
     return getEstimatedFee2(chainId, poolAddress, volume)
   } else {
@@ -91,6 +120,9 @@ export const getEstimatedMargin = async(
   leverage,
   symbolId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getEstimatedMarginV2l(chainId, poolAddress, accountAddress, volume, leverage, symbolId)
+  }
   if (symbolId === undefined) {
     return getEstimatedMargin2(chainId, poolAddress, accountAddress, volume, leverage)
   } else {
@@ -99,6 +131,9 @@ export const getEstimatedMargin = async(
 }
 
 export const getFundingRate = async (chainId, poolAddress, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getFundingRateV2l(chainId, poolAddress, symbolId)
+  }
   if (symbolId === undefined) {
     return getFundingRate2(chainId, poolAddress)
   } else {
@@ -112,6 +147,9 @@ export const getEstimatedFundingRate = async (
   newNetVolume,
   symbolId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getEstimatedFundingRateV2l(chainId, poolAddress, newNetVolume, symbolId)
+  }
   if (symbolId === undefined) {
     return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume)
   } else {
@@ -124,6 +162,9 @@ export const getLiquidityUsed = async (
   poolAddress,
   symbolId
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getLiquidityUsedV2l(chainId, poolAddress, symbolId)
+  }
   if (symbolId === undefined) {
     return getLiquidityUsed2(chainId, poolAddress)
   } else {
@@ -137,6 +178,9 @@ export const getEstimatedLiquidityUsed = async (
   newNetVolume,
   symbolId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getEstimatedLiquidityUsedV2l(chainId, poolAddress, newNetVolume, symbolId)
+  }
   if (symbolId === undefined) {
     return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume)
   } else {
@@ -145,6 +189,9 @@ export const getEstimatedLiquidityUsed = async (
 }
 
 export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getFundingRateCacheV2l(chainId, poolAddress, symbolId);
+  }
   if (symbolId === undefined) {
     return getFundingRateCache2(chainId, poolAddress)
   } else {

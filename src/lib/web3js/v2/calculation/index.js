@@ -19,4 +19,6 @@ export {
   calculateMaxRemovableLiquidity,
   isBToken0RatioValid,
   isPoolMarginRatioValid,
+  calculateShareValue,
+  calculateMaxRemovableShares,
 } from './liquidity'

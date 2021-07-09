@@ -15,6 +15,14 @@ import {
   // depositMarginWithPrices as depositMarginV2,
   // withdrawMarginWithPrices as withdrawMarginV2,
   // closePositionWithPrices as closePositionV2,
+
+  unlockV2l,
+  tradeWithMarginV2l,
+  closePositionV2l,
+  depositMarginV2l,
+  withdrawMarginV2l,
+
+  getPoolVersion,
 } from '../v2';
 
 export const unlock = async (
@@ -23,6 +31,9 @@ export const unlock = async (
   accountAddress,
   bTokenId
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return unlockV2l(chainId, poolAddress, accountAddress)
+  }
   if (accountAddress === undefined) {
     return unlockDeri(chainId, poolAddress);
   } else if (bTokenId === undefined) {
@@ -39,6 +50,9 @@ export const depositMargin = async (
   amount,
   bTokenId
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return depositMarginV2l(chainId, poolAddress, accountAddress, amount)
+  }
   if (bTokenId === undefined) {
     return depositMargin2(chainId, poolAddress, accountAddress, amount);
   } else {
@@ -60,6 +74,9 @@ export const withdrawMargin = async (
   bTokenId,
   isMaximum
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return withdrawMarginV2l(chainId, poolAddress, accountAddress, amount, isMaximum)
+  }
   if (bTokenId === undefined) {
     return withdrawMargin2(chainId, poolAddress, accountAddress, amount);
   } else {
@@ -81,6 +98,9 @@ export const tradeWithMargin = async (
   newVolume,
   symbolId
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return tradeWithMarginV2l(chainId, poolAddress, accountAddress, newVolume, symbolId)
+  }
   if (symbolId === undefined) {
     return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume);
   } else {
@@ -100,6 +120,9 @@ export const closePosition = async (
   accountAddress,
   symbolId
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return closePositionV2l(chainId, poolAddress, accountAddress, symbolId)
+  }
   if (symbolId === undefined) {
     return closePosition2(chainId, poolAddress, accountAddress);
   } else {

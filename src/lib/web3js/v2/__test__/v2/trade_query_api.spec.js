@@ -1,4 +1,4 @@
-import { DeriEnv } from '../../config'
+import { DeriEnv } from '../../../config'
 import {
   getPoolBTokensBySymbolId,
   getWalletBalance,
@@ -12,15 +12,15 @@ import {
   getEstimatedLiquidityUsed,
   getEstimatedFee,
   getFundingFee
-} from '../api'
-import { TIMEOUT, POOL_ADDRESS } from './setup';
+} from '../../api'
+import { TIMEOUT, POOL_ADDRESS } from '../setup';
 
 describe('Trade query api', () => {
   it('getSpecification()', async() => {
     const input = ['97', POOL_ADDRESS, '0', '0', true]
     const output = {
       symbol: 'BTCUSD',
-      bSymbol: 'BUSD,AUTO,CAKE',
+      bSymbol: 'BUSD',
       multiplier: '0.0001',
       feeRatio: '0.0005',
       minPoolMarginRatio: '1',
@@ -142,10 +142,10 @@ describe('Trade query api', () => {
 
   it('getFundingFee2()', async() => {
     const output = '-21.998'
-    // const fundingFee = await getFundingFee('97', POOL_ADDRESS, ACCOUNT_ADDRESS, '0', true)
+    // const fundingFee = await getFundingFee('97', POOL_ADDRESS, ACCOUNT_ADDRESS, '0')
     // expect(fundingFee).toEqual(output)
     DeriEnv.set('prod')
-    const fundingFee2 = await getFundingFee('56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0xFefC938c543751babc46cc1D662B982bd1636721', '0', true)
+    const fundingFee2 = await getFundingFee('56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0xFefC938c543751babc46cc1D662B982bd1636721', '0')
     DeriEnv.set('dev')
     expect(fundingFee2).toEqual(output)
   }, TIMEOUT)

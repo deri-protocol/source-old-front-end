@@ -21,10 +21,13 @@ import {
   getChainProviderUrl,
   getDailyBlockNumber,
   validateArgs,
-  catchError,
+  catchApiError,
   getEpochTimeRange,
+  getBlockInfo,
+  getLatestBlockNumber,
+  getLastUpdatedBlockNumber,
 } from '../utils'
-import { TIMEOUT, ACCOUNT_ADDRESS} from './setup';
+import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS, POOL_ADDRESS_LITE} from './setup';
 
 describe('utils', () => {
   test('toWei()', () => {
@@ -91,7 +94,7 @@ describe('utils', () => {
   });
 
   test('getOraclePrice()', async() => {
-    const [input, output] = [[97, 'BTCUSD', true], {priceLength: 5}];
+    const [input, output] = [[97, 'BTCUSD'], {priceLength: 5}];
     const res = await getOraclePrice(...input)
     //console.log(res)
     expect(res.split('.')[0].length).toEqual(output.priceLength);
@@ -149,21 +152,31 @@ describe('utils', () => {
     expect(validateArgs(1.99)).toEqual(true);
     expect(validateArgs(undefined)).toEqual(false);
   })
-  test('catchError()', () => {
-    const testFunc1 = () => {
-      return '1'
+  test('catchApiError()', async() => {
+    // async function mock
+    const testFunc1 = async(num) => {
+      return await (new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(num)
+        }, 100)
+      }))
     }
-    expect(catchError(testFunc1, 'testFunc1()', '0')).toEqual('1');
-    const testFunc2 = () => {
-      const res = Math.random()
-      if (res > 1) {
-        return res
-      } else {
-        throw new Error('Hi, this is a test error')
-      }
+    expect(await catchApiError(testFunc1, [123], 'testFunc1()', 0)).toEqual(123);
+    // async function mock
+    const testFunc2 = async() => {
+      return await (new Promise((resolve, reject) => {
+        setTimeout(() => {
+          const res = Math.random()
+          if (res > 1) {
+            resolve(res)
+          } else {
+            reject(new Error('Hi, this is a test error'))
+          }
+        }, 100)
+      }))
     }
-    expect(catchError(testFunc2, 'testFunc2()', 666)).toEqual(666);
-  })
+    expect(await catchApiError(testFunc2, [], 'testFunc2()', 666)).toEqual(666);
+  }, TIMEOUT)
   test('getEpochTimeRange', () => {
     const input = new Date('2021-06-28T01:00:00Z')
     const output = [(new Date('2021-06-28T00:00:00Z')).getTime()/1000, (new Date('2021-06-28T08:00:00Z')).getTime()/1000]
@@ -179,4 +192,27 @@ describe('utils', () => {
     const output = [(new Date('2021-06-28T16:00:00Z')).getTime()/1000, (new Date('2021-06-29T00:00:00Z')).getTime()/1000]
     expect(getEpochTimeRange(input)).toEqual(output)
   })
+  test('getBlockInfo', async() => {
+    const input = ['97', '10000000']
+    const output= ['0x9433da9e2a6778b78fb2961995f2558da9c3e9b8871ab93e94293718c7d037be', 1624497340]
+    const blockInfo = await getBlockInfo(...input)
+    expect(blockInfo.hash).toEqual(output[0])
+    expect(blockInfo.timestamp).toEqual(output[1])
+  }, TIMEOUT)
+  test('getLatestBlockNumber', async() => {
+    const input = '97'
+    const output= 10351162
+    const blockNumber = await getLatestBlockNumber(input)
+    expect(blockNumber).toBeGreaterThan(output)
+  }, TIMEOUT)
+
+  test('getLastUpdatedBlockNumber', async() => {
+    const output = 10178982
+    expect(await getLastUpdatedBlockNumber('97', POOL_ADDRESS)).toBeGreaterThanOrEqual(output)
+  }, TIMEOUT)
+
+  test('getLastUpdatedBlockNumber V2 lite', async() => {
+    const output = 10178982
+    expect(await getLastUpdatedBlockNumber('97', POOL_ADDRESS_LITE, 5)).toBeGreaterThanOrEqual(output)
+  }, TIMEOUT)
 })

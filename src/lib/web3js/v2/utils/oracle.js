@@ -1,6 +1,6 @@
 import { getOracleConfig } from '../config/oracle';
 import { getPoolConfig2 } from '../config/pool';
-import { oracleFactory } from '../factory';
+import { oracleFactory } from '../factory/shared';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../../config';
 
@@ -50,9 +50,10 @@ export const getOracleInfo = async (poolAddress, symbolId) => {
 //   return deriToNatural(responseJson.price).toString();
 // };
 
-export const getOraclePrice = async (chainId, symbol) => {
+export const getOraclePrice = async (chainId, symbol, version='v2') => {
   chainId = normalizeChainId(chainId);
-  const config = getOracleConfig(chainId, symbol);
+  const config = getOracleConfig(chainId, symbol, version);
+  // console.log('oracle config',config)
   if (config && config.address) {
     if (!config.decimal) {
       throw new Error('getOraclePrice: decimal is empty', config.decimal);

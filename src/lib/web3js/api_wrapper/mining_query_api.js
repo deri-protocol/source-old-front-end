@@ -4,6 +4,10 @@ import {
   getLiquidityInfo as getLiquidityInfoV2,
   getPoolLiquidity as getPoolLiquidityV2,
   getPoolInfoApy as getPoolInfoApyV2,
+  getLiquidityInfoV2l,
+  getPoolLiquidityV2l,
+  getPoolInfoApyV2l,
+  getPoolVersion,
  } from '../v2';
 
 export const getLiquidityInfo = async (
@@ -12,6 +16,9 @@ export const getLiquidityInfo = async (
   accountAddress,
   bTokenId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getLiquidityInfoV2l(chainId, poolAddress, accountAddress)
+  }
   if (bTokenId === undefined) {
     return getLiquidityInfo2(chainId, poolAddress, accountAddress)
   } else {
@@ -24,6 +31,9 @@ export const getPoolLiquidity = async (
   poolAddress,
   bTokenId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getPoolLiquidityV2l(chainId, poolAddress)
+  }
   if (bTokenId === undefined) {
     return getPoolLiquidity2(chainId, poolAddress)
   } else {
@@ -32,6 +42,9 @@ export const getPoolLiquidity = async (
 };
 
 export const getPoolInfoApy = async (chainId, poolAddress, bTokenId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getPoolInfoApyV2l(chainId, poolAddress)
+  }
   if (bTokenId === undefined) {
     return getPoolInfoApy2(chainId, poolAddress)
   } else {

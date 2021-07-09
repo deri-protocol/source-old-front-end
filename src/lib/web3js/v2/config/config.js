@@ -2,7 +2,7 @@ import { DeriEnv } from '../../config';
 import jsonConfig from '../resources/config.json';
 import { validateObjectKeyExist, validateIsArray } from '../utils';
 
-const validateConfig = (config) => {
+const validateConfigV2 = (config) => {
   validateObjectKeyExist(
     [
       'pool',
@@ -31,25 +31,60 @@ const validateConfig = (config) => {
   });
 };
 
-const processConfig = (config) => {
+const processConfigV2 = (config) => {
   // process config
   config['bTokenCount'] = config['bTokens'].length;
   config['symbolCount'] = config['symbols'].length;
 };
 
-const getJsonConfig = () => {
+const validateConfigV2Lite = (config) => {
+  validateObjectKeyExist(
+    [
+      'pool',
+      'pToken',
+      'lToken',
+      'initialBlock',
+      'bToken',
+      'bTokenSymbol',
+      'symbols',
+      'chainId',
+    ],
+    config,
+    ''
+  );
+  validateIsArray(config['symbols'], 'symbols');
+  config['symbols'].forEach((prop) => {
+    validateObjectKeyExist(['symbolId', 'symbol'], prop, 'symbol');
+  });
+};
+
+const processConfigV2Lite = (config) => {
+  // process config
+  config['symbolCount'] = config['symbols'].length;
+};
+
+const getJsonConfig = (version) => {
   const env = DeriEnv.get();
-  const configs = typeof jsonConfig === 'object' ? jsonConfig : JSON.parse(jsonConfig);
-  if (['prod', 'dev'].includes(env)) {
+  let configs = typeof jsonConfig === 'object' ? jsonConfig : JSON.parse(jsonConfig);
+  if (configs[version] && ['v2', 'v2_lite'].includes(version)) {
+    configs = configs[version]
+  }
+  if (['prod', 'dev'].includes(env)){
     //console.log(env)
-    if (configs[env]) {
+    if (configs && configs[env]) {
       //console.log(configs[env])
-      // pools
       const pools = configs[env].pools;
       if (pools && Array.isArray(pools)) {
-        for (let i = 0; i < pools.length; i++) {
-          validateConfig(pools[i]);
-          processConfig(pools[i]);
+        if (version === 'v2') {
+          for (let i = 0; i < pools.length; i++) {
+            validateConfigV2(pools[i]);
+            processConfigV2(pools[i]);
+          }
+        } else if (version === 'v2_lite') {
+          for (let i = 0; i < pools.length; i++) {
+            validateConfigV2Lite(pools[i]);
+            processConfigV2Lite(pools[i]);
+          }
         }
       }
       //console.log(configs[env])
@@ -59,11 +94,10 @@ const getJsonConfig = () => {
     }
   }
   throw new Error(
-    `getJsonConfig(): invalid config of env '${env}'`,
-    configs[env]
+    `getJsonConfig(): invalid config of version '${version}' and env '${env}'`
   );
 };
 
-export const getConfig = () => {
-  return getJsonConfig();
+export const getConfig = (version='v2') => {
+  return getJsonConfig(version);
 };

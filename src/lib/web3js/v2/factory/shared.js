@@ -1,18 +1,13 @@
 import Web3 from 'web3';
 import {
-  PerpetualPool,
-  PerpetualPoolRouter,
-  BToken,
-  LToken,
-  PToken,
   WooOracle,
-  ChainlinkOracle,
   WrappedOracle,
   BrokerManager,
-} from './contract';
-import { getChainProviderUrl } from './utils/chain';
+} from '../contract';
+import { getChainProviderUrl } from '../utils/chain';
+import { isBrowser, isJsDom } from '../utils/convert';
 
-const factory = (klass) => {
+export const factory = (klass) => {
   let instances = {}
   return (chainId, address) => {
     const key = address
@@ -48,29 +43,24 @@ export const web3Factory = (function () {
       if (Object.keys(web3InstanceMap).includes(chainId)) {
         return web3InstanceMap[chainId];
       }
-      if (['1', '3', '42'].includes(chainId)) {
-        console.log(
-          `==== web3Factory(${chainId}), please caution the access limits ===`
+      console.log(`--- web3factory init (${chainId}) ---`)
+      // using metaMask ethereum object
+      if (isBrowser() && !isJsDom() && typeof window.ethereum === 'object') {
+        web3InstanceMap[chainId] = new Web3(window.ethereum);
+        return web3InstanceMap[chainId];
+      } else if (isBrowser() && !isJsDom()) {
+        // MetaMask plugin is not installed in the browser
+        throw new Error('Please install MetaMask first');
+      } else {
+        const providerUrl = await getChainProviderUrl(chainId);
+        web3InstanceMap[chainId] = new Web3(
+          new Web3.providers.HttpProvider(providerUrl)
         );
+        return web3InstanceMap[chainId];
       }
-      const providerUrl = await getChainProviderUrl(chainId);
-      web3InstanceMap[chainId] = new Web3(
-        new Web3.providers.HttpProvider(providerUrl)
-      );
-      return web3InstanceMap[chainId];
     },
   };
 })();
-
-export const perpetualPoolFactory = factory(PerpetualPool)
-
-export const perpetualPoolRouterFactory = factory(PerpetualPoolRouter)
-
-export const bTokenFactory = factory(BToken)
-
-export const lTokenFactory = factory(LToken)
-
-export const pTokenFactory = factory(PToken)
 
 export const oracleFactory = (function () {
   const instanceMap = {};
@@ -79,14 +69,15 @@ export const oracleFactory = (function () {
     if (Object.keys(instanceMap).includes(key)) {
       return instanceMap[key];
     } else {
-      if (['80001'].includes(chainId)) {
-        instanceMap[key] = new ChainlinkOracle(
-          chainId,
-          address,
-          symbol,
-          decimal
-        );
-      } else if (['137'].includes(chainId)) {
+      // if (['80001'].includes(chainId)) {
+      //   instanceMap[key] = new ChainlinkOracle(
+      //     chainId,
+      //     address,
+      //     symbol,
+      //     decimal
+      //   );
+      // } else if (['137', '97'].includes(chainId)) {
+      if (['56', '137', '97','80001'].includes(chainId)) {
         instanceMap[key] = new WrappedOracle(chainId, address, symbol, decimal);
       } else {
         instanceMap[key] = new WooOracle(chainId, address, symbol, decimal);

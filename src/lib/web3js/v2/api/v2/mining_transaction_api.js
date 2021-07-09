@@ -1,7 +1,7 @@
-import { getPoolBTokenIdList, getPoolConfig2, getPoolSymbolIdList } from '../config'
-import { perpetualPoolRouterFactory, perpetualPoolFactory, lTokenFactory } from '../factory'
-import { getOracleInfo } from '../utils'
-import { isBToken0RatioValid, isPoolMarginRatioValid } from '../calculation'
+import { getPoolBTokenIdList, getPoolConfig2, getPoolSymbolIdList } from '../../config'
+import { perpetualPoolRouterFactory, perpetualPoolFactory, lTokenFactory } from '../../factory'
+import { getOracleInfo } from '../../utils'
+import { isBToken0RatioValid, isPoolMarginRatioValid } from '../../calculation'
 
 export const addLiquidity = async (
   chainId,

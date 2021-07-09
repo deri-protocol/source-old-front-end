@@ -1,12 +1,12 @@
 import { getConfig } from './config';
 
-export const getOracleConfigList = () => {
-  const config = getConfig()
+export const getOracleConfigList = (version) => {
+  const config = getConfig(version)
   return config.oracle
 };
 
-export const getOracleConfig = (chainId, symbol) => {
-  const filteredByChainId = getOracleConfigList().filter((c) =>
+export const getOracleConfig = (chainId, symbol, version='v2') => {
+  const filteredByChainId = getOracleConfigList(version).filter((c) =>
     symbol
       ? c.chainId === chainId && c.symbol === symbol
       : c.chainId === chainId

@@ -1,9 +1,8 @@
-// import { DeriEnv } from '../../config'
 import {
   getPoolLiquidity,
   getLiquidityInfo,
-} from '../api/mining_query_api'
-import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS } from './setup';
+} from '../../api/v2/mining_query_api'
+import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS } from '../setup';
 
 describe('Mining query api', () => {
   it('getPoolLiquidity()', async() => {

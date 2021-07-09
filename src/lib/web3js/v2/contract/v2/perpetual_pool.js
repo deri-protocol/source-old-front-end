@@ -1,6 +1,6 @@
-import { ContractBase } from './contract_base'
-import { perpetualPoolAbi } from './abis';
-import { deriToNatural, hexToNumber, bg } from '../utils'
+import { ContractBase } from '../contract_base'
+import { perpetualPoolAbi } from '../abis';
+import { deriToNatural, hexToNumber, bg } from '../../utils'
 
 export class PerpetualPool extends ContractBase {
   constructor(chainId, contractAddress) {

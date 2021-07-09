@@ -81,3 +81,12 @@ export const isOrderValid = (
   }
   return { success: false, error: 'Trader has insufficient margin' };
 };
+
+export const calculateTxFee = (volume, price, multiplier, feeRatio) => {
+  return bg(volume)
+    .abs()
+    .times(price)
+    .times(multiplier)
+    .times(feeRatio)
+    .toString();
+};
