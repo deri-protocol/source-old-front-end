@@ -11,6 +11,7 @@
   "go-trade":"Go Trade",
   "approve":"授权",
   "less-bnb":"BNB 低于最低要求",
+  "use-a-new-address":"使用新地址参与，谢谢！",
   "claim":"领取",
   "pending":"进行中...",
   "approve-failed" : "授权失败",

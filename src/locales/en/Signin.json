@@ -11,6 +11,7 @@
   "go-trade":"Go Trade",
   "approve":"APPROVE",
   "less-bnb":"Less BNB than the minimum requirement",
+  "use-a-new-address":"Use a new address to participate, thanks!",
   "claim":"CLAIM",
   "pending":"PENDING...",
   "approve-failed" : "Approve failed",
