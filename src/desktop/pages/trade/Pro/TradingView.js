@@ -44,7 +44,7 @@ function TradingView({version,trading,lang}){
         </div>
       </div>
       <div className='tradingview'>
-        <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} />
+        <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} version={version} />
       </div>
   </div>
   )
