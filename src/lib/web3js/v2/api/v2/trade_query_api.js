@@ -13,11 +13,10 @@ import { fundingRateCache, priceCache } from '../api_globals';
 export const getSpecification = async (
   chainId,
   poolAddress,
-  bTokenId,
   symbolId,
 ) => {
   try {
-    const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, bTokenId, symbolId)
+    const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, undefined, symbolId)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     const [symbolInfo, parameterInfo] = await Promise.all([
       perpetualPool.getSymbol(symbolId),

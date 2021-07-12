@@ -4,6 +4,7 @@ import {
   WrappedOracle,
   BrokerManager,
 } from '../contract';
+import { normalizeChainId } from '../utils';
 import { getChainProviderUrl } from '../utils/chain';
 import { isBrowser, isJsDom } from '../utils/convert';
 
@@ -40,6 +41,7 @@ export const web3Factory = (function () {
   const web3InstanceMap = {};
   return {
     async get(chainId) {
+      chainId = normalizeChainId(chainId)
       if (Object.keys(web3InstanceMap).includes(chainId)) {
         return web3InstanceMap[chainId];
       }

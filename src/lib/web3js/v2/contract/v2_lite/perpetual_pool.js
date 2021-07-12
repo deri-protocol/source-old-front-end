@@ -90,6 +90,7 @@ export class PerpetualPool extends ContractBase {
   }
   async removeLiquidity(accountAddress, amount, isMaximum) {
     if (isMaximum) {
+      console.log('MAX_INT256', MAX_INT256)
       return await this._transact(
         'removeLiquidity',
         [MAX_INT256, []],

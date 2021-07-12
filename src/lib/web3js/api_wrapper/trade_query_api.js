@@ -49,7 +49,6 @@ import {
 export const getSpecification = async (
   chainId,
   poolAddress,
-  bTokenId,
   symbolId,
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
@@ -58,7 +57,7 @@ export const getSpecification = async (
   if (symbolId === undefined) {
     return getSpecification2(chainId, poolAddress)
   } else {
-    return getSpecificationV2(chainId, poolAddress, bTokenId, symbolId)
+    return getSpecificationV2(chainId, poolAddress, symbolId)
   }
 }
 

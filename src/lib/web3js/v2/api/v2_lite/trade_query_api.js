@@ -182,7 +182,7 @@ export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
     const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
     const balance = await bTokenFactory(chainId, bTokenAddress).balanceOf(accountAddress)
     return balance.toString()
-  }, args)
+  }, args, 'getWalletBalance', '')
 }
 
 export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
@@ -191,7 +191,7 @@ export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
     const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
     const bToken = bTokenFactory(chainId, bTokenAddress)
     return await bToken.isUnlocked(accountAddress, poolAddress)
-  }, args)
+  }, args, 'isUnlocked', '')
 }
 
 const _getFundingRate = async(chainId, poolAddress, symbolId) => {

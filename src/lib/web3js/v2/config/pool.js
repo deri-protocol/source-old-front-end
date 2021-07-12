@@ -1,3 +1,4 @@
+import { bTokenFactory } from '../factory';
 import { getConfig } from './config';
 
 const expendPoolConfigV2 = (config) => {
@@ -87,10 +88,14 @@ export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId, versi
       return res
     }
   }
-  throw new Error(`Cannot find the pool config by poolAddress(${poolAddress}) bTokenId(${bTokenId}) and symbolId(${symbolId})`)
+  throw new Error(`getFilteredPoolConfigList(): cannot find the pool config by ${poolAddress} bTokenId(${bTokenId}) and symbolId(${symbolId})`)
 }
 
 export const getPoolConfig = (poolAddress, bTokenId, symbolId, version='v2') => {
+  // check the bToken in v2_lite
+  if (version === 'v2_lite') {
+    bTokenId = undefined
+  }
   const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId, version)
   return res[0]
 }
