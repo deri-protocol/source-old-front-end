@@ -229,7 +229,7 @@ function Signin({wallet={},lang}){
         <div>
           {lang['title-three']}
         </div>
-        
+        <div></div>
       </div>
       <div className='user-tasks'>
         <div className='header'>
