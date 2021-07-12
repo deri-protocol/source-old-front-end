@@ -3,8 +3,9 @@ import NumberFormat from 'react-number-format'
 import { removeLiquidity, bg, removeLpLiquidity } from '../../../../lib/web3js/indexV2';
 import Button from '../../../Button/Button';
 import useDisableScroll from '../../../../hooks/useDisableScroll';
+import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 
-export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit,lang}){  
+export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRemove,isLpPool,baseTokenId,unit,lang,version}){  
   const [amount, setAmount] = useState('');
   const [balance, setBalance] = useState('0');
   const [decimal, setDecimal] = useState('00');
@@ -42,7 +43,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
     if(isLpPool){
       res = await removeLpLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount);
     } else {
-      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount,baseTokenId);
+      res = await removeLiquidity(wallet.detail.chainId,address,wallet.detail.account,amount,baseTokenId,max.eq(cur));
     }
     
     if(!res || !res.success){
@@ -76,7 +77,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
           </div>
           <div className='modal-body'>          
             <div className='margin-box-info'>
-              <div> {lang['shares-available']}</div>
+              <div> {version === 'v1' ? lang['shares-available'] : lang['liquidity-available']}</div>
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
@@ -90,12 +91,12 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <div className='input-margin'>
                   <div className='box'>
                     <div className='amount' style={{display : amount ? 'block' : 'none'}}>
-                      {lang['liquidity-shares']}
+                      {version === 'v1' ? lang['liquidity-shares'] : lang['liquidity']}
                     </div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder={lang['liquidity-shares']}
+                      placeholder={version === 'v1' ? lang['liquidity-shares'] : lang['liquidity']}
                       value={amount}
                       onChange={onChange}
                     />
@@ -105,7 +106,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
               </div>
               <div className='max'>
                 <span>{lang['max-removeable']}</span>
-                <span className='max-num'>{liqInfo.totalShares}</span>
+                <span className='max-num'><DeriNumberFormat value={liqInfo.totalShares} decimalScale={8}/></span>
                 <span className='max-btn-left' onClick={addAll}>{lang['remove-all']}</span>
               </div>
               <div className='add-margin-btn'>

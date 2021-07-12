@@ -8,6 +8,7 @@ import '../Lite/lite.less'
 import '../Lite/zh-lite.less'
 import './pro.less'
 import './zh-pro.less'
+import './de-pro.less'
 
 
 

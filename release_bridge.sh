@@ -5,6 +5,7 @@ if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
   yarn build --nomaps
 fi
+# rm -rf $repo
 
 if [ ! -d $repo ]; then
   printf '\e[1;34m%-6s\e[m\n' "bridge repo is not exit ,clone it from git@github.com:deri-finance/bridge.git" 

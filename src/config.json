@@ -2,10 +2,12 @@
   "prod" : {
     "chainInfo" : {
       "1" : {
+        "code" : "ETHEREUM",
         "name" : "Ethereum",
         "text" : "ETHEREUM",
         "symbol" : "ETH",
-        "viewUrl" : "https://etherscan.io/"
+        "viewUrl" : "https://etherscan.io/",
+        "supportV1" : true
       },
       "56" : {
         "code" : "BSC",
@@ -13,13 +15,24 @@
         "text" : "BSC",
         "symbol" : "BNB",
         "viewUrl" : "https://bscscan.com/",
-        "supportV2" : true
+        "supportV2" : true,
+        "supportV1" : true
       },
       "128" : {
+        "code" : "HECO",
         "name" : "heco",
         "text" : "HECO",
         "symbol" : "HT",
-        "viewUrl" : "https://hecoscan.xyz/"
+        "viewUrl" : "https://hecoscan.xyz/",
+        "supportV1" : true
+      },
+      "137" : {
+        "code" : "POLYGON",
+        "name" : "POLYGON",
+        "text" : "POLYGON",
+        "symbol" : "MATIC",
+        "viewUrl" : "https://polygonscan.com/",
+        "supportV2" : true
       }
     }
   },
@@ -31,6 +44,7 @@
         "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/",
+        "supportV1" : true,
         "supportV2" : true
       },
       "80001" : {
@@ -42,16 +56,20 @@
         "supportV2" : true
       },
       "3" : {
+        "code" : "ROPSTEN",
         "name" :  "Ropsten-Testnet",
         "text" : "ROPSTEN TESTNET",
         "symbol" : "ETH",
-        "viewUrl" : "https://ropsten.etherscan.io"
+        "viewUrl" : "https://ropsten.etherscan.io",
+        "supportV1" : true
       },
       "256" : {
+        "code" : "HECO",
         "name" : "heco-testnet",
         "text" : "HECO TESTNET",
         "symbol" : "HT",
-        "viewUrl" : "https://scan-testnet.hecochain.com"
+        "viewUrl" : "https://scan-testnet.hecochain.com",
+        "supportV1" : true
       }
     }
   }

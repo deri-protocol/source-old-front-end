@@ -46,9 +46,9 @@ function Position({wallet,trading,version,lang}){
       refreshBalance()
     } else {      
       if(typeof res.error === 'string') {
-        alert(res.error || lang['liquidation-failed'])
+        alert(res.error || lang['close-position-failed'])
       } else if(typeof res.error === 'object'){
-        alert(res.error.errorMessage || lang['liquidation-failed'])
+        alert(res.error.errorMessage || lang['close-position-failed'])
       } else {
         alert(lang['close-position-failed'])
       }      
@@ -199,6 +199,13 @@ function Position({wallet,trading,version,lang}){
             </div>}
           </span>          
         </div>
+      </div>
+      <div className='info-right'></div>
+    </div>
+    <div className='info'>
+      <div className='info-left'>
+        <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+        <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
       </div>
       <div className='info-right'></div>
     </div>

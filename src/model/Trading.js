@@ -8,6 +8,7 @@ import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSym
 import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
+import version from './Version'
 
 /**
  * 交易模型
@@ -52,6 +53,7 @@ export default class Trading {
   fundingRate = {}
   history = []
   userSelectedDirection = 'long'
+  supportChain = true
 
   constructor(){
     makeObservable(this,{
@@ -63,6 +65,7 @@ export default class Trading {
       history : observable,
       contract : observable,
       userSelectedDirection : observable,
+      supportChain : observable,
       setWallet :action,
       setConfigs : action,
       setConfig : action,
@@ -71,6 +74,7 @@ export default class Trading {
       setPosition : action,
       setVolume : action,
       setUserSelectedDirection : action,
+      setSupportChain : action,
       setFundingRate : action,
       setHistory : action,
       setSlideMargin : action,
@@ -91,10 +95,7 @@ export default class Trading {
   /**
    * 初始化
    */
-  async init(wallet,version){    
-    if(version){
-      this.version = version
-    }
+  async init(wallet){    
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
@@ -103,20 +104,19 @@ export default class Trading {
       let defaultConfig = this.getDefaultConfig(this.configs,wallet);
       //如果还是为空，则默认用所有config的第一条
       if(!defaultConfig){
+        //没有默认的配置，
+        this.setSupportChain(false);
         defaultConfig = all.length > 0 ? all[0] : {}
       }
       this.setConfig(defaultConfig);
     } 
     //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    if(!wallet.isConnected()){
+    if(!wallet.isConnected() && !wallet.supportWeb3()){
       //没有钱包插件
-      if(!wallet.supportWeb3()){
-        //默认用v2
-        version.setCurrent('v2')
-        const all = await this.configInfo.load(version);
-        const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
-        this.setConfig(defaultConfig)
-      }
+      version.setCurrent('v2')
+      const all = await this.configInfo.load(version);
+      const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+      this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet,this.config,true)
     this.setVolume('')
@@ -126,8 +126,8 @@ export default class Trading {
     const cur = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
     let changed = false
-    if(this.version){
-      changed = this.version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
+    if(version){
+      changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
     }
     if(cur){
       this.pause();
@@ -208,26 +208,33 @@ export default class Trading {
 
   //存起来
   store(config){
-    storeConfig(this.version.current,config)
+    storeConfig(version.current,config)
   }
 
   getFromStore(){
-    return getConfigFromStore(this.version.current)
+    return getConfigFromStore(version.current)
+  }
+
+  async syncFundingRate(){
+    //资金费率和仓位同步
+    const fundingRate = await this.loadFundingRate(this.wallet,this.config)   
+    if(fundingRate){
+      this.setFundingRate(fundingRate)      
+    }
   }
 
   async refresh(){
     this.pause()
-    const position = await this.positionInfo.load(this.wallet,this.config);
-    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
-    const fundingRate = await this.loadFundingRate(this.wallet,this.config)   
-    const history = await this.historyInfo.load(this.wallet,this.config)
-
-    if(fundingRate){
-      this.setFundingRate(fundingRate)      
-    }
+    const position = await this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+      this.setPosition(position);
+      this.syncFundingRate();
+    });
     if(position){
       this.setPosition(position)
     }
+    this.syncFundingRate();
+    this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
+    const history = await this.historyInfo.load(this.wallet,this.config)
     if(history){
       this.setHistory(history)
     }
@@ -293,6 +300,10 @@ export default class Trading {
 
   setPaused(paused){
     this.paused = paused
+  }
+
+  setSupportChain(support){
+    this.supportChain = support;
   }
 
   setUserSelectedDirection(direction){
@@ -413,7 +424,7 @@ export default class Trading {
   }
 
   get fundingRateTip(){    
-    if(this.version && this.version.isV2){
+    if(version && version.isV2){
       if(this.fundingRate && this.fundingRate.fundingRatePerBlock && this.config){
         if(Intl.locale === 'zh'){
           return `${Intl.get('lite','funding-rate-per-block')} = ${this.fundingRate.fundingRatePerBlock}` +

@@ -189,7 +189,7 @@ export default function Content({lang}) {
             <img src={BASIS} alt=''/>
           </div>
           <div className='pic'>
-            <img src={dForce} alt=''/>
+            <img src={dForce} alt=''/>  
           </div>
           <div className='pic'>
             <img src={AutoFarm} alt=''/>

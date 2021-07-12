@@ -5,9 +5,10 @@ import useConfig from "../../hooks/useConfig";
 import { mintDToken } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button';
 import { eqInNumber } from '../../utils/utils';
+import DeriNumberFormat from '../../utils/DeriNumberFormat';
 
 export default function Claim({wallet,miningClaim,tradingClaim,lang}){
-	const [btnText, setBtnText] = useState('Collect Wallet')
+	const [btnText, setBtnText] = useState(lang['connect-wallet'])
 	const [claimed, setClaimed] = useState(false);
 	const [claimInfo,claimInfoInterval] = useClaimInfo(wallet);
 	const [remainingTime, setRemainingTime] = useState('')
@@ -16,7 +17,7 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
   //claim deri
 	const claim = async () => {
 		if(!eqInNumber(wallet.detail.chainId,claimInfo.chainId)) {
-			alert(`${lang['your-deri-is-on']} ${ config.text } . ${lang['connect-to']} ${ config.text } ${lang['to-claim']}.`)
+			alert(`${lang['your-deri-is-on']} ${ config.text } ${lang['connect-to']} ${ config.text } ${lang['to-claim']}`)
 			return ;
 		}
 		if ((+claimInfo.unclaimed) === 0) {
@@ -43,6 +44,13 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 			const res = await claim();
 			if(res){
 				setClaimed(true)
+			}
+		} else {
+			try{
+				const result =await wallet.connect();
+				return result ? true : false
+			} catch (e){
+				return false
 			}
 		} 
 	}
@@ -104,7 +112,7 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 				</div>
 				<div className='odd text'>
 						<div className='text-title'>{lang['unclaimed-deri']}</div>
-						<div className='text-num'>{ claimed ? 0 : (+claimInfo.unclaimed).toFixed(2) }</div>
+						<div className='text-num'>{ claimed ? 0 : <DeriNumberFormat value={claimInfo.unclaimed} decimalScale={2}/>}</div>
 				</div>
 				{tradingClaim && 
 				<div className='odd text'>

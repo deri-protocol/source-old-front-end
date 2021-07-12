@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 /* eslint-disable camelcase */
 import {io} from 'socket.io-client'
-import { restoreVersion, restoreChain, getFormatSymbol } from '../../../../../utils/utils'
+import { getFormatSymbol } from '../../../../../utils/utils'
 // function s(){
 //   data = [];
 // }

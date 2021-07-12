@@ -43,7 +43,7 @@
   "connect-wallet" : "Connect Wallet",
   "wrong-network" : "Wrong Network",
   "approve" : "APPROVE",
-  "approve-failed" : "approve failed",
+  "approve-failed" : "Approve Failed",
 
   "trading-mining" : "TRADING MINING",
   "trade-to-earn-deri" : "Trade to Earn DERI",
@@ -51,8 +51,9 @@
   "my-trading-volume-in-current-hour" : "My Trading Volume in Current Hour",
   "trade" : "TRADE",
 
-  "wallet-balance" : "wallet Balance",
+  "wallet-balance" : "Wallet Balance",
   "liquidity" : "LIQUIDITY",
+  "liquidity-available" : "Liquidity Available",
   "max" : "MAX",
   "add-all" : "ADD ALL",
   "add" : "ADD",

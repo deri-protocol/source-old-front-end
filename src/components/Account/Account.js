@@ -2,10 +2,19 @@ import React,{useState,useEffect} from 'react';
 import { formatAddress } from '../../utils/utils';
 import './account.less'
 import { observer, inject } from 'mobx-react';
+import { useRouteMatch } from 'react-router-dom';
 
 
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
+  const isIndex = useRouteMatch('/index')
+  const isRoot = useRouteMatch({path: '/',exact : true})
+  const isMining = useRouteMatch({path: '/mining',exact : true});
+  const isTeam = useRouteMatch('/team')
+
+  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot
+  
+
 
   const setAccountText = (detail) => {
     //如果用户选择的网络正确
@@ -28,9 +37,13 @@ function Account({wallet,lang}){
         setAccountText(detail)
       }
     }
-    init();
+    // const isApp = isLite || isPro || isMiningDetail
+
+    if(!notConnectWalletPage){
+      init();
+    }
     return () => {}
-  }, [])
+  }, [window.location.href])
 
   useEffect(() => {
     setAccountText(wallet.detail)
@@ -39,7 +52,7 @@ function Account({wallet,lang}){
   }, [wallet.detail.account,wallet.detail.formatBalance,lang]);
 
 
-  return (
+  return !notConnectWalletPage && (
     <div className="connect">
       <div className="network-text-logo">
         <i className={wallet.detail.symbol}></i>

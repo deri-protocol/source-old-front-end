@@ -1,18 +1,23 @@
 .lang-picker {
-  padding-left: 20px;
+  padding-left: 30px;
   position: relative;
   line-height: 82px;
-  width: 80px;
+  padding : 0 20px;
   img {
     cursor: pointer;
+    vertical-align: middle;
   }
 
   .lang-box.show {
     display: block;
   }
+  .locale{
+    font-size: 16px;
+    margin-right: 8px;
+  }
 
   .lang-box {
-    top: 83px;
+    top: 82px;
     right: 0;
     position: absolute;
     width: 158px;
@@ -46,7 +51,8 @@
     display : flex;
     align-items: center;
     font-size: 0.16rem;
-    width: 0.8rem;
+    width: 0.4rem;
+    padding: 0;
     img {
       cursor: pointer;
     }

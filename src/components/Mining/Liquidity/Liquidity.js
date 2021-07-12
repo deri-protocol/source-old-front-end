@@ -33,11 +33,11 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				// }
 			}
 			if(info){
-				const shares = bg(info.shares)
+				const shares = info.shares ? bg(info.shares) : bg(0)
 				if(version === 'v1') {
-					const total = shares.multipliedBy(info.shareValue)
+					const total = shares.isNaN() ? shares.multipliedBy(info.shareValue) : bg(0)
 					setLiquidity({
-						total :  (+info.poolLiquidity),
+						total :  info.poolLiquidity,
 						apy : ((+apyPool.apy) * 100).toFixed(2),
 						shareValue : info.shareValue,
 						percent : info.poolLiquidity > 0 ? total.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
@@ -51,11 +51,11 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					})
 				} else {
 					setLiquidity({
-						total : (+info.poolLiquidity),
+						total : info.poolLiquidity,
 						apy : ((+apyPool.apy) * 100).toFixed(2),
 						pnl : (+info.pnl).toFixed(2),
 						shares : shares.toString(),
-						formatShares : shares.toFixed(2),
+						formatShares : bg(shares).plus(info.pnl).toFixed(2),
 						totalShares : bg(shares).plus(info.pnl).toString(),
 						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
@@ -194,7 +194,12 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 
 
 	const connect =  async () => {
-		await wallet.connect();
+		try {
+			const result = await wallet.connect();
+			return result ? true : false
+		} catch (e){
+			return false
+		}
 	}
 	
 	const addLiquidity = () => {
@@ -240,7 +245,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 		} else {
 			let el = null
 			if(!wallet.isConnected()){
-				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-callet']} lang={lang}></Button></div>
+				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-wallet']} lang={lang}></Button></div>
 			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
 				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']} lang={lang}></Button></div>				
 			} else if(!isApproved) {
@@ -259,7 +264,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
-											address={address} wallet={wallet} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
+											address={address} wallet={wallet} version={version} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>

@@ -1,6 +1,7 @@
 
 
 import BigNumber from 'bignumber.js'
+import version from '../model/Version';
 const versionKey = 'deri-current-version'
 
 export function bg(value, base = 0) {
@@ -44,13 +45,13 @@ export function sessionStorageKey(version){
 }
 
 
-export function storeVersion(version){
-  sessionStorage.setItem(versionKey,version)
-}
+// export function storeVersion(version){
+//   sessionStorage.setItem(versionKey,version)
+// }
 
-export function restoreVersion(){
-  return sessionStorage.getItem(versionKey)
-}
+// export function restoreVersion(){
+//   return sessionStorage.getItem(versionKey)
+// }
 
 export function storeConfig(version,config){
   if(config){
@@ -67,7 +68,7 @@ export function storeChain(chainInfo){
   sessionStorage.setItem('current-chain',JSON.stringify(chainInfo))
 }
 export function restoreChain(){
-  return JSON.parse(sessionStorage.getItem('current-chain'));
+  return JSON.parse(sessionStorage.getItem('current-chain')) || {code : ''};
 }
 
 export function storeLocale(locale){
@@ -78,9 +79,28 @@ export function restoreLocale(){
   return sessionStorage.getItem('current-locale')
 }
 
+export function addParam(param,value,urlString = window.location.href){
+  const url = new URL(urlString);
+  if(url.searchParams.has(param)){
+    url.searchParams.set(param,value);
+  } else {
+    url.searchParams.append(param,value);
+  }
+  return  url.toString();
+}
+
+export function hasParam(param,urlString = window.location.href){
+  const url = new URL(urlString);
+  return url.searchParams.has(param);
+}
+
+export function getParam(param,urlString = window.location.href){
+  const url = new URL(urlString);
+  return url.searchParams.get(param);
+}
+
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  // return restoreVersion() === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
-  return restoreVersion() === 'v2' ? `${symbol}_V2` : symbol
+  return version.current === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 

@@ -5,6 +5,7 @@ import Modal from 'react-modal'
 import { addLiquidity, getWalletBalance, bg, addLpLiquidity } from '../../../../lib/web3js/indexV2';
 import useSpecification from '../../../../hooks/useSpecification';
 import useDisableScroll from '../../../../hooks/useDisableScroll';
+import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 
 
 
@@ -100,7 +101,7 @@ export default function AddLiquidity({wallet,address,baseToken,onClose,afterAdd,
                 <div>{ baseToken }</div>
               </div>
               <div className='max'>
-                {lang['max']}: <span className='max-num'>{balance }</span>
+                {lang['max']}: <span className='max-num'><DeriNumberFormat value={balance} decimalScale={8}/></span>
                 <span className='max-btn-left' onClick={addAll}>{lang['add-all']}</span>
               </div>
               <div className='add-margin-btn'>

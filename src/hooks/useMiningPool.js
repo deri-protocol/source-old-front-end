@@ -13,7 +13,7 @@ import { formatAddress, isLP,isSushiLP,isCakeLP } from '../utils/utils';
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function useMiningPool(version){
+export default function useMiningPool(){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
@@ -35,7 +35,7 @@ export default function useMiningPool(version){
         buttonText : 'STAKING'        
       })
     }
-    let configs = getContractAddressConfig(env,version.current);
+    let configs = getContractAddressConfig(env,'v2');
     let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
@@ -48,12 +48,8 @@ export default function useMiningPool(version){
       }
       return total;
     },all);
-    if(version.isV2){
-      configs = configs.map(mapConfig)
-    } else {
-      configs =v1Configs.map(mapConfig)
-    }
-
+    
+    configs = configs.map(mapConfig)
     const slpConfig = getLpContractAddressConfig(env).map(async config => {
       const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
@@ -101,6 +97,6 @@ export default function useMiningPool(version){
       setLoaded(true)
     })
     return () => pools.length = 0
-  },[version.current])
+  },[])
   return [loaded,pools,v1Pools,v2Pools];
 }

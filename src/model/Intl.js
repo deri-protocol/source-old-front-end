@@ -16,7 +16,7 @@ function importAll(r){
     
     if(/mobile-/.test(page)){
       const pageName= page.split('-')[1]
-      if(!cache[lang][pageName]){
+      if(!cache[lang][pageName]){ 
         cache[lang][pageName] = {}
       }
       cache[lang][pageName]['mobile'] = r(key)
@@ -34,21 +34,24 @@ class Intl {
     makeObservable(this,{
       locale : observable,
       setLocale : action,
-      dict : computed
+      dict : computed,
+      localeLabel: computed
     })
     const language = navigator.language
     const prefix = language && language.split('-')[0]
     const locale = restoreLocale()
-    if(locale){
-      this.locale = locale;
+    if(locale && Object.keys(supportedCatalog).includes(locale) ){
+      this.locale = locale
     } else if(prefix && Object.keys(supportedCatalog).includes(prefix)){
       this.locale = prefix
     }
   }
 
   setLocale(locale){
-    this.locale = locale;
-    storeLocale(locale)
+    if(locale){
+      this.locale = locale;
+      storeLocale(locale)
+    }
   }
 
   get(page,key){
@@ -57,6 +60,10 @@ class Intl {
 
   get dict(){         
     return cache[this.locale]
+  }
+
+  get localeLabel(){
+    return supportedCatalog[this.locale]
   }
 }
 
