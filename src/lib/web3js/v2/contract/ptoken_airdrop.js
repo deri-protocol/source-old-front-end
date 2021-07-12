@@ -8,6 +8,9 @@ export class PTokenAirdrop extends ContractBase {
   async getBTokenBalance() {
     return await this._call('getBTokenBalance', [])
   }
+  async totalWhitelistCount() {
+    return await this._call('totalWhitelistCount', [])
+  }
   async airdropPToken(accountAddress) {
     return await this._transact('airdropPToken', [], accountAddress)
   }

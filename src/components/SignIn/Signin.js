@@ -9,6 +9,7 @@ import {
   airdropPToken,
   isUserPTokenExist,
   fetchRestApi,
+  getAirdropPTokenWhitelistCount,
   getTradeHistory
 } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button'
@@ -23,6 +24,7 @@ function Signin({wallet={},lang}){
   }
   const [isApprove, setIsApprove] = useState(true);
   const [isThanBNB, setIsThanBNB] = useState(false);
+  const [isThanFiveThousand,setIsThanFiveThousand] = useState(false)
   const [isClaim,setIsClaim] = useState(false);
   const [isHavePtoken,setIsHavePtoken] = useState(false);
   const [isNowSign,setIsNowSign] = useState(false);
@@ -41,13 +43,26 @@ function Signin({wallet={},lang}){
   
   const loadApprove = async ()=>{
     if(hasConnectWallet() && spec){
-      const result = await wallet.isApproved(spec.pool,spec.bTokenId)
+      const result = await wallet.isApproved(spec.pool,spec.bTokenId);
       setIsApprove(result);
     }
   }
 
   const connect = () => {
     wallet.connect()
+  }
+
+  const getIsTanBNB = async () =>{
+    let path = `/ptoken_airdrop/${wallet.detail.account}/has_qualified_balance`;
+    let res = await fetchRestApi(path)
+    setIsThanBNB(res.data)
+  }
+
+  const getIsThanFiveThousand = async () =>{
+    let res = await getAirdropPTokenWhitelistCount(wallet.detail.chainId)
+    if(+res>=5000){
+      setIsThanFiveThousand(true)
+    }
   }
 
   const getIsClaimed = async () => {
@@ -83,7 +98,6 @@ function Signin({wallet={},lang}){
 
   const getIsTrade = async () => {
     let res = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
-    console.log('trade',res)
     if(isClaim){
       let obj = {}
       if(res.length == 1){
@@ -109,7 +123,7 @@ function Signin({wallet={},lang}){
     }
   }
 
-  const SignIn = async ()=>{
+  const signIn = async ()=>{
     if(!isThanBNB){
       alert(lang['less-bnb'])
       return;
@@ -125,6 +139,7 @@ function Signin({wallet={},lang}){
     let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
     let res = await fetchRestApi(path,{ method: 'POST' });
     getStamp();
+    
     if(!res.success){
       alert(lang['sign-in-failed'])
     }
@@ -140,7 +155,7 @@ function Signin({wallet={},lang}){
       alert(lang['less-bnb'])
       return;
     }
-    let res = await airdropPToken(wallet.detail.chainId,spec.pool,wallet.detail.account);
+    let res = await airdropPToken(wallet.detail.chainId,wallet.detail.account);
     if(!res.success){
       alert['claim-failed']
     }else{
@@ -176,6 +191,8 @@ function Signin({wallet={},lang}){
     if(hasConnectWallet()){
       getStamp();
       getIsClaimed();
+      getIsThanFiveThousand();
+      getIsTanBNB();
     }
   },[wallet.detail])
   useEffect(()=>{
@@ -190,11 +207,11 @@ function Signin({wallet={},lang}){
         }else{
           element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
         }
-        if(isClaim){
+        if(isClaim || isThanFiveThousand){
           element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
         }
       }else{
-        element = <Button className='btn btn-danger connect' click={SignIn} btnText={lang['sign-in']}  lang={lang} />
+        element = <Button className='btn btn-danger connect' click={signIn} btnText={lang['sign-in']}  lang={lang} />
       }
       
     } else {
@@ -280,7 +297,9 @@ function Signin({wallet={},lang}){
         <div className='text'>
           {lang['rules-two']}
         </div>
-        
+        <div className='text'>
+          {lang['rules-three']}
+        </div>
         <div className='rules-title'>
           {lang['how-to-participate']}
         </div>
@@ -294,8 +313,9 @@ function Signin({wallet={},lang}){
           {lang['step-three']}
         </div>
         <div className='text'>
-          {lang['description']}
+          {lang['step-four']}
         </div>
+        
       </div>
   </div>
   )

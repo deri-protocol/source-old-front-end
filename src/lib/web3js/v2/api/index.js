@@ -50,4 +50,5 @@ export {
 export {
   airdropPToken,
   isUserPTokenExist,
+  getAirdropPTokenWhitelistCount,
 } from './activity_api'
