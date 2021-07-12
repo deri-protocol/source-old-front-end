@@ -10,13 +10,13 @@ const getHttpBase = () => {
   return getRestServerConfig(DeriEnv.get());
 };
 
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
+const fetchJson = async (url, opts) => {
+  const resp = await fetch(url, opts);
   return await resp.json();
 };
 
-export const fetchRestApi = async(path) => {
-  return await fetchJson(`${getHttpBase()}${path}`);
+export const fetchRestApi = async (path, opts = { method: 'GET' }) => {
+  return await fetchJson(`${getHttpBase()}${path}`, opts);
 };
 
 /**

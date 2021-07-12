@@ -1,5 +1,5 @@
 import { isOrderValid } from '../calculation';
-import { getPoolConfig2, getSymbolIdList, getBTokenIdList } from '../config'
+import { getPoolConfig2, getPoolSymbolIdList, getPoolBTokenIdList } from '../config'
 import {
   bTokenFactory,
   perpetualPoolRouterFactory,
@@ -83,7 +83,7 @@ export const tradeWithMargin = async (
    //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
-   const bTokenIdList = getBTokenIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
    const margins = await pToken.getMargins(accountAddress)
     let promises = []
     for (let i=0; i<bTokenIdList.length; i++) {
@@ -95,7 +95,7 @@ export const tradeWithMargin = async (
     }, bg(0))
 
     const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
-    let symbolIdList = getSymbolIdList(poolAddress)
+    let symbolIdList = getPoolSymbolIdList(poolAddress)
     promises = []
     for (let i=0; i<symbolIdList.length; i++) {
       promises.push(perpetualPool.getSymbol(symbolIdList[i]))
@@ -174,7 +174,7 @@ export const depositMarginWithPrices = async (
   bTokenId,
 ) => {
    const { router: routerAddress } = getPoolConfig2(poolAddress);
-   const symbolIdList = getSymbolIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -202,7 +202,7 @@ export const withdrawMarginWithPrices = async (
   isMaximum = false,
 ) => {
    const { router: routerAddress } = getPoolConfig2(poolAddress);
-   const symbolIdList = getSymbolIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
@@ -229,7 +229,7 @@ export const tradeWithMarginWithPrices = async (
   symbolId,
 ) => {
    const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig2(poolAddress);
-   const symbolIdList = getSymbolIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
    const pToken = pTokenFactory(chainId, pTokenAddress);
@@ -245,7 +245,7 @@ export const tradeWithMarginWithPrices = async (
    //const { multiplier } = symbolInfo;
    const { minInitialMarginRatio, minPoolMarginRatio} = parameterInfo;
 
-   const bTokenIdList = getBTokenIdList(poolAddress)
+   const bTokenIdList = getPoolBTokenIdList(poolAddress)
    const margins = await pToken.getMargins(accountAddress)
     let promises = []
     for (let i=0; i<bTokenIdList.length; i++) {
@@ -319,7 +319,7 @@ export const tradeWithMarginWithPrices = async (
 
 export const closePositionWithPrices = async (chainId, poolAddress, accountAddress, symbolId) => {
    const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig2(poolAddress);
-   const symbolIdList = getSymbolIdList(poolAddress)
+   const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const pToken = pTokenFactory(chainId, pTokenAddress)
    const { volume } = await pToken.getPosition(accountAddress, symbolId)

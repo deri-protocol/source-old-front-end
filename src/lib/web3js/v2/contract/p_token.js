@@ -10,8 +10,8 @@ const processPosition = (res) => {
   }
 }
 export class PToken extends ContractBase {
-  constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, pTokenAbi, useInfura)
+  constructor(chainId, contractAddress) {
+    super(chainId, contractAddress, pTokenAbi)
   }
 
   // === query ===

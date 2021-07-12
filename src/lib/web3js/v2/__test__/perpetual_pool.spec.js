@@ -97,4 +97,12 @@ describe('PerpetualPool', () => {
     const output = '0x3050D5360382B7f1dbe6895Dd5645a9cf38F14f0'
     expect(await perpetualPool.getSymbolOracle(input)).toEqual(output)
   }, TIMEOUT)
+  test('getLastUpdatedBlockNumber', async() => {
+    const output = 10178982
+    expect(await perpetualPool.getLastUpdatedBlockNumber()).toBeGreaterThanOrEqual(output)
+  }, TIMEOUT)
+  test('getLatestBlockNumber', async() => {
+    const output = 10178982
+    expect(await perpetualPool.getLatestBlockNumber()).toBeGreaterThan(output)
+  }, TIMEOUT)
 })

@@ -7,13 +7,14 @@ const CONTRACT_ABI=[{"inputs":[{"internalType":"address","name":"token_","type":
 
 export class MiningVaultRouter extends Contract {
   constructor(chainId, contractAddress, isProvider) {
-    super(chainId, contractAddress, isProvider);
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI,
-      this.contractAddress
-    );
+    super(chainId, contractAddress, CONTRACT_ABI, isProvider);
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI,
+    //   this.contractAddress
+    // );
   }
   async mint(accountAddress, ...args) {
+    await this._init()
     //console.log(accountAddress, args)
     const gas = await this._estimatedGas(
       'claim',

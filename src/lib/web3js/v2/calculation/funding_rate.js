@@ -74,3 +74,51 @@ export const processFundingRate = (chainId, fundingRate) => {
   //console.log(annualBlockCount);
   return bg(fundingRate).times(annualBlockCount);
 };
+
+export const calculateFundingFee = (
+  tradersNetVolume,
+  price,
+  multiplier,
+  fundingRateCoefficient,
+  dynamicEquity,
+  cumulativeFundingRate,
+  lastCumulativeFundingRate,
+  lastUpdatedBlockNumber,
+  latestBlockNumber,
+  volume,
+) => {
+  if (bg(volume).eq(0)) {
+    return '0'
+  } else {
+    const args = [
+      tradersNetVolume,
+      price,
+      multiplier,
+      fundingRateCoefficient,
+      dynamicEquity,
+      cumulativeFundingRate,
+      lastCumulativeFundingRate,
+      lastUpdatedBlockNumber,
+      latestBlockNumber,
+      volume,
+    ];
+    if (
+      validateArgs(...args)
+    ) {
+      return bg(dynamicEquity).eq(0) ? bg(0) : bg(tradersNetVolume)
+        .times(price)
+        .times(multiplier)
+        .times(price)
+        .times(multiplier)
+        .times(fundingRateCoefficient)
+        .div(dynamicEquity)
+        .times(bg(latestBlockNumber).minus(lastUpdatedBlockNumber))
+        .plus(cumulativeFundingRate)
+        .minus(lastCumulativeFundingRate)
+        .times(volume)
+    } else {
+      console.log(`calculateFundingFee: invalid args: ${args}`);
+      return 'NaN'
+    }
+  }
+};

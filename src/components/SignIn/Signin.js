@@ -1,10 +1,15 @@
 import React ,{useEffect,useState} from 'react'
 import {inject,observer} from 'mobx-react'
+import dateFormat from 'date-format'
 import success from './img/success.svg'
 import undone from './img/undone.svg'
 import right from './img/right.svg'
 import {
-  DeriEnv
+  DeriEnv,
+  airdropPToken,
+  isUserPTokenExist,
+  fetchRestApi,
+  getTradeHistory
 } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button'
 function Signin({wallet={},lang}){
@@ -17,7 +22,9 @@ function Signin({wallet={},lang}){
     "bTokenId":"0"
   }
   const [isApprove, setIsApprove] = useState(true);
+  const [isThanBNB, setIsThanBNB] = useState(false);
   const [isClaim,setIsClaim] = useState(false);
+  const [isHavePtoken,setIsHavePtoken] = useState(false);
   const [isNowSign,setIsNowSign] = useState(false);
   const [actionElement,setActionElement] = useState(<Button className='btn'  btnText={lang['connect-wallet']}></Button>)
   const [isSignIn,setIsSignIn] =useState({
@@ -43,17 +50,107 @@ function Signin({wallet={},lang}){
     wallet.connect()
   }
 
-  const SignIn = async ()=>{
-    if((+wallet.detail.formatBalance) < 0.2){
-      alert(lang['less-bnb'])
-    }
-    if(isNowSign){
-      alert(lang['use-a-new-address'])
+  const getIsClaimed = async () => {
+    let path = `/ptoken_airdrop/${wallet.detail.account}/is_claimed`;
+    let res = await fetchRestApi(path)
+    setIsClaim(res.data)
+  }
+
+  const getStamp = async () => {
+    let path = `/ptoken_airdrop/${wallet.detail.account}/signin_status`
+    let res = await fetchRestApi(path)
+    let timestamp = Date.parse(new Date());
+    let nowDate = dateFormat.asString('yyyy-MM-dd',new Date(parseInt(timestamp)))
+    let arr = [] 
+    res.data.map(item=>{
+      let obj = false;
+      if(item.date == nowDate){
+        setIsNowSign(item.signin)
+      }
+      if(item.signin){
+        obj = item.signin;
+        arr.push(obj)
+      }
+    });
+    if(arr.length){
+      setIsSignIn({
+        'one':arr[0],
+        'two':arr[1],
+        'three':arr[2],
+      })
     }
   }
 
-  const claimPtoken = async ()=>{
+  const getIsTrade = async () => {
+    let res = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
+    console.log('trade',res)
+    if(isClaim){
+      let obj = {}
+      if(res.length == 1){
+        obj = {
+          'one':true,
+          'two':false,
+          'three':false,
+        }
+      }else if(res.length == 2){
+        obj = {
+          'one':true,
+          'two':true,
+          'three':false,
+        }
+      }else if(res.length == 3){
+        obj = {
+          'one':true,
+          'two':true,
+          'three':true,
+        }
+      }
+      setIsTrade(obj)
+    }
+  }
 
+  const SignIn = async ()=>{
+    if(!isThanBNB){
+      alert(lang['less-bnb'])
+      return;
+    }
+    if(isHavePtoken){
+      alert(lang['use-a-new-address'])
+      return;
+    }
+    if(isNowSign){
+      alert(lang['already-stamped-today'])  
+      return;
+    }
+    let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
+    let res = await fetchRestApi(path,{ method: 'POST' });
+    getStamp();
+    if(!res.success){
+      alert(lang['sign-in-failed'])
+    }
+    return;
+  }
+
+  const claimPtoken = async ()=>{
+    if(isHavePtoken){
+      alert(lang['use-a-new-address'])
+      return;
+    }
+    if(!isThanBNB){
+      alert(lang['less-bnb'])
+      return;
+    }
+    let res = await airdropPToken(wallet.detail.chainId,spec.pool,wallet.detail.account);
+    if(!res.success){
+      alert['claim-failed']
+    }else{
+      setIsClaim(true)
+    }
+  }
+
+  const isPtoken = async ()=>{
+    let res = await isUserPTokenExist(wallet.detail.chainId,spec.pool,wallet.detail.account)
+    setIsHavePtoken(res)
   }
 
   const approve = async () => {
@@ -61,6 +158,7 @@ function Signin({wallet={},lang}){
     if(res.success){
       setIsApprove(true);
       loadApprove();
+      
     } else {
       setIsApprove(false);
       alert(lang['approve-failed']);
@@ -68,8 +166,21 @@ function Signin({wallet={},lang}){
   }
   
   useEffect(() => {
+    if(hasConnectWallet()){
       loadApprove();
+      isPtoken();
+    }
   }, [wallet.detail,spec]);
+
+  useEffect(()=>{
+    if(hasConnectWallet()){
+      getStamp();
+      getIsClaimed();
+    }
+  },[wallet.detail])
+  useEffect(()=>{
+    getIsTrade();
+  },[wallet.detail,isClaim])
   let element;
   useEffect(()=>{
     if(hasConnectWallet()){
@@ -79,17 +190,18 @@ function Signin({wallet={},lang}){
         }else{
           element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
         }
+        if(isClaim){
+          element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
+        }
       }else{
         element = <Button className='btn btn-danger connect' click={SignIn} btnText={lang['sign-in']}  lang={lang} />
       }
-      if(isClaim){
-        element = <a href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
-      }
+      
     } else {
       element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
     }
     setActionElement(element) 
-  },[wallet.detail,isApprove,isSignIn,isClaim])
+  },[wallet.detail,isApprove,isSignIn,isHavePtoken,isClaim])
   
   return(
     <div className='signin'>
@@ -168,6 +280,7 @@ function Signin({wallet={},lang}){
         <div className='text'>
           {lang['rules-two']}
         </div>
+        
         <div className='rules-title'>
           {lang['how-to-participate']}
         </div>

@@ -7,12 +7,12 @@ const CONTRACT_ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"construc
 
 export class DeriContract extends Contract {
   constructor(chainId, contractAddress, poolAddress, useProvider) {
-    super(chainId, contractAddress, useProvider);
+    super(chainId, contractAddress, CONTRACT_ABI, useProvider);
     this.poolAddress = poolAddress;
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI,
-      this.contractAddress
-    );
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI,
+    //   this.contractAddress
+    // );
   }
 
   async isUnlocked(accountAddress) {

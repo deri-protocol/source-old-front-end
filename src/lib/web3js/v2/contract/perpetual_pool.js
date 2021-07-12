@@ -1,10 +1,10 @@
 import { ContractBase } from './contract_base'
 import { perpetualPoolAbi } from './abis';
-import { deriToNatural, bg } from '../utils'
+import { deriToNatural, hexToNumber, bg } from '../utils'
 
 export class PerpetualPool extends ContractBase {
-  constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, perpetualPoolAbi, useInfura)
+  constructor(chainId, contractAddress) {
+    super(chainId, contractAddress, perpetualPoolAbi)
 
     this.bTokenCount= 0
     this.symbolCount= 0
@@ -118,6 +118,23 @@ export class PerpetualPool extends ContractBase {
     await this._init()
     return await this.web3.eth.getBlock(blockNumber);
   }
+
+  // get block number when last updated
+  async getLastUpdatedBlockNumber() {
+    await this._init()
+    const res = await this.web3.eth.getStorageAt(this.contractAddress, 0)
+    //console.log('res', hexToNumber(res))
+    return hexToNumber(res)
+  }
+
+  // get block number when last updated
+  async getLatestBlockNumber() {
+    await this._init()
+    const res = await this.web3.eth.getBlockNumber()
+    //console.log('res', res)
+    return res
+  }
+
   _calculateFee(volume, price, multiplier, feeRatio) {
     return bg(volume)
       .abs()
@@ -136,7 +153,7 @@ export class PerpetualPool extends ContractBase {
     let events = [];
     //let toBlock = await this._getBlockInfo("latest");
     let amount
-    if (['56', '97'].includes(this.chainId)) {
+    if (['56', '97','127', '80001'].includes(this.chainId)) {
       amount = 999
     } else {
       amount = 4999

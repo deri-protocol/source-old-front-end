@@ -22,6 +22,7 @@ import {
   getDailyBlockNumber,
   validateArgs,
   catchError,
+  getEpochTimeRange,
 } from '../utils'
 import { TIMEOUT, ACCOUNT_ADDRESS} from './setup';
 
@@ -162,5 +163,20 @@ describe('utils', () => {
       }
     }
     expect(catchError(testFunc2, 'testFunc2()', 666)).toEqual(666);
+  })
+  test('getEpochTimeRange', () => {
+    const input = new Date('2021-06-28T01:00:00Z')
+    const output = [(new Date('2021-06-28T00:00:00Z')).getTime()/1000, (new Date('2021-06-28T08:00:00Z')).getTime()/1000]
+    expect(getEpochTimeRange(input)).toEqual(output)
+  })
+  test('getEpochTimeRange 2', () => {
+    const input = new Date('2021-06-28T11:00:00Z')
+    const output = [(new Date('2021-06-28T08:00:00Z')).getTime()/1000, (new Date('2021-06-28T16:00:00Z')).getTime()/1000]
+    expect(getEpochTimeRange(input)).toEqual(output)
+  })
+  test('getEpochTimeRange 3', () => {
+    const input = new Date('2021-06-28T16:00:01Z')
+    const output = [(new Date('2021-06-28T16:00:00Z')).getTime()/1000, (new Date('2021-06-29T00:00:00Z')).getTime()/1000]
+    expect(getEpochTimeRange(input)).toEqual(output)
   })
 })

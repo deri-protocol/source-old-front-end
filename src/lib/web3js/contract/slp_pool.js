@@ -7,11 +7,11 @@ const CONTRACT_ABI = [{"inputs":[{"internalType":"contractSushiToken","name":"_s
 
 export class SlpPool extends Contract {
   constructor(chainId, contractAddress, isProvider) {
-    super(chainId, contractAddress, isProvider);
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI,
-      this.contractAddress
-    );
+    super(chainId, contractAddress, CONTRACT_ABI, isProvider);
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI,
+    //   this.contractAddress
+    // );
   }
   async addLiquidity(accountAddress, amount) {
     const args = [152, naturalToDeri(amount)];

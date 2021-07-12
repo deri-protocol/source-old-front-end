@@ -87,4 +87,6 @@ export {
   getFilteredPoolConfigList,
   getPoolBTokensBySymbolId,
   setBroker,
+  airdropPToken,
+  isUserPTokenExist,
 } from './v2';

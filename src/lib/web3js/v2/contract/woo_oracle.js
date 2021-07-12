@@ -3,8 +3,8 @@ import { wooOracleAbi } from './abis';
 import { bg } from '../utils';
 
 export class WooOracle extends ContractBase {
-  constructor(chainId, address, symbol, decimal, useInfura) {
-    super(chainId, address, wooOracleAbi, useInfura)
+  constructor(chainId, address, symbol, decimal) {
+    super(chainId, address, wooOracleAbi)
     this.symbol = symbol
     this.decimal = decimal
   }

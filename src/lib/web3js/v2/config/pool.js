@@ -113,7 +113,7 @@ export const getPoolConfig2 = (poolAddress, bTokenId, symbolId) => {
   };
 };
 
-export const getBTokenList = (poolAddress) => {
+export const getPoolBTokenList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.bTokens.map((b) => {
     return {
@@ -124,12 +124,12 @@ export const getBTokenList = (poolAddress) => {
   });
 };
 
-export const getBTokenIdList = (poolAddress) => {
+export const getPoolBTokenIdList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.bTokens.map((b) => b.bTokenId);
 };
 
-export const getSymbolList = (poolAddress) => {
+export const getPoolSymbolList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.symbols.map((s) => {
     return {
@@ -140,7 +140,7 @@ export const getSymbolList = (poolAddress) => {
   });
 };
 
-export const getSymbolIdList = (poolAddress) => {
+export const getPoolSymbolIdList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.symbols.map((b) => b.symbolId);
 };

@@ -5,8 +5,8 @@ import { MAX_UINT256} from '../config'
 
 
 export class BToken extends ContractBase {
-  constructor(chainId, contractAddress, useInfura=false) {
-    super(chainId, contractAddress, bTokenAbi, useInfura);
+  constructor(chainId, contractAddress) {
+    super(chainId, contractAddress, bTokenAbi);
   }
   // === query ===
   async symbol() {

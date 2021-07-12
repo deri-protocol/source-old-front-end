@@ -24,6 +24,7 @@ export {
   getEstimatedLiquidityUsed,
   getFundingRateCache,
   getPoolBTokensBySymbolId,
+  getFundingFee,
 } from './trade_query_api';
 
 export {
@@ -45,3 +46,8 @@ export {
 export {
   setBroker
 } from './broker_api'
+
+export {
+  airdropPToken,
+  isUserPTokenExist,
+} from './activity_api'

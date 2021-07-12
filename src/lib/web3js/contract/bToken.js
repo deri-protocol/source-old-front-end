@@ -7,12 +7,12 @@ const CONTRACT_ABI=[{"constant":true,"inputs":[],"name":"name","outputs":[{"name
 
 export class BTokenContract extends Contract {
   constructor(chainId, contractAddress, poolAddress, isProvider) {
-    super(chainId, contractAddress, isProvider);
+    super(chainId, contractAddress, CONTRACT_ABI, isProvider);
     this.poolAddress = poolAddress;
-    this.contract = new this.web3.eth.Contract(
-      CONTRACT_ABI,
-      this.contractAddress
-    );
+    // this.contract = new this.web3.eth.Contract(
+    //   CONTRACT_ABI,
+    //   this.contractAddress
+    // );
   }
 
   async isUnlocked(accountAddress) {

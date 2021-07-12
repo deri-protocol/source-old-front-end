@@ -7,9 +7,24 @@ import {
   PToken,
   WooOracle,
   ChainlinkOracle,
+  WrappedOracle,
   BrokerManager,
+  PTokenAirdrop,
 } from './contract';
 import { getChainProviderUrl } from './utils/chain';
+
+const factory = (klass) => {
+  let instances = {}
+  return (chainId, address) => {
+    const key = address
+    if (Object.keys(instances).includes(key)) {
+      return instances[key];
+    } else {
+      instances[key] = new klass(chainId, address);
+      return instances[key];
+    }
+  }
+}
 
 export const metaMaskWeb3 = (function () {
   let web3Instance = null;
@@ -48,103 +63,39 @@ export const web3Factory = (function () {
   };
 })();
 
-export const perpetualPoolFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new PerpetualPool(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const perpetualPoolFactory = factory(PerpetualPool)
 
-export const perpetualPoolRouterFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new PerpetualPoolRouter(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const perpetualPoolRouterFactory = factory(PerpetualPoolRouter)
 
-export const bTokenFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new BToken(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const bTokenFactory = factory(BToken)
 
-export const lTokenFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new LToken(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const lTokenFactory = factory(LToken)
 
-export const pTokenFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new PToken(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const pTokenFactory = factory(PToken)
 
 export const oracleFactory = (function () {
   const instanceMap = {};
-  return (chainId, address, symbol, decimal, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
+  return (chainId, address, symbol, decimal) => {
+    const key = address;
     if (Object.keys(instanceMap).includes(key)) {
       return instanceMap[key];
     } else {
-      if (['80001', '137'].includes(chainId)) {
+      if (['80001'].includes(chainId)) {
         instanceMap[key] = new ChainlinkOracle(
           chainId,
           address,
           symbol,
-          decimal,
-          useInfura
+          decimal
         );
+      } else if (['137'].includes(chainId)) {
+        instanceMap[key] = new WrappedOracle(chainId, address, symbol, decimal);
       } else {
-        instanceMap[key] = new WooOracle(chainId, address, symbol, decimal, useInfura);
+        instanceMap[key] = new WooOracle(chainId, address, symbol, decimal);
       }
       return instanceMap[key];
     }
   };
 })();
 
-export const brokerManagerFactory = (function () {
-  const instanceMap = {};
-  return (chainId, address, useInfura) => {
-    const key = useInfura ? `${address}.useInfura` : address;
-    if (Object.keys(instanceMap).includes(key)) {
-      return instanceMap[key];
-    } else {
-      instanceMap[key] = new BrokerManager(chainId, address, useInfura);
-      return instanceMap[key];
-    }
-  };
-})();
+export const brokerManagerFactory = factory(BrokerManager);
+export const pTokenAirdropFactory = factory(PTokenAirdrop)

@@ -3,7 +3,7 @@
   "title-num":" $100,000",
   "title-two":" in DERI ",
   "title-three":"“Stamp & Win” - Experience the Innovative Dynamic Mixed Margin on BSC  ",
-  "title-frou":"Time: From July 12th 10:00 AM to July 20th 10:00 AM UTC",
+  "title-frou":"Time: From July 12th 10:00 AM to July 31th 10:00 AM UTC",
   "header":"STEPS",
   "sign-in":"STAMP",
   "trade":"TRADE",
@@ -12,6 +12,7 @@
   "approve":"APPROVE",
   "less-bnb":"Less BNB than the minimum requirement",
   "use-a-new-address":"Use a new address to participate, thanks!",
+  "already-stamped-today":"Already stamped today",
   "claim":"CLAIM",
   "pending":"PENDING...",
   "approve-failed" : "Approve failed",
@@ -19,11 +20,11 @@
   "sign-in-failed" : "STAMP failed",
   "connect-wallet" : "CONNECT WALLET",
   "who-are-eligibles":"Who are Eligible",
-  "rules-one":"Minimum wallet balance requirement: more than 0.2 BNB at July 11th, 10:00 AM UTC",
-  "rules-two":"This promotion does not apply to any addresses interacted with Deri Protocol Smart before July 12th 10:00 AM, 2021",
+  "rules-one":"Minimum BNB balance requirement: more than 0.2 BNB at July 12th, 02:00 AM UTC",
+  "rules-two":"This promotion does not apply to addresses have traded on Deri Protocol before July 12th 10:00 AM, 2021",
   "how-to-participate":"How to Participate",
   "step-one":"Step 1: Click the stamp button three times. Notably, the stamp button can only be clicked once a day",
-  "step-two":"Step 2: Claim the designated Ptoken (Deri Position Token) including 1.5 BUSD Initial Margin, one BTCUSD/BUSD contract, and one ETHUSD/BUSD contract by clicking the claim button",
-  "step-three":"Step 3: Use the Ptoken airdropped to complete at least three trades",
-  "description":"All addresses which complete the above steps during the event period will equally share a prize pool of $100,000 in DERI"
+  "step-two":"Step 2: Claim the designated Ptoken (Deri Position Token) which includs 1.5 BUSD Initial Margin, one BTCUSD/BUSD contract, and one ETHUSD/BUSD contract by clicking the claim button",
+  "step-three":"Step 3: Use the Ptoken to complete at least three trades",
+  "description":"All users who complete the stamp will be eligible to win a share of the 100,000 USDT prize pool, while only the first 5,000 participants can claim Deri Ptoken"
 }

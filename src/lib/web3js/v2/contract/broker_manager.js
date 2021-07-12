@@ -2,8 +2,8 @@ import { ContractBase } from "./contract_base";
 import { brokerManagerAbi } from './abis';
 
 export class BrokerManager extends ContractBase {
-  constructor(chainId, address, useInfura) {
-    super(chainId, address, brokerManagerAbi, useInfura)
+  constructor(chainId, address) {
+    super(chainId, address, brokerManagerAbi)
   }
   // query
   async getBroker(accountAddress) {
