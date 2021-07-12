@@ -23,7 +23,7 @@ function Signin({wallet={},lang}){
     "bTokenId":"0"
   }
   const [isApprove, setIsApprove] = useState(true);
-  const [isThanBNB, setIsThanBNB] = useState(false);
+  const [isThanBNB, setIsThanBNB] = useState(true);
   const [isThanFiveThousand,setIsThanFiveThousand] = useState(false)
   const [isClaim,setIsClaim] = useState(false);
   const [isHavePtoken,setIsHavePtoken] = useState(false);
@@ -98,7 +98,6 @@ function Signin({wallet={},lang}){
 
   const getIsTrade = async () => {
     let res = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
-    if(isClaim){
       let obj = {}
       if(res.length == 1){
         obj = {
@@ -120,7 +119,6 @@ function Signin({wallet={},lang}){
         }
       }
       setIsTrade(obj)
-    }
   }
 
   const signIn = async ()=>{
@@ -139,8 +137,11 @@ function Signin({wallet={},lang}){
     let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
     let res = await fetchRestApi(path,{ method: 'POST' });
     getStamp();
-    
     if(!res.success){
+      if(res.error.indexOf('insufficent user balance')!= 0){
+        alert(lang['less-bnb'])
+        return;
+      }
       alert(lang['sign-in-failed'])
     }
     return;
@@ -196,7 +197,9 @@ function Signin({wallet={},lang}){
     }
   },[wallet.detail])
   useEffect(()=>{
-    getIsTrade();
+    if(hasConnectWallet()){
+      getIsTrade();
+    }
   },[wallet.detail,isClaim])
   let element;
   useEffect(()=>{
@@ -204,12 +207,12 @@ function Signin({wallet={},lang}){
       if(isSignIn.three){
         if(!isApprove) {
           element = <Button className='btn' btnText={lang['approve']} click={approve} lang={lang}/>
+        }else if(isClaim || isThanFiveThousand){
+          element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
         }else{
           element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
         }
-        if(isClaim || isThanFiveThousand){
-          element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
-        }
+        
       }else{
         element = <Button className='btn btn-danger connect' click={signIn} btnText={lang['sign-in']}  lang={lang} />
       }
@@ -218,7 +221,7 @@ function Signin({wallet={},lang}){
       element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
     }
     setActionElement(element) 
-  },[wallet.detail,isApprove,isSignIn,isHavePtoken,isClaim])
+  },[wallet.detail,isApprove,isSignIn,isHavePtoken,isClaim,isThanFiveThousand])
   
   return(
     <div className='signin'>

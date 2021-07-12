@@ -7,7 +7,7 @@ import './style/index.css'
 export default function Desktop ({locale}){
   console.log('welcome Deri desktop app')
   const location = useLocation();
-  const curRouterClass = location.pathname.substring(1)
+  const curRouterClass = location.pathname.split('/')[1]
   return (
     <div className={`desktop ${curRouterClass} ${locale}`}>
       <Header></Header>

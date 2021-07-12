@@ -36,8 +36,8 @@ function LanguageSelector({intl}){
   }, [intl])
   return (
     <div className='lang-picker' onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      <img src={languageIcon} alt='language selector'/>   
-      {/* <span className='locale'>{intl.locale}</span> */}
+      {/* <img src={languageIcon} alt='language selector'/>    */}
+      <span className='locale'>{intl.localeLabel}</span>
       <img src={arrowIcon} alt='selector' />
       <div className={langBoxClass} >
         {Object.keys(languages).map((lang,index) => <div key={index} className={lang === intl.locale ? 'lang-item selected' : 'lang-item'} onClick={(e) => onClick(lang,true)}>{languages[lang]}</div>)}

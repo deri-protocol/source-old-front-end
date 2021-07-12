@@ -8,12 +8,12 @@ import {
   getLpPoolInfoApy
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
-import { formatAddress, isLP,isSushiLP,isCakeLP } from '../utils/utils';
+import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function useMiningPool(){
+export default function useMiningPool(isNew){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
@@ -29,14 +29,43 @@ export default function useMiningPool(){
         network : chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
         apy :  ((+apyPool.apy) * 100).toFixed(2),
-        pool : formatAddress(pool),
+        formatAdd : formatAddress(pool),
         address : pool,
         type : 'perpetual',
         buttonText : 'STAKING'        
       })
     }
+    const groupByNetwork = pools => {
+      const all = []
+      pools.reduce((total,pool) => {
+        const find = total.find(item => eqInNumber(item['pool']['address'],pool['address']))
+        if(find && find.list.length < 5){
+          find['list'].push(pool)
+        } else {
+          const poolInfo = {
+            pool : {
+              network : pool.network,
+              symbol : pool.symbol,
+              address : pool.address,
+              formatAdd : pool.formatAdd,
+              version : pool.version,
+              chainId : pool.chainId,
+              airdrop : pool.airdrop,
+              type : pool.type,
+              bTokenSymbol : pool.bTokenSymbol,
+              bTokenId : pool.bTokenId,
+              symbolId : pool.symbolId
+            },
+            list : [pool]
+          }
+          total.push(poolInfo)
+        }
+        return total;
+      },all)
+      return all;
+    }
     let configs = getContractAddressConfig(env,'v2');
-    let v1Configs = getContractAddressConfig(env,'v1')
+    // let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
     configs = configs.reduce((total,config) => {
@@ -58,7 +87,7 @@ export default function useMiningPool(){
       let label;
       if(isLP(config.pool)){
         let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
-        lpApy = ((+lapy.apy2) * 100).toFixed(2);           
+        lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
       }
       if(isSushiLP(config.pool)){
         label = 'SUSHI-APY'
@@ -70,7 +99,7 @@ export default function useMiningPool(){
         network : chainInfo[config.chainId].name,
         liquidity : liqInfo.liquidity,
         apy : ((+apyPool.apy) * 100).toFixed(2),
-        pool : formatAddress(pool),
+        formatAdd : formatAddress(pool),
         lpApy : lpApy,
         address : pool,
         type : 'lp',
@@ -86,11 +115,19 @@ export default function useMiningPool(){
         liquidity : '4100',
         symbol : '--',
         airdrop : true,
+        chainId : 56,
         buttonText : 'CLAIM'
       }
-      // pools.push(airDrop)
-      const v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
-      const v2Pools = pools.filter(p => p.version === 'v2')
+      pools.push(airDrop)
+      let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
+      let v2Pools = pools.filter(p => p.version === 'v2')
+      //新版本按照网络来分组
+      if(isNew){
+        v1Pools = groupByNetwork(v1Pools);
+        v2Pools = groupByNetwork(v2Pools);
+      }
+      console.log('v2',v2Pools)
+      console.log('v1',v1Pools)
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
       setPools(pools);

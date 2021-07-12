@@ -67,28 +67,35 @@ function Menu({lang,locale}) {
             <ul className="ref-box">
               <li>
                 {isProduction ? 
-                <a href={`https://${host}/#/broker`}>{lang.broker}</a>
+                <a className='broker-item' href={`https://${host}/#/broker`}>{lang.broker}</a>
                 :
-                <Link to='/broker'>{lang.broker}</Link>
+                <Link className='broker-item' to='/broker'>{lang.broker}</Link>
                 }                
               </li>
               <li>
                 {isProduction
                 ?
-                <a href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
+                <a className='broker-item' href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
                 :
-                <Link to='/brokerbind'>{lang['broker-bind']}</Link>
-                }
-                               
+                <Link className='brokerbind-item' to='/brokerbind'>{lang['broker-bind']}</Link>
+                }                
               </li>
               <li>
                 {isProduction
                 ?
-                <a href='https://app.deri.finance/#/signin'>{lang['signin']}</a>
+                <a className='signin-item' href={`https://${host}/#/signin`}>{lang['signin']}</a>
                 :
-                <Link to='/signin'>{lang['signin']}</Link>
-                }     
+                <Link className='signin-item' to='/signin'>{lang['signin']}</Link>
+                }                
               </li>
+              {/* <li>
+                {isProduction
+                ?
+                <a className='oldpool-item' href={`https://${host}/#/brokerbind`}>{lang['old-pool']}</a>
+                :
+                <Link className='oldpool-item' to='/oldpool'>{lang['old-pool']}</Link>
+                }                
+              </li> */}
             </ul>
           </li>
         </ul>

@@ -129,6 +129,11 @@
           cursor: pointer;
           line-height: 80px;
           margin-left: 20px;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          color: #aaaaaa;
+          font-size: 20px;
           img {
             vertical-align: middle;
           }
@@ -138,10 +143,15 @@
   }
 }
 
-.team .team-item , .governance .governance-item,.diphistory .governance-item, .lite .trade-item , .pro .trade-item, .mining .mining-item, .bridge .bridge-item {
-		color: #fff!important;
+.team .team-item ,.oldpool .oldpool-item,.signin .signin-item ,.governance .governance-item,.diphistory .governance-item, .lite .trade-item , .pro .trade-item, .mining .mining-item, .bridge .bridge-item, .broker .broker-item, .brokerbind .brokerbind-item {
+    color: #fff!important;
+    display: inline-block;
+    height: 55px;
+    border-bottom: 2px solid #AAAAAA;
 }
-
+.team .team-item ,.broker .broker-item, .brokerbind .brokerbind-item,.oldpool .oldpool-item,.signin .signin-item{
+  height: 30px;
+}
 .index,
 .team {
   .nav {

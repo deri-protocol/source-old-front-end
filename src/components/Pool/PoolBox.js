@@ -5,16 +5,52 @@ import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlock
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
-import { eqInNumber } from '../../utils/utils.js';
-import v2LabelImg from '../../assets/img/v2-label.png'
-import v1LabelImg from '../../assets/img/v1-label.png'
+import { eqInNumber, addParam } from '../../utils/utils.js';
+import classNames from 'classnames';
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function PoolBox({wallet,version,pool,lang}){
-  const [buttonElement, setButtonElement] = useState('');
-  const logoClassName = `logo ${pool.bTokenSymbol}`
-  const history = useHistory();
+function PoolBox({wallet,group = {},lang}){
+  const {pool,list} = group
 
+  
+
+  const poolClass = classNames('pool',{
+    'only-one' : list.length === 1 ,
+    'full' : list.length === 5
+  })
+
+  return(
+    <div className={poolClass} >
+      <div className="pool-header">
+        <div className='left'>
+          <div className="network">
+            {pool.network && pool.network.toUpperCase()}
+          </div>
+          <div className='pool-desc'>
+            <span className='symbol'>
+                <span className='symbol-label'>{lang['symbol']}:</span>
+                <span>{pool.symbol}</span>  
+            </span>
+            <span className='address'>
+              <span className='address-label'>{lang['address']}:</span>
+                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId] && chainConfig[pool.chainId]['viewUrl']}/address/${pool.address}`}> 
+                  {pool.formatAdd}
+                </a> : '--'}
+            </span>
+          </div>
+        </div>
+        <div className='version'>{pool.version}</div>
+      </div>
+      <div className="pool-info">
+        {list.map((card,index) => <Card card={card} index={index} pool={pool} list={list} wallet={wallet} lang={lang}/>)}
+      </div>
+    </div>
+  )
+}
+
+function Card({wallet,pool,card,index,list,lang}) {
+  const [buttonElement, setButtonElement] = useState('');
+  const history = useHistory();
   const gotoMining = url => {
     history.push(url)
   }
@@ -63,57 +99,39 @@ function PoolBox({wallet,version,pool,lang}){
         )
     }    
     return () => {};
-  }, [pool,wallet.detail.chainId]);
-
-  return(
-    <div className="pool" >
-      <div className="pool-header">
-        <div className="network">
-          {pool.network && pool.network.toUpperCase()}
-        </div>
-        <div className='pool-label'>{pool.version === 'v1' && <img src={v1LabelImg} alt='v1'/>}{ pool.version === 'v2' && <img src={v2LabelImg} alt='v2'/>}</div>
-      </div>
-      <div className="pool-info">
-        <div className="info-center">
-          <div className="top-info">
-            <div className={logoClassName} ></div>
-            <div className="pool-detail">
-              <div className="base-token">{pool.bTokenSymbol}</div>
-              <div>
-                <span className='title'>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
-                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.lpApy ? 7 : 0}/>
-              </div>
-              <div>
-                <span>{lang['symbol']}</span>
-                {pool.symbol}
-              </div>
-              <div className="apy">
-                <span>{lang['apy']}</span>
-                <span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} title={ pool.lpApy && lang['deri-apy']}>
-                    {pool.apy ? <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
-                  </span>
-                  {pool.lpApy &&<>
-                  <span> + </span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
-                  </>}
+  }, [wallet.detail.chainId]);
+  return (
+    <>
+      <div className="info">
+        <div className="top-info">
+          <div className='pool-top'>
+            <span className={`logo ${card.bTokenSymbol}`} ></span>
+            <span className="base-token">{card.bTokenSymbol}</span>
+          </div>
+          <div className="pool-detail">
+            <div>
+              <span className='title'>{card.airdrop ? lang['total'] : lang['pool-liq']}</span>
+              <DeriNumberFormat value={card.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0}/>
+            </div>
+            <div className="apy">
+              <span>{lang['apy']}</span>
+              <span>
+                <span className={card.lpApy ? 'sushi-apy-underline' : ''} title={ card.lpApy && lang['deri-apy']}>
+                  {card.apy ? <DeriNumberFormat value={card.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
                 </span>
-                
-              </div>
-              <div className="pool-address">
-                <span>{lang['address']}</span>
-                {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId]['viewUrl']}/address/${pool.address || pool.pool}`}> 
-                  {pool.pool}
-                </a> : '--'}
-              </div>
+                {card.lpApy &&<>
+                <span> + </span>
+                <span className={card.lpApy ? 'sushi-apy-underline' : '' } title={ card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                </>}
+              </span>
             </div>
           </div>
-          <div className="bottom-btn">
-            {buttonElement}
-          </div>
-        </div>
+      </div>
+      <div className="bottom-btn">
+        {buttonElement}
       </div>
     </div>
-  )
+    {index !== list.length-1 && <div className='top-line'></div>}
+  </>)
 }
 export default  inject('wallet','version')(observer(PoolBox))

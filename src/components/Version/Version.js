@@ -1,11 +1,9 @@
 import React , {useState,useEffect}from 'react'
-import v1Img from '../../assets/img/v1.png'
-import v2Img from '../../assets/img/v2.png'
 import { inject } from 'mobx-react';
 import { observer } from 'mobx-react-lite';
 import { useRouteMatch } from 'react-router-dom';
-import useQuery from '../../hooks/useQuery';
 import { addParam, hasParam, getParam } from '../../utils/utils';
+import './version.less'
 
 function Version({wallet,version}){
   const isLite = useRouteMatch('/lite')
@@ -15,17 +13,9 @@ function Version({wallet,version}){
 
   const switchVersion = () => {
     version.switch();
-    const url = addParam('version',version.current);
-    window.location.href = url;
+    // const url = addParam('version',version.current);
+    // window.location.href = url;
   }
-
-  // useEffect(() => {
-  //   //如果url带有version参数优先使用
-  //   if(hasParam('version')){
-  //     version.setCurrent(getParam('version'))
-  //   }
-  //   return () => {};
-  // }, [window.location.href]);
 
 
   useEffect(() => {
@@ -60,7 +50,10 @@ function Version({wallet,version}){
   return (
     enabled ? 
       (<div className='version'>
-        {version.isV1 ? <img src={v1Img} onClick={switchVersion} alt='Switch V2'/> : <img onClick={switchVersion}  src={v2Img} alt='Switch V1'/>}
+        <div onClick={switchVersion} className={`version-container ${version.current}`}>
+          <span className='current-v1'>V1</span>
+          <span className='current-v2'>V2</span>
+        </div>
       </div>)
     :
       null

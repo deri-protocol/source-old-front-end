@@ -63,7 +63,8 @@ class Intl {
   }
 
   get localeLabel(){
-    return supportedCatalog[this.locale]
+    const label = supportedCatalog[this.locale];
+    return label ? label.substr(0,2).toUpperCase() : "EN" 
   }
 }
 
