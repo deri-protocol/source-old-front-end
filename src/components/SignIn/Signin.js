@@ -136,7 +136,7 @@ function Signin({wallet={},lang}){
     }
     let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
     let res = await fetchRestApi(path,{ method: 'POST' });
-    getStamp();
+     getStamp();
     if(!res.success){
       if(res.error.indexOf('insufficent user balance')!= 0){
         alert(lang['less-bnb'])
@@ -229,7 +229,6 @@ function Signin({wallet={},lang}){
         <div>
           {lang['title-three']}
         </div>
-        <div></div>
       </div>
       <div className='user-tasks'>
         <div className='header'>
