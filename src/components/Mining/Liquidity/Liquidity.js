@@ -34,7 +34,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 			}
 			if(info){
 				const shares = info.shares ? bg(info.shares) : bg(0)
-				if(version === 'v1') {
+				if(version === 'v1' || version === 'v2_lite') {
 					const total = shares.isNaN() ? shares.multipliedBy(info.shareValue) : bg(0)
 					setLiquidity({
 						total :  info.poolLiquidity,
