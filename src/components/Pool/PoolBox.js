@@ -81,15 +81,15 @@ function Card({wallet,pool,card,index,list,lang}) {
         setButtonElement(<Button btnText={lang['claim']} click={claimAirdrop} lang={lang}></Button>)
       }
     } else {
-      let url = `/mining/${pool.version || 'v1'}/${pool.chainId}/${pool.type}/${pool.symbol}/${pool.bTokenSymbol}/${pool.address}`
-      if(pool.bTokenId){
-        url = `${url}?baseTokenId=${pool.bTokenId}`
+      let url = `/mining/${pool.version || 'v1'}/${pool.chainId}/${card.type}/${card.symbol}/${card.bTokenSymbol}/${pool.address}`
+      if(card.bTokenId){
+        url = `${url}?baseTokenId=${card.bTokenId}`
       }
-      if(pool.symbolId){
+      if(card.symbolId){
         if(url.indexOf('?') > 0){
-          url = `${url}&symbolId=${pool.symbolId}`
+          url = `${url}&symbolId=${card.symbolId}`
         } else {
-          url = `${url}?symbolId=${pool.symbolId}`
+          url = `${url}?symbolId=${card.symbolId}`
         }
       }
       setButtonElement(        

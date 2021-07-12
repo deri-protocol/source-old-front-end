@@ -118,7 +118,7 @@ export default function useMiningPool(isNew){
         chainId : 56,
         buttonText : 'CLAIM'
       }
-      pools.push(airDrop)
+      // pools.push(airDrop)
       let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
       let v2Pools = pools.filter(p => p.version === 'v2')
       //新版本按照网络来分组

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
-function TradingViewChart({symbol,lang,intl}){
+function TradingViewChart({symbol,lang,intl,version}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [deriWidget, setDeriWidget] = useState(null);
@@ -81,7 +81,7 @@ function TradingViewChart({symbol,lang,intl}){
         deriWidget.remove();
       }
     };
-  }, [symbol]);
+  }, [symbol,version.current]);
 
   return(
     <div id='tradingview'>
