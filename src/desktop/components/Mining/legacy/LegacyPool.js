@@ -23,7 +23,7 @@ function Pool({version,lang}){
             </div>}  
         </div>
       </div>
-      <div className='retired-title'>
+      <div className='retired-title premining'>
         {lang['premining-pools']}
         <span>
           {lang['premining-finished']}
