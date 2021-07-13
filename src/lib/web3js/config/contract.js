@@ -347,7 +347,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0x447A9BC67721cB115ce6E664a261568a3c8F5B35',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
-        chanId: '56',
+        chainId: '56',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/0/0/0x447A9BC67721cB115ce6E664a261568a3c8F5B35',
@@ -363,7 +363,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0xA51E3D1a0A6E9114c22728991dDFdd62a9ABd9ad',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
-        chanId: '56',
+        chainId: '56',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/0/1/0xA51E3D1a0A6E9114c22728991dDFdd62a9ABd9ad',
@@ -379,7 +379,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
-        chanId: '56',
+        chainId: '56',
         staking: true,
         url:
           'https://premining.deri.finance/#/premining/0/2/0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A',
@@ -395,7 +395,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0xEDBbC66fC5Ee21E97001A3E88E312457003D6BEc',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
-        chanId: '128',
+        chainId: '128',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/1/0/0xEDBbC66fC5Ee21E97001A3E88E312457003D6BEc',
@@ -411,7 +411,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0x667FC1D27dC94a8c7a9ff86fc9908079DCFD6aA0',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
-        chanId: '128',
+        chainId: '128',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/1/1/0x667FC1D27dC94a8c7a9ff86fc9908079DCFD6aA0',
@@ -427,7 +427,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0x4847f7b81476346e5e55BBdD3b447435c5Be4a7d',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        chanId: '1',
+        chainId: '1',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/2/0/0x4847f7b81476346e5e55BBdD3b447435c5Be4a7d',
@@ -443,7 +443,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0xC773104722aA79bdA8f6ECF9384Cf7d9B70371e2',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        chanId: '1',
+        chainId: '1',
         staking: false,
         url:
           'https://premining.deri.finance/#/premining/2/1/0xC773104722aA79bdA8f6ECF9384Cf7d9B70371e2',
@@ -459,7 +459,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         pool: '0x3f98429b673AF39671a495b5B12Ebd5C10092ccB',
         dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
         MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
-        chanId: '1',
+        chainId: '1',
         staking: true,
         url:
           'https://premining.deri.finance/#/premining/2/2/0x3f98429b673AF39671a495b5B12Ebd5C10092ccB',

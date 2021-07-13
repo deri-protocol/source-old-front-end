@@ -29,7 +29,7 @@ export default function useMiningPool(isNew){
       const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
       const pool = config.pool || ''
       return Object.assign(config,{ 
-        network : chainInfo[config.chainId].name,
+        network : chainInfo[config.chainId] && chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
         apy :  ((+apyPool.apy) * 100).toFixed(2),
         formatAdd : formatAddress(pool),
@@ -68,9 +68,9 @@ export default function useMiningPool(isNew){
       return all;
     }
     let configs = getContractAddressConfig(env,'v2')
-
+    const preminingPools = getPreminingContractConfig(env);
     const all = []
-    configs = configs.reduce((total,config) => {
+    configs = configs.concat(preminingPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if(config.version === 'v2' && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
@@ -109,7 +109,6 @@ export default function useMiningPool(isNew){
         buttonText : 'STAKING'
       })    
     })
-    const preminingPools = getPreminingContractConfig(env);
     const allConfigs = configs.concat(slpConfig).concat(preminingPools)
     Promise.all(allConfigs).then(pools => {
       const airDrop = {
@@ -124,7 +123,7 @@ export default function useMiningPool(isNew){
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => p.version === 'v2' && !p.retired)
-      const legacy = pools.filter(p => p.retired)
+      const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p => p.premining) 
       //新版本按照网络来分组
       if(isNew){
