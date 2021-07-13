@@ -10,6 +10,7 @@ function Pool({version,lang}){
   return (
     <div className='retired'>
       <div className='retired-title'>
+        <div className='retired-pools'>{lang['retired-pools']}</div>
         {lang['retired-text']}
         <a href="https://app.deri.finance/#/mining">{lang['new-pools']}</a>
       </div>
@@ -25,7 +26,7 @@ function Pool({version,lang}){
       </div>
       <div className='retired-title premining'>
         {lang['premining-pools']}
-        <span>
+        <span className='premining-finished'>
           {lang['premining-finished']}
         </span>
       </div>
