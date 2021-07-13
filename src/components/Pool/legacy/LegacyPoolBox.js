@@ -6,6 +6,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../../Button/Button.js';
 import { eqInNumber } from '../../../utils/utils.js';
+import {isLP} from '../../../utils/utils'
 import v2LabelImg from '../../../assets/img/v2-label.png'
 import v1LabelImg from '../../../assets/img/v1-label.png'
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
@@ -14,6 +15,10 @@ function PoolBox({wallet,version,pool,lang}){
   const [buttonElement, setButtonElement] = useState('');
   const logoClassName = `logo ${pool.bTokenSymbol}`
   const history = useHistory();
+
+  const isShowDecimal = (address)=>{
+    return address === '0x3f98429b673AF39671a495b5B12Ebd5C10092ccB' || address === '0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A'
+  }
 
   const gotoMining = url => {
     history.push(url)
@@ -87,7 +92,7 @@ function PoolBox({wallet,version,pool,lang}){
               <div className="base-token">{pool.bTokenSymbol}</div>
               <div>
                 <span className='title'>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
-                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={pool.lpApy ? 7 : 0}/>
+                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={isShowDecimal(pool.pool) ? 7 : 0}/>
               </div>
               <div>
                 <span>{lang['symbol']}</span>
