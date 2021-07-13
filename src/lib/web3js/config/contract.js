@@ -353,6 +353,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/0/0/0x447A9BC67721cB115ce6E664a261568a3c8F5B35',
         bTokenSymbol: 'WBNB',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
@@ -367,6 +368,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/0/1/0xA51E3D1a0A6E9114c22728991dDFdd62a9ABd9ad',
         bTokenSymbol: 'CAKE',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0xa184088a740c695E156F91f5cC086a06bb78b827',
@@ -381,6 +383,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/0/2/0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A',
         bTokenSymbol: 'AUTO',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F',
@@ -395,6 +398,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/1/0/0xEDBbC66fC5Ee21E97001A3E88E312457003D6BEc',
         bTokenSymbol: 'WHT',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c',
@@ -409,6 +413,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/1/1/0x667FC1D27dC94a8c7a9ff86fc9908079DCFD6aA0',
         bTokenSymbol: 'MDX',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
@@ -423,6 +428,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/2/0/0x4847f7b81476346e5e55BBdD3b447435c5Be4a7d',
         bTokenSymbol: 'SUSHI',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
@@ -437,6 +443,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/2/1/0xC773104722aA79bdA8f6ECF9384Cf7d9B70371e2',
         bTokenSymbol: 'AAVE',
         isInTvlRace: false,
+        retired: true,
       },
       {
         bToken: '0xA3DfbF2933FF3d96177bde4928D0F5840eE55600',
@@ -451,6 +458,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
           'https://premining.deri.finance/#/premining/2/2/0x3f98429b673AF39671a495b5B12Ebd5C10092ccB',
         bTokenSymbol: 'DERI-USDT SLP',
         isInTvlRace: false,
+        retired: true,
       },
     ];
   } else {

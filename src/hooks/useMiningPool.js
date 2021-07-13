@@ -5,7 +5,8 @@ import {
   getPoolLiquidity,
   getPoolInfoApy,
   getLpContractAddressConfig,
-  getLpPoolInfoApy
+  getLpPoolInfoApy,
+  getPreminingContractConfig
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
@@ -18,6 +19,7 @@ export default function useMiningPool(isNew){
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
   const [v2Pools, setV2Pools] = useState([])
+  const [legacyPools, setLegacyPools] = useState([])
 
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function useMiningPool(isNew){
       },all)
       return all;
     }
-    let configs = getContractAddressConfig(env,'v2').filter(config => !config.retired);
+    let configs = getContractAddressConfig(env,'v2')
     // let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
@@ -107,7 +109,8 @@ export default function useMiningPool(isNew){
         buttonText : 'STAKING'
       })    
     })
-    const allConfigs = configs.concat(slpConfig)
+    const preminingPools = getPreminingContractConfig(env);
+    const allConfigs = configs.concat(slpConfig).concat(preminingPools)
     Promise.all(allConfigs).then(pools => {
       const airDrop = {
         network : 'BSC',
@@ -121,19 +124,19 @@ export default function useMiningPool(isNew){
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => p.version === 'v2' && !p.retired)
+      let legacy = pools.filter(p => p.retired)
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
         v2Pools = groupByNetwork(v2Pools);
       }
-      console.log('v2',v2Pools)
-      console.log('v1',v1Pools)
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
       setPools(pools);
+      setLegacyPools(legacy);
       setLoaded(true)
     })
     return () => pools.length = 0
   },[])
-  return [loaded,pools,v1Pools,v2Pools];
+  return [loaded,pools,v1Pools,v2Pools,legacyPools];
 }
