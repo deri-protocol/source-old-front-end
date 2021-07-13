@@ -283,9 +283,9 @@ export const getWalletBalance = async (
  * @param {string} accountAddress
  * @returns {bool}
  */
-export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
+export const isUnlocked = async (chainId, poolAddress, accountAddress, isProvider) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
-  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress, isProvider);
   //bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
 };

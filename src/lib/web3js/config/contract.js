@@ -354,6 +354,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'WBNB',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
@@ -369,6 +370,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'CAKE',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0xa184088a740c695E156F91f5cC086a06bb78b827',
@@ -384,6 +386,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'AUTO',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F',
@@ -399,6 +402,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'WHT',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c',
@@ -414,6 +418,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'MDX',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
@@ -429,6 +434,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'SUSHI',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
@@ -444,6 +450,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'AAVE',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
       {
         bToken: '0xA3DfbF2933FF3d96177bde4928D0F5840eE55600',
@@ -459,6 +466,7 @@ export const getPreminingContractConfig = (env = 'dev') => {
         bTokenSymbol: 'DERI-USDT SLP',
         isInTvlRace: false,
         retired: true,
+        premining: true,
       },
     ];
   } else {

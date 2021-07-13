@@ -17,7 +17,8 @@ describe('Mining query api', () => {
   }, TIMEOUT)
   it('getLiquidityInfo()', async() => {
     //const input = ['97', POOL_ADDRESS, ACCOUNT_ADDRESS, '0', true]
-    const input = ['56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0xFefC938c543751babc46cc1D662B982bd1636721', '1' ]
+    //const input = ['56', '0x19c2655A0e1639B189FB0CF06e02DC0254419D92', '0xFefC938c543751babc46cc1D662B982bd1636721', '1' ]
+    const input = ['137', '0x43b4dfb998b4D17705EEBfFCc0380c6b98699252', '0xFefC938c543751babc46cc1D662B982bd1636721', '1' ]
     const output = {
       maxRemovableShares: '1000',
       poolLiquidity: '61000',

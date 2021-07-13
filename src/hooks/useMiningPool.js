@@ -20,6 +20,7 @@ export default function useMiningPool(isNew){
   const [v1Pools, setV1Pools] = useState([])    
   const [v2Pools, setV2Pools] = useState([])
   const [legacyPools, setLegacyPools] = useState([])
+  const [preminingPools, setPreminingPools] = useState([])
 
 
   useEffect(() => {
@@ -67,7 +68,6 @@ export default function useMiningPool(isNew){
       return all;
     }
     let configs = getContractAddressConfig(env,'v2')
-    // let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
     configs = configs.reduce((total,config) => {
@@ -124,7 +124,8 @@ export default function useMiningPool(isNew){
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => p.version === 'v2' && !p.retired)
-      let legacy = pools.filter(p => p.retired)
+      const legacy = pools.filter(p => p.retired)
+      const preminings = pools.filter(p => p.premining) 
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
@@ -134,9 +135,10 @@ export default function useMiningPool(isNew){
       setV1Pools(v1Pools);
       setPools(pools);
       setLegacyPools(legacy);
+      setPreminingPools(preminings)
       setLoaded(true)
     })
     return () => pools.length = 0
   },[])
-  return [loaded,pools,v1Pools,v2Pools,legacyPools];
+  return [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools];
 }
