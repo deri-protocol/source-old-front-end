@@ -8,7 +8,7 @@ const Lite = LoadableComponent(()=>import('../../pages/trade/Lite'))
 const Home = LoadableComponent(() => import('../../pages/Home/Home'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Pool = LoadableComponent(() => import('../../components/Mining/Pool'))
-const OldPool = LoadableComponent(() => import('../../components/Mining/OldPool'))
+const LegacyPool = LoadableComponent(() => import('../Mining/Legacy/LegacyPool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
@@ -36,7 +36,7 @@ class Body extends React.Component {
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
-          <Route exact path='/oldpool' component={() => <OldPool lang={dict['mining']}/>}/>
+          <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
           <Route component={() => <Lite lang={dict['lite']}/>} />
         </Switch>

@@ -124,7 +124,7 @@ export default function useMiningPool(isNew){
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => p.version === 'v2' && !p.retired)
-      const legacy = pools.filter(p => p.retired)
+      const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p => p.premining) 
       //新版本按照网络来分组
       if(isNew){

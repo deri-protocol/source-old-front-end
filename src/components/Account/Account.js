@@ -11,8 +11,9 @@ function Account({wallet,lang}){
   const isRoot = useRouteMatch({path: '/',exact : true})
   const isMining = useRouteMatch({path: '/mining',exact : true});
   const isTeam = useRouteMatch('/team')
+  const isRetired = useRouteMatch('/retired')
 
-  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot
+  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired
   
 
 

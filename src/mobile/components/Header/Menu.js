@@ -76,9 +76,9 @@ export default function Menu({closeMenu,lang,locale}){
               <li>
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
               </li>
-              {/* <li>
-                <Link to='/oldpool'>{lang['old-pool']}</Link>
-              </li> */}
+              <li>
+                <Link to='/oldpool'>{lang['retired-pools']}</Link>
+              </li>
             </ul>
           </li>
         </ul>
