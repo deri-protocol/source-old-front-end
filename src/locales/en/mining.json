@@ -4,6 +4,7 @@
   "symbol" : "Symbol",
   "retired-text":"There are no longer mining harvest from these pools. Please unstake your liquidity and stake into ",
   "new-pools":" new pools",
+  "retired-pools":"Retired Pools",
   "premining-pools":"Premining Pools",
   "apy" : "APY",
   "deri-apy" : "DERI-APY",
