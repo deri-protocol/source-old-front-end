@@ -1,5 +1,5 @@
 import React from 'react'
-import './pool.less'
+import './legacyPools.less'
 import './zh-pool.less'
 import PoolBox from '../../../../components/Pool/legacy/LegacyPoolBox';
 import useMiningPool from '../../../../hooks/useMiningPool';
@@ -16,7 +16,7 @@ function Pool({version,lang}){
         {lang['retired-text']}
         <a href="https://app.deri.finance/#/mining">{lang['new-pools']}</a>
       </div>
-      <div className="mining-info">
+      <div className="retired-mining-info">
         <div className="pools">
           {legacy.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
           {!loaded && <div className="loading">
