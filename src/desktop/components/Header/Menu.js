@@ -83,7 +83,7 @@ function Menu({lang,locale}) {
               <li>
                 {isProduction 
                 ? 
-                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target={isApp ? '' : '_blank'} className='retired-item'>{lang['retired-pools']}</a>
+                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target='_blank' className='retired-item'>{lang['retired-pools']}</a>
                 :
                 <Link className='retired-item' to ='/retired'>{lang['retired-pools']}</Link>}            
               </li>
