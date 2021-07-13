@@ -1,10 +1,13 @@
+<<<<<<< HEAD:frontend/src/v2/__test__/v2/mining_query_api.spec.js
+=======
 // import { DeriEnv } from '../../config'
 import { DeriEnv } from '../../config';
+>>>>>>> d7804a886715a2864a4d22af865340b882bb7824:frontend/src/v2/__test__/mining_query_api.spec.js
 import {
   getPoolLiquidity,
   getLiquidityInfo,
-} from '../api/mining_query_api'
-import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS } from './setup';
+} from '../../api/v2/mining_query_api'
+import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS } from '../setup';
 
 describe('Mining query api', () => {
   it('getPoolLiquidity()', async() => {

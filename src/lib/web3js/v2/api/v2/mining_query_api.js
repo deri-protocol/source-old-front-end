@@ -1,9 +1,8 @@
-import { lTokenFactory, perpetualPoolFactory } from '../factory'
-import { getPoolConfig2, getPoolBTokenIdList, getPoolSymbolIdList} from '../config'
-import { bg, deriToNatural } from '../utils'
-import { getNetworkName } from '../../utils'
-import { calculateMaxRemovableLiquidity } from '../calculation'
-import { databaseFactory } from '../../factory/contracts';
+import { databaseFactory } from '../../../factory/contracts';
+import { lTokenFactory, perpetualPoolFactory } from '../../factory'
+import { getPoolConfig2, getPoolBTokenIdList, getPoolSymbolIdList} from '../../config'
+import { bg, deriToNatural, getNetworkName } from '../../utils'
+import { calculateMaxRemovableLiquidity } from '../../calculation'
 
 export const getLiquidityInfo = async (
   chainId,
