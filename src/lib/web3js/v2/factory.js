@@ -9,6 +9,7 @@ import {
   ChainlinkOracle,
   WrappedOracle,
   BrokerManager,
+  PTokenAirdrop,
 } from './contract';
 import { getChainProviderUrl } from './utils/chain';
 
@@ -97,3 +98,4 @@ export const oracleFactory = (function () {
 })();
 
 export const brokerManagerFactory = factory(BrokerManager);
+export const pTokenAirdropFactory = factory(PTokenAirdrop)

@@ -63,7 +63,7 @@ export const getLiquidityInfo = async (
       // shareValue: '1',
       // maxRemovableShares: liquidity.toString()
       shares: liquidity.toString(),
-      pnl: approximatePnl.toString(),
+      pnl: approximatePnl.div(bTokens[bTokenId].price).toString(),
       maxRemovableShares: maxRemovableShares.toString()
     };
   } catch (err) {

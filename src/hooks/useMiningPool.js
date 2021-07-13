@@ -64,7 +64,7 @@ export default function useMiningPool(isNew){
       },all)
       return all;
     }
-    let configs = getContractAddressConfig(env,'v2');
+    let configs = getContractAddressConfig(env,'v2').filter(config => !config.retired);
     // let v1Configs = getContractAddressConfig(env,'v1')
 
     const all = []
@@ -119,8 +119,8 @@ export default function useMiningPool(isNew){
         buttonText : 'CLAIM'
       }
       // pools.push(airDrop)
-      let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
-      let v2Pools = pools.filter(p => p.version === 'v2')
+      let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
+      let v2Pools = pools.filter(p => p.version === 'v2' && !p.retired)
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);

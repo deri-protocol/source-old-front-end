@@ -46,3 +46,9 @@ export {
 export {
   setBroker
 } from './broker_api'
+
+export {
+  airdropPToken,
+  isUserPTokenExist,
+  getAirdropPTokenWhitelistCount,
+} from './activity_api'
