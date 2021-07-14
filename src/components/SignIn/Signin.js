@@ -233,6 +233,9 @@ function Signin({wallet={},lang}){
         <div>
           {lang['title-three']}
         </div>
+        <div className='time'>
+          {lang['title-five']}
+        </div>
       </div>
       <div className='user-tasks'>
         <div className='header'>
