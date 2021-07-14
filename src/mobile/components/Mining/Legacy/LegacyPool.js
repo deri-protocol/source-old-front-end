@@ -32,7 +32,7 @@ function Pool({version,lang}){
           {lang['premining-finished']}
         </span>
       </div>
-      <div className="mining-info">
+      <div className="retired-mining-info">
         <div className='pools'>
           {premining.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
           {!loaded && <div className="loading">
