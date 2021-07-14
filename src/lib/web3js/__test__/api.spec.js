@@ -1,4 +1,3 @@
-import { DeriEnv } from '../config';
 import { isUnlocked } from '../api/contractQueryApi';
 import { getPreminingPoolInfo } from '../api/databaseApi';
 

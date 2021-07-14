@@ -98,7 +98,6 @@ export const getPoolConfig2 = (poolAddress, bTokenId, symbolId) => {
     pToken: pool.pToken,
     lToken: pool.lToken,
     router: pool.router,
-    broker: pool.broker,
     bTokenCount: pool.bTokenCount,
     symbolCount: pool.symbolCount,
     initialBlock: pool.initialBlock,

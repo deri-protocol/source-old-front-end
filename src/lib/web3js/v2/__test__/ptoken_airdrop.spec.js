@@ -1,4 +1,4 @@
-import { isUserPTokenExist, getAirdropPTokenWhiteListCount } from "../api/activity_api";
+import { isUserPTokenExist, getAirdropPTokenWhitelistCount } from "../api/activity_api";
 import { pTokenAirdropFactory } from "../factory"
 import { ACCOUNT_ADDRESS, ACCOUNT2_ADDRESS, TIMEOUT } from './setup';
 

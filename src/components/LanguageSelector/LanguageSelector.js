@@ -10,13 +10,9 @@ import { addParam, hasParam, getParam } from '../../utils/utils'
 
 function LanguageSelector({intl}){
   const [show, setShow] = useState(false)
-  const query = useQuery();
   const onClick = (lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
-    if(refresh){
-      window.location.href = addParam('locale',lang)
-    }
   }
 
   const onMouseOver = () => {

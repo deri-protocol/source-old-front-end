@@ -1,4 +1,4 @@
-import { databaseFactory, databaseAirdropFactory, databasePreminingFactory } from '../factory/contracts';
+import { databaseFactory, databaseAirdropFactory } from '../factory/contracts';
 import {
   toChecksumAddress,
   getNetworkName,
@@ -328,8 +328,3 @@ export const getUserInfoAllForAirDrop = async (userAddress) => {
     };
   }
 };
-
-export const getPreminingPoolInfo = async(chainId, poolAddress) => {
-  const preminingDatabase = databasePreminingFactory()
-  return await preminingDatabase.getLiquidityInfo(chainId, poolAddress)
-}

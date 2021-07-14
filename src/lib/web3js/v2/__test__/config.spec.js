@@ -48,19 +48,18 @@ describe('config', () => {
     expect(getChainProviderUrls('56')).toEqual(output);
   });
   test('getPoolConfigList()', () => {
-    const output = 6;
+    const output = 8;
     expect(getPoolConfigList('dev').length).toEqual(output);
   });
   test('getPoolConfigList() uniq by bTokenId', () => {
-    const output = 2;
     const arr1 = getPoolConfigList()
     const arr2 = arr1.map(i => i.bTokenId)
-    expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(output)
+    expect(arr1.filter((i, index) => arr2.indexOf(i.bTokenId) === index).length).toEqual(3)
     DeriEnv.set('prod')
     const arr3 = getPoolConfigList()
     DeriEnv.set('dev')
     const arr4 = arr3.map(i => i.symbolId)
-    expect(arr3.filter((i, index) => arr4.indexOf(i.symbolId) === index).length).toEqual(output)
+    expect(arr3.filter((i, index) => arr4.indexOf(i.symbolId) === index).length).toEqual(2)
     //expect(arr4.length).toEqual(output)
   });
   test('getFilteredPoolconfig()', () => {
@@ -81,14 +80,14 @@ describe('config', () => {
       getFilteredPoolConfigList(
         POOL_ADDRESS,
       ).length
-    ).toEqual(4);
+    ).toEqual(6);
     expect(
       getFilteredPoolConfigList(
         POOL_ADDRESS,
         null,
         '1',
       ).length
-    ).toEqual(2);
+    ).toEqual(3);
   });
   test('getPoolconfig()', () => {
     expect(
@@ -152,12 +151,12 @@ describe('config', () => {
       symbol: '',
       unit: '',
       version: 'v2',
-      bTokenCount: 2,
+      bTokenCount: 3,
       symbolCount: 2,
     };
     const res = getPoolConfig2(POOL_ADDRESS)
     expect(res).toEqual(output)
-    expect(res.bTokenCount).toEqual(2)
+    expect(res.bTokenCount).toEqual(3)
     expect(res.symbolCount).toEqual(2)
     expect(getPoolConfig2(POOL_ADDRESS, '0').bTokenSymbol).toEqual('BUSD')
     expect(getPoolConfig2(POOL_ADDRESS, null, '1').symbol).toEqual('ETHUSD')

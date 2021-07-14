@@ -4,7 +4,7 @@ import {
   getPoolLiquidity,
   getLiquidityInfo,
 } from '../api/mining_query_api'
-import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS } from './setup';
+import { TIMEOUT, POOL_ADDRESS } from './setup';
 
 describe('Mining query api', () => {
   it('getPoolLiquidity()', async() => {

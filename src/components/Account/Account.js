@@ -51,10 +51,50 @@ function Account({wallet,lang}){
     return () => {
     };
   }, [wallet.detail.account,wallet.detail.formatBalance,lang]);
+  const addNetwork = () => {
+    const params = [{
+      chainId: '0x1e',
+      chainName: 'RSK Mainnet',
+      nativeCurrency: {
+        name: 'RSK BTC',
+        symbol: 'RBTC',
+        decimals: 18
+      },
+      rpcUrls: ['https://public-node.rsk.co'],
+      blockExplorerUrls: ['https://explorer.rsk.co']
+    }]
+  
+    window.ethereum.request({ method: 'wallet_addEthereumChain', params })
+      .then(() => console.log('Success'))
+      .catch((error) => console.log("Error", error.message))
+  }
+
+  const switchNetwork = async () => {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${(56).toString(16)}`}],
+      });
+    } catch (error) {
+      // This error code indicates that the chain has not been added to MetaMask.
+      if (error.code === 4902) {
+        // try {
+        //   await window.ethereum.request({
+        //     method: 'wallet_addEthereumChain',
+        //     params: [{ chainId: '0xf00', rpcUrl: 'https://...' /* ... */ }],
+        //   });
+        // } catch (addError) {
+        //   // handle "add" error
+        // }
+      }
+      // handle other "switch" errors
+    }
+  }
 
 
   return !notConnectWalletPage && (
     <div className="connect">
+      {/* <button onClick={addNetwork}>Add RSK Mainnet to Metamask</button> */}
       <div className="network-text-logo">
         <i className={wallet.detail.symbol}></i>
         <span className="logo-text">{wallet.detail.text}</span>
@@ -63,6 +103,7 @@ function Account({wallet,lang}){
         <button className="nav-btn connect-btn" onClick={wallet.connect}>
           {btnText}
         </button>
+
       </div>
     </div>
   )

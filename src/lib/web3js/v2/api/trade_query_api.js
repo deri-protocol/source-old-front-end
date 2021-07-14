@@ -17,7 +17,7 @@ export const getSpecification = async (
   symbolId,
 ) => {
   try {
-    const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, bTokenId, symbolId)
+    const {symbol } = getPoolConfig2(poolAddress, bTokenId, symbolId)
     const bTokens = getPoolBTokenList(poolAddress)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     const [symbolInfo, parameterInfo] = await Promise.all([
