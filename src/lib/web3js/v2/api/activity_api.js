@@ -40,8 +40,8 @@ export const getAirdropPTokenWhitelistCount = async (chainId) => {
 export const isUserPTokenExist = async (chainId, poolAddress, accountAddress) => {
   let res = ''
   try {
-    const {lToken:lTokenAddress} = getPoolConfig2(poolAddress)
-    const pToken = pTokenFactory(chainId, lTokenAddress)
+    const {pToken:pTokenAddress} = getPoolConfig2(poolAddress)
+    const pToken = pTokenFactory(chainId, pTokenAddress)
     const result = await pToken.balanceOf(accountAddress)
     if (result === '1') {
       res = true
