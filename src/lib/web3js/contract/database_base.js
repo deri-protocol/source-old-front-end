@@ -32,6 +32,7 @@ export class DatabaseBaseContract {
         break
       } catch (err) {
         this.providerUrl = null
+        console.log(err.toString())
       }
       retry -= 1
     }

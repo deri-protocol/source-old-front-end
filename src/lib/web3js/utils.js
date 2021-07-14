@@ -325,7 +325,6 @@ export const getPoolContractAddress = (chainId, poolAddress) => {
     (c) => c.chainId === chainId
   );
   const pool = pools.filter((p) => p.pool === poolAddress);
-  // console.log('pool', pool)
   if (pool.length > 0) {
     return {
       poolAddress: pool[0].pool,

@@ -3,6 +3,7 @@ export {
   //getContractAddressConfig,
   getLpContractAddressConfig,
   getSlpContractAddressConfig,
+  getPreminingContractConfig,
 } from './config';
 export * from './utils';
 export * from './calculation';

@@ -34,6 +34,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'BTC',
         chainId: '56',
         version: 'v1',
+        retired: true,
       },
       {
         pool:   '0x011346B81e5326904B5B76A11dECAf2c67eFFc23',
@@ -48,6 +49,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'COIN',
         chainId: '56',
         version: 'v1',
+        retired: true,
       },
       {
         pool:   '0xD3f5E6D1a25dA1E64EDf7cb571f9fAD17FEb623c',
@@ -76,6 +78,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'BTC',
         chainId: '1',
         version: 'v1',
+        retired: true,
       },
       {
         pool:   '0x96a1F15676746b9339DBc185F277618359Ac6346',
@@ -90,6 +93,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'BTC',
         chainId: '1',
         version: 'v1',
+        retired: true,
       },
       {
         pool:   '0xBA7e183042c8796E26A5a2375927DE7B1AB99d97',
@@ -104,6 +108,7 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'BTC',
         chainId: '128',
         version: 'v1',
+        retired: true,
       },
     ];
   }
@@ -184,6 +189,7 @@ export const getClpContractAddressConfig = (env = 'dev') => {
         chainId: '56',
         bTokenSymbol: 'CAKE-LP',
         symbol: '--',
+        retired: true,
       },
     ];
   } else {
@@ -238,6 +244,7 @@ export const getLpContractAddressConfig = (env = 'dev') => {
         bTokenSymbol: 'CAKE-LP',
         symbol: '--',
         type: 'clp',
+        retired: true,
       },
       {
         pool:   '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
@@ -328,6 +335,143 @@ export const getDeriContractAddressConfig = (env = 'dev') => {
       chainId: '256',
     },
   ];
+};
+
+export const getPreminingContractConfig = (env = 'dev') => {
+  if (env === 'prod') {
+    return [
+      {
+        bToken: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0xe91cb8ba06028f38e231F7099e9B97CEDd2f2736',
+        pool: '0x447A9BC67721cB115ce6E664a261568a3c8F5B35',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
+        chainId: '56',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/0/0/0x447A9BC67721cB115ce6E664a261568a3c8F5B35',
+        bTokenSymbol: 'WBNB',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x8518054fa6b7E0d4834bfD152c9BA5BDB856FD2B',
+        pool: '0xA51E3D1a0A6E9114c22728991dDFdd62a9ABd9ad',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
+        chainId: '56',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/0/1/0xA51E3D1a0A6E9114c22728991dDFdd62a9ABd9ad',
+        bTokenSymbol: 'CAKE',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0xa184088a740c695E156F91f5cC086a06bb78b827',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x167704539C9acAcF6f0C2D7AAeB4413339F86AaA',
+        pool: '0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x6C8d3F31b2ad1AE997Afa20EAd88cb67E93C6E17',
+        chainId: '56',
+        staking: true,
+        url:
+          'https://premining.deri.finance/#/premining/0/2/0x03dA5cB10D868c5F979b277eb6DF17D50E78fE2A',
+        bTokenSymbol: 'AUTO',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0x5545153CCFcA01fbd7Dd11C0b23ba694D9509A6F',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x43CA6D7129d7F490d5B91B4D14D7c877D15A92dA',
+        pool: '0xEDBbC66fC5Ee21E97001A3E88E312457003D6BEc',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
+        chainId: '128',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/1/0/0xEDBbC66fC5Ee21E97001A3E88E312457003D6BEc',
+        bTokenSymbol: 'WHT',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0x25D2e80cB6B86881Fd7e07dd263Fb79f4AbE033c',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0xeC27d4c53C2E29F1113A9667c0B19442df83c1f1',
+        pool: '0x667FC1D27dC94a8c7a9ff86fc9908079DCFD6aA0',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0xF0bC8b772f26F8DeB46c1aebbEA7C8d502Abf3b8',
+        chainId: '128',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/1/1/0x667FC1D27dC94a8c7a9ff86fc9908079DCFD6aA0',
+        bTokenSymbol: 'MDX',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0x6B3595068778DD592e39A122f4f5a5cF09C90fE2',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x3B50881F5646E809ef85Bb0016af3b2Ee5313d46',
+        pool: '0x4847f7b81476346e5e55BBdD3b447435c5Be4a7d',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
+        chainId: '1',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/2/0/0x4847f7b81476346e5e55BBdD3b447435c5Be4a7d',
+        bTokenSymbol: 'SUSHI',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0x0069b4Fb48e5B8E9CB6960f4c2468b625ACfb465',
+        pool: '0xC773104722aA79bdA8f6ECF9384Cf7d9B70371e2',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
+        chainId: '1',
+        staking: false,
+        url:
+          'https://premining.deri.finance/#/premining/2/1/0xC773104722aA79bdA8f6ECF9384Cf7d9B70371e2',
+        bTokenSymbol: 'AAVE',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+      {
+        bToken: '0xA3DfbF2933FF3d96177bde4928D0F5840eE55600',
+        pToken: '0x0000000000000000000000000000000000000000',
+        lToken: '0xFFCfB31b6500E7e420CFE5D0df710DdF928F55FD',
+        pool: '0x3f98429b673AF39671a495b5B12Ebd5C10092ccB',
+        dToken: '0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9',
+        MiningVault: '0x7826Ef8Da65494EA21D64D8E6A76AB1BED042FD8',
+        chainId: '1',
+        staking: true,
+        url:
+          'https://premining.deri.finance/#/premining/2/2/0x3f98429b673AF39671a495b5B12Ebd5C10092ccB',
+        bTokenSymbol: 'DERI-USDT SLP',
+        isInTvlRace: false,
+        retired: true,
+        premining: true,
+      },
+    ];
+  } else {
+    return []
+  }
 };
 
 export const getDailyBlockNumberConfig = () => {

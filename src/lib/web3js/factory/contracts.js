@@ -5,6 +5,7 @@ import { LTokenContract } from '../contract/lToken';
 import { DatabaseContract } from '../contract/database';
 import { DatabaseWormholeContract } from '../contract/database_wormhole';
 import { DatabaseAirdropContract } from '../contract/database_airdrop';
+import { DatabasePreminingContract } from '../contract/database_premining';
 import { MiningVaultPool } from '../contract/mining_vault_pool';
 import { MiningVaultRouter } from '../contract/mining_vault_router';
 
@@ -57,6 +58,19 @@ export const databaseAirdropFactory = (() => {
     }
     const database = new DatabaseAirdropContract(address);
     databaseInstanceMap[key] = database;
+    return database;
+  };
+})();
+
+export const databasePreminingFactory = (function () {
+  const databaseInstanceMap = {};
+  return () => {
+    const address = '0x5BFf39dD156959B7852370F20eE30A24d416281d'
+    if (Object.keys(databaseInstanceMap).includes(address)) {
+      return databaseInstanceMap[address];
+    }
+    const database = new DatabasePreminingContract(address);
+    databaseInstanceMap[address] = database;
     return database;
   };
 })();

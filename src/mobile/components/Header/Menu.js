@@ -79,9 +79,9 @@ export default function Menu({closeMenu,lang,locale}){
               <li>
                 <Link to='/signin'>{lang['signin']}</Link>
               </li>
-              {/* <li>
-                <Link to='/oldpool'>{lang['old-pool']}</Link>
-              </li> */}
+              <li>
+                <Link to='/retired'>{lang['retired-pools']}</Link>
+              </li>
             </ul>
           </li>
         </ul>
