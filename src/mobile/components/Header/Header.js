@@ -15,6 +15,9 @@ function Header({intl}){
   const closeMenu = () => setStyles({left : '-110%'})
   const header = useLang(intl.dict,'header')
   const footer = useLang(intl.dict,'footer')
+  const goIndex = () => {
+    window.location.href ='https://deri.finance/'
+  }
 
   return (
       <div className="nav">
@@ -22,9 +25,9 @@ function Header({intl}){
         <div className='menu-left' style={styles}>
           <Menu closeMenu={closeMenu} lang={Object.assign(header,footer)} locale={intl.locale}/>
         </div>
-        <a className="logo" href="https://deri.finance/">
-          <img src={logo} alt=""/>
-        </a>
+        <div className="logo" >
+          <img src={logo} alt="" onClick={goIndex}/>
+        </div>
         <div className='nav-right'>
           <Version/>
           <a href='https://app.deri.finance/#lite'><div className='trade'>{header['trade']}</div></a> 
