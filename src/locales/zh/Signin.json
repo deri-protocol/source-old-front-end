@@ -20,7 +20,7 @@
   "sign-in-failed" : "签到失败",
   "connect-wallet" : "连接钱包",
   "who-are-eligibles":"详细规则",
-  "rules-two":"- 最低钱包余额要求：在北京时间7月12日上午10点钱包内有超过0.2个BNB",
+  "rules-two":"- 最低钱包余额要求：钱包内有超过0.2个BNB",
   "rules-one":"- 此活动不适用于北京时间 2021 年 7 月 14 日 下午6点之前与 Deri Protocol发生交互的任何地址",
   "rules-three":"- 完成所有任务的用户将有资格分享$100,000奖池 ",
   "how-to-participate":"如何参与",
