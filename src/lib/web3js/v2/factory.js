@@ -87,7 +87,7 @@ export const oracleFactory = (function () {
           symbol,
           decimal
         );
-      } else if (['137'].includes(chainId)) {
+      } else if (['137', '56'].includes(chainId)) {
         instanceMap[key] = new WrappedOracle(chainId, address, symbol, decimal);
       } else {
         instanceMap[key] = new WooOracle(chainId, address, symbol, decimal);

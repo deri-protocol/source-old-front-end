@@ -34,6 +34,11 @@
             "symbolId": "1",
             "symbol": "ETHUSD",
             "unit": "ETH"
+          },
+          {
+            "symbolId": "2",
+            "symbol": "BNBUSD",
+            "unit": "BNB"
           }
         ],
         "chainId": "56",
@@ -77,13 +82,19 @@
       {
         "chainId": "56",
         "symbol": "BTCUSD",
-        "address": "0xe3C58d202D4047Ba227e437b79871d51982deEb7",
+        "address": "0xe5709F0a23aEA3A61B0db91E92458fb6a0a55857",
         "decimal": "18"
       },
       {
         "chainId": "56",
         "symbol": "ETHUSD",
-        "address": "0x9BA8966B706c905E594AcbB946Ad5e29509f45EB",
+        "address": "0xA0F51e28Ec15fcC9816FaB40684f1D1C675Bd39b",
+        "decimal": "18"
+      },
+      {
+        "chainId": "56",
+        "symbol": "BNBUSD",
+        "address": "0xa356c0559e0DdFF9281bF8f061035E7097a84Fa4",
         "decimal": "18"
       },
       {
