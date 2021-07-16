@@ -4,35 +4,71 @@
       "1" : {
         "code" : "ETHEREUM",
         "name" : "Ethereum",
-        "text" : "ETHEREUM",
         "symbol" : "ETH",
         "viewUrl" : "https://etherscan.io/",
-        "supportV1" : true
+        "supportV1" : true,
+        "metamask" : {
+          "chainName": "Repsten-Testnet",
+          "nativeCurrency": {
+            "name": "Ethereum",
+            "symbol": "ETH",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+          "blockExplorerUrls": ["https://etherscan.io"]
+        }
       },
       "56" : {
         "code" : "BSC",
         "name" : "bsc",
-        "text" : "BSC",
         "symbol" : "BNB",
         "viewUrl" : "https://bscscan.com/",
         "supportV2" : true,
-        "supportV1" : true
+        "supportV1" : true,
+        "metamask" : {
+          "chainName": "BSC-Mainnet",
+          "nativeCurrency": {
+            "name": "BSC",
+            "symbol": "BNB",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://bsc-dataseed.binance.org/"],
+          "blockExplorerUrls": ["ttps://bscscan.com/"]
+        }
       },
       "128" : {
         "code" : "HECO",
         "name" : "heco",
-        "text" : "HECO",
         "symbol" : "HT",
         "viewUrl" : "https://hecoscan.xyz/",
-        "supportV1" : true
+        "supportV1" : true,
+        "metamask" : {
+          "chainName": "HECO-Mainnet",
+          "nativeCurrency": {
+            "name": "HECO",
+            "symbol": "HT",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://http-mainnet.hecochain.com"],
+          "blockExplorerUrls": ["https://hecoscan.xyz/"]
+        }
       },
       "137" : {
         "code" : "POLYGON",
         "name" : "POLYGON",
-        "text" : "POLYGON",
         "symbol" : "MATIC",
         "viewUrl" : "https://polygonscan.com/",
-        "supportV2" : true
+        "supportV2" : true,
+        "metamask" : {
+          "chainName": "POLYGON-Mainnet",
+          "nativeCurrency": {
+            "name": "POLYGON",
+            "symbol": "MATIC",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://rpc-mainnet.maticvigil.com"],
+          "blockExplorerUrls": ["https://polygonscan.com/"]
+        }
       }
     }
   },
@@ -41,35 +77,71 @@
       "97" : {
         "code" : "BSC",
         "name" : "Bsc-testnet",
-        "text" : "BSC TESTNET",
         "symbol" : "BNB",
         "viewUrl" : "https://testnet.bscscan.com/",
         "supportV1" : true,
-        "supportV2" : true
+        "supportV2" : true,
+        "metamask" : {
+          "chainName": "BSC-Testnet",
+          "nativeCurrency": {
+            "name": "BSC",
+            "symbol": "BNB",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://data-seed-prebsc-2-s1.binance.org:8545/"],
+          "blockExplorerUrls": ["https://testnet.bscscan.com/"]
+        }
       },
       "80001" : {
-        "code" : "POLYGON",
-        "name" : "POLYGON-Testnet",
-        "text" : "POLYGON TESTNET",
+        "code" : "MUMBAI",
+        "name" : "Mumbai-Testnet",
         "symbol" : "MATIC",
         "viewUrl" : "https://explorer-mumbai.maticvigil.com/",
-        "supportV2" : true
+        "supportV2" : true,
+        "metamask" : {
+          "chainName": "Mumbai-Testnet",
+          "nativeCurrency": {
+            "name": "Mumbai",
+            "symbol": "MATIC",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://rpc-mumbai.matic.today"],
+          "blockExplorerUrls": ["https://explorer-mumbai.maticvigil.com/"]
+        }
       },
       "3" : {
         "code" : "ROPSTEN",
         "name" :  "Ropsten-Testnet",
-        "text" : "ROPSTEN TESTNET",
         "symbol" : "ETH",
         "viewUrl" : "https://ropsten.etherscan.io",
-        "supportV1" : true
+        "supportV1" : true,
+        "metamask" : {
+          "chainName": "Repsten-Testnet",
+          "nativeCurrency": {
+            "name": "Repsten",
+            "symbol": "ETH",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+          "blockExplorerUrls": ["https://ropsten.etherscan.io"]
+        }
       },
       "256" : {
         "code" : "HECO",
-        "name" : "heco-testnet",
-        "text" : "HECO TESTNET",
+        "name" : "Heco-testnet",
         "symbol" : "HT",
         "viewUrl" : "https://scan-testnet.hecochain.com",
-        "supportV1" : true
+        "supportV1" : true,
+        "metamask" : {
+          "chainName": "Heco-Testnet",
+          "nativeCurrency": {
+            "name": "HECO",
+            "symbol": "HT",
+            "decimals" : 18
+          },
+          "rpcUrls": ["https://http-testnet.hecochain.com"],
+          "blockExplorerUrls": ["https://scan-testnet.hecochain.com"]
+        }
       }
     }
   }

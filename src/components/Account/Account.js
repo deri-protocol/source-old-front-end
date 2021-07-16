@@ -3,15 +3,19 @@ import { formatAddress } from '../../utils/utils';
 import './account.less'
 import { observer, inject } from 'mobx-react';
 import { useRouteMatch } from 'react-router-dom';
+import arrowIcon from '../../assets/img/symbol-arrow.svg'
+import useConfig from '../../hooks/useConfig';
 
 
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
+  const [networkList, setNetworkList] = useState([])
   const isIndex = useRouteMatch('/index')
   const isRoot = useRouteMatch({path: '/',exact : true})
   const isMining = useRouteMatch({path: '/mining',exact : true});
   const isTeam = useRouteMatch('/team')
   const isRetired = useRouteMatch('/retired')
+  const config = useConfig();
 
   const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired
   
@@ -23,7 +27,7 @@ function Account({wallet,lang}){
       if(detail.supported) {
         setBtnText(<span>{detail.formatBalance} {detail.symbol} <span className='address'>{formatAddress(detail.account)}</span></span>)
       } else {
-      setBtnText(<span className='no-supported' onClick={addNetwork}>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
+      setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
       }
     } else {
       setBtnText(lang['connect-wallet'])
@@ -38,7 +42,6 @@ function Account({wallet,lang}){
         setAccountText(detail)
       }
     }
-    // const isApp = isLite || isPro || isMiningDetail
 
     if(!notConnectWalletPage){
       init();
@@ -51,41 +54,35 @@ function Account({wallet,lang}){
     return () => {
     };
   }, [wallet.detail.account,wallet.detail.formatBalance,lang]);
-  const addNetwork = () => {
-    const params = [{
-      chainId: '0x1e',
-      chainName: 'RSK Mainnet',
-      nativeCurrency: {
-        name: 'RSK BTC',
-        symbol: 'RBTC',
-        decimals: 18
-      },
-      rpcUrls: ['https://public-node.rsk.co'],
-      blockExplorerUrls: ['https://explorer.rsk.co']
-    }]
-  
-    window.ethereum.request({ method: 'wallet_addEthereumChain', params })
-      .then(() => console.log('Success'))
-      .catch((error) => console.log("Error", error.message))
-  }
 
-  const switchNetwork = async () => {
+
+  useEffect(() => {
+    if(config){
+      const ids = Object.keys(config);
+      const networkList = ids.map(id => Object.assign(config[id],{id}))
+      setNetworkList(networkList)
+    }
+    return () => {}
+  }, [config])
+
+  const switchNetwork = async (network) => {
+    const chainId =`0x${(parseInt(network.id)).toString(16)}`
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${(1).toString(16)}`}],
+        params: [{ chainId}],
       });
     } catch (error) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (error.code === 4902) {
-        // try {
-        //   await window.ethereum.request({
-        //     method: 'wallet_addEthereumChain',
-        //     params: [{ chainId: '0xf00', rpcUrl: 'https://...' /* ... */ }],
-        //   });
-        // } catch (addError) {
-        //   // handle "add" error
-        // }
+        try {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{chainId,...network.metamask}],
+          });
+        } catch (addError) {
+          // handle "add" error
+        }
       }
       // handle other "switch" errors
     }
@@ -94,10 +91,13 @@ function Account({wallet,lang}){
 
   return !notConnectWalletPage && (
     <div className="connect">
-      {/* <button onClick={addNetwork}>Add RSK Mainnet to Metamask</button> */}
       <div className="network-text-logo">
         <i className={wallet.detail.symbol}></i>
-        <span className="logo-text">{wallet.detail.text}</span>
+        <span className="logo-text">{wallet.detail.code}</span>
+        <span className='arrow'><img src={arrowIcon} alt='selector' /></span>
+        <div className='network-list'>
+            {networkList.map((network,index) => <div key={index} className={`network-item ${network.code === wallet.detail.code ? 'selected' : ''}`} onClick={() => switchNetwork(network)}>{network.code}</div>)}
+        </div>
       </div>
       <div className="bg-btn">
         <button className="nav-btn connect-btn" onClick={wallet.connect}>
