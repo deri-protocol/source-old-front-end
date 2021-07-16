@@ -19,5 +19,6 @@
   "use-deri":"使用 DERI",
 
   "unsupported-chain-id" : "不支持网络ID",
-  "connect-wallet" : "连接钱包"
+  "connect-wallet" : "连接钱包", 
+  "select-network" : "选择网络"
 }

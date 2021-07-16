@@ -247,7 +247,8 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 			if(!wallet.isConnected()){
 				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-wallet']} lang={lang}></Button></div>
 			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
-				el = <div className="approve" ><button className='approve-btn wrong-network'>{lang['wrong-network']}</button></div>				
+				wallet.switchNetwork({id: chainId})
+				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']}  lang={lang} click={() => wallet.switchNetwork({id : chainId})} ></Button></div>				
 			} else if(!isApproved) {
 				el = <div className='approve'><Button className='approve-btn' click={approve} btnText={lang['approve']} lang={lang}></Button></div>
 			} 

@@ -13,6 +13,9 @@ function LanguageSelector({intl}){
   const onClick = (lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
+    if(refresh){
+      window.location.href = addParam('locale',lang)
+    }
   }
 
   const onMouseOver = () => {
@@ -32,7 +35,6 @@ function LanguageSelector({intl}){
   }, [intl])
   return (
     <div className='lang-picker' onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      {/* <img src={languageIcon} alt='language selector'/>    */}
       <span className='locale'>{intl.localeLabel}</span>
       <img src={arrowIcon} alt='selector' />
       <div className={langBoxClass} >

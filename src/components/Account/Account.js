@@ -65,38 +65,21 @@ function Account({wallet,lang}){
     return () => {}
   }, [config])
 
-  const switchNetwork = async (network) => {
-    const chainId =`0x${(parseInt(network.id)).toString(16)}`
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId}],
-      });
-    } catch (error) {
-      // This error code indicates that the chain has not been added to MetaMask.
-      if (error.code === 4902) {
-        try {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{chainId,...network.metamask}],
-          });
-        } catch (addError) {
-          // handle "add" error
-        }
-      }
-      // handle other "switch" errors
-    }
-  }
+  
 
 
   return !notConnectWalletPage && (
     <div className="connect">
       <div className="network-text-logo">
         <i className={wallet.detail.symbol}></i>
-        <span className="logo-text">{wallet.detail.code}</span>
+        <span className="logo-text">{wallet.detail.name|| lang['select-network']}</span>
         <span className='arrow'><img src={arrowIcon} alt='selector' /></span>
         <div className='network-list'>
-            {networkList.map((network,index) => <div key={index} className={`network-item ${network.code === wallet.detail.code ? 'selected' : ''}`} onClick={() => switchNetwork(network)}>{network.code}</div>)}
+            {networkList.map((network,index) => (
+            <div key={index} className={`network-item ${network.code === wallet.detail.code ? 'selected' : ''}`} onClick={() => wallet.switchNetwork(network)}>
+              <span className={`logo ${network.symbol}`}></span><span>{network.name}</span>
+            </div>)
+          )}
         </div>
       </div>
       <div className="bg-btn">

@@ -17,5 +17,6 @@
   "whitepaper" : "Whitepaper",
   "use-deri":"USE DERI",
   "unsupported-chain-id" : "Unsupported Chain ID",
-  "connect-wallet" : "Connect Wallet"
+  "connect-wallet" : "Connect Wallet",
+  "select-network" : "Select Network"
 }
