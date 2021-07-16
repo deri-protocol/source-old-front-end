@@ -55,7 +55,9 @@ class Wallet {
   }
 
   switchNetwork = async (network) => {
+    const chainInfo = config[DeriEnv.get()]['chainInfo']
     const chainId =`0x${(parseInt(network.id)).toString(16)}`
+    network = chainInfo[parseInt(network.id)]
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',

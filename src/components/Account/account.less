@@ -25,7 +25,8 @@
     .network-list {
       top: 81px;
       position: absolute;
-      width: 158px;
+      min-width: 158px;
+      padding: 0 10px;
       background-color: #0d0e0f;
       color: #aaaaaa;
       padding-left: 8px;
@@ -36,13 +37,14 @@
         text-align: left;
         line-height: 50px;
         cursor: pointer;
+        white-space: nowrap;
         .logo {
+          width: 25px;
           margin-right: 22px;
           border-radius: 12px;
         }
         span {
           background-position: center;
-          width: 25px;
           height: 50px;
           background-size: 25px;
           display: inline-block;
