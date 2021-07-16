@@ -50,7 +50,7 @@ function ContractInfo({wallet,trading,lang}){
         <div className="info">
           <div className="title">{lang['transaction-fee']}</div>
           <div className="text">
-            <NumberFormat displayType='text' value ={ trading.contract.feeRatio * 100 } decimalScale={2} suffix='%'/>
+            <NumberFormat displayType='text' value ={ trading.contract.feeRatio * 100 } decimalScale={3} suffix='%'/>
           </div>
         </div>
       </div>
