@@ -23,7 +23,6 @@ function Signin({wallet={},lang}){
     "bTokenId":"0"
   }
   const [isApprove, setIsApprove] = useState(true);
-  const [isThanBNB, setIsThanBNB] = useState(true);
   const [isThanFiveThousand,setIsThanFiveThousand] = useState(false)
   const [isClaim,setIsClaim] = useState(false);
   const [isHavePtoken,setIsHavePtoken] = useState(false);
@@ -52,11 +51,7 @@ function Signin({wallet={},lang}){
     wallet.connect()
   }
 
-  const getIsTanBNB = async () =>{
-    let path = `/ptoken_airdrop/${wallet.detail.account}/has_qualified_balance`;
-    let res = await fetchRestApi(path)
-    setIsThanBNB(res.data)
-  }
+ 
 
   const getIsThanFiveThousand = async () =>{
     let res = await getAirdropPTokenWhitelistCount(wallet.detail.chainId)
@@ -126,7 +121,7 @@ function Signin({wallet={},lang}){
   }
 
   const signIn = async ()=>{
-    if(!isThanBNB){
+    if(+(wallet.detail.formatBalance)<=0.2){
       alert(lang['less-bnb'])
       return;
     }
@@ -156,7 +151,7 @@ function Signin({wallet={},lang}){
       alert(lang['use-a-new-address'])
       return;
     }
-    if(!isThanBNB){
+    if(+(wallet.detail.formatBalance)<=0.2){
       alert(lang['less-bnb'])
       return;
     }
@@ -197,7 +192,6 @@ function Signin({wallet={},lang}){
       getStamp();
       getIsClaimed();
       getIsThanFiveThousand();
-      getIsTanBNB();
     }
   },[wallet.detail])
   useEffect(()=>{
@@ -216,7 +210,6 @@ function Signin({wallet={},lang}){
         }else{
           element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
         }
-        
       }else{
         element = <Button className='btn btn-danger connect' click={signIn} btnText={lang['sign-in']}  lang={lang} />
       }

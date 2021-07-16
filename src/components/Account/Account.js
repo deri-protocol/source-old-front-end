@@ -23,7 +23,7 @@ function Account({wallet,lang}){
       if(detail.supported) {
         setBtnText(<span>{detail.formatBalance} {detail.symbol} <span className='address'>{formatAddress(detail.account)}</span></span>)
       } else {
-      setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
+      setBtnText(<span className='no-supported' onClick={addNetwork}>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
       }
     } else {
       setBtnText(lang['connect-wallet'])
@@ -73,7 +73,7 @@ function Account({wallet,lang}){
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: `0x${(56).toString(16)}`}],
+        params: [{ chainId: `0x${(1).toString(16)}`}],
       });
     } catch (error) {
       // This error code indicates that the chain has not been added to MetaMask.
