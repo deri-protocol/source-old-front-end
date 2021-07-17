@@ -18,6 +18,7 @@
   "pending":"AUSSTEHEND...",
   "approve-failed" : "Genehmigen fehlgeschlagen",
   "claim-failed" : "Beanspruchung fehlgeschlagen",
+  "claim-success":"Sie haben Ihr Ptoken erfolgreich beansprucht!",
   "sign-in-failed" : "STEMPELN fehlgeschlagen",
   "connect-wallet" : "WALLET VERBINDEN",
   "who-are-eligibles":"Detaillierte Regeln",

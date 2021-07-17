@@ -135,7 +135,6 @@ function Signin({wallet={},lang}){
     }
     let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
     let res = await fetchRestApi(path,{ method: 'POST' });
-     getStamp();
     if(!res.success){
       if(res.error.indexOf('insufficent user balance')!= 0){
         alert(lang['less-bnb'])
@@ -143,6 +142,7 @@ function Signin({wallet={},lang}){
       }
       alert(lang['sign-in-failed'])
     }
+    getStamp();
     return;
   }
 
@@ -159,6 +159,7 @@ function Signin({wallet={},lang}){
     if(!res.success){
       alert['claim-failed']
     }else{
+      alert(['claim-success'])
       setIsClaim(true)
     }
   }
@@ -185,7 +186,7 @@ function Signin({wallet={},lang}){
       loadApprove();
       isPtoken();
     }
-  }, [wallet.detail,spec]);
+  }, [wallet.detail,spec,isSignIn]);
 
   useEffect(()=>{
     if(hasConnectWallet()){
