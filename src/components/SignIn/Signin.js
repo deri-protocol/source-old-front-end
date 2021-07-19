@@ -159,7 +159,7 @@ function Signin({wallet={},lang}){
       alert(lang['use-a-new-address'])
       return;
     }
-    if(+(wallet.detail.formatBalance)<=0.2){
+    if(+(wallet.detail.formatBalance) <= 0.2){
       alert(lang['less-bnb'])
       return;
     }
