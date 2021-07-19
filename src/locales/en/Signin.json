@@ -18,6 +18,7 @@
   "pending":"PENDING...",
   "approve-failed" : "Approve failed",
   "claim-failed" : "Claim failed",
+  "claim-success":"You have successfully claimed your Ptoken!",
   "sign-in-failed" : "Stamp failed",
   "connect-wallet" : "CONNECT WALLET",
   "who-are-eligibles":"Detailed Rules",

@@ -18,6 +18,7 @@
   "approve-failed" : "授权失败",
   "claim-failed" : "领取失败",
   "sign-in-failed" : "签到失败",
+  "claim-success":"领取成功!",
   "connect-wallet" : "连接钱包",
   "who-are-eligibles":"详细规则",
   "rules-two":"- 最低钱包余额要求：钱包内有超过0.2个BNB",

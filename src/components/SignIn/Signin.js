@@ -92,9 +92,10 @@ function Signin({wallet={},lang}){
   }
 
   const getIsTrade = async () => {
-      let resone = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
-      let restwo = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"1")
-      let res = resone.concat(restwo)
+      let resBTC = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
+      let resETH = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"1")
+      let resBNB = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"2")
+      let res = resBTC.concat(resETH,resBNB);
       let obj = {}
       if(isSignIn.three){
         if(res.length == 1){
@@ -109,7 +110,7 @@ function Signin({wallet={},lang}){
             'two':true,
             'three':false,
           }
-        }else if(res.length == 3){
+        }else if(res.length >= 3){
           obj = {
             'one':true,
             'two':true,
@@ -135,7 +136,6 @@ function Signin({wallet={},lang}){
     }
     let path = `/ptoken_airdrop/${wallet.detail.account}/signin`
     let res = await fetchRestApi(path,{ method: 'POST' });
-     getStamp();
     if(!res.success){
       if(res.error.indexOf('insufficent user balance')!= 0){
         alert(lang['less-bnb'])
@@ -143,6 +143,7 @@ function Signin({wallet={},lang}){
       }
       alert(lang['sign-in-failed'])
     }
+    getStamp();
     return;
   }
 
@@ -159,6 +160,7 @@ function Signin({wallet={},lang}){
     if(!res.success){
       alert['claim-failed']
     }else{
+      alert(['claim-success'])
       setIsClaim(true)
     }
   }
@@ -185,7 +187,7 @@ function Signin({wallet={},lang}){
       loadApprove();
       isPtoken();
     }
-  }, [wallet.detail,spec]);
+  }, [wallet.detail,spec,isSignIn]);
 
   useEffect(()=>{
     if(hasConnectWallet()){
@@ -198,7 +200,7 @@ function Signin({wallet={},lang}){
     if(hasConnectWallet()){
       getIsTrade();
     }
-  },[wallet.detail,isClaim])
+  },[wallet.detail,isSignIn])
   let element;
   useEffect(()=>{
     if(hasConnectWallet()){
