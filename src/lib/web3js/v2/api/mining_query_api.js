@@ -109,14 +109,16 @@ export const getPoolInfoApy = async (chainId, poolAddress, bTokenId) => {
         `${poolNetwork}.${poolAddress}.apy${bTokenId}`,
         `${poolNetwork}.${poolAddress}.volume.1h`,
         `${poolNetwork}.${poolAddress}.volume.24h`,
+        `${poolNetwork}.${poolAddress}.V2.multiplier${bTokenId}`,
       ])
       .catch((err) => console.log('getPoolInfoApy', err));
     if (res) {
-      const [apy, volume1h, volume24h] = res;
+      const [apy, volume1h, volume24h, multiplier] = res;
       return {
         apy: deriToNatural(apy).toString(),
         volume1h: deriToNatural(volume1h).toString(),
         volume24h: deriToNatural(volume24h).toString(),
+        multiplier: deriToNatural(multiplier).toString(),
       };
     }
   } catch (err) {

@@ -139,8 +139,6 @@ export const getPoolLiquidity = async (chainId, poolAddress) => {
  */
 export const getPoolInfoApy = async (chainId, poolAddress) => {
   const db = databaseFactory(true);
-  //const [poolAddress] = getPoolContractAddress(chainId, bSymbol);
-  //console.log('getPoolInfoApy', chainId, poolAddress);
   try {
     const poolNetwork = getNetworkName(chainId);
     const res = await db

@@ -77,5 +77,8 @@
   "pending" : "AUSSTEHEND",
   "your-current-max-removable-shares-are" : "Ihre aktuellen max entfernbaren Anteile sind",
   "staking-max-limit-tip" : "Es ist nicht erlaubt, einen Stakingsaldo von weniger als 1 zu hinterlegen. Bitte klicken Sie auf \"MAX\" um alles zu entfernen, wenn Sie Ihre gesamte Liquidität abheben möchten.",
-  "invalid-liquidity" : "Ungültige Liquidität!"
+  "invalid-liquidity" : "Ungültige Liquidität!",
+  "multiplier" : "Multiplier",
+  "multiplier-tip" : "The multiplier is the effective ratio of the liquidity provided for mining.\nFor example：providing 1 B1 token for liquidity mining, if the multiplier of B1 is 0.8, then the effective value for mining is 0.8"
+
 }

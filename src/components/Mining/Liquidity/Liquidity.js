@@ -60,6 +60,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
 						sharesTitle : lang['my-Liquidity'],
+						multiplier : `${apyPool.multiplier}x`
 					})
 				}	
 			}
@@ -97,6 +98,10 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-title">{lang['pool-total-liquidity']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
 				</div>
+				{version === 'v2' && <div className='odd text'>
+					<div className='text-title'>{lang['multiplier']}</div>
+					<div className='text-num multiplier' title={lang['multiplier-tip']}>{liquidity.multiplier}</div>
+				</div>	}
 				<div className="odd text">
 						<div className="text-title">{lang['apy']}</div>
 						<div className='text-num' >
@@ -105,7 +110,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
 								<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
-				</div>	
+				</div>
 				{version === 'v1' && <div className="odd text">
 					<div className="text-title">{lang['liquidity-share-value']}</div>
 					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						

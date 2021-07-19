@@ -35,7 +35,8 @@ export default function useMiningPool(isNew){
         formatAdd : formatAddress(pool),
         address : pool,
         type : 'perpetual',
-        buttonText : 'STAKING'        
+        buttonText : 'STAKING',
+        multiplier : apyPool.multiplier 
       })
     }
     const groupByNetwork = pools => {
