@@ -199,7 +199,7 @@ function Signin({wallet={},lang}){
     if(hasConnectWallet()){
       getIsTrade();
     }
-  },[wallet.detail,isClaim])
+  },[wallet.detail,isSignIn])
   let element;
   useEffect(()=>{
     if(hasConnectWallet()){
