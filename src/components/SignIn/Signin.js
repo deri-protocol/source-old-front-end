@@ -122,6 +122,10 @@ function Signin({wallet={},lang}){
   }
 
   const signIn = async ()=>{
+    if(wallet.detail.chainId != 56){
+      alert(lang['please-switch-to-bsc']);
+      return;
+    }
     if(+(wallet.detail.formatBalance)<=0.2){
       alert(lang['less-bnb'])
       return;
@@ -148,11 +152,15 @@ function Signin({wallet={},lang}){
   }
 
   const claimPtoken = async ()=>{
+    if(wallet.detail.chainId != 56){
+      alert(lang['please-switch-to-bsc']);
+      return;
+    }
     if(isHavePtoken){
       alert(lang['use-a-new-address'])
       return;
     }
-    if(+(wallet.detail.formatBalance)<=0.2){
+    if(+(wallet.detail.formatBalance) <= 0.2){
       alert(lang['less-bnb'])
       return;
     }
@@ -171,6 +179,10 @@ function Signin({wallet={},lang}){
   }
 
   const approve = async () => {
+    if(wallet.detail.chainId != 56){
+      alert(lang['please-switch-to-bsc']);
+      return;
+    }
     const res = await wallet.approve(spec.pool,spec.bTokenId)
     if(res.success){
       setIsApprove(true);
