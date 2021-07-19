@@ -123,13 +123,13 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-title">{liquidity.sharesTitle} </div>
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.formatShares } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
-				{version === 'v2' && <div className="odd text">
+				{version === 'v2' && <div className="odd text claim-network">
 					<div className='text-title'>{lang['mining-pnl']}</div>
 					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
-				<div className="odd claim-network">
-					<div className="text-title money">{version === 'v1' && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
-				</div>
+				{version === 'v1' && <div className="odd claim-network">
+					<div className="text-title money"> <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
+				</div>}
 				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId} lang={lang}/>
 	</div>
   )
