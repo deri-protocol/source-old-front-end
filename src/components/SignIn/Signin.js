@@ -92,9 +92,10 @@ function Signin({wallet={},lang}){
   }
 
   const getIsTrade = async () => {
-      let resone = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
-      let restwo = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"1")
-      let res = resone.concat(restwo)
+      let resBTC = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.bTokenId)
+      let resETH = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"1")
+      let resBNB = await getTradeHistory(wallet.detail.chainId,spec.pool,wallet.detail.account,"2")
+      let res = resBTC.concat(resETH,resBNB);
       let obj = {}
       if(isSignIn.three){
         if(res.length == 1){
@@ -109,7 +110,7 @@ function Signin({wallet={},lang}){
             'two':true,
             'three':false,
           }
-        }else if(res.length == 3){
+        }else if(res.length >= 3){
           obj = {
             'one':true,
             'two':true,
