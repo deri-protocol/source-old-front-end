@@ -48,9 +48,9 @@ export default function Content({lang}) {
           </div>
           <div className='index_part2-R'>
             <div> <span>{lang['we-are-on']} </span> 
-              <a href="https://app.sushi.com/token/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" className="Body-link">{lang['sushi']}</a>
+              <a target="_blank" href="https://analytics.sushi.com/tokens/0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9" className="Body-link">{lang['sushi']}</a>
               <span> {lang['and']} </span> 
-              <a href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" className="Body-link">{lang['pancake']}</a> 
+              <a target="_blank" href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" className="Body-link">{lang['pancake']}</a> 
             </div>
             <div> <span> {lang['read-our']} </span> 
               <a href="https://docs.deri.finance/whitepaper" className="Body-link">{lang['whitepaper']}</a>
