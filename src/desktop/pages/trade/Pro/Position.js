@@ -110,7 +110,7 @@ function Position({wallet,trading,version,lang}){
       <div className='ave-entry-price'>{lang['average-entry-price']}</div>
       <div>{lang['direction']}</div>
       <div className='dyn-eff-bal'>
-        {version.isV1 ?  <>{lang['balance-in-contract']} <br/> ({lang['dynamic-balance']})</> :  lang['dynamic-effective-balance']}
+        {(version.isV1 || version.isV2Lite) ?  <>{lang['balance-in-contract']} <br/> ({lang['dynamic-balance']})</> :  lang['dynamic-effective-balance']}
       </div>
       <div className='margin'>{lang['margin']}</div>
       <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
@@ -132,7 +132,7 @@ function Position({wallet,trading,version,lang}){
       <div className={direction}>{direction && lang[direction.toLowerCase()]}</div>
       <div className='dyn-eff-bal'>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
-        {version.isV1 ? <span>
+        {(version.isV1 || version.isV2Lite) ? <span>
         <span
           className='open-add'
           id='openAddMargin'
