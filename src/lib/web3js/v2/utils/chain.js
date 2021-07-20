@@ -5,7 +5,7 @@ import {
 import { normalizeChainId } from './validate';
 import { getLatestRPCServer } from './network';
 import { hexToNumber } from './convert';
-import { web3Factory } from '../factory/shared'
+import { web3Factory } from '../factory/web3'
 
 export const getChainProviderUrl = async (chainId) => {
   chainId = normalizeChainId(chainId);

@@ -53,6 +53,7 @@
   "remove" : "移除",
   "deposit-margin" : "存入保证金",
   "max" : "最大可移除",
+  "max-add" : "最大可存入",
   "add-all" : "添加所有",
   "amount" : "数量",
   "add-margin" : "添加保证金",
@@ -90,5 +91,8 @@
   "index-price-camelize" : "指数价格",
   "per-block" : "每一个区块",
   "funding-fee" : "应收资金费",
-  "funding-fee-tip" : "+: 流动性池需要支付给你\n-: 你需要支付给流动性池"
+  "funding-fee-tip" : "+: 流动性池需要支付给你\n-: 你需要支付给流动性池",
+  "multiplier-tip" : "乘数代表每个token用作保证金时的折算比例（用于计算有效保证金）\n如：添加1个B1 toekn作为保证金，乘数为0.8，有效保证金为0.8",
+  "main-zone" : "主区域",
+  "innovation-zone" : "创新区域"
 }

@@ -17,7 +17,7 @@ function Mining({wallet,lang}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
 	const {version,chainId,symbol,baseToken,address,type} =  useParams();
 	const query = useQuery();
-	const networkText = chainInfo[chainId] && chainInfo[chainId].text;
+	const networkText = chainInfo[chainId] && chainInfo[chainId].name;
 	const props = {version,chainId,symbol,baseToken,address,wallet,type,lang}
 	if(query.has('baseTokenId')) {
 		props['baseTokenId'] = query.get('baseTokenId')
@@ -30,7 +30,7 @@ function Mining({wallet,lang}){
     <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
-						{type === 'lp' ? `${baseToken} @ ${networkText}` :  version === 'v2' ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
+						{type === 'lp' ? `${baseToken} @ ${networkText}` :  (version === 'v2' || version === 'v2_lite') ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
 					</div>
 					<div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >

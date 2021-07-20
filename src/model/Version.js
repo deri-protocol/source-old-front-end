@@ -9,7 +9,8 @@ class Version {
       current : observable,
       setCurrent : action,
       isV1 : computed,
-      isV2 : computed
+      isV2 : computed,
+      isV2Lite : computed
     })
   }
 
@@ -32,6 +33,10 @@ class Version {
 
   get isV2(){
     return this.current === 'v2'
+  }
+
+  get isV2Lite (){
+    return this.current === 'v2_lite'
   }
 }
 export default new Version()

@@ -1,6 +1,7 @@
 import { isOrderValid } from '../../calculation';
 import { getPoolConfig } from '../../config';
-import { bTokenFactory, perpetualPoolLiteFactory, pTokenLiteFactory } from '../../factory';
+import { bTokenFactory } from '../../factory/shared';
+import { perpetualPoolLiteFactory, pTokenLiteFactory } from '../../factory/v2_lite';
 import { catchTxApiError, bg } from '../../utils';
 
 export const unlock = async(chainId, poolAddress, accountAddress) => {
@@ -69,7 +70,7 @@ export const tradeWithMargin = async(chainId, poolAddress, accountAddress, newVo
       } else {
         return acc.plus(bg(s.tradersNetVolume).times(s.price).times(s.multiplier).abs())
       }
-    })
+    }, bg(0))
     liquidityUsed = liquidityUsed.times(minPoolMarginRatio)
 
     const orderValidation = isOrderValid(

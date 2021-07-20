@@ -2,10 +2,15 @@
 @red: #E35061;
 @text:#FFFFFF;
 @title:#AAAAAA;
+
+.trade-container {
+  display: flex;
+  flex-direction: column;
+}
 .trade-body {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: flex-start;
   color: #AAAAAA;
   font-family: Korolev, sans-serif;
 
@@ -914,6 +919,13 @@
 
         .text {
           padding-right: 55px;
+        }
+        .multiplier {
+          border-bottom: 1px dotted #aaaaaa;
+          cursor: pointer;
+        }
+        .btoken-symbol {
+          margin-left: 10px;
         }
       }
 

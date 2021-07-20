@@ -3,7 +3,7 @@ import { perpetualPoolLiteAbi } from '../abis';
 import { deriToNatural, naturalToDeri } from '../../utils'
 import { MAX_INT256} from '../../config'
 
-export class PerpetualPool extends ContractBase {
+export class PerpetualPoolLite extends ContractBase {
   constructor(chainId, contractAddress) {
     super(chainId, contractAddress, perpetualPoolLiteAbi)
 
@@ -88,21 +88,12 @@ export class PerpetualPool extends ContractBase {
       accountAddress
     );
   }
-  async removeLiquidity(accountAddress, amount, isMaximum) {
-    if (isMaximum) {
-      console.log('MAX_INT256', MAX_INT256)
-      return await this._transact(
-        'removeLiquidity',
-        [MAX_INT256, []],
-        accountAddress
-      );
-    } else {
-      return await this._transact(
-        'removeLiquidity',
-        [naturalToDeri(amount), []],
-        accountAddress
-      );
-    }
+  async removeLiquidity(accountAddress, amount) {
+    return await this._transact(
+      'removeLiquidity',
+      [naturalToDeri(amount), []],
+      accountAddress
+    );
   }
 
   async addMargin(accountAddress, amount) {
@@ -113,20 +104,20 @@ export class PerpetualPool extends ContractBase {
     );
   }
 
-  async removeMargin(accountAddress, amount, isMaximum) {
-    if (isMaximum) {
-      return await this._transact(
-        'removeMargin',
-        [MAX_INT256,[]],
-        accountAddress
-      );
-    } else {
-      return await this._transact(
-        'removeMargin',
-        [naturalToDeri(amount), []],
-        accountAddress
-      );
-    }
+  async removeMargin(accountAddress, amount) {
+    // if (isMaximum) {
+    //   return await this._transact(
+    //     'removeMargin',
+    //     [MAX_INT256,[]],
+    //     accountAddress
+    //   );
+    // } else {
+    return await this._transact(
+      'removeMargin',
+      [naturalToDeri(amount), []],
+      accountAddress
+    );
+    // }
   }
 
   async trade(accountAddress, symbolId, newVolume) {

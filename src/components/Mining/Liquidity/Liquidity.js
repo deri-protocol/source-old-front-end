@@ -60,6 +60,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
 						sharesTitle : lang['my-Liquidity'],
+						multiplier : `${apyPool.multiplier}x`
 					})
 				}	
 			}
@@ -97,6 +98,10 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-title">{lang['pool-total-liquidity']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
 				</div>
+				{version === 'v2' && <div className='odd text'>
+					<div className='text-title'>{lang['multiplier']}</div>
+					<div className='text-num multiplier' title={lang['multiplier-tip']}>{liquidity.multiplier}</div>
+				</div>	}
 				<div className="odd text">
 						<div className="text-title">{lang['apy']}</div>
 						<div className='text-num' >
@@ -105,7 +110,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 								{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
 								<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>						
-				</div>	
+				</div>
 				{(version === 'v1' || version === 'v2_lite') && <div className="odd text">
 					<div className="text-title">{lang['liquidity-share-value']}</div>
 					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						
@@ -118,13 +123,13 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						<div className="text-title">{liquidity.sharesTitle} </div>
 						<div className="text-num"><DeriNumberFormat allowZero={true}  value={ liquidity.formatShares } decimalScale={2} /> <span>{liquidity.unit}</span> </div>
 				</div>
-				{version === 'v2' && <div className="odd text">
+				{version === 'v2' && <div className="odd text claim-network">
 					<div className='text-title'>{lang['mining-pnl']}</div>
 					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
-				<div className="odd claim-network">
-					<div className="text-title money">{(version === 'v1' || version === 'v2_lite') && <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/>}</div>						
-				</div>
+				{(version === 'v1' || version === 'v2_lite' ) && <div className="odd claim-network">
+					<div className="text-title money"> <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
+				</div>}
 				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId} lang={lang}/>
 	</div>
   )
@@ -247,7 +252,8 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 			if(!wallet.isConnected()){
 				el = <div className='approve'><Button className='approve-btn' click={connect} btnText={lang['connect-wallet']} lang={lang}></Button></div>
 			} else if(!eqInNumber(wallet.detail.chainId,chainId)) {
-				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']} lang={lang}></Button></div>				
+				wallet.switchNetwork({id: chainId})
+				el = <div className="approve" ><Button className='approve-btn wrong-network' btnText={lang['wrong-network']}  lang={lang} click={() => wallet.switchNetwork({id : chainId})} ></Button></div>				
 			} else if(!isApproved) {
 				el = <div className='approve'><Button className='approve-btn' click={approve} btnText={lang['approve']} lang={lang}></Button></div>
 			} 

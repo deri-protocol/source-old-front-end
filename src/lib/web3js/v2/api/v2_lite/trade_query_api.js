@@ -1,7 +1,8 @@
 import { calculateEntryPrice } from "../../../calculation"
 import { calculateFundingRate, calculateLiquidationPrice, processFundingRate, calculateFundingFee } from "../../calculation"
 import { getPoolConfig } from "../../config"
-import { bTokenFactory, perpetualPoolLiteFactory, pTokenLiteFactory } from "../../factory"
+import { bTokenFactory } from "../../factory/shared"
+import {  perpetualPoolLiteFactory, pTokenLiteFactory } from "../../factory/v2_lite"
 import { bg, catchApiError, getLastUpdatedBlockNumber, getLatestBlockNumber, getOraclePrice } from "../../utils"
 import { fundingRateCache, priceCache } from "../api_globals"
 
@@ -27,7 +28,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
 
     return {
       symbol,
-      bSymbol: bTokenSymbol,
+      bTokenSymbol,
       multiplier: multiplier.toString(),
       feeRatio: feeRatio.toString(),
       fundingRateCoefficient: fundingRateCoefficient.toString(),
@@ -41,7 +42,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
     }
   }, args, 'getSpecification', {
     symbol: '',
-    bSymbol: '',
+    bTokenSymbol: '',
     multiplier: '',
     feeRatio: '',
     fundingRateCoefficient: '',
@@ -85,7 +86,6 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
     }
     const symbols = await Promise.all(promises)
     const symbolList = symbols.map((s) => s.symbol)
-    console.log('symbolList', symbolList)
 
     promises = []
     for (let i=0; i< symbolIds.length; i++) {

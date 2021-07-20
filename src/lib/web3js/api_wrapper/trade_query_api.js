@@ -63,7 +63,7 @@ export const getSpecification = async (
 
 export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getPositionInfoV2l(chainId, poolAddress, symbolId)
+    return getPositionInfoV2l(chainId, poolAddress, accountAddress, symbolId)
   }
   if (symbolId === undefined) {
     return getPositionInfo2(chainId, poolAddress, accountAddress)

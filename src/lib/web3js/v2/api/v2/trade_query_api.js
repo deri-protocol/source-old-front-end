@@ -16,12 +16,20 @@ export const getSpecification = async (
   symbolId,
 ) => {
   try {
-    const {symbol, bTokenSymbol } = getPoolConfig2(poolAddress, undefined, symbolId)
+    const {symbol } = getPoolConfig2(poolAddress, undefined, symbolId)
+    const bTokens = getPoolBTokenList(poolAddress)
     const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
     const [symbolInfo, parameterInfo] = await Promise.all([
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getParameters(),
     ])
+    const bTokenDiscounts = (await Promise.all(
+      bTokens.reduce(
+        (acc, b, index) =>
+          acc.concat([perpetualPool.getBToken(index.toString())]),
+        []
+      )
+    )).map((b) => b.discount);
     const { multiplier, feeRatio, fundingRateCoefficient} = symbolInfo
     const {
       minPoolMarginRatio,
@@ -34,7 +42,8 @@ export const getSpecification = async (
     } = parameterInfo
     return {
       symbol: symbol,
-      bSymbol: bTokenSymbol,
+      bTokenSymbol: bTokens.map((b) => b.bTokenSymbol),
+      bTokenMultiplier: bTokenDiscounts.map((b) => b.toString()),
       multiplier: multiplier.toString(),
       feeRatio: feeRatio.toString(),
       fundingRateCoefficient: fundingRateCoefficient.toString(),
@@ -53,7 +62,8 @@ export const getSpecification = async (
   }
   return {
     symbol: '',
-    bSymbol: '',
+    bTokenSymbol: [],
+    bTokenMultiplier: [],
     multiplier: '',
     feeRatio: '',
     fundingRateCoefficient: '',

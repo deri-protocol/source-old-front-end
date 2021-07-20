@@ -2,7 +2,7 @@ import { ContractBase } from '../contract_base'
 import { lTokenLiteAbi } from '../abis';
 import { deriToNatural } from '../../utils';
 
-export class LToken extends ContractBase {
+export class LTokenLite extends ContractBase {
   constructor(chainId, contractAddress) {
     super(chainId, contractAddress, lTokenLiteAbi)
   }

@@ -30,6 +30,7 @@
   "done":"Erledigt!",
   "back":"ZURÜCK",
   "pending":"AUSSTEHEND",
+  "bridge-to-polygon":"Brücke zum Polygon",
   "approve-faild":"Genehmigung fehlgeschlagen",
   "claim-faild":"Beanspruche fehlgeschlagen",
   "amount-must-be-greater-than-zero":"Betrag muss größer als Null sein",

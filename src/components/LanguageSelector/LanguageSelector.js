@@ -10,7 +10,6 @@ import { addParam, hasParam, getParam } from '../../utils/utils'
 
 function LanguageSelector({intl}){
   const [show, setShow] = useState(false)
-  const query = useQuery();
   const onClick = (lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
@@ -36,7 +35,6 @@ function LanguageSelector({intl}){
   }, [intl])
   return (
     <div className='lang-picker' onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      {/* <img src={languageIcon} alt='language selector'/>    */}
       <span className='locale'>{intl.localeLabel}</span>
       <img src={arrowIcon} alt='selector' />
       <div className={langBoxClass} >

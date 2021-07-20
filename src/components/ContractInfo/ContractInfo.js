@@ -13,8 +13,8 @@ function ContractInfo({wallet,trading,lang}){
         <div className="conntract-header">{lang['contract-info']}</div>
         <div className="info">
           <div className="title">{lang['base-token']}</div>
-          <div className="text">
-            { trading.contract.bSymbol }
+          <div className="text" dangerouslySetInnerHTML={ {__html : trading.contract.bTokenSymbolDisplay && trading.contract.bTokenSymbolDisplay.map(bToken => bToken) }}>
+            
           </div>
         </div>
         <div className="info">
@@ -50,7 +50,7 @@ function ContractInfo({wallet,trading,lang}){
         <div className="info">
           <div className="title">{lang['transaction-fee']}</div>
           <div className="text">
-            <NumberFormat displayType='text' value ={ trading.contract.feeRatio * 100 } decimalScale={2} suffix='%'/>
+            <NumberFormat displayType='text' value ={ trading.contract.feeRatio * 100 } decimalScale={3} suffix='%'/>
           </div>
         </div>
       </div>

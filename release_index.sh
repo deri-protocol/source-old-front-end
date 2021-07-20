@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source ~/.bashrc
 build_dir=$PWD/build
 repo=/tmp/build/deri-finance.github.io
 if [ ! -d $build_dir ]; then

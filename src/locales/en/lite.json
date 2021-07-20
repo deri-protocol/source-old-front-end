@@ -53,6 +53,7 @@
   "remove" : "Remove",
   "deposit-margin" : "DEPOSIT MARGIN",
   "max" : "MAX",
+  "max-add" : "MAX",
   "add-all" : "ADD ALL",
   "amount" : "Amount",
   "add-margin" : "add margin",
@@ -90,5 +91,8 @@
   "index-price-camelize" : "IndexPrice",
   "per-block" : "per block",
   "funding-fee" : "Acc'd Funding",
-  "funding-fee-tip" : "+: the pool owes you\n-: you owe the pool"
+  "funding-fee-tip" : "+: the pool owes you\n-: you owe the pool",
+  "multiplier-tip" : "The multiplier is the effective ratio of the margin token used as collateral (converted into effective balance).\nFor example: posting 1 B1 token as margin, if the multiplier is 0.8, then the effective margin is 0.8",
+  "main-zone" : "Main Zone",
+  "innovation-zone" : "Innovation Zone"
 }

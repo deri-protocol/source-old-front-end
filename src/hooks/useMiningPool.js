@@ -5,7 +5,8 @@ import {
   getPoolLiquidity,
   getPoolInfoApy,
   getLpContractAddressConfig,
-  getLpPoolInfoApy
+  getLpPoolInfoApy,
+  getPreminingContractConfig
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
@@ -18,6 +19,8 @@ export default function useMiningPool(isNew){
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
   const [v2Pools, setV2Pools] = useState([])
+  const [legacyPools, setLegacyPools] = useState([])
+  const [preminingPools, setPreminingPools] = useState([])
 
 
   useEffect(() => {
@@ -26,13 +29,14 @@ export default function useMiningPool(isNew){
       const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
       const pool = config.pool || ''
       return Object.assign(config,{ 
-        network : chainInfo[config.chainId].name,
+        network : chainInfo[config.chainId] && chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
         apy :  ((+apyPool.apy) * 100).toFixed(2),
         formatAdd : formatAddress(pool),
         address : pool,
         type : 'perpetual',
-        buttonText : 'STAKING'        
+        buttonText : 'STAKING',
+        multiplier : apyPool.multiplier 
       })
     }
     const groupByNetwork = pools => {
@@ -64,11 +68,11 @@ export default function useMiningPool(isNew){
       },all)
       return all;
     }
-    let configs = getContractAddressConfig(env,'v2');
-    // let v1Configs = getContractAddressConfig(env,'v1')
-
+    let configs = getContractAddressConfig(env,'v2')
+    const liteConfigs = getContractAddressConfig(env,'v2_lite')
+    const preminingPools = getPreminingContractConfig(env);
     const all = []
-    configs = configs.reduce((total,config) => {
+    configs = configs.concat(preminingPools).concat(liteConfigs).reduce((total,config) => {
       const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if((config.version === 'v2' || config.version === 'v2_lite')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
@@ -119,21 +123,23 @@ export default function useMiningPool(isNew){
         buttonText : 'CLAIM'
       }
       // pools.push(airDrop)
-      let v1Pools = pools.filter(p => p.version === 'v1' || !p.version)
-      let v2Pools = pools.filter(p => p.version === 'v2' || p.version === 'v2_lite')
+      let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
+      let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
+      const legacy = pools.filter(p => p.retired && !p.premining)
+      const preminings = pools.filter(p =>  p.retired && p.premining) 
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
         v2Pools = groupByNetwork(v2Pools);
       }
-      console.log('v2',v2Pools)
-      console.log('v1',v1Pools)
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
       setPools(pools);
+      setLegacyPools(legacy);
+      setPreminingPools(preminings)
       setLoaded(true)
     })
     return () => pools.length = 0
   },[])
-  return [loaded,pools,v1Pools,v2Pools];
+  return [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools];
 }

@@ -1,7 +1,7 @@
 import { databaseFactory } from '../../../factory/contracts';
 import { calculateMaxRemovableShares, calculateShareValue } from '../../calculation';
 import { getPoolConfig } from '../../config';
-import { lTokenLiteFactory, pTokenLiteFactory, perpetualPoolLiteFactory } from '../../factory';
+import { lTokenLiteFactory, pTokenLiteFactory, perpetualPoolLiteFactory } from '../../factory/v2_lite';
 import { catchApiError, bg, deriToNatural, getNetworkName } from '../../utils';
 
 

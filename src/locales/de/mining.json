@@ -2,15 +2,17 @@
   "pool-liq" : "Pool Liq",
   "total" : "total",
   "symbol" : "Symbol",
-  "old-pool":"OLD POOL",
+  "retired-text":"Es gibt keine Mining-Erträge mehr aus diesen Pools. Bitte entfernen Sie Ihre Liquidität und übertragen Sie sie auf die ",
+  "new-pools":" neue Pools",
   "premining-pools":"Premining Pools",
+  "retired-pools":"Inaktive Pools",
   "apy" : "APY",
   "deri-apy" : "DERI-APY",
   "sushi-apy" : "SUSHI-APY",
   "cake-apy" : "CAKE-APY",
   "address" : "Adresse",
   "staking" : "STAKING",
-  "premining-finished":"Premining is finished. Please unstake from premining pools.",
+  "premining-finished":"Die Premining phase ist beendet. Bitte unstaken Sie ihre Liquidität aus den Premining-Pools",
   "my-liquidity-providing-harvest-in-current-epoch" : "Meine Liquiditätserträge im aktuellen Zyklus",
   "my-trading-harvest-in-current-epoch" : "Meine Tradingerträge im aktuellen Zyklus",
   "current-epoch-remaining-time" : "Verbleibende Zeit des aktuellen Zyklus",
@@ -75,5 +77,7 @@
   "pending" : "AUSSTEHEND",
   "your-current-max-removable-shares-are" : "Ihre aktuellen max entfernbaren Anteile sind",
   "staking-max-limit-tip" : "Es ist nicht erlaubt, einen Stakingsaldo von weniger als 1 zu hinterlegen. Bitte klicken Sie auf \"MAX\" um alles zu entfernen, wenn Sie Ihre gesamte Liquidität abheben möchten.",
-  "invalid-liquidity" : "Ungültige Liquidität!"
+  "invalid-liquidity" : "Ungültige Liquidität!",
+  "multiplier" : "Multiplikator",
+  "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8"
 }

@@ -346,6 +346,12 @@ function Bridge({ wallet = {},lang }) {
                     isToConnected={isToConnected}
            />
         </div>
+        <div className='bridge-to'>
+          <a target='_blank' href='https://wallet.matic.network/bridge'>
+            {lang['bridge-to-polygon']}
+            <img rel='noreferrer' alt='' src="data:image/svg+xml;base64,DQo8c3ZnIGZpbGw9Im5vbmUiIGhlaWdodD0iMTAiIHdpZHRoPSIxMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgICA8cGF0aCBkPSJNOC42NzYuNjQyYS42NS42NSAwIDAwLS4wNzIuMDA2SDQuNzkzYS42NS42NSAwIDAwLS41Ny45NzUuNjUuNjUgMCAwMC41Ny4zMjJINy4xMkwuNDM4IDguNjE0YS42NDcuNjQ3IDAgMDAuMjg2IDEuMDk2LjY1LjY1IDAgMDAuNjMyLS4xNzlMOC4wNCAyLjg2MXYyLjMyNGEuNjQ4LjY0OCAwIDAwLjk3Ny41Ny42NDguNjQ4IDAgMDAuMzIyLS41N1YxLjM4YS42NDcuNjQ3IDAgMDAtLjY2Mi0uNzM3eiIgZmlsbD0iI0FBQUFBQSIvPg0KPC9zdmc+DQoNCg=="/>
+          </a>
+        </div>
       </div>
     </div>
   )
@@ -584,9 +590,6 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
       setShowMessage(false)
     }
   }, [isValid,initialize]); 
-
-  
-  
   
   useEffect(()=>{
     let element;

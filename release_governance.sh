@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source ~/.bashrc
 build_dir=$PWD/build
 repo=/tmp/build/governance
 if [ ! -d $build_dir ]; then

@@ -3,6 +3,7 @@ export {
   //getContractAddressConfig,
   getLpContractAddressConfig,
   getSlpContractAddressConfig,
+  getPreminingContractConfig,
 } from './config';
 export * from './utils';
 export * from './calculation';
@@ -87,4 +88,7 @@ export {
   getFilteredPoolConfigList,
   getPoolBTokensBySymbolId,
   setBroker,
+  airdropPToken,
+  isUserPTokenExist,
+  getAirdropPTokenWhitelistCount,
 } from './v2';

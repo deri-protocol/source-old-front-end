@@ -1,4 +1,4 @@
-import { perpetualPoolLiteFactory } from '../../factory';
+import { perpetualPoolLiteFactory } from '../../factory/v2_lite';
 import { catchTxApiError } from '../../utils';
 
 export const addLiquidity = async(chainId, poolAddress, accountAddress, amount) => {

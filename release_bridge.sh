@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 build_dir=$PWD/build
 repo=/tmp/build/bridge
 if [ ! -d $build_dir ]; then

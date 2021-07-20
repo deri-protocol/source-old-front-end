@@ -9,6 +9,7 @@ import '../Lite/zh-lite.less'
 import './pro.less'
 import './zh-pro.less'
 import './de-pro.less'
+import AreaPicker from '../../../../components/AreaPicker/AreaPicker'
 
 
 
@@ -25,17 +26,20 @@ function Pro({wallet,lang}){
 
 
   return (
-    <div className='trade-body'>
-      <Tab lang={lang}/>
-      <div className='trade-pro'>
-        <div className='left'>
-          <LiteTrade isPro={true} lang={lang}/>
-        </div>
-        <div className='right'>
-          <TradingView wallet={wallet} lang={lang}/>
-          <Reference lang={lang}/>
-        </div>
-    </div> 
+    <div className='trade-container'>
+      <AreaPicker lang={lang}></AreaPicker>
+      <div className='trade-body'>
+        <Tab lang={lang}/>
+        <div className='trade-pro'>
+          <div className='left'>
+            <LiteTrade isPro={true} lang={lang}/>
+          </div>
+          <div className='right'>
+            <TradingView wallet={wallet} lang={lang}/>
+            <Reference lang={lang}/>
+          </div>
+      </div> 
+    </div>
   </div>
   )
 }

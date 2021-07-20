@@ -311,7 +311,7 @@ function Trade({wallet = {},trading,version,lang}){
                 </span>
               </>}
               {/* v2 */}
-              {version.isV2 && <>                
+              {(version.isV2 || version.isV2Lite) && <>                
                 <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
                 </span>
@@ -329,7 +329,7 @@ function Trade({wallet = {},trading,version,lang}){
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>}
-            {version.isV2 && <>
+            {(version.isV2 || version.isV2Lite) && <>
               <div className='box-margin'>{lang['margin']}</div>
               <div className='box-margin'>
                 <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>
@@ -509,7 +509,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
       actionElement = <Button className='approve' btnText={lang['approve']} click={approve} lang={lang}/>
     } else if(!available || (+available) <= 0) {
       actionElement = (<>
-      {version.isV2 
+      {(version.isV2)
       ?
        <BalanceListDialog
         wallet={wallet}

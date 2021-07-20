@@ -42,7 +42,7 @@ function PoolBox({wallet,group = {},lang}){
         <div className='version'>{pool.version}</div>
       </div>
       <div className="pool-info">
-        {list.map((card,index) => <Card card={card} index={index} pool={pool} list={list} wallet={wallet} lang={lang}/>)}
+        {list.map((card,index) => <Card card={card} key={index} index={index} pool={pool} list={list} wallet={wallet} lang={lang}/>)}
       </div>
     </div>
   )
@@ -113,6 +113,10 @@ function Card({wallet,pool,card,index,list,lang}) {
               <span className='title'>{card.airdrop ? lang['total'] : lang['pool-liq']}</span>
               <DeriNumberFormat value={card.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0}/>
             </div>
+            {card.multiplier && <div>
+              <span>{lang['multiplier']}</span>
+              <span className='multiplier' title={lang['multiplier-tip']}>{card.multiplier}x</span>
+            </div>}
             <div className="apy">
               <span>{lang['apy']}</span>
               <span>

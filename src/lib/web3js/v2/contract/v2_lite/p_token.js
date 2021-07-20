@@ -9,7 +9,7 @@ const processPosition = (res) => {
     lastCumulativeFundingRate: deriToNatural(res.lastCumulativeFundingRate),
   }
 }
-export class PToken extends ContractBase {
+export class PTokenLite extends ContractBase {
   constructor(chainId, contractAddress) {
     super(chainId, contractAddress, pTokenLiteAbi)
   }

@@ -2,6 +2,9 @@
   display: flex;
   margin: 40px auto;
 }
+.bridge .body{
+  margin: 40px auto 60px auto;
+}
 .index .body{
   /* margin: 0 auto; */
   display: block;

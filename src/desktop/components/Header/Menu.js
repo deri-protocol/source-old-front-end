@@ -75,19 +75,27 @@ function Menu({lang,locale}) {
               <li>
                 {isProduction
                 ?
-                <a className='broker-item' href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
+                <a className='brokerbind-item' href={`https://${host}/#/brokerbind`}>{lang['broker-bind']}</a>
                 :
                 <Link className='brokerbind-item' to='/brokerbind'>{lang['broker-bind']}</Link>
                 }                
               </li>
-              {/* <li>
+              <li>
                 {isProduction
                 ?
-                <a className='oldpool-item' href={`https://${host}/#/brokerbind`}>{lang['old-pool']}</a>
+                <a className='signin-item' href={`https://${host}/#/signin`}>{lang['signin']}</a>
                 :
-                <Link className='oldpool-item' to='/oldpool'>{lang['old-pool']}</Link>
+                <Link className='signin-item' to='/signin'>{lang['signin']}</Link>
                 }                
-              </li> */}
+              </li>
+             <li>
+                {isProduction 
+                ? 
+                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target='_blank' className='retired-item'>{lang['retired-pools']}</a>
+                :
+                <Link className='retired-item' to ='/retired'>{lang['retired-pools']}</Link>}            
+              </li>
+              
             </ul>
           </li>
         </ul>

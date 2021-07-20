@@ -44,7 +44,7 @@ import {
  * @returns {Object} response
  * @returns {string} response.addresses
  * @returns {string} response.symbol
- * @returns {string} response.bSymbol
+ * @returns {string} response.bTokenSymbol
  * @returns {string} response.multiplier
  * @returns {string} response.feeRatio
  * @returns {string} response.minPoo
@@ -84,7 +84,7 @@ export const getSpecification = async (
     priceDelayAllowance,
   } = await pPool.getParameters();
   let symbol = await pPool.symbol();
-  const bSymbolRaw = await bToken.symbol();
+  const bTokenSymbol = await bToken.symbol();
 
   // fix symbol BTCUSD issue, will remove later
   // if (poolAddress === '0xA2D7316Bc60AA9463DfB78379d25E77371990507') {
@@ -94,7 +94,7 @@ export const getSpecification = async (
   return {
     addresses: poolAddress,
     symbol,
-    bSymbol: bSymbolRaw,
+    bTokenSymbol,
     multiplier: multiplier.toString(),
     feeRatio: feeRatio.toString(),
     minPoolMarginRatio: minPoolMarginRatio.toString(),
@@ -283,9 +283,9 @@ export const getWalletBalance = async (
  * @param {string} accountAddress
  * @returns {bool}
  */
-export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
+export const isUnlocked = async (chainId, poolAddress, accountAddress, isProvider) => {
   const { bTokenAddress } = getPoolContractAddress(chainId, poolAddress);
-  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress);
+  const bToken = bTokenFactory(chainId, bTokenAddress, poolAddress, isProvider);
   //bToken.setAccount(accountAddress);
   return await bToken.isUnlocked(accountAddress);
 };

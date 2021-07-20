@@ -1,17 +1,26 @@
 import {
   PerpetualPool,
   PerpetualPoolRouter,
-  BToken,
   LToken,
   PToken,
-} from '../../contract';
-import { factory } from '../shared.js';
+} from '../../contract/v2';
+
+const factory = (klass) => {
+  let instances = {}
+  return (chainId, address) => {
+    const key = address
+    if (Object.keys(instances).includes(key)) {
+      return instances[key];
+    } else {
+      instances[key] = new klass(chainId, address);
+      return instances[key];
+    }
+  }
+}
 
 export const perpetualPoolFactory = factory(PerpetualPool)
 
 export const perpetualPoolRouterFactory = factory(PerpetualPoolRouter)
-
-export const bTokenFactory = factory(BToken)
 
 export const lTokenFactory = factory(LToken)
 

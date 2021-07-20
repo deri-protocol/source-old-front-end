@@ -106,7 +106,7 @@ export default function DepositMargin({wallet,spec = {},onClose,balance,afterDep
                 <div>{ spec.bTokenSymbol }</div>
               </div>
               <div className='max'>
-                {lang['max']}: <span className='max-num'>{ balance }</span>
+                {lang['max-add']}: <span className='max-num'>{ balance }</span>
                 <span className='max-btn-left' onClick={addAll} >{lang['add-all']}</span>
               </div>
               <div className='add-margin-btn'>

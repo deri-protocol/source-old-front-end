@@ -18,6 +18,11 @@
               "bTokenId": "1",
               "bTokenSymbol": "WBNB",
               "bToken": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+            },
+            {
+              "bTokenId": "2",
+              "bTokenSymbol": "CAKE",
+              "bToken": "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82"
             }
           ],
           "symbols": [
@@ -30,6 +35,11 @@
               "symbolId": "1",
               "symbol": "ETHUSD",
               "unit": "ETH"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "BNBUSD",
+              "unit": "BNB"
             }
           ],
           "chainId": "56",
@@ -46,6 +56,11 @@
               "bTokenId": "0",
               "bTokenSymbol": "USDT",
               "bToken": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F"
+            },
+            {
+              "bTokenId": "1",
+              "bTokenSymbol": "WMATIC",
+              "bToken": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
             }
           ],
           "symbols": [
@@ -68,13 +83,19 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0xFB395C51eb2b89e873e97E5CD4ca81B0756147BB",
+          "address": "0xe5709F0a23aEA3A61B0db91E92458fb6a0a55857",
           "decimal": "18"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC8e3a84927593c047239c2437A3893e6BC5050F0",
+          "address": "0xA0F51e28Ec15fcC9816FaB40684f1D1C675Bd39b",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "BNBUSD",
+          "address": "0xa356c0559e0DdFF9281bF8f061035E7097a84Fa4",
           "decimal": "18"
         },
         {

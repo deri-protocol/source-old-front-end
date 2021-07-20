@@ -53,6 +53,7 @@
   "remove" : "Entfernen",
   "deposit-margin" : "MARGIN EINZAHLEN",
   "max" : "max",
+  "max-add" : "max",
   "add-all" : "ALLES HINZUFÜGEN",
   "amount" : "Betrag",
   "add-margin" : "Margin hinzufügen",
@@ -90,5 +91,8 @@
   "index-price-camelize" : "Indexpreis",
   "per-block" : "pro block",
   "funding-fee" : "Anf. Finanz.",
-  "funding-fee-tip" : "+: Der Pool schuldet Ihnen \n -: Sie schulden dem Pool"
+  "funding-fee-tip" : "+: Der Pool schuldet Ihnen \n -: Sie schulden dem Pool",
+  "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis des als Sicherheit verwendeten Margin-Tokens (umgerechnet in den effektiven Saldo).\nBeispiel: Wenn Sie 1 B1-Token als Margin buchen und der Multiplikator 0,8 beträgt, dann ist die effektive Margin 0,8",
+  "main-zone" : "Main Zone",
+  "innovation-zone" : "Innovation Zone"
 }

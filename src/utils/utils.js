@@ -101,6 +101,6 @@ export function getParam(param,urlString = window.location.href){
 
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  return version.current === 'v2' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  return version.current === 'v2' || version.current === 'v2_lite' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
