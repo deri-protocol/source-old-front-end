@@ -17,7 +17,7 @@ function Pro({wallet,lang}){
 
 
   useEffect(() => {
-    document.querySelector('.desktop').style.minWidth = '1920px';
+    document.querySelector('.desktop').style.minWidth = '1903px';
     return () => { 
       document.querySelector('.desktop').style.minWidth = '';
     };

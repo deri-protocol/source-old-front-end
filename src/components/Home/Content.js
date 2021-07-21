@@ -47,7 +47,7 @@ export default function Content({lang}) {
             </div>
           </div>
           <div className='index_part2-R'>
-            <div> <span>{lang['we-are-on']} </span> 
+            <div> <span>{lang['we-are-on']} </span>   
               <a target="_blank" href="https://app.sushi.com/swap?inputCurrency=&outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9" className="Body-link">{lang['sushi']}</a>
               <span> {lang['and']} </span> 
               <a target="_blank" href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" className="Body-link">{lang['pancake']}</a> 

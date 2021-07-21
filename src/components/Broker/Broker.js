@@ -177,8 +177,8 @@ function Broker({ wallet = {}, lang }) {
 				let epochBegin = parseInt(current / period)*period;
 				let dis = (epochBegin + period - current);
 				let h = parseInt(dis / 3600);
-				let m = parseInt((dis % 3600)/60)
-				let s = parseInt(dis % 60) 
+				let m = parseInt((dis % 3600)/60);
+				let s = parseInt(dis % 60);
 				setRemainingTime(`${h} ${lang['h']} ${m} ${lang['m']} ${s} ${lang['s']}`);
 			},1000);
     return () => {
