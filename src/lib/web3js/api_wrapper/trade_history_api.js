@@ -1,7 +1,9 @@
 
 import {getTradeHistory2} from '../api/restApi';
 import { 
-  getTradeHistory as getTradeHistoryV2
+  getPoolVersion,
+  getTradeHistoryV2,
+  getTradeHistoryV2l,
  } from '../v2';
 
 export const getTradeHistory = async (
@@ -10,6 +12,14 @@ export const getTradeHistory = async (
   accountAddress,
   symbolId,
 ) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getTradeHistoryV2l(
+      chainId,
+      poolAddress,
+      accountAddress,
+      symbolId,
+    );
+  }
   if (symbolId === undefined) {
     return getTradeHistory2(chainId, poolAddress, accountAddress);
   } else {

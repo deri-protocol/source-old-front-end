@@ -147,7 +147,7 @@ function Position({wallet,trading,version,lang}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text balance-con'>
-          {version.isV1 ?  <>{lang['balance-in-contract']}<br/> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
+          {(version.isV1 || version.isV2Lite) ?  <>{lang['balance-in-contract']}<br/> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
         </div>
         <div className='info-num'> 
           <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />

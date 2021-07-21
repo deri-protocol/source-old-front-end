@@ -68,13 +68,13 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getLiquidity(),
       pToken.getActiveSymbolIds(),
-      getLastUpdatedBlockNumber(chainId, poolAddress, 1),
+      getLastUpdatedBlockNumber(chainId, poolAddress, 5),
       getLatestBlockNumber(chainId),
       pToken.getPosition(accountAddress, symbolId),
       pToken.getMargin(accountAddress),
       getOraclePrice(chainId, symbol, 'v2_lite'),
     ])
-    console.log(latestBlockNumber, lastUpdatedBlockNumber)
+    //console.log(latestBlockNumber, lastUpdatedBlockNumber)
     //console.log(latestBlockNumber)
     const { volume, cost, lastCumulativeFundingRate } = positionInfo
     const { multiplier, fundingRateCoefficient, tradersNetVolume, cumulativeFundingRate } = symbolInfo
@@ -248,7 +248,7 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
   return catchApiError(async(chainId, poolAddress, volume, symbolId) => {
     let price = priceCache.get(poolAddress, symbolId)
     const { symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite');
-    console.log('symbol',symbol)
+    //console.log('symbol',symbol)
     if (!price) {
       price = await getOraclePrice(chainId, symbol, 'v2_lite')
       priceCache.set(poolAddress, symbolId, price)
@@ -273,7 +273,7 @@ export const getEstimatedMargin = async(
   const args = [chainId, poolAddress, accountAddress, volume, leverage, symbolId]
   return catchApiError(async(chainId, poolAddress, accountAddress, volume, leverage, symbolId) => {
     const { symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite');
-    console.log('symbol',symbol)
+    //console.log('symbol',symbol)
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     const [price, symbolInfo] = await Promise.all([
       getOraclePrice(chainId, symbol, 'v2_lite'),

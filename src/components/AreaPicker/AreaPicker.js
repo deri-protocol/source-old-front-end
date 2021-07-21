@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import './areaPicker.less'
 import classNames from 'classnames'
 import { inject, observer } from 'mobx-react'
@@ -14,6 +14,10 @@ function AreaPicker({lang,version}){
       version.setCurrent('v2')
     }
   }
+  useEffect(() => {
+    siwtchZone('main')
+    return () => {}
+  }, [])
   return (
     (version.isV2 || version.isV2Lite) ? <div className='area-picker'>
       <div className={clazz}>

@@ -14,7 +14,7 @@ function History({wallet,trading,lang}) {
   const [history, setHistory] = useState([]);
 
   async function loadHistory (){
-    if(wallet.isConnected() && trading.config && trading.history.length > 0){
+    if(wallet.isConnected() && trading.config){
       const his = trading.history.map(item => {
         item.directionText =  lang['long-buy']
         if(item.direction === 'SHORT') {

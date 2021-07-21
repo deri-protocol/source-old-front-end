@@ -81,7 +81,7 @@ function Position({wallet,trading,version,lang}){
   useEffect(() => {
     if(trading.position){
       const {position} = trading
-      const direction = (+position.volume) > 0 ? 'LONG' : (eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
+      const direction = (+position.volume) > 0 ? 'LONG' : (!position.volume || eqInNumber(position.volume, 0) || !position.volume ? '--' : 'SHORT') 
       setDirection(direction)      
       setBalanceContract(bg(position.margin).plus(position.unrealizedPnl).toString())
       setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())
@@ -95,13 +95,13 @@ function Position({wallet,trading,version,lang}){
     return () => {};
   }, [wallet.detail.account,trading.config,trading.amount.dynBalance])
 
-  useEffect(() => {    
-    if(trading.position.volume && trading.position.margin && trading.position.unrealizedPnl){
-      const direction = (+trading.position.volume) > 0 ? 'LONG' : (eqInNumber(trading.position.volume , 0) ? '--' : 'SHORT')       
-      setDirection(direction);
-    }
-    return () => {};
-  }, [trading.position.volume,trading.position.margin,trading.position.unrealizedPnl]);
+  // useEffect(() => {    
+  //   if(trading.position.volume && trading.position.margin && trading.position.unrealizedPnl){
+  //     const direction = (+trading.position.volume) > 0 ? 'LONG' : (!trading.position.volume || eqInNumber(trading.position.volume , 0) ? '--' : 'SHORT')       
+  //     setDirection(direction);
+  //   }
+  //   return () => {};
+  // }, [trading.position.volume,trading.position.margin,trading.position.unrealizedPnl]);
 
   return (
     <div className='position-box' >
@@ -129,7 +129,7 @@ function Position({wallet,trading,version,lang}){
         </span>
       </div>
       <div className='ave-entry-price'><DeriNumberFormat value={trading.position.averageEntryPrice}  decimalScale={2}/></div>
-      <div className={direction}>{direction && lang[direction.toLowerCase()]}</div>
+      <div className={direction}>{lang[direction.toLowerCase()] || direction }</div>
       <div className='dyn-eff-bal'>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
         {(version.isV1 || version.isV2Lite) ? <span>

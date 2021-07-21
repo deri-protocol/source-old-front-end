@@ -77,8 +77,12 @@ export {
 } from './v2_lite/trade_transaction_api';
 
 export {
-  getTradeHistory
-} from './trade_history_api';
+  getTradeHistory as getTradeHistoryV2,
+} from './v2/trade_history_api';
+
+export {
+  getTradeHistory as getTradeHistoryV2l,
+} from './v2_lite/trade_history_api';
 
 export {
   setBroker

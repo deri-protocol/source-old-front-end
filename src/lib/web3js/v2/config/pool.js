@@ -1,4 +1,3 @@
-import { bTokenFactory } from '../factory';
 import { getConfig } from './config';
 
 const expendPoolConfigV2 = (config) => {
@@ -100,8 +99,20 @@ export const getPoolConfig = (poolAddress, bTokenId, symbolId, version='v2') => 
   return res[0]
 }
 
+export const getPoolVersion = (poolAddress) => {
+  const pools = ['v2', 'v2_lite'].reduce((acc, version) => {
+    return acc.concat(getConfig(version)['pools'])
+  }, [])
+  //console.log('pools', pools)
+  const index = pools.findIndex((v) => v.pool === poolAddress)
+  if (index >= 0) {
+    return pools[index].version
+  }
+}
+
 export const _getPoolConfig = (poolAddress) => {
-  const config = getConfig()
+  const version = getPoolVersion(poolAddress)
+  const config = getConfig(version)
   const pools = config.pools;
   let pool = pools.find((p) => p.pool === poolAddress);
   //console.log(pool)
@@ -180,14 +191,3 @@ export const getPoolSymbolIdList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.symbols.map((b) => b.symbolId);
 };
-
-export const getPoolVersion = (poolAddress) => {
-  const pools = ['v2', 'v2_lite'].reduce((acc, version) => {
-    return acc.concat(getConfig(version)['pools'])
-  }, [])
-  //console.log('pools', pools)
-  const index = pools.findIndex((v) => v.pool === poolAddress)
-  if (index >= 0) {
-    return pools[index].version
-  }
-}
