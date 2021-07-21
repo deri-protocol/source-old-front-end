@@ -48,6 +48,7 @@ const validateConfigV2Lite = (config) => {
       'bTokenSymbol',
       'symbols',
       'chainId',
+      'offchainSymbolIds',
     ],
     config,
     ''
@@ -56,6 +57,7 @@ const validateConfigV2Lite = (config) => {
   config['symbols'].forEach((prop) => {
     validateObjectKeyExist(['symbolId', 'symbol'], prop, 'symbol');
   });
+  validateIsArray(config['offchainSymbolIds'], 'offchainSymbolIds');
 };
 
 const processConfigV2Lite = (config) => {

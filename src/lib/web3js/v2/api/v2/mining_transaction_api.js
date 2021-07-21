@@ -1,6 +1,6 @@
-import { getPoolBTokenIdList, getPoolConfig2, getPoolSymbolIdList } from '../../config'
+import { getPoolBTokenIdList, getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList } from '../../config'
 import { perpetualPoolRouterFactory, perpetualPoolFactory, lTokenFactory } from '../../factory'
-import { getOracleInfo } from '../../utils'
+import { RestOracle } from '../../utils'
 import { isBToken0RatioValid, isPoolMarginRatioValid } from '../../calculation'
 
 export const addLiquidity = async (
@@ -87,6 +87,7 @@ export const addLiquidityWithPrices = async (
   bTokenId,
 ) => {
    const {router:routerAddress} = getPoolConfig2(poolAddress)
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    const bTokenIdList = getPoolBTokenIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
@@ -101,8 +102,8 @@ export const addLiquidityWithPrices = async (
    let res
    if (validation.success) {
     try {
-      const promises = symbolIdList.map(async(s) => {
-        return await getOracleInfo(poolAddress, s)
+      const promises = symbolList.map(async(s) => {
+        return await RestOracle(s).getPrice()
       })
       const prices = await Promise.all(promises)
       const priceInfos = prices.map((p, index) => {
@@ -142,6 +143,7 @@ export const removeLiquidityWithPrices = async (
    const bTokens = await Promise.all(promises)
    promises = []
 
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    for (let i=0; i<symbolIdList.length; i++) {
      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
@@ -153,8 +155,8 @@ export const removeLiquidityWithPrices = async (
    let res
    if (validation.success) {
      try {
-       promises = symbolIdList.map(async(s) => {
-         return await getOracleInfo(poolAddress, s)
+       promises = symbolList.map(async(s) => {
+         return await RestOracle(s).getPrice()
        })
        const prices = await Promise.all(promises)
        const priceInfos = prices.map((p, index) => {

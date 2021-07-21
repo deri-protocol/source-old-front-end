@@ -41,6 +41,8 @@ export class ContractBase {
           console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);
         } else if (err.toString().includes("Returned values aren't valid,")) {
           console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
+        } else {
+          console.log('error:', err)
         }
       }
     }

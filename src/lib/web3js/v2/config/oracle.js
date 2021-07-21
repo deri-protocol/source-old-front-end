@@ -5,6 +5,10 @@ export const getOracleConfigList = (version) => {
   return config.oracle
 };
 
+export const isUsedRestOracle = (symbol) => {
+  return ['AXSUSDT', 'MANAUSDT'].includes(symbol);
+};
+
 export const getOracleConfig = (chainId, symbol, version='v2') => {
   const filteredByChainId = getOracleConfigList(version).filter((c) =>
     symbol

@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 global.fetch = fetch
 
 // timeout for async method testing
-export const TIMEOUT = 20000;
+export const TIMEOUT = 30000;
 
 // v2 config
 // chain id 97

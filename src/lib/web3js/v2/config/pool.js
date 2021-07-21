@@ -51,6 +51,7 @@ const expendPoolConfigV2Lite = (config) => {
           bTokenSymbol: pool.bTokenSymbol,
           symbol: symbol.symbol,
           symbolId: symbol.symbolId,
+          offchainSymbolIds: pool.offchainSymbolIds,
           unit: symbol.unit,
           version: 'v2_lite',
         });

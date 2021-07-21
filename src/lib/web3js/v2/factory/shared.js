@@ -1,10 +1,13 @@
+import { isUsedRestOracle } from '../config/oracle';
 import {
   WooOracle,
   WrappedOracle,
+  // OffchainOracle,
   BrokerManager,
   PTokenAirdrop,
   BToken,
 } from '../contract';
+import { RestOracle } from '../utils'
 
 export const factory = (klass) => {
   let instances = {}
@@ -34,7 +37,9 @@ export const oracleFactory = (function () {
       //     decimal
       //   );
       // } else if (['137', '97'].includes(chainId)) {
-      if (['56', '137', '97','80001'].includes(chainId)) {
+      if (isUsedRestOracle(symbol)) {
+        instanceMap[key] = RestOracle(symbol);
+      } else if (['56', '137', '97','80001'].includes(chainId)) {
         instanceMap[key] = new WrappedOracle(chainId, address, symbol, decimal);
       } else {
         instanceMap[key] = new WooOracle(chainId, address, symbol, decimal);

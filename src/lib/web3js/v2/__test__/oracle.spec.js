@@ -47,4 +47,14 @@ describe("oracle", () => {
     const price = await oracle.getPrice()
     expect(price.split('.')[0].length).toEqual(4)
   }, TIMEOUT)
+  test('offchain oracle bsctestnet AXSUSDT getPrice()', async() => {
+    const oracle = oracleFactory('97', '0x63F73b157Ee52dE3c3f9248753a05Aa5649B6f87', 'AXSUSDT')
+    const price = await oracle.getPrice()
+    expect(price.split('.')[0].length).toEqual(2)
+  }, TIMEOUT)
+  test('offchain oracle bsctestnet MANAUSDTgetPrice()', async() => {
+    const oracle = oracleFactory('97', '0x386BcDB9De6ce9df9232B7239073b0A931B7f39c', 'MANAUSDT')
+    const price = await oracle.getPrice()
+    expect(price.split('.')[0].length).toEqual(1)
+  }, TIMEOUT)
 }, TIMEOUT)

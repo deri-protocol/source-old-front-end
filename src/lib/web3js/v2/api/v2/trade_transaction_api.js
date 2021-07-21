@@ -1,12 +1,12 @@
 import { isOrderValid } from '../../calculation';
-import { getPoolConfig2, getPoolSymbolIdList, getPoolBTokenIdList } from '../../config'
+import { getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList, getPoolBTokenIdList } from '../../config'
 import {
   bTokenFactory,
   perpetualPoolRouterFactory,
   pTokenFactory,
   perpetualPoolFactory,
 } from '../../factory';
-import { getOracleInfo, bg } from '../../utils';
+import { RestOracle, bg } from '../../utils';
 
 export const unlock = async (chainId, poolAddress, accountAddress, bTokenId) => {
    const { bToken: bTokenAddress } = getPoolConfig2(poolAddress, bTokenId);
@@ -174,12 +174,13 @@ export const depositMarginWithPrices = async (
   bTokenId,
 ) => {
    const { router: routerAddress } = getPoolConfig2(poolAddress);
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
-     const promises = symbolIdList.map(async(s) => {
-       return await getOracleInfo(poolAddress, s)
+     const promises = symbolList.map(async(s) => {
+       return await RestOracle(s).getPrice()
      })
      const prices = await Promise.all(promises)
      const priceInfos = prices.map((p, index) => {
@@ -202,12 +203,13 @@ export const withdrawMarginWithPrices = async (
   isMaximum = false,
 ) => {
    const { router: routerAddress } = getPoolConfig2(poolAddress);
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    let res;
    try {
-     const promises = symbolIdList.map(async(s) => {
-       return await getOracleInfo(poolAddress, s)
+     const promises = symbolList.map(async(s) => {
+       return await RestOracle(s).getPrice()
      })
      const prices = await Promise.all(promises)
      const priceInfos = prices.map((p, index) => {
@@ -229,6 +231,7 @@ export const tradeWithMarginWithPrices = async (
   symbolId,
 ) => {
    const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig2(poolAddress);
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress);
    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
@@ -299,8 +302,8 @@ export const tradeWithMarginWithPrices = async (
    let res;
    if (orderValidation.success) {
     try {
-     promises = symbolIdList.map(async(s) => {
-       return await getOracleInfo(poolAddress, s)
+     promises = symbolList.map(async(s) => {
+       return await RestOracle(s).getPrice()
      })
      const prices = await Promise.all(promises)
      const priceInfos = prices.map((p, index) => {
@@ -319,6 +322,7 @@ export const tradeWithMarginWithPrices = async (
 
 export const closePositionWithPrices = async (chainId, poolAddress, accountAddress, symbolId) => {
    const { router: routerAddress, pToken: pTokenAddress } = getPoolConfig2(poolAddress);
+   const symbolList = getPoolSymbolList(poolAddress)
    const symbolIdList = getPoolSymbolIdList(poolAddress)
    const perpetualPoolRouter = perpetualPoolRouterFactory(chainId, routerAddress)
    const pToken = pTokenFactory(chainId, pTokenAddress)
@@ -327,8 +331,8 @@ export const closePositionWithPrices = async (chainId, poolAddress, accountAddre
    let res;
    if (!volume.eq(0)) {
     try {
-     const promises = symbolIdList.map(async(s) => {
-       return await getOracleInfo(poolAddress, s)
+     const promises = symbolList.map(async(s) => {
+       return await RestOracle(s).getPrice()
      })
      const prices = await Promise.all(promises)
      const priceInfos = prices.map((p, index) => {

@@ -29,7 +29,7 @@ function PoolBox({wallet,group = {},lang}){
           <div className='pool-desc'>
             <span className='symbol'>
                 <span className='symbol-label'>{lang['symbol']}:</span>
-                <span>{pool.symbol}</span>  
+                <span className='symbol-value'>{pool.symbol}</span>  
             </span>
             <span className='address'>
               <span className='address-label'>{lang['address']}:</span>

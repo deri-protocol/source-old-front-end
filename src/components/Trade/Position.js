@@ -12,6 +12,7 @@ import addMarginIcon  from '../../assets/img/add-margin.svg'
 import removeMarginIcon from '../../assets/img/remove-margin.svg'
 import marginDetailIcon from '../../assets/img/margin-detail.png'
 import pnlIcon from '../../assets/img/pnl-detail.png'
+import closePositionIcon from '../../assets/img/close-position-icon.svg'
 
 
 
@@ -133,7 +134,7 @@ function Position({wallet,trading,version,lang}){
             aria-hidden='true'
             style={{display: isLiquidation ? 'block' : 'none'}}
           ></span>
-          <svg t='1618369709897' className='icon' viewBox='0 0 1024 1024' version='1.1' xmlns='http://www.w3.org/2000/svg' p-id='2009' width='14' height='14'><path d='M510.8096 420.3008l335.296-335.296 90.5088 90.5088-335.296 335.296 335.296 335.296-90.5088 90.5088-335.296-335.296-335.296 335.296-90.5088-90.5088 335.296-335.296-335.296-335.296 90.5088-90.5088z' p-id='2010' fill='#ffffff'></path></svg> {lang['close']}
+          <img src={closePositionIcon} alt=''/> {lang['close']}
         </div>
       </div>
     </div>

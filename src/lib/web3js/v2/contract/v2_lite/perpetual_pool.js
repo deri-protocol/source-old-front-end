@@ -1,36 +1,41 @@
 import { ContractBase } from '../contract_base'
-import { perpetualPoolLiteAbi } from '../abis';
-import { deriToNatural, naturalToDeri } from '../../utils'
-import { MAX_INT256} from '../../config'
+import { offchainOracleAbi, perpetualPoolLiteAbi } from '../abis';
+import { deriToNatural, naturalToDeri, getPriceInfo } from '../../utils'
+//import { MAX_INT256} from '../../config'
+import { getPoolConfig } from '../../config';
 
 export class PerpetualPoolLite extends ContractBase {
   constructor(chainId, contractAddress) {
-    super(chainId, contractAddress, perpetualPoolLiteAbi)
+    super(chainId, contractAddress, perpetualPoolLiteAbi);
 
-    this.bTokenAddress = ''
-    this.lTokenAddress = ''
-    this.pouterAddress = ''
-    this.liquidatorQualifierAddress =''
-    this.protocolFeeCollector = ''
+    this.config = getPoolConfig(
+      contractAddress,
+      undefined,
+      undefined,
+      'v2_lite'
+    );
+    this.offchainSymbolIds = this.config.offchainSymbolIds;
+    this.bTokenAddress = '';
+    this.lTokenAddress = '';
+    this.pouterAddress = '';
+    this.liquidatorQualifierAddress = '';
+    this.protocolFeeCollector = '';
   }
 
   async _update() {
-    await Promise.all([
-      this.getAddresses(),
-      this.getParameters(),
-    ]);
+    await Promise.all([this.getAddresses(), this.getParameters()]);
   }
 
   async getAddresses() {
-    const res = await this._call('getAddresses')
-    this.bTokenAddress = res.bTokenAddress
-    this.lTokenAddress = res.lTokenAddress
-    this.pTokenAddress = res.pTokenAddress
-    this.liquidatorQualifierAddress = res.liquidatorQualifierAddress
-    this.protocolFeeCollector = res.protocolFeeCollector
+    const res = await this._call('getAddresses');
+    this.bTokenAddress = res.bTokenAddress;
+    this.lTokenAddress = res.lTokenAddress;
+    this.pTokenAddress = res.pTokenAddress;
+    this.liquidatorQualifierAddress = res.liquidatorQualifierAddress;
+    this.protocolFeeCollector = res.protocolFeeCollector;
   }
   async getParameters() {
-    const res = await this._call('getParameters')
+    const res = await this._call('getParameters');
     return {
       // decimals0: res.decimals0,
       // minBToken0Ratio: deriToNatural(res.minBToken0Ratio),
@@ -44,12 +49,12 @@ export class PerpetualPoolLite extends ContractBase {
     };
   }
   async getProtocolFeeAccrued() {
-    const res =  await this._call('getProtocolFeeAccrued')
-    return deriToNatural(res)
+    const res = await this._call('getProtocolFeeAccrued');
+    return deriToNatural(res);
   }
   async getLiquidity() {
-    const res =  await this._call('getLiquidity')
-    return deriToNatural(res)
+    const res = await this._call('getLiquidity');
+    return deriToNatural(res);
   }
   // async getBTokenOracle(bTokenId) {
   //   //bTokenId = parseInt(bTokenId)
@@ -58,7 +63,7 @@ export class PerpetualPoolLite extends ContractBase {
   async getSymbol(symbolId) {
     //symbolId = parseInt(symbolId)
     try {
-      const res =  await this._call('getSymbol', [symbolId])
+      const res = await this._call('getSymbol', [symbolId]);
       return {
         symbol: res.symbol,
         oracleAddress: res.oracleAddress,
@@ -78,52 +83,76 @@ export class PerpetualPoolLite extends ContractBase {
   //   //symbolId = parseInt(symbolId)
   //   return await this._call('getSymbolOracle', [symbolId])
   // }
-
+  async _getSymbolPrices() {
+    let prices = []
+    if (this.offchainSymbolIds.length > 0) {
+      const symbolNames = (
+        await Promise.all(
+          this.offchainSymbolIds.reduce(
+            (acc, i) => acc.concat([this.getSymbol(i)]),
+            []
+          )
+        )
+      ).map((s) => s.symbol);
+      const priceInfos = await Promise.all(
+        symbolNames.reduce((acc, s) => acc.concat([getPriceInfo(s)]), [])
+      );
+      prices = priceInfos.reduce((acc, p, index) => {
+        acc.push([
+          this.offchainSymbolIds[index],
+          p.timestamp,
+          p.price,
+          parseInt(p.v).toString(),
+          p.r,
+          p.s,
+        ]);
+        return acc;
+      }, []);
+    }
+    return prices;
+  }
 
   // === transaction ===
   async addLiquidity(accountAddress, amount) {
+    const prices = await this._getSymbolPrices()
     return await this._transact(
       'addLiquidity',
-      [naturalToDeri(amount), []],
+      [naturalToDeri(amount), prices],
       accountAddress
     );
   }
   async removeLiquidity(accountAddress, amount) {
+    const prices = await this._getSymbolPrices()
     return await this._transact(
       'removeLiquidity',
-      [naturalToDeri(amount), []],
+      [naturalToDeri(amount), prices],
       accountAddress
     );
   }
 
   async addMargin(accountAddress, amount) {
+    const prices = await this._getSymbolPrices()
     return await this._transact(
       'addMargin',
-      [naturalToDeri(amount), []],
+      [naturalToDeri(amount), prices],
       accountAddress
     );
   }
 
   async removeMargin(accountAddress, amount) {
-    // if (isMaximum) {
-    //   return await this._transact(
-    //     'removeMargin',
-    //     [MAX_INT256,[]],
-    //     accountAddress
-    //   );
-    // } else {
+    const prices = await this._getSymbolPrices()
     return await this._transact(
       'removeMargin',
-      [naturalToDeri(amount), []],
+      [naturalToDeri(amount), prices],
       accountAddress
     );
-    // }
   }
 
   async trade(accountAddress, symbolId, newVolume) {
+    const prices = await this._getSymbolPrices()
     return await this._transact(
       'trade',
-      [symbolId, naturalToDeri(newVolume), []],
+      [symbolId, naturalToDeri(newVolume), prices],
       accountAddress
     );
   }
