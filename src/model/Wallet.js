@@ -16,7 +16,8 @@ class Wallet {
       supportV2 : computed,
       supportV1 : computed,
       supportAllVersion : computed,
-      supportChain : computed
+      supportChain : computed,
+      supportInnocation : computed
     })
   }
 
@@ -64,7 +65,6 @@ class Wallet {
         params: [{ chainId}],
       });
     } catch (error) {
-      // This error code indicates that the chain has not been added to MetaMask.
       if (error.code === 4902) {
         try {
           await window.ethereum.request({
@@ -72,10 +72,9 @@ class Wallet {
             params: [{chainId,...network.metamask}],
           });
         } catch (addError) {
-          // handle "add" error
+          console.error(addError)
         }
       }
-      // handle other "switch" errors
     }
   }
 
@@ -119,6 +118,10 @@ class Wallet {
 
   get supportChain(){
     return this.detail.supported
+  }
+
+  get supportInnovation(){
+    return this.detail.supportInnovation
   }
 
 

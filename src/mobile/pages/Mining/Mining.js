@@ -17,7 +17,7 @@ function Mining({wallet,lang}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
 	const {version,chainId,baseToken,address,type} =  useParams();
 	const query = useQuery();
-	const networkText = chainInfo[chainId].text;
+	const networkText = chainInfo[chainId].name;
 	const props = {version,chainId,baseToken,address,wallet,type,lang}
 	const poolInfoClass = classnames('mining-info',currentTab)
 	if(query.has('baseTokenId')) {

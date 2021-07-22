@@ -68,11 +68,12 @@ export default function useMiningPool(isNew){
       },all)
       return all;
     }
-    let configs = getContractAddressConfig(env,'v2')
+    let v2Configs = getContractAddressConfig(env,'v2')
+    let v1Configs = getContractAddressConfig(env,'v1')
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
     const preminingPools = getPreminingContractConfig(env);
     const all = []
-    configs = configs.concat(preminingPools).concat(liteConfigs).reduce((total,config) => {
+    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).reduce((total,config) => {
       const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if((config.version === 'v2' || config.version === 'v2_lite')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
