@@ -16,6 +16,7 @@ const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
+const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 
 @withRouter
 @withLanguage
@@ -29,6 +30,7 @@ class Body extends React.Component {
         <Switch>
           <Route exact path='/index' component={()=><Home lang={dict['home']}/>}></Route>
           <Route exact path='/team' component={()=><Team lang={dict['team']}/>}></Route>
+          <Route exact path='/logo' component={() => <Download lang={dict['home']} />}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>

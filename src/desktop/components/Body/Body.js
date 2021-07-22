@@ -10,6 +10,7 @@ import IndexRoute from '../../../components/IndexRoute/IndexRoute';
 const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite')) 
 const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro')) 
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
+const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 const LegacyPool = LoadableComponent(() => import('../Mining/legacy/LegacyPool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Home = LoadableComponent(() => import('../../pages/Home/Home'))
@@ -31,6 +32,7 @@ class Body extends React.Component {
       <div className='body'>
         <Switch >
           <Route exact path='/team' component={() => <Team lang={dict['team']} />}></Route>
+          <Route exact path='/logo' component={() => <Download lang={dict['home']} />}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>

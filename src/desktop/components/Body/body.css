@@ -11,3 +11,6 @@
   margin: 0;
   justify-content: center;
 }
+.logo .body{
+  margin: 40px 0 60px 120px;
+}
