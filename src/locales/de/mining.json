@@ -79,5 +79,6 @@
   "staking-max-limit-tip" : "Es ist nicht erlaubt, einen Stakingsaldo von weniger als 1 zu hinterlegen. Bitte klicken Sie auf \"MAX\" um alles zu entfernen, wenn Sie Ihre gesamte Liquidität abheben möchten.",
   "invalid-liquidity" : "Ungültige Liquidität!",
   "multiplier" : "Multiplikator",
-  "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8"
+  "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8",
+  "v2_lite" : "Inno"
 }

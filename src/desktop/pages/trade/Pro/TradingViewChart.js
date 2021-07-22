@@ -57,7 +57,7 @@ function TradingViewChart({symbol,lang,intl,version}){
     }
 
     const w  = new widget(widgetOptions);
-    document.querySelector("iframe").addEventListener("load", function(e) {
+    document.querySelector('#tv_chart_container iframe').addEventListener("load", function(e) {
       setTimeout(() => setLoading(false),500)
     });
     return w;

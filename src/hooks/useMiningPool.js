@@ -10,6 +10,7 @@ import {
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
+import Intl from '../model/Intl';
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
@@ -53,6 +54,7 @@ export default function useMiningPool(isNew){
               address : pool.address,
               formatAdd : pool.formatAdd,
               version : pool.version,
+              label : pool.version=== 'v2_lite' ? Intl.get('mining','v2_lite') : pool.version,
               chainId : pool.chainId,
               airdrop : pool.airdrop,
               type : pool.type,

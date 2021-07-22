@@ -25,7 +25,6 @@
         "viewUrl" : "https://bscscan.com/",
         "supportV2" : true,
         "supportV1" : true,
-        "supportInnovation" : true,
         "metamask" : {
           "chainName": "BSC-Mainnet",
           "nativeCurrency": {
@@ -60,6 +59,7 @@
         "symbol" : "MATIC",
         "viewUrl" : "https://polygonscan.com/",
         "supportV2" : true,
+        "supportInnovation" : true,
         "metamask" : {
           "chainName": "POLYGON-Mainnet",
           "nativeCurrency": {
@@ -67,7 +67,7 @@
             "symbol": "MATIC",
             "decimals" : 18
           },
-          "rpcUrls": ["https://rpc-mainnet.maticvigil.com"],
+          "rpcUrls": ["https://matic-mainnet.chainstacklabs.com"],
           "blockExplorerUrls": ["https://polygonscan.com/"]
         }
       }

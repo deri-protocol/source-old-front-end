@@ -93,6 +93,6 @@
   "funding-fee" : "Anf. Finanz.",
   "funding-fee-tip" : "+: Der Pool schuldet Ihnen \n -: Sie schulden dem Pool",
   "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis des als Sicherheit verwendeten Margin-Tokens (umgerechnet in den effektiven Saldo).\nBeispiel: Wenn Sie 1 B1-Token als Margin buchen und der Multiplikator 0,8 beträgt, dann ist die effektive Margin 0,8",
-  "main-zone" : "Main Zone",
-  "innovation-zone" : "Innovation Zone"
+  "main-zone" : "Main",
+  "innovation-zone" : "Inno"
 }

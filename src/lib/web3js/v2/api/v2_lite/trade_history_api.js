@@ -1,6 +1,6 @@
 import { deriToNatural, getBlockInfo, getPastEvents } from '../../utils';
 import { perpetualPoolLiteFactory } from '../../factory';
-import { getPoolConfig2, getPoolSymbolIdList} from '../../config'
+import { getPoolConfig, getPoolConfig2, getPoolSymbolIdList} from '../../config'
 
 import { getRestServerConfig, DeriEnv } from '../../../config';
 import { calculateTxFee } from '../../calculation/position';
@@ -20,7 +20,8 @@ const processTradeEvent = async (
   blockNumber,
   txHash,
   multiplier,
-  feeRatio
+  feeRatio,
+  bTokenSymbol,
 ) => {
   const tradeVolume = deriToNatural(info.tradeVolume);
   const timeStamp = await getBlockInfo(chainId, blockNumber);
@@ -40,7 +41,7 @@ const processTradeEvent = async (
 
   const res = {
     direction,
-    //baseToken: bTokenSymbol,
+    baseToken: bTokenSymbol,
     symbolId,
     price: price.toString(),
     notional: notional.toString(),
@@ -61,6 +62,7 @@ const getTradeHistoryOnline = async (
 
   const symbolIdList = getPoolSymbolIdList(poolAddress)
   //console.log('symbolIdList', symbolIdList);
+  const { bTokenSymbol } = getPoolConfig(poolAddress, undefined, undefined, 'v2_lite')
   const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
   const toBlock = await getBlockInfo(chainId, 'latest');
   fromBlock = parseInt(fromBlock);
@@ -94,6 +96,7 @@ const getTradeHistoryOnline = async (
       item.transactionHash,
       multiplier,
       feeRatio,
+      bTokenSymbol,
     );
     result.unshift(res);
   }
@@ -123,7 +126,7 @@ export const getTradeHistory = async (
         .map((i) => {
           return {
             direction: i.direction.trim(),
-            //baseToken: i.baseToken.trim(),
+            baseToken: i.baseToken.trim(),
             symbolId: i.symbolId,
             price: deriToNatural(i.price).toString(),
             notional: deriToNatural(i.notional).toString(),

@@ -1,5 +1,3 @@
-import { depositMarginV2l } from "../api"
-
 export const catchApiError = async (func, args, methodName, defaultValue) => {
   try {
     //console.log('args', args, methodName, defaultValue)

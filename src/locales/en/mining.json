@@ -78,5 +78,6 @@
   "staking-max-limit-tip" : "Leaving staking balance of smaller than 1 is not allowed. Please click \"MAX\" to remove all if you are to withdraw all of your liquidity.",
   "invalid-liquidity" : "Invalid Liquidity!",
   "multiplier" : "Multiplier",
-  "multiplier-tip" : "The multiplier is the effective ratio of the liquidity provided for mining.\nFor example：providing 1 B1 token for liquidity mining, if the multiplier of B1 is 0.8, then the effective value for mining is 0.8"
+  "multiplier-tip" : "The multiplier is the effective ratio of the liquidity provided for mining.\nFor example：providing 1 B1 token for liquidity mining, if the multiplier of B1 is 0.8, then the effective value for mining is 0.8",
+  "v2_lite" : "Inno"
 }
