@@ -147,16 +147,12 @@
   animation: spinner-border .75s linear infinite;
 }
 
-.spinner-border-sm {
-  width: 1rem;
-  height: 1rem;
-  border-width: .2em;
-}
-.spinner-border-10px {
-  width: 10px;
-  height: 10px;
-  border-width: 2;
-}
+// .spinner-border-sm {
+//   width: 1rem;
+//   height: 1rem;
+//   border-width: .2em;
+// }
+
 
 
 html {
@@ -252,4 +248,18 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.loading-mask {
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  opacity: 0.2;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

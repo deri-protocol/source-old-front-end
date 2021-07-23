@@ -65,6 +65,7 @@ class Wallet {
         params: [{ chainId}],
       });
     } catch (error) {
+      // alert('err' + JSON.stringify(error))
       if (error.code === 4902) {
         try {
           await window.ethereum.request({
@@ -72,14 +73,14 @@ class Wallet {
             params: [{chainId,...network.metamask}],
           });
         } catch (addError) {
-          console.error(addError)
+          console.error('err' ,addError)
         }
       }
     }
   }
 
   loadWalletBalance = async (chainId,account) => {
-    const balance = await getUserWalletBalance(chainId,account)
+    const balance = await getUserWalletBalance(chainId,account).catch(e => console.log('wallet account is not exist'))
     const detail = {chainId,account,balance,formatBalance : formatBalance(balance)}
     const env = DeriEnv.get();
     const {chainInfo} = config[env]

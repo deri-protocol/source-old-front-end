@@ -74,7 +74,7 @@ export default class Trading {
       setPosition : action,
       setVolume : action,
       setUserSelectedDirection : action,
-      setSupportChain : action,
+      // setSupportChain : action,
       setFundingRate : action,
       setHistory : action,
       setSlideMargin : action,
@@ -94,8 +94,9 @@ export default class Trading {
 
   /**
    * 初始化
+   * wallet and version changed will init
    */
-  async init(wallet){    
+  async init(wallet,version,finishedCallback){    
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
@@ -104,49 +105,41 @@ export default class Trading {
       let defaultConfig = this.getDefaultConfig(this.configs,wallet);
       //如果还是为空，则默认用所有config的第一条
       if(!defaultConfig){
-        //没有默认的配置，
-        this.setSupportChain(false);
         defaultConfig = all.length > 0 ? all[0] : {}
       }
       this.setConfig(defaultConfig);
-    } 
-    //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    if(!wallet.isConnected() && !wallet.supportWeb3()){
+      //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
+    } else if(!wallet.isConnected() && !wallet.supportWeb3()){
       //没有钱包插件
       version.setCurrent('v2')
       const all = await this.configInfo.load(version);
       const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
       this.setConfig(defaultConfig)
     }
-    this.loadByConfig(this.wallet,this.config,true)
-    this.setVolume('')
+    this.loadByConfig(this.wallet,this.config,true,finishedCallback)
   }
 
-  async switch(spec){
-    const cur = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
+  async onSymbolChange(spec,finishedCallback){
+    const config = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
-    let changed = false
-    if(version){
-      changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
-    }
-    if(cur){
+    const changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
+    this.onChange(config,changed,finishedCallback)
+  }
+
+  async onChange(config,changed,finishedCallback){
+    if(config){
       this.pause();
-      this.setConfig(cur)
-      this.loadByConfig(this.wallet,cur,changed);  
+      this.setConfig(config)
+      this.loadByConfig(this.wallet,config,changed,finishedCallback);  
       if(changed){
-        this.store(cur)
+        this.store(config)
       }    
       this.resume()
       this.setVolume('')
     }
   }
 
-  async loadByConfig(wallet,config,symbolChanged){
-     //position
-     const position = await this.positionInfo.load(wallet,config,position => {       
-        this.setPosition(position);
-     })
-
+  async loadByConfig(wallet,config,symbolChanged,finishedCallback){
      //切换指数
     if(symbolChanged && config){
       const symbol = getFormatSymbol(config.symbol)
@@ -154,32 +147,25 @@ export default class Trading {
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
-      
-      if(position){
-        this.setIndex(position.price);
-      }
       this.oracle.load(symbol)
     }
-     //contract
-     const contract = await this.contractInfo.load(wallet,config)    
-
-     //funding rate
-     const fundingRate = await this.loadFundingRate(wallet,config)
-     
-     //history
-     const history = await this.historyInfo.load(wallet,config);
-
-     if(contract){
-      this.setContract(contract)
-     }
-
-     if(fundingRate){
-      this.setFundingRate(fundingRate)
-     }
-
-     if(history){
-      this.setHistory(history);
-     }
+    if(wallet && wallet.isConnected && config){
+      Promise.all([
+        this.positionInfo.load(wallet,config,position => this.setPosition(position)),
+        this.contractInfo.load(wallet,config),
+        this.loadFundingRate(wallet,config),
+        this.historyInfo.load(wallet,config)
+      ]).then(results => {
+        if(results.length === 4){
+          results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
+          results[1] && this.setContract(results[1]);
+          results[2] && this.setFundingRate(results[2]);
+          results[3] && this.setHistory(results[3]);
+        } 
+      }).finally(e => {
+        finishedCallback && finishedCallback()
+      })
+    }
   }
 
 
@@ -300,10 +286,6 @@ export default class Trading {
 
   setPaused(paused){
     this.paused = paused
-  }
-
-  setSupportChain(support){
-    this.supportChain = support;
   }
 
   setUserSelectedDirection(direction){

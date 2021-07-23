@@ -33,7 +33,7 @@
             "decimals" : 18
           },
           "rpcUrls": ["https://bsc-dataseed.binance.org/"],
-          "blockExplorerUrls": ["ttps://bscscan.com/"]
+          "blockExplorerUrls": ["https://bscscan.com/"]
         }
       },
       "128" : {

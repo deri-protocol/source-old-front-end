@@ -10,8 +10,13 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
+import Loading from '../Loading/LoadingMask';
 
 
+
+const ConfirmDialog = withModal(TradeConfirm)
+const DepositDialog = withModal(DepositMargin)
+const BalanceListDialog = withModal(BalanceList)
 
 
 function Trade({wallet = {},trading,version,lang}){
@@ -24,6 +29,7 @@ function Trade({wallet = {},trading,version,lang}){
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const indexPriceRef = useRef();  
   const directionClazz = classNames('checked-long','check-long-short',' long-short',{'checked-short' : direction === 'short'})
   const volumeClazz = classNames('contrant-input',{'inputFamliy' : trading.volume !== ''})
@@ -197,7 +203,10 @@ function Trade({wallet = {},trading,version,lang}){
 
 
   useEffect(() => {
-    trading.init(wallet,version)
+    setLoaded(true)
+    trading.init(wallet,version,() => {
+      setLoaded(false);
+    } )
   },[wallet.detail.account,version.current])
 
 
@@ -247,7 +256,7 @@ function Trade({wallet = {},trading,version,lang}){
     <div className='trade-info'>
     <div className='trade-peration'>
       <div className='check-baseToken'>
-        <SymbolSelector setSpec={setSpec} spec={spec}/>
+        <SymbolSelector setSpec={setSpec} spec={spec} showMask={setLoaded}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
@@ -401,14 +410,11 @@ function Trade({wallet = {},trading,version,lang}){
                 lang={lang}
        />
     </div>
+    <Loading modalIsOpen={loaded}/>
   </div>
   )
 }
 
-
-const ConfirmDialog = withModal(TradeConfirm)
-const DepositDialog = withModal(DepositMargin)
-const BalanceListDialog = withModal(BalanceList)
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
                   baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version,lang}){
