@@ -16,12 +16,12 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 
   //claim deri
 	const claim = async () => {
-		if(config.text === undefined) {
+		if(config.name === undefined) {
 			alert(`${lang['wrong-network']}`);
 			return;
 		}
 		if(!eqInNumber(wallet.detail.chainId,claimInfo.chainId)) {
-			alert(`${lang['your-deri-is-on']} ${ config.text } ${lang['connect-to']} ${ config.text } ${lang['to-claim']}`)
+			alert(`${lang['your-deri-is-on']} ${ config.name } ${lang['connect-to']} ${ config.name } ${lang['to-claim']}`)
 			return ;
 		}
 		if ((+claimInfo.unclaimed) === 0) {
@@ -124,7 +124,7 @@ export default function Claim({wallet,miningClaim,tradingClaim,lang}){
 						<div className='text-num'></div>
 				</div>}
 				<div className='odd claim-network'>
-						{miningClaim && <div className='text-title'>{lang['your-deri-is-on']} { config.text }  {lang['connect-to']} { config.text } {lang['to-claim']}</div>}
+						{miningClaim && <div className='text-title'>{lang['your-deri-is-on']} { config.name }  {lang['connect-to']} { config.name } {lang['to-claim']}</div>}
 				</div>
 				<div className='claim-btn'>
 					<Button btnText={btnText} click={click} className='claim' lang={lang}/>					

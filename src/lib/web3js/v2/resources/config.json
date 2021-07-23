@@ -267,7 +267,14 @@
           "version": "v2_lite"
         }
       ],
-      "oracle": [],
+      "oracle": [
+        {
+          "chainId": "137",
+          "symbol": "AXSUSDT",
+          "address": "0x6E0faAD5DE9e7FdBedA9A9e3fBCD01E1e7a1F4Db",
+          "decimal": "18"
+        }
+      ],
       "brokerManager": []
     },
     "dev": {

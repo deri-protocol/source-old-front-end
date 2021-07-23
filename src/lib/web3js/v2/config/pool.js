@@ -1,3 +1,4 @@
+import { DeriEnv } from '../../config';
 import { getConfig } from './config';
 
 const expendPoolConfigV2 = (config) => {

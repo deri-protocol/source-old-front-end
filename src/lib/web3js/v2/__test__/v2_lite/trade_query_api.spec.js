@@ -15,6 +15,7 @@ import {
   POOL_ADDRESS_LITE,
   TIMEOUT,
 } from '../setup';
+import { DeriEnv } from '../../../config';
 
 describe('trade_query_api', () => {
   it(
@@ -22,7 +23,7 @@ describe('trade_query_api', () => {
     async () => {
       const output = {
         symbol: 'BTCUSD',
-        bSymbol: 'BUSD',
+        bTokenSymbol: 'BUSD',
         multiplier: '0.0001',
         feeRatio: '0.001',
         fundingRateCoefficient: '0.00005',
@@ -42,9 +43,9 @@ describe('trade_query_api', () => {
   );
   it('getPositionInfo', async () => {
     const output = {};
-    expect(
-      await getPositionInfo(CHAIN_ID, POOL_ADDRESS_LITE, ACCOUNT_ADDRESS, '0')
-    ).toEqual(output);
+    const res = await getPositionInfo(CHAIN_ID, POOL_ADDRESS_LITE, ACCOUNT_ADDRESS, '0')
+    //const res = await getPositionInfo('137', '0xb144cCe7992f792a7C41C2a341878B28b8A11984', '0xFefC938c543751babc46cc1D662B982bd1636721', '0')
+    expect(res).toEqual(output);
   });
   it(
     'getWalletBalance',
