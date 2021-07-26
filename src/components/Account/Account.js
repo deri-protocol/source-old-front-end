@@ -15,10 +15,11 @@ function Account({wallet,lang}){
   const isMining = useRouteMatch({path: '/mining',exact : true});
   const isTeam = useRouteMatch('/team')
   const isRetired = useRouteMatch('/retired')
+  const isDeritoken = useRouteMatch('/deritoken')
   const isDownload = useRouteMatch('/logo')
   const config = useConfig();
 
-  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired || isDownload
+  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired || isDownload || isDeritoken
   
 
 
