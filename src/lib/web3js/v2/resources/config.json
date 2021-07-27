@@ -265,6 +265,44 @@
           ],
           "chainId": "137",
           "version": "v2_lite"
+        },
+        {
+          "pool": "0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0",
+          "pToken": "0x6c4907a76628574C14C6292DEA5B4A5cD81D9Ee0",
+          "lToken": "0x992974FF499979cDd295214f8883D83a93855fA7",
+          "router": "0x0000000000000000000000000000000000000000",
+          "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+          "bTokenSymbol": "BUSD",
+          "initialBlock": "9514401",
+          "offchainSymbolIds": ["0"],
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "AXSUSDT",
+              "unit": "AXS"
+            }
+          ],
+          "chainId": "56",
+          "version": "v2_lite"
+        },
+        {
+          "pool": "0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819",
+          "pToken": "0xef4c81c76ED66d9B02e0d5de2eD352f840Eb497C",
+          "lToken": "0xC246d0aD04a9029A82862BE2fbd16ab1445b1602",
+          "router": "0x0000000000000000000000000000000000000000",
+          "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
+          "bTokenSymbol": "DERI",
+          "initialBlock": "9514895",
+          "offchainSymbolIds": ["0"],
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "AXSUSDT",
+              "unit": "AXS"
+            }
+          ],
+          "chainId": "56",
+          "version": "v2_lite"
         }
       ],
       "oracle": [
@@ -272,6 +310,12 @@
           "chainId": "137",
           "symbol": "AXSUSDT",
           "address": "0x6E0faAD5DE9e7FdBedA9A9e3fBCD01E1e7a1F4Db",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "AXSUSDT",
+          "address": "0xB08D439016AC9223307A73c43Ac959d096bB64De",
           "decimal": "18"
         }
       ],

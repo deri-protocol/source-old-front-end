@@ -20,7 +20,7 @@ function TradingView({version,trading,lang}){
     <div id="trading-view">
       <div className='right-top'>
         <div className='symbol-basetoken-text'>
-          {version.isV1 ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
+          {(version.isV1 || version.isV2Lite) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['index-price']}</div>
