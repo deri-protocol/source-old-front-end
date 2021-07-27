@@ -67,7 +67,6 @@ function Trade({wallet = {},trading,version,lang}){
     }
   }
 
-
   const makeLongOrShort = (volume) => {
     if(volume >= 0){
       setDirection('long')
