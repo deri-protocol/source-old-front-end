@@ -87,7 +87,7 @@
   "volume" : "Volumen",
   "pending" : "AUSSTEHEND",
   "funding-rate-per-block" : "Finanzierungsrate  (pro block)",
-  "1-long-contract-pays-1-short-contract" : "1 Long-Kontrakt zahlt 1 Short-Kontrakt",
+  "1-long-contract-pays-1-short-contract" : "1 long-Kontrakt zahlt 1 Short-Kontrakt",
   "index-price-camelize" : "Indexpreis",
   "per-block" : "pro block",
   "funding-fee" : "Anf. Finanz.",

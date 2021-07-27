@@ -109,7 +109,7 @@ export default class Trading {
       }
       this.setConfig(defaultConfig);
       //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
-    } else if(!wallet.isConnected() && !wallet.supportWeb3()){
+    } else if(!wallet.isConnected() || !wallet.supportWeb3()){
       //没有钱包插件
       version.setCurrent('v2')
       const all = await this.configInfo.load(version);
@@ -165,30 +165,32 @@ export default class Trading {
       }).finally(e => {
         finishedCallback && finishedCallback()
       })
+    } else {
+      finishedCallback && finishedCallback()
     }
   }
 
 
-    //优先使用session storage 的，如果缓存跟用户当前链一直，则命中缓存，否则取当前配置第一条
-    getDefaultConfig(configs = [],wallet){
-      let defaultConfig = null;
-      if(configs.length > 0){    
-        const fromStore = this.getFromStore();
-        if(fromStore && eqInNumber(wallet.detail.chainId,fromStore.chainId)){
-          defaultConfig = fromStore;
-        }
-        if(defaultConfig){
-          //虽然从缓存获得config ，需要判断池子地址是否一致，否则用可用config的第一条
-          const pos = configs.findIndex(c => c.pool === defaultConfig.pool);
-          if(pos === -1){
-            defaultConfig = configs[0];
-          }
-        } else {
-          defaultConfig = configs[0]
-        }   
+  //优先使用session storage 的，如果缓存跟用户当前链一直，则命中缓存，否则取当前配置第一条
+  getDefaultConfig(configs = [],wallet){
+    let defaultConfig = null;
+    if(configs.length > 0){    
+      const fromStore = this.getFromStore();
+      if(fromStore && eqInNumber(wallet.detail.chainId,fromStore.chainId)){
+        defaultConfig = fromStore;
       }
-      return defaultConfig;    
+      if(defaultConfig){
+        //虽然从缓存获得config ，需要判断池子地址是否一致，否则用可用config的第一条
+        const pos = configs.findIndex(c => c.pool === defaultConfig.pool);
+        if(pos === -1){
+          defaultConfig = configs[0];
+        }
+      } else {
+        defaultConfig = configs[0]
+      }   
     }
+    return defaultConfig;    
+  }
 
  
 

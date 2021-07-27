@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import ContractInfo from '../ContractInfo/ContractInfo';
 import Trade from './Trade';
 import { inject, observer } from 'mobx-react';
-import useLang from '../../hooks/useLang';
 
 function LiteTrade({wallet,trading,isPro,lang}){
   const [curTab, setCurTab] = useState('trade');

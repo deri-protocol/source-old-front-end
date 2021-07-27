@@ -56,6 +56,9 @@ class Wallet {
   }
 
   switchNetwork = async (network) => {
+    if(!this.isConnected()){
+      this.connect();
+    }
     const chainInfo = config[DeriEnv.get()]['chainInfo']
     const chainId =`0x${(parseInt(network.id)).toString(16)}`
     network = chainInfo[parseInt(network.id)]
