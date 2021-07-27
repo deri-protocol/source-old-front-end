@@ -64,7 +64,6 @@ export const getContractAddressConfig = (env = 'dev') => {
         unit: 'iMEME',
         chainId: '56',
         version: 'v1',
-        retired: true,
       },
       {
         pool:   '0x23779AAc1e74a65F27B4840A8E41F767Ce993118',
