@@ -39,7 +39,7 @@ function PoolBox({wallet,group = {},lang}){
             </span>
           </div>
         </div>
-        <div className='version'>{pool.version === 'v2_lite' ? pool.innoDisplay : pool.version}</div>
+        <div className='version'>{lang[pool.version]}</div>
       </div>
       <div className="pool-info">
         {list.map((card,index) => <Card card={card} key={index} index={index} pool={pool} list={list} wallet={wallet} lang={lang}/>)}

@@ -80,5 +80,6 @@
   "invalid-liquidity" : "Ungültige Liquidität!",
   "multiplier" : "Multiplikator",
   "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8",
-  "v2_lite" : "Inno"
+  "v2_lite" : "Inno",
+  "v2" : "Main"
 }
