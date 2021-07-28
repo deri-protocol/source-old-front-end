@@ -36,14 +36,7 @@ function Footer({intl}){
         </div>
         <div className="right">
           <span> {lang['visit-us-on']}</span>
-          <a target="_blank" rel='noreferrer' className="iocn-a" >
-            <div className="circle">
-              <div className='wechat'>
-                <div className='down-box'></div>
-              </div>
-              <div className="fa fa-wechat"></div>
-            </div>
-          </a>
+          
           <a target="_blank" rel='noreferrer' className="iocn-a" href="mailto: service@deri.finance">
             <div className="circle">
               <div className="fa fa-envelope"></div>
@@ -83,6 +76,14 @@ function Footer({intl}){
           <a rel='noreferrer'  target="_blank" className="iocn-a" href="https://t.me/DeriProtocol">
             <div className="circle">
               <div className="fa fa-paper-plane"></div>
+            </div>
+          </a>
+          <a target="_blank" rel='noreferrer' className="iocn-a" >
+            <div className="circle">
+              <div className='wechat'>
+                <div className='down-box'></div>
+              </div>
+              <div className="fa fa-wechat"></div>
             </div>
           </a>
         </div>

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
 import { DeriEnv,mintDeri,freeze,getDeriBalance,bg,getUserWormholeSignature,unlockDeri,isDeriUnlocked, } from "../../lib/web3js/indexV2";
 import Button from '../Button/Button';
+import useConfig from '../../hooks/useConfig';
 import arrow from './img/arrow.png'
 import ETH from './img/ETH.png'
 import BSC from './img/BSC.png'
@@ -35,8 +36,12 @@ function Bridge({ wallet = {},lang }) {
   const [dropdownList_to, setDropdownList_to] = useState(false);
   const [From_img, setFrom_img] = useState(isNetwork(initialize.from_chainId,lang).img);
   const [To_img, setTo_img] = useState(isNetwork(initialize.to_chainId,lang).img);
-  const [isFromConnected, setIsFromConnected] = useState();
-  const [isToConnected, setIsToConnected] = useState();
+  const [isWalletConnected, setIsWalletConnected] = useState(
+    {
+      isFromConnected:false,
+      isToConnected:false
+    }
+  );
   const [AmountMessage, setAmountMessage] = useState([]);
   const [message, setMessage] = useState({});
   const selectClass = classNames('dropdown-menu', { 'show': dropdown })
@@ -101,20 +106,18 @@ function Bridge({ wallet = {},lang }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   useEffect(() => {
     if (hasConnectWallet()) {
-      let isCon = isConnected()
-      setIsFromConnected(isCon.isFromConnected);
-      setIsToConnected(isCon.isToConnected)
+      isConnected()
     }
   }, [wallet.detail])
 
   useEffect(() =>{
     setFrom_img(isNetwork(initialize.from_chainId,lang).img)
     setTo_img(isNetwork(initialize.to_chainId,lang).img)
-    let isCon = isConnected()
-    setIsFromConnected(isCon.isFromConnected);
-    setIsToConnected(isCon.isToConnected)
+    isConnected()
+   
   },[initialize])
 
+ 
   const getValid = async () => {
     if(hasConnectWallet()){
       let res = await getUserWormholeSignature(wallet.detail.account);
@@ -140,10 +143,12 @@ function Bridge({ wallet = {},lang }) {
   const isConnected = () => {
     let isFromConnected = hasConnectWallet ? (wallet.detail.chainId == initialize.from_chainId ? true : false) : false;
     let isToConnected = hasConnectWallet ? (wallet.detail.chainId == initialize.to_chainId ? true : false) : false;
-    return {
-      isFromConnected,
-      isToConnected
+    let obj = {
+      isFromConnected:isFromConnected,
+      isToConnected:isToConnected
     }
+    setIsWalletConnected(obj)
+   
   }
   const netWork_text_from = isdev ?
     {
@@ -241,7 +246,7 @@ function Bridge({ wallet = {},lang }) {
               <div className='wallet_choose_box'>
                 <div className='box_shadow'></div>
                 <img src={From_img} className='net_logo' />
-                <div className={isFromConnected ? 'is_connected connected' : 'is_connected'}>{isFromConnected ? lang['connected'] : lang['unconnected']}</div>
+                <div className={isWalletConnected.isFromConnected ? 'is_connected connected' : 'is_connected'}>{isWalletConnected.isFromConnected ? lang['connected'] : lang['unconnected']}</div>
                 <div className='wallet_ul'>
                   <div className='wallet_ul_button' onClick={showListFrom} >
                     <div className='wallet_ul_button_text'>
@@ -277,7 +282,7 @@ function Bridge({ wallet = {},lang }) {
               <div className='wallet_choose_box'>
                 <div className='box_shadow'></div>
                 <img src={To_img} className='net_logo' />
-                <div className={isToConnected ? 'is_connected connected' : 'is_connected'}>{isToConnected ? lang['connected'] : lang['unconnected']}</div>
+                <div className={isWalletConnected.isToConnected ? 'is_connected connected' : 'is_connected'}>{isWalletConnected.isToConnected  ? lang['connected'] : lang['unconnected']}</div>
                 <div className='wallet_ul'>
                   <div className='wallet_ul_button'  onClick={showListTo}>
                     <div className='wallet_ul_button_text'>
@@ -342,8 +347,7 @@ function Bridge({ wallet = {},lang }) {
                     setMessage={setMessage}
                     setSending={setSending}
                     setShowMessage={setShowMessage}
-                    isFromConnected={isFromConnected}
-                    isToConnected={isToConnected}
+                    isWalletConnected={isWalletConnected}
            />
         </div>
         <div className='bridge-to'>
@@ -356,11 +360,12 @@ function Bridge({ wallet = {},lang }) {
     </div>
   )
 }
-function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessage,setMessage,setSending,setShowMessage,isFromConnected,isToConnected}){
+function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessage,setMessage,setSending,setShowMessage,isWalletConnected}){
   const [isApprove, setIsApprove] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [balance, setBalance] = useState(0);
   const [isClickClaim, setIsClickClaim] = useState(false);
+  const config = useConfig();
   const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['approve']}></Button>);  
   const connect = () => {
     wallet.connect()
@@ -378,6 +383,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     }
     
   }
+
   const send = async () =>{
     if(amount == '' || amount == 0){
       alert(lang['amount-must-be-greater-than-zero'])
@@ -387,7 +393,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
       alert(lang['there-is-not-enough-amount'])
       return;
     }
-    if(!isFromConnected){
+    if(!isWalletConnected.isFromConnected){
       alert(`${lang['send-finished-one']} ${isNetwork(initialize.from_chainId,lang).netWork} ${lang['send-finished-two']}`)
       return;
     }
@@ -450,7 +456,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
     }
   }
   const claim = async () =>{
-    if(!isToConnected){
+    if(!isWalletConnected.isToConnected){
       alert(`${lang['send-finished-one']} ${isNetwork(initialize.to_chainId,lang).netWork} ${lang['send-finished-two']}`)
       return;
     }
@@ -534,6 +540,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   }, [wallet.detail,initialize]); 
   useEffect(() => {
     if(isValid){
+      wallet.switchNetwork(config[initialize.to_chainId])
       if(initialize.to_chainId != wallet.detail.chainId){
         setShowMessage(true)
         setMessage({
