@@ -25,6 +25,7 @@
         "viewUrl" : "https://bscscan.com/",
         "supportV2" : true,
         "supportV1" : true,
+        "supportInnovation" : true,
         "metamask" : {
           "chainName": "BSC-Mainnet",
           "nativeCurrency": {

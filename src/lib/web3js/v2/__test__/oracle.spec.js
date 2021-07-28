@@ -1,4 +1,6 @@
+import { deriToNatural } from '../../utils'
 import { oracleFactory } from '../factory'
+import { getPriceInfo } from '../utils'
 import { BTCUSD_ORACLE_ADDRESS, TIMEOUT } from './setup'
 
 describe("oracle", () => {
@@ -56,5 +58,10 @@ describe("oracle", () => {
     const oracle = oracleFactory('97', '0x386BcDB9De6ce9df9232B7239073b0A931B7f39c', 'MANAUSDT')
     const price = await oracle.getPrice()
     expect(price.split('.')[0].length).toEqual(1)
+  }, TIMEOUT)
+  test('getPriceInfo AXSUSDT', async() => {
+    const priceInfo = await getPriceInfo('AXSUSDT')
+    const price =  deriToNatural(priceInfo.price).toNumber()
+    expect(price).toBeGreaterThanOrEqual(15)
   }, TIMEOUT)
 }, TIMEOUT)
