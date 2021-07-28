@@ -242,6 +242,11 @@
               "symbolId": "0",
               "symbol": "AXSUSDT",
               "unit": "AXS"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "MBOXUSDT",
+              "unit": "MBOX"
             }
           ],
           "chainId": "56",
@@ -261,6 +266,11 @@
               "symbolId": "0",
               "symbol": "AXSUSDT",
               "unit": "AXS"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "MBOXUSDT",
+              "unit": "MBOX"
             }
           ],
           "chainId": "56",
@@ -316,6 +326,12 @@
           "chainId": "56",
           "symbol": "AXSUSDT",
           "address": "0xB08D439016AC9223307A73c43Ac959d096bB64De",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "MBOXUSDT",
+          "address": "0xDD677a1B0591206F932b946983643638DE814Bcb",
           "decimal": "18"
         }
       ],
