@@ -95,7 +95,13 @@ function Menu({lang,locale}) {
                 :
                 <Link className='retired-item' to ='/retired'>{lang['retired-pools']}</Link>}            
               </li>
-              
+              <li>
+                {isProduction 
+                ? 
+                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target='_blank' className='token-item'>{lang['deri-token']}</a>
+                :
+                <Link className='token-item' to ='/deritoken'>{lang['deri-token']}</Link>}            
+              </li>
             </ul>
           </li>
         </ul>

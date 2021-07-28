@@ -14,6 +14,7 @@ const Download = LoadableComponent(() => import('../../pages/Download/Download')
 const LegacyPool = LoadableComponent(() => import('../Mining/legacy/LegacyPool'))
 const Mining = LoadableComponent(() => import('../../pages/Mining/Mining'))
 const Home = LoadableComponent(() => import('../../pages/Home/Home'))
+const Token = LoadableComponent(() => import('../../pages/Token/Token'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Signin = LoadableComponent(() => import('../../pages/Signin/Signin'))
@@ -33,6 +34,7 @@ class Body extends React.Component {
         <Switch >
           <Route exact path='/team' component={() => <Team lang={dict['team']} />}></Route>
           <Route exact path='/logo' component={() => <Download lang={dict['home']} />}></Route>
+          <Route exact path='/deritoken' component={() => <Token lang={dict['home']} />}></Route>
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>
