@@ -54,7 +54,7 @@ export default function useMiningPool(isNew){
               address : pool.address,
               formatAdd : pool.formatAdd,
               version : pool.version,
-              innoDisplay : pool.version=== 'v2_lite' ? Intl.get('mining','v2_lite') : pool.version,
+              // innoDisplay : pool.version=== 'v2_lite' ? Intl.get('mining','v2_lite') : pool.version,
               chainId : pool.chainId,
               airdrop : pool.airdrop,
               type : pool.type,

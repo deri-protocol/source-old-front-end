@@ -73,7 +73,6 @@ function Trade({wallet = {},trading,version,lang}){
     }
   }
 
-
   const makeLongOrShort = (volume) => {
     if(volume >= 0){
       setDirection('long')
@@ -308,7 +307,7 @@ function Trade({wallet = {},trading,version,lang}){
           <div className={`contrant-info ${version.current}`}>
             <div className='balance-contract'>
               {/* v1 */}
-              {(version.isV1 || version.isV2Lite )&& <>                
+              {(version.isV1 )&& <>                
                 <span className='balance-contract-text pc v1'>
                   {lang['balance-in-contract']}<br/>
                   ({lang['dynamic-balance']})
@@ -320,7 +319,7 @@ function Trade({wallet = {},trading,version,lang}){
                 </span>
               </>}
               {/* v2 */}
-              {(version.isV2 ) && <>                
+              {(version.isV2 || version.isV2Lite) && <>                
                 <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
                 </span>
@@ -332,13 +331,13 @@ function Trade({wallet = {},trading,version,lang}){
                 <DeriNumberFormat value={ trading.amount.dynBalance } allowZero={true}  decimalScale={2}/>
               </span>
             </div>
-            {(version.isV1 || version.isV2Lite) && <div className='box-margin'>
+            {(version.isV1) && <div className='box-margin'>
                <span>{lang['margin']}</span> 
               <span className='margin'>
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>}
-            {(version.isV2 ) && <>
+            {(version.isV2 || version.isV2Lite ) && <>
               <div className='box-margin'>{lang['margin']}</div>
               <div className='box-margin'>
                 <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>

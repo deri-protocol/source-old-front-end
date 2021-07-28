@@ -190,8 +190,8 @@ function Position({wallet,trading,version,lang}){
         <div className='title-text'>{lang['unrealized-pnl']}</div>
         <div className='info-num'>
           <span className='pnl-list'>
-            <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{version.isV2 && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
-            {version.isV2 && <div className='pnl-box'>
+            <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
+            {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
               {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item,index) =>(
                 <div className='unrealizePnl-item' key={index}>
                   <span>{item[0]}</span><span><DeriNumberFormat value={item[1]} decimalScale={8}/></span>

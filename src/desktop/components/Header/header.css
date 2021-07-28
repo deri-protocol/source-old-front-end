@@ -1,0 +1,183 @@
+.desktop .nav .nav-container {
+  background-color: #0d0e0f;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 40px;
+  min-width: 1300px;
+  font-family: ArialMT, sans-serif;
+}
+.desktop .nav .nav-container .use-deri {
+  display: none;
+}
+.desktop .nav .nav-container .nav-right {
+  display: flex;
+  align-items: center;
+}
+.desktop .nav .nav-container a {
+  text-decoration: none;
+  color: #fff;
+}
+.desktop .nav .nav-container a:hover {
+  text-decoration: none;
+  color: #fff;
+}
+.desktop .nav .nav-container .nav-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+.desktop .nav .nav-container .nav-menu .logo {
+  width: 85.78px;
+}
+.desktop .nav .nav-container .nav-menu .logo img {
+  font-size: 0;
+  float: left;
+  width: 85.78px;
+  height: 50px;
+}
+.desktop .nav .nav-container .nav-menu .mean {
+  height: 80px;
+}
+.desktop .nav .nav-container .nav-menu .mean ul {
+  padding-left: 0px;
+  margin: 0;
+  width: 600px;
+  display: flex;
+  justify-content: space-evenly;
+}
+.desktop .nav .nav-container .nav-menu .mean li {
+  float: left;
+  list-style: none;
+  font-size: 20px;
+  height: 80px;
+  font-weight: 300;
+  line-height: 80px;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: ArialMT, sans-serif;
+}
+.desktop .nav .nav-container .nav-menu .mean li a {
+  color: #cccccc;
+}
+.desktop .nav .nav-container .nav-menu .mean .selected,
+.desktop .nav .nav-container .nav-menu .mean li:hover a {
+  color: #ffffff;
+}
+.desktop .nav .nav-container .nav-menu .mean .more {
+  color: #cccccc;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref {
+  position: relative;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref i {
+  vertical-align: middle;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref i svg {
+  vertical-align: sub;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref .ref-box {
+  padding-left: 0;
+  display: none;
+  width: 139px;
+  margin-top: 2px;
+  border-radius: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  position: absolute;
+  top: 79px;
+  z-index: 9;
+  background-color: #0d0e0f;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref .ref-box li {
+  width: 139px;
+  height: 30px;
+  font-family: ArialMT, sans-serif;
+  line-height: 30px;
+  padding-left: 15px;
+  float: none;
+  font-size: 14px;
+  margin-left: 0;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref .ref-box li a {
+  color: #cccccc;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref .ref-box li a:hover {
+  color: #ffffff;
+}
+.desktop .nav .nav-container .nav-menu .mean .ref:hover .ref-box {
+  display: block;
+}
+.desktop .nav .nav-container .nav-menu .version {
+  cursor: pointer;
+  line-height: 80px;
+  margin-left: 20px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  color: #aaaaaa;
+  font-size: 20px;
+}
+.desktop .nav .nav-container .nav-menu .version img {
+  vertical-align: middle;
+}
+.team .team-item,
+.deritoken .token-item,
+.retired .retired-item,
+.signin .signin-item,
+.governance .governance-item,
+.diphistory .governance-item,
+.lite .trade-item,
+.pro .trade-item,
+.mining .mining-item,
+.bridge .bridge-item,
+.broker .broker-item,
+.brokerbind .brokerbind-item {
+  color: #fff !important;
+  display: inline-block;
+  height: 55px;
+  border-bottom: 2px solid #AAAAAA;
+}
+.team .team-item,
+.deritoken .token-item,
+.retired .retired-item,
+.broker .broker-item,
+.brokerbind .brokerbind-item,
+.signin .signin-item {
+  height: 30px;
+}
+.index .nav,
+.team .nav {
+  background-color: #0d0e0f;
+  display: flex;
+}
+.index .nav .nav-container,
+.team .nav .nav-container {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+}
+.index .nav .nav-container .use-deri,
+.team .nav .nav-container .use-deri {
+  display: block;
+  margin: 17px 0;
+  width: 200px;
+  height: 46px;
+  border-radius: 23px;
+  color: #fff;
+  background-color: #246cad;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 46px;
+  text-align: center;
+}
+.index .nav .nav-container .nav-menu .version,
+.team .nav .nav-container .nav-menu .version {
+  display: none;
+}
+.index .nav .nav-container .nav-right .connect,
+.team .nav .nav-container .nav-right .connect {
+  display: none;
+}

@@ -6,7 +6,7 @@ export const getOracleConfigList = (version) => {
 };
 
 export const isUsedRestOracle = (symbol) => {
-  return ['AXSUSDT', 'MANAUSDT'].includes(symbol);
+  return ['AXSUSDT', 'MANAUSDT', 'MBOXUSDT'].includes(symbol);
 };
 
 export const getOracleConfig = (chainId, symbol, version='v2') => {

@@ -27,24 +27,19 @@ export const getPriceInfo = async (symbol) => {
   let url = getOracleUrl(symbol);
   //console.log('oracle url', url);
   let retry = 2;
-  let res;
+  let res, priceInfo;
   while (retry > 0) {
     res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
     if (res.ok) {
-      break;
+      priceInfo = await res.json();
+      if (priceInfo.status.toString() === '200') {
+        return priceInfo.data
+      }
     }
     retry -= 1;
   }
-  if (retry === 0 && !res) {
-    throw new Error(`fetch oracle info error: exceed max retry(2).`);
-  }
-  const priceInfo = await res.json();
-  if (priceInfo.data && priceInfo.data.price) {
-    return priceInfo.data;
-  } else {
-    throw new Error(
-      `fetch oracle info error: missing price at result ${priceInfo}.`
-    );
+  if (retry === 0) {
+    throw new Error(`fetch oracle info error: exceed max retry(2): ${JSON.stringify(priceInfo)}`, );
   }
 };
 
