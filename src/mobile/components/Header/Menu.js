@@ -82,9 +82,9 @@ export default function Menu({closeMenu,lang,locale}){
               <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to='/deritoken'>{lang['deri-token']}</Link>
-              </li>
+              </li> */}
             </ul>
           </li>
         </ul>

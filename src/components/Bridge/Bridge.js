@@ -540,7 +540,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   }, [wallet.detail,initialize]); 
   useEffect(() => {
     if(isValid){
-      wallet.switchNetwork(config[initialize.to_chainId])
+      // wallet.switchNetwork(config[initialize.to_chainId])
       if(initialize.to_chainId != wallet.detail.chainId){
         setShowMessage(true)
         setMessage({
