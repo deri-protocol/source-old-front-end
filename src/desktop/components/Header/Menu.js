@@ -98,7 +98,7 @@ function Menu({lang,locale}) {
               <li>
                 {isProduction 
                 ? 
-                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target='_blank' className='token-item'>{lang['deri-token']}</a>
+                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`} target='_blank' className='token-item'>{lang['deri-token']}</a>
                 :
                 <Link className='token-item' to ='/deritoken'>{lang['deri-token']}</Link>}            
               </li>
