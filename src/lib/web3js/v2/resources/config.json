@@ -236,7 +236,7 @@
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
           "initialBlock": "9514401",
-          "offchainSymbolIds": ["0"],
+          "offchainSymbolIds": ["0", "1"],
           "symbols": [
             {
               "symbolId": "0",
@@ -260,7 +260,7 @@
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
           "bTokenSymbol": "DERI",
           "initialBlock": "9514895",
-          "offchainSymbolIds": ["0"],
+          "offchainSymbolIds": ["0", "1"],
           "symbols": [
             {
               "symbolId": "0",
