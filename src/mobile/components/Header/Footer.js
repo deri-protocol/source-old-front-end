@@ -5,14 +5,7 @@ export default function Footer({lang}){
   return(
     <div className="m-footer">
         <div className="footer-link">
-          <a  rel='noreferrer' className="iocn_a" >
-            <div className="circle">
-              <div className='wechat'>
-                <div className='down_box'></div>
-              </div>
-              <div className="fa fa-wechat"></div>
-            </div>
-          </a>
+          
           <a  rel='noreferrer' className="iocn-a" href="mailto: service@deri.finance">
               <div className="circle">
                 <div className="fa fa-envelope"></div>
@@ -38,7 +31,6 @@ export default function Footer({lang}){
                 <div className="fa fa-twitter"></div>
               </div>
             </a>
-
             <a
               
               className="iocn-a"
@@ -54,6 +46,14 @@ export default function Footer({lang}){
                 <div className="fa fa-paper-plane"></div>
               </div>
             </a>
+            <a  rel='noreferrer' className="iocn_a" >
+            <div className="circle">
+              <div className='wechat'>
+                <div className='down_box'></div>
+              </div>
+              <div className="fa fa-wechat"></div>
+            </div>
+          </a>
         </div>
 
         <div className="banquan">© 2021 {lang['deri-protocol']}</div>
