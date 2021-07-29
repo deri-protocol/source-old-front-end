@@ -17,5 +17,11 @@ export {
   getPoolSymbolIdList,
   getPoolVersion,
 } from './pool';
-export { getOracleConfigList, getOracleConfig } from './oracle';
+export {
+  getOracleConfigList,
+  getOracleConfig,
+  isUsedRestOracle,
+  mapToSymbol,
+  mapToSymbolInternal,
+} from './oracle';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

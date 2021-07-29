@@ -1,5 +1,6 @@
 import { DeriEnv } from '../../config';
 import { getConfig } from './config';
+import { mapToSymbol } from './oracle';
 
 const expendPoolConfigV2 = (config) => {
   const pools = config.pools;
@@ -21,7 +22,7 @@ const expendPoolConfigV2 = (config) => {
             bToken: bToken.bToken,
             bTokenId: bToken.bTokenId,
             bTokenSymbol: bToken.bTokenSymbol,
-            symbol: symbol.symbol,
+            symbol: mapToSymbol(symbol.symbol),
             symbolId: symbol.symbolId,
             unit: symbol.unit,
             version: 'v2',
@@ -50,7 +51,7 @@ const expendPoolConfigV2Lite = (config) => {
           chainId: pool.chainId,
           bToken: pool.bToken,
           bTokenSymbol: pool.bTokenSymbol,
-          symbol: symbol.symbol,
+          symbol: mapToSymbol(symbol.symbol),
           symbolId: symbol.symbolId,
           offchainSymbolIds: pool.offchainSymbolIds,
           unit: symbol.unit,

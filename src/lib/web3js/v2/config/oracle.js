@@ -8,8 +8,25 @@ export const getOracleConfigList = (version) => {
 export const isUsedRestOracle = (symbol) => {
   return ['AXSUSDT', 'MANAUSDT', 'MBOXUSDT', 'IBSCDEFI'].includes(symbol);
 };
+export const mapToSymbol = (symbol) => {
+  switch(symbol) {
+    case 'IBSCDEFI':
+      return 'iBSCDeFi'
+    default:
+      return symbol
+  }
+}
+export const mapToSymbolInternal = (symbol) => {
+  switch(symbol) {
+    case 'iBSCDeFi':
+      return 'IBSCDEFI'
+    default:
+      return symbol
+  }
+}
 
 export const getOracleConfig = (chainId, symbol, version='v2') => {
+  symbol = mapToSymbolInternal(symbol)
   const filteredByChainId = getOracleConfigList(version).filter((c) =>
     symbol
       ? c.chainId === chainId && c.symbol === symbol

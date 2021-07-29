@@ -10,6 +10,7 @@ import {
   getDailyBlockNumberConfig,
   getChainIds,
   getPoolVersion,
+  mapToSymbol,
 } from '../config';
 import { getBrokerConfig } from '../config/broker';
 import {
@@ -20,6 +21,7 @@ import {
   PTOKEN_ADDRESS,
   LTOKEN_ADDRESS,
   BROKER_MANAGER_ADDRESS,
+  POOL_ADDRESS_LITE,
 } from './setup';
 
 describe('config', () => {
@@ -163,7 +165,7 @@ describe('config', () => {
     expect(getPoolConfig2(POOL_ADDRESS, null, '1').symbol).toEqual('ETHUSD')
   })
   test('getOracleConfigList with v2_lite', () => {
-    const output = 2
+    const output = 4
     expect(getOracleConfigList('v2_lite').length).toEqual(output)
   })
   test('getOracleConfig for v2_lite', () => {
@@ -176,18 +178,17 @@ describe('config', () => {
     expect(getOracleConfig('97', 'BTCUSD', 'v2_lite')).toEqual(output)
   })
   test('getPoolconfig() for v2_lite', () => {
-    const poolLiteAddress = '0xb255702A263F1909f7De7569f57c9493Ac08EbfA'
     expect(
       getPoolConfig(
-        poolLiteAddress,
+        POOL_ADDRESS_LITE,
         '0',
         '1',
         'v2_lite'
       ).pToken
-    ).toEqual('0x5bB522009fFD7C44a05A3522120b7D3ddfDc5dDF');
+    ).toEqual('0x1aD33A66Bc950E05E10f56a472D818AFEe72012C');
     expect(
       getPoolConfig(
-        poolLiteAddress,
+        POOL_ADDRESS_LITE,
         '0',
         null,
         'v2_lite'
@@ -195,15 +196,19 @@ describe('config', () => {
     ).toEqual('BUSD');
     expect(
       getPoolConfig(
-        poolLiteAddress,
+        POOL_ADDRESS_LITE,
         null,
         null,
         'v2_lite'
       ).lToken
-    ).toEqual('0x0f21B3AFDF6bcfc418E8AaDB758E23626a431914');
+    ).toEqual('0x5443bB7B9920b41Da027f8Aab41c90702ACD7d8a');
   });
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
-    expect(getPoolVersion('0xb255702A263F1909f7De7569f57c9493Ac08EbfA')).toEqual('v2_lite')
+    expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
+  })
+  test('mapToSymbol', () => {
+    expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDeFi')
+    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
   })
 });
