@@ -208,7 +208,7 @@ describe('config', () => {
     expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
   })
   test('mapToSymbol', () => {
-    expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDeFi')
+    expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDEFI')
     expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
   })
 });

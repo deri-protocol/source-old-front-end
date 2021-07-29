@@ -11,14 +11,14 @@ export const isUsedRestOracle = (symbol) => {
 export const mapToSymbol = (symbol) => {
   switch(symbol) {
     case 'IBSCDEFI':
-      return 'iBSCDeFi'
+      return 'iBSCDEFI'
     default:
       return symbol
   }
 }
 export const mapToSymbolInternal = (symbol) => {
   switch(symbol) {
-    case 'iBSCDeFi':
+    case 'iBSCDEFI':
       return 'IBSCDEFI'
     default:
       return symbol
