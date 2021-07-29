@@ -409,7 +409,7 @@ function Trade({wallet = {},trading,version,lang}){
                 lang={lang}
        />
     </div>
-    <Loading modalIsOpen={loaded}/>
+    <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/>
   </div>
   )
 }

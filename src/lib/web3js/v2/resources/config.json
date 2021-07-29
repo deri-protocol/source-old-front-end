@@ -236,7 +236,7 @@
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
           "initialBlock": "9514401",
-          "offchainSymbolIds": ["0", "1"],
+          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -247,6 +247,11 @@
               "symbolId": "1",
               "symbol": "MBOXUSDT",
               "unit": "MBOX"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "IBSCDEFI",
+              "unit": "IBSCDEFI"
             }
           ],
           "chainId": "56",
@@ -260,7 +265,7 @@
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
           "bTokenSymbol": "DERI",
           "initialBlock": "9514895",
-          "offchainSymbolIds": ["0", "1"],
+          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -271,6 +276,11 @@
               "symbolId": "1",
               "symbol": "MBOXUSDT",
               "unit": "MBOX"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "IBSCDEFI",
+              "unit": "IBSCDEFI"
             }
           ],
           "chainId": "56",
@@ -332,6 +342,12 @@
           "chainId": "56",
           "symbol": "MBOXUSDT",
           "address": "0xDD677a1B0591206F932b946983643638DE814Bcb",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "IBSCDEFI",
+          "address": "0x8E31136F6f9247Ef93743bDEbC74dbD48a08E3be",
           "decimal": "18"
         }
       ],

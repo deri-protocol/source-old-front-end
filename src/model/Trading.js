@@ -117,6 +117,7 @@ export default class Trading {
       this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet,this.config,true,finishedCallback)
+    this.setVolume('')
   }
 
   async onSymbolChange(spec,finishedCallback){
