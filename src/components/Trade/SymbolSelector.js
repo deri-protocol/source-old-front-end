@@ -37,7 +37,7 @@ function SymbolSelector({trading,version,setSpec,spec,showMask}) {
         <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
       </button>
       <div className={selectClass}>
-        <div className='dropdown-box'>
+        {/* <div className='dropdown-box'> */}
           {trading.configs.map((config,index) => {
             return (
               <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
@@ -46,7 +46,7 @@ function SymbolSelector({trading,version,setSpec,spec,showMask}) {
             )
           })}
         </div>            
-      </div>
+      {/* </div> */}
     </div>
   )
 }

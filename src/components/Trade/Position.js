@@ -129,7 +129,7 @@ function Position({wallet,trading,version,lang}){
           onClick={onClosePosition}
         >
           <span
-            className='spinner spinner-border spinner-border-10px'
+            className='spinner spinner-border spinner-border-sm'
             role='status'
             aria-hidden='true'
             style={{display: isLiquidation ? 'block' : 'none'}}
