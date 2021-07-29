@@ -70,6 +70,7 @@ function History({wallet ,trading,lang}){
         </div>
         )
       })}
+      {history.length==0?<div className='no-data'>{lang['no-data']}</div>:''}
     </div>
   )
 }

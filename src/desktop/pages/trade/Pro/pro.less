@@ -233,17 +233,26 @@
                 text-align: center;
               }
               .check-long {
+                font-weight: 700;
                 color: @green;
               }
               .check-short {
                 width: 200px;
                 padding-right: 15px;
-                color: @red;
+                color: #68424D;
               }
             }
 
             .checked-long.checked-short {
-              background-image: url("../../../../assets/img/check-short.png");
+              font-weight: 700;
+              background-image: url('../../../../assets/img/check-short.png');
+              .check-short{
+                color: @red;
+              }
+              .check-long {
+                font-weight: 400;
+                color: #3A503B;
+              }
             }
             .the-input {
               display: flex;
@@ -558,6 +567,10 @@
         }
         .history-box {
           display: block;
+          .no-data{
+            text-align: center;
+            margin-top: 20px;
+          }
         }
       }
       .position-info {

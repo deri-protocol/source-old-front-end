@@ -6,6 +6,7 @@
   "long":"做多",
   "short-sell" : "做空 / 卖出",
   "short":"做空",
+  "no-data":"无数据",
   "current-position" : "当前仓位",
   "contract-volume" : "合约量",
   "index-price" : "指数价格",

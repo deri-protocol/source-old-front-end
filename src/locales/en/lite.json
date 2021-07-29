@@ -6,6 +6,7 @@
   "long":"LONG",
   "short-sell" : "SHORT / SELL",
   "short":"SHORT",
+  "no-data":"No Data",
   "current-position" : "Current Position",
   "contract-volume" : "Contract Volume",
   "index-price" : "Index Price",
