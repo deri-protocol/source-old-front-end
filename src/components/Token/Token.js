@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
+import useConfig from '../../hooks/useConfig';
 import pancake from './img/pancake.svg'
 import sushi from './img/sushi.svg'
 function Token({ wallet = {}, lang }) {
     const [deriTokenAddress, setDeriTokenAddress] = useState()
     const [deriInfo, setDeriInfo] = useState()
+    const config = useConfig();
     const addToken = async () => {
         if (deriTokenAddress) {
             const tokenSymbol = 'DERI';
@@ -49,6 +51,24 @@ function Token({ wallet = {}, lang }) {
     }
     const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
+    const sushiBuy = async ()=> {
+        if(hasConnectWallet()){
+            await wallet.switchNetwork(config[1])
+            window.open("https://app.sushi.com/swap?inputCurrency=&outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9")
+        }else{
+            window.open("https://app.sushi.com/swap?inputCurrency=&outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9")
+        }
+    }
+
+    const pancakeBuy = async ()=> {
+        if(hasConnectWallet()){
+            await wallet.switchNetwork(config[56])
+            window.open("https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5")
+        }else{
+            window.open("https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5")
+        }
+    }
+
     useEffect(() => {
         if (hasConnectWallet()) {
             let address;
@@ -86,7 +106,7 @@ function Token({ wallet = {}, lang }) {
                 </button>
             </div>
             <div className='buy-deri'>
-                <a target='_blank' href='https://app.sushi.com/swap?inputCurrency=&amp;outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9'>
+                <a target='_blank' onClick={pancakeBuy}>
                     <div className='pancake-buy'>
                         <div>
                             <img src={pancake} />
@@ -96,7 +116,7 @@ function Token({ wallet = {}, lang }) {
                         </span>
                     </div>
                 </a>
-                <a target='_blank' href='https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5'>
+                <a target='_blank' onClick={sushiBuy}>
                     <div className='sushi-buy'>
                         <div>
                             <img src={sushi} />

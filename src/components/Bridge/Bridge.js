@@ -597,7 +597,11 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
       setShowMessage(false)
     }
   }, [isValid,initialize]); 
-  
+
+  useEffect(()=>{
+    console.log(isWalletConnected)
+  },[isWalletConnected])
+
   useEffect(()=>{
     let element;
     if(hasConnectWallet()){
@@ -612,7 +616,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
       element = <Button className='btn' btnText={lang['connect-wallet']} click={connect} lang={lang}></Button>
     }
     setActionElement(element)
-  },[isValid,wallet.detail,isApprove,amount,initialize])
+  },[isValid,wallet.detail,isApprove,amount,initialize,isWalletConnected])
 
   return (
     <div className='button'>
