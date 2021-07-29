@@ -51,8 +51,6 @@ function Signin({wallet={},lang}){
     wallet.connect()
   }
 
- 
-
   const getIsThanFiveThousand = async () =>{
     let res = await getAirdropPTokenWhitelistCount(wallet.detail.chainId)
     if(+res>=5000){
@@ -287,6 +285,7 @@ function Signin({wallet={},lang}){
           <div className='button'>
             {actionElement}
           </div>
+          {isThanFiveThousand? <div className='exceed'>{lang['exceed-participants']}</div>:''}
         </div>
         
       </div>

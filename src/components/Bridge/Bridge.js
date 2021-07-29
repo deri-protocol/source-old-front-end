@@ -597,11 +597,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
       setShowMessage(false)
     }
   }, [isValid,initialize]); 
-
-  useEffect(()=>{
-    console.log(isWalletConnected)
-  },[isWalletConnected])
-
+  
   useEffect(()=>{
     let element;
     if(hasConnectWallet()){

@@ -319,18 +319,27 @@
           }
 
           .check-long {
+            font-weight: 700;
             color: @green;
           }
 
           .check-short {
             width: 200px;
             padding-right: 15px;
-            color: @red;
+            color: #68424D;
           }
         }
 
         .checked-long.checked-short {
+          font-weight: 700;
           background-image: url('../../../../assets/img/check-short.png');
+          .check-short{
+            color: @red;
+          }
+          .check-long {
+            font-weight: 400;
+            color: #3A503B;
+          }
         }
 
         .the-input {
@@ -704,7 +713,10 @@
       max-height: 673px;
       overflow-y: auto;
 
-
+      .no-data{
+        text-align: center;
+        margin-top: 50px;
+      }
       .history-box {
         padding-top: 20px;
         padding-bottom: 18px;
