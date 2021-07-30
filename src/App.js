@@ -8,7 +8,7 @@ const DesktopApp = LoadableComponent(() => import('./desktop/index'))
 const MobileApp = LoadableComponent(() => import('./mobile/index'))
 
 function Mask({loading}){
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
     setIsOpen(loading.isShowMask)
     return () => {

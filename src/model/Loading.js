@@ -1,7 +1,7 @@
 import { makeObservable, observable, action, computed } from "mobx";
 
 class Loading {
-  isLoading = true
+  isLoading = false
   constructor(){
     makeObservable(this,{
       isLoading : observable,
