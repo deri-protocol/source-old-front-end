@@ -10,11 +10,12 @@ import withModal from '../../hoc/withModal';
 import { eqInNumber, isCakeLP, isLP, isSushiLP } from '../../../utils/utils';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,symbolId,lang}) {
+function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,symbolId,lang,loading}) {
   const [liquidity,setLiquidity] = useState({})
   const [bToken,setBToken] = useState(baseToken)
 	const isLpPool = (type === 'lp')
 	const loadLiquidityInfo = async () => {
+		loading.loading();
 		const apyPool = await getPoolInfoApy(chainId,address,baseTokenId)
 		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId);
 		if(wallet.isConnected() && eqInNumber(chainId , wallet.detail.chainId)){
@@ -79,6 +80,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				})
 			}
 		}
+		loading.loaded()
 	}
 
 	useEffect(() => {
@@ -277,4 +279,4 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
   )
 }
 
-export default inject('wallet')(observer(Liquidity))
+export default inject('wallet','loading')(observer(Liquidity))

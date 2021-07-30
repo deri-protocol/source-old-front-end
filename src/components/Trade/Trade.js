@@ -19,7 +19,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Trade({wallet = {},trading,version,lang}){
+function Trade({wallet = {},trading,version,lang,loading}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
@@ -202,9 +202,9 @@ function Trade({wallet = {},trading,version,lang}){
 
 
   useEffect(() => {
-    setLoaded(true)
+    loading.loading()
     trading.init(wallet,version,() => {
-      setLoaded(false);
+      loading.loaded();
     } )
   },[wallet.detail.account,version.current])
 
@@ -255,7 +255,7 @@ function Trade({wallet = {},trading,version,lang}){
     <div className='trade-info'>
     <div className='trade-peration'>
       <div className='check-baseToken'>
-        <SymbolSelector setSpec={setSpec} spec={spec} showMask={setLoaded}/>
+        <SymbolSelector setSpec={setSpec} spec={spec}/>
         <div className='price-fundingRate pc'>
           <div className='index-prcie'>
             {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
@@ -409,7 +409,7 @@ function Trade({wallet = {},trading,version,lang}){
                 lang={lang}
        />
     </div>
-    <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/>
+    {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
   </div>
   )
 }
@@ -554,4 +554,4 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading','version')(observer(Trade))
+export default inject('wallet','trading','version','loading')(observer(Trade))
