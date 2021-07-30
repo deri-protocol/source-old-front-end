@@ -215,7 +215,7 @@ function Signin({wallet={},lang}){
     let element;
     let timestamp = new Date()
     //1627725600000
-    if(timestamp.getTime() <= 1627626343461){
+    if(timestamp.getTime() <= 1627725600000){
       if(hasConnectWallet()){
         if(isSignIn.three){
           if(!isApprove) {
