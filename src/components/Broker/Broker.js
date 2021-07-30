@@ -15,7 +15,7 @@ import Button from '../Button/Button';
 import { eqInNumber } from '../../utils/utils';
 import useConfig from "../../hooks/useConfig";
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
-function Broker({ wallet = {}, lang }) {
+function Broker({ wallet = {}, lang ,loading}) {
   const [claimInfo, claimInfoInterval] = useClaimInfo(wallet);
   const config = useConfig(claimInfo.chainId)
   const [firstDeri, setFirstDeri] = useState('--');
@@ -29,6 +29,7 @@ function Broker({ wallet = {}, lang }) {
   const [claimed, setClaimed] = useState(false);
   const [list, setList] = useState([]);
   const [remainingTime, setRemainingTime] = useState('')
+  const [isLoading,setIsLoading] = useState(false)
 
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const rewardList = async () => {
@@ -49,6 +50,13 @@ function Broker({ wallet = {}, lang }) {
       setTotList(data)
     }
   }
+
+  useEffect(()=>{
+    loading.loading();
+    if(firstDeri!='--' && secondDeri!='--' && thirdDeri!='--' && yourDeri!='--' && yourRank!='--' && list.length>0 &&claimInfo.claimed){
+      loading.loaded()
+    }
+  },[firstDeri,secondDeri,thirdDeri,yourDeri,yourRank,list,claimInfo])
 
   const brokerEpoch = async ()=>{
     let path = `/broker/${wallet.detail.account}/get_harvest_deri`
@@ -154,6 +162,7 @@ function Broker({ wallet = {}, lang }) {
 
   }, [wallet.detail, totList, currentPage])
   useEffect(() => {
+    // loading.loading()
     if(hasConnectWallet()){
       rewardList();
       topList();
@@ -364,4 +373,4 @@ function Broker({ wallet = {}, lang }) {
   )
 }
 
-export default inject('wallet')(observer(Broker))
+export default inject('wallet','loading')(observer(Broker))

@@ -4,7 +4,7 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import useConfig from '../../hooks/useConfig';
 import pancake from './img/pancake.svg'
 import sushi from './img/sushi.svg'
-function Token({ wallet = {}, lang }) {
+function Token({ wallet = {}, lang,loading }) {
     const [deriTokenAddress, setDeriTokenAddress] = useState()
     const [deriInfo, setDeriInfo] = useState()
     const config = useConfig();
@@ -50,7 +50,7 @@ function Token({ wallet = {}, lang }) {
 
     }
     const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
-
+    
     const sushiBuy = async ()=> {
         if(hasConnectWallet()){
             await wallet.switchNetwork(config[1])
@@ -68,6 +68,13 @@ function Token({ wallet = {}, lang }) {
             window.open("https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5")
         }
     }
+
+    useEffect(()=>{
+        loading.loading()
+        if(deriInfo){
+            loading.loaded() 
+        }
+    },[deriInfo])
 
     useEffect(() => {
         if (hasConnectWallet()) {
@@ -171,4 +178,4 @@ function Token({ wallet = {}, lang }) {
 }
 
 
-export default inject('wallet')(observer(Token))
+export default inject('wallet','loading')(observer(Token))
