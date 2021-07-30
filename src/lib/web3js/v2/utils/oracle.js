@@ -1,4 +1,4 @@
-import { getOracleConfig } from '../config/oracle';
+import { getOracleConfig, mapToSymbolInternal } from '../config/oracle';
 import { oracleFactory } from '../factory/shared';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../../config';
@@ -24,6 +24,7 @@ export const getOracleUrl = (symbol) => {
 };
 
 export const getPriceInfo = async (symbol) => {
+  symbol = mapToSymbolInternal(symbol)
   let url = getOracleUrl(symbol);
   //console.log('oracle url', url);
   let retry = 2;
@@ -54,6 +55,7 @@ export const RestOracle = (symbol) => {
 
 export const getOraclePrice = async (chainId, symbol, version='v2') => {
   chainId = normalizeChainId(chainId);
+  symbol = mapToSymbolInternal(symbol)
   const config = getOracleConfig(chainId, symbol, version);
   // console.log('oracle config',config)
   if (config && config.address) {

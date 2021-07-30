@@ -69,7 +69,7 @@ function Trade({wallet = {},trading,version,lang}){
       const address = spec.pool
       priceCache.clear();
       priceCache.update(chainId,address);
-      PerpetualPoolParametersCache.update(chainId,address,account);
+      // PerpetualPoolParametersCache.update(chainId,address,account);
     }
   }
 

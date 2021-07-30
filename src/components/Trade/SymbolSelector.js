@@ -36,17 +36,15 @@ function SymbolSelector({trading,version,setSpec,spec,showMask}) {
         <SymbolDisplay spec={spec} version={version}/>
         <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
       </button>
-      <div className={selectClass}>
-        {/* <div className='dropdown-box'> */}
+        <div className={selectClass}>
           {trading.configs.map((config,index) => {
             return (
               <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
                 <SymbolDisplay spec={config} version={version}/>
               </div>
             )
-          })}
-        </div>            
-      {/* </div> */}
+          })}         
+      </div>
     </div>
   )
 }

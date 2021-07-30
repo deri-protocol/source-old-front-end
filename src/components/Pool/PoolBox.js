@@ -21,7 +21,7 @@ function PoolBox({wallet,group = {},lang}){
 
   return(
     <div className={poolClass} >
-      <div className={pool.network.toUpperCase()==='BSC'?pool.version==='v2_lite'?'lite-bsc pool-header':'pool-header':'pool-header'} >
+      <div className='pool-header' >
         <div className='left'>
           <div className="network">
             {pool.network && pool.network.toUpperCase()}
@@ -31,7 +31,6 @@ function PoolBox({wallet,group = {},lang}){
                 <span className='symbol-label'>{lang['symbol']}:</span>
                 <span className='symbol-value'>{pool.symbol}</span>  
             </span>
-            {pool.network.toUpperCase()==='BSC'?pool.version==='v2_lite'?<br className='mobile-br' />:'':''} 
             <span className='address'>
               <span className='address-label'>{lang['address']}:</span>
                 {!pool.airdrop ? <a target='_blank' rel='noreferrer' href={`${chainConfig[pool.chainId] && chainConfig[pool.chainId]['viewUrl']}/address/${pool.address}`}> 
