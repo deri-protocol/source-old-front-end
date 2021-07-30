@@ -53,7 +53,7 @@ function Signin({wallet={},lang}){
 
   const getIsThanFiveThousand = async () =>{
     let res = await getAirdropPTokenWhitelistCount(wallet.detail.chainId)
-    if(+res>=5000){
+    if(+res>=4999){
       setIsThanFiveThousand(true)
     }
   }
