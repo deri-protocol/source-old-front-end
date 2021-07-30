@@ -211,24 +211,31 @@ function Signin({wallet={},lang}){
       getIsTrade();
     }
   },[wallet.detail,isSignIn])
-  let element;
   useEffect(()=>{
-    if(hasConnectWallet()){
-      if(isSignIn.three){
-        if(!isApprove) {
-          element = <Button className='btn' btnText={lang['approve']} click={approve} lang={lang}/>
-        }else if(isClaim || isThanFiveThousand){
-          element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
+    let element;
+    let timestamp = new Date()
+    //1627725600000
+    if(timestamp.getTime() <= 1627626343461){
+      if(hasConnectWallet()){
+        if(isSignIn.three){
+          if(!isApprove) {
+            element = <Button className='btn' btnText={lang['approve']} click={approve} lang={lang}/>
+          }else if(isClaim || isThanFiveThousand){
+            element = <a className='btn' target="_blank" href='https://app.deri.finance/#/lite'>{lang['trade']}</a>
+          }else{
+            element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
+          }
         }else{
-          element = <Button className='btn' btnText={lang['claim']} click={claimPtoken}  lang={lang}/>
+          element = <Button className='btn btn-danger connect' click={signIn} btnText={lang['sign-in']}  lang={lang} />
         }
-      }else{
-        element = <Button className='btn btn-danger connect' click={signIn} btnText={lang['sign-in']}  lang={lang} />
+        
+      } else {
+        element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
       }
-      
-    } else {
-      element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
+    }else{
+      element = <button className='btn btn-danger connect disbutton' disabled  >{lang['activity-ends']} </button>
     }
+    
     setActionElement(element) 
   },[wallet.detail,isApprove,isSignIn,isHavePtoken,isClaim,isThanFiveThousand])
   

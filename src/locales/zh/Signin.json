@@ -15,6 +15,7 @@
   "already-stamped-today":"今日已签到",
   "claim":"领取",
   "pending":"进行中...",
+  "activity-ends":"活动结束",
   "approve-failed" : "授权失败",
   "claim-failed" : "领取失败",
   "sign-in-failed" : "签到失败",

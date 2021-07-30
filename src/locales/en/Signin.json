@@ -16,6 +16,7 @@
   "already-stamped-today":"Already stamped today",
   "claim":"CLAIM",
   "pending":"PENDING...",
+  "activity-ends":"ACTIVITY ENDS",
   "exceed-participants":"More than 5000 addresses completed all three 'STAMP'",
   "approve-failed" : "Approve failed",
   "claim-failed" : "Claim failed",
