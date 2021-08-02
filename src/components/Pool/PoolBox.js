@@ -50,12 +50,15 @@ function PoolBox({wallet,group = {},lang}){
 
 function Card({wallet,pool,card,index,list,lang}) {
   const [buttonElement, setButtonElement] = useState('');
+  const [connected, setConnected] = useState(false)
   const history = useHistory();
   const gotoMining = url => {
     history.push(url)
   }
   const connectWallet = () => {
-    wallet.connect()
+    wallet.connect().then(() => {
+      setConnected(true)
+    })
   }
   const claimAirdrop = async () =>{
     let info =  await getUserInfoAllForAirDrop(wallet.detail.account)
@@ -99,7 +102,7 @@ function Card({wallet,pool,card,index,list,lang}) {
         )
     }    
     return () => {};
-  }, [wallet.detail.chainId]);
+  }, [wallet.detail.account,connected]);
   return (
     <>
       <div className="info">
