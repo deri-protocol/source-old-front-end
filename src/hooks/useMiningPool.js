@@ -119,7 +119,7 @@ export default function useMiningPool(isNew){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '4100',
+        liquidity : '34240',
         symbol : '--',
         airdrop : true,
         chainId : 56,

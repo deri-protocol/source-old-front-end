@@ -40,6 +40,7 @@ export default {
 
   getBars: function (symbolInfo, resolution, from, to, first, onHistoryCallback) {
     let trade = getSymbol(symbolInfo);
+    trade = trade.toUpperCase()
     let ws_time
     ws_first = first
     ws_to = to
