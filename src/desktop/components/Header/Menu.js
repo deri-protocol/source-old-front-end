@@ -33,15 +33,19 @@ function Menu({lang,locale}) {
             : <Link className='trade-item' to ='/lite'>{lang.trade}</Link>         
             }      
           </li>
-          {/* <li>
+          <li>
             {isProduction
             ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#optionlite`} target={isApp ? '' : '_blank'}  className='option-item'>{lang.trade}</a>
-            : <Link className='option-item' to ='/option'>{lang.trade}</Link>         
+            : <Link className='option-item' to ='/option'>{lang.options}</Link>         
             }      
-          </li>        */}
+          </li>       
           <li>
-            <a target="_blank" rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
-          </li>
+                {isProduction 
+                ? 
+                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`} target='_blank' className='token-item'>{lang['deri-token']}</a>
+                :
+                <Link className='token-item' to ='/deritoken'>{lang['deri-token']}</Link>}            
+              </li>
           <li>
             <a target="_blank" rel='noreferrer' className='bridge-item'  href={`https://bridge.deri.finance/?locale=${locale}#bridge`}>{lang.bridge}</a>
           </li>
@@ -87,6 +91,9 @@ function Menu({lang,locale}) {
                 }                
               </li>
               <li>
+                <a target="_blank" rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
+              </li>
+              <li>
                 {isProduction
                 ?
                 <a className='signin-item' href={`https://${host}/#/signin`}>{lang['signin']}</a>
@@ -101,13 +108,7 @@ function Menu({lang,locale}) {
                 :
                 <Link className='retired-item' to ='/retired'>{lang['retired-pools']}</Link>}            
               </li>
-              <li>
-                {isProduction 
-                ? 
-                <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`} target='_blank' className='token-item'>{lang['deri-token']}</a>
-                :
-                <Link className='token-item' to ='/deritoken'>{lang['deri-token']}</Link>}            
-              </li>
+             
             </ul>
           </li>
         </ul>

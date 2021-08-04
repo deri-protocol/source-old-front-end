@@ -1,6 +1,7 @@
 {
   "mining" : "挖矿",
-  "trade" : "交易",
+  "trade" : "期货",
+  "options":"期权",
   "governance" : "治理",
   "bridge" : "跨链",
   "docs" : "文档",
