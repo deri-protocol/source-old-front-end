@@ -5,23 +5,32 @@ export const getOracleConfigList = (version) => {
   return config.oracle
 };
 
-export const isUsedRestOracle = (symbol) => {
-  return ['AXSUSDT', 'MANAUSDT', 'MBOXUSDT', 'IBSCDEFI'].includes(symbol);
+const offchainSymbolPairs = {
+  AXSUSDT: 'AXSUSDT',
+  MANAUSDT: 'MANAUSDT',
+  MBOXUSDT: 'MBOXUSDT',
+  IBSCDEFI: 'iBSCDEFI',
+  IGAME: 'iGAME',
 };
+
+export const isUsedRestOracle = (symbol) => {
+  return Object.keys(offchainSymbolPairs).includes(symbol);
+};
+
 export const mapToSymbol = (symbol) => {
-  switch(symbol) {
-    case 'IBSCDEFI':
-      return 'iBSCDEFI'
-    default:
-      return symbol
+  if (Object.keys(offchainSymbolPairs).includes(symbol)) {
+    return offchainSymbolPairs[symbol]
+  } else {
+    return symbol
   }
 }
+
 export const mapToSymbolInternal = (symbol) => {
-  switch(symbol) {
-    case 'iBSCDEFI':
-      return 'IBSCDEFI'
-    default:
-      return symbol
+  const index = Object.values(offchainSymbolPairs).indexOf(symbol)
+  if (index !== -1) {
+    return Object.keys(offchainSymbolPairs)[index]
+  } else {
+    return symbol
   }
 }
 

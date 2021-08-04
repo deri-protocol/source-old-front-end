@@ -236,7 +236,6 @@
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
           "initialBlock": "9514401",
-          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -252,6 +251,11 @@
               "symbolId": "2",
               "symbol": "IBSCDEFI",
               "unit": "iBSCDEFI"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "IGAME",
+              "unit": "iGAME"
             }
           ],
           "chainId": "56",
@@ -265,7 +269,6 @@
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
           "bTokenSymbol": "DERI",
           "initialBlock": "9514895",
-          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -281,6 +284,11 @@
               "symbolId": "2",
               "symbol": "IBSCDEFI",
               "unit": "iBSCDEFI"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "IGAME",
+              "unit": "iGAME"
             }
           ],
           "chainId": "56",
@@ -294,7 +302,6 @@
           "bToken": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
           "bTokenSymbol": "USDT",
           "initialBlock": "17129838",
-          "offchainSymbolIds": ["0"],
           "symbols": [
             {
               "symbolId": "0",
@@ -313,7 +320,6 @@
           "bToken": "0x3D1D2aFd191b165D140e3E8329E634665fFB0E5e",
           "bTokenSymbol": "DERI",
           "initialBlock": "17131129",
-          "offchainSymbolIds": ["0"],
           "symbols": [
             {
               "symbolId": "0",
@@ -349,6 +355,12 @@
           "symbol": "IBSCDEFI",
           "address": "0x8E31136F6f9247Ef93743bDEbC74dbD48a08E3be",
           "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "IGAME",
+          "address": "0x27CF22Dd313723781d3C28664363187e6EB654fE",
+          "decimal": "18"
         }
       ],
       "brokerManager": []
@@ -363,7 +375,6 @@
           "bToken": "0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF",
           "bTokenSymbol": "BUSD",
           "initialBlock": "10522328",
-          "offchainSymbolIds": ["2", "3"],
           "symbols": [
             {
               "symbolId": "0",
