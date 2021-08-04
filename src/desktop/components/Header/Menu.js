@@ -33,12 +33,6 @@ function Menu({lang,locale}) {
             : <Link className='trade-item' to ='/lite'>{lang.trade}</Link>         
             }      
           </li>
-          {/* <li>
-            {isProduction
-            ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#optionlite`} target={isApp ? '' : '_blank'}  className='option-item'>{lang.trade}</a>
-            : <Link className='option-item' to ='/option'>{lang.trade}</Link>         
-            }      
-          </li>        */}
           <li>
             <a target="_blank" rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
           </li>
