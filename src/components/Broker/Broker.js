@@ -53,6 +53,12 @@ function Broker({ wallet = {}, lang ,loading}) {
 
   useEffect(()=>{
     loading.loading();
+    // Promise.all([
+    //   brokerEpoch(),topList(),totalReward(),rewardList()
+    // ]).then(results => {
+    //   loading.loaded()
+    // })
+    
     if(firstDeri!='--' && secondDeri!='--' && thirdDeri!='--' && yourDeri!='--' && yourRank!='--' && list.length>0 &&claimInfo.claimed){
       loading.loaded()
     }
