@@ -32,7 +32,7 @@
   "symbol" : "Symbol",
   "multiplier" : "Multiplier",
   "funding-rate-coefficient" : "Funding Rate Coefficient",
-  "diseq-funding-coefficient" : "Diseq Funding Coefficient",
+  "delta-funding-coefficient" : "Delta Funding Coefficient",
   "min-initial-margin-ratio" : "Min Initial Margin Ratio",
   "initial-margin-ratio" : "Initial Margin Ratio",
   "min-maintenance-margin-ratio" : "Min Maintenance Margin Ratio",

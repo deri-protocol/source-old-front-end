@@ -32,7 +32,7 @@
   "symbol" : "标的",
   "multiplier" : "合约乘数",
   "funding-rate-coefficient" : "资金费率系数",
-  "diseq-funding-coefficient" : "Diseq Funding Coefficient",
+  "delta-funding-coefficient" : "Delta Funding Coefficient",
   "min-initial-margin-ratio" : "最小初始保证金率",
   "initial-margin-ratio" : "Initial Margin Ratio",
   "min-maintenance-margin-ratio" : "最小维持保证金率",
