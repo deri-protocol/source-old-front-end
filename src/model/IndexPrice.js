@@ -31,7 +31,7 @@ export default class IndexPrice {
         },
         cancelToken: this.source.token,
       })
-      if(res && res.data && this.cancel === false){        
+      if(res && res.data && this.cancel === false){      
         this.setIndex(deriToNatural(res.data.price).toFixed(2))
       }
     }     
