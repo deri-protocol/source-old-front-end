@@ -1,6 +1,7 @@
 import { DeriEnv } from '../../config';
 import jsonConfig from '../resources/config.json';
 import { validateObjectKeyExist, validateIsArray } from '../utils';
+import { isUsedRestOracle } from './oracle';
 
 const validateConfigV2 = (config) => {
   validateObjectKeyExist(
@@ -13,6 +14,8 @@ const validateConfigV2 = (config) => {
       'bTokens',
       'symbols',
       'chainId',
+      'symbolCount',
+      'bTokenCount',
     ],
     config,
     ''
@@ -49,6 +52,7 @@ const validateConfigV2Lite = (config) => {
       'symbols',
       'chainId',
       'offchainSymbolIds',
+      'symbolCount',
     ],
     config,
     ''
@@ -63,6 +67,7 @@ const validateConfigV2Lite = (config) => {
 const processConfigV2Lite = (config) => {
   // process config
   config['symbolCount'] = config['symbols'].length;
+  config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
 };
 
 const getJsonConfig = (version) => {
@@ -79,13 +84,13 @@ const getJsonConfig = (version) => {
       if (pools && Array.isArray(pools)) {
         if (version === 'v2') {
           for (let i = 0; i < pools.length; i++) {
-            validateConfigV2(pools[i]);
             processConfigV2(pools[i]);
+            validateConfigV2(pools[i]);
           }
         } else if (version === 'v2_lite') {
           for (let i = 0; i < pools.length; i++) {
-            validateConfigV2Lite(pools[i]);
             processConfigV2Lite(pools[i]);
+            validateConfigV2Lite(pools[i]);
           }
         }
       }

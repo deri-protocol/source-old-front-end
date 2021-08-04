@@ -11,6 +11,8 @@ import {
   getChainIds,
   getPoolVersion,
   mapToSymbol,
+  mapToSymbolInternal,
+  isUsedRestOracle,
 } from '../config';
 import { getBrokerConfig } from '../config/broker';
 import {
@@ -202,13 +204,32 @@ describe('config', () => {
         'v2_lite'
       ).lToken
     ).toEqual('0x5443bB7B9920b41Da027f8Aab41c90702ACD7d8a');
+    expect(
+      getPoolConfig(
+        POOL_ADDRESS_LITE,
+        null,
+        null,
+        'v2_lite'
+      ).offchainSymbolIds
+    ).toEqual(['2', '3']);
   });
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
     expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
   })
+  test('isUsedRestOracle', () => {
+    expect(isUsedRestOracle('AXSUSDT')).toEqual(true)
+    expect(isUsedRestOracle('MANAUSDT')).toEqual(true)
+    expect(isUsedRestOracle('IBSCDEFI')).toEqual(true)
+    expect(isUsedRestOracle('BTCUSD')).toEqual(false)
+    expect(isUsedRestOracle('iBSCDEFI')).toEqual(false)
+  })
   test('mapToSymbol', () => {
     expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDEFI')
+    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
+  })
+  test('mapToSymbolInternal', () => {
+    expect(mapToSymbolInternal('iBSCDEFI')).toEqual('IBSCDEFI')
     expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
   })
 });
