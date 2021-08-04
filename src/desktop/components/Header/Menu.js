@@ -36,7 +36,7 @@ function Menu({lang,locale}) {
           <li>
             {isProduction
             ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#optionlite`} target={isApp ? '' : '_blank'}  className='option-item'>{lang.trade}</a>
-            : <Link className='option-item' to ='/option'>{lang.options}</Link>         
+            : <Link className='option-item' to ='/optionlite'>{lang.options}</Link>         
             }      
           </li>       
           <li>

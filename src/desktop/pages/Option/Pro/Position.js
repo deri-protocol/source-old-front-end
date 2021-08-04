@@ -24,7 +24,7 @@ const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Position({wallet,trading,version,lang}){
+function Position({wallet,trading,version,lang,options}){
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);

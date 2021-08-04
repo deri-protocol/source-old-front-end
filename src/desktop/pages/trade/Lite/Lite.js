@@ -14,7 +14,7 @@ export default function Lite({lang}){
       <AreaPicker lang={lang}></AreaPicker>
       <div className='trade-body lite'>
           <Tab lite={true} lang={lang}/>
-          <LiteTrade lang={lang}/> 
+          <LiteTrade lang={lang} options={false}/> 
       </div>
     </div>
   )

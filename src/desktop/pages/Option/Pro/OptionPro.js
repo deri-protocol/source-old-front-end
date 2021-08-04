@@ -4,7 +4,7 @@ import Reference from './Reference'
 import { inject, observer } from 'mobx-react'
 import LiteTrade from '../../../../components/Trade/LiteTrade'
 import Tab from '../Tab/Tab'
-import '../Lite/lite.less'
+import '../Lite/optionlite.less'
 import '../Lite/zh-lite.less'
 import './pro.less'
 import './zh-pro.less'
@@ -27,16 +27,16 @@ function Pro({wallet,lang}){
 
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang}></AreaPicker>
+      {/* <AreaPicker lang={lang}></AreaPicker> */}
       <div className='trade-body'>
         <Tab lang={lang}/>
         <div className='trade-pro'>
           <div className='left'>
-            <LiteTrade isPro={true} lang={lang}/>
+            <LiteTrade isPro={true} lang={lang} options={true}/>
           </div>
           <div className='right'>
             <TradingView wallet={wallet} lang={lang}/>
-            <Reference lang={lang}/>
+            <Reference lang={lang} options={true} />
           </div>
       </div> 
     </div>

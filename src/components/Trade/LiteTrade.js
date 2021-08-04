@@ -6,7 +6,7 @@ import ContractInfo from '../ContractInfo/ContractInfo';
 import Trade from './Trade';
 import { inject, observer } from 'mobx-react';
 
-function LiteTrade({wallet,trading,isPro,lang}){
+function LiteTrade({wallet,trading,isPro,lang,options}){
   const [curTab, setCurTab] = useState('trade');
   const switchTab = current => setCurTab(current);
   const tradeClassName = classNames('trade-position',curTab)
@@ -34,10 +34,10 @@ function LiteTrade({wallet,trading,isPro,lang}){
             </>}
           </div>
         </div>
-        <Trade lang={lang}/>
-        <Position lang={lang}/>
-        <History wallet ={wallet} spec={trading.config} specs={trading.configs} lang={lang} />
-        <ContractInfo lang={lang}/>   
+        <Trade lang={lang} options={options}/>
+        <Position lang={lang} options={options}/>
+        <History wallet ={wallet} spec={trading.config} specs={trading.configs} lang={lang} options={options} />
+        <ContractInfo lang={lang} options={options}/>   
     </div> 
   )
 }

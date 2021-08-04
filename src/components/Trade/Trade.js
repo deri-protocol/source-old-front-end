@@ -19,7 +19,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Trade({wallet = {},trading,version,lang,loading}){
+function Trade({wallet = {},trading,version,lang,loading,options}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
@@ -256,13 +256,31 @@ function Trade({wallet = {},trading,version,lang,loading}){
     <div className='trade-peration'>
       <div className='check-baseToken'>
         <SymbolSelector setSpec={setSpec} spec={spec}/>
-        <div className='price-fundingRate pc'>
+        <div className={options?'price-fundingRate pc options':'price-fundingRate pc'}>
           <div className='index-prcie'>
             {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat  value={trading.index} decimalScale={2} /></span>
           </div>
           <div className='funding-rate'>
-            <span>{lang['funding-rate-annual']}: &nbsp;</span>
-            <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+            {options && <>
+              <div className='options-funding'>
+                <div>
+                 <span>{lang['funding-rate']} &nbsp;</span>
+                </div>
+                <div className='diseq'>
+                  <span> &nbsp;-{lang['diseq']}: &nbsp;</span>
+                  <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+                </div>
+                <div className='diseq'>
+                  <span> &nbsp;-{lang['premium']}: &nbsp;</span>
+                  <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+                </div>
+              </div>
+            </>}
+            {!options && <>
+              <span>{lang['funding-rate-annual']}: &nbsp;</span>
+              <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+            </>}
+            
           </div>
         </div>
         <div className='price-fundingRate mobile'>
@@ -276,8 +294,8 @@ function Trade({wallet = {},trading,version,lang,loading}){
         </div>
       </div>
       <div className={directionClazz}>
-        <div className='check-long' onClick={() => directionChange('long')}>{lang['long-buy']}</div>
-        <div className='check-short' onClick={() => directionChange('short')}>{lang['short-sell']}</div>
+        <div className='check-long' onClick={() => directionChange('long')}>{options?lang['call']:lang['long-buy']}</div>
+        <div className='check-short' onClick={() => directionChange('short')}>{options?lang['put']:lang['short-sell']}</div>
       </div>
       <div className='the-input'>
         <div className='left'>
@@ -319,7 +337,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
                 </span>
               </>}
               {/* v2 */}
-              {(version.isV2 || version.isV2Lite) && <>                
+              {(version.isV2 || version.isV2Lite || options) && <>                
                 <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
                 </span>
@@ -337,7 +355,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>}
-            {(version.isV2 || version.isV2Lite ) && <>
+            {(version.isV2 || version.isV2Lite || options ) && <>
               <div className='box-margin'>{lang['margin']}</div>
               <div className='box-margin'>
                 <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>

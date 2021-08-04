@@ -20,7 +20,7 @@ const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
-function Position({wallet,trading,version,lang}){
+function Position({wallet,trading,version,lang,options}){
   const [isLiquidation, setIsLiquidation] = useState(false);
   const [direction, setDirection] = useState('');
   const [balanceContract, setBalanceContract] = useState('');
@@ -155,7 +155,7 @@ function Position({wallet,trading,version,lang}){
         </div>
       </div>
       <div className={`info-right action ${version.current}`}>
-      {(version.isV1 || version.isV2Lite) ? <>
+      {(version.isV1 || version.isV2Lite || options) ? <>
         <div
           className='add-margin'
           id='openAddMargin'
@@ -186,7 +186,7 @@ function Position({wallet,trading,version,lang}){
       <div className='info-right'></div>
     </div>
     <div className='info'>
-      <div className='info-left'>
+      <div className='info-left'> 
         <div className='title-text'>{lang['unrealized-pnl']}</div>
         <div className='info-num'>
           <span className='pnl-list'>
@@ -204,10 +204,18 @@ function Position({wallet,trading,version,lang}){
       <div className='info-right'></div>
     </div>
     <div className='info'>
-      <div className='info-left'>
-        <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
-        <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
-      </div>
+      {!options&&<>
+        <div className='info-left'>
+          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+        </div>
+      </>}
+      {options&&<>
+        <div className='info-left'>
+          <div className='title-text '>{lang['time-value']}</div>
+          <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+        </div>
+      </>}
       <div className='info-right'></div>
     </div>
     <div className='info'>
