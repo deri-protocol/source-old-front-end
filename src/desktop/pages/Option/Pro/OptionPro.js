@@ -35,7 +35,7 @@ function Pro({wallet,lang}){
             <LiteTrade isPro={true} lang={lang} options={true}/>
           </div>
           <div className='right'>
-            <TradingView wallet={wallet} lang={lang}/>
+            <TradingView wallet={wallet} lang={lang} options={true}/>
             <Reference lang={lang} options={true} />
           </div>
       </div> 

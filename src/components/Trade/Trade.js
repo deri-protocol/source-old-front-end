@@ -267,7 +267,7 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
                  <span>{lang['funding-rate']} &nbsp;</span>
                 </div>
                 <div className='diseq'>
-                  <span> &nbsp;-{lang['diseq']}: &nbsp;</span>
+                  <span> &nbsp;-{lang['delta']}: &nbsp;</span>
                   <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
                 </div>
                 <div className='diseq'>
@@ -294,8 +294,8 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
         </div>
       </div>
       <div className={directionClazz}>
-        <div className='check-long' onClick={() => directionChange('long')}>{options?lang['call']:lang['long-buy']}</div>
-        <div className='check-short' onClick={() => directionChange('short')}>{options?lang['put']:lang['short-sell']}</div>
+        <div className='check-long' onClick={() => directionChange('long')}>{lang['long-buy']}</div>
+        <div className='check-short' onClick={() => directionChange('short')}>{lang['short-sell']}</div>
       </div>
       <div className='the-input'>
         <div className='left'>
@@ -425,6 +425,7 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
                 bTokenId={trading.config && trading.config.bTokenId}
                 version={version}
                 lang={lang}
+                options={options}
        />
     </div>
     {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
@@ -434,7 +435,7 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
 
 
 function Operator({hasConnectWallet,wallet,spec,volume,available,
-                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version,lang}){
+                  baseToken,leverage,indexPrice,position,transFee,afterTrade,direction,trading,symbolId,bTokenId,version,lang,options}){
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -523,6 +524,7 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
                     afterTrade={afterTrade}
                     direction={direction}
                     lang={lang}
+                    options={options}
                     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)

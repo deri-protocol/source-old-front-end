@@ -3,7 +3,7 @@ import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
-function TradingView({version,trading,lang}){
+function TradingView({version,trading,lang,options}){
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 

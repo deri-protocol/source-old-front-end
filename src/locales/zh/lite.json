@@ -14,7 +14,7 @@
   "index-price" : "指数价格",
   "funding-rate-annual" : "日资金费率",
   "funding-rate" : "Funding Rate",
-  "diseq" : "diseq",
+  "delta" : "delta",
   "premium" : "premium",
   "balance-in-contract" : "合约余额",
   "dynamic-balance" : "动态余额",

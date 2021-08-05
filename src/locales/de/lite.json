@@ -14,7 +14,7 @@
   "index-price" : "Indexpreis",
   "funding-rate-annual" : "Finanzierungsrate Täglich",
   "funding-rate" : "Funding Rate",
-  "diseq" : "diseq",
+  "delta" : "delta",
   "premium" : "premium",
   "balance-in-contract" : "Saldo im Kontrakt",
   "dynamic-balance" : "Dynamischer Saldo",

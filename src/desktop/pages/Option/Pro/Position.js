@@ -114,7 +114,12 @@ function Position({wallet,trading,version,lang,options}){
       </div>
       <div className='margin'>{lang['margin']}</div>
       <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-      <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
+      {!options&&<>
+        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
+      </>}
+      {options&&<>
+        <div><span >{lang['time-value']}</span></div>
+      </>}
       <div>{lang['liquidation-price']}</div>
     </div>
     <div className='p-box tbody'>
@@ -132,7 +137,7 @@ function Position({wallet,trading,version,lang,options}){
       <div className={direction}>{lang[direction.toLowerCase()] || direction }</div>
       <div className='dyn-eff-bal'>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
-        {(version.isV1 || version.isV2Lite) ? <span>
+        {(version.isV1 || version.isV2Lite ||options) ? <span>
         <span
           className='open-add'
           id='openAddMargin'
@@ -159,7 +164,12 @@ function Position({wallet,trading,version,lang,options}){
             </div>}
         </span> 
       </div>
-      <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+      {!options&&<>
+        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+      </>} 
+      {options&&<>
+        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+      </>}
       <div><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
     </div>
     <div className='p-box tbody'></div>

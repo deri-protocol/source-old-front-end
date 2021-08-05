@@ -48,7 +48,6 @@ export const connectWallet = async (
     //   await window.ethereum.request({ method: 'eth_chainId' })
     // );
     const account = Array.isArray(accounts) && accounts[0];
-
     // await web3.eth.requestAccounts().then(console.log)
     window.ethereum.on('accountsChanged', (accounts) => {
       let account;
