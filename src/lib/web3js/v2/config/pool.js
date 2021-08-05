@@ -1,6 +1,4 @@
-import { DeriEnv } from '../../config';
 import { getConfig } from './config';
-import { mapToSymbol } from './oracle';
 
 const expendPoolConfigV2 = (config) => {
   const pools = config.pools;
@@ -22,7 +20,7 @@ const expendPoolConfigV2 = (config) => {
             bToken: bToken.bToken,
             bTokenId: bToken.bTokenId,
             bTokenSymbol: bToken.bTokenSymbol,
-            symbol: mapToSymbol(symbol.symbol),
+            symbol: symbol.symbol,
             symbolId: symbol.symbolId,
             unit: symbol.unit,
             version: 'v2',
@@ -51,9 +49,10 @@ const expendPoolConfigV2Lite = (config) => {
           chainId: pool.chainId,
           bToken: pool.bToken,
           bTokenSymbol: pool.bTokenSymbol,
-          symbol: mapToSymbol(symbol.symbol),
+          symbol: symbol.symbol,
           symbolId: symbol.symbolId,
           offchainSymbolIds: pool.offchainSymbolIds,
+          offchainSymbols: pool.offchainSymbols,
           unit: symbol.unit,
           version: 'v2_lite',
         });
@@ -108,6 +107,7 @@ export const getPoolVersion = (poolAddress) => {
   }, [])
   //console.log('pools', pools)
   const index = pools.findIndex((v) => v.pool === poolAddress)
+  //console.log('pools index', index)
   if (index >= 0) {
     return pools[index].version
   }

@@ -1,7 +1,7 @@
 import { DeriEnv } from '../../config';
 import jsonConfig from '../resources/config.json';
 import { validateObjectKeyExist, validateIsArray } from '../utils';
-import { isUsedRestOracle } from './oracle';
+import { isUsedRestOracle, mapToBToken, mapToSymbol } from './oracle';
 
 const validateConfigV2 = (config) => {
   validateObjectKeyExist(
@@ -38,6 +38,8 @@ const processConfigV2 = (config) => {
   // process config
   config['bTokenCount'] = config['bTokens'].length;
   config['symbolCount'] = config['symbols'].length;
+  config['bTokens'].forEach((b) => b['bTokenSymbol'] = mapToBToken(b['bTokenSymbol']))
+  config['symbols'].forEach((s) => s['symbol'] = mapToSymbol(s['symbol']))
 };
 
 const validateConfigV2Lite = (config) => {
@@ -52,6 +54,7 @@ const validateConfigV2Lite = (config) => {
       'symbols',
       'chainId',
       'offchainSymbolIds',
+      'offchainSymbols',
       'symbolCount',
     ],
     config,
@@ -68,6 +71,8 @@ const processConfigV2Lite = (config) => {
   // process config
   config['symbolCount'] = config['symbols'].length;
   config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
+  config['offchainSymbols'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbol)
+  config['symbols'].forEach((s) => s['symbol'] = mapToSymbol(s['symbol']))
 };
 
 const getJsonConfig = (version) => {

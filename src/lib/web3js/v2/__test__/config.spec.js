@@ -13,8 +13,10 @@ import {
   mapToSymbol,
   mapToSymbolInternal,
   isUsedRestOracle,
+  getPoolBTokenList,
 } from '../config';
 import { getBrokerConfig } from '../config/broker';
+import { mapToBToken } from '../config/oracle';
 import {
   POOL_ADDRESS,
   ROUTER_ADDRESS,
@@ -212,6 +214,24 @@ describe('config', () => {
         'v2_lite'
       ).offchainSymbolIds
     ).toEqual(['2', '3']);
+    expect(
+      getPoolConfig(
+        POOL_ADDRESS_LITE,
+        null,
+        '3',
+        'v2_lite'
+      ).symbol
+    ).toEqual('iGAME');
+    DeriEnv.set('prod')
+    expect(
+      getPoolConfig(
+        '0x43b4dfb998b4D17705EEBfFCc0380c6b98699252',
+        '2',
+        null,
+        'v2'
+      ).bTokenSymbol
+    ).toEqual('amUSDC');
+    DeriEnv.set('dev')
   });
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
@@ -231,5 +251,16 @@ describe('config', () => {
   test('mapToSymbolInternal', () => {
     expect(mapToSymbolInternal('iBSCDEFI')).toEqual('IBSCDEFI')
     expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
+  })
+  test('mapToBToken', () => {
+    expect(mapToBToken('WBNB')).toEqual('WBNB')
+    expect(mapToBToken('AMUSDC')).toEqual('amUSDC')
+  })
+  test('bTokenList', () => {
+    DeriEnv.set('prod')
+    const res = getPoolBTokenList('0x43b4dfb998b4D17705EEBfFCc0380c6b98699252')
+    expect(res.length).toEqual(3)
+    expect(res[2].bTokenSymbol).toEqual('amUSDC')
+    DeriEnv.set('dev')
   })
 });

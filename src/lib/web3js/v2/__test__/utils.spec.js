@@ -12,7 +12,6 @@ import {
   hexToNumber,
   hexToNumberString,
   // getOracleUrl,
-  // getOracleInfo,
   getOraclePrice,
   normalizeChainId,
   normalizeAddress,
@@ -27,6 +26,7 @@ import {
   getLatestBlockNumber,
   getLastUpdatedBlockNumber,
 } from '../utils'
+import { getPriceInfos } from '../utils/oracle';
 import { TIMEOUT, ACCOUNT_ADDRESS, POOL_ADDRESS, POOL_ADDRESS_LITE} from './setup';
 
 describe('utils', () => {
@@ -92,12 +92,16 @@ describe('utils', () => {
     const [input, output] = ['0x001032', '4146'];
     expect(hexToNumberString(input)).toEqual(output);
   });
-
   test('getOraclePrice()', async() => {
     const [input, output] = [[97, 'BTCUSD'], {priceLength: 5}];
     const res = await getOraclePrice(...input)
-    //console.log(res)
     expect(res.split('.')[0].length).toEqual(output.priceLength);
+  }, TIMEOUT)
+  test('getPriceInfos()', async() => {
+    const input  = ['MBOXUSDT', 'AXSUSDT']
+    const output = ['AXSUSDT', 'MBOXUSDT'];
+    const res = await getPriceInfos(input);
+    expect(Object.keys(res)).toEqual(output);
   }, TIMEOUT)
   test('checkHttpServerIsAlive()', async() => {
     const [input, output] = ['http://www.baidu.com', true];

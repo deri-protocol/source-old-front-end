@@ -40,7 +40,37 @@ export const getPriceInfo = async (symbol) => {
     retry -= 1;
   }
   if (retry === 0) {
-    throw new Error(`fetch oracle info error: exceed max retry(2): ${JSON.stringify(priceInfo)}`, );
+    throw new Error(`fetch oracle info exceed max retry(2): ${symbol} ${JSON.stringify(priceInfo)}`);
+  }
+};
+
+export const getPriceInfos = async (symbolList) => {
+  //symbol = mapToSymbolInternal(symbol)
+  let url = getOracleUrl();
+  //console.log('oracle url', url);
+  let retry = 2;
+  let res, priceInfo;
+  while (retry > 0) {
+    res = await fetch(url, {
+      mode: 'cors',
+      cache: 'no-cache',
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(symbolList),
+    });
+    if (res.ok) {
+      priceInfo = await res.json();
+      if (priceInfo.status.toString() === '200') {
+        return priceInfo.data
+      }
+    }
+    retry -= 1;
+  }
+  if (retry === 0) {
+    throw new Error(`fetch oracle infos exceed max retry(2): ${symbolList} ${JSON.stringify(priceInfo)}`);
   }
 };
 

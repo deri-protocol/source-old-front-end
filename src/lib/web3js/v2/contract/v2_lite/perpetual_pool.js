@@ -1,6 +1,6 @@
 import { ContractBase } from '../contract_base'
-import { offchainOracleAbi, perpetualPoolLiteAbi } from '../abis';
-import { deriToNatural, naturalToDeri, getPriceInfo } from '../../utils'
+import { perpetualPoolLiteAbi } from '../abis';
+import { deriToNatural, naturalToDeri, getPriceInfo, getPriceInfos } from '../../utils'
 //import { MAX_INT256} from '../../config'
 import { getPoolConfig } from '../../config';
 
@@ -15,6 +15,7 @@ export class PerpetualPoolLite extends ContractBase {
       'v2_lite'
     );
     this.offchainSymbolIds = this.config.offchainSymbolIds;
+    this.offchainSymbols = this.config.offchainSymbols;
     this.bTokenAddress = '';
     this.lTokenAddress = '';
     this.pouterAddress = '';
@@ -86,20 +87,21 @@ export class PerpetualPoolLite extends ContractBase {
   async _getSymbolPrices() {
     let prices = []
     if (this.offchainSymbolIds.length > 0) {
-      const symbolNames = (
-        await Promise.all(
-          this.offchainSymbolIds.reduce(
-            (acc, i) => acc.concat([this.getSymbol(i)]),
-            []
-          )
-        )
-      ).map((s) => s.symbol);
-      const priceInfos = await Promise.all(
-        symbolNames.reduce((acc, s) => acc.concat([getPriceInfo(s)]), [])
-      );
-      prices = priceInfos.reduce((acc, p, index) => {
+      // const symbolNames = (
+      //   await Promise.all(
+      //     this.offchainSymbolIds.reduce(
+      //       (acc, i) => acc.concat([this.getSymbol(i)]),
+      //       []
+      //     )
+      //   )
+      // ).map((s) => s.symbol);
+      // const priceInfos = await Promise.all(
+      //   symbolNames.reduce((acc, s) => acc.concat([getPriceInfo(s)]), [])
+      // );
+      const priceInfos = await getPriceInfos(this.offchainSymbols)
+      prices = Object.values(priceInfos).reduce((acc, p, index) => {
         acc.push([
-          this.offchainSymbolIds[index],
+          this.offchainSymbolIds[this.offchainSymbols.indexOf(Object.keys(priceInfos)[index])],
           p.timestamp,
           p.price,
           parseInt(p.v).toString(),

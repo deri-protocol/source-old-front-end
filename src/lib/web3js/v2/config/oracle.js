@@ -5,6 +5,10 @@ export const getOracleConfigList = (version) => {
   return config.oracle
 };
 
+const bTokenPairs = {
+  AMUSDC: 'amUSDC',
+};
+
 const offchainSymbolPairs = {
   AXSUSDT: 'AXSUSDT',
   MANAUSDT: 'MANAUSDT',
@@ -12,6 +16,7 @@ const offchainSymbolPairs = {
   IBSCDEFI: 'iBSCDEFI',
   IGAME: 'iGAME',
 };
+
 
 export const isUsedRestOracle = (symbol) => {
   return Object.keys(offchainSymbolPairs).includes(symbol);
@@ -31,6 +36,23 @@ export const mapToSymbolInternal = (symbol) => {
     return Object.keys(offchainSymbolPairs)[index]
   } else {
     return symbol
+  }
+}
+
+export const mapToBToken = (bToken) => {
+  if (Object.keys(bTokenPairs).includes(bToken)) {
+    return bTokenPairs[bToken]
+  } else {
+    return bToken
+  }
+}
+
+export const mapToBTokenInternal = (bToken) => {
+  const index = Object.values(bTokenPairs).indexOf(bToken)
+  if (index !== -1) {
+    return Object.keys(bTokenPairs)[index]
+  } else {
+    return bToken
   }
 }
 
