@@ -10,6 +10,7 @@ import { DeriEnv } from './lib/web3js/indexV2';
 import version from './model/Version';
 import intl from './model/Intl';
 import loading from './model/Loading';
+import type from './model/Type';
 
 const wallet = new Wallet();
 const trading = new Trading()
@@ -21,7 +22,7 @@ DeriEnv.set('prod')
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
-      <Provider wallet={wallet}  trading={trading} version={version} intl={intl} loading={loading}>
+      <Provider type={type} wallet={wallet}  trading={trading} version={version} intl={intl} loading={loading}>
         <App />
       </Provider>
     </HashRouter>

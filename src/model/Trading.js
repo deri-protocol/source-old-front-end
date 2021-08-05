@@ -9,6 +9,7 @@ import { getFundingRate } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
 import version from './Version'
+import type from './Type'
 
 /**
  * 交易模型
@@ -42,6 +43,7 @@ import version from './Version'
 export default class Trading {
   version = null;
   wallet = null;
+  type = null;
   configs = [] 
   config = null;
   index = ''
@@ -96,7 +98,8 @@ export default class Trading {
    * 初始化
    * wallet and version changed will init
    */
-  async init(wallet,version,finishedCallback){    
+  async init(wallet,version,type,finishedCallback){  
+      
     const all = await this.configInfo.load(version);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){

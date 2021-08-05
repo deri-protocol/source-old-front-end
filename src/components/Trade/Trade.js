@@ -19,7 +19,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Trade({wallet = {},trading,version,lang,loading,options}){
+function Trade({wallet = {},trading,version,type,lang,loading,options}){
   const [direction, setDirection] = useState('long');
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
@@ -203,10 +203,11 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
 
   useEffect(() => {
     loading.loading()
-    trading.init(wallet,version,() => {
+    type.setCurrent(options) //设置是否为options
+    trading.init(wallet,version,type,() => {
       loading.loaded();
     } )
-  },[wallet.detail.account,version.current])
+  },[wallet.detail.account,version.current,type.current,options])
 
 
   useEffect(() => {
@@ -591,4 +592,4 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading','version','loading')(observer(Trade))
+export default inject('wallet','trading','version','loading','type')(observer(Trade))

@@ -15,16 +15,8 @@ class Type{
     this.current = options;
   }
 
-  switch(){
-    if(this.current === 'futures'){
-      this.setCurrent(false)
-    }else{
-      this.setCurrent(true)
-    }
-  }
-
   get isOptions(){
-    return this.current === 'options'
+    return this.current === true
   }
 }
 
