@@ -9,9 +9,9 @@ function Lite({lang}){
 
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang}/>
+      {/* <AreaPicker lang={lang}/> */}
       <div className='trade-body'>
-        <LiteTrade lang={lang} options={false}/>  
+        <LiteTrade lang={lang} options={true}/>  
       </div>
     </div>    
   )

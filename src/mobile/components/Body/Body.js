@@ -4,7 +4,8 @@ import LoadableComponent from '../../../utils/LoadableComponent'
 import withLanguage from '../../../components/hoc/withLanguage';
 import IndexRoute from '../../../components/IndexRoute/IndexRoute';
 
-const Lite = LoadableComponent(()=>import('../../pages/trade/Lite'))  
+const Lite = LoadableComponent(()=>import('../../pages/trade/Lite'))
+const OptionLite = LoadableComponent(()=>import('../../pages/Options/OptionLite'))  
 const Home = LoadableComponent(() => import('../../pages/Home/Home'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Pool = LoadableComponent(() => import('../../components/Mining/Pool'))
@@ -41,6 +42,7 @@ class Body extends React.Component {
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/optionlite' component={() => <OptionLite lang={dict['lite']}/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>

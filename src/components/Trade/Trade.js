@@ -283,13 +283,30 @@ function Trade({wallet = {},trading,version,lang,loading,options}){
             
           </div>
         </div>
-        <div className='price-fundingRate mobile'>
+        <div className={options?'price-fundingRate mobile options':'price-fundingRate mobile'}>
           <div className='index-prcie'>
             {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2}/></span>
           </div>
           <div className='funding-rate'>
+          {options && <>
+              <div className='options-funding'>
+                <div>
+                 <span>{lang['funding-rate']} &nbsp;</span>
+                </div>
+                <div className='diseq'>
+                  <span> &nbsp;-{lang['delta']}: &nbsp;</span>
+                  <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+                </div>
+                <div className='diseq'>
+                  <span> &nbsp;-{lang['premium']}: &nbsp;</span>
+                  <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
+                </div>
+              </div>
+            </>}
+          {!options && <>
             <span>{lang['funding']}: &nbsp;</span>
             <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%'/></span> 
+          </>}
           </div>
         </div>
       </div>
