@@ -50,4 +50,4 @@ function TradingView({version,trading,lang,options}){
   )
 }
 
-export default  inject('trading','version')(observer(TradingView))
+export default  inject('trading','version','type')(observer(TradingView))

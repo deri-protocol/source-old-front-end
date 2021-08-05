@@ -260,4 +260,4 @@ function Position({wallet,trading,version,lang,options}){
   </div>
   )
 }
-export default inject('wallet','trading','version')(observer(Position))
+export default inject('wallet','trading','version','type')(observer(Position))

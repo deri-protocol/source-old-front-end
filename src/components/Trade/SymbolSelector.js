@@ -54,4 +54,4 @@ function SymbolDisplay({version,spec}){
     (version.isV1 || version.isV2Lite) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
   )
 }
-export default inject('trading','version','loading')(observer(SymbolSelector))
+export default inject('trading','version','loading','type')(observer(SymbolSelector))
