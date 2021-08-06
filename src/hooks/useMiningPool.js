@@ -76,7 +76,7 @@ export default function useMiningPool(isNew){
     const preminingPools = getPreminingContractConfig(env);
     const all = []
     let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).reduce((total,config) => {
-      const pos = total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
+      const pos = total.findIndex(item => item.chainId===config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if((config.version === 'v2' || config.version === 'v2_lite')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
