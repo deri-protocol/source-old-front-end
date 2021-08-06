@@ -16,6 +16,7 @@ const offchainSymbolPairs = {
   MBOXUSDT: 'MBOXUSDT',
   IBSCDEFI: 'iBSCDEFI',
   IGAME: 'iGAME',
+  ALICEUSDT: 'ALICEUSDT',
 };
 
 export const isUsedRestOracle = (symbol) => {
