@@ -1,5 +1,5 @@
 import { perpetualPoolFactory } from '../factory/contracts';
-import { getBTCUSDPrice } from '../utils';
+import { getBTCUSDPrice2 } from '../utils';
 import { io } from 'socket.io-client';
 
 /** @module apiCache */
@@ -61,9 +61,9 @@ export const priceCache = (function () {
       }
       return _price;
     },
-    async _update(chainId, poolAddress) {
+    async _update(poolAddress, symbol) {
       try {
-        const res = await getBTCUSDPrice(chainId, poolAddress);
+        const res = await getBTCUSDPrice2(poolAddress, symbol);
         if (res !== '') {
           _price = res;
         }
@@ -71,11 +71,11 @@ export const priceCache = (function () {
         console.log(`priceCache.update: ${err}`)
       }
     },
-    update(chainId, poolAddress) {
+    update(poolAddress, symbol) {
       const self = this;
       _interval = setInterval(() => {
         // console.log('tick')
-        self._update(chainId, poolAddress);
+        self._update(poolAddress, symbol);
       }, 3000);
     },
     clear() {

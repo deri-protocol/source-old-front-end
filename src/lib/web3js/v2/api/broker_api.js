@@ -1,4 +1,4 @@
-import { brokerManagerFactory } from "../factory"
+import { brokerManagerFactory } from "../factory/shared"
 import { normalizeAddress, normalizeChainId } from "../utils"
 import { getBrokerConfig } from "../config"
 

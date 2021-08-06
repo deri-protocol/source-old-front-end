@@ -1,3 +1,4 @@
+import { perpetualPoolLiteViewerFactory } from '../factory/shared';
 import { getConfig } from './config';
 
 export const getOracleConfigList = (version) => {
@@ -16,7 +17,6 @@ const offchainSymbolPairs = {
   IBSCDEFI: 'iBSCDEFI',
   IGAME: 'iGAME',
 };
-
 
 export const isUsedRestOracle = (symbol) => {
   return Object.keys(offchainSymbolPairs).includes(symbol);
@@ -58,7 +58,8 @@ export const mapToBTokenInternal = (bToken) => {
 
 export const getOracleConfig = (chainId, symbol, version='v2') => {
   symbol = mapToSymbolInternal(symbol)
-  const filteredByChainId = getOracleConfigList(version).filter((c) =>
+  const oracles = getOracleConfigList(version)
+  const filteredByChainId = oracles.filter((c) =>
     symbol
       ? c.chainId === chainId && c.symbol === symbol
       : c.chainId === chainId
@@ -70,5 +71,5 @@ export const getOracleConfig = (chainId, symbol, version='v2') => {
       return filteredByChainId;
     }
   }
-  throw new Error(`getOracleConfig(): invalid chainId(${chainId}) or symbol(${symbol}).`);
+  //console.log(`getOracleConfig(): invalid chainId(${chainId}) or symbol(${symbol}).`);
 };

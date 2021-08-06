@@ -1,7 +1,7 @@
 import { getOracleConfig, mapToSymbolInternal } from '../config/oracle';
 import { oracleFactory } from '../factory/shared';
 import { normalizeChainId } from './validate';
-import { DeriEnv } from '../../config';
+import { DeriEnv } from '../../config/env';
 import { deriToNatural } from './convert';
 
 export const getOracleUrl = (symbol) => {
@@ -89,9 +89,6 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
   const config = getOracleConfig(chainId, symbol, version);
   // console.log('oracle config',config)
   if (config && config.address) {
-    if (!config.decimal) {
-      throw new Error('getOraclePrice: decimal is empty', config.decimal);
-    }
     const oracle = oracleFactory(
       chainId,
       config.address,
@@ -99,5 +96,9 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
       config.decimal,
     );
     return await oracle.getPrice();
+  } else {
+    // for new added symbol and not updated to config yet
+    const priceInfo = await getPriceInfo(symbol);
+    return deriToNatural(priceInfo.price).toString();
   }
 };

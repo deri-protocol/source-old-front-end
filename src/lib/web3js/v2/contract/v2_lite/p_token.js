@@ -1,6 +1,6 @@
 import { ContractBase } from '../contract_base'
 import { pTokenLiteAbi } from '../abis';
-import { deriToNatural } from '../../utils'
+import { deriToNatural } from '../../utils/convert'
 
 const processPosition = (res) => {
   return {

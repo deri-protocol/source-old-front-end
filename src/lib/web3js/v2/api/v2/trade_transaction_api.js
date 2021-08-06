@@ -2,10 +2,12 @@ import { isOrderValid } from '../../calculation';
 import { getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList, getPoolBTokenIdList } from '../../config'
 import {
   bTokenFactory,
+} from '../../factory/shared';
+import {
   perpetualPoolRouterFactory,
   pTokenFactory,
   perpetualPoolFactory,
-} from '../../factory';
+} from '../../factory/v2';
 import { RestOracle, bg } from '../../utils';
 
 export const unlock = async (chainId, poolAddress, accountAddress, bTokenId) => {

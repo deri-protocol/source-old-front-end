@@ -7,7 +7,8 @@ import {
   PTokenAirdrop,
   BToken,
 } from '../contract';
-import { RestOracle } from '../utils'
+import { PerpetualPoolLiteViewer } from '../contract/perpetual_pool_lite_viewer';
+import { RestOracle } from '../utils/oracle'
 
 export const factory = (klass) => {
   let instances = {}
@@ -55,3 +56,5 @@ export const bTokenFactory = factory(BToken);
 export const brokerManagerFactory = factory(BrokerManager);
 
 export const pTokenAirdropFactory = factory(PTokenAirdrop)
+
+export const perpetualPoolLiteViewerFactory = factory(PerpetualPoolLiteViewer)

@@ -368,6 +368,16 @@
           "decimal": "18"
         }
       ],
+      "poolViewer": [
+        {
+          "chainId": "56",
+          "address": "0xC157B7bf1aA08Eb36338EFd7bD0a33abF04f1Dd2"
+        },
+        {
+          "chainId": "137",
+          "address": "0x7587353B1B8071dB7e81F9AC6A9D2419A04c2D86"
+        }
+      ],
       "brokerManager": []
     },
     "dev": {
@@ -430,6 +440,24 @@
           "symbol": "MANAUSDT",
           "address": "0x386BcDB9De6ce9df9232B7239073b0A931B7f39c",
           "decimal": "18"
+        },
+        {
+          "chainId": "97",
+          "symbol": "MBOXUSDT",
+          "address": "0xB6cce9FAf4bB63bD4060aaDB311Cfb216aF91C36",
+          "decimal": "18"
+        },
+        {
+          "chainId": "97",
+          "symbol": "IBSCDEFI",
+          "address": "0x38e84505697A25ad0c279E6D0b85EBc9712118BA",
+          "decimal": "18"
+        }
+      ],
+      "poolViewer": [
+        {
+          "chainId": "97",
+          "address": "0xaBeB6F87ab3810655a5702C00d4D646dC85d7a0C"
         }
       ],
       "brokerManager": [

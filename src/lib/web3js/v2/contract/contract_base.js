@@ -1,5 +1,5 @@
 import { web3Factory } from '../factory/web3';
-import { numberToHex } from '../utils';
+import { numberToHex } from '../utils/convert';
 
 const MAX_GAS_AMOUNT = 832731;
 

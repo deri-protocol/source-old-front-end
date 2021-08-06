@@ -561,3 +561,52 @@ export const normalizeAddress = (address) => {
     throw new Error(`invalid address: ${address}`)
   }
 };
+
+export const getOracleUrl2 = (symbol) => {
+  const env = DeriEnv.get()
+  const addSymbolParam = (url, symbol='BTCUSD') => `${url}?symbol=${symbol}`;
+  if (env === 'prod' || env === 'production') {
+    // for production
+    if (symbol) {
+      return addSymbolParam('https://oracle4.deri.finance/price', symbol);
+    }
+    return 'https://oracle4.deri.finance/price';
+  } else {
+    if (symbol) {
+      return addSymbolParam('https://oracle2.deri.finance/price', symbol);
+    }
+    // for test
+    return 'https://oracle2.deri.finance/price';
+  }
+};
+
+export const getOracleInfo2 = async (poolAddress, symbol) => {
+  let url = getOracleUrl2(symbol);
+  //console.log('oracle url', url);
+  let retry = 2;
+  //let timeout = 1000;
+  let res;
+  while (retry > 0) {
+    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+    //if (res && !res.timeout) {
+    if (res.ok) {
+      break;
+    }
+    //console.log('get oracle info timeout')
+    retry -= 1;
+    //timeout += 800;
+  }
+  if (retry === 0 && !res) {
+    throw new Error(`fetch oracle info error: exceed max retry(2).`);
+  }
+  return await res.json();
+};
+
+export const getBTCUSDPrice2 = async (poolAddress, symbol) => {
+  const responseJson = await getOracleInfo2(poolAddress, symbol);
+  let price = responseJson.price;
+  if (!price) {
+    price = '0';
+  }
+  return deriToNatural(responseJson.price).toString();
+};

@@ -1,4 +1,5 @@
-import { pTokenAirdropFactory, pTokenFactory } from "../factory"
+import { pTokenAirdropFactory, } from "../factory/shared"
+import { pTokenFactory } from "../factory/v2"
 import { getPoolConfig2 } from '../config'
 import { DeriEnv } from "../../config"
 

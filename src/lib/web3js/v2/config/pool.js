@@ -194,3 +194,13 @@ export const getPoolSymbolIdList = (poolAddress) => {
   const pool = _getPoolConfig(poolAddress);
   return pool.symbols.map((b) => b.symbolId);
 };
+
+export const getPoolViewerConfig = (chainId, version="v2_lite") => {
+  const config = getConfig(version)
+  const viewers = config.poolViewer.filter((v) => v.chainId === chainId.toString())
+  if (viewers.length > 0) {
+    return viewers[0].address
+  } else {
+    throw new Error(`getPoolViewerConfig(): invalid chainId(${chainId}) or version(${version}).`);
+  }
+};

@@ -1,5 +1,5 @@
 import { deriToNatural, getBlockInfo, getPastEvents } from '../../utils';
-import { perpetualPoolLiteFactory } from '../../factory';
+import { perpetualPoolLiteFactory } from '../../factory/v2_lite';
 import { getPoolConfig, getPoolConfig2, getPoolSymbolIdList} from '../../config'
 
 import { getRestServerConfig, DeriEnv } from '../../../config';

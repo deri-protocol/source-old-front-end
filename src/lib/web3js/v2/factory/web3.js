@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { normalizeChainId } from '../utils';
+import { normalizeChainId } from '../utils/validate';
 import { getChainProviderUrl } from '../utils/chain';
 import { isBrowser, isJsDom } from '../utils/convert';
 

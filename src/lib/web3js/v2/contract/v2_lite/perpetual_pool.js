@@ -3,6 +3,9 @@ import { perpetualPoolLiteAbi } from '../abis';
 import { deriToNatural, naturalToDeri, getPriceInfo, getPriceInfos } from '../../utils'
 //import { MAX_INT256} from '../../config'
 import { getPoolConfig } from '../../config';
+import { PTokenLite } from './p_token';
+import { PerpetualPoolLiteViewer } from '../perpetual_pool_lite_viewer';
+import { getPoolViewerConfig } from '../../config/pool';
 
 export class PerpetualPoolLite extends ContractBase {
   constructor(chainId, contractAddress) {
@@ -24,7 +27,32 @@ export class PerpetualPoolLite extends ContractBase {
   }
 
   async _update() {
-    await Promise.all([this.getAddresses(), this.getParameters()]);
+    await Promise.all([this.getAddresses()]);
+  }
+
+  async _updateOffchainSymbols() {
+    if (!this.pTokenAddress) {
+      await this.getAddresses()
+      const pToken = new PTokenLite(this.chainId, this.pTokenAddress)
+      const viewerAddress = getPoolViewerConfig(this.chainId)
+      const [activeSymbolIds, activeSymbols] = await Promise.all([
+        pToken.getActiveSymbolIds(),
+        new PerpetualPoolLiteViewer(
+          this.chainId,
+          viewerAddress
+        ).getOffChainOracleSymbols(this.contractAddress),
+      ]);
+      //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
+      this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
+        return activeSymbols[index] == '' ? acc :  acc.concat([i])
+      }, [])
+      this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
+      // console.log(
+      //   'offchainSymbolIds',
+      //   this.offchainSymbolIds,
+      //   this.offchainSymbols
+      // );
+    }
   }
 
   async getAddresses() {
@@ -85,6 +113,7 @@ export class PerpetualPoolLite extends ContractBase {
   //   return await this._call('getSymbolOracle', [symbolId])
   // }
   async _getSymbolPrices() {
+    await this._updateOffchainSymbols()
     let prices = []
     if (this.offchainSymbolIds.length > 0) {
       // const symbolNames = (

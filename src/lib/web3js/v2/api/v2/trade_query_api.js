@@ -1,4 +1,5 @@
-import { perpetualPoolFactory, bTokenFactory, pTokenFactory } from '../../factory';
+import { bTokenFactory } from '../../factory/shared';
+import { perpetualPoolFactory, pTokenFactory } from '../../factory/v2';
 import { getPoolBTokenIdList, getPoolBTokenList, getPoolConfig2, getPoolSymbolIdList, getPoolSymbolList} from '../../config'
 import {
   calculateEntryPrice,

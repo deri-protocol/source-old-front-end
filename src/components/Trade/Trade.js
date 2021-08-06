@@ -67,8 +67,9 @@ function Trade({wallet = {},trading,version,lang,loading}){
     if(hasConnectWallet() && hasSpec()){
       const {chainId,account} = wallet.detail;
       const address = spec.pool
+      const symbol = spec.symbol
       priceCache.clear();
-      priceCache.update(chainId,address);
+      priceCache.update(address, symbol);
       // PerpetualPoolParametersCache.update(chainId,address,account);
     }
   }
