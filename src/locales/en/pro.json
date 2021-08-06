@@ -7,5 +7,7 @@
   "current-position" : "CURRENT POSITION",
   "trade-history" : "TRADE HISTORY",
   "pool-total-liquidity" : "Pool Total liquidity",
+  "funding-rate-delta":"Funding Rate Delta",
+  "funding-rate-premium":"Funding Rate Premium",
   "position-info" : "POSITION INFO"
 }

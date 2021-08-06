@@ -1,18 +1,18 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
-function TradingView({version,trading,lang,options}){
+function TradingView({ version, trading, lang, options }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 
-  useEffect(() => {    
-    if(indexPriceRef.current){
+  useEffect(() => {
+    if (indexPriceRef.current) {
       indexPriceRef.current > trading.index ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
     }
     indexPriceRef.current = trading.index
-    return () => {      
+    return () => {
     };
   }, [trading.index]);
 
@@ -26,28 +26,48 @@ function TradingView({version,trading,lang,options}){
           <div className='trade-dashboard-title'>{lang['index-price']}</div>
           <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
         </div>
-        <div className='trade-dashboard-item latest-price'>
-          <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
-          <div className='trade-dashboard-value'> 
-          <span className='funding-per' title={trading.fundingRateTip}> 
-            <DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
-          </span>
+        {!options && <>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
+            <div className='trade-dashboard-value'>
+              <span className='funding-per' title={trading.fundingRateTip}>
+                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+              </span>
+            </div>
           </div>
-        </div>
+        </>}
+        {options && <>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'><span >{lang['funding-rate-delta']}</span>  </div>
+            <div className='trade-dashboard-value'>
+              <span >
+                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+              </span>
+            </div>
+          </div>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'><span >{lang['funding-rate-premium']}</span>  </div>
+            <div className='trade-dashboard-value'>
+              <span >
+                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+              </span>
+            </div>
+          </div>
+        </>}
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
-          <div className='trade-dashboard-value'><DeriNumberFormat value={trading.fundingRate.tradersNetVolume}/></div>
-        </div>            
+          <div className='trade-dashboard-value'><DeriNumberFormat value={trading.fundingRate.tradersNetVolume} /></div>
+        </div>
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['pool-total-liquidity']}</div>
-          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity}  decimalScale={2}/> {trading.config && trading.config.bTokenSymbol}</div>
+          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity} decimalScale={2} /> {trading.config && trading.config.bTokenSymbol}</div>
         </div>
       </div>
       <div className='tradingview'>
         <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} version={version} />
       </div>
-  </div>
+    </div>
   )
 }
 
-export default  inject('trading','version','type')(observer(TradingView))
+export default inject('trading', 'version', 'type')(observer(TradingView))
