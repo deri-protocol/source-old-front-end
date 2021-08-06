@@ -69,10 +69,14 @@ const validateConfigV2Lite = (config) => {
 
 const processConfigV2Lite = (config) => {
   // process config
-  config['symbolCount'] = config['symbols'].length;
-  config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
-  config['offchainSymbols'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbol)
-  config['symbols'].forEach((s) => s['symbol'] = mapToSymbol(s['symbol']))
+  if (!config['symbolCount']) {
+    config['symbolCount'] = config['symbols'].length;
+  }
+  if (!config['offchainSymbolIds'] && !config['offchainSymbols']) {
+    config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
+    config['offchainSymbols'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbol)
+    config['symbols'].forEach((s) => s['symbol'] = mapToSymbol(s['symbol']))
+  }
 };
 
 const getJsonConfig = (version) => {
