@@ -10,10 +10,12 @@ import './pro.less'
 import './zh-pro.less'
 import './de-pro.less'
 import AreaPicker from '../../../../components/AreaPicker/AreaPicker'
+import { useRouteMatch } from 'react-router-dom';
 
 
 
 function Pro({wallet,lang}){
+  const isOptions = useRouteMatch('/pro/options') ? true : false
 
 
   useEffect(() => {
@@ -27,16 +29,16 @@ function Pro({wallet,lang}){
 
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang}></AreaPicker>
+      <AreaPicker lang={lang} options={isOptions}></AreaPicker>
       <div className='trade-body'>
-        <Tab lang={lang}/>
+        <Tab lang={lang} options={isOptions}/>
         <div className='trade-pro'>
           <div className='left'>
-            <LiteTrade isPro={true} lang={lang}/>
+            <LiteTrade isPro={true} lang={lang} options={isOptions}/>
           </div>
           <div className='right'>
-            <TradingView wallet={wallet} lang={lang}/>
-            <Reference lang={lang}/>
+            <TradingView wallet={wallet} lang={lang} options={isOptions}/>
+            <Reference lang={lang} options={isOptions}/>
           </div>
       </div> 
     </div>
