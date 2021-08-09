@@ -9,12 +9,12 @@ import { useRouteMatch } from 'react-router-dom';
 
 
 export default function Lite({lang}){
-  const isOptions = useRouteMatch('/lite/options') ? true : false
+  const isOptions = useRouteMatch('/options/lite') ? true : false
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang}></AreaPicker>
+      <AreaPicker lang={lang} options={isOptions}></AreaPicker>
       <div className='trade-body lite'>
-          <Tab lite={true} lang={lang}/>
+          <Tab lite={true} lang={lang} options={isOptions}/>
           <LiteTrade lang={lang} options={isOptions}/> 
       </div>
     </div>

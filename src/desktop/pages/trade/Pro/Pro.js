@@ -15,7 +15,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 
 function Pro({wallet,lang}){
-  const isOptions = useRouteMatch('/pro/options') ? true : false
+  const isOptions = useRouteMatch('/options/pro') ? true : false
 
 
   useEffect(() => {

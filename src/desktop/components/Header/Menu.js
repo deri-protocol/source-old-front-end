@@ -5,8 +5,8 @@ import { useRouteMatch } from 'react-router-dom'
 import Version from '../../../components/Version/Version'
 
 function Menu({lang,locale}) {
-  const isLite = useRouteMatch('/lite')
-  const isPro = useRouteMatch('/pro')
+  const isLite = useRouteMatch('/futures/lite')
+  const isPro = useRouteMatch('/futures/lite')
   const isMining = useRouteMatch('/mining')
   const isApp = isLite || isPro || isMining  
   const isProduction = process.env.NODE_ENV === 'production'
@@ -29,14 +29,14 @@ function Menu({lang,locale}) {
           </li>
           <li>
             {isProduction
-            ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#lite`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
-            : <Link className='trade-item' to ='/lite'>{lang.trade}</Link>         
+            ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/lite`} target={isApp ? '' : '_blank'}  className='trade-item'>{lang.trade}</a>
+            : <Link className='trade-item' to ='/futures/lite'>{lang.trade}</Link>         
             }      
           </li>
           <li>
             {isProduction
-            ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#optionlite`} target={isApp ? '' : '_blank'}  className='option-item'>{lang.trade}</a>
-            : <Link className='option-item' to ='/optionlite'>{lang.options}</Link>         
+            ? <a  rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/lite`} target={isApp ? '' : '_blank'}  className='option-item'>{lang.trade}</a>
+            : <Link className='option-item' to ='/options/lite'>{lang.options}</Link>         
             }      
           </li>       
           <li>

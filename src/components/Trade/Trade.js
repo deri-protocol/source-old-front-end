@@ -203,11 +203,10 @@ function Trade({wallet = {},trading,version,type,lang,loading,options}){
 
   useEffect(() => {
     loading.loading()
-    type.setCurrent(options) //设置是否为options
-    trading.init(wallet,version,type,() => {
+    trading.init(wallet,version,options,() => {
       loading.loaded();
     } )
-  },[wallet.detail.account,version.current,type.current,options])
+  },[wallet.detail.account,version.current,options])
 
 
   useEffect(() => {
@@ -592,4 +591,4 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading','version','loading','type')(observer(Trade))
+export default inject('wallet','trading','version','loading')(observer(Trade))
