@@ -61,6 +61,11 @@
               "bTokenId": "1",
               "bTokenSymbol": "WMATIC",
               "bToken": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"
+            },
+            {
+              "bTokenId": "2",
+              "bTokenSymbol": "AMUSDC",
+              "bToken": "0x1a13F4Ca1d028320A707D99520AbFefca3998b7F"
             }
           ],
           "symbols": [
@@ -236,7 +241,6 @@
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
           "initialBlock": "9514401",
-          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -252,6 +256,16 @@
               "symbolId": "2",
               "symbol": "IBSCDEFI",
               "unit": "iBSCDEFI"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "IGAME",
+              "unit": "iGAME"
+            },
+            {
+              "symbolId": "4",
+              "symbol": "ALICEUSDT",
+              "unit": "ALICE"
             }
           ],
           "chainId": "56",
@@ -265,7 +279,6 @@
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
           "bTokenSymbol": "DERI",
           "initialBlock": "9514895",
-          "offchainSymbolIds": ["0", "1", "2"],
           "symbols": [
             {
               "symbolId": "0",
@@ -281,6 +294,16 @@
               "symbolId": "2",
               "symbol": "IBSCDEFI",
               "unit": "iBSCDEFI"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "IGAME",
+              "unit": "iGAME"
+            },
+            {
+              "symbolId": "4",
+              "symbol": "ALICEUSDT",
+              "unit": "ALICE"
             }
           ],
           "chainId": "56",
@@ -294,12 +317,16 @@
           "bToken": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
           "bTokenSymbol": "USDT",
           "initialBlock": "17129838",
-          "offchainSymbolIds": ["0"],
           "symbols": [
             {
               "symbolId": "0",
               "symbol": "AXSUSDT",
               "unit": "AXS"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "ALICEUSDT",
+              "unit": "ALICE"
             }
           ],
           "chainId": "137",
@@ -313,12 +340,16 @@
           "bToken": "0x3D1D2aFd191b165D140e3E8329E634665fFB0E5e",
           "bTokenSymbol": "DERI",
           "initialBlock": "17131129",
-          "offchainSymbolIds": ["0"],
           "symbols": [
             {
               "symbolId": "0",
               "symbol": "AXSUSDT",
               "unit": "AXS"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "ALICEUSDT",
+              "unit": "ALICE"
             }
           ],
           "chainId": "137",
@@ -330,6 +361,12 @@
           "chainId": "137",
           "symbol": "AXSUSDT",
           "address": "0x6E0faAD5DE9e7FdBedA9A9e3fBCD01E1e7a1F4Db",
+          "decimal": "18"
+        },
+        {
+          "chainId": "137",
+          "symbol": "ALICEUSDT",
+          "address": "0x0000000000000000000000000000000000000000",
           "decimal": "18"
         },
         {
@@ -349,6 +386,28 @@
           "symbol": "IBSCDEFI",
           "address": "0x8E31136F6f9247Ef93743bDEbC74dbD48a08E3be",
           "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "IGAME",
+          "address": "0x27CF22Dd313723781d3C28664363187e6EB654fE",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "ALICEUSDT",
+          "address": "0x0000000000000000000000000000000000000000",
+          "decimal": "18"
+        }
+      ],
+      "poolLiteViewer": [
+        {
+          "chainId": "56",
+          "address": "0xC157B7bf1aA08Eb36338EFd7bD0a33abF04f1Dd2"
+        },
+        {
+          "chainId": "137",
+          "address": "0x7587353B1B8071dB7e81F9AC6A9D2419A04c2D86"
         }
       ],
       "brokerManager": []
@@ -363,7 +422,6 @@
           "bToken": "0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF",
           "bTokenSymbol": "BUSD",
           "initialBlock": "10522328",
-          "offchainSymbolIds": ["2", "3"],
           "symbols": [
             {
               "symbolId": "0",
@@ -414,6 +472,24 @@
           "symbol": "MANAUSDT",
           "address": "0x386BcDB9De6ce9df9232B7239073b0A931B7f39c",
           "decimal": "18"
+        },
+        {
+          "chainId": "97",
+          "symbol": "MBOXUSDT",
+          "address": "0xB6cce9FAf4bB63bD4060aaDB311Cfb216aF91C36",
+          "decimal": "18"
+        },
+        {
+          "chainId": "97",
+          "symbol": "IBSCDEFI",
+          "address": "0x38e84505697A25ad0c279E6D0b85EBc9712118BA",
+          "decimal": "18"
+        }
+      ],
+      "poolLiteViewer": [
+        {
+          "chainId": "97",
+          "address": "0xaBeB6F87ab3810655a5702C00d4D646dC85d7a0C"
         }
       ],
       "brokerManager": [

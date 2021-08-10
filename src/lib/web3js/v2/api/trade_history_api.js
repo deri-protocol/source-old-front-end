@@ -1,8 +1,11 @@
-import { deriToNatural } from '../utils';
+import { deriToNatural } from '../../shared/utils';
+import {
+  getPoolConfig2,
+  getPoolSymbolIdList,
+  getRestServerConfig,
+  DeriEnv,
+} from '../../shared/config';
 import { perpetualPoolFactory } from '../factory';
-import { getPoolConfig2, getPoolSymbolIdList} from '../config'
-
-import { getRestServerConfig, DeriEnv } from '../../config';
 
 const getHttpBase = () => {
   return getRestServerConfig(DeriEnv.get());

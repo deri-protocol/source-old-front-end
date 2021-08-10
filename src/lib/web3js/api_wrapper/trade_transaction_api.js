@@ -1,29 +1,26 @@
-import { unlock as unlock2, unlockDeri } from '../api/contractTransactionApi';
+import { closePositionOption, depositMarginOption, tradeWithMarginOption, unlockOption, withdrawMarginOption } from '../option/api';
+import { getPoolVersion, unlockDeri } from '../shared';
 import {
+  unlock2,
   tradeWithMargin2,
   closePosition2,
   depositMargin2,
   withdrawMargin2,
-} from '../api/contractTransactionApiV2';
+} from '../v1/api';
 import {
-  unlock as unlockV2,
-  tradeWithMargin as tradeWithMarginV2,
-  closePosition as closePositionV2,
-  depositMargin as depositMarginV2,
-  withdrawMargin as withdrawMarginV2,
-  // tradeWithMarginWithPrices as tradeWithMarginV2,
-  // depositMarginWithPrices as depositMarginV2,
-  // withdrawMarginWithPrices as withdrawMarginV2,
-  // closePositionWithPrices as closePositionV2,
-
+  unlockV2,
+  tradeWithMarginV2,
+  closePositionV2,
+  depositMarginV2,
+  withdrawMarginV2,
+} from '../v2/api';
+import {
   unlockV2l,
   tradeWithMarginV2l,
   closePositionV2l,
   depositMarginV2l,
   withdrawMarginV2l,
-
-  getPoolVersion,
-} from '../v2';
+} from '../v2_lite/api';
 
 export const unlock = async (
   chainId,
@@ -31,8 +28,11 @@ export const unlock = async (
   accountAddress,
   bTokenId
 ) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return unlockV2l(chainId, poolAddress, accountAddress)
+  const version = getPoolVersion(poolAddress)
+  if (version === 'v2_lite') {
+    return unlockV2l(chainId, poolAddress, accountAddress);
+  } else if (version === 'option') {
+    return unlockOption(chainId, poolAddress, accountAddress);
   }
   if (accountAddress === undefined) {
     return unlockDeri(chainId, poolAddress);
@@ -50,8 +50,11 @@ export const depositMargin = async (
   amount,
   bTokenId
 ) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return depositMarginV2l(chainId, poolAddress, accountAddress, amount)
+  const version = getPoolVersion(poolAddress)
+  if (version === 'v2_lite') {
+    return depositMarginV2l(chainId, poolAddress, accountAddress, amount);
+  } else if (version === 'option') {
+    return depositMarginOption(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
     return depositMargin2(chainId, poolAddress, accountAddress, amount);
@@ -74,8 +77,23 @@ export const withdrawMargin = async (
   bTokenId,
   isMaximum
 ) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return withdrawMarginV2l(chainId, poolAddress, accountAddress, amount, isMaximum)
+  const version = getPoolVersion(poolAddress)
+  if (version === 'v2_lite') {
+    return withdrawMarginV2l(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount,
+      isMaximum
+    );
+  } else if (version === 'option') {
+    return withdrawMarginOption(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount,
+      isMaximum
+    );
   }
   if (bTokenId === undefined) {
     return withdrawMargin2(chainId, poolAddress, accountAddress, amount);
@@ -98,8 +116,23 @@ export const tradeWithMargin = async (
   newVolume,
   symbolId
 ) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return tradeWithMarginV2l(chainId, poolAddress, accountAddress, newVolume, symbolId)
+  const version = getPoolVersion(poolAddress)
+  if (version === 'v2_lite') {
+    return tradeWithMarginV2l(
+      chainId,
+      poolAddress,
+      accountAddress,
+      newVolume,
+      symbolId
+    );
+  } else if (version === 'option') {
+    return tradeWithMarginOption(
+      chainId,
+      poolAddress,
+      accountAddress,
+      newVolume,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume);
@@ -120,8 +153,11 @@ export const closePosition = async (
   accountAddress,
   symbolId
 ) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return closePositionV2l(chainId, poolAddress, accountAddress, symbolId)
+  const version = getPoolVersion(poolAddress)
+  if (version === 'v2_lite') {
+    return closePositionV2l(chainId, poolAddress, accountAddress, symbolId);
+  } else if (version === 'option') {
+    return closePositionOption(chainId, poolAddress, accountAddress, symbolId);
   }
   if (symbolId === undefined) {
     return closePosition2(chainId, poolAddress, accountAddress);

@@ -1,13 +1,15 @@
-import { getContractAddressConfig as getContractAddressConfig2 } from "../config";
-import { getPoolConfigList as getPoolConfigListV2} from "../v2/config"
-//import { getPoolVersion } from '../v2';
+import {
+  getPoolConfigList as getPoolV2ConfigList,
+  getPoolV1ConfigList,
+  VERSIONS,
+} from '../shared/config';
 
 export const getContractAddressConfig = (env = 'dev', version) => {
   if (!version || version === '1' || version === 'v1') {
-    return getContractAddressConfig2(env)
-  } else if (version === 'v2' || version === 'v2_lite') {
-    return getPoolConfigListV2(version)
+    return getPoolV1ConfigList(env);
+  } else if (VERSIONS.includes(version)) {
+    return getPoolV2ConfigList(version);
   } else {
-    throw new Error(`getPoolContractAddress: invalid version: ${version}`)
+    throw new Error(`getContractAddressConfig: invalid version: ${version}`);
   }
-}
+};
