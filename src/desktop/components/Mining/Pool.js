@@ -33,6 +33,9 @@ function Pool({lang,loading}){
         <div className='pools'>
           {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
+        <div className='pools'>
+          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
       </>}
       {curTab === 'futures' &&<>
         <div className="pools">
