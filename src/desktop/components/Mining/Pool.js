@@ -11,7 +11,6 @@ function Pool({lang,loading}){
   const [loaded,pools,v1Pools,v2Pools,optionPools] = useMiningPool(true);
   const [curTab,setCurTab] = useState('all')
   const switchTab = (current) => {
-    
     setCurTab(current)
   };
   const PoolsClassName = classNames('checkout-pools',curTab)
@@ -34,17 +33,17 @@ function Pool({lang,loading}){
           {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
       </>}
+      {curTab === 'options' &&<>
+        <div className='pools'>
+          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </>}
       {curTab === 'futures' &&<>
         <div className="pools">
           {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
         <div className='pools'>
           {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-      </>}
-      {curTab === 'options' &&<>
-        <div className='pools'>
-          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
       </>}
       
