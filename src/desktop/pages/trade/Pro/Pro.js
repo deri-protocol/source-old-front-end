@@ -15,9 +15,6 @@ import { useRouteMatch } from 'react-router-dom';
 
 
 function Pro({wallet,lang}){
-  const isOptions = useRouteMatch('/options/pro') ? true : false
-
-
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1903px';
     return () => { 
@@ -29,16 +26,16 @@ function Pro({wallet,lang}){
 
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang} isOptions={isOptions}></AreaPicker>
+      <AreaPicker lang={lang} ></AreaPicker>
       <div className='trade-body'>
-        <Tab lang={lang} isOptions={isOptions}/>
+        <Tab lang={lang} />
         <div className='trade-pro'>
           <div className='left'>
-            <LiteTrade isPro={true} lang={lang} isOptions={isOptions}/>
+            <LiteTrade isPro={true} lang={lang} />
           </div>
           <div className='right'>
-            <TradingView wallet={wallet} lang={lang} isOptions={isOptions}/>
-            <Reference lang={lang} isOptions={isOptions}/>
+            <TradingView wallet={wallet} lang={lang} />
+            <Reference lang={lang} />
           </div>
       </div> 
     </div>

@@ -18,6 +18,9 @@ const offchainSymbolPairs = {
   ALICEUSDT: 'ALICEUSDT',
 };
 
+export const normalizeOptionSymbol = (optionSymbol) => {
+};
+
 export const isUsedRestOracle = (symbol) => {
   return Object.keys(offchainSymbolPairs).includes(symbol);
 };

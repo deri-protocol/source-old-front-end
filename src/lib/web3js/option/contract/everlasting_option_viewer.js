@@ -1,100 +1,144 @@
-import { ContractBase, deleteIndexedKey, fromWeiForObject, fromWei } from '../../shared'
-import { everlastingOptionViewerAbi } from './abis.js'
+import { ContractBase, fromWei } from '../../shared';
+import { everlastingOptionViewerAbi } from './abis';
 
 export class EverlastingOptionViewer extends ContractBase {
   // init
   constructor(chainId, contractAddress) {
-    super(chainId, contractAddress, everlastingOptionViewerAbi)
+    super(chainId, contractAddress, everlastingOptionViewerAbi);
   }
 
   // query
-  async getMarginStatusForTrader(pool, account) {
-    const res = await this._call('getMarginStatusForTrader', [pool, account])
-    return fromWeiForObject(deleteIndexedKey(res), [
-      'dynamicMargin',
-      'initialMargin',
-      'maintenanceMargin',
-    ]);
+  async _getTraderPortfolio(state, account) {
+    const res = await this._call('_getTraderPortfolio', [state, account]);
+    return res;
   }
-  // async getMarginStatusForTraders(pool, accounts) {
-  //   const res = await this._call('getMarginStatusForTraders', [pool, accounts])
-  //   return res
-  // }
-  async getPoolState(pool) {
-    const res = await this._call('getPoolState', [pool])
+  async _initState(poolAddress, oraclePrices) {
+    const res = await this._call('_initState', [poolAddress, oraclePrices]);
+    return res;
+  }
+  async _updateSymbolPrices(state) {
+    const res = await this._call('_updateSymbolPrices', [state]);
+    return res;
+  }
+  async getPoolStates(poolAddress, oraclePrices) {
+    const res = await this._call('getPoolStates', [poolAddress, oraclePrices]);
+    const symbolState = res[2].reduce((acc, i) => {
+      const symbol = {
+        symbolId: i[0],
+        symbol: i[1],
+        oracleAddress: i[2],
+        volatilityAddress: i[3],
+        isCall: i[4],
+        multiplier: fromWei(i[5]),
+        deltaFundingCoefficient: fromWei(i[6]),
+        strikePrice: fromWei(i[7]),
+        oraclePrice: fromWei(i[8]),
+        dynamicMarginRatio: fromWei(i[9]),
+        intrinsicPrice: fromWei(i[10]),
+        timePrice: fromWei(i[11]),
+        delta: fromWei(i[12]),
+        tradersNetVolume: fromWei(i[13]),
+        tradersNetCost: fromWei(i[14]),
+        cumulativeDeltaFundingRate: fromWei(i[15]),
+        cumulativePremiumFundingRate: fromWei(i[16]),
+        deltaFundingRatePerSecond: fromWei(i[17]),
+        premiumFundingRatePerSecond: fromWei(i[18]),
+      }
+      return acc.concat([symbol])
+    }, [])
     return {
-      pool: res[0],
-      bToken: res[1],
-      lToken: res[2],
-      pToken: res[3],
-      liquidatorQualifier: res[4],
-      protocolFeeCollector: res[5],
-
-      minPoolMarginRatio: res[6],
-      initialMarginRatio: res[7],
-      maintenanceMarginRatio: res[8],
-      minLiquidationReward: res[9],
-      maxLiquidationReward: res[10],
-      liquidationCutRatio: res[11],
-      protocolFeeCollectRatio: res[12],
-      premiumFundingPeriod: res[13],
-      premiumFundingCoefficient: res[14],
-
-      liquidity: res[15],
-      protocolFeeAccrued: res[16],
-      totalDynamicEquity: res[17],
-      totalAbsCost: res[18],
-      preTimestamp: res[19],
-      curTimestamp: res[20],
+      poolState: {
+        pool: res[0][0],
+        pToken: res[0][1],
+        initialMarginRatio: fromWei(res[0][2]),
+        maintenanceMarginRatio: fromWei(res[0][3]),
+        premiumFundingPeriod: fromWei(res[0][4]),
+        premiumFundingCoefficient: fromWei(res[0][5]),
+        liquidity: fromWei(res[0][6]),
+        totalDynamicEquity: fromWei(res[0][7]),
+        totalInitialMargin: fromWei(res[0][8]),
+        preTimestamp: res[0][9],
+        curTimestamp: res[0][10],
+      },
+      symbolState,
     };
   }
-  async getSymbols(pool) {
-    const symbols = await this._call('getSymbols', [pool])
-    return symbols.reduce((acc, res) => {
-      return acc.concat([{
-        symbolId: res[0],
-        symbol: res[1],
-        oracleAddress: res[2],
-        volatilityAddress: res[3],
-        multiplier: fromWei(res[4]),
-        feeRatio: fromWei(res[5]),
-        strikePrice: fromWei(res[6]),
-        isCall: res[7],
-        diseqFundingCoefficient: fromWei(res[8]),
-        cumulativeDeltaFundingRate: fromWei(res[9]),
-        intrinsicValue: fromWei(res[10]),
-        cumulativePremiumFundingRate: fromWei(res[11]),
-        timeValue: res[12],
-        tradersNetVolume: fromWei(res[13]),
-        tradersNetCost: fromWei(res[14]),
-        quote_balance_offset: fromWei(res[15]),
-        K: fromWei(res[16]),
-      }])
-    }, []);
-  }
-  async getTraderMargin(symbols, positions, margin, initialMarginRatio, maintenanceMarginRatio) {
-    const res = await this._call('getTraderMargin', [symbols, positions, margin, initialMarginRatio, maintenanceMarginRatio])
-    return res
-  }
-  async getTraderPorfolio(pToken, account) {
-    const res = await this._call('getTraderPorfolio', [pToken, account])
-    const newRes = fromWeiForObject(deleteIndexedKey(res), [
-      'margin',
+  async getTraderStates(poolAddress, account, oraclePrices) {
+    const res = await this._call('getTraderStates', [
+      poolAddress,
+      account,
+      oraclePrices,
     ]);
-    newRes.positions = newRes.positions.map((i) => ({
-      volume: fromWei(i[0]),
-      cost: fromWei(i[1]),
-      lastCumulativePremiumFundingRate: fromWei(i[2]),
-      lastCumulativeDeltaFundingRate: fromWei(i[3]),
-    }));
-    return newRes
+    const symbolState = res[2].reduce((acc, i) => {
+      const symbol = {
+        symbolId: i[0],
+        symbol: i[1],
+        oracleAddress: i[2],
+        volatilityAddress: i[3],
+        isCall: i[4],
+        multiplier: fromWei(i[5]),
+        deltaFundingCoefficient: fromWei(i[6]),
+        strikePrice: fromWei(i[7]),
+        oraclePrice: fromWei(i[8]),
+        dynamicMarginRatio: fromWei(i[9]),
+        intrinsicPrice: fromWei(i[10]),
+        timePrice: fromWei(i[11]),
+        delta: fromWei(i[12]),
+        tradersNetVolume: fromWei(i[13]),
+        tradersNetCost: fromWei(i[14]),
+        cumulativeDeltaFundingRate: fromWei(i[15]),
+        cumulativePremiumFundingRate: fromWei(i[16]),
+        deltaFundingRatePerSecond: fromWei(i[17]),
+        premiumFundingRatePerSecond: fromWei(i[18]),
+      }
+      return acc.concat([symbol])
+    }, [])
+    const positionState = res[3].reduce((acc, i) => {
+      const position = {
+        volume: fromWei(i[0]),
+        cost: fromWei(i[1]),
+        lastCumulativeDeltaFundingRate: fromWei(i[2]),
+        lastCumulativePremiumFundingRate: fromWei(i[3]),
+        pnl: fromWei(i[4]),
+        deltaFundingAccrued: fromWei(i[5]),
+        premiumFundingAccrued: fromWei(i[6]),
+      }
+      return acc.concat([position])
+    }, [])
+    return {
+      poolState: {
+        pool: res[0][0],
+        pToken: res[0][1],
+        initialMarginRatio: fromWei(res[0][2]),
+        maintenanceMarginRatio: fromWei(res[0][3]),
+        premiumFundingPeriod: fromWei(res[0][4]),
+        premiumFundingCoefficient: fromWei(res[0][5]),
+        liquidity: fromWei(res[0][6]),
+        totalDynamicEquity: fromWei(res[0][7]),
+        totalInitialMargin: fromWei(res[0][8]),
+        preTimestamp: res[0][9],
+        curTimestamp: res[0][10],
+      },
+      traderState: {
+        margin: fromWei(res[1][0]),
+        totalPnl: fromWei(res[1][1]),
+        totalFundingAccrued: fromWei(res[1][2]),
+        dynamicMargin: fromWei(res[1][3]),
+        initialMargin: fromWei(res[1][4]),
+        maintenanceMargin: fromWei(res[1][5]),
+      },
+      symbolState: symbolState,
+      positionState: positionState,
+    };
   }
-  async updateSymbolPricesAndFundingRates(ps, symbols) {
-    const res = await this._call('updateSymbolPricesAndFundingRates', [ps, symbols])
-    return res
+  async getVolatilityOracles(poolAddress) {
+    const res = await this._call('getVolatilityOracles', [poolAddress]);
+    return res;
+  }
+  async getPriceOracles(poolAddress) {
+    const res = await this._call('getPriceOracles', [poolAddress]);
+    return res;
   }
 
   // tx
-
-
 }

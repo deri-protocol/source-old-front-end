@@ -16,7 +16,7 @@ export const addLiquidity = async (
   if (version === 'v2_lite') {
     return addLiquidityV2l(chainId, poolAddress, accountAddress, amount);
   } else if (version === 'option') {
-    return addLiquidityOption(chainId, poolAddress, accountAddress);
+    return addLiquidityOption(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
     return addLiquidity2(chainId, poolAddress, accountAddress, amount);
@@ -43,7 +43,7 @@ export const removeLiquidity = async (
   if (version === 'v2_lite') {
     return removeLiquidityV2l(chainId, poolAddress, accountAddress, amount, isMaximum)
   } else if (version === 'option') {
-    return removeLiquidityOption(chainId, poolAddress, accountAddress)
+    return removeLiquidityOption(chainId, poolAddress, accountAddress, amount, isMaximum)
   }
   if (bTokenId === undefined) {
     return removeLiquidity2(chainId, poolAddress, accountAddress, amount);

@@ -9,7 +9,7 @@ import './menu.less'
 export default function Menu({ closeMenu, lang, locale }) {
   const isMining = useRouteMatch('/mining') ? true : false
   const isTrade = useRouteMatch('/futures/lite') ? true : false
-  // const isOption = useRouteMatch('/optionlite') ? true : false
+  const isOption = useRouteMatch('/options/lite') ? true : false
   const isDeriToken = useRouteMatch('/deritoken') ? true : false
   const isBridge = useRouteMatch('/bridge') ? true : false
 
@@ -36,9 +36,9 @@ export default function Menu({ closeMenu, lang, locale }) {
           <li className={isTrade ? 'selected' : ''}>
             <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/futures/lite`}> {lang['trade']} </a>
           </li>
-          {/* <li className={isOption ? 'selected' : ''}>
-            <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#optionlite`}> {lang['options']} </a>
-          </li> */}
+          <li className={isOption ? 'selected' : ''}>
+            <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/options/lite`}> {lang['options']} </a>
+          </li>
           <li className={isDeriToken ? 'selected' : ''}>
             <Link to='/deritoken'>{lang['deri-token']}</Link>
           </li>

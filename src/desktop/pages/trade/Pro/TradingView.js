@@ -3,7 +3,7 @@ import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
-function TradingView({ version, trading, lang, isOptions }) {
+function TradingView({ version, trading, lang,type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const indexPriceRef = useRef()
 
@@ -26,7 +26,7 @@ function TradingView({ version, trading, lang, isOptions }) {
           <div className='trade-dashboard-title'>{lang['index-price']}</div>
           <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
         </div>
-        {!isOptions && <>
+        {type.isFuture && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
             <div className='trade-dashboard-value'>
@@ -36,12 +36,12 @@ function TradingView({ version, trading, lang, isOptions }) {
             </div>
           </div>
         </>}
-        {isOptions && <>
+        {type.isOption && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span >{lang['funding-rate-delta']}</span>  </div>
             <div className='trade-dashboard-value'>
               <span className='funding-per' title={trading.fundingRateDeltaTip}>
-                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+                <DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4} suffix='%' />
               </span>
             </div>
           </div>
@@ -49,7 +49,7 @@ function TradingView({ version, trading, lang, isOptions }) {
             <div className='trade-dashboard-title'><span >{lang['funding-rate-premium']}</span>  </div>
             <div className='trade-dashboard-value'>
               <span className='funding-per' title={trading.fundingRatePremiumTip}>
-                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+                <DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} suffix='%' />
               </span>
             </div>
           </div>
@@ -64,10 +64,10 @@ function TradingView({ version, trading, lang, isOptions }) {
         </div>
       </div>
       <div className='tradingview'>
-        <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} version={version} />
+        <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} version={version}  />
       </div>
     </div>
   )
 }
 
-export default inject('trading', 'version')(observer(TradingView))
+export default inject('trading', 'version','type')(observer(TradingView))

@@ -4,7 +4,7 @@ import { getSpecification } from '../../lib/web3js/indexV2';
 import { inject, observer } from 'mobx-react';
 
 
-function ContractInfo({ wallet, trading, lang,isOptions }) {
+function ContractInfo({ wallet, trading, lang,type }) {
 
   return (
     <div className="contract-box">
@@ -29,7 +29,7 @@ function ContractInfo({ wallet, trading, lang,isOptions }) {
             {trading.contract.multiplier}
           </div>
         </div>
-        {!isOptions && <>
+        {!type.isOption && <>
           <div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
@@ -49,23 +49,23 @@ function ContractInfo({ wallet, trading, lang,isOptions }) {
             </div>
           </div>
         </>}
-        {isOptions && <>
+        {type.isOption && <>
           <div className="info">
             <div className="title ">{lang['delta-funding-coefficient']}</div>
             <div className="text">
-              {trading.contract.fundingRateCoefficient}
+              {trading.contract.deltaFundingCoefficient}
             </div>
           </div>
           <div className="info">
-            <div className="title"> <span className='margin-per'>{lang['initial-margin-ratio']}</span> </div>
+            <div className="title"> <span title={trading.initialMarginRatioTip} className='margin-per'>{lang['initial-margin-ratio']}</span> </div>
             <div className="text">
-              <NumberFormat displayType='text' value={trading.contract.minInitialMarginRatio * 100} decimalScale={2} suffix='%' />
+              <NumberFormat displayType='text' value={trading.contract.initialMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>
           </div>
           <div className="info">
-            <div className="title"> <span className='margin-per'> {lang['maintenance-margin-ratio']}</span> </div>
+            <div className="title"> <span title={trading.maintenanceMarginRatioTip} className='margin-per'> {lang['maintenance-margin-ratio']}</span> </div>
             <div className="text">
-              <NumberFormat displayType='text' value={trading.contract.minMaintenanceMarginRatio * 100} decimalScale={2} suffix='%' />
+              <NumberFormat displayType='text' value={trading.contract.maintenanceMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>
           </div>
         </>}
@@ -80,4 +80,4 @@ function ContractInfo({ wallet, trading, lang,isOptions }) {
   )
 }
 
-export default inject('wallet', 'trading')(observer(ContractInfo))
+export default inject('wallet', 'trading','type')(observer(ContractInfo))
