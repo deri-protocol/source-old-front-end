@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 
 
 function Pool({lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools] = useMiningPool(true);
+  const [loaded,pools,v1Pools,v2Pools,optionPools] = useMiningPool(true);
   const [curTab,setCurTab] = useState('all')
   const switchTab = (current) => {
     
@@ -26,12 +26,28 @@ function Pool({lang,loading}){
         <div className='futures' onClick={() => switchTab('futures')}>{lang['futures']}</div>
         <div className='options' onClick={() => switchTab('options')}>{lang['options']}</div>
       </div>
-      <div className="pools">
-        {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-      </div>
-      <div className='pools'>
-        {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-      </div>
+      {curTab === 'all' &&<>
+        <div className="pools">
+          {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+        <div className='pools'>
+          {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </>}
+      {curTab === 'futures' &&<>
+        <div className="pools">
+          {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+        <div className='pools'>
+          {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </>}
+      {curTab === 'options' &&<>
+        <div className='pools'>
+          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </>}
+      
     </div>
   )
 }
