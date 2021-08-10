@@ -11,8 +11,11 @@ export default class Config {
     })
   }
 
-  load(version){
-    const current = version && version.current;
+  load(version,isOptions){
+    let current = version && version.current;
+    // if(isOptions){
+    //   current = 'option'
+    // }
     let configs = getContractAddressConfig(DeriEnv.get(),current)
     if(version){
       configs = configs.filter(c => c.version === version.current)

@@ -10,9 +10,9 @@ function Lite({lang}){
   const isOptions = useRouteMatch('/options/lite') ? true : false
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang} options={isOptions}/>
+      <AreaPicker lang={lang} isOptions={isOptions}/>
       <div className='trade-body'>
-        <LiteTrade lang={lang} options={isOptions}/>  
+        <LiteTrade lang={lang} isOptions={isOptions}/>  
       </div>
     </div>    
   )

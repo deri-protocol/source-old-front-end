@@ -81,6 +81,8 @@ export default class Trading {
       setSlideMargin : action,
       amount : computed,
       fundingRateTip : computed,
+      fundingRateDeltaTip : computed,
+      fundingRatePremiumTip : computed,
       direction : computed,
       volumeDisplay : computed,
       isNegative : computed,
@@ -97,9 +99,9 @@ export default class Trading {
    * 初始化
    * wallet and version changed will init
    */
-  async init(wallet,version,options,finishedCallback){  
+  async init(wallet,version,isOptions,finishedCallback){  
       
-    const all = await this.configInfo.load(version);
+    const all = await this.configInfo.load(version,isOptions);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
       this.setWallet(wallet);
@@ -437,6 +439,14 @@ export default class Trading {
     return ''
   }
 
+  get fundingRateDeltaTip(){    
+    
+    return 'aaa'
+  }
+  get fundingRatePremiumTip(){    
+    
+    return 'bb'
+  }
 
 
 }

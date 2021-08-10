@@ -4,7 +4,7 @@ import { getSpecification } from '../../lib/web3js/indexV2';
 import { inject, observer } from 'mobx-react';
 
 
-function ContractInfo({ wallet, trading, lang,options }) {
+function ContractInfo({ wallet, trading, lang,isOptions }) {
 
   return (
     <div className="contract-box">
@@ -29,7 +29,7 @@ function ContractInfo({ wallet, trading, lang,options }) {
             {trading.contract.multiplier}
           </div>
         </div>
-        {!options && <>
+        {!isOptions && <>
           <div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
@@ -49,21 +49,21 @@ function ContractInfo({ wallet, trading, lang,options }) {
             </div>
           </div>
         </>}
-        {options && <>
+        {isOptions && <>
           <div className="info">
-            <div className="title">{lang['delta-funding-coefficient']}</div>
+            <div className="title ">{lang['delta-funding-coefficient']}</div>
             <div className="text">
               {trading.contract.fundingRateCoefficient}
             </div>
           </div>
           <div className="info">
-            <div className="title">{lang['initial-margin-ratio']}</div>
+            <div className="title"> <span className='margin-per'>{lang['initial-margin-ratio']}</span> </div>
             <div className="text">
               <NumberFormat displayType='text' value={trading.contract.minInitialMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>
           </div>
           <div className="info">
-            <div className="title">{lang['maintenance-margin-ratio']}</div>
+            <div className="title"> <span className='margin-per'> {lang['maintenance-margin-ratio']}</span> </div>
             <div className="text">
               <NumberFormat displayType='text' value={trading.contract.minMaintenanceMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>

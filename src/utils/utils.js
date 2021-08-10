@@ -104,3 +104,5 @@ export function getFormatSymbol(symbol){
   return version.current === 'v2' || version.current === 'v2_lite' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
+
+

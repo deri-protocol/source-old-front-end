@@ -15,9 +15,12 @@ function Account({wallet,lang}){
   const isMining = useRouteMatch({path: '/mining',exact : true});
   const isTeam = useRouteMatch('/team')
   const isRetired = useRouteMatch('/retired')
+  const isOptionsLite = useRouteMatch('/options/lite')
+  const isOptionsPro = useRouteMatch('/options/pro') 
   const isDownload = useRouteMatch('/logo')
   const config = useConfig();
 
+  const isOptions = isOptionsLite || isOptionsPro
   const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired || isDownload
   
 
@@ -25,7 +28,7 @@ function Account({wallet,lang}){
   const setAccountText = (detail) => {
     //如果用户选择的网络正确
     if(wallet.isConnected()){
-      if(detail.supported) {
+      if(wallet.isSupportChain(isOptions)) {
         setBtnText(<span>{detail.formatBalance} {detail.symbol} <span className='address'>{formatAddress(detail.account)}</span></span>)
       } else {
       setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)

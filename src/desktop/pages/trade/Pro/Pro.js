@@ -29,16 +29,16 @@ function Pro({wallet,lang}){
 
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang} options={isOptions}></AreaPicker>
+      <AreaPicker lang={lang} isOptions={isOptions}></AreaPicker>
       <div className='trade-body'>
-        <Tab lang={lang} options={isOptions}/>
+        <Tab lang={lang} isOptions={isOptions}/>
         <div className='trade-pro'>
           <div className='left'>
-            <LiteTrade isPro={true} lang={lang} options={isOptions}/>
+            <LiteTrade isPro={true} lang={lang} isOptions={isOptions}/>
           </div>
           <div className='right'>
-            <TradingView wallet={wallet} lang={lang} options={isOptions}/>
-            <Reference lang={lang} options={isOptions}/>
+            <TradingView wallet={wallet} lang={lang} isOptions={isOptions}/>
+            <Reference lang={lang} isOptions={isOptions}/>
           </div>
       </div> 
     </div>

@@ -12,6 +12,7 @@ import {
   getDeriContractAddressConfig,
   getChainIds,
 } from './config';
+import { version } from 'react';
 
 /** @module utils */
 

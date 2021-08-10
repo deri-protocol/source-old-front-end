@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import classNames from 'classnames';
 
 
-export default function Tab({ lite = false, lang, options }) {
+export default function Tab({ lite = false, lang, isOptions }) {
   const history = useHistory();
   // const [isLite, setIsLite] = useState(true);
 
@@ -19,12 +19,12 @@ export default function Tab({ lite = false, lang, options }) {
 
   return (
     <div className={clazz}>
-      {!options && <>
+      {!isOptions && <>
         <div className='lite' onClick={() => redirect('/futures/lite')} >{lang['lite']}</div>
         <div className='pro' onClick={() => redirect('/futures/pro')}> {lang['pro']}
         </div>
       </>}
-      {options && <>
+      {isOptions && <>
         <div className='lite' onClick={() => redirect('/options/lite')} >{lang['lite']}</div>
         <div className='pro' onClick={() => redirect('/options/pro')}> {lang['pro']}
         </div>
