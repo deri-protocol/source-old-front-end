@@ -18,11 +18,65 @@
       }
     }
   }
+  
+
+
   .checkout-pools{
     display: flex;
-    width: 300px;
+    width: 600px;
     justify-content: space-around;
-    div{
+    align-items: center;
+
+    .style-select.card {
+      .card {
+        background: url(../../../assets/img/card-style-icon-select.png) center no-repeat;
+        background-size: 21px 21px;
+      }
+    }
+    .style-select.list {
+      .list {
+        background: url(../../../assets/img/list-style-icon-selected.png) center no-repeat; 
+        background-size: 21px 21px;
+      }
+    }
+    .style-select {
+      display: flex;
+      flex-direction: row;
+      width: 60px;
+      height: 21px;
+      justify-content: space-around;
+      cursor: pointer;
+
+      .card {
+        background: url(../../../assets/img/card-style-icon.png) center no-repeat;
+        background-size: 21px 21px;
+        width: 21px;
+      }
+      .list {
+        background: url(../../../assets/img/list-style-icon.png) center no-repeat;
+        background-size: 21px 21px;
+        width: 21px;
+      }
+    }
+
+    .switch-btn {
+      background: url(../../../assets/img/ios-switch-icon.png) center no-repeat; 
+      width: 50px;
+      height: 27px;
+      cursor: pointer;
+    }
+    .switch-btn.checked {
+      background: url(../../../assets/img/ios-switch-icon-selecct.png) center no-repeat; 
+      width: 50px;
+      height: 27px;
+      cursor: pointer;
+    }
+
+    .added-only {
+      margin-right: 30px;
+    }
+
+    .all,.futures,.options{
       padding: 0 20px 0 20px;
       height: 30px;
       line-height: 30px;
@@ -62,6 +116,92 @@
     .sushi-apy-underline {
       cursor: pointer;
       border-bottom: 1px dashed #aaa;
+    }
+
+    .logo {
+      width: 96px;
+      height: 96px;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+    }
+
+    .BUSD {
+      background-image: url(../../../assets/img/busd.png);
+      background-size: cover;
+    }
+
+    .HUSD {
+      background-image: url(../../../assets/img/husd.png);
+      background-size: cover;
+    }
+
+    .hSlp {
+      display: inline-block;
+      cursor: pointer;
+      border-bottom: 1px dashed #FFFFFF;
+    }
+
+    .DERI-USDT {
+      background-image: url(../../../assets/img/slp.png);
+      background-size: 80px;
+      background-repeat: no-repeat;
+    }
+
+    .USDT {
+      background-image: url(../../../assets/img/usdt.png);
+      background-size: cover;
+    }
+
+    .BAC {
+      background-image: url(../../../assets/img/bac.png);
+      background-size: cover;
+    }
+
+    .DERI {
+      background-image: url(../../../assets/img/deri.png);
+      background-size: cover;
+    }
+
+    .CAKE-LP {
+      background-image: url(../../../assets/img/cake.png);
+      background-size: 80px;
+      background-repeat: no-repeat;
+    }
+
+    .GIVEAWAY {
+      background-image: url(../../../assets/img/deri.png);
+      background-size: 100%;
+    }
+
+    .BETH {
+      background-image: url(../../../assets/img/beth.png);
+      background-size: cover;
+    }
+
+    .amUSDC {
+      background-image: url(../../../assets/img/amUSDC.png);
+      background-size: cover;
+    }
+
+    .AUTO {
+      background-image: url(../../../assets/img/auto.png);
+      background-size: cover;
+    }
+
+    .CAKE {
+      background-image: url(../../../assets/img/cake-logo.png);
+      background-size: cover;
+    }
+
+    .WBNB {
+      background-image: url(../../../assets/img/wbnb.png);
+      background-size: cover;
+    }
+
+    .WMATIC {
+      background-image: url(../../../assets/img/polygon.png);
+      background-size: cover;
     }
 
     .pools {
@@ -223,91 +363,7 @@
                 }
               }
 
-              .logo {
-                width: 96px;
-                height: 96px;
-                background-repeat: no-repeat;
-                background-position: center;
-                display: inline-block;
-              }
-
-              .BUSD {
-                background-image: url(../../../assets/img/busd.png);
-                background-size: cover;
-              }
-
-              .HUSD {
-                background-image: url(../../../assets/img/husd.png);
-                background-size: cover;
-              }
-
-              .hSlp {
-                display: inline-block;
-                cursor: pointer;
-                border-bottom: 1px dashed #FFFFFF;
-              }
-
-              .DERI-USDT {
-                background-image: url(../../../assets/img/slp.png);
-                background-size: 80px;
-                background-repeat: no-repeat;
-              }
-
-              .USDT {
-                background-image: url(../../../assets/img/usdt.png);
-                background-size: cover;
-              }
-
-              .BAC {
-                background-image: url(../../../assets/img/bac.png);
-                background-size: cover;
-              }
-
-              .DERI {
-                background-image: url(../../../assets/img/deri.png);
-                background-size: cover;
-              }
-
-              .CAKE-LP {
-                background-image: url(../../../assets/img/cake.png);
-                background-size: 80px;
-                background-repeat: no-repeat;
-              }
-
-              .GIVEAWAY {
-                background-image: url(../../../assets/img/deri.png);
-                background-size: 100%;
-              }
-
-              .BETH {
-                background-image: url(../../../assets/img/beth.png);
-                background-size: cover;
-              }
-
-              .amUSDC {
-                background-image: url(../../../assets/img/amUSDC.png);
-                background-size: cover;
-              }
-
-              .AUTO {
-                background-image: url(../../../assets/img/auto.png);
-                background-size: cover;
-              }
-
-              .CAKE {
-                background-image: url(../../../assets/img/cake-logo.png);
-                background-size: cover;
-              }
-
-              .WBNB {
-                background-image: url(../../../assets/img/wbnb.png);
-                background-size: cover;
-              }
-
-              .WMATIC {
-                background-image: url(../../../assets/img/polygon.png);
-                background-size: cover;
-              }
+              
 
               .pool-detail {
                 padding: 0 20px;
@@ -378,5 +434,83 @@
       }
 
 
+    }
+
+    .pool-list{
+      border : 1px solid #707070;
+      border-radius: 20px;
+      margin : 30px 0px;
+
+      .pool-list-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 40px 0 20px;
+        align-items: center;
+        height: 75px;
+        background: #000;
+        border-radius: 20px 20px 0 0;
+        .list-header-left {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .l-h-network {
+            margin: 4px 0;
+            color: #d4e05c;
+            font-size: 15px;
+            font-family: Tachyon;
+            margin-bottom: 4px;
+          }
+          .l-h-y-ad {
+            .add {
+              margin-left: 10px;
+              a {
+                color: #fff;
+              }
+            }
+            .symbol-value {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              max-width: 890px;
+              display: inline-block;
+              vertical-align: bottom;
+            }
+
+          }
+        }
+      }
+      .pool-list-body {
+        .list-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 1px solid #707070;
+          padding: 20px 40px 20px 12px;
+
+          .col.btoken {
+            display: flex;
+            align-items: center;
+          }
+          .col {
+            display: inline-block;
+            text-align: center;
+            .base-token,.staking {
+              margin-left: 14px;
+              font-size: 16px;
+              font-weight: bold;
+            }
+            .logo {
+              width: 60px;
+              height: 60px;
+            }
+            .col-label {
+              color : #AAAAAA;
+              font-size: 16px;
+              margin-bottom: 8px;
+            }
+          }
+        }
+      }
     }
   }
