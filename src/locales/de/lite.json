@@ -47,6 +47,7 @@
   "connect-wallet" : "WALLET VERBINDEN",
   "pool-liquidity" : "Pool-Liquidität",
   "liquidity-used" : "Genutzte Liquidität",
+  "mark-price":"Mark Price",
   "funding-rate-impact" : "Auswirkung der Finanzierungsrate",
   "funding-rate-delta-impact" : "Funding Rate Delta Impact",
   "no-margin-tip" : "Sie haben kein Guthaben im Kontrakt. Zahlen Sie bitte zuerst ein.",

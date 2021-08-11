@@ -12,4 +12,6 @@ export * from './v1/api';
 export * from './v2/api';
 export * from './v2_lite/api';
 
+export { getIntrinsicPrice } from './option/calculation/trade';
+
 export * from './api_wrapper';

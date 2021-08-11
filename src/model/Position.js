@@ -17,6 +17,10 @@ export default class Position {
     volume: "800",
     premiumFundingAccrued:'',
     deltaFundingAccrued:'',
+    strikePrice:0,
+    timePrice:0,
+    volatility:0,
+    isCall:false,
    }
 
    async load(wallet,spec,callback,isOptions){

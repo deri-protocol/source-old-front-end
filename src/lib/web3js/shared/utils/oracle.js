@@ -1,4 +1,4 @@
-import { getOracleConfig, mapToSymbolInternal } from '../config/oracle';
+import { getOracleConfig, mapToSymbolInternal, normalizeOptionSymbol } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
 import { oracleFactory } from '../factory/oracle';
@@ -114,4 +114,8 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
     const priceInfo = await getPriceInfo(symbol);
     return deriToNatural(priceInfo.price).toString();
   }
+};
+
+export const getOraclePriceForOption = async (chainId, symbol) => {
+  return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
 };

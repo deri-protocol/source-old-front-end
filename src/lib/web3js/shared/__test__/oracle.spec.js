@@ -1,7 +1,7 @@
 import { bg } from '../utils'
 import { oracleFactory } from '../factory'
-import { getPriceFromRest } from '../utils/oracle'
-import { TIMEOUT } from './setup'
+import { getOraclePriceForOption, getPriceFromRest } from '../utils/oracle'
+import { CHAIN_ID, TIMEOUT } from './setup'
 
 describe("oracle", () => {
   test('oracle BSC BTCUSD getPrice()', async() => {
@@ -69,4 +69,8 @@ describe("oracle", () => {
     const price = await getPriceFromRest('AXSUSDT')
     expect(bg(price).toNumber()).toBeGreaterThanOrEqual(15)
   }, TIMEOUT)
-}, TIMEOUT)
+  test('getOraclePriceForOption', async() => {
+    const price = await getOraclePriceForOption(CHAIN_ID, 'BTCUSD-20000-C')
+    expect(bg(price).toNumber()).toBeGreaterThanOrEqual(30000)
+  }, TIMEOUT)
+})

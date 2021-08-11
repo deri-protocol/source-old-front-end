@@ -40,3 +40,9 @@ export const getPremiumFundingRate = (symbol, premiumFundingCoefficient, totalDy
         .times(premiumFundingCoefficient)
         .div(totalDynamicEquity);
 } 
+
+export const getIntrinsicPrice = (price, strikePrice, isCall) => {
+  return isCall
+    ? max(bg(price).minus(strikePrice), bg(0))
+    : max(bg(strikePrice).minus(price), bg(0));
+};

@@ -15,6 +15,7 @@ import {
   isUsedRestOracle,
   getPreminingConfigList,
 } from '../config';
+import { normalizeOptionSymbol } from '../config/oracle';
 import { bg } from '../utils';
 import {
   POOL_V2_ADDRESS,
@@ -236,7 +237,7 @@ describe('config', () => {
         null,
         'option'
       ).lToken
-    ).toEqual('0xc14097dBfC37719dB731F8532AA3F4D0fd305262');
+    ).toEqual('0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8');
   });
   test('getPoolconfig() volatileSymbols for option', () => {
     expect(
@@ -251,7 +252,7 @@ describe('config', () => {
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
     expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
-    expect(getPoolVersion('0x0ee8b0133135268bEc201D8d7752B2f90E5a6c92')).toEqual('option')
+    expect(getPoolVersion('0x24D8b55c8E2dF740782240e4D89FA526B973D4d5')).toEqual('option')
   })
   test('isUsedRestOracle', () => {
     expect(isUsedRestOracle('AXSUSDT')).toEqual(true)
@@ -270,5 +271,8 @@ describe('config', () => {
   })
   test('getPreminingContractConfig', () => {
     expect(getPreminingConfigList('prod').length).toEqual(8)
+  })
+  test('no', () => {
+    expect(normalizeOptionSymbol('BTCUSD-20000-C')).toEqual('BTCUSD')
   })
 });

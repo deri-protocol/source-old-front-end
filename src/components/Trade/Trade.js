@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import { priceCache, PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate } from '../../lib/web3js/indexV2'
+import { priceCache, getIntrinsicPrice ,PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate } from '../../lib/web3js/indexV2'
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
@@ -11,6 +11,7 @@ import { inject, observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import Loading from '../Loading/LoadingMask';
+import { bg } from "../../lib/web3js/indexV2";
 
 
 
@@ -21,16 +22,19 @@ const BalanceListDialog = withModal(BalanceList)
 
 function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
   const [direction, setDirection] = useState('long');
+  const [markPrice,setMarkPrice] = useState();
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
   const [transFee, setTransFee] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
+  const [markPriceClass, setMarkPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const indexPriceRef = useRef();
+  const markPriceRef = useRef();
   const directionClazz = classNames('checked-long', 'check-long-short', ' long-short', { 'checked-short': direction === 'short' })
   const volumeClazz = classNames('contrant-input', { 'inputFamliy': trading.volume !== '' })
 
@@ -196,6 +200,19 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
   }, [trading.index]);
 
   useEffect(() => {
+    if(type.isOption){
+      let mark = getIntrinsicPrice(trading.index,trading.position.strikePrice,trading.position.isCall).plus(trading.position.timePrice).toString()
+      if (markPriceRef.current > mark) {
+        setMarkPriceClass('fall')
+      } else {
+        setMarkPriceClass('rise')
+      }
+      markPriceRef.current = mark
+      setMarkPrice(mark)
+    }
+  },[trading.index])
+
+  useEffect(() => {
     if (trading.config) {
       setSpec(trading.config)
     }
@@ -257,11 +274,22 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
     <div className='trade-info'>
       <div className='trade-peration'>
         <div className='check-baseToken'>
-          <SymbolSelector setSpec={setSpec} spec={spec} />
+          <SymbolSelector setSpec={setSpec} spec={spec} isOption={type.isOption} />
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
-            <div className='index-prcie'>
-              {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
-            </div>
+            {type.isFuture && <>
+              <div className='index-prcie'>
+                {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+              </div>
+            </>} 
+            {type.isOption && <>
+              <div className='index-prcie'>
+              {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''} : <span>&nbsp; <span className={indexPriceClass}> <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
+              {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
+              </div>
+              <div className='mark-price'>
+                {lang['eo-mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+              </div>
+            </>}
             <div className='funding-rate'>
               {type.isOption && <>
                 <div className='type.isOption-funding'>
@@ -270,11 +298,11 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4} suffix='%' /></span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4}  /></span>
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} suffix='%' /></span>
+                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} /></span>
                   </div>
                 </div>
               </>}
@@ -286,9 +314,22 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
-            <div className='index-prcie'>
-              {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
-            </div>
+            {type.isFuture && <>
+              <div className='index-prcie'>
+                {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+              </div>
+            </>} 
+            {type.isOption && <>
+              <div className='index-prcie'>
+                {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+              </div>
+              <div className='index-prcie'>
+                {lang['vol']}: <DeriNumberFormat value={trading.position.volatility} decimalScale={2} />
+              </div>
+              <div className='mark-price'>
+                {lang['eo-mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+              </div>
+            </>} 
             <div className='funding-rate'>
               {type.isOption && <>
                 <div className='type.isOption-funding'>
@@ -297,11 +338,11 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4} suffix='%' /></span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4}  /></span>
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} suffix='%' /></span>
+                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4}  /></span>
                   </div>
                 </div>
               </>}
@@ -402,6 +443,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
         <div className='title-margin'>{lang['margin']}</div>
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
+            
             <div className='text-info'>
               <div className='title-enter pool'>{lang['pool-liquidity']}</div>
               <div className='text-enter poolL'>
@@ -423,6 +465,12 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
               </div>
             </>}
             {type.isOption && <>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['mark-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2}  />
+                </div>
+              </div>
               <div className='text-info'>
                 <div className='title-enter'>{lang['funding-rate-delta-impact']}</div>
                 <div className='text-enter'>
@@ -455,6 +503,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
           version={version}
           lang={lang}
           type={type}
+          markPrice={markPrice}
         />
       </div>
       {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
@@ -464,7 +513,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang,type }) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang,type ,markPrice}) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -553,6 +602,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
       afterTrade={afterTrade}
       direction={direction}
       lang={lang}
+      markPrice={markPrice}
     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)

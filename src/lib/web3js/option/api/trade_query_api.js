@@ -1,80 +1,98 @@
 import { bg, bTokenFactory, catchApiError, getPoolConfig } from "../../shared";
 import { fundingRateCache } from "../../shared/api/api_globals";
+import { normalizeOptionSymbol } from "../../shared/config/oracle";
 import { wrappedOracleFactory } from "../../shared/factory/oracle";
-import { dynamicInitialMarginRatio, dynamicInitialPoolMarginRatio, getDeltaFundingRatePerSecond } from "../calculation/trade";
+import { getPriceFromRest } from "../../shared/utils/oracle";
+//import { getOraclePriceForOption } from "../../shared/utils/oracle";
+import { dynamicInitialMarginRatio, dynamicInitialPoolMarginRatio, getDeltaFundingRatePerSecond, getIntrinsicPrice } from "../calculation/trade";
 import { everlastingOptionFactory, everlastingOptionViewerFactory, pTokenOptionFactory } from "../factory";
 
 const SECONDS_IN_A_DAY = 86400
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
-  return catchApiError(async(chainId, poolAddress, symbolId) => {
-    const { bTokenSymbol } = getPoolConfig(poolAddress, '0', '0', 'option');
-    const optionPool = everlastingOptionFactory(chainId, poolAddress)
-    const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-    const [state, symbolInfo2, poolInfo2] = await Promise.all([
-      poolViewer.getPoolStates(poolAddress, []),
-      optionPool.getSymbol(symbolId),
-      optionPool.getParameters(),
-    ]);
+  return catchApiError(
+    async (chainId, poolAddress, symbolId) => {
+      const { bTokenSymbol } = getPoolConfig(poolAddress, '0', '0', 'option');
+      const optionPool = everlastingOptionFactory(chainId, poolAddress);
+      const poolViewer = everlastingOptionViewerFactory(
+        chainId,
+        optionPool.viewerAddress
+      );
+      const [state, symbolInfo2, poolInfo2] = await Promise.all([
+        poolViewer.getPoolStates(poolAddress, []),
+        optionPool.getSymbol(symbolId),
+        optionPool.getParameters(),
+      ]);
 
-    const { symbolState } = state
-    const symbolIndex = symbolState.findIndex((s) => s.symbolId === symbolId);
-    const symbolInfo = symbolState[symbolIndex]
-    const { dynamicMarginRatio, deltaFundingCoefficient } = symbolInfo;
-    const { symbol, multiplier, feeRatio } = symbolInfo2;
-    const {
-      initialMarginRatio,
-      maintenanceMarginRatio,
-      minLiquidationReward,
-      maxLiquidationReward,
-      liquidationCutRatio,
-      protocolFeeCollectRatio,
-    } = poolInfo2;
+      const { symbolState } = state;
+      const symbolIndex = symbolState.findIndex((s) => s.symbolId === symbolId);
+      const symbolInfo = symbolState[symbolIndex];
+      const {
+        dynamicMarginRatio,
+        deltaFundingCoefficient,
+        isCall,
+      } = symbolInfo;
+      const { symbol, multiplier, feeRatio } = symbolInfo2;
+      const {
+        initialMarginRatio,
+        maintenanceMarginRatio,
+        minLiquidationReward,
+        maxLiquidationReward,
+        liquidationCutRatio,
+        protocolFeeCollectRatio,
+      } = poolInfo2;
 
-    return {
-      symbol,
-      bTokenSymbol,
-      multiplier: multiplier.toString(),
-      feeRatio: feeRatio.toString(),
-      //minPoolMarginRatio: minPoolMarginRatio.toString(),
-      initialMarginRatioOrigin: initialMarginRatio.toString(),
-      initialMarginRatio: dynamicMarginRatio.toString(),
-      maintenanceMarginRatioOrigin: maintenanceMarginRatio.toString(),
-      maintenanceMarginRatio: bg(dynamicMarginRatio)
-        .times(maintenanceMarginRatio)
-        .div(initialMarginRatio)
-        .toString(),
-      minLiquidationReward: minLiquidationReward.toString(),
-      maxLiquidationReward: maxLiquidationReward.toString(),
-      liquidationCutRatio: liquidationCutRatio.toString(),
-      protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
-      deltaFundingCoefficient: deltaFundingCoefficient.toString(),
-    };
-  }, args, 'getSpecification', {
-    symbol: '',
-    bTokenSymbol: '',
-    multiplier: '',
-    feeRatio: '',
-    //minPoolMarginRatio: '',
-    initialMarginRatio: '',
-    maintenanceMarginRatio: '',
-    minLiquidationReward: '',
-    maxLiquidationReward: '',
-    liquidationCutRatio: '',
-    protocolFeeCollectRatio: '',
-  })
+      return {
+        symbol,
+        bTokenSymbol,
+        multiplier: multiplier.toString(),
+        feeRatio: feeRatio.toString(),
+        //minPoolMarginRatio: minPoolMarginRatio.toString(),
+        initialMarginRatioOrigin: initialMarginRatio.toString(),
+        initialMarginRatio: dynamicMarginRatio.toString(),
+        maintenanceMarginRatioOrigin: maintenanceMarginRatio.toString(),
+        maintenanceMarginRatio: bg(dynamicMarginRatio)
+          .times(maintenanceMarginRatio)
+          .div(initialMarginRatio)
+          .toString(),
+        minLiquidationReward: minLiquidationReward.toString(),
+        maxLiquidationReward: maxLiquidationReward.toString(),
+        liquidationCutRatio: liquidationCutRatio.toString(),
+        protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
+        deltaFundingCoefficient: deltaFundingCoefficient.toString(),
+        isCall: isCall,
+      };
+    },
+    args,
+    'getSpecification',
+    {
+      symbol: '',
+      bTokenSymbol: '',
+      multiplier: '',
+      feeRatio: '',
+      //minPoolMarginRatio: '',
+      initialMarginRatio: '',
+      maintenanceMarginRatio: '',
+      minLiquidationReward: '',
+      maxLiquidationReward: '',
+      liquidationCutRatio: '',
+      protocolFeeCollectRatio: '',
+    }
+  );
 }
 
 
 export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbolId) => {
   const args = [chainId, poolAddress, accountAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, accountAddress, symbolId) => {
+    const { symbol:symbolStr } = getPoolConfig(poolAddress, undefined, symbolId, 'option')
     const optionPool = everlastingOptionFactory(chainId, poolAddress)
     //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
     const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-    const [state] = await Promise.all([
-      poolViewer.getTraderStates(poolAddress, accountAddress, [])
+    const [state, volPrice] = await Promise.all([
+      poolViewer.getTraderStates(poolAddress, accountAddress, []),
+      getPriceFromRest(`VOL-${normalizeOptionSymbol(symbolStr)}`, 'option'),
     ])
     const { poolState, symbolState, traderState, positionState } = state
     const { initialMarginRatio } = poolState;
@@ -100,10 +118,15 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       );
     return {
       price,
+      strikePrice: symbol.strikePrice.toString(),
+      timePrice: symbol.timePrice.toString(),
       volume: position.volume.toString(),
       averageEntryPrice: bg(position.volume).eq(0)
         ? '0'
-        : bg(position.cost).div(position.volume).div(symbol.multiplier).toString(),
+        : bg(position.cost)
+            .div(position.volume)
+            .div(symbol.multiplier)
+            .toString(),
       margin: margin.toString(),
       marginHeld: initialMargin.toString(),
       marginHeldBySymbol: marginHeldBySymbol.toString(),
@@ -114,10 +137,14 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       ]),
       deltaFundingAccrued: positionState[symbolIndex].deltaFundingAccrued,
       premiumFundingAccrued: positionState[symbolIndex].premiumFundingAccrued,
+      isCall: symbol.isCall,
+      volatility: bg(volPrice).times(100).toString(),
       liquidationPrice: '',
     };
   }, args, 'getPositionInfo', {
       price: '',
+      strikePrice: '',
+      timePrice: '',
       volume: '',
       averageEntryPrice: '',
       margin: '',
@@ -128,6 +155,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       deltaFundingAccrued: '',
       premiumFundingAccrued: '',
       liquidationPrice: '',
+      volatility: '',
   })
 }
 
@@ -151,12 +179,14 @@ export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
 
 
 const _getFundingRate = async (chainId, poolAddress, symbolId) => {
+  //const { symbol } = getPoolConfig(poolAddress, undefined, symbolId, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
   const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress);
   const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-  const [symbolIds, state] = await Promise.all([
+  const [symbolIds, state ] = await Promise.all([
     pToken.getActiveSymbolIds(),
     poolViewer.getPoolStates(poolAddress,[]),
+    //getOraclePriceForOption(chainId, symbol)
   ]);
     const { poolState, symbolState } = state
     const {
@@ -164,12 +194,12 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
       totalDynamicEquity,
       liquidity,
     } = poolState;
-  //console.log('tvMidPrice', tvMidPrice)
   const curSymbolIndex = symbolIds.indexOf(symbolId)
   if (curSymbolIndex < 0) {
     throw new Error(`getFundingRate(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
   }
-  const symbol = symbolState[curSymbolIndex]
+  const symbolInfo = symbolState[curSymbolIndex]
+  // const notionalValue = bg(1).times(symbolInfo.multiplier).times(price)
   // const symbols = await Promise.all(
   //   symbolIds.reduce((acc, i) => acc.concat([optionPool.getSymbol(i)]), [])
   // );
@@ -207,11 +237,15 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
     totalDynamicEquity,
     prices,
     liquidityUsed: liquidityUsedInAmount.div(liquidity),
-    deltaFundingRate: bg(symbol.deltaFundingRatePerSecond).times(SECONDS_IN_A_DAY).toString(),
-    deltaFundingRatePerSecond: symbol.deltaFundingRatePerSecond,
-    premiumFundingRate:bg(symbol.premiumFundingRatePerSecond).times(SECONDS_IN_A_DAY).toString(),
-    premiumFundingRatePerSecond: symbol.premiumFundingRatePerSecond,
-  }
+    deltaFundingRate: bg(symbolInfo.deltaFundingRatePerSecond)
+      .times(SECONDS_IN_A_DAY)
+      .toString(),
+    deltaFundingRatePerSecond: symbolInfo.deltaFundingRatePerSecond,
+    premiumFundingRate: bg(symbolInfo.premiumFundingRatePerSecond)
+      .times(SECONDS_IN_A_DAY)
+      .toString(),
+    premiumFundingRatePerSecond: symbolInfo.premiumFundingRatePerSecond,
+  };
   fundingRateCache.set(chainId, poolAddress, symbolId, res)
   return res
 };
@@ -221,22 +255,24 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
   return catchApiError(
     async (chainId, poolAddress, volume, symbolId) => {
       const optionPool = everlastingOptionFactory(chainId, poolAddress)
-      const symbol = await optionPool.getSymbol(symbolId)
+      const symbolInfo = await optionPool.getSymbol(symbolId)
       let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       if (!res) {
         res = await _getFundingRate(chainId, poolAddress, symbolId);
       }
-      const { symbolIds, prices } = res;
+      const { symbolIds, prices, symbols } = res;
       const curSymbolIndex = symbolIds.indexOf(symbolId)
       if (curSymbolIndex < 0) {
         throw new Error(`getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
       }
-      //console.log(volume, prices[curSymbolIndex], symbols[curSymbolIndex])
+      const symbol = symbols[curSymbolIndex];
+      const intrinsicPrice = getIntrinsicPrice(prices[curSymbolIndex], symbol.strikePrice, symbol.isCall)
+      //console.log(volume, prices[curSymbolIndex], symbol, intrinsicPrice.toString())
       return bg(volume)
         .abs()
-        .times(prices[curSymbolIndex])
+        .times(intrinsicPrice)
         .times(symbol.multiplier)
-        .times(symbol.feeRatio)
+        .times(symbolInfo.feeRatio)
         .toString();
     },
     args,
@@ -283,9 +319,9 @@ export const getFundingRate = async(chainId, poolAddress, symbolId) => {
         throw new Error(`getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
       }
       return {
-        deltaFundingRate0: bg(res.deltaFundingRate).times(100).toString(),
+        deltaFundingRate0: bg(res.deltaFundingRate).toString(),
         deltaFundingRatePerSecond: res.deltaFundingRatePerSecond,
-        premiumFundingRate0: bg(res.premiumFundingRate).times(100).toString(),
+        premiumFundingRate0: bg(res.premiumFundingRate).toString(),
         premiumFundingRatePerSecond: res.premiumFundingRatePerSecond,
         liquidity: res.liquidity.toString(),
         volume: '-',
@@ -325,7 +361,9 @@ export const getEstimatedFundingRate = async (
         throw new Error(`getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
       }
       let symbol = symbols[curSymbolIndex] 
+      //console.log('symbol.tradersNetVolume0', symbol.tradersNetVolume)
       symbol.tradersNetVolume = bg(symbol.tradersNetVolume).plus(newNetVolume).toString()
+      //console.log('symbol.tradersNetVolume1', symbol.tradersNetVolume)
       const deltaFundingRate1 = getDeltaFundingRatePerSecond(symbol, symbol.delta, prices[curSymbolIndex], totalDynamicEquity)
 
       return {

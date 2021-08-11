@@ -17,6 +17,9 @@ export default class Config {
       current = 'option'
     }
     let configs = getContractAddressConfig(DeriEnv.get(),current)
+    // if(isOptions){
+    //   configs = configs.filter(c => c.symbo)
+    // }
     if(!isOptions && version){
       configs = configs.filter(c => c.version === version.current)
       //v2 不需要展示base token,需要合并相同的base token

@@ -20,6 +20,8 @@ describe('trade query api', () => {
         multiplier: '0.01',
         protocolFeeCollectRatio: '0.2',
         deltaFundingCoefficient: '0.000005',
+        strikePrice: '20000',
+        timePrice: '0.000000187143649599',
         symbol: 'BTCUSD-20000-C',
       });
     },
@@ -47,6 +49,7 @@ describe('trade query api', () => {
       expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(1)
       expect(bg(res.averageEntryPrice).toNumber()).toBeGreaterThanOrEqual(15000)
       expect(bg(res.price).toNumber()).toBeGreaterThanOrEqual(30000)
+      expect(res.isCall).toEqual(true)
     },
     TIMEOUT
   );
@@ -72,16 +75,17 @@ describe('trade query api', () => {
           tradersNetVolume:  expect.any(String),
         })
       );
-      expect(bg(res.deltaFundingRate0).abs().toNumber()).toBeLessThanOrEqual(1000);
-      expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(1000);
+      // expect(bg(res.deltaFundingRate0).abs().toNumber()).toBeLessThanOrEqual(1000);
+      // expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(1000);
+      expect(res).toEqual({});
     },
     TIMEOUT
   );
   it(
     'getEstimatedFundingRate',
     async () => {
-      const res = await getEstimatedFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '1', '0');
-      expect(bg(res.deltaFundingRate1).abs().toNumber()).toBeLessThanOrEqual(1000)
+      const res = await getEstimatedFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '-61', '0');
+      expect(bg(res.deltaFundingRate1).abs().toNumber()).toEqual(0)
     },
     TIMEOUT
   );

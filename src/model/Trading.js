@@ -446,10 +446,10 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.deltaFundingRatePerSecond && this.config){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-delta')} = ${this.fundingRate.deltaFundingRatePerSecond}` +
-      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-delta')} = ${this.fundingRate.deltaFundingRatePerSecond}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFundingRatePerSecond} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFundingRatePerSecond}  ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
       }
     }
     return ''
@@ -458,10 +458,10 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.premiumFundingRatePerSecond && this.config){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-premium')} = ${this.fundingRate.premiumFundingRatePerSecond}` +
-      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-premium')} = ${this.fundingRate.premiumFundingRatePerSecond}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingRatePerSecond} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingRatePerSecond} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
       }
     }
     return ''

@@ -12,8 +12,9 @@
   "current-position" : "Current Position",
   "contract-volume" : "Contract Volume",
   "index-price" : "Index Price",
+
   "funding-rate-annual" : "Funding Rate Daily",
-  "funding-rate" : "Funding Rate",
+  "funding-rate" : "Funding Fee",
   "funding-rate-d":"Delta Funding",
   "funding-rate-p":"Premium Funding",
   "delta" : "delta",
@@ -47,6 +48,8 @@
   "connect-wallet" : "CONNECT WALLET",
   "pool-liquidity" : "Pool Liquidity",
   "liquidity-used" : "Liquidity Used",
+  "eo-mark-price":"EO Mark Price",
+  "mark-price":"Mark Price",
   "funding-rate-impact" : "Funding Rate Impact",
   "funding-rate-delta-impact" : "Funding Rate Delta Impact",
   "no-margin-tip" : "You have no fund in contract. Please deposit first.",
@@ -58,6 +61,7 @@
   "leverage-after-execution" : "Leverage after execution",
   "cancel" : "CANCEL",
   "ok" : "OK",
+  "vol":"VOL",
 
   "deposit" : "DEPOSIT",
   "balance-in-contract-uppercase" : "BALANCE IN CONTRACT",

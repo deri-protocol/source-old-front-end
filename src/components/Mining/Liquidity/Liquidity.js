@@ -230,7 +230,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 
   
   useEffect(() => {
-		//todo 判断网络
+		// todo 判断网络
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId, chainId)){
 			isApprove()
     }

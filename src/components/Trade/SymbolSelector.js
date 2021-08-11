@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react"
 import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
 import classNames from 'classnames';
 
-function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
+function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
   const [dropdown, setDropdown] = useState(false);  
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
 
@@ -22,7 +22,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
       loading.loading();
       trading.pause();
       setSpec(selected)
-      trading.onSymbolChange(selected,() => loading.loaded(),isOptions);
+      trading.onSymbolChange(selected,() => loading.loaded(),type.isOption);
       setDropdown(false)
     } 
   }
@@ -33,14 +33,14 @@ function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
         type='button'            
         onClick={onDropdown}
         className='btn chec'>
-        <SymbolDisplay spec={spec} version={version}/>
+        <SymbolDisplay spec={spec} version={version} type={type} />
         <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
       </button>
         <div className={selectClass}>
           {trading.configs.map((config,index) => {
             return (
               <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
-                <SymbolDisplay spec={config} version={version}/>
+                <SymbolDisplay spec={config} version={version} type={type}/>
               </div>
             )
           })}         
@@ -49,9 +49,16 @@ function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
   )
 }
 
-function SymbolDisplay({version,spec}){
-  return (
-    (version.isV1 || version.isV2Lite) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
-  )
+function SymbolDisplay({version,spec,type}){
+  if(type.isOption){
+    return (
+      `${spec.symbol || 'BTCUSD-20000-C'}`  
+    )
+  }else{
+    return (
+      (version.isV1 || version.isV2Lite) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
+    )
+  }
+  
 }
-export default inject('trading','version','loading')(observer(SymbolSelector))
+export default inject('trading','version','loading','type')(observer(SymbolSelector))

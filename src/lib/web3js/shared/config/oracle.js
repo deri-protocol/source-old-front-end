@@ -19,6 +19,12 @@ const offchainSymbolPairs = {
 };
 
 export const normalizeOptionSymbol = (optionSymbol) => {
+  const res = optionSymbol.split('-')
+  if (res.length >= 2) {
+    return res[0]
+  } else {
+    throw new Error(`invalid option symbol:${optionSymbol}`)
+  }
 };
 
 export const isUsedRestOracle = (symbol) => {
