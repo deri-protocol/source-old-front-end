@@ -19,3 +19,24 @@ export const dynamicInitialPoolMarginRatio = (spot, strike, isCall, initialMargi
     return max((bg(1).minus(otmRatio.times(3))).times(initialPoolMarginRatio), bg(0.01).times(10))
   }
 }
+
+export const getDeltaFundingRatePerSecond = (symbol, delta, price, totalDynamicEquity)  => {
+  return bg(totalDynamicEquity).eq(0)
+    ? bg(0)
+    : bg(delta)
+        .times(symbol.tradersNetVolume)
+        .times(price)
+        .times(price)
+        .times(symbol.multiplier)
+        .times(symbol.multiplier)
+        .times(symbol.deltaFundingCoefficient)
+        .div(totalDynamicEquity);
+} 
+export const getPremiumFundingRate = (symbol, premiumFundingCoefficient, totalDynamicEquity)  => {
+  return bg(totalDynamicEquity).eq(0)
+    ? bg(0)
+    : bg(symbol.timeValue)
+        .times(symbol.multiplier)
+        .times(premiumFundingCoefficient)
+        .div(totalDynamicEquity);
+} 

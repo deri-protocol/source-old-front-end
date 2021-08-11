@@ -2,6 +2,7 @@ import { getSpecification } from "../lib/web3js/indexV2";
 import { makeObservable, observable, action, computed } from "mobx";
 import Intl from "./Intl";
 import version from "./Version";
+import type from "./Type";
 
 export default class Contract {
   info = {
@@ -9,12 +10,14 @@ export default class Contract {
     symbol:'BTCUSD',
     multiplier:'0.0001',
     fundingRateCoefficient:'0.0000025',
+    deltaFundingCoefficient:'0.2',
     minInitialMarginRatio:0.1,
+    initialMarginRatio:0.1,
     minMaintenanceMarginRatio:0.05,
+    maintenanceMarginRatio:0.05,
     feeRatio:0.0005,
     bTokenSymbolDisplay : ['BUSD']
   }
-
   // constructor(){
   //   makeObservable(this,{
   //     info : observable,
@@ -37,7 +40,7 @@ export default class Contract {
   }
 
   bTokenSymbolDisplay(spec){
-    if(version.isV1 || version.isV2Lite){
+    if(version.isV1 || version.isV2Lite || type.isOption){
       return [spec.bTokenSymbol];
     }
     const {bTokenSymbol = [],bTokenMultiplier = []} = spec

@@ -14,7 +14,39 @@
       color: #6d5959;
     }
   }
-
+  .checkout-pools{
+    display: flex;
+    width: 300px;
+    justify-content: space-around;
+    font-size: 0.16rem;
+    margin-top: 10px;
+    div{
+      padding: 0 20px 0 20px;
+      height: 30px;
+      line-height: 30px;
+      border-radius: 10px;
+      border: 1px solid #fff;
+      cursor: pointer;
+    }
+  }
+  .checkout-pools.all{
+    .all{
+      border: 1px solid transparent;
+      background-color: rgb(1, 81, 128);
+    }
+  }
+  .checkout-pools.futures{
+    .futures{
+      border: 1px solid transparent;
+      background-color:  rgb(1, 81, 128);
+    }
+  }
+  .checkout-pools.options{
+    .options{
+      border: 1px solid transparent;
+      background-color:  rgb(1, 81, 128);
+    }
+  }
   .mining-info-header {
     flex-direction: row-reverse;
     margin-bottom: 0.05rem;
@@ -79,6 +111,7 @@
           .symbol,.address {
             margin-right: 0.08rem;
             font-size: 0.14rem;
+            white-space: nowrap
           }
           .symbol-label,.address-label {
             margin-right: 0.04rem;
@@ -106,6 +139,7 @@
           font-size: 0.16rem;
           line-height: 0.75rem;
           margin-right: 0.3rem;
+          white-space: nowrap;
         }
         .network {
           color: #D4E05C;

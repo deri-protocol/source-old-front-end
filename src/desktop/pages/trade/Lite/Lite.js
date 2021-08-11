@@ -4,18 +4,14 @@ import Tab from '../Tab/Tab';
 import './lite.less'
 import './zh-lite.less'
 import './de-lite.less'
-import { useRouteMatch } from 'react-router-dom';
-
-
 
 export default function Lite({lang}){
-  const isOptions = useRouteMatch('/options/lite') ? true : false
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang} isOptions={isOptions}></AreaPicker>
+      <AreaPicker lang={lang} ></AreaPicker> 
       <div className='trade-body lite'>
-          <Tab lite={true} lang={lang} isOptions={isOptions}/>
-          <LiteTrade lang={lang} isOptions={isOptions}/> 
+          <Tab lite={true} lang={lang} />
+          <LiteTrade lang={lang} /> 
       </div>
     </div>
   )

@@ -24,7 +24,7 @@ const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Position({wallet,trading,version,lang,isOptions}){
+function Position({wallet,trading,version,lang,type}){
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
@@ -114,13 +114,13 @@ function Position({wallet,trading,version,lang,isOptions}){
       </div>
       <div className='margin'>{lang['margin']}</div>
       <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-      {!isOptions&&<>
+      {type.isFuture&&<>
         <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
       </>}
-      {isOptions&&<>
-        <div><span >{lang['time-value']}</span></div>
-        <div><span >{lang['time-value']}</span></div>
-        <div><span >{lang['time-value']}</span></div>
+      {type.isOption&&<>
+        {/* <div><span >{lang['time-value']}</span></div> */}
+        <div><span >{lang['funding-rate-d']}</span></div>
+        <div><span >{lang['funding-rate-p']}</span></div>
       </>}
       <div>{lang['liquidation-price']}</div>
     </div>
@@ -139,7 +139,7 @@ function Position({wallet,trading,version,lang,isOptions}){
       <div className={direction}>{lang[direction.toLowerCase()] || direction }</div>
       <div className='dyn-eff-bal'>
         <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
-        {(version.isV1 || version.isV2Lite ||isOptions) ? <span>
+        {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
         <span
           className='open-add'
           id='openAddMargin'
@@ -156,7 +156,7 @@ function Position({wallet,trading,version,lang,isOptions}){
       <div className='margin'><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
       <div>        
         <span className='pnl-list unrealized-pnl'>
-          <DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={8}/>{(version.isV2  || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
+          <DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={6}/>{(version.isV2  || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
             {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
               {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item,index) =>(
                 <div className='unrealizePnl-item' key={index}>
@@ -166,13 +166,13 @@ function Position({wallet,trading,version,lang,isOptions}){
             </div>}
         </span> 
       </div>
-      {!isOptions&&<>
+      {type.isFuture&&<>
         <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
       </>} 
-      {isOptions&&<>
-        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
-        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
-        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
+      {type.isOption&&<>
+        {/* <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div> */}
+        <div><DeriNumberFormat value={(-(trading.position.deltaFundingAccrued))}  decimalScale={8}/></div>
+        <div><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))}  decimalScale={8}/></div>
       </>}
       <div><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
     </div>
@@ -215,4 +215,4 @@ function Position({wallet,trading,version,lang,isOptions}){
   )
 }
 
-export default inject('wallet','trading','version')(observer(Position))
+export default inject('wallet','trading','version','type')(observer(Position))

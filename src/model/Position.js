@@ -5,6 +5,7 @@ export default class Position {
   callback = () => {}
    wallet = null;
    spec = null
+   isOptions =null;
  
    mockPositionInfo = {
     averageEntryPrice: "",
@@ -14,10 +15,13 @@ export default class Position {
     marginHeldBySymbol : "293.16152",
     unrealizedPnl: "3.1311",
     volume: "800",
+    premiumFundingAccrued:'',
+    deltaFundingAccrued:'',
    }
 
-   async load(wallet,spec,callback){
-     if(wallet && wallet.isConnected() && wallet.supportChain && spec && spec.pool){
+   async load(wallet,spec,callback,isOptions){
+     this.isOptions = isOptions
+     if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       // const fundingFee = await getFun
       if(position){
@@ -34,7 +38,7 @@ export default class Position {
      if(this.interval !== null){
        clearInterval(this.interval);
      }
-    this.interval = window.setInterval(() => this.load(wallet,spec,callback),3000)      
+    this.interval = window.setInterval(() => this.load(wallet,spec,callback,this.isOptions),3000)      
     if(wallet){
       this.wallet= wallet; 
     }

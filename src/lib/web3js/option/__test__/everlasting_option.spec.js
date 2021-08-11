@@ -1,4 +1,4 @@
-import { CHAIN_ID, OPTION_BTOKEN_ADDRESS, OPTION_POOL_ADDRESS, TIMEOUT } from '../../shared/__test__/setup';
+import { CHAIN_ID, OPTION_PTOKEN_ADDRESS, OPTION_POOL_ADDRESS, TIMEOUT } from '../../shared/__test__/setup';
 import { bg } from '../../shared';
 import { everlastingOptionFactory, pTokenOptionFactory, lTokenOptionFactory, everlastingOptionViewerFactory } from '../factory';
 
@@ -16,7 +16,6 @@ describe('EverlastingOption', () => {
         maintenanceMarginRatio: '0.05',
         maxLiquidationReward: '1000',
         minLiquidationReward: '10',
-        minPoolMarginRatio: '1',
         protocolFeeCollectRatio: '0.2',
       })
     );
@@ -31,25 +30,25 @@ describe('EverlastingOption', () => {
     expect(res).toEqual(
       expect.objectContaining({
         bTokenAddress: '0x4405F3131E2659120E4F931146f032B4c05314E2',
-        lTokenAddress: '0xc14097dBfC37719dB731F8532AA3F4D0fd305262',
+        lTokenAddress: '0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8',
         liquidatorQualifierAddress:
           '0x0000000000000000000000000000000000000000',
-        pTokenAddress: '0x980a0B311e2B8D20557E3CA1C6d981Fd77520bC0',
+        pTokenAddress: '0xB7517aCe9B2409C3Fd1f522493f0420B86D1e490',
         protocolFeeCollector: '0x4aF582Fd437f997F08df645aB6b0c070CC791DeE',
       })
     );
   }, TIMEOUT)
   it('getProtocolFeeAccrued', async() => {
     const res = await everlastingOption.getProtocolFeeAccrued()
-    expect(bg(res).toNumber()).toBeGreaterThan(100)
+    expect(bg(res).toNumber()).toBeGreaterThan(10)
   }, TIMEOUT)
   it('OptionPricer', async() => {
     const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0x14783AF9241a83805845432b93A5c481B793f2CB')
+    expect(res).toEqual('0xE6522df9Eab9D0e454Ba79368ccBae63D005B198')
   }, TIMEOUT)
   it('PmmPricer', async() => {
     const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0x8443af976FD08bC20d3Dd67CA1e9cb4Ec0a2D37f')
+    expect(res).toEqual('0x4CdE7a44a8d527254161Da62829669D673a3F402')
   }, TIMEOUT)
   it('_T', async() => {
     const res = await everlastingOption._T()
@@ -77,7 +76,7 @@ describe('EverlastingOption', () => {
           timeValue:  expect.any(String),
           tradersNetCost: expect.any(String),
           tradersNetVolume: expect.any(String),
-          volatilityAddress: '0x2480C977c737a9057d8DA9ef3A91d3b66E093c7d',
+          volatilityAddress: '0xF6c2582635d26f793898a4BAC5e8843b82eB4121',
         })
       );
       expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-100)
@@ -86,7 +85,8 @@ describe('EverlastingOption', () => {
   );
   it('_getVolSymbolPrices', async() => {
     const res = await everlastingOption._getVolSymbolPrices()
-    expect(res).toEqual({})
+    expect(res.length).toEqual(2)
+    expect(bg(res[0][2]).toNumber()).toBeGreaterThan(1)
   }, TIMEOUT)
   it('optionPool pToken', async() => {
     const pToken = pTokenOptionFactory(CHAIN_ID, everlastingOption.pTokenAddress)
@@ -100,7 +100,7 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('optionPool viewer', async() => {
     const viewer = everlastingOptionViewerFactory(CHAIN_ID, everlastingOption.viewerAddress)
-    const res = await viewer.getPoolState(everlastingOption.contractAddress)
-    expect(res.bToken).toEqual(OPTION_BTOKEN_ADDRESS)
+    const res = await viewer.getPoolStates(everlastingOption.contractAddress, [])
+    expect(res.poolState.pToken).toEqual(OPTION_PTOKEN_ADDRESS)
   }, TIMEOUT)
 });

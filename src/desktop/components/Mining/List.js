@@ -1,12 +1,17 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 
+import React, { useState, useEffect } from 'react'
 import config from  '../../../config.json'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
-import { DeriEnv } from '../../../lib/web3js/indexV2.js';
+import { DeriEnv, getUserInfoAllForAirDrop, mintAirdrop } from '../../../lib/web3js/indexV2.js';
+import { useHistory ,Link} from 'react-router-dom';
+import { eqInNumber } from '../../../utils/utils.js';
+
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function ListBox({group,lang,index}){
+function ListBox({group,lang,index,wallet}){
   const {pool,list} = group
-
+  
   return (
     <div className='pool-list' key={index}>
       <div className='pool-list-header'>
@@ -32,61 +37,121 @@ function ListBox({group,lang,index}){
         </div>
       </div>
       <div className='pool-list-body'>
-        {list.map((item,index) => (
-          <div className='list-item' key={index}>
-            <span className='col btoken'>
-              <span className={`logo ${item.bTokenSymbol}`}></span>
-              <span className='base-token'>{item.bTokenSymbol}</span>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{item.airdrop ? lang['total'] : lang['pool-liq']}</div>
-              <div className='col-value'><DeriNumberFormat value={item.liquidity} displayType='text' thousandSeparator={true} decimalScale={item.lpApy ? 7 : 0}/></div>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{lang['multiplier']}</div>
-              <div className='col-value' title={lang['multiplier-tip']}>{item.multiplier}x</div>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{lang['apy']}</div>
-              <div className='col-value'>
-              <span>
-                <span className={item.lpApy ? 'sushi-apy-underline' : ''} title={ item.lpApy && lang['deri-apy']}>
-                  {item.apy ? <DeriNumberFormat value={item.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
-                </span>
-                {item.lpApy &&<>
-                <span> + </span>
-                <span className={item.lpApy ? 'sushi-apy-underline' : '' } title={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
-                </>}
-              </span>
-              </div>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{lang['claimed-deri']}</div>
-              <div className='col-value'><DeriNumberFormat value={item.claimedDeri} decimalScale={2}/></div>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{lang['unclaimed-deri']}</div>
-              <div className='col-value'><DeriNumberFormat value={item.unclaimedDeri} decimalScale={2}/></div>
-            </span>
-            <span className='col'>
-              <div className='col-label'>{lang['mining-pnl']}</div>
-              <div className='col-value'><DeriNumberFormat value={item.miningPnl} decimalScale={2}/></div>
-            </span>
-            <span className='col'>
-              <div className='staking'>{lang['staking']} ></div>
-            </span>
-          </div>
-        ))}
+        {list.map((item,index) => <Card index={index} item={item} lang={lang} wallet={wallet} pool={pool}/>)}
       </div>
     </div>
   )
 }
-export default function List({optionPools,v1Pools,v2Pools,type,lang}){
+
+function Card({index,item,lang,wallet,pool}){
+  const [connected, setConnected] = useState(false)
+  const [text, setText] = useState('')
+  const history = useHistory();
+
+  const gotoMining = url => {
+    history.push(url)
+  }
+  const connectWallet = () => {
+    wallet.connect().then(() => {
+      setConnected(true)
+    })
+  }
+  const claimAirdrop = async () =>{
+    let info =  await getUserInfoAllForAirDrop(wallet.detail.account)
+    if(!info.valid){
+      alert(lang['no-deri-to-claim']);
+      return;
+    }
+    if(!eqInNumber(wallet.detail.chainId,info.chainId)){
+      alert(lang['please-switch-to-BSC-to-claim-deri'])
+      return;
+    }
+    let res = await mintAirdrop(info.chainId,wallet.detail.account)
+    if(!res.success){
+      alert(lang['claim-failed'])
+    }
+  }
+
+  useEffect(() => {
+    if(item && item.airdrop){
+      if(!wallet.isConnected()) {
+        setText(<a href='#' onClick={connectWallet}>{lang['connect-wallet']}</a>)
+      } else {
+        setText(<a href='#' onClick={claimAirdrop}>{lang['claim']}</a>)
+      }
+    } else {
+      let url = `/mining/${pool.version || 'v1'}/${pool.chainId}/${item.type}/${item.symbol}/${item.bTokenSymbol}/${pool.address}`
+      if(item.bTokenId){
+        url = `${url}?baseTokenId=${item.bTokenId}`
+      }
+      if(item.symbolId){
+        if(url.indexOf('?') > 0){
+          url = `${url}&symbolId=${item.symbolId}`
+        } else {
+          url = `${url}?symbolId=${item.symbolId}`
+        }
+      }
+      setText(     
+          <Link to={url}>
+            {lang['staking']}
+          </Link>   
+        )
+    }    
+    return () => {};
+  }, [wallet.detail.account,connected]);
+
+  return (
+    <div className='list-item' key={index}>
+      <span className='col btoken'>
+        <span className={`logo ${item.bTokenSymbol}`}></span>
+        <span className='base-token'>{item.bTokenSymbol}</span>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{item.airdrop ? lang['total'] : lang['pool-liq']}</div>
+        <div className='col-value'><DeriNumberFormat value={item.liquidity} displayType='text' thousandSeparator={true} decimalScale={item.lpApy ? 7 : 0}/></div>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{lang['multiplier']}</div>
+        <div className='col-value' title={lang['multiplier-tip']}><DeriNumberFormat value={item.multiplier}  suffix='x' /></div>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{lang['apy']}</div>
+        <div className='col-value'>
+        <span>
+          <span className={item.lpApy ? 'sushi-apy-underline' : ''} title={ item.lpApy && lang['deri-apy']}>
+            {item.apy ? <DeriNumberFormat value={item.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
+          </span>
+          {item.lpApy &&<>
+          <span> + </span>
+          <span className={item.lpApy ? 'sushi-apy-underline' : '' } title={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+          </>}
+        </span>
+        </div>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{lang['claimed-deri']}</div>
+        <div className='col-value'><DeriNumberFormat value={item.claimed} decimalScale={2}/></div>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{lang['unclaimed-deri']}</div>
+        <div className='col-value'><DeriNumberFormat value={item.unclaimed} decimalScale={2}/></div>
+      </span>
+      <span className='col'>
+        <div className='col-label'>{lang['mining-pnl']}</div>
+        <div className='col-value'><DeriNumberFormat value={item.pnl} decimalScale={2}/></div>
+      </span>
+      <span className='col'>
+        <div className='staking'>{text} ></div>
+      </span>
+    </div>
+  )
+}
+export default function List({optionPools,v1Pools,v2Pools,type,lang,wallet}){
   return (
     <div> 
-      {v2Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index}/>)}
-      {optionPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index}/>)}
-      {v1Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index}/>)}
+      {v2Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+      {optionPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+      {v1Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
     </div>
 
   )

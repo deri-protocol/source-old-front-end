@@ -531,9 +531,9 @@
     "dev": {
       "pools": [
         {
-          "pool": "0x0ee8b0133135268bEc201D8d7752B2f90E5a6c92",
-          "pToken": "0x980a0B311e2B8D20557E3CA1C6d981Fd77520bC0",
-          "lToken": "0xc14097dBfC37719dB731F8532AA3F4D0fd305262",
+          "pool": "0x24D8b55c8E2dF740782240e4D89FA526B973D4d5",
+          "pToken": "0xB7517aCe9B2409C3Fd1f522493f0420B86D1e490",
+          "lToken": "0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8",
           "bToken": "0x4405F3131E2659120E4F931146f032B4c05314E2",
           "bTokenSymbol": "USDT",
           "initialBlock": "10845371",
@@ -624,7 +624,7 @@
       "poolLiteViewer": [
         {
           "chainId": "97",
-          "address": "0x035aE9bcDA3b3fA3e981ef05D6A2f339EE6942E4"
+          "address": "0xd834A1Db1A69fAA874dBA4cB284aD041D81D6469"
         }
       ]
     }

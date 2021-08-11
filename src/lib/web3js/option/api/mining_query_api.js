@@ -1,7 +1,7 @@
 import { getPoolConfig } from '../../shared/config';
 import { catchApiError, bg } from '../../shared/utils';
 import { calculateMaxRemovableShares, calculateShareValue } from '../../v1/calculation';
-import { lTokenOptionFactory, pTokenOptionFactory, everlastingOptionFactory} from '../factory';
+import { lTokenOptionFactory, pTokenOptionFactory, everlastingOptionFactory, everlastingOptionViewerFactory} from '../factory';
 
 
 const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
@@ -9,23 +9,25 @@ const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
   const optionPool = everlastingOptionFactory(chainId, poolAddress)
   const lToken = lTokenOptionFactory(chainId, lTokenAddress)
   const pToken = pTokenOptionFactory(chainId, pTokenAddress)
-  const [parameterInfo, liquidity, lTokenBalance, lTokenTotalSupply, symbolIds] = await Promise.all([
-    optionPool.getParameters(),
-    optionPool.getLiquidity(),
+  const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
+  const [lTokenBalance, lTokenTotalSupply, symbolIds, state] = await Promise.all([
     lToken.balanceOf(accountAddress),
     lToken.totalSupply(),
     pToken.getActiveSymbolIds(),
+    poolViewer.getPoolStates(poolAddress, []),
   ])
-  const { minPoolMarginRatio } = parameterInfo;
+
+  const { poolState } = state
+  const { initialMarginRatio, liquidity, totalDynamicEquity } = poolState;
   let promises = []
   for (let i = 0; i < symbolIds.length; i++) {
     promises.push(optionPool.getSymbol(symbolIds[i]));
   }
   const symbols = await Promise.all(promises)
-  const totalPnl = symbols.reduce((acc, s) => {
-    return acc.plus(bg(s.tradersNetVolume).times(s.strikePrice).times(s.multiplier).minus(s.tradersNetCost))
-  }, bg(0))
-  const poolDynamicEquity = bg(liquidity).minus(totalPnl)
+  // const totalPnl = symbols.reduce((acc, s) => {
+  //   return acc.plus(bg(s.tradersNetVolume).times(s.strikePrice).times(s.multiplier).minus(s.tradersNetCost))
+  // }, bg(0))
+  // const poolDynamicEquity = bg(liquidity).minus(totalPnl)
   const cost = symbols.reduce((acc, s) => acc.plus(s.tradersNetCost), bg(0))
   const value = symbols.reduce((acc, s) => acc.plus(bg(s.tradersNetVolume).times(s.strikePrice).times(s.multiplier)), bg(0))
   return {
@@ -34,7 +36,7 @@ const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
     shares: lTokenBalance.toString(),
     shareValue: calculateShareValue(
       lTokenTotalSupply,
-      poolDynamicEquity
+      totalDynamicEquity,
     ).toString(),
     maxRemovableShares: calculateMaxRemovableShares(
       lTokenBalance,
@@ -42,7 +44,7 @@ const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
       liquidity,
       value,
       cost,
-      minPoolMarginRatio
+      bg(initialMarginRatio).times(10),
     ).toString(),
   };
 }

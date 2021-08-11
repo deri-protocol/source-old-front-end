@@ -27,6 +27,8 @@
     }
     .position-info {
       display: block;
+      overflow: scroll;
+      overflow-x: hidden;
     }
     .trade-info,.history-info {
       display: none;
@@ -222,7 +224,7 @@
               .funding-per {
                 display: inline-block;
                 color: @text;
-                border-bottom: 1px #AAAAAA dotted;
+                // border-bottom: 1px #AAAAAA dotted;
                 cursor: pointer;
               }
             }
@@ -511,7 +513,7 @@
           }
           .pnl-box {
             position: absolute;
-            width: 2rem;
+            min-width: 2rem;
             display: none;
             z-index: 1;
             top: 0.02rem;

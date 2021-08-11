@@ -41,7 +41,11 @@ export class EverlastingOption extends ContractBase {
   // }
   async _getTvMidPrice(symbolId) {
     const res = await this._call('_getTvMidPrice', [symbolId])
-    return res
+    return {
+      _tmp: fromWei(res[0]),
+      midPrice: fromWei(res[1]),
+      delta: fromWei(res[2]),
+    }
   }
   async _premiumFundingCoefficient() {
     const res = await this._call('_premiumFundingCoefficient', [])
@@ -157,10 +161,9 @@ export class EverlastingOption extends ContractBase {
     );
   }
   async addMargin(accountAddress, bAmount) {
-    const prices = await this._getVolSymbolPrices();
     return await this._transact(
       'addMargin',
-      [naturalToDeri(bAmount), prices],
+      [naturalToDeri(bAmount)],
       accountAddress
     );
   }

@@ -2,6 +2,9 @@
 
   .mining-info {
     width: 1225px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 
     .mining-info-header,
     .mining-info-footer {
@@ -26,6 +29,24 @@
     width: 600px;
     justify-content: space-around;
     align-items: center;
+
+    .switcher{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .added-only{
+        margin-left: 8px;
+      }
+    }
+
+    .filter {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .all,.futures,.options {
+        margin-left: 18px;
+      }
+    }
 
     .style-select.card {
       .card {
@@ -439,7 +460,7 @@
     .pool-list{
       border : 1px solid #707070;
       border-radius: 20px;
-      margin : 30px 0px;
+      margin : 20px 0px;
 
       .pool-list-header {
         display: flex;
@@ -461,6 +482,7 @@
             font-family: Tachyon;
             margin-bottom: 4px;
           }
+          
           .l-h-y-ad {
             .add {
               margin-left: 10px;
@@ -472,7 +494,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
-              max-width: 890px;
+              max-width: 850px;
               display: inline-block;
               vertical-align: bottom;
             }
@@ -486,7 +508,7 @@
           justify-content: space-between;
           align-items: center;
           border-top: 1px solid #707070;
-          padding: 20px 40px 20px 12px;
+          padding: 27px 40px 27px 12px;
 
           .col.btoken {
             display: flex;
@@ -499,6 +521,9 @@
               margin-left: 14px;
               font-size: 16px;
               font-weight: bold;
+              a {
+                color: #fff;
+              }
             }
             .logo {
               width: 60px;

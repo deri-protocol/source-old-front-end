@@ -5,14 +5,14 @@ import './zh-lite.less'
 import './de-lite.less'
 import AreaPicker from "../../../components/AreaPicker/AreaPicker";
 import { useRouteMatch } from 'react-router-dom';
+import type from '../../../model/Type';
 
 function Lite({lang}){
-  const isOptions = useRouteMatch('/options/lite') ? true : false
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang} isOptions={isOptions}/>
+      <AreaPicker lang={lang} />
       <div className='trade-body'>
-        <LiteTrade lang={lang} isOptions={isOptions}/>  
+        <LiteTrade lang={lang} />  
       </div>
     </div>    
   )

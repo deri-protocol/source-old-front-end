@@ -1,23 +1,28 @@
-import {makeAutoObservable,observable,action,computed} from 'mobx'
+import { makeAutoObservable, observable, action, computed } from "mobx";
 
-class Type{
+
+class Type {
   current = null;
- 
+  
   constructor(){
     makeAutoObservable(this,{
-      current : observable,
+      current:observable,
       setCurrent : action,
-      isOptions : computed,
+      isOption : computed,
+      isFuture : computed
     })
   }
 
-  setCurrent(options){
-    this.current = options;
+  setCurrent(type){
+    this.current = type;
   }
 
-  get isOptions(){
-    return this.current === true
+  get isOption() {
+    return this.current === 'option'
+  }
+
+  get isFuture() {
+    return this.current === 'future'
   }
 }
-
 export default new Type()

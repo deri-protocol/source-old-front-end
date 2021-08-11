@@ -6,16 +6,18 @@ import {
   getPoolInfoApy,
   getLpContractAddressConfig,
   getLpPoolInfoApy,
-  getPreminingContractConfig
+  getPreminingContractConfig,
+  getUserInfoAll,
+  getLiquidityInfo
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
-import Intl from '../model/Intl';
+
 
 const env = DeriEnv.get();
 const {chainInfo} = config[env]
 
-export default function useMiningPool(isNew){
+export default function useMiningPool(isNew,wallet){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
@@ -30,7 +32,7 @@ export default function useMiningPool(isNew){
       const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
       const pool = config.pool || ''
-      return Object.assign(config,{ 
+      const item = { 
         network : chainInfo[config.chainId] && chainInfo[config.chainId].name,
         liquidity : liqPool.liquidity,
         apy :  ((+apyPool.apy) * 100).toFixed(2),
@@ -39,7 +41,20 @@ export default function useMiningPool(isNew){
         type : 'perpetual',
         buttonText : 'STAKING',
         multiplier : apyPool.multiplier 
-      })
+      }
+      if(wallet.isConnected()){
+        const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId);
+        const claimInfo = await getUserInfoAll(wallet.detail.account);
+        if(info){
+          item['pnl'] = info.pnl
+        }
+        if(claimInfo){
+          item['claimed'] = claimInfo.total;
+          item['unclaimed'] = claimInfo.amount
+        }
+      }
+
+      return Object.assign(config,item)
     }
     const groupByNetwork = pools => {
       const all = []
@@ -77,6 +92,7 @@ export default function useMiningPool(isNew){
     const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
     const all = []
+    //将不同symbol同一池子合并
     let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
@@ -129,7 +145,7 @@ export default function useMiningPool(isNew){
       }
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
-      let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
+      let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  ) && !p.retired)
       let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
       const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p =>  p.retired && p.premining) 
@@ -148,6 +164,6 @@ export default function useMiningPool(isNew){
       setLoaded(true)
     })
     return () => pools.length = 0
-  },[])
+  },[wallet.detail.account])
   return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools];
 }

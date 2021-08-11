@@ -2,6 +2,7 @@
 
 import BigNumber from 'bignumber.js'
 import version from '../model/Version';
+import type from '../model/Type';
 const versionKey = 'deri-current-version'
 
 export function bg(value, base = 0) {
@@ -101,7 +102,10 @@ export function getParam(param,urlString = window.location.href){
 
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
-  return version.current === 'v2' || version.current === 'v2_lite' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  if(type.isOption){
+    symbol = symbol.split('-')[0]
+  }
+  return version.isV2 || version.isV2Lite || type.isOption ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
 

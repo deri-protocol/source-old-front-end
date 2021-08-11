@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import classNames from 'classnames';
+import type from '../../../../model/Type'
 
 
-export default function Tab({ lite = false, lang, isOptions }) {
+export default function Tab({ lite = false, lang }) {
   const history = useHistory();
   // const [isLite, setIsLite] = useState(true);
 
@@ -19,12 +20,12 @@ export default function Tab({ lite = false, lang, isOptions }) {
 
   return (
     <div className={clazz}>
-      {!isOptions && <>
+      {type.isFuture && <>
         <div className='lite' onClick={() => redirect('/futures/lite')} >{lang['lite']}</div>
         <div className='pro' onClick={() => redirect('/futures/pro')}> {lang['pro']}
         </div>
       </>}
-      {isOptions && <>
+      {type.isOption && <>
         <div className='lite' onClick={() => redirect('/options/lite')} >{lang['lite']}</div>
         <div className='pro' onClick={() => redirect('/options/pro')}> {lang['pro']}
         </div>

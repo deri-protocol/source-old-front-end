@@ -4,7 +4,7 @@ import Position from "./Position";
 import History from "./History";
 import classNames from "classnames";
 
-function Reference({lang,isOptions}) {
+function Reference({lang}) {
   const [curTab, setCurTab] = useState('position');
 
   const switchTab = tab => {
@@ -37,8 +37,8 @@ function Reference({lang,isOptions}) {
         </div>
       </div>
       <div className='pos-his-info '>
-        <Position lang={lang} isOptions={isOptions}/>
-        <History lang={lang} isOptions={isOptions} />
+        <Position lang={lang} />
+        <History lang={lang}  />
       </div>
     </div>
   )
