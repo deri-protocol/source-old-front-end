@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import { priceCache, getIntrinsicPrice ,PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate } from '../../lib/web3js/indexV2'
+import { priceCache, getIntrinsicPrice ,PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate,  getEstimatedTimePrice } from '../../lib/web3js/indexV2'
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
@@ -25,6 +25,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
   const [markPrice,setMarkPrice] = useState();
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
+  const [markPriceAfter, setMarkPriceAfter] = useState('');
   const [transFee, setTransFee] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -116,8 +117,21 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
       const volume = (direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay)
       const fundingRateAfter = await getEstimatedFundingRate(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
       if (fundingRateAfter) {
-        let funding =  type.isOption ? fundingRateAfter.deltaFundingRate1 : fundingRateAfter.fundingRate1
+        let funding =  type.isOption ? fundingRateAfter.deltaFunding1 : fundingRateAfter.fundingRate1
         setFundingRateAfter(funding);
+      }
+    }
+  }
+
+  //计算markPrice
+
+  const calcMarkPriceAfter = async () => {
+    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
+      const volume = (direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay)
+      const markPriceAfter = await getEstimatedTimePrice(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
+      if (markPriceAfter) {
+        let markP =  getIntrinsicPrice(trading.index,trading.position.strikePrice,trading.position.isCall).plus(markPriceAfter).toString()
+        setMarkPriceAfter(markP);
       }
     }
   }
@@ -178,6 +192,9 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
     if (!stopCalculate && trading.volumeDisplay !== '') {
       trading.pause();
       calcFundingRateAfter();
+      if(type.isOption){
+        calcMarkPriceAfter();
+      }
       calcLiquidityUsed();
       loadTransactionFee();
     } else if (wallet.detail.account) {
@@ -298,11 +315,11 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4}  /></span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} /></span>
+                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                   </div>
                 </div>
               </>}
@@ -338,11 +355,11 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4}  /></span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
                   </div>
                   <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4}  /></span>
+                    <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
                   </div>
                 </div>
               </>}
@@ -468,13 +485,13 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['mark-price']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2}  />
+                  <DeriNumberFormat value={markPriceAfter} decimalScale={2}  />
                 </div>
               </div>
               <div className='text-info'>
                 <div className='title-enter'>{lang['funding-rate-delta-impact']}</div>
                 <div className='text-enter'>
-                  <DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} suffix='%' decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} suffix='%' />
+                  <DeriNumberFormat value={trading.fundingRate.deltaFunding0} suffix='%' decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} suffix='%' />
                 </div>
               </div>
             </>}

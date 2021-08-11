@@ -31,6 +31,32 @@ describe('EverlastingOptionViewer', () => {
           totalInitialMargin: expect.any(String),
         })
       );
+      expect(res.symbolState[0]).toEqual(
+        expect.objectContaining({
+          K: '0.9',
+          cumulativeDeltaFundingRate: expect.any(String),
+          cumulativePremiumFundingRate: expect.any(String),
+          delta: expect.any(String),
+          deltaFundingCoefficient: expect.any(String),
+          deltaFundingPerSecond: expect.any(String),
+          dynamicMarginRatio: expect.any(String),
+          intrinsicValue: expect.any(String),
+          isCall: true,
+          multiplier: '0.01',
+          oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
+          oraclePrice: expect.any(String),
+          premiumFundingPerSecond: expect.any(String),
+          quoteBalanceOffset: expect.any(String),
+          strikePrice: '20000',
+          symbol: 'BTCUSD-20000-C',
+          symbolId: '0',
+          timePrice: expect.any(String),
+          timeValue: expect.any(String),
+          tradersNetCost: expect.any(String),
+          tradersNetVolume: expect.any(String),
+          volatilityAddress: '0xF6c2582635d26f793898a4BAC5e8843b82eB4121',
+        })
+      );
     },
     TIMEOUT
   );
@@ -50,6 +76,17 @@ describe('EverlastingOptionViewer', () => {
           margin: expect.any(String),
           totalFundingAccrued: expect.any(String),
           totalPnl: expect.any(String),
+        })
+      );
+      expect(res.positionState[0]).toEqual(
+        expect.objectContaining({
+          volume: expect.any(String),
+          cost: expect.any(String),
+          lastCumulativeDeltaFundingRate: expect.any(String),
+          lastCumulativePremiumFundingRate: expect.any(String),
+          pnl: expect.any(String),
+          deltaFundingAccrued: expect.any(String),
+          premiumFundingAccrued: expect.any(String),
         })
       );
     },

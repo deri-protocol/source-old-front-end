@@ -70,7 +70,7 @@ function TradingView({ version, trading, lang,type }) {
             <div className='trade-dashboard-title'><span >{lang['funding-rate-delta']}</span>  </div>
             <div className='trade-dashboard-value'>
               <span className='funding-per' title={trading.fundingRateDeltaTip}>
-                <DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} decimalScale={4}  />
+                <DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  />
               </span>
             </div>
           </div>
@@ -78,7 +78,7 @@ function TradingView({ version, trading, lang,type }) {
             <div className='trade-dashboard-title'><span >{lang['funding-rate-premium']}</span>  </div>
             <div className='trade-dashboard-value'>
               <span className='funding-per' title={trading.fundingRatePremiumTip}>
-                <DeriNumberFormat value={trading.fundingRate.premiumFundingRate0} decimalScale={4} />
+                <DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} />
               </span>
             </div>
           </div>

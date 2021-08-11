@@ -20,7 +20,7 @@ export const dynamicInitialPoolMarginRatio = (spot, strike, isCall, initialMargi
   }
 }
 
-export const getDeltaFundingRatePerSecond = (symbol, delta, price, totalDynamicEquity)  => {
+export const getdeltaFundingPerSecond = (symbol, delta, price, totalDynamicEquity)  => {
   return bg(totalDynamicEquity).eq(0)
     ? bg(0)
     : bg(delta)
@@ -32,7 +32,7 @@ export const getDeltaFundingRatePerSecond = (symbol, delta, price, totalDynamicE
         .times(symbol.deltaFundingCoefficient)
         .div(totalDynamicEquity);
 } 
-export const getPremiumFundingRate = (symbol, premiumFundingCoefficient, totalDynamicEquity)  => {
+export const getpremiumFunding = (symbol, premiumFundingCoefficient, totalDynamicEquity)  => {
   return bg(totalDynamicEquity).eq(0)
     ? bg(0)
     : bg(symbol.timeValue)

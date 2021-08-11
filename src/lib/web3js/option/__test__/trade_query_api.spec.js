@@ -1,6 +1,6 @@
 import { ACCOUNT_ADDRESS, CHAIN_ID, OPTION_POOL_ADDRESS, TIMEOUT } from "../../shared/__test__/setup"
 import { bg } from '../../shared';
-import { getEstimatedFee, getEstimatedFundingRate, getEstimatedLiquidityUsed, getEstimatedMargin, getFundingRate, getLiquidityUsed, getPositionInfo, getSpecification } from "../api/trade_query_api"
+import { getEstimatedFee, getEstimatedFundingRate, getEstimatedLiquidityUsed, getEstimatedMargin, getEstimatedTimePrice, getFundingRate, getLiquidityUsed, getPositionInfo, getSpecification } from "../api/trade_query_api"
 
 describe('trade query api', () => {
   it(
@@ -20,9 +20,8 @@ describe('trade query api', () => {
         multiplier: '0.01',
         protocolFeeCollectRatio: '0.2',
         deltaFundingCoefficient: '0.000005',
-        strikePrice: '20000',
-        timePrice: '0.000000187143649599',
         symbol: 'BTCUSD-20000-C',
+        isCall: true,
       });
     },
     TIMEOUT
@@ -67,15 +66,15 @@ describe('trade query api', () => {
       const res = await getFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '0');
       expect(res).toEqual(
         expect.objectContaining({
-          deltaFundingRate0: expect.any(String),
-          deltaFundingRatePerSecond: expect.any(String),
+          deltaFunding0: expect.any(String),
+          deltaFundingPerSecond: expect.any(String),
           liquidity: expect.any(String),
-          premiumFundingRate0:  expect.any(String),
-          premiumFundingRatePerSecond: expect.any(String),
+          premiumFunding0:  expect.any(String),
+          premiumFundingPerSecond: expect.any(String),
           tradersNetVolume:  expect.any(String),
         })
       );
-      // expect(bg(res.deltaFundingRate0).abs().toNumber()).toBeLessThanOrEqual(1000);
+      // expect(bg(res.deltaFunding0).abs().toNumber()).toBeLessThanOrEqual(1000);
       // expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(1000);
       expect(res).toEqual({});
     },
@@ -85,7 +84,7 @@ describe('trade query api', () => {
     'getEstimatedFundingRate',
     async () => {
       const res = await getEstimatedFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '-61', '0');
-      expect(bg(res.deltaFundingRate1).abs().toNumber()).toEqual(0)
+      expect(bg(res.deltaFunding1).abs().toNumber()).toEqual(0)
     },
     TIMEOUT
   );
@@ -111,6 +110,15 @@ describe('trade query api', () => {
     'getEstimateFee',
     async () => {
       const res = await getEstimatedFee(CHAIN_ID, OPTION_POOL_ADDRESS, '3', '0');
+      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(0.01)
+      expect(bg(res).toNumber()).toBeLessThanOrEqual(10)
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimateTimePrice',
+    async () => {
+      const res = await getEstimatedTimePrice(CHAIN_ID, OPTION_POOL_ADDRESS, '2', '0');
       expect(bg(res).toNumber()).toBeGreaterThanOrEqual(0.01)
       expect(bg(res).toNumber()).toBeLessThanOrEqual(10)
     },

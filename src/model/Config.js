@@ -18,7 +18,7 @@ export default class Config {
     }
     let configs = getContractAddressConfig(DeriEnv.get(),current)
     // if(isOptions){
-    //   configs = configs.filter(c => c.symbo)
+      
     // }
     if(!isOptions && version){
       configs = configs.filter(c => c.version === version.current)
