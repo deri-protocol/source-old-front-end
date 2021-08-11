@@ -424,7 +424,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
             </>}
             {type.isOption && <>
               <div className='text-info'>
-                <div className='title-enter'>{lang['funding-rate-impact']}</div>
+                <div className='title-enter'>{lang['funding-rate-delta-impact']}</div>
                 <div className='text-enter'>
                   <DeriNumberFormat value={trading.fundingRate.deltaFundingRate0} suffix='%' decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} suffix='%' />
                 </div>

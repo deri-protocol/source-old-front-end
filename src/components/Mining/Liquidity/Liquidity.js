@@ -272,7 +272,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
-											address={address} wallet={wallet} version={version} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
+											address={address} wallet={wallet} version={version} unit={version === 'v1' || version === 'v2_lite' || version === 'option' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>
