@@ -145,13 +145,15 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
 
 
   const onKeyPress = evt => {
-    // if(type.isOption){
-    //   // return ''
-    // }else if(type.isFuture){
+    if(type.isOption){
       if (evt.which !== 46 && (evt.which < 48 || evt.which > 57)) {
         evt.preventDefault();
       }
-    // }
+    }else if(type.isFuture){
+      if(evt.which < 48 || evt.which > 57) {
+        evt.preventDefault();
+      }
+    }
     
   }
 
