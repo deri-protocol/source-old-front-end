@@ -43,7 +43,7 @@ function History({wallet,trading,lang,type}) {
         <div>{lang['direction']}</div>
         <div>{lang['base-token']}</div>
         <div>{lang['price']}</div>
-        <div>{lang['volume']}</div>
+        <div>{lang['volume']}  {type.isOption?`( ${lang['notional']} )`:''} </div>
         <div>{type.isOption?lang['contract-value']: lang['notional']}</div>
         <div>{lang['transaction-fee']}</div>
       </div>

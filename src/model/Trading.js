@@ -309,8 +309,21 @@ export default class Trading {
       const price = position.price || this.index
       const increment = slideIncrementMargin - position.marginHeld
       let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
-      const volume =  increment / (price * this.contract.multiplier * MarginRatio);
-      this.setVolume(volume.toFixed(0))
+      let volume =  increment / (price * this.contract.multiplier * MarginRatio);
+      if(type.isOption){
+        volume = +volume * +this.contract.multiplier
+        let index = this.contract.multiplier.indexOf('.')
+        let num = this.contract.multiplier.slice(index);
+        let length = num.length 
+        let value = volume.toString()
+        if(value.indexOf(".") != '-1'){
+          value = value.substring(0,value.indexOf(".") + length)
+        }
+        this.setVolume(value)
+      }else{
+        this.setVolume(volume.toFixed(0))
+      }
+      
     }
   }
 
@@ -383,6 +396,8 @@ export default class Trading {
       currentSymbolMarginHeld : currentSymbolMarginHeld,
       leverage : leverage
     }
+    
+    
   }
 
   get direction(){    
@@ -460,25 +475,25 @@ export default class Trading {
   }
 
   get fundingRateDeltaTip(){    
-    if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config){
+    if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${(+this.fundingRate.deltaFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.deltaFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${(+this.fundingRate.deltaFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${(+this.fundingRate.deltaFunding0).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
   }
   get fundingRatePremiumTip(){    
-    if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config){
+    if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${(+this.fundingRate.premiumFundingPerSecond / +this.contract.multiplier).toString()} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingPerBlock} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${(+this.fundingRate.premiumFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${(+this.fundingRate.premiumFunding0).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
