@@ -78,15 +78,16 @@ describe('trade query api', () => {
       expect(bg(res.deltaFunding0).abs().toNumber()).toBeLessThanOrEqual(1000);
       expect(bg(res.tradersNetVolume).abs().toNumber()).toBeLessThanOrEqual(100000);
       expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(1000);
-      //expect(res).toEqual({});
+      expect(res).toEqual({});
     },
     TIMEOUT
   );
   it(
     'getEstimatedFundingRate',
     async () => {
-      const res = await getEstimatedFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '-61', '0');
-      expect(bg(res.deltaFunding1).abs().toNumber()).toBeGreaterThanOrEqual(0)
+      const res = await getEstimatedFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '12', '0');
+      //expect(bg(res.deltaFunding1).abs().toNumber()).toBeGreaterThanOrEqual(0)
+      expect(res).toEqual({});
     },
     TIMEOUT
   );

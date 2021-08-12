@@ -1,8 +1,14 @@
-import { getOracleConfig, mapToSymbolInternal, normalizeOptionSymbol } from '../config/oracle';
+import { getOracleConfig } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
 import { oracleFactory } from '../factory/oracle';
 import { deriToNatural } from './convert';
+import {
+  getVolatilitySymbols,
+  mapToSymbolInternal,
+  mapToBTokenInternal,
+  normalizeOptionSymbol,
+} from '../config/token';
 
 export const getOracleUrl = (symbol, type='futures') => {
   const env = DeriEnv.get();
@@ -38,7 +44,7 @@ export const getPriceFromRest = async(symbol, type='futures') => {
 
 // from oracle rest api
 export const getPriceInfo = async (symbol, type='futures') => {
-  symbol = mapToSymbolInternal(symbol)
+  symbol = mapToBTokenInternal(symbol)
   let url = getOracleUrl(symbol, type);
   // console.log(`getPriceInfo url: ${url}`)
   let retry = 3;
@@ -90,8 +96,6 @@ export const RestOracle = (symbol) => {
   return {
     getPrice: async function () {
       return getPriceFromRest(symbol)
-      // const priceInfo = await getPriceInfo(symbol)
-      // return deriToNatural(priceInfo.price).toString()
     }
   }
 };
@@ -118,4 +122,14 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
 
 export const getOraclePriceForOption = async (chainId, symbol) => {
   return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
+};
+
+export const getOracleVolatilityForOption = async (chainId, symbols) => {
+  const volSymbols = getVolatilitySymbols(symbols)
+  volSymbols.map((s) => `VOL-${s.toUpperCase()}`)
+
+  const volatilities = await Promise.all(
+    volSymbols.reduce((acc, i) => acc.concat([getPriceInfo(i, 'option')]), [])
+  );
+  return volatilities;
 };

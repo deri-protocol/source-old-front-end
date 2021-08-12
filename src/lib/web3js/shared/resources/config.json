@@ -537,10 +537,6 @@
           "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
           "bTokenSymbol": "BUSD",
           "initialBlock": "11404887",
-          "volatilitySymbols": [
-            "VOL-BTCUSD",
-            "VOL-ETHUSD"
-          ],
           "symbols": [
             {
               "symbolId": "0",

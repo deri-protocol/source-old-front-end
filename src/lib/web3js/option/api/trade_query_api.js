@@ -1,6 +1,6 @@
 import { bg, bTokenFactory, catchApiError, getPoolConfig, getPoolLiteViewerConfig } from "../../shared";
 import { fundingRateCache } from "../../shared/api/api_globals";
-import { normalizeOptionSymbol } from "../../shared/config/oracle";
+import { normalizeOptionSymbol } from "../../shared/config/token";
 import { wrappedOracleFactory } from "../../shared/factory/oracle";
 import { getPriceFromRest } from "../../shared/utils/oracle";
 import { queryTradePMM } from '../calculation/PMM';
@@ -246,7 +246,6 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
       .toString(),
     premiumFundingPerSecond: symbolInfo.premiumFundingPerSecond,
   };
-  fundingRateCache.set(chainId, poolAddress, symbolId, res)
   return res
 };
 
@@ -314,6 +313,7 @@ export const getFundingRate = async(chainId, poolAddress, symbolId) => {
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
       const res = await _getFundingRate(chainId, poolAddress, symbolId);
+      fundingRateCache.set(chainId, poolAddress, symbolId, res)
       const curSymbolIndex = res.symbolIds.indexOf(symbolId)
       if (curSymbolIndex < 0) {
         throw new Error(`getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
@@ -354,6 +354,7 @@ export const getEstimatedFundingRate = async (
       let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       if (!res) {
         res = await _getFundingRate(chainId, poolAddress, symbolId);
+        fundingRateCache.set(chainId, poolAddress, symbolId, res)
       }
       const { symbolIds, symbols, prices, totalDynamicEquity } = res;
       const curSymbolIndex = symbolIds.indexOf(symbolId)
@@ -362,9 +363,9 @@ export const getEstimatedFundingRate = async (
       }
       let symbol = symbols[curSymbolIndex] 
       //console.log('symbol.tradersNetVolume0', symbol.tradersNetVolume)
-      symbol.tradersNetVolume = bg(symbol.tradersNetVolume).plus(newNetVolume).toString()
+      //symbol.tradersNetVolume = bg(symbol.tradersNetVolume).plus(newNetVolume).toString()
       //console.log('symbol.tradersNetVolume1', symbol.tradersNetVolume)
-      const deltaFunding1 = getdeltaFundingPerSecond(symbol, symbol.delta, prices[curSymbolIndex], totalDynamicEquity)
+      const deltaFunding1 = getdeltaFundingPerSecond(symbol, symbol.delta, prices[curSymbolIndex], totalDynamicEquity, newNetVolume)
 
       return {
         deltaFunding1: bg(deltaFunding1).times(SECONDS_IN_A_DAY).toString(),
@@ -386,6 +387,7 @@ export const getLiquidityUsed = async (chainId, poolAddress, symbolId) => {
       let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       if (!res) {
         res = await _getFundingRate(chainId, poolAddress, symbolId);
+        fundingRateCache.set(chainId, poolAddress, symbolId, res)
       }
       return {
         liquidityUsed0: res.liquidityUsed.times(100).toString(),
@@ -410,6 +412,7 @@ export const getEstimatedLiquidityUsed = async (
     let res = fundingRateCache.get(chainId, poolAddress, symbolId);
     if (!res) {
       res = await _getFundingRate(chainId, poolAddress, symbolId);
+      fundingRateCache.set(chainId, poolAddress, symbolId, res)
     }
     const {symbolIds, symbols, prices, liquidity, initialMarginRatio } = res;
 

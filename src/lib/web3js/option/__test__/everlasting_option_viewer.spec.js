@@ -15,7 +15,7 @@ describe('EverlastingOptionViewer', () => {
         OPTION_POOL_ADDRESS,
        [] 
       );
-      res.symbolState.forEach((s) => console.log(s))
+      //res.symbolState.forEach((s) => console.log(s))
       expect(res.poolState).toEqual(
         expect.objectContaining({
           curTimestamp: expect.any(String),

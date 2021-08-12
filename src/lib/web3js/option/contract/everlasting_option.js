@@ -1,6 +1,8 @@
 import { ContractBase, deleteIndexedKey, fromWeiForObject, fromWei, naturalToDeri, getPoolConfig, getPoolLiteViewerConfig } from '../../shared'
 import { getPriceInfo } from '../../shared/utils/oracle';
 import { everlastingOptionAbi } from './abis.js'
+// import { EverlastingOptionViewer } from './everlasting_option_viewer';
+// import { PTokenOption } from './p_token_option';
 
 export class EverlastingOption extends ContractBase {
   // init
@@ -20,6 +22,33 @@ export class EverlastingOption extends ContractBase {
     this.lTokenAddress = this.config.lToken;
     this.pTokenAddress = this.config.pToken;
     this.viewerAddress = getPoolLiteViewerConfig(this.chainId, 'option');
+  }
+  async _updateConfig() {
+  //   const {
+  //     bTokenAddress,
+  //     pTokenAddress,
+  //     lTokenAddress,
+  //   } = await this.getAddresses();
+  //   bTokenAddress !== this.config.bTokenAddress &&
+  //     console.error(`pool bTokenAddress not match: ${bTokenAddress}`);
+  //   lTokenAddress !== this.config.lTokenAddress &&
+  //     console.error(`pool lTokenAddress not match: ${lTokenAddress}`);
+  //   pTokenAddress !== this.config.pTokenAddress &&
+  //     console.error(`pool pTokenAddress not match: ${pTokenAddress}`);
+
+  //  const pToken = new PTokenOption(this.chainId, this.pTokenAddress);
+  //     const [activeSymbolIds, state] = await Promise.all([
+  //       pToken.getActiveSymbolIds(),
+  //       new EverlastingOptionViewer(
+  //         this.chainId,
+  //         viewerAddress
+  //       ).getPoolStates(this.contractAddress, []),
+  //     ]);
+  //     //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
+  //     this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
+  //       return activeSymbols[index] == '' ? acc : acc.concat([i]);
+  //     }, []);
+  //     this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
   }
 
   // query

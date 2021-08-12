@@ -20,7 +20,7 @@ export const normalizeOptionSymbol = (optionSymbol) => {
   }
 };
 
-export const getVolatilitySymbols = (symbols) => {
+export const getNormalizedOptionSymbols = (symbols) => {
   let res = []
   symbols.forEach((s) => {
     const volSymbol = normalizeOptionSymbol(s)
@@ -29,6 +29,10 @@ export const getVolatilitySymbols = (symbols) => {
     }
   })
   return res
+}
+
+export const getVolatilitySymbols = (symbols) => {
+  return getNormalizedOptionSymbols(symbols).map((s) => `VOL-${s}`)
 }
 
 export const isUsedRestOracle = (symbol) => {

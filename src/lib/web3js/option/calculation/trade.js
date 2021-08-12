@@ -20,11 +20,11 @@ export const dynamicInitialPoolMarginRatio = (spot, strike, isCall, initialMargi
   }
 }
 
-export const getdeltaFundingPerSecond = (symbol, delta, price, totalDynamicEquity)  => {
+export const getdeltaFundingPerSecond = (symbol, delta, price, totalDynamicEquity, newNetVolume)  => {
   return bg(totalDynamicEquity).eq(0)
     ? bg(0)
     : bg(delta)
-        .times(symbol.tradersNetVolume)
+        .times(bg(symbol.tradersNetVolume).plus(newNetVolume))
         .times(price)
         .times(price)
         .times(symbol.multiplier)

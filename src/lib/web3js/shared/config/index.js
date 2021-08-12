@@ -44,8 +44,13 @@ export {
 export { 
   getOracleConfigList,
   getOracleConfig,
+} from './oracle';
+export { 
   isUsedRestOracle,
   mapToSymbol,
   mapToSymbolInternal,
-} from './oracle';
+  mapToBToken,
+  normalizeOptionSymbol,
+  getNormalizedOptionSymbols,
+} from './token';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

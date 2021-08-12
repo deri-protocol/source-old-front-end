@@ -36,7 +36,7 @@ function TradingView({ version, trading, lang,type }) {
   return (
     <div id="trading-view">
       <div className='right-top'>
-        <div className='symbol-basetoken-text'>
+        <div className='symbol-basetoken-text option-symbol'>
           {type.isOption? `${trading.config ? trading.config.symbol:''}` : (version.isV1 || version.isV2Lite) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
        
