@@ -53,6 +53,10 @@ function TradingView({ version, trading, lang,type }) {
               </span>
             </div>
           </div>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
+            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.fundingRate.tradersNetVolume} /></div>
+          </div>
         </>}
         {type.isOption && <>
           <div className='trade-dashboard-item latest-price  '>
@@ -82,12 +86,12 @@ function TradingView({ version, trading, lang,type }) {
               </span>
             </div>
           </div>
-          
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
+            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract?trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'' } /></div>
+          </div>
         </>}
-        <div className='trade-dashboard-item latest-price'>
-          <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
-          <div className='trade-dashboard-value'><DeriNumberFormat value={trading.fundingRate.tradersNetVolume} /></div>
-        </div>
+        
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['pool-total-liquidity']}</div>
           <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity} decimalScale={2} /> {trading.config && trading.config.bTokenSymbol}</div>
