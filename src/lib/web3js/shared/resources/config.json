@@ -531,13 +531,13 @@
     "dev": {
       "pools": [
         {
-          "pool": "0x56E6B7Dd09Ac36F38FeF7aB6DE27E941E044504a",
-          "pToken": "0x8a006f0791Ad96DeA41523152c2A4b7c00bF1532",
-          "lToken": "0x3E9DCe5Ed9e4620e7e7E916b9E439174ecB8A9b4",
-          "bToken": "0x4405F3131E2659120E4F931146f032B4c05314E2",
-          "bTokenSymbol": "USDT",
-          "initialBlock": "11385148",
-          "volatileSymbols": [
+          "pool": "0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6",
+          "pToken": "0x7484e22022C971e314A00e0dfbfCDe8E223c80aC",
+          "lToken": "0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C",
+          "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
+          "bTokenSymbol": "BUSD",
+          "initialBlock": "11404887",
+          "volatilitySymbols": [
             "VOL-BTCUSD",
             "VOL-ETHUSD"
           ],

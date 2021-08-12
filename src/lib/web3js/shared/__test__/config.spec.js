@@ -9,13 +9,9 @@ import {
   getDailyBlockNumberConfig,
   getChainIds,
   getPoolVersion,
-  mapToSymbol,
   getBrokerConfig,
-  mapToSymbolInternal,
-  isUsedRestOracle,
   getPreminingConfigList,
 } from '../config';
-import { normalizeOptionSymbol } from '../config/oracle';
 import { bg } from '../utils';
 import {
   POOL_V2_ADDRESS,
@@ -91,7 +87,7 @@ describe('config', () => {
     expect(getFilteredPoolConfigList(POOL_V2_ADDRESS, '0').length).toEqual(2);
   });
   test('getFilteredPoolconfig(1) for option', () => {
-    expect(getFilteredPoolConfigList(OPTION_POOL_ADDRESS, undefined, undefined, 'option').length).toEqual(12);
+    expect(getFilteredPoolConfigList(OPTION_POOL_ADDRESS, undefined, undefined, 'option').length).toEqual(16);
   });
   test('getPoolconfig(0, 1)', () => {
     expect(
@@ -145,7 +141,7 @@ describe('config', () => {
       chainId: '97',
       symbol: 'ETHUSD',
       decimal: '18',
-      address: '0xdF0050D6A07C19C6F6505d3e66B68c29F41edA09',
+      address: '0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A',
     };
     expect(getOracleConfig('97', 'ETHUSD', 'option')).toEqual(output)
   })
@@ -237,42 +233,24 @@ describe('config', () => {
         null,
         'option'
       ).lToken
-    ).toEqual('0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8');
+    ).toEqual('0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C');
   });
-  test('getPoolconfig() volatileSymbols for option', () => {
+  test('getPoolconfig() volatilitySymbols for option', () => {
     expect(
       getPoolConfig(
         OPTION_POOL_ADDRESS,
         null,
         null,
         'option'
-      ).volatileSymbols
+      ).volatilitySymbols
     ).toEqual(['VOL-BTCUSD', 'VOL-ETHUSD']);
   });
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
     expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
-    expect(getPoolVersion('0x24D8b55c8E2dF740782240e4D89FA526B973D4d5')).toEqual('option')
-  })
-  test('isUsedRestOracle', () => {
-    expect(isUsedRestOracle('AXSUSDT')).toEqual(true)
-    expect(isUsedRestOracle('MANAUSDT')).toEqual(true)
-    expect(isUsedRestOracle('IBSCDEFI')).toEqual(true)
-    expect(isUsedRestOracle('BTCUSD')).toEqual(false)
-    expect(isUsedRestOracle('iBSCDEFI')).toEqual(false)
-  })
-  test('mapToSymbol', () => {
-    expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDEFI')
-    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
-  })
-  test('mapToSymbolInternal', () => {
-    expect(mapToSymbolInternal('iBSCDEFI')).toEqual('IBSCDEFI')
-    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
+    expect(getPoolVersion('0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6')).toEqual('option')
   })
   test('getPreminingContractConfig', () => {
     expect(getPreminingConfigList('prod').length).toEqual(8)
-  })
-  test('no', () => {
-    expect(normalizeOptionSymbol('BTCUSD-20000-C')).toEqual('BTCUSD')
   })
 });

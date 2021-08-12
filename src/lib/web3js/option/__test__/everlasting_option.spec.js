@@ -29,26 +29,26 @@ describe('EverlastingOption', () => {
     const res = await everlastingOption.getAddresses()
     expect(res).toEqual(
       expect.objectContaining({
-        bTokenAddress: '0x4405F3131E2659120E4F931146f032B4c05314E2',
-        lTokenAddress: '0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8',
+        bTokenAddress: '0x2ebE70929bC7D930248040f54135dA12f458690C',
+        lTokenAddress: '0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C',
         liquidatorQualifierAddress:
           '0x0000000000000000000000000000000000000000',
-        pTokenAddress: '0xB7517aCe9B2409C3Fd1f522493f0420B86D1e490',
+        pTokenAddress: '0x7484e22022C971e314A00e0dfbfCDe8E223c80aC',
         protocolFeeCollector: '0x4aF582Fd437f997F08df645aB6b0c070CC791DeE',
       })
     );
   }, TIMEOUT)
   it('getProtocolFeeAccrued', async() => {
     const res = await everlastingOption.getProtocolFeeAccrued()
-    expect(bg(res).toNumber()).toBeGreaterThan(10)
+    expect(bg(res).toNumber()).toBeGreaterThan(2)
   }, TIMEOUT)
   it('OptionPricer', async() => {
     const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0xA3614D4FFE4F635405bF5A0bb94b0d86361ec80D')
+    expect(res).toEqual('0x2D346A85299d812C0c0e97B23CD1ff0F37b606Ab')
   }, TIMEOUT)
   it('PmmPricer', async() => {
     const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0xd0CaD75F6E58C3343e226046e13457EDa0f32a13')
+    expect(res).toEqual('0x1D7AFF20BB5E52dDD10d5B4B0e0b91b5327Ae826')
   }, TIMEOUT)
   it('_T', async() => {
     const res = await everlastingOption._T()
@@ -68,7 +68,7 @@ describe('EverlastingOption', () => {
           intrinsicValue: expect.any(String),
           isCall: true,
           multiplier: '0.01',
-          oracleAddress: '0x78Db6d02EE87260a5D825B31616B5C29f927E430',
+          oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
           quote_balance_offset: expect.any(String),
           strikePrice: '20000',
           symbol: 'BTCUSD-20000-C',
@@ -76,7 +76,7 @@ describe('EverlastingOption', () => {
           timeValue:  expect.any(String),
           tradersNetCost: expect.any(String),
           tradersNetVolume: expect.any(String),
-          volatilityAddress: '0xF6c2582635d26f793898a4BAC5e8843b82eB4121',
+          volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',
         })
       );
       expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-100)

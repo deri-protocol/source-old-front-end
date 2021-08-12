@@ -85,7 +85,7 @@ const expendPoolConfigOption = (config) => {
           symbolId: symbol.symbolId,
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
-          volatileSymbols: pool.volatileSymbols,
+          volatilitySymbols: pool.volatilitySymbols,
           unit: symbol.unit,
           version: 'option',
           isOption: true,

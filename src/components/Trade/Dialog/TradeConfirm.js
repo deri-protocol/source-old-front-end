@@ -5,7 +5,7 @@ import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
 
 
-export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPrice}) {
+export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPriceAfter}) {
   const [pending, setPending] = useState(false);
 
 
@@ -68,8 +68,8 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               </>} 
               {type.isOption && <>
                 <div className='text'>
-                  <div className='text-title'>{lang['mark-price']}</div>
-                  <div className='text-num'><NumberFormat value={markPrice} decimalScale={2} displayType='text' /></div>
+                  <div className='text-title'>{lang['trade-price']}</div>
+                  <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>
                 </div>
               </>}
               {type.isFuture && <>

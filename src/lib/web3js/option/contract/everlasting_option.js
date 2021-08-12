@@ -13,9 +13,9 @@ export class EverlastingOption extends ContractBase {
       undefined,
       'option'
     );
-    this.offchainSymbolIds = this.config.offchainSymbolIds;
-    this.offchainSymbols = this.config.offchainSymbols;
-    this.volatileSymbols = this.config.volatileSymbols;
+    // this.offchainSymbolIds = this.config.offchainSymbolIds;
+    // this.offchainSymbols = this.config.offchainSymbols;
+    this.volatilitySymbols = this.config.volatilitySymbols;
     this.bTokenAddress = this.config.bToken;
     this.lTokenAddress = this.config.lToken;
     this.pTokenAddress = this.config.pToken;
@@ -120,10 +120,10 @@ export class EverlastingOption extends ContractBase {
   // tx
   async _getVolSymbolPrices() {
     let prices = [];
-    if (this.volatileSymbols.length > 0) {
+    if (this.volatilitySymbols.length > 0) {
       //const priceInfos = await getPriceInfos(this.offchainSymbols);
       const priceInfos = await Promise.all(
-        this.volatileSymbols.reduce(
+        this.volatilitySymbols.reduce(
           (acc, i) => acc.concat([getPriceInfo(i, 'option')]),
           []
         )

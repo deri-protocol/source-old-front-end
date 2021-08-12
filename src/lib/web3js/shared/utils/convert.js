@@ -111,4 +111,3 @@ export const fromWeiForObject = (obj, keyList = []) => {
     return acc;
   }, {});
 };
-

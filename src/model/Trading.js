@@ -444,25 +444,25 @@ export default class Trading {
   }
 
   get fundingRateDeltaTip(){    
-    if(this.fundingRate && this.fundingRate.deltaFundingRatePerSecond && this.config){
+    if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-delta')} = ${this.fundingRate.deltaFundingRatePerSecond}` +
-      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n ${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-delta')} = ${this.fundingRate.deltaFundingRatePerSecond}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFundingRatePerSecond}  ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFundingPerSecond}  ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
   }
   get fundingRatePremiumTip(){    
-    if(this.fundingRate && this.fundingRate.premiumFundingRatePerSecond && this.config){
+    if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-premium')} = ${this.fundingRate.premiumFundingRatePerSecond}` +
-      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} ) ${this.config.bTokenSymbol}`        
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n ${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingPerBlock} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-premium')} = ${this.fundingRate.premiumFundingRatePerSecond}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingRatePerSecond} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingPerSecond} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
@@ -474,6 +474,7 @@ export default class Trading {
       `\n ${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin} ${Intl.get('lite','otm-ratio-initial')})` +
       `\n \n ${Intl.get('lite','otm-ratio-max')}`
     }
+    return ''
   }
   get maintenanceMarginRatioTip(){
     if(this.contract && this.contract.maintenanceMarginRatioOrigin){
@@ -481,12 +482,14 @@ export default class Trading {
       `\n ${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin} ${Intl.get('lite','otm-ratio-initial')})` +
       `\n \n ${Intl.get('lite','otm-ratio-max')}`
     }
+    return ''
   }
 
   get multiplierTip(){
     if(this.contract && this.config){
-      return `(${Intl.get('lite','the-notional-value-of')} ${this.contract.multiplier}${this.config.unit})`
+      return `${Intl.get('lite','the-notional-value-of')} ${this.contract.multiplier}${this.config.unit}`
     }
+    return ''
   }
 
 }

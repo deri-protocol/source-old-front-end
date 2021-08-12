@@ -15,15 +15,15 @@ describe('EverlastingOptionViewer', () => {
         OPTION_POOL_ADDRESS,
        [] 
       );
-      // res.symbolState.forEach((s) => console.log(s))
+      res.symbolState.forEach((s) => console.log(s))
       expect(res.poolState).toEqual(
         expect.objectContaining({
           curTimestamp: expect.any(String),
           initialMarginRatio: '0.1',
           liquidity: expect.any(String),
           maintenanceMarginRatio: '0.05',
-          pToken: '0xB7517aCe9B2409C3Fd1f522493f0420B86D1e490',
-          pool: '0x24D8b55c8E2dF740782240e4D89FA526B973D4d5',
+          pToken: '0x7484e22022C971e314A00e0dfbfCDe8E223c80aC',
+          pool: '0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6',
           preTimestamp: expect.any(String),
           premiumFundingCoefficient: expect.any(String),
           premiumFundingPeriod: expect.any(String),
@@ -54,7 +54,7 @@ describe('EverlastingOptionViewer', () => {
           timeValue: expect.any(String),
           tradersNetCost: expect.any(String),
           tradersNetVolume: expect.any(String),
-          volatilityAddress: '0xF6c2582635d26f793898a4BAC5e8843b82eB4121',
+          volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',
         })
       );
     },

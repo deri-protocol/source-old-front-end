@@ -300,8 +300,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
             </>} 
             {type.isOption && <>
               <div className='index-prcie'>
-              {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> <span className='vol'> | </span>  
-              {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
+              {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
               </div>
               <div className='mark-price'>
                 {lang['eo-mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
@@ -469,13 +468,14 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                 <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
               </div>
             </div>
-            <div className='text-info'>
-              <div className='title-enter'>{lang['liquidity-used']}</div>
-              <div className='text-enter'>
-                <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2} /> -> <DeriNumberFormat value={liqUsedPair.afterLiqUsed} decimalScale={2} suffix='%' />
-              </div>
-            </div>
+            
             {type.isFuture && <>
+              <div className='text-info'>
+                <div className='title-enter'>{lang['liquidity-used']}</div>
+                <div className='text-enter'>
+                  <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2} /> -> <DeriNumberFormat value={liqUsedPair.afterLiqUsed} decimalScale={2} suffix='%' />
+                </div>
+              </div>
               <div className='text-info'>
                 <div className='title-enter'>{lang['funding-rate-impact']}</div>
                 <div className='text-enter'>
@@ -485,9 +485,15 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
             </>}
             {type.isOption && <>
               <div className='text-info'>
-                <div className='title-enter pool'>{lang['mark-price']}</div>
+                <div className='title-enter pool'>{lang['trade-price']}</div>
                 <div className='text-enter poolL'>
                   <DeriNumberFormat value={markPriceAfter} decimalScale={2}  />
+                </div>
+              </div>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['mark-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={markPrice} decimalScale={2}  />
                 </div>
               </div>
               <div className='text-info'>
@@ -522,7 +528,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
           version={version}
           lang={lang}
           type={type}
-          markPrice={markPrice}
+          markPriceAfter={markPriceAfter}
         />
       </div>
       {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
@@ -532,7 +538,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang,type ,markPrice}) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang,type ,markPriceAfter}) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -621,7 +627,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
       afterTrade={afterTrade}
       direction={direction}
       lang={lang}
-      markPrice={markPrice}
+      markPriceAfter={markPriceAfter}
     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)

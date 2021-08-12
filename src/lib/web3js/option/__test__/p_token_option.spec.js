@@ -59,7 +59,24 @@ describe('PTokenOption', () => {
     'getActiveSymbolIds',
     async () => {
       const res = await pTokenOption.getActiveSymbolIds(ACCOUNT_ADDRESS);
-      const output = ['0', '1','2','3','4','5','6','7','8','9','10','11']
+      const output = [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+      ];
       expect(res).toEqual(output);
     },
     TIMEOUT
@@ -68,7 +85,7 @@ describe('PTokenOption', () => {
     'getMargin',
     async () => {
       const res = await pTokenOption.getMargin(ACCOUNT_ADDRESS);
-      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(MID_NUMBER);
+      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(MIN_NUMBER);
       expect(bg(res).toNumber()).toBeLessThanOrEqual(MAX_NUMBER);
     },
     TIMEOUT

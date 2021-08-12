@@ -91,10 +91,10 @@ const validateConfigOption = (config) => {
       'bTokenSymbol',
       'symbols',
       'chainId',
-      'offchainSymbolIds',
-      'offchainSymbols',
+      // 'offchainSymbolIds',
+      // 'offchainSymbols',
       'symbolCount',
-      'volatileSymbols',
+      'volatilitySymbols',
     ],
     config,
     ''
@@ -103,17 +103,18 @@ const validateConfigOption = (config) => {
   config['symbols'].forEach((prop) => {
     validateObjectKeyExist(['symbolId', 'symbol'], prop, 'symbol');
   });
-  validateIsArray(config['offchainSymbolIds'], 'offchainSymbolIds');
-  validateIsArray(config['offchainSymbols'], 'offchainSymbols');
-  validateIsArray(config['volatileSymbols'], 'volatileSymbols');
+  // validateIsArray(config['offchainSymbolIds'], 'offchainSymbolIds');
+  // validateIsArray(config['offchainSymbols'], 'offchainSymbols');
+  validateIsArray(config['volatilitySymbols'], 'volatilitySymbols');
 };
 
 const processConfigOption = (config) => {
   // process config
   config['symbolCount'] = config['symbols'].length;
-  if (!config['offchainSymbolIds']) {
-    config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
-    config['offchainSymbols'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbol)
+  if (!config['volatilitySymbols']) {
+    // config['offchainSymbolIds'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbolId)
+    // config['offchainSymbols'] = config['symbols'].filter((s)=> isUsedRestOracle(s.symbol)).map((s) => s.symbol)
+    config['volatilitySymbols'] = 
     config['symbols'].forEach((s) => s['symbol'] = mapToSymbol(s['symbol']))
   }
 };
