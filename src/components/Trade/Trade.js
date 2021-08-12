@@ -173,7 +173,11 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       let index = trading.contract.multiplier.indexOf('.')
       let num = trading.contract.multiplier.slice(index);
       let length = num.length 
-      let value = target.value.substring(0,target.value.indexOf(".") + length)
+      let value = target.value
+      if(target.value.indexOf(".") != '-1'){
+        value = target.value.substring(0,target.value.indexOf(".") + length)
+      }
+      
       trading.setVolume(value)
     }
     if (target.value === '') {
