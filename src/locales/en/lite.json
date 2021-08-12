@@ -14,7 +14,7 @@
   "index-price" : "Index Price",
 
   "funding-rate-annual" : "Funding Rate Daily",
-  "funding-rate" : "Funding Fee",
+  "funding-rate" : "Funding Fee Daily",
   "funding-rate-d":"Delta Funding",
   "funding-rate-p":"Premium Funding",
   "delta" : "delta",
@@ -51,7 +51,7 @@
   "connect-wallet" : "CONNECT WALLET",
   "pool-liquidity" : "Pool Liquidity",
   "liquidity-used" : "Liquidity Used",
-  "eo-mark-price":"EO Mark Price",
+  "eo-mark-price":"Option Mark Price",
   "mark-price":"Mark Price",
   "funding-rate-impact" : "Funding Rate Impact",
   "funding-rate-delta-impact" : "Funding Rate Delta Impact",

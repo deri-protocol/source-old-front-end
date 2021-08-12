@@ -58,7 +58,7 @@ function TradingView({ version, trading, lang,type }) {
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{trading.config?type.isOption ? trading.config.symbol.split('-')[0]:'':''}</div>
             <div className='trade-dashboard-value'>
-              <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
+              <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span><span className='vol'> | </span> 
               {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' />
             </div>
           </div>
