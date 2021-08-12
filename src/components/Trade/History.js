@@ -10,12 +10,11 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
-
 function History({wallet ,trading,lang,type}){
   const [history, setHistory] = useState([]);  
 
   async function loadHistory (){
-    if(wallet.isConnected() && trading.configs && trading.config){
+    if(wallet.isConnected() && trading.configs && trading.config && trading.contract){
       const all = trading.history
       const his = all.map(item => {
         item.directionText = lang['long-buy']
@@ -24,6 +23,7 @@ function History({wallet ,trading,lang,type}){
         } else if (item.direction.toLowerCase() === 'liquidation') {
           item.directionText = lang['liquidation']
         }
+        item.volume = type.isOption ? item.volume * trading.contract.multiplier : item.volume
         const find = trading.config
         if(find){
           item.baseTokenText = item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol

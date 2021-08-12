@@ -411,7 +411,14 @@
                 color: #D4E05C;
                 display: none;
               }
-
+              .option-unit{
+                position: absolute;
+                right: 7px;
+                top: 30px;
+                font-size: 16px;
+                color: @text;
+                display: none;
+              }
               .contrant-input {
                  box-sizing: border-box;
                 width: 229px;
@@ -437,7 +444,7 @@
                 // font-family: 'LED Calculator';
               }
 
-              .contrant-input:focus+.title-volume {
+              .contrant-input:focus+.title-volume,.contrant-input:focus+.option-unit {
                 display: block;
               }
 
@@ -448,11 +455,16 @@
                 font-family: 'LED Calculator';
               }
 
-              .inputFamliy+.title-volume {
+              .inputFamliy+.title-volume,.inputFamliy+.option-unit {
                 display: block;
               }
             }
+            .option-input{
+              .contrant-input{
+                padding-right: 30px  !important;
+              }
 
+            }
             .btc {
               text-align: right;
               padding-right: 17px;

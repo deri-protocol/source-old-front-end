@@ -15,6 +15,8 @@ describe('EverlastingOptionViewer', () => {
         OPTION_POOL_ADDRESS,
        [] 
       );
+      // console.log(res.poolState)
+      // console.log(res.symbolState[0])
       //res.symbolState.forEach((s) => console.log(s))
       expect(res.poolState).toEqual(
         expect.objectContaining({
@@ -68,6 +70,8 @@ describe('EverlastingOptionViewer', () => {
         ACCOUNT_ADDRESS,
        [] 
       );
+      // console.log(res.traderState)
+      // console.log(res.positionState[0])
       expect(res.traderState).toEqual(
         expect.objectContaining({
           dynamicMargin: expect.any(String),

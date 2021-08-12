@@ -65,18 +65,14 @@ export class PTokenOption extends ContractBase {
     const res = await this._call('pool', [])
     return res
   }
-  // async supportsInterface(interfaceId) {
-  //   const res = await this._call('supportsInterface', [interfaceId])
-  //   return res
-  // }
   async symbol() {
     const res = await this._call('symbol', [])
     return res
   }
-  // async totalMinted() {
-  //   const res = await this._call('totalMinted', [])
-  //   return res
-  // }
+  async totalMinted() {
+    const res = await this._call('totalMinted', [])
+    return res
+  }
   async totalSupply() {
     const res = await this._call('totalSupply', [])
     return res
@@ -86,20 +82,15 @@ export class PTokenOption extends ContractBase {
   async addMargin(accountAddress, owner, delta) {
     return await this._transact('addMargin', [owner, delta], accountAddress)
   }
-  // async addSymbolId(accountAddress, symbolId) {
-  //   return await this._transact('addSymbolId', [symbolId], accountAddress)
-  // }
+  async updateMargin(accountAddress, owner, margin) {
+    return await this._transact('updateMargin', [owner, margin], accountAddress)
+  }
+  async updatePosition(accountAddress, owner, symbolId, position) {
+    return await this._transact('updatePosition', [owner, symbolId, position], accountAddress)
+  }
+
   // async approve(accountAddress, operator, tokenId) {
   //   return await this._transact('approve', [operator, tokenId], accountAddress)
-  // }
-  // async burn(accountAddress, owner) {
-  //   return await this._transact('burn', [owner], accountAddress)
-  // }
-  // async mint(accountAddress, owner) {
-  //   return await this._transact('mint', [owner], accountAddress)
-  // }
-  // async removeSymbolId(accountAddress, symbolId) {
-  //   return await this._transact('removeSymbolId', [symbolId], accountAddress)
   // }
   // async safeTransferFrom(accountAddress, from, to, tokenId) {
   //   return await this._transact('safeTransferFrom', [from, to, tokenId], accountAddress)
@@ -110,20 +101,10 @@ export class PTokenOption extends ContractBase {
   // async setApprovalForAll(accountAddress, operator, approved) {
   //   return await this._transact('setApprovalForAll', [operator, approved], accountAddress)
   // }
-  // async setPool(accountAddress, newPool) {
-  //   return await this._transact('setPool', [newPool], accountAddress)
-  // }
   // async toggleCloseOnly(accountAddress, symbolId) {
   //   return await this._transact('toggleCloseOnly', [symbolId], accountAddress)
   // }
   // async transferFrom(accountAddress, from, to, tokenId) {
   //   return await this._transact('transferFrom', [from, to, tokenId], accountAddress)
   // }
-  async updateMargin(accountAddress, owner, margin) {
-    return await this._transact('updateMargin', [owner, margin], accountAddress)
-  }
-  async updatePosition(accountAddress, owner, symbolId, position) {
-    return await this._transact('updatePosition', [owner, symbolId, position], accountAddress)
-  }
-
 }

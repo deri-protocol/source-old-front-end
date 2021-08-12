@@ -2,6 +2,7 @@ import { web3Factory } from '../factory/web3';
 import { numberToHex } from '../utils/convert';
 
 const MAX_GAS_AMOUNT = 832731;
+const RE_ERROR_MSG = /\"message\":\s\"execution\sreverted:([\w\s]+)\"/
 
 export class ContractBase {
   constructor(chainId, contractAddress, contractAbi) {
@@ -59,10 +60,14 @@ export class ContractBase {
         gas = parseInt(gas * 1.25);
         break;
       } catch (error) {
+        const res = error.toString().split('\n').join('').match(RE_ERROR_MSG)
+        if (Array.isArray(res) && res.length >= 2) {
+          throw new Error(res[1].trim())
+        }
         // ignore the metamask error
       }
     }
-    if (gas == 0) gas = MAX_GAS_AMOUNT;
+    if (gas === 0) gas = MAX_GAS_AMOUNT;
     return gas;
   }
 

@@ -11,7 +11,9 @@
   "no-data":"No Data",
   "current-position" : "Current Position",
   "contract-volume" : "Contract Volume",
+  "option-input":"Quantity",
   "index-price" : "Index Price",
+  "min-trade-volume":"Min Trade Volume",
 
   "funding-rate-annual" : "Funding Rate Daily",
   "funding-rate" : "Funding Fee Daily",

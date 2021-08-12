@@ -5,12 +5,13 @@ import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
 
 
-export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPriceAfter}) {
+export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPriceAfter,trading}) {
   const [pending, setPending] = useState(false);
 
 
   const trade = async () => {
     setPending(true)
+    volume = type.isOption? volume/(+trading.contract.multiplier) : volume
     volume = direction === 'long' ? volume : -(+volume)
     const res = await tradeWithMargin(wallet.detail.chainId, spec.pool, wallet.detail.account, volume, spec.symbolId)
     if (res.success) {

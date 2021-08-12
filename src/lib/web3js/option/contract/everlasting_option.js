@@ -1,8 +1,8 @@
 import { ContractBase, deleteIndexedKey, fromWeiForObject, fromWei, naturalToDeri, getPoolConfig, getPoolLiteViewerConfig } from '../../shared'
+import { getVolatilitySymbols } from '../../shared/config/token';
 import { getPriceInfo } from '../../shared/utils/oracle';
+import { everlastingOptionViewerFactory, pTokenOptionFactory } from '../factory/tokens';
 import { everlastingOptionAbi } from './abis.js'
-// import { EverlastingOptionViewer } from './everlasting_option_viewer';
-// import { PTokenOption } from './p_token_option';
 
 export class EverlastingOption extends ContractBase {
   // init
@@ -24,31 +24,24 @@ export class EverlastingOption extends ContractBase {
     this.viewerAddress = getPoolLiteViewerConfig(this.chainId, 'option');
   }
   async _updateConfig() {
-  //   const {
-  //     bTokenAddress,
-  //     pTokenAddress,
-  //     lTokenAddress,
-  //   } = await this.getAddresses();
-  //   bTokenAddress !== this.config.bTokenAddress &&
-  //     console.error(`pool bTokenAddress not match: ${bTokenAddress}`);
-  //   lTokenAddress !== this.config.lTokenAddress &&
-  //     console.error(`pool lTokenAddress not match: ${lTokenAddress}`);
-  //   pTokenAddress !== this.config.pTokenAddress &&
-  //     console.error(`pool pTokenAddress not match: ${pTokenAddress}`);
-
-  //  const pToken = new PTokenOption(this.chainId, this.pTokenAddress);
-  //     const [activeSymbolIds, state] = await Promise.all([
-  //       pToken.getActiveSymbolIds(),
-  //       new EverlastingOptionViewer(
-  //         this.chainId,
-  //         this.viewerAddress
-  //       ).getPoolStates(this.contractAddress, []),
-  //     ]);
-  //     const {symbolState} = state
-  //     this.activeSymbolIds = activeSymbolIds
-  //     this.activeSymbols = symbolState.filter((s) =>
-  //       activeSymbolIds.includes(s.symbolId)
-  //     );
+    if (!this.pToken) {
+      this.pToken = pTokenOptionFactory(this.chainId, this.pTokenAddress);
+    }
+    if (!this.viewer) {
+      this.viewer = everlastingOptionViewerFactory( this.chainId, this.viewerAddress)
+    }
+    const [activeSymbolIds, state] = await Promise.all([
+      this.pToken.getActiveSymbolIds(),
+      this.viewer.getPoolStates(this.contractAddress, []),
+    ]);
+    const { symbolState } = state;
+    this.activeSymbolIds = activeSymbolIds;
+    this.activeSymbols = symbolState.filter((s) =>
+      activeSymbolIds.includes(s.symbolId)
+    );
+    this.volatilitySymbols = getVolatilitySymbols(
+      this.activeSymbols.map((s) => s.symbol)
+    );
   }
 
   // query
@@ -64,30 +57,6 @@ export class EverlastingOption extends ContractBase {
     const res = await this._call('_T', []);
     return fromWei(res);
   }
-  // async _dynamicInitialMarginRatio(spotPrice, strikePrice, isCall) {
-  //   const res = await this._call('_dynamicInitialMarginRatio', [spotPrice, strikePrice, isCall])
-  //   return res
-  // }
-  async _getTvMidPrice(symbolId) {
-    const res = await this._call('_getTvMidPrice', [symbolId])
-    return {
-      _tmp: fromWei(res[0]),
-      midPrice: fromWei(res[1]),
-      delta: fromWei(res[2]),
-    }
-  }
-  async _premiumFundingCoefficient() {
-    const res = await this._call('_premiumFundingCoefficient', [])
-    return res
-  }
-  // async _queryTradePMM(symbolId, volume, timePrice) {
-  //   const res = await this._call('_queryTradePMM', [symbolId, volume, timePrice])
-  //   return res
-  // }
-  // async controller() {
-  //   const res = await this._call('controller', [])
-  //   return res
-  // }
   async getAddresses() {
     const res = await this._call('getAddresses', []);
     return deleteIndexedKey(res);
@@ -137,20 +106,12 @@ export class EverlastingOption extends ContractBase {
       K: fromWei(res[16]),
     };
   }
-  // async migrationDestination() {
-  //   const res = await this._call('migrationDestination', [])
-  //   return res
-  // }
-  // async migrationTimestamp() {
-  //   const res = await this._call('migrationTimestamp', [])
-  //   return res
-  // }
 
   // tx
   async _getVolSymbolPrices() {
+    await this._updateConfig()
     let prices = [];
     if (this.volatilitySymbols.length > 0) {
-      //const priceInfos = await getPriceInfos(this.offchainSymbols);
       const priceInfos = await Promise.all(
         this.volatilitySymbols.reduce(
           (acc, i) => acc.concat([getPriceInfo(i, 'option')]),
@@ -200,7 +161,7 @@ export class EverlastingOption extends ContractBase {
     const prices = await this._getVolSymbolPrices();
     return await this._transact(
       'removeMargin',
-      [ naturalToDeri(bAmount), prices],
+      [naturalToDeri(bAmount), prices],
       accountAddress
     );
   }
@@ -212,40 +173,4 @@ export class EverlastingOption extends ContractBase {
       accountAddress
     );
   }
-  // async addSymbol(accountAddress, symbolId, symbol, strikePrice, isCall, oracleAddress, volatilityAddress, multiplier, feeRatio, diseqFundingCoefficient, k) {
-  //   return await this._transact('addSymbol', [symbolId, symbol, strikePrice, isCall, oracleAddress, volatilityAddress, multiplier, feeRatio, diseqFundingCoefficient, k], accountAddress)
-  // }
-  // async approveMigration(accountAddress) {
-  //   return await this._transact('approveMigration', [], accountAddress)
-  // }
-  // async claimNewController(accountAddress) {
-  //   return await this._transact('claimNewController', [], accountAddress)
-  // }
-  // async collectProtocolFee(accountAddress) {
-  //   return await this._transact('collectProtocolFee', [], accountAddress)
-  // }
-  // async executeMigration(accountAddress, source) {
-  //   return await this._transact('executeMigration', [source], accountAddress)
-  // }
-  // async liquidate(accountAddress, account, volatility) {
-  //   return await this._transact('liquidate', [account, volatility], accountAddress)
-  // }
-  // async prepareMigration(accountAddress, target, graceDays) {
-  //   return await this._transact('prepareMigration', [target, graceDays], accountAddress)
-  // }
-  // async removeSymbol(accountAddress, symbolId) {
-  //   return await this._transact('removeSymbol', [symbolId], accountAddress)
-  // }
-  // async setNewController(accountAddress, newController) {
-  //   return await this._transact('setNewController', [newController], accountAddress)
-  // }
-  // async setPoolParameters(accountAddress, premiumFundingCoefficient, T, everlastingPricingOptionAddress) {
-  //   return await this._transact('setPoolParameters', [premiumFundingCoefficient, T, everlastingPricingOptionAddress], accountAddress)
-  // }
-  // async setSymbolParameters(accountAddress, symbolId, oracleAddress, volatilityAddress, feeRatio, diseqFundingCoefficient, k) {
-  //   return await this._transact('setSymbolParameters', [symbolId, oracleAddress, volatilityAddress, feeRatio, diseqFundingCoefficient, k], accountAddress)
-  // }
-  // async toggleCloseOnly(accountAddress, symbolId) {
-  //   return await this._transact('toggleCloseOnly', [symbolId], accountAddress)
-  // }
 }

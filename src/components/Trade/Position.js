@@ -120,7 +120,9 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         <div className='info-left'>
           <div className='title-text'>{lang['position']}</div>
-          <div className='info-num'>{trading.position.volume}</div>
+          <div className='info-num'>
+          {type.isOption?<DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+          </div>
         </div>
         <div className='info-right'>
           <div

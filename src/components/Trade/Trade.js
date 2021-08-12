@@ -145,14 +145,19 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
 
 
   const onKeyPress = evt => {
-    if (evt.which < 48 || evt.which > 57) {
-      evt.preventDefault();
-    }
+    // if(type.isOption){
+    //   // return ''
+    // }else if(type.isFuture){
+      if (evt.which !== 46 && (evt.which < 48 || evt.which > 57)) {
+        evt.preventDefault();
+      }
+    // }
+    
   }
 
   const volumeChange = event => {
     let { value } = event.target
-    if (value === '0') {
+    if (value === '0' && type.isFuture) {
       value = ''
     }
     trading.setVolume(value)
@@ -162,6 +167,13 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
 
   const onBlur = event => {
     const target = event.target;
+    if(type.isOption){
+      let index = trading.contract.multiplier.indexOf('.')
+      let num = trading.contract.multiplier.slice(index);
+      let length = num.length 
+      let value = target.value.substring(0,target.value.indexOf(".") + length)
+      trading.setVolume(value)
+    }
     if (target.value === '') {
       target.setAttribute('class', 'contrant-input')
     }
@@ -379,25 +391,47 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
           <div className='left'>
             <div className='current-position'>
               <span>{lang['current-position']}</span>
-              <span className='position-text'><DeriNumberFormat value={trading.position.volume} allowZero={true} /></span>
+              <span className='position-text'>
+              {type.isOption?<DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+              </span>
             </div>
-            <div className='contrant'>
-              <input
-                type='number'
-                onFocus={onFocus}
-                onBlur={onBlur}
-                onKeyPress={onKeyPress}
-                disabled={!trading.index || Math.abs(trading.position.margin) === 0}
-                onChange={event => volumeChange(event)}
-                value={trading.volumeDisplay}
-                className={volumeClazz}
-                placeholder={lang['contract-volume']}
-              />
-              <div className='title-volume' >
-                {lang['contract-volume']}
+            {type.isFuture && <>
+              <div className='contrant'>
+                <input
+                  type='number'
+                  onFocus={onFocus}
+                  onBlur={onBlur}
+                  onKeyPress={onKeyPress}
+                  disabled={!trading.index || Math.abs(trading.position.margin) === 0}
+                  onChange={event => volumeChange(event)}
+                  value={trading.volumeDisplay}
+                  className={volumeClazz}
+                  placeholder={lang['contract-volume']}
+                />
+                <div className='title-volume' >
+                  {lang['contract-volume']}
+                </div>
               </div>
-            </div>
-            {!!trading.volumeDisplay && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix='= ' suffix={` ${spec.unit}`} /></div>}
+            </>}
+            {type.isOption && <>
+              <div className='contrant option-input'>
+                <input
+                  type='number'
+                  onFocus={onFocus}
+                  onBlur={onBlur}
+                  onKeyPress={onKeyPress}
+                  disabled={!trading.index || Math.abs(trading.position.margin) === 0}
+                  onChange={event => volumeChange(event)}
+                  value={trading.volumeDisplay}
+                  className={volumeClazz}
+                  placeholder={lang['option-input']}
+                />
+                <div className='option-unit' >
+                  {spec.unit}
+                </div>
+              </div>
+            </>}
+            {(!!trading.volumeDisplay && type.isFuture) && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix='= ' suffix={` ${spec.unit}`} /></div>}
           </div>
           <div className='right-info'>
             <div className={`contrant-info ${version.current}`}>
@@ -505,7 +539,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               <div className='text-info'>
                 <div className='title-enter'>{lang['funding-rate-delta-impact']}</div>
                 <div className='text-enter'>
-                  <DeriNumberFormat value={trading.fundingRate.deltaFunding0}  decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} />
+                  <DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} />
                 </div>
               </div>
             </>}
@@ -634,6 +668,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
       direction={direction}
       lang={lang}
       markPriceAfter={markPriceAfter}
+      trading={trading}
     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>
   </>)

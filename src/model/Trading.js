@@ -316,18 +316,29 @@ export default class Trading {
 
 
   get volumeDisplay(){
-    if(Math.abs(this.volume) === 0 || this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
-      return '';
-    } else {
-      return Math.abs(this.volume)
-    }
+    // if(type.isOption){
+    //   if( this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
+    //     return '';
+    //   } else {
+    //     return Math.abs(this.volume)
+    //   }
+    // }else if(type.isFuture){
+      if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
+        return '';
+      } else {
+        return Math.abs(this.volume)
+      }
+    // }
+    
   }
   
 
   get amount(){
     const position = this.position
     const contract = this.contract;
-    const volume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
+    let initVolume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
+    let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    const volume = optionVolume
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
     const price = position.price || this.index
     //v2
@@ -411,6 +422,11 @@ export default class Trading {
       const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
       if(config){    
         const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
+        const contractInfo = await this.contractInfo.load(wallet,config)
+        if(type.isOption){
+          res.deltaFunding0 = (+res.deltaFunding0) / (+contractInfo.multiplier)
+          res.premiumFunding0 = (+res.premiumFunding0) / (+contractInfo.multiplier)
+        }
         return res;
       }
     }

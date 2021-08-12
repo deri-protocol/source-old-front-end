@@ -37,15 +37,6 @@ export class LTokenOption extends ContractBase {
   // async approve(accountAddress, spender, amount) {
   //   return await this._transact('approve', [spender, amount], accountAddress)
   // }
-  // async burn(accountAddress, account, amount) {
-  //   return await this._transact('burn', [account, amount], accountAddress)
-  // }
-  // async mint(accountAddress, account, amount) {
-  //   return await this._transact('mint', [account, amount], accountAddress)
-  // }
-  // async setPool(accountAddress, newPool) {
-  //   return await this._transact('setPool', [newPool], accountAddress)
-  // }
   // async transfer(accountAddress, to, amount) {
   //   return await this._transact('transfer', [to, amount], accountAddress)
   // }
