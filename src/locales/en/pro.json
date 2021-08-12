@@ -7,7 +7,7 @@
   "current-position" : "CURRENT POSITION",
   "trade-history" : "TRADE HISTORY",
   "pool-total-liquidity" : "Pool Total Liquidity",
-  "funding-rate-delta":"Premium Funding Daily",
-  "funding-rate-premium":"Delta Funding Daily",
+  "funding-rate-delta":"Delta Funding Daily",
+  "funding-rate-premium":"Premium Funding Daily",
   "position-info" : "POSITION INFO"
 }
