@@ -44,11 +44,11 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('OptionPricer', async() => {
     const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0xE6522df9Eab9D0e454Ba79368ccBae63D005B198')
+    expect(res).toEqual('0xA3614D4FFE4F635405bF5A0bb94b0d86361ec80D')
   }, TIMEOUT)
   it('PmmPricer', async() => {
     const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0x4CdE7a44a8d527254161Da62829669D673a3F402')
+    expect(res).toEqual('0xd0CaD75F6E58C3343e226046e13457EDa0f32a13')
   }, TIMEOUT)
   it('_T', async() => {
     const res = await everlastingOption._T()

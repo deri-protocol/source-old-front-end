@@ -16,6 +16,9 @@ export default class Contract {
     minMaintenanceMarginRatio:0.05,
     maintenanceMarginRatio:0.05,
     feeRatio:0.0005,
+    underlier :'',
+    strike:0,
+    optionType:'C',
     bTokenSymbolDisplay : ['BUSD']
   }
   // constructor(){
@@ -30,6 +33,12 @@ export default class Contract {
     if(wallet && wallet.supportChain && config && config.pool !== this.info.pool){
       const spec = await getSpecification(wallet.detail.chainId,config.pool,config.symbolId);
       spec.bTokenSymbolDisplay = this.bTokenSymbolDisplay(spec)
+      if(type.isOption){
+        spec.underlier = spec.symbol.split('-')[0]
+        spec.strike = spec.symbol.split('-')[1]
+        spec.optionType = spec.symbol.split('-')[2]
+      }
+      
       this.setInfo(spec)
     }
     return this.info

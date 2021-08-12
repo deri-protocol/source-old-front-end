@@ -119,8 +119,8 @@ function Position({wallet,trading,version,lang,type}){
       </>}
       {type.isOption&&<>
         {/* <div><span >{lang['time-value']}</span></div> */}
-        <div><span >{lang['funding-rate-d']}</span></div>
         <div><span >{lang['funding-rate-p']}</span></div>
+        <div><span >{lang['funding-rate-d']}</span></div>
       </>}
       <div>{lang['liquidation-price']}</div>
     </div>
@@ -171,8 +171,9 @@ function Position({wallet,trading,version,lang,type}){
       </>} 
       {type.isOption&&<>
         {/* <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div> */}
-        <div><DeriNumberFormat value={(-(trading.position.deltaFundingAccrued))}  decimalScale={8}/></div>
         <div><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))}  decimalScale={8}/></div>
+        <div><DeriNumberFormat value={(-(trading.position.deltaFundingAccrued))}  decimalScale={8}/></div>
+        
       </>}
       <div><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
     </div>

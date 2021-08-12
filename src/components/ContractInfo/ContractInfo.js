@@ -4,7 +4,7 @@ import { getSpecification } from '../../lib/web3js/indexV2';
 import { inject, observer } from 'mobx-react';
 
 
-function ContractInfo({ wallet, trading, lang,type }) {
+function ContractInfo({ wallet, trading, lang, type }) {
 
   return (
     <div className="contract-box">
@@ -23,13 +23,14 @@ function ContractInfo({ wallet, trading, lang,type }) {
             {trading.contract.symbol}
           </div>
         </div>
-        <div className="info">
-          <div className="title">{lang['multiplier']}</div>
-          <div className="text">
-            {trading.contract.multiplier}
+
+        {type.isFuture && <>
+          <div className="info">
+            <div className="title">{lang['multiplier']}</div>
+            <div className="text">
+              {trading.contract.multiplier}
+            </div>
           </div>
-        </div>
-        {!type.isOption && <>
           <div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
@@ -50,6 +51,30 @@ function ContractInfo({ wallet, trading, lang,type }) {
           </div>
         </>}
         {type.isOption && <>
+          <div className="info">
+            <div className="title">{lang['underlier']}</div>
+            <div className="text">
+              {trading.contract.underlier}
+            </div>
+          </div>
+          <div className="info">
+            <div className="title">{lang['strike']}</div>
+            <div className="text">
+              {trading.contract.strike}
+            </div>
+          </div>
+          <div className="info">
+            <div className="title">{lang['option-type']}</div>
+            <div className="text">
+              {trading.contract.optionType === 'C' ? `${lang['call']}`:`${lang['put']}`}
+            </div>
+          </div>
+          <div className="info">
+            <div className="title"> <span className='margin-per' title={trading.multiplierTip}>{lang['multiplier']}</span> </div>
+            <div className="text">
+              {trading.contract.multiplier}
+            </div>
+          </div>
           <div className="info">
             <div className="title ">{lang['delta-funding-coefficient']}</div>
             <div className="text">
@@ -80,4 +105,4 @@ function ContractInfo({ wallet, trading, lang,type }) {
   )
 }
 
-export default inject('wallet', 'trading','type')(observer(ContractInfo))
+export default inject('wallet', 'trading', 'type')(observer(ContractInfo))

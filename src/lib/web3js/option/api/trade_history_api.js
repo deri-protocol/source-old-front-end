@@ -1,4 +1,4 @@
-import { deriToNatural, getBlockInfo, getPastEvents, bg } from '../../shared/utils';
+import { deriToNatural, getBlockInfo, getPastEvents } from '../../shared/utils';
 import {
   getPoolConfig,
   getRestServerConfig,
@@ -169,7 +169,6 @@ export const getTradeHistory = async (
       const result = tradeHistoryOnline.concat(tradeHistory);
       return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
     } else {
-
       const {initialBlock} = getPoolConfig(poolAddress, undefined, symbolId, 'option')
       tradeFromBlock = parseInt(initialBlock);
       const [tradeHistoryOnline] = await Promise.all([

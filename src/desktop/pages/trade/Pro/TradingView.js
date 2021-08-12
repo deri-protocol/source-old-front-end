@@ -24,9 +24,9 @@ function TradingView({ version, trading, lang,type }) {
     if(type.isOption){
       let mark =  getIntrinsicPrice(trading.index,trading.position.strikePrice,trading.position.isCall).plus(trading.position.timePrice).toString()
       if (markPriceRef.current > mark) {
-        setMarkPriceClass('fall')
+        setMarkPriceClass('fall trade-dashboard-value')
       } else {
-        setMarkPriceClass('rise')
+        setMarkPriceClass('rise trade-dashboard-value')
       }
       markPriceRef.current = mark
       setMarkPrice(mark)
@@ -57,22 +57,14 @@ function TradingView({ version, trading, lang,type }) {
         {type.isOption && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{trading.config?type.isOption ? trading.config.symbol.split('-')[0]:'':''}</div>
-            <div >
-              <span className={indexPriceClass}> <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
+            <div className='trade-dashboard-value'>
+              <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
               {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' />
             </div>
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['eo-mark-price']}</div>
             <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
-          </div>
-          <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'><span >{lang['funding-rate-delta']}</span>  </div>
-            <div className='trade-dashboard-value'>
-              <span className='funding-per' title={trading.fundingRateDeltaTip}>
-                <DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  />
-              </span>
-            </div>
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span >{lang['funding-rate-premium']}</span>  </div>
@@ -82,6 +74,15 @@ function TradingView({ version, trading, lang,type }) {
               </span>
             </div>
           </div>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'><span >{lang['funding-rate-delta']}</span>  </div>
+            <div className='trade-dashboard-value'>
+              <span className='funding-per' title={trading.fundingRateDeltaTip}>
+                <DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  />
+              </span>
+            </div>
+          </div>
+          
         </>}
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['total-net-position']}</div>

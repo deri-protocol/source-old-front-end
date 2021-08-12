@@ -86,6 +86,7 @@ export default class Trading {
       fundingRatePremiumTip : computed,
       initialMarginRatioTip : computed,
       maintenanceMarginRatioTip : computed,
+      multiplierTip : computed,
       direction : computed,
       volumeDisplay : computed,
       isNegative : computed,
@@ -479,6 +480,12 @@ export default class Trading {
       return `${Intl.get('lite','in-the-money-maintenance')} = ${this.contract.maintenanceMarginRatioOrigin}` +
       `\n ${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin} ${Intl.get('lite','otm-ratio-initial')})` +
       `\n \n ${Intl.get('lite','otm-ratio-max')}`
+    }
+  }
+
+  get multiplierTip(){
+    if(this.contract && this.config){
+      return `(${Intl.get('lite','the-notional-value-of')} ${this.contract.multiplier}${this.config.unit})`
     }
   }
 

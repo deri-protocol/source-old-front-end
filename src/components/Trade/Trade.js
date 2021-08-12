@@ -300,7 +300,7 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
             </>} 
             {type.isOption && <>
               <div className='index-prcie'>
-              {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''} : <span>&nbsp; <span className={indexPriceClass}> <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
+              {trading.config ? type.isOption ? trading.config.symbol.split('-')[0]:'':''} : <span>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /> </span> | &nbsp;
               {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
               </div>
               <div className='mark-price'>
@@ -314,13 +314,14 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                     <span>{lang['funding-rate']} &nbsp;</span>
                   </div>
                   <div className='diseq'>
-                    <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
-                  </div>
-                  <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
                     <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                   </div>
+                  <div className='diseq'>
+                    <span> &nbsp;-{lang['delta']}: &nbsp;</span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
+                  </div>
+                  
                 </div>
               </>}
               {type.isFuture && <>
@@ -354,13 +355,14 @@ function Trade({ wallet = {}, trading, version, lang, loading ,type}) {
                     <span>{lang['funding-rate']} &nbsp;</span>
                   </div>
                   <div className='diseq'>
-                    <span> &nbsp;-{lang['delta']}: &nbsp;</span>
-                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
-                  </div>
-                  <div className='diseq'>
                     <span> &nbsp;-{lang['premium']}: &nbsp;</span>
                     <span className='funding-per' title={trading.fundingRatePremiumTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
                   </div>
+                  <div className='diseq'>
+                    <span> &nbsp;-{lang['delta']}: &nbsp;</span>
+                    <span className='funding-per' title={trading.fundingRateDeltaTip}><DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4}  /></span>
+                  </div>
+                  
                 </div>
               </>}
               {!type.isOption && <>

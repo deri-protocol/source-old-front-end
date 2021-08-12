@@ -89,6 +89,7 @@ export class EverlastingOptionViewer extends ContractBase {
       const position = fromWeiForObject(deleteIndexedKey(i), [
         'volume',
         'cost',
+        'pnl',
         'lastCumulativeDeltaFundingRate',
         'lastCumulativePremiumFundingRate',
         'deltaFundingAccrued',
