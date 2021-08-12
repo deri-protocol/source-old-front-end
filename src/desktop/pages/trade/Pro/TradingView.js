@@ -36,7 +36,7 @@ function TradingView({ version, trading, lang,type }) {
   return (
     <div id="trading-view">
       <div className='right-top'>
-        <div className='symbol-basetoken-text option-symbol'>
+        <div className='symbol-basetoken-text'>
           {type.isOption? `${trading.config ? trading.config.symbol:''}` : (version.isV1 || version.isV2Lite) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
        
@@ -55,8 +55,8 @@ function TradingView({ version, trading, lang,type }) {
           </div>
         </>}
         {type.isOption && <>
-          <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'>{trading.config?type.isOption ? trading.config.symbol.split('-')[0]:'':''}</div>
+          <div className='trade-dashboard-item latest-price  '>
+            <div className='trade-dashboard-title option-symbol'>{trading.config?type.isOption ? trading.config.symbol.split('-')[0]:'':''}</div>
             <div className='trade-dashboard-value'>
               <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span><span className='vol'> | </span> 
               {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' />
