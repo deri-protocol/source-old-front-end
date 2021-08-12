@@ -62,7 +62,7 @@ export class ContractBase {
         // ignore the metamask error
       }
     }
-    if (gas == 0 || gas > 10000000) gas = MAX_GAS_AMOUNT;
+    if (gas == 0) gas = MAX_GAS_AMOUNT;
     return gas;
   }
 
