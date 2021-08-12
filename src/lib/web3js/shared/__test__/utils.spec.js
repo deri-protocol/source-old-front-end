@@ -22,6 +22,7 @@ import {
   getBlockInfo,
   getLatestBlockNumber,
   getLastUpdatedBlockNumber,
+  sortOptionSymbols,
 } from '../utils'
 import { getOraclePrice, getPriceInfos } from '../utils/oracle';
 import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V2_ADDRESS, POOL_V2L_ADDRESS} from './setup';
@@ -194,4 +195,108 @@ describe('utils', () => {
     const output = 10178982
     expect(await getLastUpdatedBlockNumber('97', POOL_V2L_ADDRESS, 5)).toBeGreaterThanOrEqual(output)
   }, TIMEOUT)
+
+  test('sortOptionSymbols', () => {
+    const input = [
+      {
+        symbol: 'BTCUSD-20000-C',
+      },
+      {
+        symbol: 'BTCUSD-30000-C',
+      },
+      {
+        symbol: 'BTCUSD-40000-C',
+      },
+      {
+        symbol: 'BTCUSD-20000-P',
+      },
+      {
+        symbol: 'BTCUSD-30000-P',
+      },
+      {
+        symbol: 'BTCUSD-40000-P',
+      },
+      {
+        symbol: 'ETHUSD-1500-C',
+      },
+      {
+        symbol: 'ETHUSD-2000-C',
+      },
+      {
+        symbol: 'ETHUSD-2500-C',
+      },
+      {
+        symbol: 'ETHUSD-1500-P',
+      },
+      {
+        symbol: 'ETHUSD-2000-P',
+      },
+      {
+        symbol: 'ETHUSD-2500-P',
+      },
+      {
+        symbol: 'BTCUSD-50000-C',
+      },
+      {
+        symbol: 'BTCUSD-60000-C',
+      },
+      {
+        symbol: 'ETHUSD-3500-C',
+      },
+      {
+        symbol: 'ETHUSD-4000-C',
+      },
+    ];
+    const output = [
+      {
+        symbol: 'BTCUSD-20000-C',
+      },
+      {
+        symbol: 'BTCUSD-30000-C',
+      },
+      {
+        symbol: 'BTCUSD-40000-C',
+      },
+      {
+        symbol: 'BTCUSD-50000-C',
+      },
+      {
+        symbol: 'BTCUSD-60000-C',
+      },
+      {
+        symbol: 'BTCUSD-20000-P',
+      },
+      {
+        symbol: 'BTCUSD-30000-P',
+      },
+      {
+        symbol: 'BTCUSD-40000-P',
+      },
+      {
+        symbol: 'ETHUSD-1500-C',
+      },
+      {
+        symbol: 'ETHUSD-2000-C',
+      },
+      {
+        symbol: 'ETHUSD-2500-C',
+      },
+      {
+        symbol: 'ETHUSD-3500-C',
+      },
+      {
+        symbol: 'ETHUSD-4000-C',
+      },
+      {
+        symbol: 'ETHUSD-1500-P',
+      },
+      {
+        symbol: 'ETHUSD-2000-P',
+      },
+      {
+        symbol: 'ETHUSD-2500-P',
+      },
+    ];
+    expect(sortOptionSymbols(input)).toEqual(output)
+  })
 })

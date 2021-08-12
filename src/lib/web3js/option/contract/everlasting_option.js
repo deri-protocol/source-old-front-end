@@ -41,14 +41,14 @@ export class EverlastingOption extends ContractBase {
   //       pToken.getActiveSymbolIds(),
   //       new EverlastingOptionViewer(
   //         this.chainId,
-  //         viewerAddress
+  //         this.viewerAddress
   //       ).getPoolStates(this.contractAddress, []),
   //     ]);
-  //     //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
-  //     this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
-  //       return activeSymbols[index] == '' ? acc : acc.concat([i]);
-  //     }, []);
-  //     this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
+  //     const {symbolState} = state
+  //     this.activeSymbolIds = activeSymbolIds
+  //     this.activeSymbols = symbolState.filter((s) =>
+  //       activeSymbolIds.includes(s.symbolId)
+  //     );
   }
 
   // query

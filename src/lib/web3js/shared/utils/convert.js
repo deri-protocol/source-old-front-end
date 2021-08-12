@@ -111,3 +111,30 @@ export const fromWeiForObject = (obj, keyList = []) => {
     return acc;
   }, {});
 };
+
+export const sortOptionSymbols = (symbolList) => {
+  const symbolArr = symbolList
+    .map((s) => s.symbol)
+    .map((s) => {
+      return s.split('-');
+    });
+  const unique = (value, index, self) => self.indexOf(value) === index
+  const to2 = (i) => i < 10 ? `0${i}` : i
+  const symbol = symbolArr.map((s) => s[0]).filter(unique)
+  const direction = symbolArr.map((s) => s[2]).filter(unique)
+  const price = symbolArr
+    .map((s) => s[1])
+    .filter(unique)
+    .sort((a, b) => parseInt(a) - parseInt(b));
+  return symbolList.map((i, index) => {
+    const index1 =  symbol.indexOf(symbolArr[index][0]) + 1
+    const index2 =  to2(direction.indexOf(symbolArr[index][2]) + 1)
+    const index3 =  to2(price.indexOf(symbolArr[index][1]) + 1)
+    i.index = parseInt(`${index1}${index2}${index3}`)
+    return i
+  }).sort((a, b) => a.index - b.index).map((i) => {
+    delete i.index
+    return i
+  })
+}
+
