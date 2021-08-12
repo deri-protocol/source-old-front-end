@@ -3,6 +3,7 @@ import {widget} from '../../../../lib/charting_library'
 import datafeeds from './datafeeds/index'
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
+import Type from '../../../../model/Type';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
@@ -49,8 +50,14 @@ function TradingViewChart({symbol,lang,intl,version}){
         "mainSeriesProperties.candleStyle.drawBorder": true,
         "mainSeriesProperties.candleStyle.borderUpColor" : "#53B987",
         "mainSeriesProperties.candleStyle.borderDownColor" : "#EB4D5C",
-        "scalesProperties.textColor": "#AAA",
+        "scalesProperties.textColor" : "#aaa" ,
+        "scalesProperties.backgroundColor" : "#aaa",
+        "paneProperties.axisProperties.percentage" : false
       },      
+      studies_overrides: {
+        "compare.plot.color": "#fff",
+        "compare.source": "high"
+      },
       toolbar_bg: "#212327",
       timezone: "Asia/Shanghai", 
       session: "24x7"
@@ -60,6 +67,11 @@ function TradingViewChart({symbol,lang,intl,version}){
     document.querySelector('#tv_chart_container iframe').addEventListener("load", function(e) {
       setTimeout(() => setLoading(false),500)
     });
+    w.onChartReady(() => {
+      if(Type.isOption){
+        w.chart().createStudy('Compare',false,false,['open',`${symbol}-MARKPRICE`])
+      } 
+    })
     return w;
   }
 

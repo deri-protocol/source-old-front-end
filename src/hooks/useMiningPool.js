@@ -121,13 +121,13 @@ export default function useMiningPool(isNew){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '34240',
+        liquidity : '1002200',
         symbol : '--',
         airdrop : true,
         chainId : 56,
         buttonText : 'CLAIM'
       }
-      // pools.push(airDrop)
+      pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
       let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
