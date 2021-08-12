@@ -119,8 +119,8 @@ function Position({wallet,trading,version,lang,type}){
       </>}
       {type.isOption&&<>
         {/* <div><span >{lang['time-value']}</span></div> */}
-        <div><span >{lang['funding-rate-p']}</span></div>
-        <div><span >{lang['funding-rate-d']}</span></div>
+        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-p']}</span></div>
+        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-d']}</span></div>
       </>}
       <div>{lang['liquidation-price']}</div>
     </div>

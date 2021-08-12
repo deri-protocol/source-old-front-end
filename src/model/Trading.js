@@ -447,10 +447,10 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n ${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+      `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFundingPerSecond}  ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.deltaFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
@@ -459,10 +459,10 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n ${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingPerBlock} ) ${this.config.bTokenSymbol}`        
+      `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingPerBlock} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingPerSecond} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
@@ -471,16 +471,16 @@ export default class Trading {
   get initialMarginRatioTip(){
     if(this.contract && this.contract.initialMarginRatioOrigin){
       return `${Intl.get('lite','in-the-money-initial')} = ${this.contract.initialMarginRatioOrigin}` +
-      `\n ${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin} ${Intl.get('lite','otm-ratio-initial')})` +
-      `\n \n ${Intl.get('lite','otm-ratio-max')}`
+      `\n${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')})` +
+      `\n\n${Intl.get('lite','otm-ratio-max')}`
     }
     return ''
   }
   get maintenanceMarginRatioTip(){
     if(this.contract && this.contract.maintenanceMarginRatioOrigin){
       return `${Intl.get('lite','in-the-money-maintenance')} = ${this.contract.maintenanceMarginRatioOrigin}` +
-      `\n ${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin} ${Intl.get('lite','otm-ratio-initial')})` +
-      `\n \n ${Intl.get('lite','otm-ratio-max')}`
+      `\n${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')})` +
+      `\n\n${Intl.get('lite','otm-ratio-max')}`
     }
     return ''
   }

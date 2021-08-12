@@ -223,14 +223,14 @@ function Position({ wallet, trading, version, lang, type }) {
         </div> */}
         <div className='info'>
           <div className='info-left'>
-            <div className='title-text'>{lang['funding-rate-p']}</div>
+            <div className='title-text funding-fee' title={lang['funding-fee-tip']}>{lang['funding-rate-p']}</div>
             <div className='info-num'><DeriNumberFormat decimalScale={4} value={-(trading.position.premiumFundingAccrued)} /></div>
           </div>
           <div className='info-right'></div>
         </div>
         <div className='info'>
           <div className='info-left'>
-            <div className='title-text'>{lang['funding-rate-d']}</div>
+            <div className='title-text funding-fee' title={lang['funding-fee-tip']}>{lang['funding-rate-d']}</div>
             <div className='info-num'><DeriNumberFormat decimalScale={4} value={(-(trading.position.deltaFundingAccrued))} /></div>
           </div>
           <div className='info-right'></div>
