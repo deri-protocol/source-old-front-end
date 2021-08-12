@@ -88,7 +88,7 @@ function TradingView({ version, trading, lang,type }) {
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
-            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract?trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'' } /></div>
+            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract ? trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'0' } /></div>
           </div>
         </>}
         

@@ -104,6 +104,7 @@
 
   "history" : "HISTORY",
   "volume-price" : "Volume @ Price",
+  "volume-notional-price":"Volume ( Notional ) @ Price",
   "notional" : "Notional",
   "contract-value":"Option Value",
   "liquidation" : "LIQUIDATION",

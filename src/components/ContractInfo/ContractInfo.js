@@ -70,7 +70,7 @@ function ContractInfo({ wallet, trading, lang, type }) {
             </div>
           </div>
           <div className="info">
-            <div className="title"> <span>{lang['min-trade-volume']}</span> </div>
+            <div className="title"> <span>{lang['min-trade-volume']} ( {lang['notional']} )</span> </div>
             <div className="text">
               {trading.contract.multiplier} {trading.config ? trading.config.unit:''}
             </div>

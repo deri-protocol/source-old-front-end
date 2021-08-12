@@ -98,9 +98,13 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     }
   }
 
+  const volumeMu = (volume) => {
+    return type.isOption ? volume / trading.contract.multiplier: volume
+  }
+
   //计算流动性的变化
   const calcLiquidityUsed = async () => {
-    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
+    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay && type.isFuture) {
       const { detail } = wallet
       const volume = direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay
       const curLiqUsed = await getLiquidityUsed(detail.chainId, spec.pool, spec.symbolId)
@@ -114,10 +118,11 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
     if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
-      const volume = (direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay)
+      let num = volumeMu(trading.volumeDisplay)
+      const volume = (direction === 'long' ? num : -num)
       const fundingAfter = await getEstimatedFundingRate(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
       if (fundingAfter) {
-        let funding = type.isOption ? fundingAfter.deltaFunding1 : fundingAfter.fundingRate1
+        let funding = type.isOption ? fundingAfter.deltaFunding1 / trading.contract.multiplier : fundingAfter.fundingRate1
         setFundingRateAfter(funding);
       }
     }
@@ -127,7 +132,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
 
   const calcMarkPriceAfter = async () => {
     if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
-      const volume = (direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay)
+      let num = volumeMu(trading.volumeDisplay)
+      const volume = (direction === 'long' ? num : -num)
       const markPriceAfter = await getEstimatedTimePrice(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
       if (markPriceAfter) {
         let markP = getIntrinsicPrice(trading.index, trading.position.strikePrice, trading.position.isCall).plus(markPriceAfter).toString()
@@ -525,17 +531,18 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             </>}
             {type.isOption && <>
               <div className='text-info'>
-                <div className='title-enter pool'>{lang['trade-price']}</div>
-                <div className='text-enter poolL'>
-                  <DeriNumberFormat value={markPriceAfter} decimalScale={2} />
-                </div>
-              </div>
-              <div className='text-info'>
                 <div className='title-enter pool'>{lang['mark-price']}</div>
                 <div className='text-enter poolL'>
                   <DeriNumberFormat value={markPrice} decimalScale={2} />
                 </div>
               </div>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['trade-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={markPriceAfter} decimalScale={2} />
+                </div>
+              </div>
+              
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>

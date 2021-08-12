@@ -54,7 +54,7 @@ function History({wallet ,trading,lang,type}){
           </div>
           <div className='time-price-volume'>
             <div className='history-price'>
-              <div className='history-title'>{lang['volume-price']}</div>
+              <div className='history-title'> {type.isOption ? lang['volume-notional-price'] : lang['volume-price']}</div>
               <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
             </div>
           <div className='notional'>
