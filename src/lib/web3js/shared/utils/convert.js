@@ -112,6 +112,18 @@ export const fromWeiForObject = (obj, keyList = []) => {
   }, {});
 };
 
+export const toNumberForObject = (obj, keyList = []) => {
+  return Object.keys(obj).reduce((acc, i) => {
+    if (keyList.includes(i)) {
+      acc[i] = bg(obj[i]).toNumber();
+    } else {
+      acc[i] = obj[i];
+    }
+    return acc;
+  }, {});
+};
+
+
 export const sortOptionSymbols = (symbolList) => {
   const symbolArr = symbolList
     .map((s) => s.symbol)

@@ -5,7 +5,6 @@ import {
   DeriEnv,
 } from '../../shared/config';
 import { everlastingOptionFactory } from '../factory/pool';
-import { pTokenOptionFactory } from '../factory/tokens';
 import { calculateTxFee } from '../../v2/calculation/position';
 
 const getHttpBase = () => {
@@ -26,6 +25,7 @@ const processTradeEvent = async (
   feeRatio,
   bTokenSymbol,
   symbolIdList,
+  symbols,
 ) => {
   const tradeVolume = deriToNatural(info.tradeVolume);
   const timeStamp = await getBlockInfo(chainId, blockNumber);
@@ -42,7 +42,7 @@ const processTradeEvent = async (
     baseToken: bTokenSymbol,
     symbolId,
     price: price.toString(),
-    volume: volume.toString(),
+    volume: volume.times(symbols[index].multiplier).toString(),
     transactionHash: txHash.toString(),
     time,
   }
@@ -78,17 +78,17 @@ const getTradeHistoryOnline = async (
   //console.log('symbolIdList', symbolIdList);
   const { bTokenSymbol, pToken: pTokenAddress } = getPoolConfig(poolAddress, undefined, undefined, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
-  const pToken = pTokenOptionFactory(chainId, pTokenAddress)
-  const symbolIdList = await pToken.getActiveSymbolIds()
-  const toBlock = await getBlockInfo(chainId, 'latest');
+  const [toBlock] = await Promise.all([
+    getBlockInfo(chainId, 'latest'),
+    optionPool._updateConfig(),
+  ]);
   fromBlock = parseInt(fromBlock);
 
   let promises= []
-  for (let i=0; i<symbolIdList.length; i++) {
-    promises.push(optionPool.getSymbol(symbolIdList[i]))
+  for (let i = 0; i < optionPool.activeSymbolIds.length; i++) {
+    promises.push(optionPool.getSymbol(optionPool.activeSymbolIds[i]));
   }
   let symbols = await Promise.all(promises)
-
   const multiplier = symbols.map((i) => i.multiplier.toString());
   const feeRatio = symbols.map((i) => i.feeRatio.toString());
 
@@ -101,7 +101,7 @@ const getTradeHistoryOnline = async (
   );
 
   const result = [];
-  events  = events.filter((i) => i.returnValues.symbolId === symbolId)
+  //events  = events.filter((i) => i.returnValues.symbolId === symbolId)
   //console.log("events length:", events.length);
   for (let i = 0; i < events.length; i++) {
     const item = events[i];
@@ -113,8 +113,13 @@ const getTradeHistoryOnline = async (
       multiplier,
       feeRatio,
       bTokenSymbol,
-      symbolIdList,
+      optionPool.activeSymbolIds,
+      symbols,
     );
+    const filteredSymbols = symbols.filter((s) => s.symbolId === symbolId)
+    if (filteredSymbols.length > 0) {
+      res.symbol =  filteredSymbols[0].symbol
+    }
     result.unshift(res);
   }
   return result;
@@ -128,9 +133,13 @@ export const getTradeHistory = async (
 ) => {
   try {
     let tradeFromBlock, tradeHistory = [];
-    const res = await fetchJson(
-      `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}/${symbolId}`
-    );
+    const optionPool = everlastingOptionFactory(chainId, poolAddress)
+    const [res] = await Promise.all([
+      fetchJson(
+        `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}/${symbolId}`
+      ),
+      optionPool._updateConfig()
+    ]);
     if (res && res.success) {
       //console.log('his res', res.data)
       tradeFromBlock = parseInt(res.data.tradeHistoryBlock);
@@ -138,17 +147,20 @@ export const getTradeHistory = async (
         tradeHistory = res.data.tradeHistory;
       }
     }
+    const symbols = optionPool.activeSymbols
     if (tradeHistory.length > 0) {
       tradeHistory = tradeHistory
         .filter((i) => i)
         .map((i) => {
+          const index = symbols.findIndex((s) => s.symbolId === symbolId)
           return {
             direction: i.direction.trim(),
             baseToken: i.baseToken.trim(),
             symbolId: i.symbolId,
+            symbol: i.symbol,
             price: deriToNatural(i.price).toString(),
             notional: deriToNatural(i.notional).toString(),
-            volume: deriToNatural(i.volume).toString(),
+            volume: deriToNatural(i.volume).times(symbols[index].multiplier).toString(),
             transactionFee: deriToNatural(i.transactionFee).toString(),
             transactionHash: i.transactionHash,
             time: i.time.toString(),

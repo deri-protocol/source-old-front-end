@@ -1,8 +1,22 @@
-import { ContractBase, deleteIndexedKey, fromWeiForObject, fromWei, naturalToDeri, getPoolConfig, getPoolLiteViewerConfig } from '../../shared'
+import {
+  ContractBase,
+  deleteIndexedKey,
+  fromWeiForObject,
+  fromWei,
+  naturalToDeri,
+  getPoolConfig,
+  getPoolViewerConfig,
+} from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
-import { getPriceInfo } from '../../shared/utils/oracle';
-import { everlastingOptionViewerFactory, pTokenOptionFactory } from '../factory/tokens';
-import { everlastingOptionAbi } from './abis.js'
+import {
+  getPriceInfo,
+} from '../../shared/utils/oracle';
+import {
+  everlastingOptionViewerFactory,
+  pTokenOptionFactory,
+} from '../factory/tokens';
+import { volatilitiesCache } from '../utils';
+import { everlastingOptionAbi } from './abis.js';
 
 export class EverlastingOption extends ContractBase {
   // init
@@ -21,27 +35,45 @@ export class EverlastingOption extends ContractBase {
     this.bTokenAddress = this.config.bToken;
     this.lTokenAddress = this.config.lToken;
     this.pTokenAddress = this.config.pToken;
-    this.viewerAddress = getPoolLiteViewerConfig(this.chainId, 'option');
+    this.viewerAddress = getPoolViewerConfig(this.chainId, 'option');
   }
   async _updateConfig() {
     if (!this.pToken) {
       this.pToken = pTokenOptionFactory(this.chainId, this.pTokenAddress);
     }
     if (!this.viewer) {
-      this.viewer = everlastingOptionViewerFactory( this.chainId, this.viewerAddress)
+      this.viewer = everlastingOptionViewerFactory(
+        this.chainId,
+        this.viewerAddress
+      );
     }
-    const [activeSymbolIds, state] = await Promise.all([
-      this.pToken.getActiveSymbolIds(),
-      this.viewer.getPoolStates(this.contractAddress, [], []),
-    ]);
-    const { symbolState } = state;
-    this.activeSymbolIds = activeSymbolIds;
-    this.activeSymbols = symbolState.filter((s) =>
-      activeSymbolIds.includes(s.symbolId)
-    );
-    this.volatilitySymbols = getVolatilitySymbols(
-      this.activeSymbols.map((s) => s.symbol)
-    );
+    if(!this.activeSymbolIds){
+      this.activeSymbolIds = await this.pToken.getActiveSymbolIds();
+      const activeSymbols = await Promise.all(
+        this.activeSymbolIds.reduce(
+          (acc, i) => acc.concat([this.getSymbol(i)]),
+          []
+        )
+      );
+      const symbolVolatilities = await volatilitiesCache.get(
+        this.contractAddress,
+        activeSymbols.map((s) => s.symbol)
+      );
+      //console.log(symbolVolatilities)
+      const state = await this.viewer.getPoolStates(
+        this.contractAddress,
+        [],
+        symbolVolatilities
+      );
+      const { symbolState } = state;
+      this.activeSymbols = symbolState.filter((s) =>
+        this.activeSymbolIds.includes(s.symbolId)
+      );
+      // for tx use
+      this.volatilitySymbols = getVolatilitySymbols(
+        this.activeSymbols.map((s) => s.symbol)
+      );
+    }
   }
 
   // query
@@ -109,7 +141,7 @@ export class EverlastingOption extends ContractBase {
 
   // tx
   async _getVolSymbolPrices() {
-    await this._updateConfig()
+    await this._updateConfig();
     let prices = [];
     if (this.volatilitySymbols.length > 0) {
       const priceInfos = await Promise.all(

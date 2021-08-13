@@ -13,9 +13,14 @@ import {
 export const getOracleUrl = (symbol, type='futures') => {
   const env = DeriEnv.get();
   //if (/^[0-9]+$/.test(symbolId.toString())) {
+  const preservedSymbols = ['BTCUSD', 'ETHUSD'];
   let method = 'get_signed_price'
   if (type === 'option') {
     method = 'get_signed_volatility'
+  }
+  if (preservedSymbols.includes(symbol)) {
+    method = 'get_price'
+    symbol = `${symbol}_v2_bsc`
   }
   let baseUrl =
     env === 'prod'
@@ -60,7 +65,7 @@ export const getPriceInfo = async (symbol, type='futures') => {
     retry -= 1;
   }
   if (retry === 0) {
-    throw new Error(`fetch oracle info exceed max retry(2): ${symbol} ${JSON.stringify(priceInfo)}`);
+    throw new Error(`fetch oracle info exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);
   }
 };
 

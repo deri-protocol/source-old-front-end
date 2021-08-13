@@ -28,7 +28,7 @@ export {
   getPoolSymbolList,
   getPoolSymbolIdList,
   getPoolVersion,
-  getPoolLiteViewerConfig,
+  getPoolViewerConfig,
 } from './pool';
 export {
   getPoolV1ConfigList,

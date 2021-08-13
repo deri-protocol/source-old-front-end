@@ -3,7 +3,7 @@ import {
   ContractBase,
   deriToNatural,
   naturalToDeri,
-  getPoolLiteViewerConfig,
+  getPoolViewerConfig,
 } from '../../shared';
 import { getPriceInfos } from '../../shared/utils/oracle';
 import { perpetualPoolLiteAbi } from './abis';
@@ -37,7 +37,7 @@ export class PerpetualPoolLite extends ContractBase {
     if (!this.pTokenAddress) {
       await this.getAddresses()
       const pToken = new PTokenLite(this.chainId, this.pTokenAddress)
-      const viewerAddress = getPoolLiteViewerConfig(this.chainId)
+      const viewerAddress = getPoolViewerConfig(this.chainId)
       const [activeSymbolIds, activeSymbols] = await Promise.all([
         pToken.getActiveSymbolIds(),
         new PerpetualPoolLiteViewer(

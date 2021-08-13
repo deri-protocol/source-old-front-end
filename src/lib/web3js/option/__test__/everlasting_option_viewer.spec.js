@@ -1,12 +1,13 @@
-import { getPoolConfig, getPoolLiteViewerConfig, getPoolSymbolList } from "../../shared"
-import { getOraclePricesForOption, getOracleVolatilitiesForOption } from "../../shared/utils/oracle"
+import { getPoolViewerConfig, getPoolSymbolList } from "../../shared"
+import { getOraclePricesForOption } from "../../shared/utils/oracle"
 import { ACCOUNT_ADDRESS, CHAIN_ID, OPTION_POOL_ADDRESS, TIMEOUT } from "../../shared/__test__/setup"
 import { everlastingOptionViewerFactory } from "../factory/tokens"
+import { volatilitiesCache } from "../utils"
 
 describe('EverlastingOptionViewer', () => {
   let everlastingOptionViewer
   beforeAll(() => {
-    const viewAddress = getPoolLiteViewerConfig(CHAIN_ID, 'option')
+    const viewAddress = getPoolViewerConfig(CHAIN_ID, 'option')
     everlastingOptionViewer = everlastingOptionViewerFactory(CHAIN_ID, viewAddress )
   })
   it(
@@ -15,7 +16,7 @@ describe('EverlastingOptionViewer', () => {
       const symbols = getPoolSymbolList(OPTION_POOL_ADDRESS).map((s) => s.symbol)
       const [symbolPrices, symbolVolatilities] = await Promise.all([
         getOraclePricesForOption(CHAIN_ID, symbols),
-        getOracleVolatilitiesForOption(symbols),
+        volatilitiesCache.get(OPTION_POOL_ADDRESS, symbols),
       ]);
       const res = await everlastingOptionViewer.getPoolStates(
         OPTION_POOL_ADDRESS,
@@ -32,7 +33,6 @@ describe('EverlastingOptionViewer', () => {
           pToken: '0x7484e22022C971e314A00e0dfbfCDe8E223c80aC',
           pmmPricer: '0x1D7AFF20BB5E52dDD10d5B4B0e0b91b5327Ae826',
           optionPricer: '0x2D346A85299d812C0c0e97B23CD1ff0F37b606Ab',
-          optionPricer: expect.any(String),
           initialMarginRatio: '0.1',
           maintenanceMarginRatio: '0.05',
           premiumFundingPeriod: expect.any(String),
@@ -80,7 +80,7 @@ describe('EverlastingOptionViewer', () => {
       const symbols = getPoolSymbolList(OPTION_POOL_ADDRESS).map((s) => s.symbol)
       const [symbolPrices, symbolVolatilities] = await Promise.all([
         getOraclePricesForOption(CHAIN_ID, symbols),
-        getOracleVolatilitiesForOption(symbols),
+        volatilitiesCache.get(OPTION_POOL_ADDRESS, symbols),
       ]);
       const res = await everlastingOptionViewer.getTraderStates(
         OPTION_POOL_ADDRESS,
@@ -88,8 +88,10 @@ describe('EverlastingOptionViewer', () => {
        symbolPrices,
        symbolVolatilities,
       );
-      // console.log(res.traderState)
-      // console.log(res.positionState[0])
+      console.log(res.poolState)
+      console.log(res.traderState)
+      console.log(res.symbolState[14])
+      console.log(res.positionState[14])
       expect(res.traderState).toEqual(
         expect.objectContaining({
           dynamicMargin: expect.any(String),

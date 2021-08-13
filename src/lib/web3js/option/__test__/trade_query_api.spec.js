@@ -35,7 +35,7 @@ describe('trade query api', () => {
         minLiquidationReward: '10',
         multiplier: '0.01',
         protocolFeeCollectRatio: '0.2',
-        deltaFundingCoefficient: '0.000005',
+        deltaFundingCoefficient: '0.000001',
         symbol: 'BTCUSD-20000-C',
         isCall: true,
       });
@@ -92,17 +92,13 @@ describe('trade query api', () => {
     'getFundingRate',
     async () => {
       const res = await getFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '0');
-      expect(res).toEqual(
-        expect.objectContaining({
-          deltaFunding0: expect.any(String),
-          deltaFundingPerSecond: expect.any(String),
-          liquidity: expect.any(String),
-          premiumFunding0: expect.any(String),
-          premiumFundingPerSecond: expect.any(String),
-          tradersNetVolume: expect.any(String),
-          volume: '-',
-        })
-      );
+      expect(res).toHaveProperty('deltaFunding0')
+      expect(res).toHaveProperty('deltaFundingPerSecond')
+      expect(res).toHaveProperty('liquidity')
+      expect(res).toHaveProperty('premiumFunding0')
+      expect(res).toHaveProperty('premiumFundingPerSecond')
+      expect(res).toHaveProperty('tradersNetVolume')
+      expect(res).toHaveProperty('volume')
       expect(bg(res.deltaFunding0).abs().toNumber()).toBeLessThanOrEqual(1000);
       expect(bg(res.tradersNetVolume).abs().toNumber()).toBeLessThanOrEqual(
         100000

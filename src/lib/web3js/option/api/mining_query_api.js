@@ -1,6 +1,5 @@
 import { getPoolConfig } from '../../shared/config';
 import { catchApiError, bg } from '../../shared/utils';
-import { getOraclePricesForOption, getOracleVolatilitiesForOption } from '../../shared/utils/oracle';
 import {
   calculateMaxRemovableShares,
   calculateShareValue,
@@ -9,9 +8,10 @@ import { everlastingOptionFactory } from '../factory/pool';
 import {
   lTokenOptionFactory,
 } from '../factory/tokens';
+import { volatilitiesCache } from '../utils';
 
 const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
-  const { lToken: lTokenAddress, pToken: pTokenAddress } = getPoolConfig(
+  const { lToken: lTokenAddress } = getPoolConfig(
     poolAddress,
     '0',
     '0',
@@ -29,17 +29,10 @@ const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
   ]);
 
   const symbols = optionPool.activeSymbols
-  const [symbolPrices, symbolVolatilities] = await Promise.all([
-    getOraclePricesForOption(chainId, symbols.map((s) => s.symbol)),
-    getOracleVolatilitiesForOption(symbols.map((s) => s.symbol)),
-  ]);
-  const state = await  optionPool.viewer.getPoolStates(poolAddress, symbolPrices, symbolVolatilities)
+  const symbolVolatilities = await volatilitiesCache.get(poolAddress, symbols.map((s) => s.symbol))
+  const state = await optionPool.viewer.getPoolStates(poolAddress, [], symbolVolatilities)
   const { poolState } = state;
   const { initialMarginRatio, liquidity, totalDynamicEquity } = poolState;
-  // const totalPnl = symbols.reduce((acc, s) => {
-  //   return acc.plus(bg(s.tradersNetVolume).times(s.strikePrice).times(s.multiplier).minus(s.tradersNetCost))
-  // }, bg(0))
-  // const poolDynamicEquity = bg(liquidity).minus(totalPnl)
   const cost = symbols.reduce((acc, s) => acc.plus(s.tradersNetCost), bg(0));
   const value = symbols.reduce(
     (acc, s) =>

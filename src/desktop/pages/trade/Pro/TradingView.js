@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import TradingViewChart from "./TradingViewChart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
-import {getIntrinsicPrice} from '../../../../lib/web3js/indexV2'
+import {getIntrinsicPrice,bg} from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
 
 function TradingView({ version, trading, lang,type }) {
@@ -87,7 +87,7 @@ function TradingView({ version, trading, lang,type }) {
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
-            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract ? trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'0'  } decimalScale={4} /></div>
+            <div className='trade-dashboard-value'><DeriNumberFormat value={ bg(trading.fundingRate.tradersNetVolume).minus(trading.contract.multiplier).toString()  } decimalScale={4} /></div>
           </div>
         </>}
         <div className='trade-dashboard-item latest-price'>

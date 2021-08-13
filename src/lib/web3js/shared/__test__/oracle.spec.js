@@ -77,7 +77,7 @@ describe("oracle", () => {
     const input  = ['BTCUSD-30000-C', 'BTCUSD-40000-C', 'ETHUSD-3000-C', 'BTCUSD-50000-P']
     const res = await getOraclePricesForOption(CHAIN_ID, input);
     expect(res.length).toEqual(4);
-    expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(10000);
+    expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(10000000000000000000000);
     expect(bg(res[3]).toNumber()).toBeGreaterThanOrEqual(10000);
   }, TIMEOUT)
   test('getOracleVolatilitiesForOption()', async() => {

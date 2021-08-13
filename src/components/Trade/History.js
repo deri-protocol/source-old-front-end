@@ -1,5 +1,5 @@
 import React, { useState ,useEffect} from 'react'
-import { getTradeHistory,DeriEnv } from "../../lib/web3js/indexV2";
+import { getTradeHistory,DeriEnv,bg} from "../../lib/web3js/indexV2";
 import dateFormat from 'date-format'
 import NumberFormat from 'react-number-format';
 import useInterval from '../../hooks/useInterval';
@@ -23,10 +23,10 @@ function History({wallet ,trading,lang,type}){
         } else if (item.direction.toLowerCase() === 'liquidation') {
           item.directionText = lang['liquidation']
         }
-        item.volume = type.isOption ? item.volume * trading.contract.multiplier : item.volume
+        // item.volume = type.isOption ? bg(item.volume).times(bg(trading.contract.multiplier)).toString() : item.volume
         const find = trading.config
         if(find){
-          item.baseTokenText = item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol
+          item.baseTokenText = type.isOption ? `${item.symbol} / ${item.baseToken}` : item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol
         }
         return item;
       })

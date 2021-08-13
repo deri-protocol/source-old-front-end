@@ -136,6 +136,8 @@ export const getPoolConfig = (poolAddress, bTokenId, symbolId, version='v2') => 
   const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId, version)
   return res[0]
 }
+export const getFilteredPoolConfig  = getPoolConfig
+
 
 export const getPoolVersion = (poolAddress) => {
   const pools = VERSIONS.reduce((acc, version) => {
@@ -231,12 +233,12 @@ export const getPoolSymbolIdList = (poolAddress) => {
   return pool.symbols.map((b) => b.symbolId);
 };
 
-export const getPoolLiteViewerConfig = (chainId, version="v2_lite") => {
+export const getPoolViewerConfig = (chainId, version="v2_lite") => {
   const config = getConfig(version)
-  const viewers = config.poolLiteViewer.filter((v) => v.chainId === chainId.toString())
+  const viewers = config.poolViewer.filter((v) => v.chainId === chainId.toString())
   if (viewers.length > 0) {
     return viewers[0].address
   } else {
-    throw new Error(`getpoolLiteViewerConfig(): invalid chainId(${chainId}) or version(${version}).`);
+    throw new Error(`getPoolViewerConfig(): invalid chainId(${chainId}) or version(${version}).`);
   }
 };

@@ -70,7 +70,7 @@ describe('EverlastingOption', () => {
           K: '0.9',
           cumulativeDeltaFundingRate: expect.any(String),
           cumulativePremiumFundingRate: expect.any(String),
-          diseqFundingCoefficient: '0.000005',
+          diseqFundingCoefficient: '0.000001',
           feeRatio: '0.005',
           intrinsicValue: expect.any(String),
           isCall: true,
