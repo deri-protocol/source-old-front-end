@@ -91,7 +91,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   //交易费用
   const loadTransactionFee = async () => {
     if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
-      const transFee = await getEstimatedFee(wallet.detail.chainId, spec.pool, Math.abs(trading.volumeDisplay), spec.symbolId);
+      let volume = volumeMu(trading.volumeDisplay)
+      const transFee = await getEstimatedFee(wallet.detail.chainId, spec.pool, Math.abs(volume), spec.symbolId);
       if (!isNaN(transFee)) {
         setTransFee((+transFee).toFixed(2));
       }
