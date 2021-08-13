@@ -100,7 +100,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   }
 
   const volumeMu = (volume) => {
-    return type.isOption ? volume / trading.contract.multiplier: volume
+    return type.isOption ? volume / trading.contract.multiplier : volume
   }
 
   //计算流动性的变化
@@ -404,7 +404,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             <div className='current-position'>
               <span>{lang['current-position']}</span>
               <span className='position-text'>
-              {type.isOption?<DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+              {type.isOption ? <DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} decimalScale={4} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
               </span>
             </div>
             {type.isFuture && <>

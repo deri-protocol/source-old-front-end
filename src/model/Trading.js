@@ -497,7 +497,7 @@ export default class Trading {
   get initialMarginRatioTip(){
     if(this.contract && this.contract.initialMarginRatioOrigin){
       return `${Intl.get('lite','in-the-money-initial')} = ${this.contract.initialMarginRatioOrigin}` +
-      `\n${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')})` +
+      `\n${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')} ${this.contract.initialMarginRatioOrigin / 10})` +
       `\n\n${Intl.get('lite','otm-ratio-max')}`
     }
     return ''
@@ -505,7 +505,7 @@ export default class Trading {
   get maintenanceMarginRatioTip(){
     if(this.contract && this.contract.maintenanceMarginRatioOrigin){
       return `${Intl.get('lite','in-the-money-maintenance')} = ${this.contract.maintenanceMarginRatioOrigin}` +
-      `\n${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')})` +
+      `\n${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin}${Intl.get('lite','otm-ratio-maintenance')} ${this.contract.maintenanceMarginRatioOrigin / 10})` +
       `\n\n${Intl.get('lite','otm-ratio-max')}`
     }
     return ''
