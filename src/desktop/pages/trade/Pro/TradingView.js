@@ -31,7 +31,7 @@ function TradingView({ version, trading, lang,type }) {
       markPriceRef.current = mark
       setMarkPrice(mark)
     }
-  },[trading.index])
+  },[trading.index,trading.position])
 
   return (
     <div id="trading-view">
@@ -39,7 +39,6 @@ function TradingView({ version, trading, lang,type }) {
         <div className='symbol-basetoken-text'>
           {type.isOption? `${trading.config ? trading.config.symbol:''}` : (version.isV1 || version.isV2Lite) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
-       
         {type.isFuture && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['index-price']}</div>
@@ -59,16 +58,16 @@ function TradingView({ version, trading, lang,type }) {
           </div>
         </>}
         {type.isOption && <>
-          <div className='trade-dashboard-item latest-price  '>
+          <div className='trade-dashboard-item latest-price option-price-weight'>
+            <div className='trade-dashboard-title'>{lang['eo-mark-price']}</div>
+            <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={4} /></div>
+          </div>
+          <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title option-symbol'>{trading.config?type.isOption ? trading.config.symbol.split('-')[0]:'':''}</div>
             <div className='trade-dashboard-value'>
               <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span><span className='vol'> | </span> 
               {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' />
             </div>
-          </div>
-          <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'>{lang['eo-mark-price']}</div>
-            <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span className='funding-per' title={lang['premium-tip']}>{lang['funding-rate-premium']}</span>  </div>
@@ -88,10 +87,9 @@ function TradingView({ version, trading, lang,type }) {
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['total-net-position']}</div>
-            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract ? trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'0' } /></div>
+            <div className='trade-dashboard-value'><DeriNumberFormat value={trading.contract ? trading.fundingRate.tradersNetVolume * trading.contract.multiplier:'0'  } decimalScale={4} /></div>
           </div>
         </>}
-        
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['pool-total-liquidity']}</div>
           <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity} decimalScale={2} /> {trading.config && trading.config.bTokenSymbol}</div>

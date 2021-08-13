@@ -91,7 +91,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   //交易费用
   const loadTransactionFee = async () => {
     if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
-      const transFee = await getEstimatedFee(wallet.detail.chainId, spec.pool, Math.abs(trading.volumeDisplay), spec.symbolId);
+      let volume = volumeMu(trading.volumeDisplay)
+      const transFee = await getEstimatedFee(wallet.detail.chainId, spec.pool, Math.abs(volume), spec.symbolId);
       if (!isNaN(transFee)) {
         setTransFee((+transFee).toFixed(2));
       }
@@ -129,7 +130,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   }
 
   //计算markPrice
-
   const calcMarkPriceAfter = async () => {
     if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
       let num = volumeMu(trading.volumeDisplay)
@@ -183,7 +183,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       if(target.value.indexOf(".") != '-1'){
         value = target.value.substring(0,target.value.indexOf(".") + length)
       }
-      
       trading.setVolume(value)
     }
     if (target.value === '') {
@@ -251,7 +250,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       markPriceRef.current = mark
       setMarkPrice(mark)
     }
-  }, [trading.index])
+  }, [trading.index,trading.position])
 
   useEffect(() => {
     if (trading.config) {
@@ -323,11 +322,11 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               </div>
             </>}
             {type.isOption && <>
+              <div className='mark-price'>
+                {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={4} /></span>
+              </div>
               <div className='index-prcie'>
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
-              </div>
-              <div className='mark-price'>
-                {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
               </div>
             </>}
             <div className='funding-rate'>
@@ -361,15 +360,16 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               </div>
             </>}
             {type.isOption && <>
+              <div className='mark-price'>
+                {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+              </div>
               <div className='index-prcie'>
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
               </div>
               <div className='index-prcie'>
                 {lang['vol']}: <DeriNumberFormat value={trading.position.volatility} decimalScale={2} />
               </div>
-              <div className='mark-price'>
-                {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
-              </div>
+              
             </>}
             <div className='funding-rate'>
               {type.isOption && <>
@@ -507,8 +507,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
         <div className='title-margin'>{lang['margin']}</div>
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
-
-
             {type.isFuture && <>
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
@@ -533,16 +531,15 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['mark-price']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={markPrice} decimalScale={2} />
+                  <DeriNumberFormat value={markPrice} decimalScale={4} />
                 </div>
               </div>
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['trade-price']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={markPriceAfter} decimalScale={2} />
+                  <DeriNumberFormat value={markPriceAfter} decimalScale={4} />
                 </div>
               </div>
-              
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
