@@ -121,7 +121,7 @@ function TradingViewChart({symbol,lang,intl,version}){
       </div>
       <div id={defaultProps.containerId} style={{display : chartType === 'index-price' ? 'block' : 'none'}}></div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol}  />
+        <LightChart symbol={symbol} interval={currentInterval} />
       </div>}
   </div>
   )
