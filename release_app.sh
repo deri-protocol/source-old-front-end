@@ -2,6 +2,7 @@
 # echo PUBLIC_URL=https://cdn.jsdelivr.net/gh/deri-finance/app@main > .env.production
 source ~/.bashrc
 echo REACT_APP_WSS_URL=wss://oracle4.deri.finance >> .env.production
+echo REACT_APP_HTTP_URL=https://oracle2.deri.finance >> .env.production
 echo REACT_APP_REST_SERVER_URL=https://api.deri.finance >> .env.production
 yarn build --nomaps 
 repo=/tmp/build/app

@@ -4,6 +4,7 @@ import datafeeds from './datafeeds/index'
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Type from '../../../../model/Type';
+import LightChart from './LightChart';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
@@ -11,16 +12,19 @@ function TradingViewChart({symbol,lang,intl,version}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [deriWidget, setDeriWidget] = useState(null);
+  const [chartType, setChartType] = useState('')
   const [currentInterval, setCurrentInterval] = useState('1');
 
   const activedClass = classNames('btn',actived)
+  const switchClass = classNames('switcher',chartType)
+
 
   const initialize = () => {
     const widgetOptions = {
 			symbol: symbol,
       datafeed: datafeeds,
       interval: currentInterval,
-      container_id: defaultProps.containerId,
+      container_id: defaultProps.containerId ,
       library_path: `/charting_library/`,      
       custom_css_url : `/style/tradingview-overide.css`,
       locale: intl.locale,
@@ -42,21 +46,10 @@ function TradingViewChart({symbol,lang,intl,version}){
         "paneProperties.background": "#212327",
         "paneProperties.vertGridProperties.color": "#212327",
         "paneProperties.horzGridProperties.color": "#212327",
-        "mainSeriesProperties.candleStyle.upColor": "#53B987",
-        "mainSeriesProperties.candleStyle.downColor": "#EB4D5C",
-        "symbolWatermarkProperties.transparency": 90,
-        "mainSeriesProperties.candleStyle.wickUpColor": "#53B987",
-        "mainSeriesProperties.candleStyle.wickDownColor": "#EB4D5C",
-        "mainSeriesProperties.candleStyle.drawBorder": true,
-        "mainSeriesProperties.candleStyle.borderUpColor" : "#53B987",
-        "mainSeriesProperties.candleStyle.borderDownColor" : "#EB4D5C",
-        "scalesProperties.textColor" : "#aaa" ,
-        "scalesProperties.backgroundColor" : "#aaa",
-        "paneProperties.axisProperties.percentage" : false
+        "scalesProperties.textColor" : "#aaa" 
       },      
       studies_overrides: {
-        "compare.plot.color": "#fff",
-        "compare.source": "high"
+        "compare.plot.color": "rgb(86, 155, 218)",
       },
       toolbar_bg: "#212327",
       timezone: "Asia/Shanghai", 
@@ -64,13 +57,14 @@ function TradingViewChart({symbol,lang,intl,version}){
     }
 
     const w  = new widget(widgetOptions);
-    document.querySelector('#tv_chart_container iframe').addEventListener("load", function(e) {
-      setTimeout(() => setLoading(false),500)
-    });
+    // document.querySelector('iframe').addEventListener("load", function(e) {
+    //   setTimeout(() => setLoading(false),500)
+    // });
     w.onChartReady(() => {
-      if(Type.isOption){
-        w.chart().createStudy('Compare',false,false,['open',`${symbol}-MARKPRICE`])
-      } 
+      // if(Type.isOption){
+        // w.chart().createStudy('Compare',false,false,['open',`${symbol}-MARKPRICE`])
+        setTimeout(() => setLoading(false),500)
+      // } 
     })
     return w;
   }
@@ -84,9 +78,18 @@ function TradingViewChart({symbol,lang,intl,version}){
     })        
   }
 
+  const switchChart = (type) => {
+    setChartType(type)
+  }
+
   useEffect(() => {
     if(symbol){
       setDeriWidget(initialize())
+    }
+    if(Type.isOption){
+      setChartType('mark-price')
+    } else {
+      setChartType('index-price')
     }
     return () => {
       if (deriWidget !== null) {
@@ -97,6 +100,10 @@ function TradingViewChart({symbol,lang,intl,version}){
 
   return(
     <div id='tradingview'>
+      {Type.isOption &&<div className={switchClass}>
+        <span className='mark-price-c' onClick={() => switchChart('mark-price')}>Mark Price</span>
+        <span className='index-price-c' onClick={() => switchChart('index-price')}>Index Price</span>
+      </div>}
       <div className={activedClass}>
           <span className='tab-btn one' onClick={() => changeTime('1','one')} >1{lang['min']}</span>
           <span className='tab-btn five' onClick={() => changeTime('5','five')}>5{lang['min']}</span>
@@ -106,13 +113,16 @@ function TradingViewChart({symbol,lang,intl,version}){
           <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1{lang['day']}</span>
           <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1{lang['week']}</span>
       </div>
+      
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>
           </div>
       </div>
-      <div id={defaultProps.containerId}>        
-      </div>
+      <div id={defaultProps.containerId} style={{display : chartType === 'index-price' ? 'block' : 'none'}}></div>
+      {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
+        <LightChart symbol={symbol}  />
+      </div>}
   </div>
   )
 }

@@ -2,6 +2,7 @@
 # source ~/.bashrc
 echo PUBLIC_URL=/ > .env.development
 echo REACT_APP_WSS_URL=wss://oracle2.deri.finance >> .env.development
+echo REACT_APP_HTTP_URL=https://oracle2.deri.finance >> .env.development
 echo REACT_APP_REST_SERVER_URL=https://testnetapi.deri.finance >> .env.development
 npm run build_testnet --nomaps --env=development
 repo=/tmp/build/testnet

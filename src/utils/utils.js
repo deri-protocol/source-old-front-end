@@ -103,8 +103,13 @@ export function getParam(param,urlString = window.location.href){
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
   if(type.isOption){
-    symbol = symbol.split('-')[0]
+    if(symbol.indexOf('-MARKPRICE') !== -1) {
+      symbol = symbol.substr(0,symbol.indexOf('-MARKPRICE'))
+    } else {
+      symbol = symbol.split('-')[0]
+    }
   }
+  // if(symbol.indexOf('MARKPRICE') !== -1)
   return version.isV2 || version.isV2Lite || type.isOption ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
