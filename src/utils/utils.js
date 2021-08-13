@@ -109,8 +109,17 @@ export function getFormatSymbol(symbol){
       symbol = symbol.split('-')[0]
     }
   }
-  // if(symbol.indexOf('MARKPRICE') !== -1)
   return version.isV2 || version.isV2Lite || type.isOption ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+}
+
+export function stripSymbol(symbol){
+  if(!symbol){
+    return symbol;
+  }
+  if(/-/.test(symbol)){
+    symbol = symbol.split('-')[0]
+  }
+  return symbol
 }
 
 

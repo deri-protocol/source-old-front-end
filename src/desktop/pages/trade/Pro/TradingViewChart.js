@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Type from '../../../../model/Type';
 import LightChart from './LightChart';
+import { stripSymbol } from '../../../../utils/utils';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
@@ -102,8 +103,8 @@ function TradingViewChart({symbol,lang,intl,version}){
   return(
     <div id='tradingview'>
       {Type.isOption &&<div className={switchClass}>
-        <span className='mark-price-c' onClick={() => switchChart('mark-price')}>Mark Price</span>
-        <span className='index-price-c' onClick={() => switchChart('index-price')}>Index Price</span>
+        <span className='mark-price-c' onClick={() => switchChart('mark-price')}>Option Mark Price</span>
+        <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || 'index'} Price</span>
       </div>}
       <div className={activedClass}>
           <span className='tab-btn one' onClick={() => changeTime('1','one')} >1{lang['min']}</span>

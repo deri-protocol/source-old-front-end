@@ -1,10 +1,12 @@
 import React, { useState, useEffect,useRef } from 'react'
 import dateFormat from 'dateformat'
-
+import {io} from 'socket.io-client'
 import {createChart} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol } from '../../../../utils/utils';
+
+let socketStatus = 'disconnected'
 const secondsInRange = {
   '1' : 60,
   '5' : 300,
@@ -24,18 +26,20 @@ const intervalRange = {
   '1W' : 'week'
 }
 
+const socket = io(process.env.REACT_APP_WSS_URL, {
+  transports: ['websocket'],
+  withCredentials: true
+})
+
+socket.on('connect', data => {
+  socketStatus = 'connected'
+})
+
 function LightChart({symbol,interval = '1',intl}){
   const chart = useRef(null)
+  const barSeries = useRef(null);
   const [loading, setLoading] = useState(true);
-  
-  const formatDate = (time,type) => {
-    switch (type) {
-      case 'min':
-        return dateFormat(time,'yyyy-mm-dd h:MM')
-      default:
-        break;
-    }
-  }
+
 
   const calcRange = (interval) => {
     const timestamp = new Date().getTime() /1000 ;
@@ -51,9 +55,27 @@ function LightChart({symbol,interval = '1',intl}){
    
   }
 
+  const initWs = () => {
+    if(socketStatus === 'connected') {
+      socket.emit('get_kline_update', {'symbol': getFormatSymbol(`${symbol}-MARKPRICE`), 'time_type': intervalRange[interval],updated : true})
+    }
+    socket.on('kline_update', data => {
+      let obj = {}
+      if (data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === getFormatSymbol(`${symbol}-MARKPRICE`).toUpperCase()) {
+        obj.time = data.time
+        obj.low = Number(data.low)
+        obj.high = Number(data.high)
+        obj.open = Number(data.open)
+        obj.close = Number(data.close)
+        obj.volume = Number(data.volume)
+        barSeries.current.update(obj)
+      }
+    })
+  }
+
   const loadChart = async () => {
     if(symbol){
-      const barSeries = chart.current.addBarSeries();
+      barSeries.current = chart.current.addBarSeries();
       const range = calcRange(interval)
       const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${getFormatSymbol(`${symbol}-MARKPRICE`)}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
       setLoading(true)
@@ -61,11 +83,13 @@ function LightChart({symbol,interval = '1',intl}){
       if(res && res.data) {
         const {data} = res
         if(data.data instanceof Array){
-          barSeries.setData(data.data);
+          const d = data.data
+          barSeries.current.setData(d);
         } else {
-          barSeries.setData([])
+          barSeries.current.setData([])
         }
         setLoading(false)
+        initWs()
       }
     }
   }
@@ -73,18 +97,19 @@ function LightChart({symbol,interval = '1',intl}){
   const initChart = () => {
     chart.current = createChart(document.querySelector('.ligth-chart-container'), { 
       localization : {
-          locale: intl.locale
+        timeFormatter : businessDayOrTimestamp => {
+          return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
         },
-        width: 1198,
-        height: 468 
-      });
-    chart.current.applyOptions({
+      },
+      width: 1198,
+      height: 468,
       timeScale: {
+        rightOffset : 3,
         timeVisible : true,
         borderColor : '#fff',
         tickMarkFormatter: (time, tickMarkType, locale) => {
-          const current = new Date(time)
-          return `${current.getHours() + 1} :${current.getMinutes()}`;
+          const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd HH:MM' : 'HH:MM'
+          return dateFormat(time,format)
         },
       },
       priceScale: {
@@ -93,16 +118,18 @@ function LightChart({symbol,interval = '1',intl}){
       },
       crosshair: {
         vertLine: {
-            color: '#fff',
-            width: 0.5,
-            visible: true,
-            labelVisible: true,
+          color: '#fff',
+          width: 0.1,
+          visible: true,
+          labelVisible: true,
+          labelBackgroundColor : '#569bda'
         },
         horzLine: {
-            color: '#fff',
-            width: 0.5,
-            visible: true,
-            labelVisible: true,
+          color: '#fff',
+          width: 0.1,
+          visible: true,
+          labelVisible: true,
+          labelBackgroundColor : '#569bda'
         },
         mode: 1,
       },
@@ -126,6 +153,9 @@ function LightChart({symbol,interval = '1',intl}){
     if(chart.current) {
       chart.current.remove()
       chart.current = null;
+    }
+    if(barSeries.current){
+      barSeries.current = null;
     }
     initChart();
     symbol && loadChart();
