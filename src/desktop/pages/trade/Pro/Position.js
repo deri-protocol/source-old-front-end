@@ -126,7 +126,7 @@ function Position({wallet,trading,version,lang,type}){
     </div>
     <div className='p-box tbody'>
       <div className='position'>
-      {type.isOption?<DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+      {type.isOption?<DeriNumberFormat value={trading.position.volume * trading.contract.multiplier} decimalScale={4} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
         <span className='close-position'>
           {!closing && <img src={closePosImg} onClick={onClosePosition}/>}
           <span

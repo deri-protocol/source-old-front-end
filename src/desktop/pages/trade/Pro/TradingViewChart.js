@@ -88,6 +88,7 @@ function TradingViewChart({symbol,lang,intl,version}){
     }
     if(Type.isOption){
       setChartType('mark-price')
+      // setChartType('index-price')
     } else {
       setChartType('index-price')
     }
@@ -113,7 +114,6 @@ function TradingViewChart({symbol,lang,intl,version}){
           <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1{lang['day']}</span>
           <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1{lang['week']}</span>
       </div>
-      
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>
