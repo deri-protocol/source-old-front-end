@@ -20,8 +20,8 @@ export class EverlastingOptionViewer extends ContractBase {
     const res = await this._call('_updateSymbolPrices', [state]);
     return res;
   }
-  async getPoolStates(poolAddress, oraclePrices) {
-    const res = await this._call('getPoolStates', [poolAddress, oraclePrices]);
+  async getPoolStates(poolAddress, oraclePrices, oracleVolatilities) {
+    const res = await this._call('getPoolStates', [poolAddress, oraclePrices, oracleVolatilities]);
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
         'multiplier',
@@ -41,6 +41,7 @@ export class EverlastingOptionViewer extends ContractBase {
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
+        'oracleVolatility',
       ]);
       return acc.concat([symbol])
     }, [])
@@ -57,11 +58,12 @@ export class EverlastingOptionViewer extends ContractBase {
       symbolState,
     };
   }
-  async getTraderStates(poolAddress, account, oraclePrices) {
+  async getTraderStates(poolAddress, account, oraclePrices, oracleVolatilities) {
     const res = await this._call('getTraderStates', [
       poolAddress,
       account,
       oraclePrices,
+      oracleVolatilities,
     ]);
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
@@ -82,6 +84,7 @@ export class EverlastingOptionViewer extends ContractBase {
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
+        'oracleVolatility',
       ]);
       return acc.concat([symbol])
     }, [])

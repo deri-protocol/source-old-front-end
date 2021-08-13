@@ -4,7 +4,8 @@ import {
   getRestServerConfig,
   DeriEnv,
 } from '../../shared/config';
-import { everlastingOptionFactory, pTokenOptionFactory } from '../factory';
+import { everlastingOptionFactory } from '../factory/pool';
+import { pTokenOptionFactory } from '../factory/tokens';
 import { calculateTxFee } from '../../v2/calculation/position';
 
 const getHttpBase = () => {

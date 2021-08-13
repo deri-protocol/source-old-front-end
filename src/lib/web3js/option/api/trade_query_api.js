@@ -2,10 +2,11 @@ import { bg, bTokenFactory, catchApiError, getPoolConfig, getPoolLiteViewerConfi
 import { fundingRateCache } from "../../shared/api/api_globals";
 import { normalizeOptionSymbol } from "../../shared/config/token";
 import { wrappedOracleFactory } from "../../shared/factory/oracle";
-import { getPriceFromRest } from "../../shared/utils/oracle";
+import { getOraclePricesForOption, getOracleVolatilitiesForOption, getPriceFromRest } from "../../shared/utils/oracle";
 import { queryTradePMM } from '../calculation/PMM';
 import { dynamicInitialMarginRatio, dynamicInitialPoolMarginRatio, getdeltaFundingPerSecond, getIntrinsicPrice } from "../calculation/trade";
-import { everlastingOptionFactory, everlastingOptionViewerFactory, pTokenOptionFactory } from "../factory";
+import { everlastingOptionFactory } from "../factory/pool";
+import { everlastingOptionViewerFactory, pTokenOptionFactory } from "../factory/tokens";
 
 const SECONDS_IN_A_DAY = 86400
 
@@ -15,16 +16,18 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
     async (chainId, poolAddress, symbolId) => {
       const { bTokenSymbol } = getPoolConfig(poolAddress, '0', '0', 'option');
       const optionPool = everlastingOptionFactory(chainId, poolAddress);
-      const poolViewer = everlastingOptionViewerFactory(
-        chainId,
-        optionPool.viewerAddress
-      );
-      const [state, symbolInfo2, poolInfo2] = await Promise.all([
-        poolViewer.getPoolStates(poolAddress, []),
+      await optionPool._updateConfig()
+      const [symbolInfo2, poolInfo2] = await Promise.all([
         optionPool.getSymbol(symbolId),
         optionPool.getParameters(),
       ]);
 
+      const symbols = optionPool.activeSymbols
+      const [symbolPrices, symbolVolatilities] = await Promise.all([
+        getOraclePricesForOption(chainId, symbols.map((s) => s.symbol)),
+        getOracleVolatilitiesForOption(symbols.map((s) => s.symbol)),
+      ]);
+      const state = await optionPool.viewer.getPoolStates(poolAddress, symbolPrices, symbolVolatilities)
       const { symbolState } = state;
       const symbolIndex = symbolState.findIndex((s) => s.symbolId === symbolId);
       const symbolInfo = symbolState[symbolIndex];
@@ -88,12 +91,16 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
   return catchApiError(async(chainId, poolAddress, accountAddress, symbolId) => {
     const { symbol:symbolStr } = getPoolConfig(poolAddress, undefined, symbolId, 'option')
     const optionPool = everlastingOptionFactory(chainId, poolAddress)
+    await optionPool._updateConfig()
     //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
-    const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-    const [state, volPrice] = await Promise.all([
-      poolViewer.getTraderStates(poolAddress, accountAddress, []),
+    //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
+    const symbols = optionPool.activeSymbols
+    const [symbolPrices, symbolVolatilities, volPrice] = await Promise.all([
+      getOraclePricesForOption(chainId, symbols.map((s) => s.symbol)),
+      getOracleVolatilitiesForOption(symbols.map((s) => s.symbol)),
       getPriceFromRest(`VOL-${normalizeOptionSymbol(symbolStr)}`, 'option'),
-    ])
+    ]);
+    const state = await optionPool.viewer.getTraderStates(poolAddress, accountAddress, symbolPrices, symbolVolatilities)
     const { poolState, symbolState, traderState, positionState } = state
     const { initialMarginRatio } = poolState;
     const { margin, totalPnl, initialMargin } = traderState;
@@ -181,28 +188,29 @@ export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
 const _getFundingRate = async (chainId, poolAddress, symbolId) => {
   //const { symbol } = getPoolConfig(poolAddress, undefined, symbolId, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
+  await optionPool._updateConfig()
   const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress);
-  const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-  const [symbolIds, state ] = await Promise.all([
-    pToken.getActiveSymbolIds(),
-    poolViewer.getPoolStates(poolAddress,[]),
-    //getOraclePriceForOption(chainId, symbol)
+  //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
+  const symbols = optionPool.activeSymbols;
+  const [symbolPrices, symbolVolatilities] = await Promise.all([
+    getOraclePricesForOption(
+      chainId,
+      symbols.map((s) => s.symbol)
+    ),
+    getOracleVolatilitiesForOption(symbols.map((s) => s.symbol)),
   ]);
-    const { poolState, symbolState } = state
-    const {
-      initialMarginRatio,
-      totalDynamicEquity,
-      liquidity,
-    } = poolState;
-  const curSymbolIndex = symbolIds.indexOf(symbolId)
+  const state = await optionPool.viewer.getPoolStates(
+    poolAddress,
+    symbolPrices,
+    symbolVolatilities
+  );
+  const { poolState, symbolState } = state;
+  const { initialMarginRatio, totalDynamicEquity, liquidity } = poolState;
+  const curSymbolIndex = optionPool.activeSymbolIds.indexOf(symbolId)
   if (curSymbolIndex < 0) {
     throw new Error(`getFundingRate(): invalid symbolId(${symbolId}) for pool(${poolAddress})`)
   }
   const symbolInfo = symbolState[curSymbolIndex]
-  // const notionalValue = bg(1).times(symbolInfo.multiplier).times(price)
-  // const symbols = await Promise.all(
-  //   symbolIds.reduce((acc, i) => acc.concat([optionPool.getSymbol(i)]), [])
-  // );
 
   const prices = await Promise.all(
     symbolState.reduce(
@@ -231,20 +239,20 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
 
   const res = {
     initialMarginRatio,
-    symbolIds,
+    symbolIds:optionPool.activeSymbolIds,
     symbols: symbolState,
     liquidity,
     totalDynamicEquity,
     prices,
     liquidityUsed: liquidityUsedInAmount.div(liquidity),
-    deltaFunding: bg(symbolInfo.deltaFundingPerSecond)
+    deltaFunding: bg(symbolInfo.deltaFundingPerSecond).div(symbolInfo.multiplier)
       .times(SECONDS_IN_A_DAY)
       .toString(),
-    deltaFundingPerSecond: symbolInfo.deltaFundingPerSecond,
-    premiumFunding: bg(symbolInfo.premiumFundingPerSecond)
+    deltaFundingPerSecond: bg(symbolInfo.deltaFundingPerSecond).div(symbolInfo.multiplier),
+    premiumFunding: bg(symbolInfo.premiumFundingPerSecond).div(symbolInfo.multiplier)
       .times(SECONDS_IN_A_DAY)
       .toString(),
-    premiumFundingPerSecond: symbolInfo.premiumFundingPerSecond,
+    premiumFundingPerSecond: bg(symbolInfo.premiumFundingPerSecond).div(symbolInfo.multiplier),
   };
   return res
 };
@@ -269,7 +277,7 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
       //console.log(volume, prices[curSymbolIndex], symbol, intrinsicPrice.toString())
       return bg(volume)
         .abs()
-        .times(intrinsicPrice)
+        .times(intrinsicPrice.plus(symbol.timeValue))
         .times(symbol.multiplier)
         .times(symbolInfo.feeRatio)
         .toString();
@@ -368,7 +376,7 @@ export const getEstimatedFundingRate = async (
       const deltaFunding1 = getdeltaFundingPerSecond(symbol, symbol.delta, prices[curSymbolIndex], totalDynamicEquity, newNetVolume)
 
       return {
-        deltaFunding1: bg(deltaFunding1).times(SECONDS_IN_A_DAY).toString(),
+        deltaFunding1: bg(deltaFunding1).div(symbol.multiplier).times(SECONDS_IN_A_DAY).toString(),
       };
     },
     args,
@@ -460,9 +468,9 @@ export const getEstimatedLiquidityUsed = async (
 export const getEstimatedTimePrice = (chainId, poolAddress, newNetVolume, symbolId) => {
   const args = [chainId, poolAddress, newNetVolume, symbolId];
   return catchApiError(async (chainId, poolAddress, newNetVolume, symbolId) => {
-    const poolViewerAddress = getPoolLiteViewerConfig(chainId, 'option')
-    const poolViewer = everlastingOptionViewerFactory(chainId, poolViewerAddress)
-    const state = await poolViewer.getPoolStates(poolAddress, [])
+    const optionPool = everlastingOptionFactory(chainId, poolAddress);
+    await optionPool._updateConfig()
+    const state = await optionPool.viewer.getPoolStates(poolAddress, [], [])
     const { poolState, symbolState } = state;
 
     const { liquidity } = poolState;

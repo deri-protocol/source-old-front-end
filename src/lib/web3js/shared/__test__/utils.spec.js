@@ -24,7 +24,7 @@ import {
   getLastUpdatedBlockNumber,
   sortOptionSymbols,
 } from '../utils'
-import { getOraclePrice, getPriceInfos } from '../utils/oracle';
+import { getOraclePrice, , getPriceInfos } from '../utils/oracle';
 import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V2_ADDRESS, POOL_V2L_ADDRESS} from './setup';
 
 describe('utils', () => {

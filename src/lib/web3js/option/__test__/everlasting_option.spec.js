@@ -1,6 +1,13 @@
 import { CHAIN_ID, OPTION_PTOKEN_ADDRESS, OPTION_POOL_ADDRESS, TIMEOUT } from '../../shared/__test__/setup';
 import { bg } from '../../shared';
-import { everlastingOptionFactory, pTokenOptionFactory, lTokenOptionFactory, everlastingOptionViewerFactory } from '../factory';
+import {
+  everlastingOptionFactory,
+} from '../factory/pool';
+import {
+  pTokenOptionFactory,
+  lTokenOptionFactory,
+  everlastingOptionViewerFactory,
+} from '../factory/tokens';
 
 describe('EverlastingOption', () => {
   let everlastingOption
@@ -79,7 +86,7 @@ describe('EverlastingOption', () => {
           volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',
         })
       );
-      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-100)
+      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-200)
     },
     TIMEOUT
   );
@@ -100,7 +107,7 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('optionPool viewer', async() => {
     const viewer = everlastingOptionViewerFactory(CHAIN_ID, everlastingOption.viewerAddress)
-    const res = await viewer.getPoolStates(everlastingOption.contractAddress, [])
+    const res = await viewer.getPoolStates(everlastingOption.contractAddress, [], [])
     expect(res.poolState.pToken).toEqual(OPTION_PTOKEN_ADDRESS)
   }, TIMEOUT)
 });

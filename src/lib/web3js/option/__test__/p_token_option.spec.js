@@ -8,7 +8,7 @@ import {
   MAX_NUMBER,
   MIN_NUMBER,
 } from '../../shared/__test__/setup';
-import { pTokenOptionFactory } from '../factory';
+import { pTokenOptionFactory } from '../factory/tokens';
 import { bg } from '../../shared';
 
 describe('PTokenOption', () => {

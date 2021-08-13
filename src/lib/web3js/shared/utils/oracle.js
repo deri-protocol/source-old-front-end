@@ -2,7 +2,7 @@ import { getOracleConfig } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
 import { oracleFactory } from '../factory/oracle';
-import { deriToNatural } from './convert';
+import { deriToNatural, toWei } from './convert';
 import {
   getVolatilitySymbols,
   mapToSymbolInternal,
@@ -124,7 +124,22 @@ export const getOraclePriceForOption = async (chainId, symbol) => {
   return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
 };
 
-export const getOracleVolatilityForOption = async (chainId, symbols) => {
+export const getOraclePricesForOption = async (chainId, symbols) => {
+  const oracleSymbols = symbols
+    .map((i) => normalizeOptionSymbol(i))
+    .filter((value, index, self) => self.indexOf(value) === index);
+  const oracleSymbolPrices = await Promise.all(
+    oracleSymbols.reduce(
+      (acc, i) => acc.concat([getOraclePrice(chainId, i, 'option')]),
+      []
+    )
+  );
+  return symbols.map((s) => {
+    return toWei(oracleSymbolPrices[oracleSymbols.indexOf(normalizeOptionSymbol(s))]);
+  });
+};
+
+export const getOracleVolatilityForOption = async (symbols) => {
   const volSymbols = getVolatilitySymbols(symbols)
   volSymbols.map((s) => `VOL-${s.toUpperCase()}`)
 
@@ -132,4 +147,19 @@ export const getOracleVolatilityForOption = async (chainId, symbols) => {
     volSymbols.reduce((acc, i) => acc.concat([getPriceInfo(i, 'option')]), [])
   );
   return volatilities;
+};
+
+export const getOracleVolatilitiesForOption = async (symbols) => {
+  const oracleSymbols = symbols
+    .map((i) => normalizeOptionSymbol(i))
+    .filter((value, index, self) => self.indexOf(value) === index);
+  const oracleSymbolVolatilities = await Promise.all(
+    oracleSymbols.reduce(
+      (acc, i) => acc.concat([getPriceInfo(`VOL-${i}`, 'option')]),
+      []
+    )
+  );
+  return symbols.map((s) => {
+    return oracleSymbolVolatilities[oracleSymbols.indexOf(normalizeOptionSymbol(s))].volatility;
+  });
 };

@@ -123,7 +123,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       const volume = (direction === 'long' ? num : -num)
       const fundingAfter = await getEstimatedFundingRate(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
       if (fundingAfter) {
-        let funding = type.isOption ? fundingAfter.deltaFunding1 / trading.contract.multiplier : fundingAfter.fundingRate1
+        let funding = type.isOption ? fundingAfter.deltaFunding1  : fundingAfter.fundingRate1
         setFundingRateAfter(funding);
       }
     }

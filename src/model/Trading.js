@@ -437,11 +437,6 @@ export default class Trading {
       const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
       if(config){    
         const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
-        const contractInfo = await this.contractInfo.load(wallet,config)
-        if(type.isOption){
-          res.deltaFunding0 = (+res.deltaFunding0) / (+contractInfo.multiplier)
-          res.premiumFunding0 = (+res.premiumFunding0) / (+contractInfo.multiplier)
-        }
         return res;
       }
     }
@@ -477,11 +472,11 @@ export default class Trading {
   get fundingRateDeltaTip(){    
     if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-delta-tip')} = ${(+this.fundingRate.deltaFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-delta-tip')} = ${(+this.fundingRate.deltaFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${(+this.fundingRate.deltaFunding0).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+        return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.deltaFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''
@@ -489,11 +484,11 @@ export default class Trading {
   get fundingRatePremiumTip(){    
     if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
-        return `${Intl.get('lite','funding-rate-premium-tip')} = ${(+this.fundingRate.premiumFundingPerSecond / +this.contract.multiplier).toString()} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond } ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingPerBlock} ) ${this.config.bTokenSymbol}`        
       } else {
-        return `${Intl.get('lite','funding-rate-premium-tip')} = ${(+this.fundingRate.premiumFundingPerSecond / +this.contract.multiplier).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${(+this.fundingRate.premiumFunding0).toFixed(20)} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
+        return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
       }
     }
     return ''

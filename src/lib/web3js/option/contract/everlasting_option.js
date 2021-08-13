@@ -32,7 +32,7 @@ export class EverlastingOption extends ContractBase {
     }
     const [activeSymbolIds, state] = await Promise.all([
       this.pToken.getActiveSymbolIds(),
-      this.viewer.getPoolStates(this.contractAddress, []),
+      this.viewer.getPoolStates(this.contractAddress, [], []),
     ]);
     const { symbolState } = state;
     this.activeSymbolIds = activeSymbolIds;
