@@ -125,7 +125,7 @@ export default function useMiningPool(isNew){
         chainId : 56,
         buttonText : 'CLAIM'
       }
-      pools.push(airDrop)
+      // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
       const legacy = pools.filter(p => p.retired && !p.premining)
