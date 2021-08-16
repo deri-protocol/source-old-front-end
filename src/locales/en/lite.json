@@ -98,7 +98,7 @@
   "detail" : "Detail",
   "direction" : "Direction",
   "unrealized-pnl" : "Unrealized Pnl",
-  "liquidation-price" : "Liq Price",
+  "liquidation-price" : "Liq Price (Est.)",
   "liquidation-failed" : "Liquidation failed",
   "close-position-failed" : "Close position failed",
 

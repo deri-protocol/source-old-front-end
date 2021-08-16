@@ -20,7 +20,7 @@ function History({wallet ,trading,lang,type}){
         item.directionText = lang['long-buy']
         if(item.direction === 'SHORT') {
           item.directionText = lang['short-sell']
-        } else if (item.direction.toLowerCase() === 'liquidation') {
+        } else if (item.direction.toLowerCase() === 'liquidation'){
           item.directionText = lang['liquidation']
         }
         // item.volume = type.isOption ? bg(item.volume).times(bg(trading.contract.multiplier)).toString() : item.volume
