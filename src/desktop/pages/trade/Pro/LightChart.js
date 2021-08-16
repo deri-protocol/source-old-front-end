@@ -38,6 +38,9 @@ socket.on('connect', data => {
 function LightChart({symbol,interval = '1',intl}){
   const chart = useRef(null)
   const barSeries = useRef(null);
+  const lastData = useRef(null)
+  const currentSymbol = useRef(null);
+  const oldSymbol = useRef(null);
   const [loading, setLoading] = useState(true);
 
 
@@ -57,11 +60,14 @@ function LightChart({symbol,interval = '1',intl}){
 
   const initWs = () => {
     if(socketStatus === 'connected') {
-      socket.emit('get_kline_update', {'symbol': getFormatSymbol(`${symbol}-MARKPRICE`), 'time_type': intervalRange[interval],updated : true})
+      if(oldSymbol.current){
+        socket.emit('un_get_kline',{symbol : oldSymbol.current})
+      }
+      socket.emit('get_kline_update', {'symbol': currentSymbol.current, 'time_type': intervalRange[interval],updated : true})
     }
     socket.on('kline_update', data => {
       let obj = {}
-      if (data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === getFormatSymbol(`${symbol}-MARKPRICE`).toUpperCase()) {
+      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === currentSymbol.current.toUpperCase()) {
         obj.time = data.time
         obj.low = Number(data.low)
         obj.high = Number(data.high)
@@ -69,6 +75,7 @@ function LightChart({symbol,interval = '1',intl}){
         obj.close = Number(data.close)
         obj.volume = Number(data.volume)
         barSeries.current.update(obj)
+        lastData.current = obj
       }
     })
   }
@@ -77,7 +84,9 @@ function LightChart({symbol,interval = '1',intl}){
     if(symbol){
       barSeries.current = chart.current.addBarSeries();
       const range = calcRange(interval)
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${getFormatSymbol(`${symbol}-MARKPRICE`)}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
+      oldSymbol.current = currentSymbol.current
+      currentSymbol.current = getFormatSymbol(`${symbol}-MARKPRICE`)
+      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${currentSymbol.current}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
       setLoading(true)
       const res = await axios.get(url)
       if(res && res.data) {
@@ -85,6 +94,7 @@ function LightChart({symbol,interval = '1',intl}){
         if(data.data instanceof Array){
           const d = data.data
           barSeries.current.setData(d);
+          lastData.current = d[d.length-1]
         } else {
           barSeries.current.setData([])
         }
