@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef } from 'react'
 import dateFormat from 'dateformat'
 import {io} from 'socket.io-client'
-import {createChart} from 'lightweight-charts'
+import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol } from '../../../../utils/utils';
@@ -35,12 +35,13 @@ socket.on('connect', data => {
   socketStatus = 'connected'
 })
 
-function LightChart({symbol,interval = '1',intl}){
+function LightChart({symbol,interval = '1',intl,displayCandleData}){
   const chart = useRef(null)
   const barSeries = useRef(null);
+  const candleSeries = useRef(null);
   const lastData = useRef(null)
-  const currentSymbol = useRef(null);
-  const oldSymbol = useRef(null);
+  const queryParams = useRef(null);
+  const lastQueryParam = useRef(null);
   const [loading, setLoading] = useState(true);
 
 
@@ -60,52 +61,71 @@ function LightChart({symbol,interval = '1',intl}){
 
   const initWs = () => {
     if(socketStatus === 'connected') {
-      if(oldSymbol.current){
-        socket.emit('un_get_kline',{symbol : oldSymbol.current})
+      if(lastQueryParam.current){
+        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
-      socket.emit('get_kline_update', {'symbol': currentSymbol.current, 'time_type': intervalRange[interval],updated : true})
+      socket.emit('get_kline_update', {'symbol': queryParams.current, 'time_type': intervalRange[interval],updated : true})
     }
     socket.on('kline_update', data => {
       let obj = {}
-      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === currentSymbol.current.toUpperCase()) {
+      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === queryParams.current.toUpperCase()) {
         obj.time = data.time
         obj.low = Number(data.low)
         obj.high = Number(data.high)
         obj.open = Number(data.open)
         obj.close = Number(data.close)
         obj.volume = Number(data.volume)
-        barSeries.current.update(obj)
+        candleSeries.current.update(obj)
         lastData.current = obj
+        displayCandleData && displayCandleData({data : obj})
       }
     })
   }
 
   const loadChart = async () => {
     if(symbol){
-      barSeries.current = chart.current.addBarSeries();
+      candleSeries.current = chart.current.addCandlestickSeries({
+        upColor: "#4bffb5",
+        downColor: "#ff4976",
+        borderDownColor: "#ff4976",
+        borderUpColor: "#4bffb5",
+        wickDownColor: "#838ca1",
+        wickUpColor: "#838ca1"
+      });
       const range = calcRange(interval)
-      oldSymbol.current = currentSymbol.current
-      currentSymbol.current = getFormatSymbol(`${symbol}-MARKPRICE`)
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${currentSymbol.current}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
+      lastQueryParam.current = queryParams.current
+      queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
+      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
       setLoading(true)
       const res = await axios.get(url)
       if(res && res.data) {
         const {data} = res
         if(data.data instanceof Array){
           const d = data.data
-          barSeries.current.setData(d);
+          candleSeries.current.setData(d);
           lastData.current = d[d.length-1]
         } else {
-          barSeries.current.setData([])
+          candleSeries.current.setData([])
         }
         setLoading(false)
+        displayCandleData && displayCandleData({data : lastData.current})
         initWs()
       }
     }
   }
 
+  const handleCrosshairMoved = (param) => {
+    if (!param.point) {
+        return;
+    }
+    if(typeof displayCandleData === 'function'){
+      const data = {time : param.time ,data : param.seriesPrices.values().next().value}
+      displayCandleData(data);
+    }
+  }
+
   const initChart = () => {
-    chart.current = createChart(document.querySelector('.ligth-chart-container'), { 
+    chart.current = createChart('ligth-chart-container', { 
       localization : {
         timeFormatter : businessDayOrTimestamp => {
           return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
@@ -127,21 +147,15 @@ function LightChart({symbol,interval = '1',intl}){
         mode: 1
       },
       crosshair: {
+        mode: CrosshairMode.Normal,    
         vertLine: {
           color: '#fff',
-          width: 0.1,
-          visible: true,
-          labelVisible: true,
           labelBackgroundColor : '#569bda'
         },
         horzLine: {
           color: '#fff',
-          width: 0.1,
-          visible: true,
-          labelVisible: true,
           labelBackgroundColor : '#569bda'
         },
-        mode: 1,
       },
       grid: {
         vertLines: {
@@ -157,6 +171,8 @@ function LightChart({symbol,interval = '1',intl}){
         fontSize: 12
       },
     });
+  
+    chart.current.subscribeCrosshairMove(handleCrosshairMoved);
   }
 
   useEffect(() => {
@@ -164,16 +180,19 @@ function LightChart({symbol,interval = '1',intl}){
       chart.current.remove()
       chart.current = null;
     }
-    if(barSeries.current){
-      barSeries.current = null;
+    if(candleSeries.current){
+      candleSeries.current = null;
     }
     initChart();
     symbol && loadChart();
-    return () => {}
+    return () => {
+      chart.current.remove()
+      chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
+    }
   }, [symbol,interval])
 
   return(
-    <div className='ligth-chart-container'>
+    <div className='ligth-chart-container' id='ligth-chart-container'>
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>

@@ -1410,9 +1410,31 @@
   }
 
   .btn {
-    position: absolute;
-    padding-right: 50px;
-    right: 0;
+    display: flex;
+    justify-content: space-between;
+
+    .interval {    
+      margin: 0 52px 10px;
+    }
+
+    .candle-data-area {
+      .symbol-value {
+        color : #aaaaaa;
+        margin-right: 10px;
+      }
+      .candle-data {
+        font-size: 10px;
+        span {
+          margin-right: 4px;
+        }
+        .rise {
+          color : #4bffb5
+        }
+        .down  {
+          color : #ff4976;
+        }
+      }
+    }
   }
 
   .btn.one .one,
@@ -1472,11 +1494,6 @@
   #tv_chart_container,.lightweight-chart {
     height: 468px;
     min-width: 712px;
-    margin-top: 40px;
     background-color: #212327;
-  }
-
-  .ligth-chart-container {
-    margin-top: 40px;
   }
 }
