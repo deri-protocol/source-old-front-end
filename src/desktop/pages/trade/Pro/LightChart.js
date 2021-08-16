@@ -39,8 +39,8 @@ function LightChart({symbol,interval = '1',intl}){
   const chart = useRef(null)
   const barSeries = useRef(null);
   const lastData = useRef(null)
-  const currentSymbol = useRef(null);
-  const oldSymbol = useRef(null);
+  const queryParams = useRef(null);
+  const lastQueryParam = useRef(null);
   const [loading, setLoading] = useState(true);
 
 
@@ -60,14 +60,14 @@ function LightChart({symbol,interval = '1',intl}){
 
   const initWs = () => {
     if(socketStatus === 'connected') {
-      if(oldSymbol.current){
-        socket.emit('un_get_kline',{symbol : oldSymbol.current})
+      if(lastQueryParam.current){
+        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
-      socket.emit('get_kline_update', {'symbol': currentSymbol.current, 'time_type': intervalRange[interval],updated : true})
+      socket.emit('get_kline_update', {'symbol': queryParams.current, 'time_type': intervalRange[interval],updated : true})
     }
     socket.on('kline_update', data => {
       let obj = {}
-      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === currentSymbol.current.toUpperCase()) {
+      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === queryParams.current.toUpperCase()) {
         obj.time = data.time
         obj.low = Number(data.low)
         obj.high = Number(data.high)
@@ -84,9 +84,9 @@ function LightChart({symbol,interval = '1',intl}){
     if(symbol){
       barSeries.current = chart.current.addBarSeries();
       const range = calcRange(interval)
-      oldSymbol.current = currentSymbol.current
-      currentSymbol.current = getFormatSymbol(`${symbol}-MARKPRICE`)
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${currentSymbol.current}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
+      lastQueryParam.current = queryParams.current
+      queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
+      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current}&time_type=${queryParams.interval}&from=${range[0]}&to=${range[1]}`
       setLoading(true)
       const res = await axios.get(url)
       if(res && res.data) {
