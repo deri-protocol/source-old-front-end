@@ -46,11 +46,13 @@ export default class Position {
     if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
       let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       let positions = [] 
-      positions = res.map(item=>{
-        item.balanceContract = bg(item.margin).plus(item.unrealizedPnl).toString()
-        item.direction = (+item.volume) > 0 ? 'LONG' : (!item.volume || eqInNumber(item.volume, 0) || !item.volume ? '--' : 'SHORT')
-        return item
-      })
+      if(res.length){
+        positions = res.map(item=>{
+          item.balanceContract = bg(item.margin).plus(item.unrealizedPnl).toString()
+          item.direction = (+item.volume) > 0 ? 'LONG' : (!item.volume || eqInNumber(item.volume, 0) || !item.volume ? '--' : 'SHORT')
+          return item
+        })
+      }
       if(positions){
         if(callback){
           callback(positions)
