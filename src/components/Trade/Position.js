@@ -121,7 +121,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='info-left'>
           <div className='title-text'>{lang['position']}</div>
           <div className='info-num'>
-          {type.isOption?<DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+          <DeriNumberFormat value={trading.position.volume} allowZero={true} />
           </div>
         </div>
         <div className='info-right'>
@@ -136,7 +136,7 @@ function Position({ wallet, trading, version, lang, type }) {
               aria-hidden='true'
               style={{ display: isLiquidation ? 'block' : 'none' }}
             ></span>
-            <img src={closePositionIcon} alt='' /> {lang['close']}
+            <img src={closePositionIcon} /> {lang['close']}
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ function Position({ wallet, trading, version, lang, type }) {
           <div className='info-num'>
             <span className='pnl-list'>
               <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={8} />
-              {( trading.position.unrealizedPnlList ? (version.isV2 || version.isV2Lite) && trading.position.unrealizedPnlList.length : (version.isV2 || version.isV2Lite))  && <img src={pnlIcon} alt='unrealizePnl' />}
+              {(trading.position.unrealizedPnlList ? (version.isV2 || version.isV2Lite) && trading.position.unrealizedPnlList.length : (version.isV2 || version.isV2Lite)) && <img src={pnlIcon} alt='unrealizePnl' />}
               {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
                 {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item, index) => (
                   <div className='unrealizePnl-item' key={index}>
@@ -206,7 +206,7 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='info-right'></div>
       </div>
-     
+
       {type.isFuture && <>
         <div className='info'>
           <div className='info-left'>
@@ -238,12 +238,14 @@ function Position({ wallet, trading, version, lang, type }) {
           </div>
           <div className='info-right'></div>
         </div>
-        
+
       </>}
       <div className='info'>
         <div className='info-left'>
           <div className='title-text'>{lang['liquidation-price']}</div>
-          <div className='info-num'><DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice} /></div>
+          <div className='info-num'>
+            {type.isOption ? <LiqPrice trading={trading} wallet={wallet} lang={lang} /> : <DeriNumberFormat decimalScale={4} value={trading.position.liquidationPrice} />}
+          </div>
         </div>
         <div className='info-right'></div>
       </div>
@@ -281,5 +283,80 @@ function Position({ wallet, trading, version, lang, type }) {
       />
     </div>
   )
+}
+
+function LiqPrice({ trading, wallet,lang }) {
+
+  const [element, setElement] = useState(<span></span>);
+
+  useEffect(() => {
+    let ele;
+    if (wallet.isConnected() && trading.position.liquidationPrice) {
+      if (trading.position.liquidationPrice.numPositions > 1) {
+        if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
+              <span> / </span> 
+              <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+          </span>
+        } else if(!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <span> / </span> 
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+          </span>
+        }else if(!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <span> / </span> 
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
+          </span>
+        }else if(trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
+            <span> / </span> 
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+          </span>
+        }
+      }else{
+        if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
+              <span> / </span> 
+              <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+          </span>
+        } else if(!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span > -- </span>
+            <span> / </span> 
+            <span > -- </span>
+          </span>
+        }else if(!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span > -- </span>
+            <span> / </span> 
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
+          </span>
+        }else if(trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+          ele = <span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
+            <span> / </span> 
+            <span > -- </span>
+          </span>
+        }
+      }
+      setElement(ele)
+    }
+    
+
+  }, [trading.position, wallet.detail])
+
+
+  return (
+    <span>
+      {element}
+    </span>
+  )
+
 }
 export default inject('wallet', 'trading', 'version', 'type')(observer(Position))

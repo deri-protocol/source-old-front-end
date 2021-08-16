@@ -21,6 +21,7 @@ export {
   getEstimatedLiquidityUsed as getEstimatedLiquidityUsedOption,
   getFundingRateCache as getFundingRateCacheOption,
   getEstimatedTimePrice,
+  getPositionInfos,
 } from './trade_query_api'
 
 export {

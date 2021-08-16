@@ -129,6 +129,7 @@ export const getOraclePriceForOption = async (chainId, symbol) => {
   return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
 };
 
+// for viewer use
 export const getOraclePricesForOption = async (chainId, symbols) => {
   const oracleSymbols = symbols
     .map((i) => normalizeOptionSymbol(i))
@@ -144,6 +145,7 @@ export const getOraclePricesForOption = async (chainId, symbols) => {
   });
 };
 
+// for tx use
 export const getOracleVolatilityForOption = async (symbols) => {
   const volSymbols = getVolatilitySymbols(symbols)
   volSymbols.map((s) => `VOL-${s.toUpperCase()}`)
@@ -154,6 +156,7 @@ export const getOracleVolatilityForOption = async (symbols) => {
   return volatilities;
 };
 
+// for viewer use
 export const getOracleVolatilitiesForOption = async (symbols) => {
   const oracleSymbols = symbols
     .map((i) => normalizeOptionSymbol(i))

@@ -1,4 +1,4 @@
-import { getPoolViewerConfig, getPoolSymbolList } from "../../shared"
+import { getPoolViewerConfig, getPoolSymbolList, toNumberForObject } from "../../shared"
 import { getOraclePricesForOption } from "../../shared/utils/oracle"
 import { ACCOUNT_ADDRESS, CHAIN_ID, OPTION_POOL_ADDRESS, TIMEOUT } from "../../shared/__test__/setup"
 import { everlastingOptionViewerFactory } from "../factory/tokens"
@@ -85,13 +85,71 @@ describe('EverlastingOptionViewer', () => {
       const res = await everlastingOptionViewer.getTraderStates(
         OPTION_POOL_ADDRESS,
         ACCOUNT_ADDRESS,
-       symbolPrices,
-       symbolVolatilities,
+        symbolPrices,
+        symbolVolatilities
       );
-      console.log(res.poolState)
-      console.log(res.traderState)
-      console.log(res.symbolState[14])
-      console.log(res.positionState[14])
+      // console.log(
+      //   toNumberForObject(res.poolState, [
+      //     'initialMarginRatio',
+      //     'maintenanceMarginRatio',
+      //     'premiumFundingPeriod',
+      //     'premiumFundingCoefficient',
+      //     'liquidity',
+      //     'totalDynamicEquity',
+      //     'totalInitialMargin',
+      //   ])
+      // );
+      // console.log(
+      //   toNumberForObject(res.traderState, [
+      //     'margin',
+      //     'totalPnl',
+      //     'totalFundingAccrued',
+      //     'dynamicMargin',
+      //     'initialMargin',
+      //     'maintenanceMargin',
+      //   ])
+      // );
+      // res.symbolState.forEach((s) => {
+      //   if (s.symbolId === '0' || s.symbolId === '12') {
+      //     console.log(
+      //       toNumberForObject(s, [
+      //         'multiplier',
+      //         'deltaFundingCoefficient',
+      //         'strikePrice',
+      //         'oraclePrice',
+      //         'oracleVolatility',
+      //         'timePrice',
+      //         'dynamicMarginRatio',
+      //         'intrinsicValue',
+      //         'timeValue',
+      //         'delta',
+      //         'K',
+      //         'quoteBalanceOffset',
+      //         'tradersNetVolume',
+      //         'tradersNetCost',
+      //         'cumulativeDeltaFundingRate',
+      //         'cumulativePremiumFundingRate',
+      //         'deltaFundingPerSecond',
+      //         'premiumFundingPerSecond',
+      //       ])
+      //     );
+      //   }
+      // });
+      // res.symbolState.forEach((s) => {
+      //   if (s.symbolId === '0' || s.symbolId === '12') {
+      //     console.log(
+      //       toNumberForObject(res.positionState[s.symbolId], [
+      //         'volume',
+      //         'cost',
+      //         'lastCumulativeDeltaFundingRate',
+      //         'lastCumulativePremiumFundingRate',
+      //         'pnl',
+      //         'deltaFundingAccrued',
+      //         'premiumFundingAccrued',
+      //       ])
+      //     );
+      //   }
+      // });
       expect(res.traderState).toEqual(
         expect.objectContaining({
           dynamicMargin: expect.any(String),

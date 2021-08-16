@@ -1,8 +1,10 @@
-import { getPositionInfo } from "../lib/web3js/indexV2"
+import { getPositionInfo ,bg,getPositionInfos} from "../lib/web3js/indexV2"
+import { eqInNumber } from '../utils/utils';
 
 export default class Position {
 
-  callback = () => {}
+   callback = () => {}
+   callbackALL = ()=>{}
    wallet = null;
    spec = null
    isOptions =null;
@@ -42,51 +44,13 @@ export default class Position {
    async loadAll(wallet,spec,callback,isOptions){
     this.isOptions = isOptions
     if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
-      // const positions = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
-      const positions = [
-        {
-          volume:0.11,
-          symbolId:0,
-          averageEntryPrice:100,
-          direction:"LONG",
-          balanceContract:100,
-          symbol:'BTCUSD-20000-C',
-          marginHeld:10,
-          unrealizedPnl:0.11,
-          fundingFee:0.11,
-          premiumFundingAccrued:0.11,
-          deltaFundingAccrued:0.11,
-          liquidationPrice:2000,
-        },
-        {
-          volume:0.13,
-          symbolId:1,
-          direction:"LONG",
-          symbol:'BTCUSD-30000-C',
-          averageEntryPrice:100,
-          balanceContract:100,
-          marginHeld:10,
-          unrealizedPnl:0.11,
-          fundingFee:0.11,
-          premiumFundingAccrued:0.11,
-          deltaFundingAccrued:0.11,
-          liquidationPrice:2000,
-        },
-        {
-          volume:0.15,
-          symbolId:2,
-          direction:"SHORT",
-          symbol:'BTCUSD-40000-C',
-          averageEntryPrice:100,
-          balanceContract:100,
-          marginHeld:10,
-          unrealizedPnl:0.11,
-          fundingFee:0.11,
-          premiumFundingAccrued:0.11,
-          deltaFundingAccrued:0.11,
-          liquidationPrice:2000,
-        },
-      ]
+      let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
+      let positions = [] 
+      positions = res.map(item=>{
+        item.balanceContract = bg(item.margin).plus(item.unrealizedPnl).toString()
+        item.direction = (+item.volume) > 0 ? 'LONG' : (!item.volume || eqInNumber(item.volume, 0) || !item.volume ? '--' : 'SHORT')
+        return item
+      })
       if(positions){
         if(callback){
           callback(positions)
@@ -98,10 +62,10 @@ export default class Position {
    }
 
    startAll(wallet,spec,callback){
-    if(this.interval !== null){
-      clearInterval(this.interval);
+    if(this.intervalAll !== null){
+      clearInterval(this.intervalAll);
     }
-   this.interval = window.setInterval(() => this.loadAll(wallet,spec,callback,this.isOptions),3000)      
+   this.intervalAll = window.setInterval(() => this.loadAll(wallet,spec,callback,this.isOptions),3000)      
    if(wallet){
      this.wallet= wallet; 
    }
@@ -109,7 +73,7 @@ export default class Position {
      this.spec = spec
    }
    if(callback){
-     this.callback = callback;
+     this.callbackALL = callback;
    }
   }
 
@@ -139,9 +103,5 @@ export default class Position {
    resume(wallet,spec,callback){
      this.start(wallet,spec,callback || this.callback)
    }
-
-   
-
-
  
 }

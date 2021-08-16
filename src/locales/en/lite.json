@@ -94,6 +94,8 @@
   "my-position" : "MY POSITION",
   "position" : "Position",
   "close" : "close",
+  "close-is-position":"close this position",
+  "close-position":"Close Position",
   "average-entry-price" : "Avg Entry Price",
   "detail" : "Detail",
   "direction" : "Direction",
@@ -101,6 +103,7 @@
   "liquidation-price" : "Liq Price (Est.)",
   "liquidation-failed" : "Liquidation failed",
   "close-position-failed" : "Close position failed",
+  "liq-price-hover":" Cannot calculate a liquidation price for this direction. Please manage your positions carefully.",
 
   "history" : "HISTORY",
   "volume-price" : "Volume @ Price",

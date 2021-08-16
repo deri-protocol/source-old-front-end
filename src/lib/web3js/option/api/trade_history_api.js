@@ -76,7 +76,7 @@ const getTradeHistoryOnline = async (
 
   // const symbolIdList = getPoolSymbolIdList(poolAddress)
   //console.log('symbolIdList', symbolIdList);
-  const { bTokenSymbol, pToken: pTokenAddress } = getPoolConfig(poolAddress, undefined, undefined, 'option')
+  const { bTokenSymbol } = getPoolConfig(poolAddress, undefined, undefined, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
   const [toBlock] = await Promise.all([
     getBlockInfo(chainId, 'latest'),

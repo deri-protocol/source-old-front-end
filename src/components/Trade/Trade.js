@@ -404,7 +404,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             <div className='current-position'>
               <span>{lang['current-position']}</span>
               <span className='position-text'>
-              {type.isOption ? <DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+              <DeriNumberFormat value={trading.position.volume} allowZero={true} />
               </span>
             </div>
             {type.isFuture && <>

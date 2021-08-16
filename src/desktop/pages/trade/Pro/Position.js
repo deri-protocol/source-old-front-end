@@ -34,14 +34,6 @@ function Position({ wallet, trading, version, lang, type }) {
   const [balanceContract, setBalanceContract] = useState('');
   const [availableBalance, setAvailableBalance] = useState('');
 
-  const [postions, setPostions] = useState([]);
-
-  useEffect(() => {
-    if (wallet.isConnected() && trading.postions) {
-      setPostions(trading.postions)
-    }
-  }, [wallet.detail.account, trading.postions])
-
   const afterWithdraw = () => {
     refreshBalance();
   }
@@ -59,7 +51,6 @@ function Position({ wallet, trading, version, lang, type }) {
     loadBalance();
     trading.refresh();
   }
-
 
   const loadBalance = async () => {
     if (wallet.isConnected() && trading.config) {
@@ -122,116 +113,57 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        {type.isFuture && <>
-          <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
-        </>}
-        {type.isOption && <>
-          {/* <div><span >{lang['time-value']}</span></div> */}
-          <div className='funding-posi'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-p']}</span></div>
-          <div className='funding-posi'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-d']}</span></div>
-        </>}
-        <div className='liquidation-price'>{lang['liquidation-price']}</div>
+        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
+        <div className='liquidation-price'>
+          {lang['liquidation-price']}
+        </div>
       </div>
-      {/* <div className='p-box tbody'>
-      <div className='position'>
-      {type.isOption ? <DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} />:<DeriNumberFormat value={trading.position.volume} allowZero={true} />}
-        <span className='close-position'>
-          {!closing && <img src={closePosImg} onClick={onClosePosition}/>}
-          <span
-            className='spinner spinner-border spinner-border-sm'
-            style={{display : closing ? 'block' : 'none',marginLeft : '8px'}}
-          ></span>
-        </span>
-      </div>
-      <div className='ave-entry-price'><DeriNumberFormat value={trading.position.averageEntryPrice}  decimalScale={2}/></div>
-      <div className={direction}>{lang[direction.toLowerCase()] || direction }</div>
-      <div className='dyn-eff-bal'>
-        <DeriNumberFormat allowZero={true} value={balanceContract}  decimalScale={2}/>
-        {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
-        <span
-          className='open-add'
-          id='openAddMargin'
-          onClick={() => setAddModalIsOpen(true)}
-        > 
-          <img src={removeMarginIcon} alt='add margin'/>
-        </span>
-        <span className='open-remove'
-          onClick={() => setRemoveModalIsOpen(true)}>
-          <img src={addMarginIcon} alt='add margin'/>
-        </span>
-      </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin'/> {lang['detail']}</span>)}       
-      </div>
-      <div className='margin'><DeriNumberFormat value={trading.position.marginHeld}  decimalScale={2}/></div>
-      <div className='pnl'>        
-        <span className='pnl-list unrealized-pnl'>
-          <DeriNumberFormat value={trading.position.unrealizedPnl}  decimalScale={6}/>{(version.isV2  || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
+      <div className='p-box tbody'>
+        <div className='position'>
+          {type.isOption ? <DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} /> : <DeriNumberFormat value={trading.position.volume} allowZero={true} />}
+          <span className='close-position'>
+            {!closing && <img src={closePosImg} onClick={onClosePosition} title={lang['close-is-position']} />}
+            <span
+              className='spinner spinner-border spinner-border-sm'
+              style={{ display: closing ? 'block' : 'none', marginLeft: '8px' }}
+            ></span>
+          </span>
+        </div>
+        <div className='ave-entry-price'><DeriNumberFormat value={trading.position.averageEntryPrice} decimalScale={2} /></div>
+        <div className={direction}>{lang[direction.toLowerCase()] || direction}</div>
+        <div className='dyn-eff-bal'>
+          <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
+          {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
+            <span
+              className='open-add'
+              id='openAddMargin'
+              onClick={() => setAddModalIsOpen(true)}
+            >
+              <img src={removeMarginIcon} alt='add margin' />
+            </span>
+            <span className='open-remove'
+              onClick={() => setRemoveModalIsOpen(true)}>
+              <img src={addMarginIcon} alt='add margin' />
+            </span>
+          </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)}
+        </div>
+        <div className='margin'><DeriNumberFormat value={trading.position.marginHeld} decimalScale={2} /></div>
+        <div className='pnl'>
+          <span className='pnl-list unrealized-pnl'>
+            <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={6} />{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
             {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
-              {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item,index) =>(
+              {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item, index) => (
                 <div className='unrealizePnl-item' key={index}>
-                  <span>{item[0]}</span><span><DeriNumberFormat value={item[1]} decimalScale={8}/></span>
+                  <span>{item[0]}</span><span><DeriNumberFormat value={item[1]} decimalScale={8} /></span>
                 </div>
               ))}
             </div>}
-        </span> 
+          </span>
+        </div>
+        <div><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
+        <div className='liquidation-price'><DeriNumberFormat value={trading.position.liquidationPrice} decimalScale={2} /></div>
       </div>
-      {type.isFuture&&<>
-        <div><DeriNumberFormat value={(-(trading.position.fundingFee))}  decimalScale={8}/></div>
-      </>} 
-      {type.isOption&&<>
-        <div className='funding-posi'><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))}  decimalScale={8}/></div>
-        <div className='funding-posi'><DeriNumberFormat value={(-(trading.position.deltaFundingAccrued))}  decimalScale={8}/></div>
-      </>}
-      <div className='liquidation-price'><DeriNumberFormat value={trading.position.liquidationPrice}  decimalScale={2}/></div>
-    </div>
-    <div className='p-box tbody'></div> */}
-      {postions.map((pos, index) => {
-        return (
-          <div className='p-box tbody' key={index}>
-            <div className='position'>
-            <DeriNumberFormat value={pos.volume} allowZero={true} />
-              <span className='close-position'>
-                {!closing && <img src={closePosImg} onClick={onClosePosition(pos.symbolId)} />}
-                <span
-                  className='spinner spinner-border spinner-border-sm'
-                  style={{ display: closing ? 'block' : 'none', marginLeft: '8px' }}
-                ></span>
-              </span>
-            </div>
-            <div className='ave-entry-price'><DeriNumberFormat value={pos.averageEntryPrice} decimalScale={2} /></div>
-            <div className={pos.direction}>{lang[pos.direction.toLowerCase()] || pos.direction}</div>
-            <div className='dyn-eff-bal'>
-              <DeriNumberFormat allowZero={true} value={pos.balanceContract} decimalScale={2} />
-              {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
-                <span
-                  className='open-add'
-                  id='openAddMargin'
-                  onClick={() => setAddModalIsOpen(true)}
-                >
-                  <img src={removeMarginIcon} alt='add margin' />
-                </span>
-                <span className='open-remove'
-                  onClick={() => setRemoveModalIsOpen(true)}>
-                  <img src={addMarginIcon} alt='add margin' />
-                </span>
-              </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)}
-            </div>
-            <div className='margin'><DeriNumberFormat value={pos.marginHeld} decimalScale={2} /></div>
-            <div className='pnl'>
-              <span className='pnl-list unrealized-pnl'>
-                <DeriNumberFormat value={pos.unrealizedPnl} decimalScale={6} />{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
-              </span>
-            </div>
-            {type.isFuture && <>
-              <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>
-            </>}
-            {type.isOption && <>
-              <div className='funding-posi'><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>
-              <div className='funding-posi'><DeriNumberFormat value={(-(pos.deltaFundingAccrued))} decimalScale={8} /></div>
-            </>}
-            <div className='liquidation-price'><DeriNumberFormat value={pos.liquidationPrice} decimalScale={2} /></div>
-          </div>
-        )
-      })}
+      <div className='p-box tbody'></div>
 
       <DepositDialog
         wallet={wallet}
@@ -269,5 +201,6 @@ function Position({ wallet, trading, version, lang, type }) {
     </div>
   )
 }
+
 
 export default inject('wallet', 'trading', 'version', 'type')(observer(Position))

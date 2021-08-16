@@ -14,7 +14,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 
 
-function Pro({wallet,lang}){
+function Pro({wallet,lang,type}){
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1903px';
     return () => { 
@@ -35,11 +35,11 @@ function Pro({wallet,lang}){
           </div>
           <div className='right'>
             <TradingView wallet={wallet} lang={lang} />
-            <Reference lang={lang} />
+            <Reference lang={lang} type={type} />
           </div>
       </div> 
     </div>
   </div>
   )
 }
-export  default inject('wallet')(observer(Pro))
+export  default inject('wallet','type')(observer(Pro))

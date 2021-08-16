@@ -15,6 +15,7 @@ import {
   getFundingRate,
   getLiquidityUsed,
   getPositionInfo,
+  getPositionInfos,
   getSpecification,
 } from '../api/trade_query_api';
 
@@ -48,28 +49,41 @@ describe('trade query api', () => {
       const res = await getPositionInfo(
         CHAIN_ID,
         OPTION_POOL_ADDRESS,
-        ACCOUNT_ADDRESS,
+        '0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
         '0'
       );
-      expect(res).toEqual(
-        expect.objectContaining({
-          averageEntryPrice: expect.any(String),
-          deltaFundingAccrued: expect.any(String),
-          liquidationPrice: '',
-          margin: expect.any(String),
-          marginHeld: expect.any(String),
-          marginHeldBySymbol: expect.any(String),
-          premiumFundingAccrued: expect.any(String),
-          price: expect.any(String),
-          unrealizedPnl: expect.any(String),
-          unrealizedPnlList: expect.any(Array),
-          volume: expect.any(String),
-        })
-      );
+
+      expect(res).toHaveProperty('volume', expect.any(String))
+      expect(res).toHaveProperty('margin', expect.any(String))
+      expect(res).toHaveProperty('marginHeld', expect.any(String))
+      expect(res).toHaveProperty('marginHeldBySymbol')
+      expect(res).toHaveProperty('price', expect.any(String))
+      expect(res).toHaveProperty('averageEntryPrice', expect.any(String))
+      expect(res).toHaveProperty('liquidationPrice', expect.any(String))
+      expect(res).toHaveProperty('unrealizedPnl', expect.any(String))
+      expect(res).toHaveProperty('unrealizedPnlList', expect.any(Array))
+      expect(res).toHaveProperty('averageEntryPrice', expect.any(String))
+      expect(res).toHaveProperty('deltaFundingAccrued', expect.any(String))
+      expect(res).toHaveProperty('premiumFundingAccrued', expect.any(String))
+
       expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
       expect(bg(res.averageEntryPrice).toNumber()).toBeGreaterThanOrEqual(0);
-      expect(bg(res.price).toNumber()).toBeGreaterThanOrEqual(30000);
+      expect(bg(res.price).toNumber()).toBeGreaterThanOrEqual(2000);
       expect(res.isCall).toEqual(true);
+    },
+    TIMEOUT
+  );
+  it(
+    'getPositionInfos',
+    async () => {
+      const res = await getPositionInfos(
+        CHAIN_ID,
+        OPTION_POOL_ADDRESS,
+        '0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
+      );
+      expect(res.length).toEqual(2);
+      expect(res[0]).toEqual({});
+      //expect(res[14]).toEqual({});
     },
     TIMEOUT
   );
