@@ -51,6 +51,7 @@ export default class Trading {
   paused = false
   slideIncrementMargin = 0
   position = {}
+  positions = []
   contract = {}
   fundingRate = {}
   history = []
@@ -64,6 +65,7 @@ export default class Trading {
       slideIncrementMargin : observable,
       fundingRate : observable,
       position : observable,
+      positions : observable,
       history : observable,
       contract : observable,
       userSelectedDirection : observable,
@@ -74,6 +76,7 @@ export default class Trading {
       setIndex : action,
       setContract : action,
       setPosition : action,
+      setPositions : action,
       setVolume : action,
       setUserSelectedDirection : action,
       // setSupportChain : action,
@@ -162,13 +165,15 @@ export default class Trading {
         this.positionInfo.load(wallet,config,position => this.setPosition(position),isOptions),
         this.contractInfo.load(wallet,config,isOptions),
         this.loadFundingRate(wallet,config,isOptions),
-        this.historyInfo.load(wallet,config,isOptions)
+        this.historyInfo.load(wallet,config,isOptions),
+        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOptions),
       ]).then(results => {
-        if(results.length === 4){
+        if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
           results[1] && this.setContract(results[1]);
           results[2] && this.setFundingRate(results[2]);
           results[3] && this.setHistory(results[3]);
+          results[4] && this.setPositions(results[4]);
         } 
       }).finally(e => {
         finishedCallback && finishedCallback()
@@ -275,6 +280,12 @@ export default class Trading {
   setPosition(position){
     if(position){
       this.position = position
+    }
+  }
+
+  setPositions(positions){
+    if(positions){
+      this.positions = positions
     }
   }
 
