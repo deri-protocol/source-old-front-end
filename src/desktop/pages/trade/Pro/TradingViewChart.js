@@ -88,8 +88,14 @@ function TradingViewChart({symbol,lang,intl,version}){
   const displayCandleData = candle => {
     if(candle && candle.data){
       const {data} = candle
+      const riseOrDown = data.close - data.open > 0 ? 'rise' : 'down'
       setCandleDataDisplay(
-        `O: ${data.open.toFixed(2)} H: ${data.high.toFixed(2)} L: ${data.low.toFixed(2)} C: ${data.close.toFixed(2)}`
+        <>
+          <span>O</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
+          <span>H</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
+          <span>L</span><span className={riseOrDown}>{data.low.toFixed(2)}</span>
+          <span>C</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
+        </>
       )
     }
   }
@@ -121,7 +127,7 @@ function TradingViewChart({symbol,lang,intl,version}){
             <span className='symbol-value' style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
               {candleDataDisplay && symbol}
             </span>
-            <span className='candle-data'style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
+            <span className='candle-data' style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
               {candleDataDisplay}
             </span>
           </span>

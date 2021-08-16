@@ -77,6 +77,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         obj.volume = Number(data.volume)
         candleSeries.current.update(obj)
         lastData.current = obj
+        displayCandleData && displayCandleData({data : obj})
       }
     })
   }
@@ -107,6 +108,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
           candleSeries.current.setData([])
         }
         setLoading(false)
+        displayCandleData && displayCandleData({data : lastData.current})
         initWs()
       }
     }
@@ -120,8 +122,6 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       const data = {time : param.time ,data : param.seriesPrices.values().next().value}
       displayCandleData(data);
     }
-
-    console.log(`A user moved the crosshair to (${param.point.x}, ${param.point.y}) point, the time is ${param.time}`);
   }
 
   const initChart = () => {
