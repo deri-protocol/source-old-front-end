@@ -15,6 +15,7 @@ function TradingViewChart({symbol,lang,intl,version}){
   const [deriWidget, setDeriWidget] = useState(null);
   const [chartType, setChartType] = useState('')
   const [currentInterval, setCurrentInterval] = useState('1');
+  const [candleDataDisplay, setCandleDataDisplay] = useState('')
 
   const activedClass = classNames('btn',actived)
   const switchClass = classNames('switcher',chartType)
@@ -47,7 +48,14 @@ function TradingViewChart({symbol,lang,intl,version}){
         "paneProperties.background": "#212327",
         "paneProperties.vertGridProperties.color": "#212327",
         "paneProperties.horzGridProperties.color": "#212327",
-        "scalesProperties.textColor" : "#aaa" 
+        "scalesProperties.textColor" : "#aaa" ,
+        "mainSeriesProperties.candleStyle.upColor": "#4bffb5",
+        "mainSeriesProperties.candleStyle.downColor": "#d75442",
+        "mainSeriesProperties.candleStyle.borderColor": "#378658",
+        "mainSeriesProperties.candleStyle.borderUpColor": "#4bffb5",
+        "mainSeriesProperties.candleStyle.borderDownColor": "#ff4976",
+        "mainSeriesProperties.candleStyle.wickUpColor": '#838ca1',
+        "mainSeriesProperties.candleStyle.wickDownColor": '#838ca1',
       },      
       studies_overrides: {
         "compare.plot.color": "rgb(86, 155, 218)",
@@ -58,14 +66,8 @@ function TradingViewChart({symbol,lang,intl,version}){
     }
 
     const w  = new widget(widgetOptions);
-    // document.querySelector('iframe').addEventListener("load", function(e) {
-    //   setTimeout(() => setLoading(false),500)
-    // });
     w.onChartReady(() => {
-      // if(Type.isOption){
-        // w.chart().createStudy('Compare',false,false,['open',`${symbol}-MARKPRICE`])
-        setTimeout(() => setLoading(false),500)
-      // } 
+      setTimeout(() => setLoading(false),500)
     })
     return w;
   }
@@ -83,13 +85,21 @@ function TradingViewChart({symbol,lang,intl,version}){
     setChartType(type)
   }
 
+  const displayCandleData = candle => {
+    if(candle && candle.data){
+      const {data} = candle
+      setCandleDataDisplay(
+        `O: ${data.open.toFixed(2)} H: ${data.high.toFixed(2)} L: ${data.low.toFixed(2)} C: ${data.close.toFixed(2)}`
+      )
+    }
+  }
+
   useEffect(() => {
     if(symbol){
       setDeriWidget(initialize())
     }
     if(Type.isOption){
       setChartType('mark-price')
-      // setChartType('index-price')
     } else {
       setChartType('index-price')
     }
@@ -107,13 +117,23 @@ function TradingViewChart({symbol,lang,intl,version}){
         <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || 'index'} Price</span>
       </div>}
       <div className={activedClass}>
-          <span className='tab-btn one' onClick={() => changeTime('1','one')} >1{lang['min']}</span>
-          <span className='tab-btn five' onClick={() => changeTime('5','five')}>5{lang['min']}</span>
-          <span className='tab-btn fifteen' onClick={() => changeTime('15','fifteen')}>15{lang['min']}</span>
-          <span className='tab-btn thirty' onClick={() => changeTime('30','thirty')}>30{lang['min']}</span>
-          <span className='tab-btn sixty' onClick={() => changeTime('60','sixty')}>1{lang['hour']}</span>
-          <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1{lang['day']}</span>
-          <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1{lang['week']}</span>
+          <span className='candle-data-area'>
+            <span className='symbol-value' style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
+              {candleDataDisplay && symbol}
+            </span>
+            <span className='candle-data'style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
+              {candleDataDisplay}
+            </span>
+          </span>
+          <span className='interval'>
+            <span className='tab-btn one' onClick={() => changeTime('1','one')} >1{lang['min']}</span>
+            <span className='tab-btn five' onClick={() => changeTime('5','five')}>5{lang['min']}</span>
+            <span className='tab-btn fifteen' onClick={() => changeTime('15','fifteen')}>15{lang['min']}</span>
+            <span className='tab-btn thirty' onClick={() => changeTime('30','thirty')}>30{lang['min']}</span>
+            <span className='tab-btn sixty' onClick={() => changeTime('60','sixty')}>1{lang['hour']}</span>
+            <span className='tab-btn one-day' onClick={() => changeTime('1D','one-day')}>1{lang['day']}</span>
+            <span className='tab-btn one-week' onClick={() => changeTime('1W','one-week')}>1{lang['week']}</span>
+          </span>
       </div>
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
@@ -122,7 +142,7 @@ function TradingViewChart({symbol,lang,intl,version}){
       </div>
       <div id={defaultProps.containerId} style={{display : chartType === 'index-price' ? 'block' : 'none'}}></div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol} interval={currentInterval} />
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} />
       </div>}
   </div>
   )
