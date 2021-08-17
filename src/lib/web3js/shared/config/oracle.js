@@ -1,4 +1,5 @@
 import { getConfig } from './config';
+import { DeriEnv } from './env';
 import { mapToSymbolInternal } from './token';
 
 export const getOracleConfigList = (version='v2', env) => {
@@ -8,7 +9,7 @@ export const getOracleConfigList = (version='v2', env) => {
 
 export const getOracleConfig = (chainId, symbol, version='v2') => {
   symbol = mapToSymbolInternal(symbol)
-  const oracles = getOracleConfigList(version)
+  const oracles = getOracleConfigList(version, DeriEnv.get())
   const filteredByChainId = oracles.filter((c) =>
     symbol
       ? c.chainId === chainId && c.symbol === symbol

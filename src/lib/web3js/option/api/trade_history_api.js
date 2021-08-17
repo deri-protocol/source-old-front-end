@@ -37,34 +37,22 @@ const processTradeEvent = async (
   const symbolId = info.symbolId
   const index = symbolIdList.indexOf(symbolId)
 
-  let res = {
-    direction,
-    baseToken: bTokenSymbol,
-    symbolId,
-    price: price.toString(),
-    volume: volume.times(symbols[index].multiplier).toString(),
-    transactionHash: txHash.toString(),
-    time,
-  }
-  if (index === -1) {
-    res.notional = ''
-    res.transactionFee = ''
+  if (index > -1) {
+    return {
+      direction,
+      baseToken: bTokenSymbol,
+      symbolId,
+      symbol: symbols[index].symbol,
+      price: price.toString(),
+      volume: volume.times(symbols[index].multiplier).toString(),
+      transactionHash: txHash.toString(),
+      notional: tradeVolume.abs().times(price).times(multiplier[index]).toString(),
+      transactionFee: calculateTxFee( tradeVolume, price, multiplier[index], feeRatio[index]).toString(),
+      time,
+    };
   } else {
-    const transactionFee = calculateTxFee(
-      tradeVolume,
-      price,
-      multiplier[index],
-      feeRatio[index]
-    );
-    const notional = tradeVolume
-      .abs()
-      .times(price)
-      .times(multiplier[index]);
-
-    res.notional = notional.toString();
-    res.transactionFee = transactionFee.toString();
+    return null
   }
-  return res;
 };
 const getTradeHistoryOnline = async (
   chainId,
@@ -100,7 +88,7 @@ const getTradeHistoryOnline = async (
     toBlock.number
   );
 
-  const result = [];
+  let result = [];
   //events  = events.filter((i) => i.returnValues.symbolId === symbolId)
   //console.log("events length:", events.length);
   for (let i = 0; i < events.length; i++) {
@@ -116,12 +104,9 @@ const getTradeHistoryOnline = async (
       optionPool.activeSymbolIds,
       symbols,
     );
-    const filteredSymbols = symbols.filter((s) => s.symbolId === symbolId)
-    if (filteredSymbols.length > 0) {
-      res.symbol =  filteredSymbols[0].symbol
-    }
     result.unshift(res);
   }
+  result = result.filter((tr) => tr !== null)
   return result;
 };
 
@@ -152,24 +137,29 @@ export const getTradeHistory = async (
       tradeHistory = tradeHistory
         //.filter((i) => i)
         .map((i) => {
-          const index = symbols.findIndex((s) => s.symbolId === symbolId)
-          return {
-            direction: i.direction.trim(),
-            baseToken: i.baseToken.trim(),
-            symbolId: i.symbolId,
-            symbol: i.symbol,
-            price: deriToNatural(i.price).toString(),
-            notional: deriToNatural(i.notional).toString(),
-            volume: deriToNatural(i.volume).times(symbols[index].multiplier).toString(),
-            transactionFee: deriToNatural(i.transactionFee).toString(),
-            transactionHash: i.transactionHash,
-            time: i.time.toString(),
-          };
+          const index = symbols.findIndex((s) => s.symbolId === i.symbolId)
+          if (index > -1) {
+            return {
+              direction: i.direction.trim(),
+              baseToken: i.baseToken.trim(),
+              symbolId: i.symbolId,
+              symbol: i.symbol,
+              price: deriToNatural(i.price).toString(),
+              notional: deriToNatural(i.notional).toString(),
+              volume: deriToNatural(i.volume).times(symbols[index].multiplier).toString(),
+              transactionFee: deriToNatural(i.transactionFee).toString(),
+              transactionHash: i.transactionHash,
+              time: i.time.toString(),
+            };
+          } else {
+            // i.symbolId is not in activeSymbols
+            return null
+          }
         });
     }
-      //console.log('tradeHistory1',tradeHistory)
+    tradeHistory = tradeHistory.filter((tr) => tr !== null)
+    // fetch tradeHistory on the block with fromBlock from rest api
     if (tradeFromBlock !== 0) {
-      // console.log(tradeFromBlock, liquidateFromBlock)
       const [tradeHistoryOnline] = await Promise.all([
         getTradeHistoryOnline(
           chainId,

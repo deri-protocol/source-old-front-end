@@ -1,4 +1,5 @@
 import { getConfig } from './config';
+import { DeriEnv } from './env';
 import { LITE_VERSIONS, VERSIONS } from './version';
 
 const expendPoolConfigV2 = (config) => {
@@ -141,26 +142,27 @@ export const getFilteredPoolConfig  = getPoolConfig
 
 export const getPoolVersion = (poolAddress) => {
   const pools = VERSIONS.reduce((acc, version) => {
-    return acc.concat(getConfig(version)['pools'])
+    return acc.concat(getConfig(version, DeriEnv.get())['pools'])
   }, [])
-  //console.log('pools', pools)
   const index = pools.findIndex((v) => v.pool === poolAddress)
   //console.log('pools index', index)
   if (index >= 0) {
     return pools[index].version
   }
+  throw new Error(`getPoolVersion, cannot find pool version by pool address ${poolAddress}`)
 }
 
 export const _getPoolConfig = (poolAddress) => {
-  const version = getPoolVersion(poolAddress)
-  const config = getConfig(version)
+  const version = getPoolVersion(poolAddress);
+  const config = getConfig(version, DeriEnv.get());
   const pools = config.pools;
   let pool = pools.find((p) => p.pool === poolAddress);
   //console.log(pool)
   if (pool) {
-    return pool
+    return pool;
+  } else {
+    throw new Error(`getPoolConfig, cannot find pool config by pool address ${poolAddress}`)
   }
-  throw new Error(`Cannot find the pool by poolAddress(${poolAddress})`);
 };
 
 export const getPoolConfig2 = (poolAddress, bTokenId, symbolId) => {
