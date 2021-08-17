@@ -186,8 +186,13 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
     initChart();
     symbol && loadChart();
     return () => {
-      chart.current.remove()
       chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
+      if(lastQueryParam.current){
+        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
+      }
+      if(queryParams.current){
+        socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
+      }
     }
   }, [symbol,interval])
 
