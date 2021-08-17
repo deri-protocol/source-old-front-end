@@ -1,15 +1,16 @@
 import React, { useState, useEffect ,useRef} from 'react'
-import {widget} from '../../../../lib/charting_library'
 import datafeeds from './datafeeds/index'
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Type from '../../../../model/Type';
 import LightChart from './LightChart';
 import { stripSymbol } from '../../../../utils/utils';
+import { widget} from '../../../../lib/charting_library'
+import TVChart from './TVChart';
 const defaultProps = {
   containerId : 'tv_chart_container'
 }
-function TradingViewChart({symbol,lang,intl,version}){
+function Chart({symbol,lang,intl,version}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [deriWidget, setDeriWidget] = useState(null);
@@ -61,7 +62,6 @@ function TradingViewChart({symbol,lang,intl,version}){
       timezone: "Asia/Shanghai", 
       session: "24x7"
     }
-
     const w  = new widget(widgetOptions);
     w.onChartReady(() => {
       setTimeout(() => setLoading(false),500)
@@ -143,11 +143,13 @@ function TradingViewChart({symbol,lang,intl,version}){
               <span className='sr-only'></span>
           </div>
       </div>
-      <div id={defaultProps.containerId} style={{display : chartType === 'index-price' ? 'block' : 'none'}}></div>
+      <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
+        <TVChart/>
+      </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} />
       </div>}
   </div>
   )
 }
-export default inject('intl','trading')(observer(TradingViewChart))
+export default inject('intl','trading')(observer(Chart))

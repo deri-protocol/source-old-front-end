@@ -123,4 +123,39 @@ export function stripSymbol(symbol){
 }
 
 
+export const  secondsInRange = {
+  '1' : 60,
+  '5' : 300,
+  '15' : 900,
+  '30' : 1800,
+  '60' : 3600,
+  '1D' : 3600 * 24,
+  '1W' : 3600 * 24 * 7
+}
+export const intervalRange = {
+  '1' : 'min',
+  '5' : '5min',
+  '15' : '15min',
+  '30' : '30min',
+  '60' : 'hour',
+  '1D' : 'day',
+  '1W' : 'week'
+}
+
+ 
+export function calcRange(interval){
+  const timestamp = new Date().getTime() /1000 ;
+  let from,to;
+  if(interval !== '1W') {
+    to = Math.floor(timestamp / secondsInRange[interval] ) * secondsInRange[interval]
+    from  = to - secondsInRange[interval] * 1440
+  } else {
+    to = Math.floor((timestamp - 345600) /secondsInRange[interval]) * secondsInRange[interval] + 345600
+    from = to - secondsInRange[interval] * 1440
+  }
+  return [from,to]
+ 
+}
+
+
 
