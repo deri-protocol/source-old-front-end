@@ -29,14 +29,14 @@ function Menu({ lang, locale }) {
           </li>
           <li>
             {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/lite`} target={isApp ? '' : '_blank'} className='trade-item'>{lang.trade}</a>
-              : <Link className='trade-item' to='/futures/lite'>{lang.trade}</Link>
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/pro`} target={isApp ? '' : '_blank'} className='trade-item'>{lang.trade}</a>
+              : <Link className='trade-item' to='/futures/pro'>{lang.trade}</Link>
             }
           </li>
           <li>
             {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/lite`} target={isApp ? '' : '_blank'} className='option-item'>{lang.trade}</a>
-              : <Link className='option-item' to='/options/lite'>{lang.options}</Link>
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} target={isApp ? '' : '_blank'} className='option-item'>{lang.trade}</a>
+              : <Link className='option-item' to='/options/pro'>{lang.options}</Link>
             }
           </li>
           <li>

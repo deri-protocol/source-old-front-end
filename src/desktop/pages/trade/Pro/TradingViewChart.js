@@ -57,9 +57,6 @@ function TradingViewChart({symbol,lang,intl,version}){
         "mainSeriesProperties.candleStyle.wickUpColor": '#838ca1',
         "mainSeriesProperties.candleStyle.wickDownColor": '#838ca1',
       },      
-      studies_overrides: {
-        "compare.plot.color": "rgb(86, 155, 218)",
-      },
       toolbar_bg: "#212327",
       timezone: "Asia/Shanghai", 
       session: "24x7"

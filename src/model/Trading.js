@@ -5,7 +5,7 @@ import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
 import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol } from "../utils/utils";
-import { getFundingRate } from "../lib/web3js/indexV2";
+import { getFundingRate, priceCache } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
 import version from './Version'
@@ -174,6 +174,7 @@ export default class Trading {
           results[2] && this.setFundingRate(results[2]);
           results[3] && this.setHistory(results[3]);
           results[4] && this.setPositions(results[4]);
+          // this.refreshCache();
         } 
       }).finally(e => {
         finishedCallback && finishedCallback()
@@ -181,6 +182,13 @@ export default class Trading {
     } else {
       finishedCallback && finishedCallback()
     }
+  }
+
+  refreshCache(){
+    const {pool} = this.config;
+    const symbol = type.isOption ? this.config.symbol.split('-')[0] : this.config.symbol
+    priceCache.clear();
+    priceCache.update(pool,symbol)
   }
 
 

@@ -67,18 +67,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   }
 
 
-  //refresh cache
-  const refreshCache = () => {
-    if (hasConnectWallet() && hasSpec()) {
-      const { chainId, account } = wallet.detail;
-      const address = spec.pool
-      const symbol = type.isOption ? spec.symbol.split('-')[0] : spec.symbol
-      priceCache.clear();
-      priceCache.update(address, symbol);
-      // PerpetualPoolParametersCache.update(chainId,address,account);
-    }
-  }
-
   const makeLongOrShort = (volume) => {
     if (volume >= 0) {
       setDirection('long')
@@ -180,7 +168,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       let num = trading.contract.multiplier.slice(index);
       let length = num.length 
       let value = target.value
-      if(target.value.indexOf(".") != '-1'){
+      if(target.value.indexOf(".") !== '-1'){
         value = target.value.substring(0,target.value.indexOf(".") + length)
       }
       trading.setVolume(value)
@@ -196,12 +184,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     trading.refresh();
     wallet.refresh();
   }
-
-  useEffect(() => {
-    refreshCache();
-    return () => {
-    };
-  }, [wallet.detail]);
 
 
   useEffect(() => {
