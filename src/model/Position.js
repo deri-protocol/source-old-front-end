@@ -29,8 +29,6 @@ export default class Position {
      this.isOptions = isOptions
      if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
-      // const fundingFee = await getFun
-      position.unrealizedPnlList = position.unrealizedPnlList.filter(item => (item[1] != '0'))
       if(position){
         if(callback){
           callback(position)

@@ -64,11 +64,11 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
-      socket.emit('get_kline_update', {'symbol': queryParams.current, 'time_type': intervalRange[interval],updated : true})
+      socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
     }
     socket.on('kline_update', data => {
       let obj = {}
-      if (lastData.current.time <= data.time && data.time_type === intervalRange[interval] && data.symbol.toUpperCase() === queryParams.current.toUpperCase()) {
+      if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
         obj.time = data.time
         obj.low = Number(data.low)
         obj.high = Number(data.high)
