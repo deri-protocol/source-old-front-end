@@ -241,7 +241,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
 
   useEffect(() => {
     if (type.isOption) {
-      let mark = getIntrinsicPrice(trading.index, trading.position.strikePrice, trading.position.isCall).plus(trading.position.timePrice).toString()
+      let mark = trading.position.markPrice
       if (markPriceRef.current > mark) {
         setMarkPriceClass('fall')
       } else {

@@ -150,7 +150,7 @@ export const getTradeHistory = async (
     const symbols = optionPool.activeSymbols
     if (tradeHistory.length > 0) {
       tradeHistory = tradeHistory
-        .filter((i) => i)
+        //.filter((i) => i)
         .map((i) => {
           const index = symbols.findIndex((s) => s.symbolId === symbolId)
           return {

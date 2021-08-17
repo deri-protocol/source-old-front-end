@@ -1349,8 +1349,11 @@
     div{
       flex-grow: 0;
     }
-    .margin{
+    .margin,.position,.direction{
       width: 100px;
+    }
+    .ave-entry-price{
+      width: 140px;
     }
     .funding-pos{
       margin-left: 30px;
@@ -1366,8 +1369,21 @@
   
 }
 .options .trade-body .trade-pro .right .position-info .pos-his-info .position-box .tbody{
-  .margin{
+  div{
+    flex-grow: 0;
+  }
+  .margin,.position,.LONG,.SHORT{
     width: 100px;
+  }
+  .position{
+    .close-position{
+      img{
+        margin-left: 0px;
+      }
+    }
+  }
+  .ave-entry-price{
+    width: 140px;
   }
   .funding-pos{
     margin-left: 30px;

@@ -10,6 +10,7 @@ import {
   getEstimatedMarginOption,
   getEstimatedLiquidityUsedOption,
   isUnlockedOption,
+  getPositionInfosPosition,
 } from '../option/api';
 import { getPoolVersion, isDeriUnlocked } from '../shared';
 import {
@@ -91,6 +92,16 @@ export const getPositionInfo = async (
     return getPositionInfoV2(chainId, poolAddress, accountAddress, symbolId);
   }
 };
+
+export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
+  const version = getPoolVersion(poolAddress);
+  if (version === 'option') {
+    return getPositionInfosPosition(chainId, poolAddress, accountAddress)
+  } else {
+    // return empty array for v1, v2, v2_lite
+    return []
+  }
+}
 export const getWalletBalance = async (
   chainId,
   poolAddress,

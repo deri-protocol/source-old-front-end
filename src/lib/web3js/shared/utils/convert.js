@@ -86,6 +86,17 @@ export const isBrowser = () => typeof window !== 'undefined' && typeof window.do
 export const isNodejs = () => typeof process !== 'undefined' && process.versions != null && process.versions.node != null
 export const isJsDom = () => typeof window !== 'undefined' && navigator.userAgent.includes('jsdom')
 
+// == array set
+export const isEqualSet = (set1, set2) => {
+  if (set1.size !== set2.size) return false;
+  for (let item of set1) {
+    if (!set2.has(item)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // == contract gen
 export const deleteIndexedKey = (obj) => {
   if (isObject(obj)) {
@@ -124,6 +135,7 @@ export const toNumberForObject = (obj, keyList = []) => {
 };
 
 
+// for frontend to display symbols
 export const sortOptionSymbols = (symbolList) => {
   const symbolArr = symbolList
     .map((s) => s.symbol)

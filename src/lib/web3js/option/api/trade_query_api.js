@@ -1,4 +1,10 @@
-import { bg, bTokenFactory, catchApiError, deriToNatural, getPoolConfig } from '../../shared';
+import {
+  bg,
+  bTokenFactory,
+  catchApiError,
+  deriToNatural,
+  getPoolConfig,
+} from '../../shared';
 import { fundingRateCache } from '../../shared/api/api_globals';
 import { normalizeOptionSymbol } from '../../shared/config/token';
 import { wrappedOracleFactory } from '../../shared/factory/oracle';
@@ -23,7 +29,6 @@ import { volatilitiesCache } from '../utils';
 
 //
 const SECONDS_IN_A_DAY = 86400;
-
 
 export const getSpecification = async (chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId];
@@ -56,11 +61,8 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
       const { symbolState } = state;
       const symbolIndex = symbolState.findIndex((s) => s.symbolId === symbolId);
       const symbolInfo = symbolState[symbolIndex];
-      const {
-        dynamicMarginRatio,
-        deltaFundingCoefficient,
-        isCall,
-      } = symbolInfo;
+      const { dynamicMarginRatio, deltaFundingCoefficient, isCall } =
+        symbolInfo;
       const { symbol, multiplier, feeRatio } = symbolInfo2;
       const {
         initialMarginRatio,
@@ -130,19 +132,21 @@ export const getPositionInfo = async (
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
       const symbols = optionPool.activeSymbols;
-      let symbolPrices = [], symbolVolatilities = [], volPrice
+      let symbolPrices = [],
+        symbolVolatilities = [],
+        volPrice;
       if (symbols && symbols.length > 0) {
-      [symbolPrices, symbolVolatilities, volPrice] = await Promise.all([
-        getOraclePricesForOption(
-          chainId,
-          symbols.map((s) => s.symbol)
-        ),
-        volatilitiesCache.get(
-          poolAddress,
-          symbols.map((s) => s.symbol)
-        ),
-        getPriceFromRest(`VOL-${normalizeOptionSymbol(symbolStr)}`, 'option'),
-      ]);
+        [symbolPrices, symbolVolatilities, volPrice] = await Promise.all([
+          getOraclePricesForOption(
+            chainId,
+            symbols.map((s) => s.symbol)
+          ),
+          volatilitiesCache.get(
+            poolAddress,
+            symbols.map((s) => s.symbol)
+          ),
+          getPriceFromRest(`VOL-${normalizeOptionSymbol(symbolStr)}`, 'option'),
+        ]);
       }
       const state = await optionPool.viewer.getTraderStates(
         poolAddress,
@@ -166,16 +170,21 @@ export const getPositionInfo = async (
         price,
         strikePrice: symbol.strikePrice.toString(),
         timePrice: symbol.timeValue.toString(),
+        markPrice: bg(symbol.intrinsicValue).plus(symbol.timeValue).toString(),
         volume: bg(position.volume).times(symbol.multiplier).toString(),
         averageEntryPrice: getAverageEntryPrice(position, symbol),
         margin: margin.toString(),
         marginHeld: initialMargin.toString(),
-        marginHeldBySymbol: getMarginHeldBySymbol(position.volume, price, symbol, initialMarginRatio).toString(),
+        marginHeldBySymbol: getMarginHeldBySymbol(
+          position.volume,
+          price,
+          symbol,
+          initialMarginRatio
+        ).toString(),
         unrealizedPnl: totalPnl,
-        unrealizedPnlList: symbolState.map((s, index) => [
-          s.symbol,
-          positionState[index].pnl,
-        ]),
+        unrealizedPnlList: symbolState
+          .filter((s, index) => positionState[index].pnl !== '0')
+          .map((s) => [s.symbol, positionState[symbolState.findIndex((oS) => oS.symbolId === s.symbolId)].pnl]),
         deltaFundingAccrued: positionState[symbolIndex].deltaFundingAccrued,
         premiumFundingAccrued: positionState[symbolIndex].premiumFundingAccrued,
         isCall: symbol.isCall,
@@ -207,7 +216,7 @@ export const getPositionInfo = async (
 export const getPositionInfos = async (
   chainId,
   poolAddress,
-  accountAddress,
+  accountAddress
 ) => {
   const args = [chainId, poolAddress, accountAddress];
   return catchApiError(
@@ -245,30 +254,41 @@ export const getPositionInfos = async (
             ]),
           []
         )
-      ); 
+      );
 
-      const liquidationPrices = getLiquidationPrices(state)
-      return symbols.filter((s) => positionState[s.symbolId].volume !== '0').map((s, index) => {
-        const vIndex = symbolState.findIndex((vS) => vS.symbolId === s.symbolId)
-        return {
-        symbolId: s.symbolId,
-        symbol: s.symbol,
-        price: prices[index],
-        strikePrice: s.strikePrice.toString(),
-        timePrice: s.timeValue.toString(),
-        volume: bg(positionState[vIndex].volume).times(symbolState[vIndex].multiplier).toString(),
-        averageEntryPrice: getAverageEntryPrice(positionState[vIndex], s),
-        margin: margin.toString(),
-        marginHeld: initialMargin.toString(),
-        marginHeldBySymbol: getMarginHeldBySymbol(positionState[vIndex].volume, prices[index], s, initialMarginRatio).toString(),
-        unrealizedPnl: positionState[vIndex].pnl,
-        deltaFundingAccrued: positionState[vIndex].deltaFundingAccrued,
-        premiumFundingAccrued: positionState[vIndex].premiumFundingAccrued,
-        isCall: s.isCall,
-        volatility: deriToNatural(volPrices[index]).times(100).toString(),
-        liquidationPrice: liquidationPrices,
-      }
-    })
+      const liquidationPrices = getLiquidationPrices(state);
+      return symbols
+        .filter((s) => positionState[s.symbolId].volume !== '0')
+        .map((s) => {
+          const vIndex = symbolState.findIndex(
+            (oS) => oS.symbolId === s.symbolId
+          );
+          return {
+            symbolId: s.symbolId,
+            symbol: s.symbol,
+            price: prices[vIndex],
+            // strikePrice: s.strikePrice.toString(),
+            // timePrice: s.timeValue.toString(),
+            volume: bg(positionState[vIndex].volume)
+              .times(symbolState[vIndex].multiplier)
+              .toString(),
+            averageEntryPrice: getAverageEntryPrice(positionState[vIndex], s),
+            margin: margin.toString(),
+            marginHeld: initialMargin.toString(),
+            marginHeldBySymbol: getMarginHeldBySymbol(
+              positionState[vIndex].volume,
+              prices[vIndex],
+              s,
+              initialMarginRatio
+            ).toString(),
+            unrealizedPnl: positionState[vIndex].pnl,
+            deltaFundingAccrued: positionState[vIndex].deltaFundingAccrued,
+            premiumFundingAccrued: positionState[vIndex].premiumFundingAccrued,
+            isCall: s.isCall,
+            volatility: deriToNatural(volPrices[vIndex]).times(100).toString(),
+            liquidationPrice: liquidationPrices,
+          };
+        });
     },
     args,
     'getPositionInfos',

@@ -49,7 +49,7 @@ describe('trade query api', () => {
       const res = await getPositionInfo(
         CHAIN_ID,
         OPTION_POOL_ADDRESS,
-        '0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
+        ACCOUNT_ADDRESS,
         '0'
       );
 
@@ -59,7 +59,7 @@ describe('trade query api', () => {
       expect(res).toHaveProperty('marginHeldBySymbol')
       expect(res).toHaveProperty('price', expect.any(String))
       expect(res).toHaveProperty('averageEntryPrice', expect.any(String))
-      expect(res).toHaveProperty('liquidationPrice', expect.any(String))
+      expect(res).toHaveProperty('liquidationPrice', expect.any(Object))
       expect(res).toHaveProperty('unrealizedPnl', expect.any(String))
       expect(res).toHaveProperty('unrealizedPnlList', expect.any(Array))
       expect(res).toHaveProperty('averageEntryPrice', expect.any(String))
@@ -70,6 +70,7 @@ describe('trade query api', () => {
       expect(bg(res.averageEntryPrice).toNumber()).toBeGreaterThanOrEqual(0);
       expect(bg(res.price).toNumber()).toBeGreaterThanOrEqual(2000);
       expect(res.isCall).toEqual(true);
+      expect(res).toEqual({});
     },
     TIMEOUT
   );
@@ -79,7 +80,8 @@ describe('trade query api', () => {
       const res = await getPositionInfos(
         CHAIN_ID,
         OPTION_POOL_ADDRESS,
-        '0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
+        //'0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080',
+        ACCOUNT_ADDRESS,
       );
       expect(res.length).toEqual(2);
       expect(res[0]).toEqual({});

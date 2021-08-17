@@ -244,7 +244,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='info-left'>
           <div className='title-text'>{lang['liquidation-price']}</div>
           <div className='info-num'>
-            {type.isOption ? <LiqPrice trading={trading} wallet={wallet} lang={lang} /> : <DeriNumberFormat decimalScale={4} value={trading.position.liquidationPrice} />}
+            {type.isOption ? <LiqPrice trading={trading} wallet={wallet} lang={lang} /> : <DeriNumberFormat decimalScale={4} value={typeof trading.position.liquidationPrice == 'object'?'':trading.position.liquidationPrice} />}
           </div>
         </div>
         <div className='info-right'></div>

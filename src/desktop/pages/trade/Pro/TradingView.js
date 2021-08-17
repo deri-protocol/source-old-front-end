@@ -22,17 +22,13 @@ function TradingView({ version, trading, lang,type }) {
 
   useEffect(() => {
     if(type.isOption && trading.index && trading.position.strikePrice && trading.position.timePrice){
-      console.log('index ',trading.index)
-      console.log('strikePrice ',trading.position.strikePrice)
-      console.log('timePrice ',trading.position.timePrice)
-      let mark =  getIntrinsicPrice(trading.index,trading.position.strikePrice,trading.position.isCall).plus(trading.position.timePrice).toString()
+      let mark =  trading.position.markPrice
       if (markPriceRef.current > mark) {
         setMarkPriceClass('fall trade-dashboard-value')
       } else {
         setMarkPriceClass('rise trade-dashboard-value')
       }
       markPriceRef.current = mark
-      console.log('mark price',mark)
       setMarkPrice(mark)
     }
   },[trading.index,trading.position])

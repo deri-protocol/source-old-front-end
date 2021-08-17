@@ -12,6 +12,7 @@
   "current-position" : "当前仓位",
   "contract-volume" : "合约量",
   "index-price" : "指数价格",
+  "min-trade-volume":"Min Trade Volume",
 
   "funding-rate-annual" : "日资金费率",
   "funding-rate" : "Funding Fee Daily",
@@ -92,6 +93,8 @@
   "my-position" : "我的仓位",
   "position" : "仓位",
   "close" : "平仓",
+  "close-is-position":"close this position",
+  "close-position":"平仓",
   "average-entry-price" : "开仓均价",
   "detail" : "更多",
   "direction" : "方向",

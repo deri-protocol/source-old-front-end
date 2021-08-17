@@ -27,6 +27,7 @@ const BalanceListDialog = withModal(BalanceList)
 function Position({ wallet, trading, version, lang, type }) {
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
+  const [closingIndex, setClosingIndex] = useState(null);
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
   const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
   const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false);
@@ -70,9 +71,10 @@ function Position({ wallet, trading, version, lang, type }) {
     }
   }
 
-  const onClosePosition = async (symbolId) => {
+  const onClosePosition = async (symbolId,volume,index) => {
     setClosing(true)
-    const res = await closePosition(wallet.detail.chainId, trading.config.pool, wallet.detail.account, symbolId).finally(() => setClosing(false))
+    setClosingIndex(index)
+    const res = await closePosition(wallet.detail.chainId, trading.config.pool, wallet.detail.account, symbolId).finally(() => {setClosing(false);setClosingIndex(null)})
     if (res.success) {
       refreshBalance();
     } else {
@@ -153,7 +155,7 @@ function Position({ wallet, trading, version, lang, type }) {
           <div className='funding-posi'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-p']}</span></div>
           <div className='funding-pos'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-d']}</span></div>
         </>}
-        <div className='margin'>
+        <div className='position'>
           {lang['close-position']}
         </div>
         
@@ -181,9 +183,15 @@ function Position({ wallet, trading, version, lang, type }) {
               <div className='funding-posi'><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>
               <div className='funding-pos'><DeriNumberFormat value={(-(pos.deltaFundingAccrued))} decimalScale={8} /></div>
             </>}
-            <div className='margin'>
-            <span className='close-position'>
-                { <img src={closePosImg} onClick={() => { onClosePosition(pos.symbolId,pos.volume) }} title={lang['close-is-position']} />}
+            <div className='position'>
+              <span className='close-position'>
+              <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId,pos.volume,index) }} title={lang['close-is-position']} />
+                <span
+                  className='spinner spinner-border spinner-border-sm'
+                  role='status'
+                  aria-hidden='true'
+                  style={{ display: closing && closingIndex == index ? 'block' : 'none' }}
+                ></span>
               </span>
             </div>
           </div>
@@ -324,12 +332,11 @@ function LiqPrice({wallet,trading,lang}){
       }
       return ele
     }
-    return ''
   }
 
   useEffect(()=>{
     if(wallet.isConnected() && trading.positions){
-      if(trading.positions.liquidationPrice){
+      if(trading.positions.length){
         if(trading.positions[0].liquidationPrice){
           let elem =trading.positions[0].liquidationPrice.map(item=>{
             let ele = liqText(item)

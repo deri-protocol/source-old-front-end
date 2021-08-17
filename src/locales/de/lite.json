@@ -12,6 +12,7 @@
   "current-position" : "Aktuelle Position",
   "contract-volume" : "Kontraktmenge",
   "index-price" : "Indexpreis",
+  "min-trade-volume":"Min Trade Volume",
 
   "funding-rate-annual" : "Finanzierungsrate Täglich",
   "funding-rate" : "Funding Rate",
@@ -92,6 +93,8 @@
   "my-position" : "MEINE POSITION",
   "position" : "POSITION",
   "close" : "Schließen",
+  "close-is-position":"close this position",
+  "close-position":"Schließen Position",
   "average-entry-price" : "Durchschn. Einstiegspreis",
   "detail" : "Detail",
   "direction" : "Richtung",

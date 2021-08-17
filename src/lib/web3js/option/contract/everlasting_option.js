@@ -6,6 +6,7 @@ import {
   naturalToDeri,
   getPoolConfig,
   getPoolViewerConfig,
+  isEqualSet,
 } from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
 import {
@@ -47,10 +48,15 @@ export class EverlastingOption extends ContractBase {
         this.viewerAddress
       );
     }
-    if(!this.activeSymbolIds){
-      this.activeSymbolIds = await this.pToken.getActiveSymbolIds();
+
+    const activeSymbolIds = await this.pToken.getActiveSymbolIds();
+    if (
+      !this.activeSymbolIds ||
+      !isEqualSet(new Set(this.activeSymbolIds), new Set(activeSymbolIds))
+    ) {
+      // symbol is updated
       const activeSymbols = await Promise.all(
-        this.activeSymbolIds.reduce(
+      activeSymbolIds.reduce(
           (acc, i) => acc.concat([this.getSymbol(i)]),
           []
         )
@@ -66,6 +72,9 @@ export class EverlastingOption extends ContractBase {
         symbolVolatilities
       );
       const { symbolState } = state;
+
+      // update state
+      this.activeSymbolIds = activeSymbolIds;
       this.activeSymbols = symbolState.filter((s) =>
         this.activeSymbolIds.includes(s.symbolId)
       );
