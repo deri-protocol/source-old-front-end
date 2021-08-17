@@ -27,6 +27,15 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
     } 
   }
 
+  useEffect(() => {
+    document.body.addEventListener('click',() => {
+      setDropdown(false)
+    })
+    return () => {
+      // document.body.removeEventListener('click')
+    }
+  }, [])
+
   return (
     <div className='btn-group check-baseToken-btn'>
       <button
