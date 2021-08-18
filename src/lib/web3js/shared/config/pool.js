@@ -1,5 +1,6 @@
 import { getConfig } from './config';
 import { DeriEnv } from './env';
+import { getPoolV1ConfigList } from './pool_v1';
 import { LITE_VERSIONS, VERSIONS } from './version';
 
 const expendPoolConfigV2 = (config) => {
@@ -141,9 +142,11 @@ export const getFilteredPoolConfig  = getPoolConfig
 
 
 export const getPoolVersion = (poolAddress) => {
-  const pools = VERSIONS.reduce((acc, version) => {
+  let pools = VERSIONS.reduce((acc, version) => {
     return acc.concat(getConfig(version, DeriEnv.get())['pools'])
   }, [])
+  // add v1 config
+  pools = pools.concat(getPoolV1ConfigList(DeriEnv.get()))
   const index = pools.findIndex((v) => v.pool === poolAddress)
   //console.log('pools index', index)
   if (index >= 0) {
