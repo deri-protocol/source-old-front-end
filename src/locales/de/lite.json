@@ -11,6 +11,7 @@
   "no-data":"Keine Daten",
   "current-position" : "Aktuelle Position",
   "contract-volume" : "Kontraktmenge",
+  "option-input":"Quantity",
   "index-price" : "Indexpreis",
   "min-trade-volume":"Min Trade Volume",
 
@@ -102,6 +103,7 @@
   "liquidation-price" : "Liquidationspreis",
   "liquidation-failed" : "Liquidation fehlgeschlagen",
   "close-position-failed" : "Position schließen fehlgeschlagen",
+  "liq-price-hover":" Cannot calculate a liquidation price for this direction. Please manage your positions carefully.",
 
   "history" : "HISTORIE",
   "volume-price" : "Volumen @ Preis",

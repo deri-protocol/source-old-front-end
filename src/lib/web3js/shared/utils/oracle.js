@@ -13,7 +13,7 @@ import {
 export const getOracleUrl = (symbol, type='futures') => {
   const env = DeriEnv.get();
   //if (/^[0-9]+$/.test(symbolId.toString())) {
-  const preservedSymbols = ['BTCUSD', 'ETHUSD'];
+  const preservedSymbols = ['BTCUSD', 'ETHUSD', 'BNBUSD'];
   let method = 'get_signed_price'
   if (type === 'option') {
     method = 'get_signed_volatility'
@@ -109,7 +109,6 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
   chainId = normalizeChainId(chainId);
   symbol = mapToSymbolInternal(symbol)
   const config = getOracleConfig(chainId, symbol, version);
-  // console.log('oracle config',config)
   if (config && config.address) {
     const oracle = oracleFactory(
       chainId,
