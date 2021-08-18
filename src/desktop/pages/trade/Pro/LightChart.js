@@ -4,32 +4,36 @@ import {io} from 'socket.io-client'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol, secondsInRange, calcRange, intervalRange } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange } from '../../../../utils/utils';
 
-let socketStatus = 'disconnected'
 
 const socket = io(process.env.REACT_APP_WSS_URL, {
   transports: ['websocket'],
   withCredentials: true
 })
 
-socket.on('connect', data => {
-  socketStatus = 'connected'
-})
 
 function LightChart({symbol,interval = '1',intl,displayCandleData}){
   const chart = useRef(null)
-  const barSeries = useRef(null);
   const candleSeries = useRef(null);
   const lastData = useRef(null)
   const queryParams = useRef(null);
   const lastQueryParam = useRef(null);
   const [loading, setLoading] = useState(true);
+  const connectStatusRef = useRef()
 
-
+  const connectWs = () => {
+    socket.on('connect', data => {
+      if(connectStatusRef.current && queryParams.current){
+        console.log( `kline for :${queryParams.current.symbol} - ${queryParams.current.interval} reconnect`)
+        socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
+      }
+      connectStatusRef.current = true
+    })
+  }
 
   const initWs = () => {
-    if(socketStatus === 'connected') {
+    if(connectStatusRef.current) {
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
@@ -164,6 +168,11 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       }
     }
   }, [symbol,interval])
+
+  useEffect(() => {
+    connectWs();
+    return () => {}
+  }, [])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container'>
