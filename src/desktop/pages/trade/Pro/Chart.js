@@ -5,15 +5,11 @@ import { inject, observer } from 'mobx-react';
 import Type from '../../../../model/Type';
 import LightChart from './LightChart';
 import { stripSymbol } from '../../../../utils/utils';
-import { widget} from '../../../../lib/charting_library'
 import TVChart from './TVChart';
-const defaultProps = {
-  containerId : 'tv_chart_container'
-}
+
 function Chart({symbol,lang,intl,version}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
-  const [deriWidget, setDeriWidget] = useState(null);
   const [chartType, setChartType] = useState('')
   const [currentInterval, setCurrentInterval] = useState('1');
   const [candleDataDisplay, setCandleDataDisplay] = useState('')
@@ -22,60 +18,9 @@ function Chart({symbol,lang,intl,version}){
   const switchClass = classNames('switcher',chartType)
 
 
-  const initialize = () => {
-    const widgetOptions = {
-			symbol: symbol,
-      datafeed: datafeeds,
-      interval: currentInterval,
-      container_id: defaultProps.containerId ,
-      library_path: `/charting_library/`,      
-      custom_css_url : `/style/tradingview-overide.css`,
-      locale: intl.locale,
-      disabled_features: [
-        "header_widget",
-        "timeframes_toolbar",
-        "go_to_date",
-      ],
-      enabled_features: [
-        'show_logo_on_all_charts'
-      ],
-      charts_storage_url: 'https://saveload.tradingview.com',
-      charts_storage_api_version: '1.14',
-      client_id: 'tradingview.com',
-      user_id: 'public_user_id',
-      fullscreen: false,
-      autosize: true,
-      overrides: {        
-        "paneProperties.background": "#212327",
-        "paneProperties.vertGridProperties.color": "#212327",
-        "paneProperties.horzGridProperties.color": "#212327",
-        "scalesProperties.textColor" : "#aaa" ,
-        "mainSeriesProperties.candleStyle.upColor": "#4bffb5",
-        "mainSeriesProperties.candleStyle.downColor": "#d75442",
-        "mainSeriesProperties.candleStyle.borderColor": "#378658",
-        "mainSeriesProperties.candleStyle.borderUpColor": "#4bffb5",
-        "mainSeriesProperties.candleStyle.borderDownColor": "#ff4976",
-        "mainSeriesProperties.candleStyle.wickUpColor": '#838ca1',
-        "mainSeriesProperties.candleStyle.wickDownColor": '#838ca1',
-      },      
-      toolbar_bg: "#212327",
-      timezone: "Asia/Shanghai", 
-      session: "24x7"
-    }
-    const w  = new widget(widgetOptions);
-    w.onChartReady(() => {
-      setTimeout(() => setLoading(false),500)
-    })
-    return w;
-  }
-
-
-  const  changeTime= (time,period) => {
+  const changeTime= (time,period) => {
     setActived(period)
-    setCurrentInterval(time)
-    deriWidget.activeChart().setResolution(time,() => {
-      deriWidget.chart().refreshMarks()
-    })        
+    setCurrentInterval(time) 
   }
 
   const switchChart = (type) => {
@@ -98,20 +43,13 @@ function Chart({symbol,lang,intl,version}){
   }
 
   useEffect(() => {
-    if(symbol){
-      setDeriWidget(initialize())
-    }
     if(Type.isOption){
       setChartType('mark-price')
     } else {
       setChartType('index-price')
     }
-    return () => {
-      if (deriWidget !== null) {
-        deriWidget.remove();
-      }
-    };
-  }, [symbol,version.current]);
+    return () => {};
+  }, []);
 
   return(
     <div id='tradingview'>
@@ -144,10 +82,10 @@ function Chart({symbol,lang,intl,version}){
           </div>
       </div>
       <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
-        <TVChart/>
+        <TVChart symbol={symbol} interval={currentInterval} showLoad={isShow => setLoading(isShow)}/>
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} />
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)}/>
       </div>}
   </div>
   )
