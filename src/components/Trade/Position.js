@@ -148,14 +148,14 @@ function Position({wallet,trading,version,lang}){
     <div className='info'>
       <div className='info-left'>
         <div className='title-text balance-con'>
-          {(version.isV1 || version.isV2Lite) ?  <>{lang['balance-in-contract']}<br/> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
+          {(version.isV1 || version.isV2Lite || version.isOpen) ?  <>{lang['balance-in-contract']}<br/> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
         </div>
         <div className='info-num'> 
           <DeriNumberFormat decimalScale = {2} allowZero={true} value={ balanceContract}  />
         </div>
       </div>
       <div className={`info-right action ${version.current}`}>
-      {(version.isV1 || version.isV2Lite) ? <>
+      {(version.isV1 || version.isV2Lite || version.isOpen) ? <>
         <div
           className='add-margin'
           id='openAddMargin'
@@ -190,8 +190,8 @@ function Position({wallet,trading,version,lang}){
         <div className='title-text'>{lang['unrealized-pnl']}</div>
         <div className='info-num'>
           <span className='pnl-list'>
-            <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
-            {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
+            <DeriNumberFormat value={ trading.position.unrealizedPnl }  decimalScale={8}/>{(version.isV2 || version.isV2Lite || version.isOpen) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl'/>}
+            {(version.isV2 || version.isV2Lite || version.isOpen) && <div className='pnl-box'>
               {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item,index) =>(
                 <div className='unrealizePnl-item' key={index}>
                   <span>{item[0]}</span><span><DeriNumberFormat value={item[1]} decimalScale={8}/></span>

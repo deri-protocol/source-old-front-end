@@ -10,8 +10,8 @@ import {
   calculateShareValue,
   calculateMaxRemovableShares,
 } from '../calculation';
-import { bg } from '../utils';
-import { TIMEOUT } from './setup';
+import { bg } from '../../shared/utils';
+import { TIMEOUT } from '../../shared/__test__/setup';
 
 describe('calculation', () => {
   test('calculateEntryPrice', () => {

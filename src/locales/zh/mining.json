@@ -79,5 +79,8 @@
   "multiplier" : "乘数",
   "multiplier-tip" : "乘数代表每个token用作保证金时的折算比例（用于计算有效保证金）\n如：添加1个B1 toekn作为保证金，乘数为0.8，有效保证金为0.8",
   "v2_lite" : "创新区",
-  "v2" : "主区"
+  "v2" : "主区",
+  "official-zone" : "主区和创新区",
+  "open-zone" : "开放区",
+  "my-liqudity-providing" : "我提供的流动性"
 }

@@ -400,7 +400,7 @@
           "decimal": "18"
         }
       ],
-      "poolViewer": [
+      "poolLiteViewer": [
         {
           "chainId": "56",
           "address": "0xC157B7bf1aA08Eb36338EFd7bD0a33abF04f1Dd2"
@@ -486,7 +486,7 @@
           "decimal": "18"
         }
       ],
-      "poolViewer": [
+      "poolLiteViewer": [
         {
           "chainId": "97",
           "address": "0xaBeB6F87ab3810655a5702C00d4D646dC85d7a0C"

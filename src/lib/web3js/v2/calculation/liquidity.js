@@ -1,4 +1,4 @@
-import { bg, max, min } from '../utils'
+import { bg, max, min } from '../../shared/utils'
 
 export const calculateBTokenDynamicEquities = (bTokens) => {
   //const dynamicEquities = bTokens.map((b) => bg(b.liquidity).times(b.price).times(b.discount).plus(b.pnl))

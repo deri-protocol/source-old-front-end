@@ -10,8 +10,10 @@ function AreaPicker({lang,version,wallet}){
     setCurrent(zone)
     if(zone === 'innovation') {
       version.setCurrent('v2_lite')
-    } else {
+    } else if(zone === 'main') {
       version.setCurrent('v2')
+    } else {
+      version.setCurrent('v2_lite_open')
     }
   }
   useEffect(() => {
@@ -19,10 +21,11 @@ function AreaPicker({lang,version,wallet}){
     return () => {}
   }, [])
   return (
-    ((version.isV2 || version.isV2Lite) && wallet.supportInnovation) ? <div className='area-picker'>
+    ((version.isV2 || version.isV2Lite || version.isOpen) && wallet.supportInnovation) ? <div className='area-picker'>
       <div className={clazz}>
         <span className='left' onClick={() => siwtchZone('main')}>{lang['main-zone']}</span>
-        <span className='right' onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
+        <span className='middle' onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
+        <span className='right' onClick={() => siwtchZone('open')}>{lang['open-zone']}</span>
       </div>
     </div> 
     : null

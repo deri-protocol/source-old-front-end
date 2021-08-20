@@ -123,6 +123,7 @@ function Card({wallet,pool,card,index,list,lang}) {
               </>}
             </div>
             <div className="apy">
+              {!card.isOpen &&<>
               <span>{lang['apy']}</span>
               <span>
                 <span className={card.lpApy ? 'sushi-apy-underline' : ''} title={ card.lpApy && lang['deri-apy']}>
@@ -133,6 +134,7 @@ function Card({wallet,pool,card,index,list,lang}) {
                 <span className={card.lpApy ? 'sushi-apy-underline' : '' } title={ card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                 </>}
               </span>
+              </>}
             </div>
           </div>
       </div>

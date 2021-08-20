@@ -320,7 +320,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
                 </span>
               </>}
               {/* v2 */}
-              {(version.isV2 || version.isV2Lite) && <>                
+              {(version.isV2 || version.isV2Lite || version.isOpen) && <>                
                 <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
                 </span>
@@ -338,7 +338,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
                 <DeriNumberFormat value={ trading.amount.margin } allowZero={true}  decimalScale={2}/>
               </span>
             </div>}
-            {(version.isV2 || version.isV2Lite ) && <>
+            {(version.isV2 || version.isV2Lite || version.isOpen) && <>
               <div className='box-margin'>{lang['margin']}</div>
               <div className='box-margin'>
                 <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>

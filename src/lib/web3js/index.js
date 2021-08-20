@@ -1,16 +1,17 @@
-export * from './api/walletApi';
-export * from './api/contractQueryApi';
-export * from './api/contractTransactionApi';
-export * from './api/databaseApi';
-export * from './api/factoryApi';
-export * from './api/slpPoolApi';
-export * from './api/clpPoolApi';
-export * from './api/tradeHistoryApi';
-export * from './api/restApi';
-export * from './api/apiGlobals';
+export * from './shared/api/wallet_api';
+export * from './shared/api/database_api';
+export * from './shared/api/slp_pool_api';
+export * from './shared/api/clp_pool_api';
+
+export * from './v1/api/contract_query_api';
+export * from './v1/api/contract_transaction_api';
+export * from './v1/api/trade_history_api';
+export * from './v1/api/rest_api';
+export * from './v1/api/api_v1_globals';
+export * from './v1/api/factoryApi';
+
 export {
   DeriEnv,
-  getContractAddressConfig,
-  getSlpContractAddressConfig,
-} from './config';
+} from './shared/config';
+
 export * from './utils';

@@ -80,5 +80,8 @@
   "multiplier" : "Multiplier",
   "multiplier-tip" : "The multiplier is the effective ratio of the liquidity provided for mining.\nFor example：providing 1 B1 token for liquidity mining, if the multiplier of B1 is 0.8, then the effective value for mining is 0.8",
   "v2_lite" : "Inno",
-  "v2" : "Main"
+  "v2" : "Main",
+  "official-zone" : "main & inno zone",
+  "open-zone" : "open zone",
+  "my-liqudity-providing" : "My Liquidity Providing"
 }

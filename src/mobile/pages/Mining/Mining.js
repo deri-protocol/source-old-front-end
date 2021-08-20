@@ -33,11 +33,11 @@ function Mining({wallet,lang}){
 					<div className="pool-network">
 							{baseToken} @ {networkText}
 					</div>
-					<div className="check-trade-liquidity">
+					{version !== 'v2_lite_open' && <div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
 								{lang['liquidity-mining']}
 							</div>
-					</div>
+					</div>}
 			</div>
 			<div className='pool-info'>
 					<LiquidityMining {...props}/>

@@ -1,5 +1,5 @@
 .area-picker {
-  width: 50%;
+  width: 625px;
   font-family: Korolev, sans-serif;
   margin-bottom: 20px;
   display: flex;
@@ -13,6 +13,14 @@
     }
   }
   .area-picker-wrapper.innovation {
+    .middle {
+      background-color: #232529;
+      color: #ffffff;
+      font-weight: bold;
+      border-radius: 25px
+    }
+  }
+  .area-picker-wrapper.open{
     .right {
       background-color: #232529;
       color: #ffffff;
@@ -25,7 +33,7 @@
     border-radius: 25px;
     background: #41424A;
 
-    .left,.right {
+    .left,.middle,.right {
       width: 180px;
       font-size: 16px;
       color: #aaaaaa;
@@ -47,13 +55,17 @@
 
   .area-picker-wrapper.main{
     .left {
-      // border-radius: 0 0.25rem 0.25rem 0;
       border-radius: 0;
     }
   }
   .area-picker-wrapper.innovation {
+    .middle {
+      border-radius: 0;
+    }
+  }
+
+  .area-picker-wrapper.innovation {
     .right {
-      // border-radius: 0.25rem 0 0 0.25rem;
       border-radius: 0;
     }
   }
@@ -62,7 +74,7 @@
     border-radius: 0;
     display: flex;
 
-    .left,.right {
+    .left,.middle,.right {
       width: 1.8rem;
       font-size: 0.16rem;
       height: 0.5rem;

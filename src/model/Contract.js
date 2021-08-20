@@ -37,7 +37,7 @@ export default class Contract {
   }
 
   bTokenSymbolDisplay(spec){
-    if(version.isV1 || version.isV2Lite){
+    if(version.isV1 || version.isV2Lite || version.isOpen){
       return [spec.bTokenSymbol];
     }
     const {bTokenSymbol = [],bTokenMultiplier = []} = spec

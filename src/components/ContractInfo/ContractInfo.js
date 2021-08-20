@@ -1,6 +1,5 @@
 import React, { useState,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
-import { getSpecification } from '../../lib/web3js/indexV2';
 import { inject, observer } from 'mobx-react';
 
 
