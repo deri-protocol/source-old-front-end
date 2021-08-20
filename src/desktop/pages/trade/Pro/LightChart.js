@@ -4,63 +4,36 @@ import {io} from 'socket.io-client'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange } from '../../../../utils/utils';
 
-let socketStatus = 'disconnected'
-const secondsInRange = {
-  '1' : 60,
-  '5' : 300,
-  '15' : 900,
-  '30' : 1800,
-  '60' : 3600,
-  '1D' : 3600 * 24,
-  '1W' : 3600 * 24 * 7
-}
-const intervalRange = {
-  '1' : 'min',
-  '5' : '5min',
-  '15' : '15min',
-  '30' : '30min',
-  '60' : 'hour',
-  '1D' : 'day',
-  '1W' : 'week'
-}
 
 const socket = io(process.env.REACT_APP_WSS_URL, {
   transports: ['websocket'],
   withCredentials: true
 })
 
-socket.on('connect', data => {
-  socketStatus = 'connected'
-})
 
 function LightChart({symbol,interval = '1',intl,displayCandleData}){
   const chart = useRef(null)
-  const barSeries = useRef(null);
   const candleSeries = useRef(null);
   const lastData = useRef(null)
   const queryParams = useRef(null);
   const lastQueryParam = useRef(null);
   const [loading, setLoading] = useState(true);
+  const connectStatusRef = useRef()
 
-
-  const calcRange = (interval) => {
-    const timestamp = new Date().getTime() /1000 ;
-    let from,to;
-    if(interval !== '1W') {
-      to = Math.floor(timestamp / secondsInRange[interval] ) * secondsInRange[interval]
-      from  = to - secondsInRange[interval] * 1440
-    } else {
-      to = Math.floor((timestamp - 345600) /secondsInRange[interval]) * secondsInRange[interval] + 345600
-      from = to - secondsInRange[interval] * 1440
-    }
-    return [from,to]
-   
+  const connectWs = () => {
+    socket.on('connect', data => {
+      if(connectStatusRef.current && queryParams.current){
+        console.log( `kline for :${queryParams.current.symbol} - ${queryParams.current.interval} reconnect`)
+        socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
+      }
+      connectStatusRef.current = true
+    })
   }
 
   const initWs = () => {
-    if(socketStatus === 'connected') {
+    if(connectStatusRef.current) {
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
@@ -195,6 +168,11 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       }
     }
   }, [symbol,interval])
+
+  useEffect(() => {
+    connectWs();
+    return () => {}
+  }, [])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container'>

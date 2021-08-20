@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import TradingViewChart from "./TradingViewChart";
+import Chart from "./Chart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
-import {getIntrinsicPrice,bg} from '../../../../lib/web3js/indexV2'
+import {bg} from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
 
 function TradingView({ version, trading, lang,type }) {
@@ -96,7 +96,7 @@ function TradingView({ version, trading, lang,type }) {
         </div>
       </div>
       <div className='tradingview'>
-        <TradingViewChart symbol={trading.config && trading.config.symbol} lang={lang} version={version} containerId ='tv1' />
+        <Chart symbol={trading.config && trading.config.symbol} lang={lang} version={version} />
       </div>
     </div>
   )
