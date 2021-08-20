@@ -197,6 +197,7 @@ function Position({ wallet, trading, version, lang, type }) {
           </div>
         )
       })}
+      {!positions.length ? <div className='no-data'>{lang['no-data']}</div> : ''}
 
       <DepositDialog
         wallet={wallet}
@@ -273,7 +274,6 @@ function LiqPrice({wallet,trading,lang}){
         </span>
         &nbsp;
         </span>
-       
       }else if(positions.price1 && !positions.price2){
         ele = <span>
           <span>{positions.underlier}: </span>
