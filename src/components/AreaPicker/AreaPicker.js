@@ -25,7 +25,7 @@ function AreaPicker({lang,version,wallet}){
       <div className={clazz}>
         <span className='left' onClick={() => siwtchZone('main')}>{lang['main-zone']}</span>
         <span className='middle' onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
-        <span className='right' onClick={() => siwtchZone('open')}>{lang['open-zone']}</span>
+        {wallet.supportOpen &&<span className='right' onClick={() => siwtchZone('open')}>{lang['open-zone']}</span>}
       </div>
     </div> 
     : null

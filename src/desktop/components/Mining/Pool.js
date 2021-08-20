@@ -5,6 +5,7 @@ import './pool.less'
 import './zh-pool.less'
 import { inject, observer } from 'mobx-react';
 import classNames from 'classnames';
+import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
 
 
 function Pool({lang,loading}){
@@ -35,6 +36,7 @@ function Pool({lang,loading}){
       </div>}
       {curTab === 'open' && <div className='pools open-pool'>
         {openPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        <PoolPlacehold lang={lang}></PoolPlacehold>
       </div>}
     </div>
   )

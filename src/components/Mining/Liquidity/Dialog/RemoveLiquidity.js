@@ -77,7 +77,7 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
           </div>
           <div className='modal-body'>          
             <div className='margin-box-info'>
-              <div> {version === 'v1' ? lang['shares-available'] : lang['liquidity-available']}</div>
+              <div> {version === 'v1' || version === 'v2_lite'  || version === 'v2_lite_open' ? lang['shares-available'] : lang['liquidity-available']}</div>
               <div className='money'>
                 <span>
                   <span className='bt-balance'>
@@ -91,12 +91,12 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                 <div className='input-margin'>
                   <div className='box'>
                     <div className='amount' style={{display : amount ? 'block' : 'none'}}>
-                      {version === 'v1' ? lang['liquidity-shares'] : lang['liquidity']}
+                      {version === 'v1' || version === 'v2_lite'  || version === 'v2_lite_open'  ? lang['liquidity-shares'] : lang['liquidity']}
                     </div>
                     <input
                       type='number'
                       className='margin-value'
-                      placeholder={version === 'v1' ? lang['liquidity-shares'] : lang['liquidity']}
+                      placeholder={version === 'v1' || version === 'v2_lite'  || version === 'v2_lite_open'  ? lang['liquidity-shares'] : lang['liquidity']}
                       value={amount}
                       onChange={onChange}
                     />

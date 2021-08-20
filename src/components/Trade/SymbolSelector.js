@@ -51,7 +51,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading}) {
 
 function SymbolDisplay({version,spec}){
   return (
-    (version.isV1 || version.isV2Lite) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
+    (version.isV1 || version.isV2Lite || version.isOpen) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
   )
 }
 export default inject('trading','version','loading')(observer(SymbolSelector))
