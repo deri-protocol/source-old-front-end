@@ -492,7 +492,7 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.deltaFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFunding0} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+      `\n${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.deltaFunding0} } * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-delta-tip')} = ${this.fundingRate.deltaFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.deltaFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
@@ -504,7 +504,7 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config && this.contract){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond } ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
-      `\n${Intl.get('lite','per-day')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFunding0} ) ${this.config.bTokenSymbol}`        
+      `\n${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFunding0} ) ${this.config.bTokenSymbol}`        
       } else {
         return `${Intl.get('lite','funding-rate-premium-tip')} = ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}` +
       `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFunding0} ${this.config.bTokenSymbol} ${Intl.get('lite','per-day')}`        
