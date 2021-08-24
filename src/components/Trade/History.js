@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from 'react'
+import React, { useState ,useEffect, version} from 'react'
 import { getTradeHistory,DeriEnv } from "../../lib/web3js/indexV2";
 import dateFormat from 'date-format'
 import NumberFormat from 'react-number-format';
@@ -26,7 +26,7 @@ function History({wallet ,trading,lang}){
         }
         const find = trading.config
         if(find){
-          item.baseTokenText = item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol
+          item.baseTokenText = item.baseToken ?  item.symbol ? ` ${item.symbol} / ${item.baseToken}` : ` ${find.symbol} / ${item.baseToken}` : item.symbol
         }
         return item;
       })
