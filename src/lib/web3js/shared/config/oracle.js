@@ -17,6 +17,7 @@ const offchainSymbolPairs = {
   IGAME: 'iGAME',
   ALICEUSDT: 'ALICEUSDT',
   SANDUSDT: 'SANDUSDT',
+  QUICKUSDT: 'QUICKUSDT',
 };
 
 export const isUsedRestOracle = (symbol) => {

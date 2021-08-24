@@ -332,6 +332,11 @@
               "symbolId": "2",
               "symbol": "SANDUSDT",
               "unit": "SAND"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "QUICKUSDT",
+              "unit": "QUICK"
             }
           ],
           "chainId": "137",
@@ -360,6 +365,11 @@
               "symbolId": "2",
               "symbol": "SANDUSDT",
               "unit": "SAND"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "QUICKUSDT",
+              "unit": "QUICK"
             }
           ],
           "chainId": "137",
@@ -383,6 +393,12 @@
           "chainId": "137",
           "symbol": "SANDUSDT",
           "address": "0x57A99b69E7dA118025fD5DC75ba2b0a17226Af39",
+          "decimal": "18"
+        },
+        {
+          "chainId": "137",
+          "symbol": "QUICKUSDT",
+          "address": "0xcbd7EA5220e6E01F71BfDc520893555C48ad63DC",
           "decimal": "18"
         },
         {
