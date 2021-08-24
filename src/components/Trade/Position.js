@@ -121,7 +121,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='info-left'>
           <div className='title-text'>{lang['position']}</div>
           <div className='info-num'>
-          <DeriNumberFormat value={trading.position.volume} allowZero={true} />
+            <DeriNumberFormat value={trading.position.volume} allowZero={true} />
           </div>
         </div>
         <div className='info-right'>
@@ -206,33 +206,13 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='info-right'></div>
       </div>
-
-      {type.isFuture && <>
-        <div className='info'>
-          <div className='info-left'>
-            <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
-            <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
-          </div>
-          <div className='info-right'></div>
+      <div className='info'>
+        <div className='info-left'>
+          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
         </div>
-      </>}
-      {type.isOption && <>
-        <div className='info'>
-          <div className='info-left'>
-            <div className='title-text funding-fee' title={lang['funding-fee-tip']}>{lang['funding-rate-p']}</div>
-            <div className='info-num'><DeriNumberFormat decimalScale={4} value={-(trading.position.premiumFundingAccrued)} /></div>
-          </div>
-          <div className='info-right'></div>
-        </div>
-        <div className='info'>
-          <div className='info-left'>
-            <div className='title-text funding-fee' title={lang['funding-fee-tip']}>{lang['funding-rate-d']}</div>
-            <div className='info-num'><DeriNumberFormat decimalScale={4} value={(-(trading.position.deltaFundingAccrued))} /></div>
-          </div>
-          <div className='info-right'></div>
-        </div>
-
-      </>}
+        <div className='info-right'></div>
+      </div>
       <div className='info'>
         <div className='info-left'>
           <div className='title-text'>{lang['liquidation-price']}</div>
@@ -278,7 +258,7 @@ function Position({ wallet, trading, version, lang, type }) {
   )
 }
 
-function LiqPrice({ trading, wallet,lang }) {
+function LiqPrice({ trading, wallet, lang }) {
 
   const [element, setElement] = useState(<span></span>);
 
@@ -289,58 +269,58 @@ function LiqPrice({ trading, wallet,lang }) {
         if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
             <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
-              <span> / </span> 
-              <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
           </span>
-        } else if(!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+        } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
             <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-            <span> / </span> 
+            <span> / </span>
             <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
           </span>
-        }else if(!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2){
+        } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
             <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-            <span> / </span> 
+            <span> / </span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
           </span>
-        }else if(trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+        } else if (trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
-            <span> / </span> 
+            <span> / </span>
             <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
           </span>
         }
-      }else{
+      } else {
         if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
             <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
-              <span> / </span> 
-              <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
           </span>
-        } else if(!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+        } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
             <span > -- </span>
-            <span> / </span> 
+            <span> / </span>
             <span > -- </span>
           </span>
-        }else if(!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2){
+        } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
             <span > -- </span>
-            <span> / </span> 
+            <span> / </span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
           </span>
-        }else if(trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2){
+        } else if (trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
-            <span> / </span> 
+            <span> / </span>
             <span > -- </span>
           </span>
         }
       }
       setElement(ele)
     }
-    
+
 
   }, [trading.position, wallet.detail])
 

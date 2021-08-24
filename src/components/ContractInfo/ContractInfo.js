@@ -75,12 +75,12 @@ function ContractInfo({ wallet, trading, lang, type }) {
               {trading.contract.multiplier} {trading.config ? trading.config.unit:''}
             </div>
           </div>
-          <div className="info">
+          {/* <div className="info">
             <div className="title ">{lang['delta-funding-coefficient']}</div>
             <div className="text">
               {trading.contract.deltaFundingCoefficient}
             </div>
-          </div>
+          </div> */}
           <div className="info">
             <div className="title"> <span title={trading.initialMarginRatioTip} className='margin-per'>{lang['initial-margin-ratio']}</span> </div>
             <div className="text">

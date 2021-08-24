@@ -125,6 +125,7 @@
   "funding-rate-delta-tip":"Delta Funding Fee",
   "funding-rate-premium-tip":"Premium Funding Fee",
   "funding-rate-per-block":"Finanzierungsrate (pro block)",
+  "funding-rate-per-second":"Finanzierungsrate (per second)",
   "1-long-contract-pays-1-short-contract" : "1 long-Kontrakt zahlt 1 Short-Kontrakt",
   "index-price-camelize" : "Indexpreis",
   "per-block" : "pro block",

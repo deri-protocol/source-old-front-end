@@ -71,10 +71,10 @@ function Position({ wallet, trading, version, lang, type }) {
     }
   }
 
-  const onClosePosition = async (symbolId,volume,index) => {
+  const onClosePosition = async (symbolId, volume, index) => {
     setClosing(true)
     setClosingIndex(index)
-    const res = await closePosition(wallet.detail.chainId, trading.config.pool, wallet.detail.account, symbolId).finally(() => {setClosing(false);setClosingIndex(null)})
+    const res = await closePosition(wallet.detail.chainId, trading.config.pool, wallet.detail.account, symbolId).finally(() => { setClosing(false); setClosingIndex(null) })
     if (res.success) {
       refreshBalance();
     } else {
@@ -119,20 +119,20 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='dyn-eff-bal'>
           {lang['dynamic-effective-balance']} : &nbsp;
           <span>
-          <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
-          {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
-            <span
-              className='open-add'
-              id='openAddMargin'
-              onClick={() => setAddModalIsOpen(true)}
-            >
-              <img src={removeMarginIcon} alt='add margin' />
-            </span>
-            <span className='open-remove'
-              onClick={() => setRemoveModalIsOpen(true)}>
-              <img src={addMarginIcon} alt='add margin' />
-            </span>
-          </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)}
+            <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
+            {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
+              <span
+                className='open-add'
+                id='openAddMargin'
+                onClick={() => setAddModalIsOpen(true)}
+              >
+                <img src={removeMarginIcon} alt='add margin' />
+              </span>
+              <span className='open-remove'
+                onClick={() => setRemoveModalIsOpen(true)}>
+                <img src={addMarginIcon} alt='add margin' />
+              </span>
+            </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)}
           </span>
         </div>
         <div className='liquidation-price'>
@@ -148,17 +148,11 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='direction'>{lang['direction']}</div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        {type.isFuture && <>
-          <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
-        </>}
-        {type.isOption && <>
-          <div className='funding-posi'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-p']}</span></div>
-          <div className='funding-pos'><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-rate-d']}</span></div>
-        </>}
+        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
         <div className='position'>
           {lang['close-position']}
         </div>
-        
+
       </div>
       {positions.map((pos, index) => {
         return (
@@ -169,23 +163,17 @@ function Position({ wallet, trading, version, lang, type }) {
             </div>
             <div className='ave-entry-price'><DeriNumberFormat value={pos.averageEntryPrice} decimalScale={2} /></div>
             <div className={pos.direction}>{lang[pos.direction.toLowerCase()] || pos.direction}</div>
-           
+
             <div className='margin'><DeriNumberFormat value={pos.marginHeldBySymbol} decimalScale={2} /></div>
             <div className='pnl'>
               <span className='pnl-list unrealized-pnl'>
                 <DeriNumberFormat value={pos.unrealizedPnl} decimalScale={6} />
               </span>
             </div>
-            {type.isFuture && <>
-              <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>
-            </>}
-            {type.isOption && <>
-              <div className='funding-posi'><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>
-              <div className='funding-pos'><DeriNumberFormat value={(-(pos.deltaFundingAccrued))} decimalScale={8} /></div>
-            </>}
+            <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>
             <div className='position'>
               <span className='close-position'>
-              <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId,pos.volume,index) }} title={lang['close-is-position']} />
+                <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
                 <span
                   className='spinner spinner-border spinner-border-sm'
                   role='status'
@@ -237,120 +225,120 @@ function Position({ wallet, trading, version, lang, type }) {
 }
 
 
-function LiqPrice({wallet,trading,lang}){
-  const [element ,setElement] = useState(<span></span>)
-  
-  const liqText = (positions)=>{
+function LiqPrice({ wallet, trading, lang }) {
+  const [element, setElement] = useState(<span></span>)
+
+  const liqText = (positions) => {
     let ele = <span>--</span>;
     if (positions.numPositions > 1) {
       if (positions.price1 && positions.price2) {
         ele = <span>
-        <span>{positions.underlier}: </span> 
-        <span>
-          <DeriNumberFormat decimalScale={2} value={positions.price1} />
-          <span> / </span> 
-          <DeriNumberFormat decimalScale={2} value={positions.price2} />
-        </span>
-        &nbsp;
-        </span>
-      } else if(!positions.price1 && !positions.price2){
-        ele =<span>
-        <span>{positions.underlier}: </span> 
-        <span>
-          <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-          <span> / </span> 
-          <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-        </span>
-        &nbsp;
-        </span>
-      }else if(!positions.price1 && positions.price2){
-        ele = 
-        <span>
           <span>{positions.underlier}: </span>
           <span>
-          <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-          <span> / </span> 
-          <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
-        </span>
+            <DeriNumberFormat decimalScale={2} value={positions.price1} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={positions.price2} />
+          </span>
         &nbsp;
         </span>
-      }else if(positions.price1 && !positions.price2){
+      } else if (!positions.price1 && !positions.price2) {
         ele = <span>
           <span>{positions.underlier}: </span>
           <span>
-          <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
-          <span> / </span> 
-          <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
-        </span>
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <span> / </span>
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+          </span>
         &nbsp;
-        </span> 
+        </span>
+      } else if (!positions.price1 && positions.price2) {
+        ele =
+          <span>
+            <span>{positions.underlier}: </span>
+            <span>
+              <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+              <span> / </span>
+              <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
+            </span>
+        &nbsp;
+        </span>
+      } else if (positions.price1 && !positions.price2) {
+        ele = <span>
+          <span>{positions.underlier}: </span>
+          <span>
+            <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
+            <span> / </span>
+            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+          </span>
+        &nbsp;
+        </span>
       }
       return ele
-    }else{
+    } else {
       if (positions.price1 && positions.price2) {
         ele = <span>
-        <span>{positions.underlier}: </span> 
-        <span>
-          <DeriNumberFormat decimalScale={2} value={positions.price1} />
-            <span> / </span> 
-          <DeriNumberFormat decimalScale={2} value={positions.price2} />
-        </span>
-        &nbsp;
-        </span>
-      } else if(!positions.price1 && !positions.price2){
-        ele =<span>
-        <span>{positions.underlier}: </span> 
-        <span>
-          <span > -- </span>
-          <span> / </span> 
-          <span > -- </span>
-        </span>
-        &nbsp;
-        </span>
-      }else if(!positions.price1 && positions.price2){
-        ele = 
-        <span>
           <span>{positions.underlier}: </span>
           <span>
-          <span > -- </span>
-          <span> / </span> 
-          <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
-        </span>
+            <DeriNumberFormat decimalScale={2} value={positions.price1} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={positions.price2} />
+          </span>
         &nbsp;
         </span>
-       
-      }else if(positions.price1 && !positions.price2){
+      } else if (!positions.price1 && !positions.price2) {
         ele = <span>
           <span>{positions.underlier}: </span>
           <span>
-          <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
-          <span> / </span> 
-          <span > -- </span>
-        </span>
+            <span > -- </span>
+            <span> / </span>
+            <span > -- </span>
+          </span>
         &nbsp;
-        </span> 
+        </span>
+      } else if (!positions.price1 && positions.price2) {
+        ele =
+          <span>
+            <span>{positions.underlier}: </span>
+            <span>
+              <span > -- </span>
+              <span> / </span>
+              <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
+            </span>
+        &nbsp;
+        </span>
+
+      } else if (positions.price1 && !positions.price2) {
+        ele = <span>
+          <span>{positions.underlier}: </span>
+          <span>
+            <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
+            <span> / </span>
+            <span > -- </span>
+          </span>
+        &nbsp;
+        </span>
       }
       return ele
     }
   }
 
-  useEffect(()=>{
-    if(wallet.isConnected() && trading.positions){
-      if(trading.positions.length){
-        if(trading.positions[0].liquidationPrice){
-          let elem =trading.positions[0].liquidationPrice.map(item=>{
+  useEffect(() => {
+    if (wallet.isConnected() && trading.positions) {
+      if (trading.positions.length) {
+        if (trading.positions[0].liquidationPrice) {
+          let elem = trading.positions[0].liquidationPrice.map(item => {
             let ele = liqText(item)
             return ele
-          }) 
+          })
           setElement(elem)
         }
       }
     }
-  },[wallet,trading.positions])
+  }, [wallet, trading.positions])
 
   return (
     <span>
-    {element}
+      {element}
     </span>
   )
 }
