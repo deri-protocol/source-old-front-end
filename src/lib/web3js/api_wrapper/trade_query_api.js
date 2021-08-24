@@ -1,35 +1,33 @@
+import { getPoolVersion, isDeriUnlocked } from '../shared';
 import {
-  getPositionInfo as getPositionInfo2,
-  isUnlocked as isUnlocked2,
-  isDeriUnlocked,
-  getEstimatedMargin as getEstimatedMargin2,
-  getEstimatedFee as getEstimatedFee2,
-  getEstimatedFundingRate as getEstimatedFundingRate2,
-  getEstimatedLiquidityUsed as getEstimatedLiquidityUsed2,
-  getWalletBalance as getWalletBalance2,
-} from '../api/contractQueryApi'
-
-import {
+  getPositionInfo2,
+  isUnlocked2,
+  getEstimatedMargin2,
+  getEstimatedFee2,
+  getEstimatedFundingRate2,
+  getEstimatedLiquidityUsed2,
+  getWalletBalance2,
   getSpecification2,
   getFundingRate2,
   getLiquidityUsed2,
   getFundingRateCache2,
-} from '../api/restApi'
-//import { bTokenFactory } from '../factory/contracts'
+} from '../v1/api';
 
 import {
-  getPositionInfo as getPositionInfoV2,
-  isUnlocked as isUnlockedV2,
-  getEstimatedMargin as getEstimatedMarginV2,
-  getEstimatedFee as getEstimatedFeeV2,
-  getEstimatedFundingRate as getEstimatedFundingRateV2,
-  getEstimatedLiquidityUsed as getEstimatedLiquidityUsedV2,
-  getSpecification as getSpecificationV2,
-  getWalletBalance as getWalletBalanceV2,
-  getFundingRate as getFundingRateV2,
-  getLiquidityUsed as getLiquidityUsedV2,
-  getFundingRateCache as getFundingRateCacheV2,
+  getPositionInfoV2,
+  isUnlockedV2,
+  getEstimatedMarginV2,
+  getEstimatedFeeV2,
+  getEstimatedFundingRateV2,
+  getEstimatedLiquidityUsedV2,
+  getSpecificationV2,
+  getWalletBalanceV2,
+  getFundingRateV2,
+  getLiquidityUsedV2,
+  getFundingRateCacheV2,
+} from '../v2/api';
 
+import {
   getPositionInfoV2l,
   isUnlockedV2l,
   getEstimatedMarginV2l,
@@ -41,133 +39,167 @@ import {
   getFundingRateV2l,
   getLiquidityUsedV2l,
   getFundingRateCacheV2l,
+} from '../v2_lite/api';
 
-  getPoolVersion,
-} from '../v2'
+export const getSpecification = async (chainId, poolAddress, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getSpecificationV2l(chainId, poolAddress, symbolId);
+  }
+  if (symbolId === undefined) {
+    return getSpecification2(chainId, poolAddress);
+  } else {
+    return getSpecificationV2(chainId, poolAddress, symbolId);
+  }
+};
 
-
-export const getSpecification = async (
+export const getPositionInfo = async (
   chainId,
   poolAddress,
-  symbolId,
+  accountAddress,
+  symbolId
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getSpecificationV2l(chainId, poolAddress, symbolId)
+    return getPositionInfoV2l(chainId, poolAddress, accountAddress, symbolId);
   }
   if (symbolId === undefined) {
-    return getSpecification2(chainId, poolAddress)
+    return getPositionInfo2(chainId, poolAddress, accountAddress);
   } else {
-    return getSpecificationV2(chainId, poolAddress, symbolId)
+    return getPositionInfoV2(chainId, poolAddress, accountAddress, symbolId);
   }
-}
-
-export const getPositionInfo = async (chainId, poolAddress, accountAddress, symbolId) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getPositionInfoV2l(chainId, poolAddress, accountAddress, symbolId)
-  }
-  if (symbolId === undefined) {
-    return getPositionInfo2(chainId, poolAddress, accountAddress)
-  } else {
-    return getPositionInfoV2(chainId, poolAddress, accountAddress, symbolId)
-  }
-}
+};
 export const getWalletBalance = async (
   chainId,
   poolAddress,
   accountAddress,
-  bTokenId,
+  bTokenId
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getWalletBalanceV2l(chainId, poolAddress, accountAddress)
+    return getWalletBalanceV2l(chainId, poolAddress, accountAddress);
   }
   if (bTokenId === undefined) {
-    return getWalletBalance2(chainId, poolAddress, accountAddress)
+    return getWalletBalance2(chainId, poolAddress, accountAddress);
   } else {
-    return getWalletBalanceV2(chainId, poolAddress, accountAddress, bTokenId)
+    return getWalletBalanceV2(chainId, poolAddress, accountAddress, bTokenId);
   }
-}
+};
 
-export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => { 
+export const isUnlocked = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  bTokenId
+) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return isUnlockedV2l(chainId, poolAddress, accountAddress)
+    return isUnlockedV2l(chainId, poolAddress, accountAddress);
   }
   if (accountAddress === undefined) {
-    return isDeriUnlocked(chainId, poolAddress)
+    return isDeriUnlocked(chainId, poolAddress);
   } else if (bTokenId === undefined) {
-    return isUnlocked2(chainId, poolAddress, accountAddress)
+    return isUnlocked2(chainId, poolAddress, accountAddress);
   } else {
-    return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId)
+    return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId);
   }
-}
+};
 
-export const getEstimatedFee = async (chainId, poolAddress, volume, symbolId) => {
+export const getEstimatedFee = async (
+  chainId,
+  poolAddress,
+  volume,
+  symbolId
+) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getEstimatedFeeV2l(chainId, poolAddress, volume, symbolId)
+    return getEstimatedFeeV2l(chainId, poolAddress, volume, symbolId);
   }
   if (symbolId === undefined) {
-    return getEstimatedFee2(chainId, poolAddress, volume)
+    return getEstimatedFee2(chainId, poolAddress, volume);
   } else {
-    return getEstimatedFeeV2(chainId, poolAddress, volume, symbolId)
+    return getEstimatedFeeV2(chainId, poolAddress, volume, symbolId);
   }
-}
+};
 
-export const getEstimatedMargin = async(
+export const getEstimatedMargin = async (
   chainId,
   poolAddress,
   accountAddress,
   volume,
   leverage,
-  symbolId,
+  symbolId
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getEstimatedMarginV2l(chainId, poolAddress, accountAddress, volume, leverage, symbolId)
+    return getEstimatedMarginV2l(
+      chainId,
+      poolAddress,
+      accountAddress,
+      volume,
+      leverage,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
-    return getEstimatedMargin2(chainId, poolAddress, accountAddress, volume, leverage)
+    return getEstimatedMargin2(
+      chainId,
+      poolAddress,
+      accountAddress,
+      volume,
+      leverage
+    );
   } else {
-    return getEstimatedMarginV2(chainId, poolAddress, accountAddress, volume, leverage, symbolId)
+    return getEstimatedMarginV2(
+      chainId,
+      poolAddress,
+      accountAddress,
+      volume,
+      leverage,
+      symbolId
+    );
   }
-}
+};
 
 export const getFundingRate = async (chainId, poolAddress, symbolId) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getFundingRateV2l(chainId, poolAddress, symbolId)
+    return getFundingRateV2l(chainId, poolAddress, symbolId);
   }
   if (symbolId === undefined) {
-    return getFundingRate2(chainId, poolAddress)
+    return getFundingRate2(chainId, poolAddress);
   } else {
-    return getFundingRateV2(chainId, poolAddress, symbolId)
+    return getFundingRateV2(chainId, poolAddress, symbolId);
   }
-}
+};
 
 export const getEstimatedFundingRate = async (
   chainId,
   poolAddress,
   newNetVolume,
-  symbolId,
-) => {
-  if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getEstimatedFundingRateV2l(chainId, poolAddress, newNetVolume, symbolId)
-  }
-  if (symbolId === undefined) {
-    return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume)
-  } else {
-    return getEstimatedFundingRateV2(chainId, poolAddress, newNetVolume, symbolId)
-  }
-}
-
-export const getLiquidityUsed = async (
-  chainId,
-  poolAddress,
   symbolId
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getLiquidityUsedV2l(chainId, poolAddress, symbolId)
+    return getEstimatedFundingRateV2l(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
-    return getLiquidityUsed2(chainId, poolAddress)
+    return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume);
   } else {
-    return getLiquidityUsedV2(chainId, poolAddress, symbolId)
+    return getEstimatedFundingRateV2(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
+  }
+};
+
+export const getLiquidityUsed = async (chainId, poolAddress, symbolId) => {
+  if (getPoolVersion(poolAddress) === 'v2_lite') {
+    return getLiquidityUsedV2l(chainId, poolAddress, symbolId);
+  }
+  if (symbolId === undefined) {
+    return getLiquidityUsed2(chainId, poolAddress);
+  } else {
+    return getLiquidityUsedV2(chainId, poolAddress, symbolId);
   }
 };
 
@@ -175,25 +207,35 @@ export const getEstimatedLiquidityUsed = async (
   chainId,
   poolAddress,
   newNetVolume,
-  symbolId,
+  symbolId
 ) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
-    return getEstimatedLiquidityUsedV2l(chainId, poolAddress, newNetVolume, symbolId)
+    return getEstimatedLiquidityUsedV2l(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
-    return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume)
+    return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume);
   } else {
-    return getEstimatedLiquidityUsedV2(chainId, poolAddress, newNetVolume, symbolId)
+    return getEstimatedLiquidityUsedV2(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
   }
-}
+};
 
-export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
+export const getFundingRateCache = async (chainId, poolAddress, symbolId) => {
   if (getPoolVersion(poolAddress) === 'v2_lite') {
     return getFundingRateCacheV2l(chainId, poolAddress, symbolId);
   }
   if (symbolId === undefined) {
-    return getFundingRateCache2(chainId, poolAddress)
+    return getFundingRateCache2(chainId, poolAddress);
   } else {
-    return getFundingRateCacheV2(chainId, poolAddress, symbolId)
+    return getFundingRateCacheV2(chainId, poolAddress, symbolId);
   }
-}
+};

@@ -1,4 +1,4 @@
-import { bg, max } from '../utils';
+import { bg, max } from '../../shared/utils';
 
 export const calculateEntryPrice = (volume, cost, multiplier) =>
   volume.eq(0) ? bg(0) : cost.div(volume).div(multiplier);

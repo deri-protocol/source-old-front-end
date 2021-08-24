@@ -5,7 +5,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { bg } from '../../../utils/utils';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance,nested,lang}){
+export default function WithdrawMagin({wallet,spec =  {},position,onClose,afterWithdraw,availableBalance,nested,lang}){
   const [available, setAvailable] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');
@@ -110,7 +110,7 @@ export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWi
                 </div>
                 <div>{ spec.baseToken }</div>
               </div>
-              {(+position.volume) === 0 && <div className='max'>
+              {(+position.marginHeld) === 0 && <div className='max'>
                 {lang['max']}: <span className='max-num'>{ available ? available : position.margin }</span>
                 <span className='max-btn-left' onClick={removeAll}>{lang['remove-all']}</span>
               </div>}

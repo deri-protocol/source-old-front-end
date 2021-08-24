@@ -1,4 +1,4 @@
-import { bg, getDailyBlockNumber, validateArgs } from '../utils';
+import { bg, getDailyBlockNumber, validateArgs } from '../../shared/utils';
 
 export const calculateLiquidityUsed = (
   tradersNetVolume,

@@ -1,14 +1,20 @@
-import { getLiquidityInfo2 } from '../api/restApi';
-import { getPoolLiquidity as getPoolLiquidity2, getPoolInfoApy as getPoolInfoApy2 } from '../api/databaseApi';
-import { 
-  getLiquidityInfo as getLiquidityInfoV2,
-  getPoolLiquidity as getPoolLiquidityV2,
-  getPoolInfoApy as getPoolInfoApyV2,
+//import { getLiquidityInfo2 } from '../v1/api/rest_api';
+import { getPoolVersion } from '../shared';
+import { getLiquidityInfo2 } from '../v1/api';
+import {
+  getPoolLiquidity as getPoolLiquidity2,
+  getPoolInfoApy as getPoolInfoApy2,
+} from '../shared/api/database_api';
+import {
+  getLiquidityInfoV2,
+  getPoolLiquidityV2,
+  getPoolInfoApyV2,
+} from '../v2/api';
+import {
   getLiquidityInfoV2l,
   getPoolLiquidityV2l,
   getPoolInfoApyV2l,
-  getPoolVersion,
- } from '../v2';
+} from '../v2_lite/api';
 
 export const getLiquidityInfo = async (
   chainId,
