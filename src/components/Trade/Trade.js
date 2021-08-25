@@ -504,12 +504,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                   <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
                 </div>
               </div>
-              <div className='text-info'>
-                <div className='title-enter'>{lang['funding-rate-delta-impact']}</div>
-                <div className='text-enter'>
-                  <DeriNumberFormat value={trading.fundingRate.deltaFunding0} decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} />
-                </div>
-              </div>
+              
             </>}
             <div className='text-info'>
               <div className='title-enter'>{lang['transaction-fee']}</div>
