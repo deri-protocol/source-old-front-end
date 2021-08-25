@@ -26,7 +26,8 @@ function History({wallet ,trading,lang}){
         }
         const find = trading.config
         if(find){
-          item.baseTokenText = item.baseToken ?  item.symbol ? ` ${item.symbol} / ${item.baseToken}` : ` ${find.symbol} / ${item.baseToken}` : item.symbol
+          item.symbol = item.symbol ? item.symbol : find.symbol
+          item.baseTokenText = item.baseToken ?  ` ${item.symbol} / ${item.baseToken}` : item.symbol
         }
         return item;
       })
