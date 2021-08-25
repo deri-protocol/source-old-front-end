@@ -37,10 +37,10 @@ describe('EverlastingOption', () => {
     expect(res).toEqual(
       expect.objectContaining({
         bTokenAddress: '0x2ebE70929bC7D930248040f54135dA12f458690C',
-        lTokenAddress: '0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C',
+        lTokenAddress: '0x4F69fbc5cdca63818988eA0d2069cff8A06e783a',
         liquidatorQualifierAddress:
           '0x0000000000000000000000000000000000000000',
-        pTokenAddress: '0x7484e22022C971e314A00e0dfbfCDe8E223c80aC',
+        pTokenAddress: '0x67eBB9e3dcd1982E6B0D09b398fA9d7FA1852EEb',
         protocolFeeCollector: '0x4aF582Fd437f997F08df645aB6b0c070CC791DeE',
       })
     );
@@ -51,11 +51,11 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('OptionPricer', async() => {
     const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0x2D346A85299d812C0c0e97B23CD1ff0F37b606Ab')
+    expect(res).toEqual('0x01Be69975Bba27b6D4d4be750aB3B0DEF8ace805')
   }, TIMEOUT)
   it('PmmPricer', async() => {
     const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0x1D7AFF20BB5E52dDD10d5B4B0e0b91b5327Ae826')
+    expect(res).toEqual('0x353Ec542F02AF324023C552a31B1083C8359238B')
   }, TIMEOUT)
   it('_T', async() => {
     const res = await everlastingOption._T()
@@ -65,22 +65,20 @@ describe('EverlastingOption', () => {
     'getSymbol',
     async () => {
       const res = await everlastingOption.getSymbol('0');
+      //expect(res).toHaveProperty('', '')
       expect(res).toEqual(
         expect.objectContaining({
-          K: '0.9',
-          cumulativeDeltaFundingRate: expect.any(String),
+          alpha: '0.01',
           cumulativePremiumFundingRate: expect.any(String),
-          diseqFundingCoefficient: '0.000001',
           feeRatio: '0.005',
-          intrinsicValue: expect.any(String),
+          intrinsicPrice: expect.any(String),
           isCall: true,
           multiplier: '0.01',
           oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
-          quote_balance_offset: expect.any(String),
+          pmmPrice:  expect.any(String),
           strikePrice: '20000',
           symbol: 'BTCUSD-20000-C',
           symbolId: '0',
-          timeValue:  expect.any(String),
           tradersNetCost: expect.any(String),
           tradersNetVolume: expect.any(String),
           volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',

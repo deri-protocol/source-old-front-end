@@ -37,8 +37,7 @@ export class PTokenOption extends ContractBase {
     return {
       volume: fromWei(res[0]),
       cost: fromWei(res[1]),
-      lastCumulativeDeltaFundingRate: fromWei(res[2]),
-      lastCumulativePremiumFundingRate: fromWei(res[3]),
+      lastCumulativePremiumFundingRate: fromWei(res[2]),
     };
  }
   async getTokenId(owner) {

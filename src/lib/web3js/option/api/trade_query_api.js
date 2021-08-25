@@ -13,12 +13,12 @@ import {
   getPriceFromRest,
   getOracleVolatilitiesForOption,
 } from '../../shared/utils/oracle';
-import { queryTradePMM } from '../calculation/PMM';
+import { queryTradePMM } from '../calculation/PMM2';
 import {
   dynamicInitialMarginRatio,
   dynamicInitialPoolMarginRatio,
   getAverageEntryPrice,
-  getdeltaFundingPerSecond,
+  //getDeltaFundingPerSecond,
   getIntrinsicPrice,
   getLiquidationPrice,
   getLiquidationPrices,
@@ -61,7 +61,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
       const { symbolState } = state;
       const symbolIndex = symbolState.findIndex((s) => s.symbolId === symbolId);
       const symbolInfo = symbolState[symbolIndex];
-      const { dynamicMarginRatio, deltaFundingCoefficient, isCall } =
+      const { dynamicMarginRatio, isCall } =
         symbolInfo;
       const { symbol, multiplier, feeRatio } = symbolInfo2;
       const {
@@ -90,7 +90,6 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
         maxLiquidationReward: maxLiquidationReward.toString(),
         liquidationCutRatio: liquidationCutRatio.toString(),
         protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
-        deltaFundingCoefficient: deltaFundingCoefficient.toString(),
         isCall: isCall,
       };
     },
@@ -185,7 +184,6 @@ export const getPositionInfo = async (
         unrealizedPnlList: symbolState
           .filter((s, index) => positionState[index].pnl !== '0')
           .map((s) => [s.symbol, positionState[symbolState.findIndex((oS) => oS.symbolId === s.symbolId)].pnl]),
-        deltaFundingAccrued: positionState[symbolIndex].deltaFundingAccrued,
         premiumFundingAccrued: positionState[symbolIndex].premiumFundingAccrued,
         isCall: symbol.isCall,
         volatility: bg(volPrice).times(100).toString(),
@@ -205,7 +203,6 @@ export const getPositionInfo = async (
       marginHeldBySymbol: '',
       unrealizedPnl: '',
       unrealizedPnlList: [],
-      deltaFundingAccrued: '',
       premiumFundingAccrued: '',
       liquidationPrice: '',
       volatility: '',
@@ -282,7 +279,6 @@ export const getPositionInfos = async (
               initialMarginRatio
             ).toString(),
             unrealizedPnl: positionState[vIndex].pnl,
-            deltaFundingAccrued: positionState[vIndex].deltaFundingAccrued,
             premiumFundingAccrued: positionState[vIndex].premiumFundingAccrued,
             isCall: s.isCall,
             volatility: deriToNatural(volPrices[vIndex]).times(100).toString(),
@@ -405,13 +401,6 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
     totalDynamicEquity,
     prices,
     liquidityUsed: liquidityUsedInAmount.div(liquidity),
-    deltaFunding: bg(symbolInfo.deltaFundingPerSecond)
-      .div(symbolInfo.multiplier)
-      .times(SECONDS_IN_A_DAY)
-      .toString(),
-    deltaFundingPerSecond: bg(symbolInfo.deltaFundingPerSecond).div(
-      symbolInfo.multiplier
-    ),
     premiumFunding: bg(symbolInfo.premiumFundingPerSecond)
       .div(symbolInfo.multiplier)
       .times(SECONDS_IN_A_DAY)
@@ -514,10 +503,8 @@ export const getFundingRate = async (chainId, poolAddress, symbolId) => {
         );
       }
       return {
-        deltaFunding0: bg(res.deltaFunding).toString(),
-        deltaFundingPerSecond: res.deltaFundingPerSecond,
         premiumFunding0: bg(res.premiumFunding).toString(),
-        premiumFundingPerSecond: res.premiumFundingPerSecond,
+        premiumFundingPerSecond: res.premiumFundingPerSecond.toString(),
         liquidity: res.liquidity.toString(),
         volume: '-',
         tradersNetVolume: res.symbols[curSymbolIndex].tradersNetVolume,
@@ -526,8 +513,6 @@ export const getFundingRate = async (chainId, poolAddress, symbolId) => {
     args,
     'getFundingRate',
     {
-      deltaFunding0: '',
-      deltaFundingPerSecond: '',
       premiumFunding0: '',
       premiumFundingPerSecond: '',
       liquidity: '',
@@ -546,42 +531,40 @@ export const getEstimatedFundingRate = async (
   const args = [chainId, poolAddress, newNetVolume, symbolId];
   return catchApiError(
     async (chainId, poolAddress, newNetVolume, symbolId) => {
-      let res = fundingRateCache.get(chainId, poolAddress, symbolId);
-      if (!res) {
-        res = await _getFundingRate(chainId, poolAddress, symbolId);
-        fundingRateCache.set(chainId, poolAddress, symbolId, res);
-      }
-      const { symbolIds, symbols, prices, totalDynamicEquity } = res;
-      const curSymbolIndex = symbolIds.indexOf(symbolId);
-      if (curSymbolIndex < 0) {
-        throw new Error(
-          `getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`
-        );
-      }
-      let symbol = symbols[curSymbolIndex];
-      //console.log('symbol.tradersNetVolume0', symbol.tradersNetVolume)
-      //symbol.tradersNetVolume = bg(symbol.tradersNetVolume).plus(newNetVolume).toString()
-      //console.log('symbol.tradersNetVolume1', symbol.tradersNetVolume)
-      const deltaFunding1 = getdeltaFundingPerSecond(
-        symbol,
-        symbol.delta,
-        prices[curSymbolIndex],
-        totalDynamicEquity,
-        newNetVolume
-      );
+      // let res = fundingRateCache.get(chainId, poolAddress, symbolId);
+      // if (!res) {
+      //   res = await _getFundingRate(chainId, poolAddress, symbolId);
+      //   fundingRateCache.set(chainId, poolAddress, symbolId, res);
+      // }
+      // const { symbolIds, symbols, prices, totalDynamicEquity } = res;
+      // const curSymbolIndex = symbolIds.indexOf(symbolId);
+      // if (curSymbolIndex < 0) {
+      //   throw new Error(
+      //     `getEstimatedFee(): invalid symbolId(${symbolId}) for pool(${poolAddress})`
+      //   );
+      // }
+      // let symbol = symbols[curSymbolIndex];
+      // //console.log('symbol.tradersNetVolume0', symbol.tradersNetVolume)
+      // //symbol.tradersNetVolume = bg(symbol.tradersNetVolume).plus(newNetVolume).toString()
+      // //console.log('symbol.tradersNetVolume1', symbol.tradersNetVolume)
+      // const deltaFunding1 = getdeltaFundingPerSecond(
+      //   symbol,
+      //   symbol.delta,
+      //   prices[curSymbolIndex],
+      //   totalDynamicEquity,
+      //   newNetVolume
+      // );
 
       return {
-        deltaFunding1: bg(deltaFunding1)
-          .div(symbol.multiplier)
-          .times(SECONDS_IN_A_DAY)
-          .toString(),
+        // deltaFunding1: bg(deltaFunding1)
+        //   .div(symbol.multiplier)
+        //   .times(SECONDS_IN_A_DAY)
+        //   .toString(),
       };
     },
     args,
     'getEstimatedFundingRate',
     {
-      deltaFunding1: '',
-      premiumFunding1: '',
     }
   );
 };
@@ -694,26 +677,27 @@ export const getEstimatedTimePrice = (
       );
       const { poolState, symbolState } = state;
 
-      const { liquidity } = poolState;
+      //const { liquidity } = poolState;
       const index = symbolState.findIndex((s) => s.symbolId === symbolId);
       if (index > -1) {
         const {
           tradersNetVolume,
           multiplier,
-          quoteBalanceOffset,
-          timePrice,
+          intrinsicValue,
+          timeValue,
           K,
         } = symbolState[index];
         //console.log(tradersNetVolume, multiplier, liquidity, quoteBalanceOffset, timePrice, K)
-        const res = queryTradePMM(
-          bg(timePrice).toNumber(),
+        const args = [
           bg(tradersNetVolume).times(multiplier).toNumber(),
+          bg(intrinsicValue).plus(timeValue).toNumber(),
+          bg(K).toNumber(),
           bg(newNetVolume).times(multiplier).toNumber(),
-          bg(liquidity).plus(quoteBalanceOffset).toNumber(),
-          bg(K).toNumber()
-        );
+        ]
+
+        const res = queryTradePMM(...args);
         //console.log('res', res)
-        return res[1];
+        return bg(res).div(newNetVolume).div(multiplier).toString();
       } else {
         console.log(
           `invalid symbolId(${symbolId}) for the pool(${poolAddress})`

@@ -25,23 +25,23 @@ export class EverlastingOptionViewer extends ContractBase {
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
         'multiplier',
-        'deltaFundingCoefficient',
+        //'deltaFundingCoefficient',
         'strikePrice',
-        'oraclePrice',
+        'underlierPrice',
         'timePrice',
         'dynamicMarginRatio',
         'intrinsicValue',
         'timeValue',
         'delta',
         'K',
-        'quoteBalanceOffset',
+        //'quoteBalanceOffset',
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
-        'oracleVolatility',
+        'underlierVolatility',
       ]);
       return acc.concat([symbol])
     }, [])
@@ -68,23 +68,23 @@ export class EverlastingOptionViewer extends ContractBase {
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
         'multiplier',
-        'deltaFundingCoefficient',
+        //'deltaFundingCoefficient',
         'strikePrice',
-        'oraclePrice',
+        'underlierPrice',
         'timePrice',
         'dynamicMarginRatio',
         'intrinsicValue',
         'timeValue',
         'delta',
         'K',
-        'quoteBalanceOffset',
+        //'quoteBalanceOffset',
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
-        'oracleVolatility',
+        'underlierVolatility',
       ]);
       return acc.concat([symbol])
     }, [])

@@ -124,8 +124,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       const volume = (direction === 'long' ? num : -num)
       const markPriceAfter = await getEstimatedTimePrice(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
       if (markPriceAfter) {
-        let markP = getIntrinsicPrice(trading.index, trading.position.strikePrice, trading.position.isCall).plus(markPriceAfter).toString()
-        setMarkPriceAfter(markP);
+        // let markP = getIntrinsicPrice(trading.index, trading.position.strikePrice, trading.position.isCall).plus(markPriceAfter).toString()
+        setMarkPriceAfter(markPriceAfter);
       }
     }
   }
@@ -314,7 +314,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} suffix='%' /></span>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
@@ -344,7 +344,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} suffix='%' /></span>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>

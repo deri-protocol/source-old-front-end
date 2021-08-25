@@ -45,7 +45,7 @@ export class ContractBase {
       }
     }
     if (retry === 0 && !res) {
-      throw new Error(`The contract(${this.contractAddress}) '${method}([${args.join(',')}])' failed with max retry 2.`)
+      throw new Error(`The contract(${this.contractAddress}) '${method}([${args}])' failed with max retry 2.`)
     }
     return res
   }

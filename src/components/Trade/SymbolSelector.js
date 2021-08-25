@@ -29,7 +29,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
 
   useEffect(() => {
     document.body.addEventListener('click',(event) => {
-      if(!document.querySelector('.btn-group').contains(event.target)){
+      if(document.querySelector('.btn-group') && !document.querySelector('.btn-group').contains(event.target)){
         setDropdown(false)
       }
     })

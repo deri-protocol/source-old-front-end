@@ -136,15 +136,13 @@ export class EverlastingOption extends ContractBase {
       feeRatio: fromWei(res[5]),
       strikePrice: fromWei(res[6]),
       isCall: res[7],
-      diseqFundingCoefficient: fromWei(res[8]),
-      cumulativeDeltaFundingRate: fromWei(res[9]),
-      intrinsicValue: fromWei(res[10]),
-      cumulativePremiumFundingRate: fromWei(res[11]),
-      timeValue: res[12],
-      tradersNetVolume: fromWei(res[13]),
-      tradersNetCost: fromWei(res[14]),
-      quote_balance_offset: fromWei(res[15]),
-      K: fromWei(res[16]),
+      intrinsicPrice: fromWei(res[8]),
+      pmmPrice: fromWei(res[9]),
+      cumulativePremiumFundingRate: fromWei(res[10]),
+      // timeValue: res[12],
+      tradersNetVolume: fromWei(res[11]),
+      tradersNetCost: fromWei(res[12]),
+      alpha: fromWei(res[13]),
     };
   }
 

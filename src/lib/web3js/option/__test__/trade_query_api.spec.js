@@ -36,7 +36,7 @@ describe('trade query api', () => {
         minLiquidationReward: '10',
         multiplier: '0.01',
         protocolFeeCollectRatio: '0.2',
-        deltaFundingCoefficient: '0.000001',
+        //deltaFundingCoefficient: '0.000001',
         symbol: 'BTCUSD-20000-C',
         isCall: true,
       });
@@ -63,7 +63,6 @@ describe('trade query api', () => {
       expect(res).toHaveProperty('unrealizedPnl', expect.any(String))
       expect(res).toHaveProperty('unrealizedPnlList', expect.any(Array))
       expect(res).toHaveProperty('averageEntryPrice', expect.any(String))
-      expect(res).toHaveProperty('deltaFundingAccrued', expect.any(String))
       expect(res).toHaveProperty('premiumFundingAccrued', expect.any(String))
 
       expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
@@ -108,14 +107,11 @@ describe('trade query api', () => {
     'getFundingRate',
     async () => {
       const res = await getFundingRate(CHAIN_ID, OPTION_POOL_ADDRESS, '0');
-      expect(res).toHaveProperty('deltaFunding0')
-      expect(res).toHaveProperty('deltaFundingPerSecond')
       expect(res).toHaveProperty('liquidity')
       expect(res).toHaveProperty('premiumFunding0')
       expect(res).toHaveProperty('premiumFundingPerSecond')
       expect(res).toHaveProperty('tradersNetVolume')
       expect(res).toHaveProperty('volume')
-      expect(bg(res.deltaFunding0).abs().toNumber()).toBeLessThanOrEqual(1000);
       expect(bg(res.tradersNetVolume).abs().toNumber()).toBeLessThanOrEqual(
         100000
       );
@@ -124,20 +120,20 @@ describe('trade query api', () => {
     },
     TIMEOUT
   );
-  it(
-    'getEstimatedFundingRate',
-    async () => {
-      const res = await getEstimatedFundingRate(
-        CHAIN_ID,
-        OPTION_POOL_ADDRESS,
-        '12',
-        '0'
-      );
-      expect(bg(res.deltaFunding1).abs().toNumber()).toBeGreaterThanOrEqual(0)
-      //expect(res).toEqual({});
-    },
-    TIMEOUT
-  );
+  // it(
+  //   'getEstimatedFundingRate',
+  //   async () => {
+  //     const res = await getEstimatedFundingRate(
+  //       CHAIN_ID,
+  //       OPTION_POOL_ADDRESS,
+  //       '12',
+  //       '0'
+  //     );
+  //     expect(bg(res.deltaFunding1).abs().toNumber()).toBeGreaterThanOrEqual(0)
+  //     //expect(res).toEqual({});
+  //   },
+  //   TIMEOUT
+  // );
   it(
     'getLiquidityUsed',
     async () => {

@@ -1,5 +1,5 @@
 import { bg, max, normalizeOptionSymbol, toNumberForObject } from "../../shared"
-import { findLiquidationPrice } from './findLiquidationPrice';
+import { findLiquidationPrice } from './findLiquidationPrice2';
 
 export const dynamicInitialMarginRatio = (spot, strike, isCall, initialMarginRatio) => {
   if ((bg(strike).gte(spot) && !isCall) || (bg(strike).lte(spot) && isCall)) {
@@ -21,7 +21,7 @@ export const dynamicInitialPoolMarginRatio = (spot, strike, isCall, initialMargi
   }
 }
 
-export const getdeltaFundingPerSecond = (symbol, delta, price, totalDynamicEquity, newNetVolume)  => {
+export const getDeltaFundingPerSecond = (symbol, delta, price, totalDynamicEquity, newNetVolume)  => {
   return bg(totalDynamicEquity).eq(0)
     ? bg(0)
     : bg(delta)
@@ -102,22 +102,20 @@ export const getLiquidationPrice = (state, symbolId)  => {
       .map((s) =>
         toNumberForObject(s, [
           'multiplier',
-          'deltaFundingCoefficient',
+          //'deltaFundingCoefficient',
           'strikePrice',
-          'oraclePrice',
-          'oracleVolatility',
+          'underlierPrice',
+          'underlierVolatility',
           'timePrice',
           'dynamicMarginRatio',
           'intrinsicValue',
           'timeValue',
           'delta',
           'K',
-          'quoteBalanceOffset',
+          //'quoteBalanceOffset',
           'tradersNetVolume',
           'tradersNetCost',
-          'cumulativeDeltaFundingRate',
           'cumulativePremiumFundingRate',
-          'deltaFundingPerSecond',
           'premiumFundingPerSecond',
         ])
       ),
@@ -128,10 +126,8 @@ export const getLiquidationPrice = (state, symbolId)  => {
         toNumberForObject(positionState[s.symbolId], [
           'volume',
           'cost',
-          'lastCumulativeDeltaFundingRate',
           'lastCumulativePremiumFundingRate',
           'pnl',
-          'deltaFundingAccrued',
           'premiumFundingAccrued',
         ])
       )
@@ -172,17 +168,17 @@ export const getLiquidationPrices = (state) => {
         .map((s) =>
           toNumberForObject(s, [
             'multiplier',
-            'deltaFundingCoefficient',
+            //'deltaFundingCoefficient',
             'strikePrice',
-            'oraclePrice',
-            'oracleVolatility',
+            'underlierPrice',
+            'underlierVolatility',
             'timePrice',
             'dynamicMarginRatio',
             'intrinsicValue',
             'timeValue',
             'delta',
             'K',
-            'quoteBalanceOffset',
+            //'quoteBalanceOffset',
             'tradersNetVolume',
             'tradersNetCost',
             'cumulativeDeltaFundingRate',
