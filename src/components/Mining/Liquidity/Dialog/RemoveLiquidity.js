@@ -102,7 +102,9 @@ export default function RemoveLiquidity({wallet,address,liqInfo,onClose,afterRem
                     />
                   </div>
                 </div>
-                <div>{unit}</div>
+                <div>
+                 {version === 'v2' ? unit : lang['shares']}
+                </div>
               </div>
               <div className='max'>
                 <span>{lang['max-removeable']}</span>

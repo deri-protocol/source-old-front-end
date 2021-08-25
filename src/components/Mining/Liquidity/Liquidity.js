@@ -109,9 +109,9 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				{version !== 'v2_lite_open' && <div className="odd text">
 					<div className="text-title">{lang['apy']}</div>
 							<div className='text-num' >
-								<span title={isLP(address) && 'DERI-APY'} className={`${isLP(address) && 'sushi-apy-underline'}`}>
+								<span title={isLP(address) && lang['deri-apy']} className={`${isLP(address) && 'sushi-apy-underline'}`}>
 									<DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-									{isLP(address) && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
+									{isLP(address) && liquidity.lpApy > 0 && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
 									<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>					
 				</div>}

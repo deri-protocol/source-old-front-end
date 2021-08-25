@@ -41,7 +41,7 @@ function History({wallet,trading,lang}) {
       <div className='p-box theader'>
         <div className='td'>{lang['time']}</div>
         <div>{lang['direction']}</div>
-        <div>{lang['base-token']}</div>
+        <div>{lang['symbol']}</div>
         <div>{lang['price']}</div>
         <div>{lang['volume']}</div>
         <div>{lang['notional']}</div>
@@ -58,7 +58,7 @@ function History({wallet,trading,lang}) {
               <HistoryLine wallet={wallet} his={his}/>
             </div>
             <div>
-              {his.baseToken || '--'}
+              {his.symbol}
             </div>
             <div>
               <DeriNumberFormat value={his.price}  decimalScale={2}/>
