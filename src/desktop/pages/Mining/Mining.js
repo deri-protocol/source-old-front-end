@@ -25,7 +25,7 @@ function Mining({wallet,lang}){
 	if(query.has('symbolId')){
 		props['symbolId'] = query.get('symbolId')
 	}
-	const poolInfoClass = classnames('mining-info',currentTab)
+	const poolInfoClass = classnames('mining-info',currentTab,{'open-zone' : version === 'v2_lite_open'})
 	return(
     <div className={poolInfoClass}>
 			<div className="pool-header">

@@ -85,6 +85,6 @@
   "open-zone" : "开放区",
   "my-liqudity-providing" : "我提供的流动性",
   "add-pool" : "添加池子",
-  "coming-soon" : "即将开放!",
-  "add-pool-text" : "任何人都可以创建流动性池，敬请期待！"
+  "coming-soon" : "即将开放！敬请期待！",
+  "add-pool-text" : "创建我的流动性池"
 }

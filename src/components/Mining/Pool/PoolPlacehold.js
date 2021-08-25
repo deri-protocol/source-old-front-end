@@ -8,7 +8,7 @@ export default function PoolPlacehold({lang}){
       </div>
       <div className='pool-body'>
         <div className='info'>
-          <div className='coming-soon'>{lang['coming-soon']}</div>
+          {/* <div className='coming-soon'>{lang['coming-soon']}</div> */}
           <div>{lang['add-pool-text']}</div>
         </div>
         <div className='btn-c'>
