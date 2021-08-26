@@ -88,7 +88,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   }
 
   const volumeMu = (volume) => {
-    return type.isOption ? volume / trading.contract.multiplier : volume
+    return type.isOption ? bg(volume).div(bg(trading.contract.multiplier)).toString() : volume
   }
 
   //计算流动性的变化
@@ -166,11 +166,12 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     if(type.isOption){
       let index = trading.contract.multiplier.indexOf('.')
       let num = trading.contract.multiplier.slice(index);
-      let length = num.length 
+      let length = num.length - 1 
       let value = target.value
-      if(target.value.indexOf(".") !== '-1'){
-        value = target.value.substring(0,target.value.indexOf(".") + length)
-      }
+      let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
+      value = value.replace(reg,'$1');
+      //target.value.substring(0,target.value.indexOf(".") + length)
+      value = value === '0' ? '' : value
       trading.setVolume(value)
     }
     if (target.value === '') {

@@ -31,7 +31,7 @@ const processTradeEvent = async (
   const timeStamp = await getBlockInfo(chainId, blockNumber);
 
   const direction = tradeVolume.gt(0) ? 'LONG' : 'SHORT';
-  const price = deriToNatural(info.intrinsicValue).plus(deriToNatural(info.optionValue));
+  const price = deriToNatural(info.optionValue);
   const time = `${+timeStamp.timestamp}000`;
   const volume = tradeVolume.abs();
   const symbolId = info.symbolId
