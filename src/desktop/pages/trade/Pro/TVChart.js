@@ -18,7 +18,6 @@ function TVChart({interval,symbol,showLoad,intl}){
   const queryParamsRef = useRef(null);
   const lastQueryParamsRef = useRef(null);
   const lastDataRef = useRef(null);
-  const updateKlineCbRef = useRef(null);
   const connectStatusRef = useRef()
   const datafeedRef = useRef({
     onReady: (callback) => {
@@ -55,11 +54,18 @@ function TVChart({interval,symbol,showLoad,intl}){
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
     socket.emit('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : queryParamsRef.current.interval,update : true})
-    updateKlineCbRef.current= onRealtimeCallback
+    // updateKlineFun = onRealtimeCallback
+    socket.on('kline_update', data => {
+      if (onRealtimeCallback) {
+        onRealtimeCallback(data)
+      }
+    })
   }
 
   const unsubscribeBars = subscriptUID => {
-    socket.emit('un_get_kline',{symbol : queryParamsRef.current.formatSymbol,time_type : queryParamsRef.current.interval})
+    if(queryParamsRef.current){
+      socket.emit('un_get_kline',{symbol : queryParamsRef.current.formatSymbol,time_type : queryParamsRef.current.interval})
+    }
   }
 
   const resolveSymbol = (symbol,onSymbolResolvedCallback) => {
@@ -102,11 +108,6 @@ function TVChart({interval,symbol,showLoad,intl}){
         console.log( `kline for : ${queryParamsRef.current.formatSymbol} - ${queryParamsRef.current.interval} reconnect`)
         socket.emit('get_kline_update',{symbol : queryParamsRef.current.formatSymbol,time_type : queryParamsRef.current.interval,update : true})
       }
-      socket.on('kline_update', data => {
-        if (updateKlineCbRef.current) {
-          updateKlineCbRef.current(data)
-        }
-      })
       connectStatusRef.current = true
     })
   }
@@ -126,6 +127,7 @@ function TVChart({interval,symbol,showLoad,intl}){
       if(widgetRef.current){
         widgetRef.current.remove();
       }
+      unsubscribeBars();
     }
   }, [symbol,interval])
 

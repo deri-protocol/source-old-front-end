@@ -22,8 +22,8 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
   const [loading, setLoading] = useState(true);
   const connectStatusRef = useRef()
 
-  const connectWs = () => {
-    socket.on('connect', data => {
+  const onConnect = () => {
+    socket.on('connect', () => {
       if(connectStatusRef.current && queryParams.current){
         console.log( `kline for :${queryParams.current.symbol} - ${queryParams.current.interval} reconnect`)
         socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
@@ -32,27 +32,20 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
     })
   }
 
-  const initWs = () => {
-    if(connectStatusRef.current) {
-      if(lastQueryParam.current){
-        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
-      }
-      socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
+  const initWebSocket = () => {
+    if(lastQueryParam.current){
+      socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
     }
-    socket.on('kline_update', data => {
-      let obj = {}
-      if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
-        obj.time = data.time
-        obj.low = Number(data.low)
-        obj.high = Number(data.high)
-        obj.open = Number(data.open)
-        obj.close = Number(data.close)
-        obj.volume = Number(data.volume)
-        candleSeries.current.update(obj)
-        lastData.current = obj
-        displayCandleData && displayCandleData({data : obj})
-      }
-    })
+    if(socket.connected){
+      socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
+      socket.on('kline_update', data => {
+        if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
+          candleSeries.current.update(data)
+          lastData.current = data
+          displayCandleData && displayCandleData({data : data})
+        }
+      })
+    }
   }
 
   const loadChart = async () => {
@@ -62,8 +55,8 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         downColor: "#ff4976",
         borderDownColor: "#ff4976",
         borderUpColor: "#4bffb5",
-        wickDownColor: "#838ca1",
-        wickUpColor: "#838ca1"
+        wickDownColor: "#ff4976",
+        wickUpColor: "#4bffb5"
       });
       const range = calcRange(interval)
       lastQueryParam.current = queryParams.current
@@ -82,7 +75,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         }
         setLoading(false)
         displayCandleData && displayCandleData({data : lastData.current})
-        initWs()
+        initWebSocket()
       }
     }
   }
@@ -166,12 +159,12 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       if(queryParams.current){
         socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
       }
+      connectStatusRef.current = null
     }
   }, [symbol,interval])
 
   useEffect(() => {
-    connectWs();
-    return () => {}
+    onConnect();
   }, [])
 
   return(

@@ -33,10 +33,10 @@ function Chart({symbol,lang,intl,version}){
       const riseOrDown = data.close - data.open > 0 ? 'rise' : 'down'
       setCandleDataDisplay(
         <>
-          <span>O</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
-          <span>H</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
-          <span>L</span><span className={riseOrDown}>{data.low.toFixed(2)}</span>
-          <span>C</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
+          <span>{lang['open']}</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
+          <span>{lang['high']}</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
+          <span>{lang['low']}</span><span className={riseOrDown}>{data.low.toFixed(2)}</span>
+          <span>{lang['close']}</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
         </>
       )
     }
@@ -54,8 +54,8 @@ function Chart({symbol,lang,intl,version}){
   return(
     <div id='tradingview'>
       {Type.isOption &&<div className={switchClass}>
-        <span className='mark-price-c' onClick={() => switchChart('mark-price')}>Option Mark Price</span>
-        <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || 'index'} Price</span>
+        <span className='mark-price-c' onClick={() => switchChart('mark-price')}>{lang['option-mark-price']}</span>
+        <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || lang['index']} {lang['price']}</span>
       </div>}
       <div className={activedClass}>
           <span className='candle-data-area'>
@@ -85,7 +85,7 @@ function Chart({symbol,lang,intl,version}){
         <TVChart symbol={symbol} interval={currentInterval} showLoad={isShow => setLoading(isShow)}/>
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)}/>
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang}/>
       </div>}
   </div>
   )
