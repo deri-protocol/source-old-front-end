@@ -162,7 +162,10 @@ export default class Trading {
     }
     if(wallet && wallet.isConnected && config){
       Promise.all([
-        this.positionInfo.load(wallet,config,position => this.setPosition(position),isOption),
+        this.positionInfo.load(wallet,config,(position) => {
+          this.setPosition(position)
+          this.syncFundingRate(wallet,config,isOption)
+        },isOption),
         this.contractInfo.load(wallet,config,isOption),
         this.loadFundingRate(wallet,config,isOption),
         this.historyInfo.load(wallet,config,isOption),
