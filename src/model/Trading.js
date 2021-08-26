@@ -88,6 +88,7 @@ export default class Trading {
       optionFundingRateTip : computed,
       initialMarginRatioTip : computed,
       maintenanceMarginRatioTip : computed,
+      TransactionFeeTip : computed,
       multiplierTip : computed,
       direction : computed,
       volumeDisplay : computed,
@@ -105,8 +106,8 @@ export default class Trading {
    * 初始化
    * wallet and version changed will init
    */
-  async init(wallet,version,isOptions,finishedCallback){  
-    const all = await this.configInfo.load(version,isOptions);
+  async init(wallet,version,isOption,finishedCallback){  
+    const all = await this.configInfo.load(version,isOption);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
       this.setWallet(wallet);
@@ -121,26 +122,26 @@ export default class Trading {
     } else if(!wallet.isConnected() || !wallet.supportWeb3()){
       //没有钱包插件
       version.setCurrent('v2')
-      const all = await this.configInfo.load(version,isOptions);
+      const all = await this.configInfo.load(version,isOption);
       const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
       this.setConfig(defaultConfig)
     }
-    this.loadByConfig(this.wallet,this.config,true,finishedCallback,isOptions)
+    this.loadByConfig(this.wallet,this.config,true,finishedCallback,isOption)
     this.setVolume('')
   }
 
-  async onSymbolChange(spec,finishedCallback,isOptions){
+  async onSymbolChange(spec,finishedCallback,isOption){
     const config = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
     const changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
-    this.onChange(config,changed,finishedCallback,isOptions)
+    this.onChange(config,changed,finishedCallback,isOption)
   }
 
-  async onChange(config,changed,finishedCallback,isOptions){
+  async onChange(config,changed,finishedCallback,isOption){
     if(config){
       this.pause();
       this.setConfig(config)
-      this.loadByConfig(this.wallet,config,changed,finishedCallback,isOptions);  
+      this.loadByConfig(this.wallet,config,changed,finishedCallback,isOption);  
       if(changed){
         this.store(config)
       }    
@@ -149,7 +150,7 @@ export default class Trading {
     }
   }
 
-  async loadByConfig(wallet,config,symbolChanged,finishedCallback,isOptions){
+  async loadByConfig(wallet,config,symbolChanged,finishedCallback,isOption){
      //切换指数
     if(symbolChanged && config){
       const symbol = getFormatSymbol(config.symbol)
@@ -161,11 +162,11 @@ export default class Trading {
     }
     if(wallet && wallet.isConnected && config){
       Promise.all([
-        this.positionInfo.load(wallet,config,position => this.setPosition(position),isOptions),
-        this.contractInfo.load(wallet,config,isOptions),
-        this.loadFundingRate(wallet,config,isOptions),
-        this.historyInfo.load(wallet,config,isOptions),
-        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOptions),
+        this.positionInfo.load(wallet,config,position => this.setPosition(position),isOption),
+        this.contractInfo.load(wallet,config,isOption),
+        this.loadFundingRate(wallet,config,isOption),
+        this.historyInfo.load(wallet,config,isOption),
+        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOption),
       ]).then(results => {
         if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
@@ -450,9 +451,9 @@ export default class Trading {
   }
 
   //资金费率
-  async loadFundingRate(wallet,config){
+  async loadFundingRate(wallet,config,isOption){
     if(config){
-      const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
+      const chainId = wallet && wallet.isConnected() && wallet.isSupportChain(isOption) ? wallet.detail.chainId : config.chainId
       if(config){    
         const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
         return res;
@@ -491,10 +492,10 @@ export default class Trading {
     if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config){
       if(Intl.locale === 'zh'){
         return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.premiumFundingPerSecond}` +
-      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.fundingRatePerBlock} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol}`        
+      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} `        
       } else {
         return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.premiumFundingPerSecond}` +
-      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} (${this.fundingRate.premiumFundingPerSecond} * ${Intl.get('lite','index-price-camelize')} * ${this.contract.multiplier} ) ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
       }
     }
     return ''
@@ -520,6 +521,13 @@ export default class Trading {
   get multiplierTip(){
     if(this.contract && this.config){
       return `${Intl.get('lite','the-notional-value-of')} ${this.contract.multiplier}${this.config.unit}`
+    }
+    return ''
+  }
+
+  get TransactionFeeTip(){
+    if(this.contract && this.config){
+        return `${Intl.get('lite','transaction-fee-tip')}${this.config.unit} = ${Intl.get('lite','transaction-fee-tip1')} ${this.contract.feeRatio * 100}%`
     }
     return ''
   }

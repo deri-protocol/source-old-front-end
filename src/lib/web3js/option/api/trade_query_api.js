@@ -169,7 +169,7 @@ export const getPositionInfo = async (
         price,
         strikePrice: symbol.strikePrice.toString(),
         timePrice: symbol.timeValue.toString(),
-        markPrice: bg(symbol.intrinsicValue).plus(symbol.timeValue).toString(),
+        markPrice: bg(symbol.pmmPrice, -18).toString(),
         volume: bg(position.volume).times(symbol.multiplier).toString(),
         averageEntryPrice: getAverageEntryPrice(position, symbol),
         margin: margin.toString(),

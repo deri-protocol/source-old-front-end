@@ -70,10 +70,10 @@ function TradingView({ version, trading, lang,type }) {
             </div>
           </div>
           <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
+            <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
             <div className='trade-dashboard-value'>
               <span className='funding-per' title={trading.optionFundingRateTip}>
-                <DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} suffix='%' />
+                <DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  />
               </span>
             </div>
           </div>
@@ -84,7 +84,7 @@ function TradingView({ version, trading, lang,type }) {
         </>}
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'>{lang['pool-total-liquidity']}</div>
-          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} value={trading.fundingRate.liquidity} decimalScale={2} /> {trading.config && trading.config.bTokenSymbol}</div>
+          <div className='trade-dashboard-value'> <DeriNumberFormat allowLeadingZeros={true} thousandSeparator={true} value={trading.fundingRate.liquidity} decimalScale={2} /> {trading.config && trading.config.bTokenSymbol}</div>
         </div>
       </div>
       <div className='tradingview'>

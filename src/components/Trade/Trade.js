@@ -313,8 +313,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             </>}
             <div className='funding-rate'>
               {type.isOption && <>
-                <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} suffix='%' /></span>
+                <span>{lang['funding-rate']} : &nbsp;</span>
+                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
@@ -343,8 +343,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             </>}
             <div className='funding-rate'>
               {type.isOption && <>
-                <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} suffix='%' /></span>
+                <span>{lang['funding-rate']} : &nbsp;</span>
+                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
@@ -501,7 +501,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
                 </div>
               </div>
               
@@ -511,6 +511,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               <div className='text-enter'>
                 <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
               </div>
+             
             </div>
           </>}
         </div>

@@ -7,7 +7,7 @@ export default class Position {
    callbackALL = ()=>{}
    wallet = null;
    spec = null
-   isOptions =null;
+   isOption =null;
  
    mockPositionInfo = {
     averageEntryPrice: "",
@@ -25,9 +25,9 @@ export default class Position {
     isCall:false,
    }
 
-   async load(wallet,spec,callback,isOptions){
-     this.isOptions = isOptions
-     if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
+   async load(wallet,spec,callback,isOption){
+     this.isOption = isOption
+     if(wallet && wallet.isConnected() && wallet.isSupportChain(isOption) && spec && spec.pool){
       const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       if(position){
         if(callback){
@@ -39,9 +39,9 @@ export default class Position {
      }
    }
 
-   async loadAll(wallet,spec,callback,isOptions){
-    this.isOptions = isOptions
-      if(wallet && wallet.isConnected() && wallet.isSupportChain(isOptions) && spec && spec.pool){
+   async loadAll(wallet,spec,callback,isOption){
+    this.isOption = isOption
+      if(wallet && wallet.isConnected() && wallet.isSupportChain(isOption) && spec && spec.pool){
         let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
         let positions = [] 
         if(res.length){
@@ -65,7 +65,7 @@ export default class Position {
     if(this.intervalAll !== null){
       clearInterval(this.intervalAll);
     }
-   this.intervalAll = window.setInterval(() => this.loadAll(wallet,spec,callback,this.isOptions),3000)      
+   this.intervalAll = window.setInterval(() => this.loadAll(wallet,spec,callback,this.isOption),3000)      
    if(wallet){
      this.wallet= wallet; 
    }
@@ -81,7 +81,7 @@ export default class Position {
      if(this.interval !== null){
        clearInterval(this.interval);
      }
-    this.interval = window.setInterval(() => this.load(wallet,spec,callback,this.isOptions),3000)      
+    this.interval = window.setInterval(() => this.load(wallet,spec,callback,this.isOption),3000)      
     if(wallet){
       this.wallet= wallet; 
     }

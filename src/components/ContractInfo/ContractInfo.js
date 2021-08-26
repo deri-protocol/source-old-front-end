@@ -95,7 +95,15 @@ function ContractInfo({ wallet, trading, lang, type }) {
           </div>
         </>}
         <div className="info">
-          <div className="title">{lang['transaction-fee']}</div>
+          
+          {type.isFuture && <>
+            <div className="title">{lang['transaction-fee']}</div>
+          </>}
+          {type.isOption && <>
+            <div className="title">
+              <span className="margin-per" title={trading.TransactionFeeTip}>{lang['transaction-fee']}</span>  
+            </div>
+          </>}
           <div className="text">
             <NumberFormat displayType='text' value={trading.contract.feeRatio * 100} decimalScale={3} suffix='%' />
           </div>

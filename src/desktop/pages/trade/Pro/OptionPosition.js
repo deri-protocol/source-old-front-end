@@ -170,7 +170,7 @@ function Position({ wallet, trading, version, lang, type }) {
                 <DeriNumberFormat value={pos.unrealizedPnl} decimalScale={6} />
               </span>
             </div>
-            <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>
+            <div><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>
             <div className='position'>
               <span className='close-position'>
                 <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
