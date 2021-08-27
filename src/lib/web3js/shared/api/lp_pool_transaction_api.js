@@ -1,15 +1,11 @@
 import { getLpConfig } from '../config';
-import { unlockSlp } from './slp_pool_api';
-import { unlockClp } from './clp_pool_api';
-import { unlockClp2 } from './clp2_pool_api';
+import { unlockSlp, addSlpLiquidity, removeSlpLiquidity } from './slp_pool_api';
+import { unlockClp, addClpLiquidity, removeClpLiquidity } from './clp_pool_api';
 import {
-  addSlpLiquidity2 as addSlpLiquidity,
-  removeSlpLiquidity2 as removeSlpLiquidity,
-  addClpLiquidity2 as addClpLiquidity,
-  removeClpLiquidity2 as removeClpLiquidity,
-  addClp2Liquidity2 as addClp2Liquidity,
-  removeClp2Liquidity2 as removeClp2Liquidity,
-} from '../../v1/api/contract_transaction_api_v2';
+  unlockClp2,
+  addClp2Liquidity,
+  removeClp2Liquidity,
+} from './clp2_pool_api';
 
 /**
  * Unlock the account in the lp pool

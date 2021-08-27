@@ -11,6 +11,40 @@ import {
 } from '../config/token';
 import { PRESERVED_SYMBOLS } from '../config/version';
 
+export const getPriceInfoForV1 = async(symbol) => {
+  const env = DeriEnv.get();
+  let method = 'get_signed_price'
+  let url
+  let baseUrl =
+    env === 'prod'
+      ? `https://oracle4.deri.finance/${method}`
+      : `https://oracle2.deri.finance/${method}`;
+  const addSymbolParam = (url, symbol) =>
+    `${url}?symbol=${symbol}`;
+  if (symbol) {
+    url = addSymbolParam(baseUrl, symbol);
+  } else {
+    url = baseUrl;
+  }
+  let retry = 3;
+  let res, priceInfo;
+  while (retry > 0) {
+    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+    if (res.ok) {
+      priceInfo = await res.json();
+      if (priceInfo.status.toString() === '200' && priceInfo.data) {
+        return priceInfo.data
+        //return deriToNatural(priceInfo.data.price).toString()
+      }
+    }
+    retry -= 1;
+  }
+  if (retry === 0) {
+    throw new Error(`getPriceFromV1 exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);
+  }
+}
+
+
 export const getOracleUrl = (symbol, type='futures') => {
   const env = DeriEnv.get();
   //if (/^[0-9]+$/.test(symbolId.toString())) {

@@ -430,7 +430,7 @@ export const getEstimatedFundingRate = async (
       res.liquidity,
       res.fundingRateCoefficient,
     ];
-    if (validateArgs(...parameters)) {
+    if (!validateArgs(...parameters)) {
       return {
         fundingRate1: '0',
       };
@@ -499,7 +499,7 @@ export const getEstimatedLiquidityUsed = async (
       res.liquidity,
       res.poolMarginRatio,
     ];
-    if (validateArgs(...parameters)) {
+    if (!validateArgs(...parameters)) {
       return {
         liquidityUsed1: '0',
       };

@@ -4,13 +4,14 @@ import {
   formatBN,
   naturalToDeri,
   getPoolV1Config,
+  deriToNatural,
 } from '../../shared';
 import {
   lTokenFactory,
   pTokenFactory,
   perpetualPoolFactory,
 } from '../factory';
-import { getPriceFromRest } from '../../shared/utils/oracle'
+import { getPriceInfoForV1 } from '../../shared/utils/oracle'
 import {
   calculateMaxRemovableShares,
   calculateMaxWithdrawMargin,
@@ -93,7 +94,7 @@ export const withdrawMargin = async (
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
   //pToken.setAccount(accountAddress);
 
-  const price = await getPriceFromRest(symbol);
+  const price = deriToNatural((await getPriceInfoForV1(symbol)).price).toString();
   const { volume, margin, cost } = await pToken.getPositionInfo(accountAddress);
   const { multiplier, minInitialMarginRatio } = await pPool.getParameters();
 
@@ -213,7 +214,8 @@ export const removeLiquidity = async (
   //pPool.setAccount(accountAddress);
   const lToken = lTokenFactory(chainId, lTokenAddress, poolAddress);
   //lToken.setAccount(accountAddress);
-  const price = await getPriceFromRest(symbol);
+  const price = deriToNatural((await getPriceInfoForV1(symbol)).price).toString();
+
   const [lTokenBalance, lTokenTotalSupply] = await Promise.all([
     lToken.balance(accountAddress),
     lToken.totalSupply(),
@@ -277,7 +279,7 @@ export const tradeWithMargin = async (
   const { pTokenAddress, symbol } = getPoolV1Config(chainId, poolAddress);
   const pPool = perpetualPoolFactory(chainId, poolAddress);
   const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  const price = await getPriceFromRest(symbol);
+  const price = deriToNatural((await getPriceInfoForV1(symbol)).price).toString();
   const {
     multiplier,
     minInitialMarginRatio,

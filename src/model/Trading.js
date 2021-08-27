@@ -154,7 +154,7 @@ export default class Trading {
       Promise.all([
         this.positionInfo.load(wallet,config,(position) => {
           this.setPosition(position)
-          this.loadFundingRate(wallet,config)          
+          this.syncFundingRate(wallet,config)          
         }),
         this.contractInfo.load(wallet,config),
         this.loadFundingRate(wallet,config),          
