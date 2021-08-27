@@ -11,6 +11,7 @@ import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import Loading from '../Loading/LoadingMask';
+import withTtip from '../hoc/withTip';
 
 
 
@@ -263,6 +264,9 @@ function Trade({wallet = {},trading,version,lang,loading}){
           </div>
           <div className='funding-rate'>
             <span>{lang['funding-rate-annual']}: &nbsp;</span>
+            {/* <div className='hover-box'>
+              <div>{trading.fundingRateTip}</div>
+            </div> */}
             <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/></span> 
           </div>
         </div>
@@ -271,6 +275,9 @@ function Trade({wallet = {},trading,version,lang,loading}){
             {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2}/></span>
           </div>
           <div className='funding-rate'>
+            {/* <div className='hover-box'>
+              <div>{trading.fundingRateTip}</div>
+            </div> */}
             <span>{lang['funding']}: &nbsp;</span>
             <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%'/></span> 
           </div>
@@ -352,7 +359,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
             }
             <div className='available-balance'>
               <span className='available-balance pc' title={lang['available-balance-title']} > {lang['available-balance']} </span>
-              <span className='available-balance mobile' >{lang['available-balance']}</span>
+              <span className='available-balance mobile' title={lang['available-balance-title']} >{lang['available-balance']}</span>
               <span className='available-balance-num'>
                 <DeriNumberFormat value={ trading.amount.available } allowZero={true}  decimalScale={2} />
               </span>
@@ -555,4 +562,4 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading','version','loading')(observer(Trade))
+export default inject('wallet','trading','version','loading')(withTtip(observer(Trade)))

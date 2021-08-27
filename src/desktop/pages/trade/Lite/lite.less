@@ -255,6 +255,7 @@
             font-size: 12px;
             height: 68px;
             padding-top: 13px;
+            
 
             .rise {
               color: @green;
@@ -266,6 +267,7 @@
 
             .funding-rate {
               padding-top: 5px;
+              position: relative;
 
               .funding-per {
                 display: inline-block;
@@ -273,6 +275,21 @@
                 border-bottom: 1px #AAAAAA dotted;
                 cursor: pointer;
               }
+              .hover-box {
+                position: absolute;
+                background-color: #2c2d31;
+                border: 1px solid #AAAAAA;
+                color: #AAAAAA;
+                border-radius: 10px;
+                padding: 4px;
+                top: 26px;
+                left: 60px;
+                width: 177px;
+                display: none;
+              }
+            }
+            .funding-rate:hover .hover-box {
+              display: block;
             }
           }
         }

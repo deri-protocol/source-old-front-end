@@ -207,6 +207,8 @@
             margin-left: 0.10rem;
             font-weight: 500;
             font-size: 0.12rem;
+            overflow: inherit;
+            position: relative;
 
             .rise {
               color: @green;
@@ -214,6 +216,22 @@
 
             .fall {
               color: @red;
+            }
+
+            .hover-box {
+              position: absolute;
+              background-color: #2c2d31;
+              border: 1px solid #AAAAAA;
+              color: #AAAAAA;
+              border-radius: 0.1rem;
+              padding: 0.04rem;
+              top: 0.45rem;
+              z-index: 1;
+              display: none;
+            }
+
+            .funding-rate:hover .hover-box {
+              display: block;
             }
 
             .funding-rate {
@@ -399,6 +417,9 @@
               }
               .available-balance.pc {
                 display: none
+              }
+              .available-balance.mobile {
+                border-bottom: 1px dotted #aaaaaa;
               }
               .balance-contract-text.pc{
                 display: none

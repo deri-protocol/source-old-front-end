@@ -29,7 +29,10 @@ function TradingView({version,trading,lang}){
         <div className='trade-dashboard-item latest-price'>
           <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
           <div className='trade-dashboard-value'> 
-          <span className='funding-per' title={trading.fundingRateTip}> 
+          <div className='hover-box'>
+              <div>{trading.fundingRateTip}</div>
+          </div>
+          <span className='funding-per'> 
             <DeriNumberFormat value={ trading.fundingRate.fundingRate0 } decimalScale={4} suffix='%'/>
           </span>
           </div>
