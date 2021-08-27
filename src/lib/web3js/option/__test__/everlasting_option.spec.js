@@ -34,16 +34,9 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('getAddresses', async() => {
     const res = await everlastingOption.getAddresses()
-    expect(res).toEqual(
-      expect.objectContaining({
-        bTokenAddress: '0x2ebE70929bC7D930248040f54135dA12f458690C',
-        lTokenAddress: '0x4F69fbc5cdca63818988eA0d2069cff8A06e783a',
-        liquidatorQualifierAddress:
-          '0x0000000000000000000000000000000000000000',
-        pTokenAddress: '0x67eBB9e3dcd1982E6B0D09b398fA9d7FA1852EEb',
-        protocolFeeCollector: '0x4aF582Fd437f997F08df645aB6b0c070CC791DeE',
-      })
-    );
+    expect(res).toHaveProperty('bTokenAddress', '0x2ebE70929bC7D930248040f54135dA12f458690C')
+    expect(res).toHaveProperty('lTokenAddress', '0x1936762A77F3516aaEE9840cFf9BF61c6A98c99a')
+    expect(res).toHaveProperty('pTokenAddress', '0x1527D434007C90230047ed713733a2A95ac04d17')
   }, TIMEOUT)
   it('getProtocolFeeAccrued', async() => {
     const res = await everlastingOption.getProtocolFeeAccrued()
@@ -51,11 +44,11 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('OptionPricer', async() => {
     const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0x01Be69975Bba27b6D4d4be750aB3B0DEF8ace805')
+    expect(res).toEqual('0xeEfaBc1B79Ec13ACA9FCAa96a5eC0811A576BaDc')
   }, TIMEOUT)
   it('PmmPricer', async() => {
     const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0x353Ec542F02AF324023C552a31B1083C8359238B')
+    expect(res).toEqual('0xD8d8D8C994335bC521087281b53433dad5370602')
   }, TIMEOUT)
   it('_T', async() => {
     const res = await everlastingOption._T()

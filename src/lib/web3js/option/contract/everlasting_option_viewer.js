@@ -34,7 +34,7 @@ export class EverlastingOptionViewer extends ContractBase {
         'timeValue',
         'delta',
         'K',
-        //'quoteBalanceOffset',
+        'alpha',
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',

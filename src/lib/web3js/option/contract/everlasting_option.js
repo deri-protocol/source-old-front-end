@@ -103,11 +103,12 @@ export class EverlastingOption extends ContractBase {
     return deleteIndexedKey(res);
   }
   async getLastTimestamp() {
-    return await this._call('getLastTimestamp', []);
+    const res = await this._call('getPoolStateValues', []);
+    return res[1]
   }
   async getLiquidity() {
-    const res = await this._call('getLiquidity', []);
-    return fromWei(res);
+    const res = await this._call('getPoolStateValues', []);
+    return fromWei(res[0])
   }
   async getParameters() {
     const res = await this._call('getParameters', []);
@@ -122,8 +123,8 @@ export class EverlastingOption extends ContractBase {
     ]);
   }
   async getProtocolFeeAccrued() {
-    const res = await this._call('getProtocolFeeAccrued', []);
-    return fromWei(res);
+    const res = await this._call('getPoolStateValues', []);
+    return fromWei(res[2])
   }
   async getSymbol(symbolId) {
     const res = await this._call('getSymbol', [symbolId]);

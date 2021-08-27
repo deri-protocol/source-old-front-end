@@ -149,10 +149,6 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
         <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
-        <div className='position'>
-          {lang['close-position']}
-        </div>
-
       </div>
       {positions.map((pos, index) => {
         return (
@@ -160,6 +156,15 @@ function Position({ wallet, trading, version, lang, type }) {
             <div className='position-symbol'>{pos.symbol}</div>
             <div className='position'>
               <DeriNumberFormat value={pos.volume} allowZero={true} />
+              <span className='close-position'>
+                <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
+                <span
+                  className='spinner spinner-border spinner-border-sm'
+                  role='status'
+                  aria-hidden='true'
+                  style={{ display: closing && closingIndex == index ? 'block' : 'none' }}
+                ></span>
+              </span>
             </div>
             <div className='ave-entry-price'><DeriNumberFormat value={pos.averageEntryPrice} decimalScale={2} /></div>
             <div className={pos.direction}>{lang[pos.direction.toLowerCase()] || pos.direction}</div>
@@ -171,17 +176,6 @@ function Position({ wallet, trading, version, lang, type }) {
               </span>
             </div>
             <div><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>
-            <div className='position'>
-              <span className='close-position'>
-                <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
-                <span
-                  className='spinner spinner-border spinner-border-sm'
-                  role='status'
-                  aria-hidden='true'
-                  style={{ display: closing && closingIndex == index ? 'block' : 'none' }}
-                ></span>
-              </span>
-            </div>
           </div>
         )
       })}
