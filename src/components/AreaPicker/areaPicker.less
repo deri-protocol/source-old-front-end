@@ -32,9 +32,10 @@
   .area-picker-wrapper {
     border-radius: 25px;
     background: #41424A;
+    width: 100%;
 
     .left,.middle,.right {
-      width: 180px;
+      // width: 180px;
       font-size: 16px;
       color: #aaaaaa;
       height: 50px;
@@ -51,35 +52,39 @@
   .area-picker {
     width: 100%;
     margin : 0;
-  }
-
-  .area-picker-wrapper.main{
-    .left {
+    .area-picker-wrapper {
       border-radius: 0;
+      display: flex;
     }
-  }
-  .area-picker-wrapper.innovation {
-    .middle {
+    .area-picker-wrapper.main{
+      .left {
+        border-radius: 0;
+      }
+    }
+    .area-picker-wrapper.innovation {
+      .middle {
+        border-radius: 0;
+      }
+    }
+  
+    .area-picker-wrapper.open {
+      .right {
+        border-radius: 0;
+      }
+    }
+  
+    .area-picker-wrapper.open {
       border-radius: 0;
+      display: flex;
+  
+      .left,.middle,.right {
+        // width: 1.4rem;
+        font-size: 0.16rem;
+        height: 0.5rem;
+        line-height: 0.5rem;
+        border-radius: 0px;
+      }
     }
   }
-
-  .area-picker-wrapper.innovation {
-    .right {
-      border-radius: 0;
-    }
-  }
-
-  .area-picker-wrapper {
-    border-radius: 0;
-    display: flex;
-
-    .left,.middle,.right {
-      width: 1.4rem;
-      font-size: 0.16rem;
-      height: 0.5rem;
-      line-height: 0.5rem;
-      border-radius: 0.25rem;
-    }
-  }
+  
 }

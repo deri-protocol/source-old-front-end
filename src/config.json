@@ -69,7 +69,7 @@
             "symbol": "MATIC",
             "decimals" : 18
           },
-          "rpcUrls": ["https://matic-mainnet.chainstacklabs.com"],
+          "rpcUrls": ["https://polygon-rpc.com"],
           "blockExplorerUrls": ["https://polygonscan.com/"]
         }
       }
