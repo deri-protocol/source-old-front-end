@@ -15,11 +15,8 @@ function TipWrapper(props){
             hover.style.cssText = `z-index : 1;max-width : 200px;font-size : 0.1rem ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
             document.body.appendChild(hover)
             hover.innerText = event.currentTarget.getAttribute('title')
-            event.target.removeAttribute('title')
+            event.target.setAttribute('title','')
           } 
-          if(event.currentTarget.getAttribute('title')){
-            hover.innerText = event.currentTarget.getAttribute('title')
-          }
           hover.id = id
           hover.style.display = 'block'
           hover.style.top = `${event.pageY +4}px`
