@@ -7,7 +7,7 @@ function TipWrapper(props){
     if(currentNode){
       const hoverNodes = currentNode.querySelectorAll('[title]')
       hoverNodes.forEach(hoverNode => {
-        const id = `hover-box-${new Date().getMilliseconds()}`
+        const id = `hover-box-${new Date().getTime()}`
         let hover = document.body.querySelector(`#${id}`)
         hoverNode.addEventListener('mouseover',event => {
           if(!hover) {
@@ -40,7 +40,7 @@ function TipWrapper(props){
         })   
       });
     }
-      
+  return () => {ref.current = null}
   }, [])
   return props.block ? <div ref={ref}>{props.children}</div> : <span ref={ref}>{props.children}</span>
 }

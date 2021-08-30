@@ -284,13 +284,13 @@ function LiqPrice({ trading, wallet, lang }) {
           </span>
         } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
             <span> / </span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
           </span>
         } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
             <span> / </span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
           </span>
@@ -298,7 +298,7 @@ function LiqPrice({ trading, wallet, lang }) {
           ele = <span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
             <span> / </span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
           </span>
         }
       } else {

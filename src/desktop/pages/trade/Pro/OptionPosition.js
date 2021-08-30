@@ -15,6 +15,7 @@ import marginDetailIcon from '../../../../assets/img/margin-detail.png'
 import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
 import { bg } from '../../../../lib/web3js/indexV2';
 import pnlIcon from '../../../../assets/img/pnl-detail.png'
+import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
 
 
 
@@ -148,7 +149,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='direction'>{lang['direction']}</div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
+        <div><TipWrapper><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></TipWrapper> </div>
       </div>
       {positions.map((pos, index) => {
         return (
@@ -157,12 +158,12 @@ function Position({ wallet, trading, version, lang, type }) {
             <div className='position'>
               <DeriNumberFormat value={pos.volume} allowZero={true} />
               <span className='close-position'>
-                <img style={{ display: closingIndex != index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
+                <img style={{ display: closingIndex !== index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
                 <span
                   className='spinner spinner-border spinner-border-sm'
                   role='status'
                   aria-hidden='true'
-                  style={{ display: closing && closingIndex == index ? 'block' : 'none' }}
+                  style={{ display: closing && closingIndex === index ? 'block' : 'none' }}
                 ></span>
               </span>
             </div>

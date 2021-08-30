@@ -114,7 +114,7 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        <div><TipWrapper block={false}><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></TipWrapper></div>
+        <div><TipWrapper block={false}><span className='funding-fee' title={lang['funding-fee-tip'] || ''} >{lang['funding-fee']}</span></TipWrapper></div>
         <div className='liquidation-price'>
           {lang['liquidation-price']}
         </div>
