@@ -97,7 +97,6 @@ describe('PTokenOption', () => {
       expect(res).toEqual(
         expect.objectContaining({
           cost: expect.any(String),
-          lastCumulativeDeltaFundingRate: expect.any(String),
           lastCumulativePremiumFundingRate: expect.any(String),
           volume: expect.any(String),
         })

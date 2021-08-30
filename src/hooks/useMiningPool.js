@@ -20,6 +20,7 @@ export default function useMiningPool(isNew){
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])    
   const [v2Pools, setV2Pools] = useState([])
+  const [optionPools, setOptionPools] = useState([])
   const [legacyPools, setLegacyPools] = useState([])
   const [preminingPools, setPreminingPools] = useState([])
   const [openPools, setOpenPools] = useState([])
@@ -74,12 +75,13 @@ export default function useMiningPool(isNew){
     let v2Configs = getContractAddressConfig(env,'v2')
     let v1Configs = getContractAddressConfig(env,'v1')
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
+    const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
     const openPools = getContractAddressConfig(env,'v2_lite_open')
     const all = []
-    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(openPools).reduce((total,config) => {
+    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
-      if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'v2_lite_open')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
+      if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
         total.push(config)
@@ -130,6 +132,7 @@ export default function useMiningPool(isNew){
       // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
+      let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
       const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p =>  p.retired && p.premining) 
       let openPools = pools.filter(p => p.isOpen)
@@ -137,10 +140,12 @@ export default function useMiningPool(isNew){
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
         v2Pools = groupByNetwork(v2Pools);
+        optionPools =groupByNetwork(optionPools)
         openPools = groupByNetwork(openPools)
       }
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
+      setOptionPools(optionPools)
       setPools(pools);
       setLegacyPools(legacy);
       setPreminingPools(preminings)
@@ -149,5 +154,5 @@ export default function useMiningPool(isNew){
     })
     return () => pools.length = 0
   },[])
-  return [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools,openPools];
+  return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools];
 }

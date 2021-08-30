@@ -10,7 +10,7 @@ import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
-function History({wallet,trading,lang}) {
+function History({wallet,trading,lang,type}) {
   const [history, setHistory] = useState([]);
 
   async function loadHistory (){
@@ -43,8 +43,8 @@ function History({wallet,trading,lang}) {
         <div>{lang['direction']}</div>
         <div>{lang['symbol']}</div>
         <div>{lang['price']}</div>
-        <div>{lang['volume']}</div>
-        <div>{lang['notional']}</div>
+        <div>{lang['volume']}  {type.isOption?`( ${lang['notional']} )`:''} </div>
+        <div>{type.isOption?lang['contract-value']: lang['notional']}</div>
         <div>{lang['transaction-fee']}</div>
       </div>
       {history.map((his,index) => {
@@ -58,7 +58,7 @@ function History({wallet,trading,lang}) {
               <HistoryLine wallet={wallet} his={his}/>
             </div>
             <div>
-              {his.symbol}
+              {his.symbol || '--'}
             </div>
             <div>
               <DeriNumberFormat value={his.price}  decimalScale={2}/>
@@ -105,5 +105,5 @@ function HistoryLine({wallet,his}){
   )
 }
 
-export default inject('wallet','trading')(observer(History))
+export default inject('wallet','trading','type')(observer(History))
 

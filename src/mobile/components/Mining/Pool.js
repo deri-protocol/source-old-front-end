@@ -1,15 +1,15 @@
 import React,{useEffect,useState} from 'react'
 import './pool.less'
 import './zh-pool.less'
+import classNames from 'classnames';
 import PoolBox from '../../../components/Pool/PoolBox';
 import useMiningPool from '../../../hooks/useMiningPool';
 import { inject, observer } from 'mobx-react';
-import classNames from 'classnames';
 import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
 
 
 function Pool({lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools,openPools] = useMiningPool(true);
+  const [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools,openPools,optionPools] = useMiningPool(true);
   const [curTab, setCurTab] = useState('official')
   const tabCLassName = classNames('filter-area',{'official' : curTab ==='official','open' : curTab === 'open'})
   const siwtchTab = (tab) => {

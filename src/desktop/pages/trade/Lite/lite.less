@@ -149,10 +149,17 @@
 
         .check-baseToken {
           display: flex;
-
+          .option-vol{
+            color: @text;
+          }
           .check-baseToken-btn,
           .price-fundingRate {
             display: inline-block;
+            .vol{
+              font-size: 16px;
+              vertical-align: middle;
+            }
+            
           }
 
           .check-baseToken-btn {
@@ -170,6 +177,9 @@
               top: 62px;
               left: 10px;
               will-change: transform;
+              max-height: 480px;
+              overflow: auto;
+              overflow-x: hidden;
               z-index: 2;
             }
             .dropdown-menu {
@@ -183,6 +193,28 @@
                 padding-left: 12px;
               }
             }
+            .dropdown-menu::-webkit-scrollbar {
+              border-radius: 10px;
+              width: 10px;
+              height: 10px;
+              background-color: rgb(20, 25, 36);
+            }
+        
+            /*定义滚动条轨道 内阴影+圆角*/
+        
+            .dropdown-menu::-webkit-scrollbar-track {
+              box-shadow: inset 0 0 0px rgb(20, 25, 36);
+              border-radius: 10px;
+              background-color: rgb(20, 25, 36);
+            }
+        
+            /*定义滑块 内阴影+圆角*/
+        
+            .dropdown-menu::-webkit-scrollbar-thumb {
+              border-radius: 10px;
+              box-shadow: inset 0 0 0px rgb(20, 25, 36);
+              background-color: gray;
+            }
 
             .dropdown-item {
               padding: 6px;
@@ -193,6 +225,7 @@
               margin-left: 14px;
               line-height: 32px;
             }
+            
 
             .dropdown-item:focus,
             .dropdown-item:hover {
@@ -264,7 +297,6 @@
             .fall {
               color: @red;
             }
-
             .funding-rate {
               padding-top: 5px;
               position: relative;
@@ -292,10 +324,31 @@
               display: block;
             }
           }
+          .options{
+            padding-top: 0px !important;
+            margin-top: -10px;
+            .diseq{
+              padding-top: 5px;
+              display: flex;
+              justify-content: space-between;
+            }
+            .index-prcie{
+              padding-top: 5px;
+            }
+            .funding-rate{
+              padding-top: 0px !important;
+            }
+            .rise,.fall{
+              font-size: 14px;
+              font-weight: 600;
+            }
+          }
+          
         }
 
         .check-long-short {
           display: flex;
+          margin-top: 20px;
           width: 423px;
           height: 73px;
           // margin-top: 9px;
@@ -382,7 +435,14 @@
                 color: #D4E05C;
                 display: none;
               }
-
+              .option-unit{
+                position: absolute;
+                right: 7px;
+                top: 30px;
+                font-size: 16px;
+                color: @text;
+                display: none;
+              }
               .contrant-input {
                  box-sizing: border-box;
                 width: 229px;
@@ -408,7 +468,7 @@
                 // font-family: 'LED Calculator';
               }
 
-              .contrant-input:focus+.title-volume {
+              .contrant-input:focus+.title-volume,.contrant-input:focus+.option-unit {
                 display: block;
               }
 
@@ -419,11 +479,16 @@
                 font-family: 'LED Calculator';
               }
 
-              .inputFamliy+.title-volume {
+              .inputFamliy+.title-volume,.inputFamliy+.option-unit {
                 display: block;
               }
             }
+            .option-input{
+              .contrant-input{
+                padding-right: 30px  !important;
+              }
 
+            }
             .btc {
               text-align: right;
               padding-right: 17px;
@@ -523,6 +588,11 @@
             .text-enter {
               color: @text;
             }
+            .transaction-fee-hover{
+              color: #ffffff;
+              border-bottom: 1px #aaaaaa dotted;
+              cursor: pointer;
+            }
           }
         }
 
@@ -585,15 +655,18 @@
           }
           .pnl-box {
             position: absolute;
-            width: 200px;
+            min-width: 260px;
             display: none;
             z-index: 1;
             top: 2px;
-            left: 324px;
+            left: 317px;
             background-color: #2c2d31;
             border: 1px solid #AAAAAA;
             color: #AAAAAA;
             border-radius: 10px;
+            max-height: 300px;
+            overflow: auto;
+            overflow-x: hidden;
             font-size: 14px;
             .unrealizePnl-item {
               margin: 10px 0;
@@ -604,6 +677,28 @@
                 color: #fff;
               }
             }
+          }
+          .pnl-box::-webkit-scrollbar {
+            border-radius: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: rgb(20, 25, 36);
+          }
+      
+          /*定义滚动条轨道 内阴影+圆角*/
+      
+          .pnl-box::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 0px rgb(20, 25, 36);
+            border-radius: 10px;
+            background-color: rgb(20, 25, 36);
+          }
+      
+          /*定义滑块 内阴影+圆角*/
+      
+          .pnl-box::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            box-shadow: inset 0 0 0px rgb(20, 25, 36);
+            background-color: gray;
           }
         }
 
@@ -926,7 +1021,11 @@
         .title {
           padding-left: 59px;
         }
-
+        .margin-per{
+          display: inline-block;
+          border-bottom: 1px #AAAAAA dotted;
+          cursor: pointer;
+        }
         .text {
           padding-right: 55px;
         }
@@ -945,7 +1044,9 @@
     }
   }
 }
-
+.options .trade-body .trade-position .history-info .history-box .view{
+  left: 52px;
+}
 .trading-dialog {
 
   .modal-dialog {

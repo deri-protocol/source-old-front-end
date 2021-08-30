@@ -7,5 +7,14 @@
   "current-position" : "当前仓位",
   "trade-history" : "交易记录",
   "pool-total-liquidity" : "池总流动性",
-  "position-info" : "仓位信息"
+  "funding-rate-delta":"Delta Funding Daily",
+  "funding-rate-premium":"Premium Funding Daily",
+  "position-info" : "仓位信息",
+  "option-mark-price" : "期权价格",
+  "open" : "开",
+  "high" : "高",
+  "low" : "低",
+  "close" : "收",
+  "price" : "价格",
+  "index" : "指数"
 }

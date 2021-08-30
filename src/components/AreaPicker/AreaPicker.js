@@ -3,7 +3,7 @@ import './areaPicker.less'
 import classNames from 'classnames'
 import { inject, observer } from 'mobx-react'
 
-function AreaPicker({lang,version,wallet}){
+function AreaPicker({lang,version,wallet,type}){
   const [current, setCurrent] = useState('main')
   const clazz = classNames('area-picker-wrapper',current)
   const [styles, setStyles] = useState({})
@@ -23,7 +23,7 @@ function AreaPicker({lang,version,wallet}){
     return () => {}
   }, [wallet.detail])
   return (
-    ((version.isV2 || version.isV2Lite || version.isOpen) && wallet.supportInnovation) ? <div className='area-picker'>
+    ((version.isV2 || version.isV2Lite || version.isOpen) && wallet.supportInnovation  &&!type.isOption) ? <div className='area-picker'>
       <div className={clazz}>
         <span className='left' style={styles} onClick={() => siwtchZone('main')}>{lang['main-zone']}</span>
         <span className='middle' style={styles} onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
@@ -34,4 +34,4 @@ function AreaPicker({lang,version,wallet}){
   )
 }
 
-export default inject('version','wallet')(observer(AreaPicker))
+export default inject('version','wallet','type')(observer(AreaPicker))

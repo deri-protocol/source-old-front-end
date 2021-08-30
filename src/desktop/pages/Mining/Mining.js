@@ -30,7 +30,7 @@ function Mining({wallet,lang}){
     <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
-						{type === 'lp' ? `${baseToken} @ ${networkText}` :  (version === 'v2' || version === 'v2_lite' || version === 'v2_lite_open') ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
+						{type === 'lp' ? `${baseToken} @ ${networkText}` :  (version === 'v2' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
 					</div>
 					{version !== 'v2_lite_open' && <div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >

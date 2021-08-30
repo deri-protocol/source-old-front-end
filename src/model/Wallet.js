@@ -109,6 +109,17 @@ class Wallet {
     this.loadWalletBalance(this.detail.chainId,this.detail.account);
   }
 
+  isSupportChain(isOptions){
+    const chainId = this.detail.chainId
+    const env = DeriEnv.get();
+    const {chainInfo} = config[env]
+    if(isOptions){
+      return chainInfo[chainId] && chainInfo[chainId]['supportOptions']
+    } else {
+      return this.supportChain
+    }
+  }
+
   get supportV2() {
     return this.detail.supportV2
   }

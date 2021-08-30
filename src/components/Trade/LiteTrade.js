@@ -34,8 +34,8 @@ function LiteTrade({wallet,trading,isPro,lang}){
             </>}
           </div>
         </div>
-        <Trade lang={lang}/>
-        <Position lang={lang}/>
+        <Trade lang={lang} />
+        <Position lang={lang} />
         <History wallet ={wallet} spec={trading.config} specs={trading.configs} lang={lang} />
         <ContractInfo lang={lang}/>   
     </div> 

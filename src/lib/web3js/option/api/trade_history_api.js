@@ -1,20 +1,9 @@
-import { deriToNatural, getBlockInfo, getPastEvents } from '../../shared/utils';
+import { deriToNatural, bg, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig,
-  getRestServerConfig,
-  DeriEnv,
 } from '../../shared/config';
 import { everlastingOptionFactory } from '../factory/pool';
 import { calculateTxFee } from '../../v2/calculation/position';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
-  return await resp.json();
-};
 
 const processTradeEvent = async (
   chainId,
@@ -31,11 +20,12 @@ const processTradeEvent = async (
   const timeStamp = await getBlockInfo(chainId, blockNumber);
 
   const direction = tradeVolume.gt(0) ? 'LONG' : 'SHORT';
-  const price = deriToNatural(info.intrinsicValue).plus(deriToNatural(info.timeValue));
+  const tradeCost = deriToNatural(info.tradeCost);
   const time = `${+timeStamp.timestamp}000`;
   const volume = tradeVolume.abs();
   const symbolId = info.symbolId
   const index = symbolIdList.indexOf(symbolId)
+  const price = bg(tradeCost).div(bg(tradeVolume).times(symbols[index].multiplier))
 
   if (index > -1) {
     return {

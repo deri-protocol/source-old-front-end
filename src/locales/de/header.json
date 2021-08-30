@@ -1,6 +1,7 @@
 {
   "mining" : "Minen",
   "trade" : "Trade",
+  "options":"Options",
   "governance" : "Governance",
   "bridge" : "Brücke",
   "docs" : "Docs",
@@ -9,7 +10,7 @@
   "broker-bind":"Broker Binden",
   "signin":"Aktivitätszentrum",
   "retired-pools":"Inaktive Pools",
-  "deri-token":"Deri Zeichen",
+  "deri-token":"Zeichen",
   "team" : "Team",
   "faq" : "FAQ",
   "code-audit" : "Auditberichte",

@@ -1,13 +1,12 @@
 import {
   bTokenFactory,
   ContractBase,
-  DeriEnv,
   deriToNatural,
+  fetchJson,
+  getHttpBase,
 } from '../../shared';
-import { normalizeSymbolUnit } from '../../shared/config/oracle';
-import { getPoolV2LiteManagerConfig } from '../config';
+import { normalizeSymbolUnit } from '../../shared/config/token';
 import { perpetualPoolLiteAbi } from './abis';
-import { PerpetualPoolLiteManager } from './perpetual_pool_lite_manager';
 import { PTokenLite } from './p_token';
 
 export class PerpetualPoolLite extends ContractBase {
@@ -71,21 +70,25 @@ export class PerpetualPoolLite extends ContractBase {
     this.bTokenSymbol = await this.bToken.symbol()
     return this.bTokenSymbol
   }
-  async getInitialBlock() {
-  //   const managerConfig= getPoolV2LiteManagerConfig(DeriEnv.get())
-  //   console.log(managerConfig)
-  //   const manager = new PerpetualPoolLiteManager(this.chainId, managerConfig.address)
-  //   await manager._init()
-  //   const event = await manager.contract.getPastEvents('CreatePool', {
-  //     fromBlock: managerConfig.initialBlock,
-  //     topics: ['0xdbd2a1ea6808362e6adbec4db4969cbc11e3b0b28fb6c74cb342defaaf1daada']
-  //   })
-  //   return event
+  async getPoolExtraInfo() {
+    const url = `${getHttpBase()}/pool_extra_info/${this.contractAddress}`
+    const res = await fetchJson(url)
+    // console.log(res)
+    if (res.success) {
+      return res.data
+    } else {
+      console.log(`-- getInitialBlock(): ${res.message}`)
+      return  {
+        block_number: '1000000000',
+        version: '',
+      }
+    }
   }
   async getConfig() {
-    const [bToken, symbols] = await Promise.all([
+    const [bToken, symbols, extraInfo] = await Promise.all([
       this.getBTokenSymbol(),
       this.getSymbols(),
+      this.getPoolExtraInfo(),
     ])
     return {
       pool: this.contractAddress,
@@ -97,7 +100,10 @@ export class PerpetualPoolLite extends ContractBase {
         symbolId: this.symbolIds[index],
         symbol: s.symbol,
         unit: normalizeSymbolUnit(s.symbol),
-      }))
+      })),
+      initialBlock:extraInfo.block_number,
+      version:extraInfo.version,
+      chainId: this.chainId,
     }
   }
 }

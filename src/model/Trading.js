@@ -5,10 +5,11 @@ import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
 import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol } from "../utils/utils";
-import { getFundingRate } from "../lib/web3js/indexV2";
+import { getFundingRate, priceCache } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
 import version from './Version'
+import type from './Type'
 
 /**
  * 交易模型
@@ -42,6 +43,7 @@ import version from './Version'
 export default class Trading {
   version = null;
   wallet = null;
+  type = null;
   configs = [] 
   config = null;
   index = ''
@@ -49,6 +51,7 @@ export default class Trading {
   paused = false
   slideIncrementMargin = 0
   position = {}
+  positions = []
   contract = {}
   fundingRate = {}
   history = []
@@ -62,6 +65,7 @@ export default class Trading {
       slideIncrementMargin : observable,
       fundingRate : observable,
       position : observable,
+      positions : observable,
       history : observable,
       contract : observable,
       userSelectedDirection : observable,
@@ -72,6 +76,7 @@ export default class Trading {
       setIndex : action,
       setContract : action,
       setPosition : action,
+      setPositions : action,
       setVolume : action,
       setUserSelectedDirection : action,
       // setSupportChain : action,
@@ -80,6 +85,11 @@ export default class Trading {
       setSlideMargin : action,
       amount : computed,
       fundingRateTip : computed,
+      optionFundingRateTip : computed,
+      initialMarginRatioTip : computed,
+      maintenanceMarginRatioTip : computed,
+      TransactionFeeTip : computed,
+      multiplierTip : computed,
       direction : computed,
       volumeDisplay : computed,
       isNegative : computed,
@@ -96,8 +106,8 @@ export default class Trading {
    * 初始化
    * wallet and version changed will init
    */
-  async init(wallet,version,finishedCallback){    
-    const all = await this.configInfo.load(version);
+  async init(wallet,version,isOption,finishedCallback){  
+    const all = await this.configInfo.load(version,isOption);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
       this.setWallet(wallet);
@@ -112,26 +122,26 @@ export default class Trading {
     } else if(!wallet.isConnected() || !wallet.supportWeb3()){
       //没有钱包插件
       version.setCurrent('v2')
-      const all = await this.configInfo.load(version);
+      const all = await this.configInfo.load(version,isOption);
       const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
       this.setConfig(defaultConfig)
     }
-    this.loadByConfig(this.wallet,this.config,true,finishedCallback)
+    this.loadByConfig(this.wallet,this.config,true,finishedCallback,isOption)
     this.setVolume('')
   }
 
-  async onSymbolChange(spec,finishedCallback){
+  async onSymbolChange(spec,finishedCallback,isOption){
     const config = this.configs.find(config => config.pool === spec.pool && config.symbolId === spec.symbolId)
     //v1 只需要比较池子地址，v2 需要比较symbolId
     const changed = version.isV1 ? spec.pool !== this.config.pool : spec.symbolId !== this.config.symbolId
-    this.onChange(config,changed,finishedCallback)
+    this.onChange(config,changed,finishedCallback,isOption)
   }
 
-  async onChange(config,changed,finishedCallback){
+  async onChange(config,changed,finishedCallback,isOption){
     if(config){
       this.pause();
       this.setConfig(config)
-      this.loadByConfig(this.wallet,config,changed,finishedCallback);  
+      this.loadByConfig(this.wallet,config,changed,finishedCallback,isOption);  
       if(changed){
         this.store(config)
       }    
@@ -140,7 +150,7 @@ export default class Trading {
     }
   }
 
-  async loadByConfig(wallet,config,symbolChanged,finishedCallback){
+  async loadByConfig(wallet,config,symbolChanged,finishedCallback,isOption){
      //切换指数
     if(symbolChanged && config){
       const symbol = getFormatSymbol(config.symbol)
@@ -154,17 +164,20 @@ export default class Trading {
       Promise.all([
         this.positionInfo.load(wallet,config,(position) => {
           this.setPosition(position)
-          this.syncFundingRate(wallet,config)          
-        }),
-        this.contractInfo.load(wallet,config),
-        this.loadFundingRate(wallet,config),          
-        this.historyInfo.load(wallet,config)
+          this.syncFundingRate(wallet,config,isOption)
+        },isOption),
+        this.contractInfo.load(wallet,config,isOption),
+        this.loadFundingRate(wallet,config,isOption),
+        this.historyInfo.load(wallet,config,isOption),
+        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOption),
       ]).then(results => {
-        if(results.length === 4){
+        if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
           results[1] && this.setContract(results[1]);
           results[2] && this.setFundingRate(results[2]);
           results[3] && this.setHistory(results[3]);
+          results[4] && this.setPositions(results[4]);
+          // this.refreshCache();
         } 
       }).finally(e => {
         finishedCallback && finishedCallback()
@@ -172,6 +185,13 @@ export default class Trading {
     } else {
       finishedCallback && finishedCallback()
     }
+  }
+
+  refreshCache(){
+    const {pool} = this.config;
+    const symbol = type.isOption ? this.config.symbol.split('-')[0] : this.config.symbol
+    priceCache.clear();
+    priceCache.update(pool,symbol)
   }
 
 
@@ -274,6 +294,12 @@ export default class Trading {
     }
   }
 
+  setPositions(positions){
+    if(positions){
+      this.positions = positions
+    }
+  }
+
   setContract(contract){
     this.contract = contract
   }
@@ -304,32 +330,57 @@ export default class Trading {
       const position = this.position;
       const price = position.price || this.index
       const increment = slideIncrementMargin - position.marginHeld
-      const volume = increment / (price * this.contract.multiplier * this.contract.minInitialMarginRatio);
-      this.setVolume(volume.toFixed(0))
+      let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
+      let volume =  increment / (price * this.contract.multiplier * MarginRatio);
+      if(type.isOption){
+        volume = +volume * +this.contract.multiplier
+        let index = this.contract.multiplier.indexOf('.')
+        let num = this.contract.multiplier.slice(index);
+        let length = num.length 
+        let value = volume.toString()
+        if(value.indexOf(".") != '-1'){
+          value = value.substring(0,value.indexOf(".") + length)
+        }
+        this.setVolume(value)
+      }else{
+        this.setVolume(volume.toFixed(0))
+      }
+      
     }
   }
 
 
   get volumeDisplay(){
-    if(Math.abs(this.volume) === 0 || this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
-      return '';
-    } else {
-      return Math.abs(this.volume)
-    }
+    // if(type.isOption){
+    //   if( this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
+    //     return '';
+    //   } else {
+    //     return Math.abs(this.volume)
+    //   }
+    // }else if(type.isFuture){
+      if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
+        return '';
+      } else {
+        return Math.abs(this.volume)
+      }
+    // }
+    
   }
   
 
   get amount(){
     const position = this.position
     const contract = this.contract;
-    const volume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
+    let initVolume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
+    let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    const volume = optionVolume
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
     const price = position.price || this.index
     //v2
     let otherMarginHeld = bg(marginHeld).minus(currentSymbolMarginHeld)
     otherMarginHeld = otherMarginHeld.isNaN() ? bg(0) : otherMarginHeld;
     const contractValue = volume * price * contract.multiplier;
-    const incrementMarginHeld = contractValue * contract.minInitialMarginRatio
+    const incrementMarginHeld =  type.isOption ? contractValue * contract.initialMarginRatio : contractValue * contract.minInitialMarginRatio
     let totalMarginHeld = bg(marginHeld) ;
 
     //如果当前仓位为正仓用户做空或者当前仓位为负仓用户做多，总仓位相减,取绝对值
@@ -367,6 +418,8 @@ export default class Trading {
       currentSymbolMarginHeld : currentSymbolMarginHeld,
       leverage : leverage
     }
+    
+    
   }
 
   get direction(){    
@@ -401,9 +454,9 @@ export default class Trading {
   }
 
   //资金费率
-  async loadFundingRate(wallet,config){
+  async loadFundingRate(wallet,config,isOption){
     if(config){
-      const chainId = wallet && wallet.isConnected() && wallet.supportChain ? wallet.detail.chainId : config.chainId
+      const chainId = wallet && wallet.isConnected() && wallet.isSupportChain(isOption) ? wallet.detail.chainId : config.chainId
       if(config){    
         const res = await getFundingRate(chainId,config.pool,config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
         return res;
@@ -435,9 +488,51 @@ export default class Trading {
       }
     }
     
+   
+  }
+
+  get optionFundingRateTip(){
+    if(this.fundingRate && this.fundingRate.premiumFundingPerSecond && this.config){
+      if(Intl.locale === 'zh'){
+        return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.premiumFundingPerSecond}` +
+      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} `        
+      } else {
+        return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.premiumFundingPerSecond}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+      }
+    }
     return ''
   }
 
+  get initialMarginRatioTip(){
+    if(this.contract && this.contract.initialMarginRatioOrigin){
+      return `${Intl.get('lite','in-the-money-initial')} = ${this.contract.initialMarginRatioOrigin}` +
+      `\n${Intl.get('lite','out-of-money-initial')} = ${Intl.get('lite','in-max')}(${this.contract.initialMarginRatioOrigin}${Intl.get('lite','otm-ratio-initial')} ${this.contract.initialMarginRatioOrigin / 10})` +
+      `\n\n${Intl.get('lite','otm-ratio-max')}`
+    }
+    return ''
+  }
+  get maintenanceMarginRatioTip(){
+    if(this.contract && this.contract.maintenanceMarginRatioOrigin){
+      return `${Intl.get('lite','in-the-money-maintenance')} = ${this.contract.maintenanceMarginRatioOrigin}` +
+      `\n${Intl.get('lite','out-of-money-maintenance')} = ${Intl.get('lite','in-max')}(${this.contract.maintenanceMarginRatioOrigin}${Intl.get('lite','otm-ratio-maintenance')} ${this.contract.maintenanceMarginRatioOrigin / 10})` +
+      `\n\n${Intl.get('lite','otm-ratio-max')}`
+    }
+    return ''
+  }
 
+  get multiplierTip(){
+    if(this.contract && this.config){
+      return `${Intl.get('lite','the-notional-value-of')} ${this.contract.multiplier}${this.config.unit}`
+    }
+    return ''
+  }
+
+  get TransactionFeeTip(){
+    if(this.contract && this.config){
+        return `${Intl.get('lite','transaction-fee-tip')}${this.config.unit} = ${Intl.get('lite','transaction-fee-tip1')} ${this.contract.feeRatio * 100}%`
+    }
+    return ''
+  }
 
 }

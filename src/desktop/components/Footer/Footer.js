@@ -20,7 +20,7 @@ function Footer({intl}){
         <div className="left">
           <div>
             <span>
-              <a  rel='noreferrer' href={`https://app.deri.finance/#lite?locale=${intl.locale}`} target={isApp ? '' : '_blank'} className='mt-27'>{lang['app']}</a>  
+              <a  rel='noreferrer' href={`https://app.deri.finance/#/futures/lite?locale=${intl.locale}`} target={isApp ? '' : '_blank'} className='mt-27'>{lang['app']}</a>  
             </span>
             <span className="mt-27">
               <a href="https://docs.deri.finance/">{lang['docs']}</a> 

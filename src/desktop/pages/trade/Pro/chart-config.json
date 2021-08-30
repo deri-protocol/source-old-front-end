@@ -1,0 +1,28 @@
+{
+  "container_id": "tv-container",
+  "library_path": "/charting_library/",      
+  "custom_css_url" : "/style/tradingview-overide.css",
+  "disabled_features": [
+    "header_widget",
+    "timeframes_toolbar",
+    "go_to_date"
+  ],
+  "fullscreen": false,
+  "autosize": true,
+  "overrides": {
+    "paneProperties.background": "#212327",
+    "paneProperties.vertGridProperties.color": "#212327",
+    "paneProperties.horzGridProperties.color": "#212327",
+    "scalesProperties.textColor" : "#aaa" ,
+    "mainSeriesProperties.candleStyle.upColor": "#4bffb5",
+    "mainSeriesProperties.candleStyle.downColor": "#d75442",
+    "mainSeriesProperties.candleStyle.borderColor": "#378658",
+    "mainSeriesProperties.candleStyle.borderUpColor": "#4bffb5",
+    "mainSeriesProperties.candleStyle.borderDownColor": "#ff4976",
+    "mainSeriesProperties.candleStyle.wickUpColor": "#838ca1",
+    "mainSeriesProperties.candleStyle.wickDownColor": "#838ca1"
+  },      
+  "toolbar_bg": "#212327",
+  "timezone": "Asia/Shanghai", 
+  "session": "24x7"
+}

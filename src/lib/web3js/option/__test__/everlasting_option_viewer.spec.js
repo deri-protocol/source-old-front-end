@@ -1,4 +1,4 @@
-import { getPoolViewerConfig, getPoolSymbolList, toNumberForObject } from "../../shared"
+import { getPoolViewerConfig, getPoolSymbolList } from "../../shared"
 import { getOraclePricesForOption } from "../../shared/utils/oracle"
 import { ACCOUNT_ADDRESS, CHAIN_ID, OPTION_POOL_ADDRESS, TIMEOUT } from "../../shared/__test__/setup"
 import { everlastingOptionViewerFactory } from "../factory/tokens"
@@ -27,50 +27,41 @@ describe('EverlastingOptionViewer', () => {
       // console.log(res.poolState)
       // console.log(res.symbolState[14])
       //res.symbolState.forEach((s) => console.log(s))
-      expect(res.poolState).toEqual(
-        expect.objectContaining({
-          pool: '0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6',
-          pToken: '0x7484e22022C971e314A00e0dfbfCDe8E223c80aC',
-          pmmPricer: '0x1D7AFF20BB5E52dDD10d5B4B0e0b91b5327Ae826',
-          optionPricer: '0x2D346A85299d812C0c0e97B23CD1ff0F37b606Ab',
-          initialMarginRatio: '0.1',
-          maintenanceMarginRatio: '0.05',
-          premiumFundingPeriod: expect.any(String),
-          premiumFundingCoefficient: expect.any(String),
-          liquidity: expect.any(String),
-          totalDynamicEquity: expect.any(String),
-          totalInitialMargin: expect.any(String),
-          curTimestamp: expect.any(String),
-          preTimestamp: expect.any(String),
-        })
-      );
-      expect(res.symbolState[0]).toEqual(
-        expect.objectContaining({
-          symbol: 'BTCUSD-20000-C',
-          symbolId: '0',
-          oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
-          volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',
-          isCall: true,
-          multiplier: '0.01',
-          deltaFundingCoefficient: expect.any(String),
-          strikePrice: '20000',
-          oraclePrice: expect.any(String),
-          oracleVolatility: expect.any(String),
-          timePrice: expect.any(String),
-          dynamicMarginRatio: expect.any(String),
-          intrinsicValue: expect.any(String),
-          timeValue: expect.any(String),
-          delta: expect.any(String),
-          K: '0.9',
-          quoteBalanceOffset: expect.any(String),
-          tradersNetVolume: expect.any(String),
-          tradersNetCost: expect.any(String),
-          cumulativeDeltaFundingRate: expect.any(String),
-          cumulativePremiumFundingRate: expect.any(String),
-          deltaFundingPerSecond: expect.any(String),
-          premiumFundingPerSecond: expect.any(String),
-        })
-      );
+      expect(res.poolState).toHaveProperty('pool', '0x041FC773fD97f878429d6F40b5B3420ce8e92672')
+      expect(res.poolState).toHaveProperty('pToken', expect.any(String))
+      expect(res.poolState).toHaveProperty('optionPricer', expect.any(String))
+      expect(res.poolState).toHaveProperty('initialMarginRatio', '0.1')
+      expect(res.poolState).toHaveProperty('maintenanceMarginRatio', '0.05')
+      expect(res.poolState).toHaveProperty('liquidity', expect.any(String))
+      expect(res.poolState).toHaveProperty('totalDynamicEquity', expect.any(String))
+      expect(res.poolState).toHaveProperty('totalInitialMargin', expect.any(String))
+      expect(res.poolState).toHaveProperty('curTimestamp', expect.any(String))
+      expect(res.poolState).toHaveProperty('preTimestamp', expect.any(String))
+      expect(res.poolState).toHaveProperty('premiumFundingCoefficient', expect.any(String))
+      expect(res.poolState).toHaveProperty('premiumFundingPeriod', expect.any(String))
+
+      expect(Object.keys(res.symbolState[0]).length).toEqual(20)
+      expect(res.symbolState[0]).toHaveProperty('symbolId', '0')
+      expect(res.symbolState[0]).toHaveProperty('symbol', 'BTCUSD-20000-C')
+      expect(res.symbolState[0]).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
+      expect(res.symbolState[0]).toHaveProperty('volatilityAddress', '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc')
+      expect(res.symbolState[0]).toHaveProperty('isCall', true)
+      expect(res.symbolState[0]).toHaveProperty('multiplier', '0.01')
+      expect(res.symbolState[0]).toHaveProperty('dynamicMarginRatio', '0.1')
+      expect(res.symbolState[0]).toHaveProperty('strikePrice', '20000')
+      expect(res.symbolState[0]).toHaveProperty('K', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('alpha', '0.01')
+      expect(res.symbolState[0]).toHaveProperty('delta', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('premiumFundingPerSecond', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('intrinsicValue', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('timeValue', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('spotPrice', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('volatility', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('dpmmPrice', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('tradersNetCost', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('tradersNetVolume', expect.any(String))
+      expect(res.symbolState[0]).toEqual({})
     },
     TIMEOUT
   );
@@ -152,22 +143,20 @@ describe('EverlastingOptionViewer', () => {
       // });
       expect(res.traderState).toEqual(
         expect.objectContaining({
+          margin: expect.any(String),
+          totalPnl: expect.any(String),
+          totalFundingAccrued: expect.any(String),
           dynamicMargin: expect.any(String),
           initialMargin: expect.any(String),
           maintenanceMargin: expect.any(String),
-          margin: expect.any(String),
-          totalFundingAccrued: expect.any(String),
-          totalPnl: expect.any(String),
         })
       );
       expect(res.positionState[0]).toEqual(
         expect.objectContaining({
           volume: expect.any(String),
           cost: expect.any(String),
-          lastCumulativeDeltaFundingRate: expect.any(String),
           lastCumulativePremiumFundingRate: expect.any(String),
           pnl: expect.any(String),
-          deltaFundingAccrued: expect.any(String),
           premiumFundingAccrued: expect.any(String),
         })
       );

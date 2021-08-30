@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react'
 import Position from "./Position";
+import OptionPosition from "./OptionPosition";
 import History from "./History";
 import classNames from "classnames";
 
-function Reference({lang}) {
+function Reference({lang,type}) {
   const [curTab, setCurTab] = useState('position');
 
   const switchTab = tab => {
@@ -37,8 +38,9 @@ function Reference({lang}) {
         </div>
       </div>
       <div className='pos-his-info '>
-        <Position lang={lang}/>
-        <History lang={lang}/>
+        {type.isFuture && <Position lang={lang} />} 
+        {type.isOption && <OptionPosition lang={lang} />} 
+        <History lang={lang}  />
       </div>
     </div>
   )

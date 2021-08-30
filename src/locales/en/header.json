@@ -1,6 +1,7 @@
 {
-  "mining" : "Mining",
-  "trade" : "Trade",
+  "mining" : "Pools",
+  "trade" : "Futures",
+  "options":"Options",
   "governance" : "Governance",
   "bridge" : "Bridge",
   "docs" : "Docs",
@@ -9,7 +10,7 @@
   "broker-bind":"Bind Broker",
   "signin":"Promotional Events",
   "retired-pools":"Retired Pools",
-  "deri-token":"Deri Token",
+  "deri-token":"Token",
   "team" : "Team",
   "faq" : "FAQ",
   "code-audit" : "Code Audit",

@@ -5,16 +5,13 @@ import './lite.less'
 import './zh-lite.less'
 import './de-lite.less'
 
-
-
 export default function Lite({lang}){
-
   return (
     <div className='trade-container'>
-      <AreaPicker lang={lang}></AreaPicker>
+      <AreaPicker lang={lang} ></AreaPicker> 
       <div className='trade-body lite'>
-          <Tab lite={true} lang={lang}/>
-          <LiteTrade lang={lang}/> 
+          <Tab lite={true} lang={lang} />
+          <LiteTrade lang={lang} /> 
       </div>
     </div>
   )

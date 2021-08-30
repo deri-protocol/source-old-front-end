@@ -35,7 +35,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 			}
 			if(info){
 				const shares = info.shares ? bg(info.shares) : bg(0)
-				if(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open') {
+				if(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') {
 					const total = shares.isNaN() ? bg(0) : shares.multipliedBy(info.shareValue) 
 					setLiquidity({
 						total :  info.poolLiquidity,
@@ -115,7 +115,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 									<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>					
 				</div>}
-				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open') && <div className="odd text">
+				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') && <div className="odd text">
 					<div className="text-title">{lang['liquidity-share-value']}</div>
 					<div className="text-num"><DeriNumberFormat  allowZero={true} decimalScale={6} value={ liquidity.shareValue} suffix={ ' '+ bToken } thousandSeparator={true}/></div>						
 				</div>}
@@ -131,7 +131,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					<div className='text-title'>{lang['mining-pnl']}</div>
 					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
-				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open') && <div className="odd claim-network">
+				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') && <div className="odd claim-network">
 					<div className="text-title money"> <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
 				</div>}
 				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId} lang={lang}/>
@@ -232,7 +232,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 
   
   useEffect(() => {
-		//todo 判断网络
+		// todo 判断网络
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId, chainId)){
 			isApprove()
     }
@@ -274,7 +274,7 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 				? <AddDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} balance={balance}
 										  address={address} wallet={wallet} baseToken={baseToken} afterAdd={afterClick} baseTokenId={baseTokenId}  symbolId={symbolId} lang={lang}/> 
 				: <RemoveDialog  modalIsOpen={isOpen} isLpPool={isLpPool} onClose={afterClick} liqInfo={liqInfo}  
-											address={address} wallet={wallet} version={version} unit={version === 'v1' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
+											address={address} wallet={wallet} version={version} unit={version === 'v1' || version === 'v2_lite' || version === 'option' ? lang['shares'] :baseToken} afterRemove={afterClick} baseTokenId={baseTokenId} symbolId={symbolId} lang={lang}/>
 			}			
 			{buttonElment}
   </div>

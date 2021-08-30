@@ -1,6 +1,7 @@
 {
-  "mining" : "挖矿",
-  "trade" : "交易",
+  "mining" : "矿池",
+  "trade" : "期货",
+  "options":"期权",
   "governance" : "治理",
   "bridge" : "跨链",
   "docs" : "文档",
@@ -9,7 +10,7 @@
   "broker-bind":"绑定经纪人",
   "signin":"活动中心",
   "retired-pools":"退役矿池",
-  "deri-token":"Deri 通证",
+  "deri-token":"通证",
   "team" : "团队",
   "faq" : "FAQ",
   "code-audit" : "审计报告",
