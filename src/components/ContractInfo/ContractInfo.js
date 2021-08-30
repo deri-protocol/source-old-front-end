@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import NumberFormat from 'react-number-format'
 import { inject, observer } from 'mobx-react';
+import TipWrapper from '../TipWrapper/TipWrapper';
+import version from '../../model/Version';
 
 
 function ContractInfo({ wallet, trading, lang, type }) {
@@ -12,9 +14,13 @@ function ContractInfo({ wallet, trading, lang, type }) {
         <div className="conntract-header">{lang['contract-info']}</div>
         <div className="info">
           <div className="title">{lang['base-token']}</div>
-          <div className="text" dangerouslySetInnerHTML={{ __html: trading.contract.bTokenSymbolDisplay && trading.contract.bTokenSymbolDisplay.map(bToken => bToken) }}>
-
-          </div>
+            <div className="text" >
+              {trading.contract.bTokenSymbol && trading.contract.bTokenSymbol.map((bToken,index) => {
+                return ( (version.isV2 && type.isFuture )
+                  ? <TipWrapper><span class='btoken-symbol'>{bToken}(<span class='multiplier' title={lang['multiplier-tip']}>{trading.contract.bTokenMultiplier && trading.contract.bTokenMultiplier[index]}x</span>)</span></TipWrapper>
+                  : <span class='btoken-symbol'>{bToken}</span>)  
+              })}
+            </div>
         </div>
         <div className="info">
           <div className="title">{lang['symbol']}</div>
@@ -74,33 +80,28 @@ function ContractInfo({ wallet, trading, lang, type }) {
               {trading.contract.multiplier} {trading.config ? trading.config.unit:''}
             </div>
           </div>
-          {/* <div className="info">
-            <div className="title ">{lang['delta-funding-coefficient']}</div>
-            <div className="text">
-              {trading.contract.deltaFundingCoefficient}
-            </div>
-          </div> */}
           <div className="info">
-            <div className="title"> <span title={trading.initialMarginRatioTip} className='margin-per'>{lang['initial-margin-ratio']}</span> </div>
+            <div className="title"><TipWrapper block={false}><span title={trading.initialMarginRatioTip} className='margin-per'>{lang['initial-margin-ratio']}</span></TipWrapper></div>
             <div className="text">
               <NumberFormat displayType='text' value={trading.contract.initialMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>
           </div>
           <div className="info">
-            <div className="title"> <span title={trading.maintenanceMarginRatioTip} className='margin-per'> {lang['maintenance-margin-ratio']}</span> </div>
+            <div className="title"> <TipWrapper block={false}><span title={trading.maintenanceMarginRatioTip} className='margin-per'> {lang['maintenance-margin-ratio']}</span></TipWrapper> </div>
             <div className="text">
               <NumberFormat displayType='text' value={trading.contract.maintenanceMarginRatio * 100} decimalScale={2} suffix='%' />
             </div>
           </div>
         </>}
         <div className="info">
-          
           {type.isFuture && <>
             <div className="title">{lang['transaction-fee']}</div>
           </>}
           {type.isOption && <>
             <div className="title">
-              <span className="margin-per" title={trading.TransactionFeeTip}>{lang['transaction-fee']}</span>  
+              <TipWrapper block={false}>
+                <span className="margin-per" title={trading.TransactionFeeTip}>{lang['transaction-fee']}</span>  
+              </TipWrapper>
             </div>
           </>}
           <div className="text">

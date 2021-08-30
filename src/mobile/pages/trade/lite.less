@@ -265,8 +265,9 @@
               .funding-per {
                 display: inline-block;
                 color: @text;
-                // border-bottom: 1px #AAAAAA dotted;
+                border-bottom: 1px #AAAAAA dotted;
                 cursor: pointer;
+                
               }
             }
           }
@@ -432,6 +433,13 @@
             font-weight: 500;
             margin-left: 0.1rem;
 
+            .v2,.v2_lite {
+              .balance-contract-text,.total-held, .pos-held,.available-balance .pc{
+                cursor: pointer;
+                border-bottom: 1px dotted #aaaaaa;
+              }
+            }
+
             .contrant-info {
               font-size: 0.12rem;
               width: 1.6rem;
@@ -444,7 +452,7 @@
                 }  
               }
 
-              div {
+              .margin-held-pos,.balance-contract,.box-margin,.available-balance {
                 display: flex;
                 justify-content: space-between;
                 padding-top: 0.03rem;
@@ -464,10 +472,10 @@
                   position: relative;
                 }
               }
-              .available-balance.pc {
+              .available-balance .pc {
                 display: none
               }
-              .available-balance.mobile {
+              .available-balance .mobile {
                 border-bottom: 1px dotted #aaaaaa;
               }
               .balance-contract-text.pc{
@@ -612,9 +620,16 @@
             line-height: 0.2rem;
           }
 
+          .funding-fee {
+            border-bottom: 1px #AAAAAA dotted;
+            cursor: pointer;
+          }
+
           .title-text {
             color: @title;
-            padding-left: 0.2rem;
+            margin-left: 0.2rem;
+
+           
           }
 
           .info-num ,.Direction{
@@ -882,6 +897,19 @@
         font-weight: 500;
         color: #AAAAAA;
         padding: 0 0.15rem;
+        .text > div {
+          display: inline;
+        }
+        .multiplier {
+          border-bottom: 1px dotted #aaaaaa;
+          cursor: pointer;
+        }
+
+        .margin-per {
+          display: inline-block;
+          border-bottom: 1px #AAAAAA dotted;
+          cursor: pointer;
+        }
       }
       
       .info:nth-child(even) {

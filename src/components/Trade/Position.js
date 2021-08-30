@@ -13,6 +13,7 @@ import removeMarginIcon from '../../assets/img/remove-margin.svg'
 import marginDetailIcon from '../../assets/img/margin-detail.png'
 import pnlIcon from '../../assets/img/pnl-detail.png'
 import closePositionIcon from '../../assets/img/close-position-icon.svg'
+import TipWrapper from '../TipWrapper/TipWrapper';
 
 
 
@@ -209,14 +210,14 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         {type.isFuture && <>
           <div className='info-left'>
-          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
           <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
         </div>
         <div className='info-right'></div>
         </>}
         {type.isOption && <>
           <div className='info-left'>
-          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
           <div className='info-num'><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))} decimalScale={8} /></div>
         </div>
         <div className='info-right'></div>

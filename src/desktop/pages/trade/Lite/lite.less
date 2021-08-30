@@ -288,7 +288,6 @@
             font-size: 12px;
             height: 68px;
             padding-top: 13px;
-            
 
             .rise {
               color: @green;
@@ -505,7 +504,7 @@
 
 
             .v2,.v2_lite {
-              .balance-contract-text.pc,.total-held, .pos-held,.available-balance.pc{
+              .balance-contract-text.pc,.total-held, .pos-held,.available-balance .pc{
                 cursor: pointer;
                 border-bottom: 1px dotted #aaaaaa;
               }
@@ -515,7 +514,7 @@
               font-size: 12px;
 
 
-              div {
+              .margin-held-pos,.balance-contract,.box-margin,.available-balance {
                 display: flex;
                 justify-content: space-between;
                 width: 220px;
@@ -548,7 +547,7 @@
               .balance-contract-text.mobile {
                 display: none
               }
-              .available-balance.mobile {
+              .available-balance .mobile {
                 display: none;
               }
 
@@ -1028,6 +1027,9 @@
         }
         .text {
           padding-right: 55px;
+          > div{
+            display: inline;
+          }
         }
         .multiplier {
           border-bottom: 1px dotted #aaaaaa;

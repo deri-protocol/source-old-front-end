@@ -32,13 +32,7 @@ export default class Contract {
   async load(wallet,config){
     if(wallet && wallet.supportChain && config && config.pool !== this.info.pool){
       const spec = await getSpecification(wallet.detail.chainId,config.pool,config.symbolId);
-      spec.bTokenSymbolDisplay = this.bTokenSymbolDisplay(spec)
-      if(type.isOption){
-        spec.underlier = spec.symbol.split('-')[0]
-        spec.strike = spec.symbol.split('-')[1]
-        spec.optionType = spec.symbol.split('-')[2]
-      }
-      
+      spec.bTokenSymbol = this.bTokenSymbolDisplay(spec)
       this.setInfo(spec)
     }
     return this.info
@@ -52,7 +46,6 @@ export default class Contract {
     if(version.isV1 || version.isV2Lite || type.isOption || version.isOpen){
       return [spec.bTokenSymbol];
     }
-    const {bTokenSymbol = [],bTokenMultiplier = []} = spec
-    return bTokenSymbol instanceof Array && bTokenSymbol.map((bToken,index) => `<span class='btoken-symbol'>${bToken}(<span class='multiplier' title='${Intl.get('lite','multiplier-tip')}'>${bTokenMultiplier[index]}x</span>)</span>`)
+    return spec.bTokenSymbol;
   }
 }
