@@ -26,6 +26,7 @@ const processTradeEvent = async (
   multiplier,
   feeRatio,
   bTokenSymbol,
+  symbols,
 ) => {
   const tradeVolume = deriToNatural(info.tradeVolume);
   const timeStamp = await getBlockInfo(chainId, blockNumber);
@@ -34,6 +35,7 @@ const processTradeEvent = async (
   const price = deriToNatural(info.price);
   const time = `${+timeStamp.timestamp}000`;
   const symbolId = info.symbolId
+  const symbol = symbols.find((s) => s.symbolId == info.symbolId)
   const transactionFee = calculateTxFee(
     tradeVolume,
     price,
@@ -47,6 +49,7 @@ const processTradeEvent = async (
     direction,
     baseToken: bTokenSymbol,
     symbolId,
+    symbol: symbol && symbol.symbol,
     price: price.toString(),
     notional: notional.toString(),
     volume: volume.toString(),
@@ -101,6 +104,7 @@ const getTradeHistoryOnline = async (
       multiplier,
       feeRatio,
       bTokenSymbol,
+      symbols,
     );
     result.unshift(res);
   }
@@ -132,6 +136,7 @@ export const getTradeHistory = async (
             direction: i.direction.trim(),
             baseToken: i.baseToken.trim(),
             symbolId: i.symbolId,
+            symbol: i.symbol,
             price: deriToNatural(i.price).toString(),
             notional: deriToNatural(i.notional).toString(),
             volume: deriToNatural(i.volume).toString(),

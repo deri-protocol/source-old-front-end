@@ -9,16 +9,50 @@ import {
   mapToBTokenInternal,
   normalizeOptionSymbol,
 } from '../config/token';
+import { PRESERVED_SYMBOLS } from '../config/version';
+
+export const getPriceInfoForV1 = async(symbol) => {
+  const env = DeriEnv.get();
+  let method = 'get_signed_price'
+  let url
+  let baseUrl =
+    env === 'prod'
+      ? `https://oracle4.deri.finance/${method}`
+      : `https://oracle2.deri.finance/${method}`;
+  const addSymbolParam = (url, symbol) =>
+    `${url}?symbol=${symbol}`;
+  if (symbol) {
+    url = addSymbolParam(baseUrl, symbol);
+  } else {
+    url = baseUrl;
+  }
+  let retry = 3;
+  let res, priceInfo;
+  while (retry > 0) {
+    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+    if (res.ok) {
+      priceInfo = await res.json();
+      if (priceInfo.status.toString() === '200' && priceInfo.data) {
+        return priceInfo.data
+        //return deriToNatural(priceInfo.data.price).toString()
+      }
+    }
+    retry -= 1;
+  }
+  if (retry === 0) {
+    throw new Error(`getPriceFromV1 exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);
+  }
+}
+
 
 export const getOracleUrl = (symbol, type='futures') => {
   const env = DeriEnv.get();
   //if (/^[0-9]+$/.test(symbolId.toString())) {
-  const preservedSymbols = ['BTCUSD', 'ETHUSD', 'BNBUSD'];
   let method = 'get_signed_price'
   if (type === 'option') {
     method = 'get_signed_volatility'
   }
-  if (preservedSymbols.includes(symbol)) {
+  if (PRESERVED_SYMBOLS.includes(symbol)) {
     method = 'get_price'
     symbol = `${symbol}_v2_bsc`
   }
@@ -39,7 +73,7 @@ export const getOracleUrl = (symbol, type='futures') => {
 export const getPriceFromRest = async(symbol, type='futures') => {
   const res = await getPriceInfo(symbol, type)
   if (type === 'futures' && res.price) {
-    return deriToNatural(res.price).toString()
+    return PRESERVED_SYMBOLS.includes(symbol) ? res.price : deriToNatural(res.price).toString()
   } else if (type === 'option' && res.volatility) {
     return deriToNatural(res.volatility).toString()
   } else {
@@ -51,7 +85,6 @@ export const getPriceFromRest = async(symbol, type='futures') => {
 export const getPriceInfo = async (symbol, type='futures') => {
   symbol = mapToBTokenInternal(symbol)
   let url = getOracleUrl(symbol, type);
-  // console.log(`getPriceInfo url: ${url}`)
   let retry = 3;
   let res, priceInfo;
   while (retry > 0) {
@@ -68,6 +101,29 @@ export const getPriceInfo = async (symbol, type='futures') => {
     throw new Error(`fetch oracle info exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);
   }
 };
+
+// cache
+export const getOraclePriceFromCache = (function () {
+  let cache = {};
+  return {
+    async get(chainId, symbol = '_', version = 'v2') {
+      const key = `${chainId}_${symbol}_${version}`
+      if (
+        Object.keys(cache).includes(key) &&
+        Math.floor(Date.now() / 1000) - cache[key].timestamp < 5
+      ) {
+        return cache[key].data;
+      } else {
+        const data = await getOraclePrice(chainId, symbol, version);
+        cache[key] = {
+          data,
+          timestamp: Math.floor(Date.now() / 1000),
+        };
+        return cache[key].data;
+      }
+    },
+  };
+})();
 
 export const getPriceInfos = async (symbolList) => {
   let url = getOracleUrl();
@@ -119,7 +175,7 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
     return await oracle.getPrice();
   } else {
     // for new added symbol and not updated to config yet
-    const priceInfo = await getPriceInfo(symbol);
+    const priceInfo = await getPriceInfo(symbol, version);
     return deriToNatural(priceInfo.price).toString();
   }
 };

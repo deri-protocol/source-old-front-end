@@ -109,7 +109,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='ave-entry-price'>{lang['average-entry-price']}</div>
         <div className='direction'>{lang['direction']}</div>
         <div className='dyn-eff-bal'>
-          {(version.isV1 || version.isV2Lite) ? <>{lang['balance-in-contract']} <br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
+          {(version.isV1 || version.isV2Lite || version.isOpen) ? <>{lang['balance-in-contract']} <br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
         </div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
@@ -133,7 +133,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className={direction}>{lang[direction.toLowerCase()] || direction}</div>
         <div className='dyn-eff-bal'>
           <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
-          {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
+          {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen) ? <span>
             <span
               className='open-add'
               id='openAddMargin'
@@ -151,7 +151,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='pnl'>
           <span className='pnl-list unrealized-pnl'>
             <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={6} />{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
-            {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
+            {(version.isV2 || version.isV2Lite || version.isOpen) && <div className='pnl-box'>
               {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item, index) => (
                 <div className='unrealizePnl-item' key={index}>
                   <span>{item[0]}</span><span><DeriNumberFormat value={item[1]} decimalScale={8} /></span>

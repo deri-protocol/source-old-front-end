@@ -9,6 +9,9 @@ const offchainSymbolPairs = {
   IBSCDEFI: 'iBSCDEFI',
   IGAME: 'iGAME',
   ALICEUSDT: 'ALICEUSDT',
+  SANDUSDT: 'SANDUSDT',
+  QUICKUSDT: 'QUICKUSDT',
+  GHSTUSDT: 'GHSTUSDT',
 };
 
 export const normalizeOptionSymbol = (optionSymbol) => {
@@ -72,3 +75,13 @@ export const mapToBTokenInternal = (bToken) => {
     return bToken
   }
 }
+
+export const normalizeSymbolUnit = (symbol) => {
+  const prefix = ['USD', 'USDT'];
+  const re = new RegExp(`(${prefix.join('|')})$`);
+  if (typeof symbol === 'string') {
+    return mapToSymbol(symbol).replace(re, '');
+  }
+  console.log(`symbol(${symbol}) is not a string type`);
+  return symbol;
+};

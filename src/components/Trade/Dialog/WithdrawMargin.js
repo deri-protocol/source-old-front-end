@@ -5,7 +5,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { bg } from '../../../utils/utils';
 import useDisableScroll from '../../../hooks/useDisableScroll';
 
-export default function WithdrawMagin({wallet,spec = {},position,onClose,afterWithdraw,availableBalance,nested,lang}){
+export default function WithdrawMagin({wallet,spec =  {},position,onClose,afterWithdraw,availableBalance,nested,lang}){
   const [available, setAvailable] = useState('');
   const [decimal, setDecimal] = useState('');
   const [amount,setAmount] = useState('');

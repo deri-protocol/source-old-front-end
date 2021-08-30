@@ -26,7 +26,7 @@ export const getLiquidityInfo = async (
   bTokenId,
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return getLiquidityInfoV2l(chainId, poolAddress, accountAddress)
   } else if (version === 'option') {
     return getLiquidityInfoOption(chainId, poolAddress, accountAddress)

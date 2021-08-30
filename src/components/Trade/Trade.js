@@ -420,7 +420,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                 </span>
                 </>}
                 {/* v2 */}
-                {(version.isV2 || version.isV2Lite || type.isOption) && <>
+                {(version.isV2 || version.isV2Lite || type.isOption || version.isOpen ) && <>
                   <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                     {lang['dynamic-effective-balance']}
                   </span>

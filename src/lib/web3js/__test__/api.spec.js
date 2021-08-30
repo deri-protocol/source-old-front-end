@@ -19,6 +19,11 @@ describe('api', () => {
     expect(res).toHaveProperty('maxRemovableShares');
     expect(bg(res.totalSupply).toNumber()).toBeGreaterThan(100);
   }, TIMEOUT );
+  it('getPoolConfigList v2_lite_open', () => {
+    const configList = getContractAddressConfig('prod', 'v2_lite_open')
+    expect(configList.length).toEqual(2)
+    expect(configList[0]).toEqual({})
+  })
   it('getLiquidityInfo for option', async() => {
     const res = await getLiquidityInfo('97', OPTION_POOL_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF')
     expect(res).toHaveProperty('totalSupply');
@@ -29,7 +34,7 @@ describe('api', () => {
     expect(res).toEqual({});
     expect(bg(res.totalSupply).toNumber()).toBeGreaterThan(100);
   }, TIMEOUT );
-  it('getPoolConfigList', () => {
+  it('getPoolConfigList option', () => {
     const res = getContractAddressConfig('dev', 'option')
     expect(res.length).toEqual(12)
   })

@@ -140,5 +140,6 @@
   "main-zone" : "Main",
   "premium-tip":"The funding fee that a long contract pays a short contract as option premium",
   "delta-tip":"The funding that the majority side pays the minority side due to long/short imbalance",
-  "innovation-zone" : "Inno"
+  "innovation-zone" : "Inno",
+  "open-zone" : "Open"
 }

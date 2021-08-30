@@ -1,7 +1,7 @@
 import { getConfig } from './config';
 import { DeriEnv } from './env';
 import { getPoolV1ConfigList } from './pool_v1';
-import { LITE_VERSIONS, VERSIONS } from './version';
+import { LITE_AND_OPTION_VERSIONS, VERSIONS } from './version';
 
 const expendPoolConfigV2 = (config) => {
   const pools = config.pools;
@@ -48,7 +48,6 @@ const expendPoolConfigV2Lite = (config) => {
           pool: pool.pool,
           pToken: pool.pToken,
           lToken: pool.lToken,
-          router: pool.router,
           initialBlock: pool.initialBlock,
           chainId: pool.chainId,
           bToken: pool.bToken,
@@ -98,12 +97,44 @@ const expendPoolConfigOption = (config) => {
     .flat();
 };
 
+const expendPoolConfigV2LiteOpen = (config) => {
+  const pools = config.pools;
+  //console.log(pools)
+  return pools
+    .map((pool) => {
+      let result = [];
+      for (let i = 0; i < pool.symbols.length; i++) {
+        const symbol = pool.symbols[i];
+        result.push({
+          pool: pool.pool,
+          pToken: pool.pToken,
+          lToken: pool.lToken,
+          initialBlock: pool.initialBlock,
+          chainId: pool.chainId,
+          bToken: pool.bToken,
+          bTokenSymbol: pool.bTokenSymbol,
+          symbol: symbol.symbol,
+          symbolId: symbol.symbolId,
+          offchainSymbolIds: pool.offchainSymbolIds,
+          offchainSymbols: pool.offchainSymbols,
+          unit: symbol.unit,
+          version: 'v2_lite_open',
+          isOpen: true,
+        });
+      }
+      return result;
+    })
+    .flat();
+};
+
 export const getPoolConfigList = (version='v2', env = 'dev') => {
   const config = getConfig(version, env)
   if (version === 'v2') {
     return expendPoolConfigV2(config)
   } else if (version === 'v2_lite') {
     return expendPoolConfigV2Lite(config)
+  } else if (version === 'v2_lite_open') {
+    return expendPoolConfigV2LiteOpen(config)
   } else if (version === 'option') {
     return expendPoolConfigOption(config)
   }
@@ -112,7 +143,7 @@ export const getPoolConfigList = (version='v2', env = 'dev') => {
 export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId, version='v2') => {
   bTokenId = typeof bTokenId === 'number' ? bTokenId.toString() : bTokenId
   symbolId = typeof symbolId === 'number' ? symbolId.toString() : symbolId
-  const poolConfigList = getPoolConfigList(version)
+  const poolConfigList = getPoolConfigList(version, DeriEnv.get())
   const check = bTokenId != null
     ? symbolId != null
       ? (i) =>
@@ -130,9 +161,10 @@ export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId, versi
   throw new Error(`getFilteredPoolConfigList(): cannot find the pool config by ${poolAddress} bTokenId(${bTokenId}) and symbolId(${symbolId})`)
 }
 
-export const getPoolConfig = (poolAddress, bTokenId, symbolId, version='v2') => {
+export const getPoolConfig = (poolAddress, bTokenId, symbolId) => {
+  const version = getPoolVersion(poolAddress)
   // check the bToken in v2_lite
-  if (LITE_VERSIONS.includes(version)) {
+  if (LITE_AND_OPTION_VERSIONS.includes(version)) {
     bTokenId = undefined
   }
   const res =  getFilteredPoolConfigList(poolAddress, bTokenId, symbolId, version)
@@ -152,7 +184,6 @@ export const getPoolVersion = (poolAddress) => {
   if (index >= 0) {
     return pools[index].version
   }
-  throw new Error(`getPoolVersion, cannot find pool version by pool address ${poolAddress}`)
 }
 
 export const _getPoolConfig = (poolAddress) => {
@@ -239,7 +270,8 @@ export const getPoolSymbolIdList = (poolAddress) => {
 };
 
 export const getPoolViewerConfig = (chainId, version="v2_lite") => {
-  const config = getConfig(version)
+  const env = DeriEnv.get()
+  const config = getConfig(version, env)
   const viewers = config.poolViewer.filter((v) => v.chainId === chainId.toString())
   if (viewers.length > 0) {
     return viewers[0].address

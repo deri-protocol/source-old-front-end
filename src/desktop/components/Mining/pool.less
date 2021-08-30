@@ -2,7 +2,46 @@
 
   .mining-info {
     width: 1225px;
-    min-height: 687px;
+    min-height: calc(100vh - 240px);
+
+    .filter-area {
+      .official-zone,.open-zone {
+        border: 1px solid #aaaaaa;
+        color: #aaaaaa;
+        background-color: #202124;
+        padding: 6px;
+        font-size: 12px;
+        display: inline-block;
+        border-radius: 8px;
+        margin: 0 10px;
+        cursor: pointer;
+      }
+      .separator-line{
+        width: 1px;
+        border-right: 1px solid #aaaaaa;
+        padding: 12px 0;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .filter-area.open{
+      .open-zone{
+        background-color: #21639d;
+        color: #ffffff;
+        border: 0px;
+        padding: 8px;
+      }
+    }
+    
+    .filter-area.official{
+      .official-zone {
+        background-color:#21639d;
+        color: #ffffff;
+        padding: 8px;
+        border: 0px;
+      }
+    }
+
     .mining-info-header,
     .mining-info-footer {
       display: flex;
@@ -70,7 +109,7 @@
       max-width: 100%;
 
       .only-one.pool {
-        width: 487px;
+        width: 495px;
 
         .pool-info {
           border-bottom: 1px solid #707070;
@@ -308,6 +347,10 @@
                 background-image: url(../../../assets/img/polygon.png);
                 background-size: cover;
               }
+              .zUSD {
+                background-image: url(../../../assets/img/zUSD.png);
+                background-size: cover;
+              }
 
               .pool-detail {
                 padding: 0 20px;
@@ -319,7 +362,7 @@
                   margin-top: 8px;
                 }
 
-                .multiplier {
+                .apy,.multiplier {
                   height: 22px;
 
                   .multiplier-value {

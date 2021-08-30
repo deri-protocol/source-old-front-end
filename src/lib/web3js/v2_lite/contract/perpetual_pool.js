@@ -50,10 +50,10 @@ export class PerpetualPoolLite extends ContractBase {
       const activeSymbols = await this.viewer.getOffChainOracleSymbols(this.contractAddress)
       //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
       this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
-        return activeSymbols[index] == '' ? acc :  acc.concat([i])
-      }, [])
+        return activeSymbols[index] == '' ? acc : acc.concat([i]);
+      }, []);
       this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
-      this.activeSymbolIds = activeSymbolIds
+      this.activeSymbolIds = activeSymbolIds;
     }
   }
 
@@ -76,6 +76,10 @@ export class PerpetualPoolLite extends ContractBase {
       liquidationCutRatio: deriToNatural(res.liquidationCutRatio),
       protocolFeeCollectRatio: deriToNatural(res.protocolFeeCollectRatio),
     };
+  }
+  async getLastUpdateBlock() {
+    const res = await this._call('getLastUpdateBlock');
+    return parseInt(res)
   }
   async getProtocolFeeAccrued() {
     const res = await this._call('getProtocolFeeAccrued');

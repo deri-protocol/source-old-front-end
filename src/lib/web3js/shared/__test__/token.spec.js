@@ -5,6 +5,7 @@ import {
   normalizeOptionSymbol,
   getVolatilitySymbols,
   getNormalizedOptionSymbols,
+  normalizeSymbolUnit,
 } from '../config/token';
 
 describe('Token Config', () => {
@@ -51,4 +52,18 @@ describe('Token Config', () => {
     const output = ['VOL-BTCUSD', 'VOL-ETHUSD'];
     expect(getVolatilitySymbols(input)).toEqual(output);
   });
+  test('normalizeSymbolUnit', () => {
+    expect(normalizeSymbolUnit('BTCUSD')).toEqual('BTC')
+    expect(normalizeSymbolUnit('ETHUSD')).toEqual('ETH')
+    expect(normalizeSymbolUnit('MATICUSD')).toEqual('MATIC')
+    expect(normalizeSymbolUnit('BNBUSD')).toEqual('BNB')
+    expect(normalizeSymbolUnit('SANDUSDT')).toEqual('SAND')
+    expect(normalizeSymbolUnit('IGAME')).toEqual('iGAME')
+    expect(normalizeSymbolUnit('AXSUSDT')).toEqual('AXS')
+    expect(normalizeSymbolUnit('MANAUSDT')).toEqual('MANA')
+    expect(normalizeSymbolUnit('MBOXUSDT')).toEqual('MBOX')
+    expect(normalizeSymbolUnit('IBSCDEFI')).toEqual('iBSCDEFI')
+    expect(normalizeSymbolUnit('ALICEUSDT')).toEqual('ALICE')
+    expect(normalizeSymbolUnit('AXSUSDTT')).toEqual('AXSUSDTT')
+  })
 });

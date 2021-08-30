@@ -23,6 +23,7 @@ export default function useMiningPool(isNew){
   const [optionPools, setOptionPools] = useState([])
   const [legacyPools, setLegacyPools] = useState([])
   const [preminingPools, setPreminingPools] = useState([])
+  const [openPools, setOpenPools] = useState([])
 
 
   useEffect(() => {
@@ -76,8 +77,9 @@ export default function useMiningPool(isNew){
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
     const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
+    const openPools = getContractAddressConfig(env,'v2_lite_open')
     const all = []
-    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).reduce((total,config) => {
+    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
       if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
@@ -121,23 +123,25 @@ export default function useMiningPool(isNew){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '1002200',
+        liquidity : '2600',
         symbol : '--',
         airdrop : true,
         chainId : 56,
         buttonText : 'CLAIM'
       }
-      pools.push(airDrop)
+      // pools.push(airDrop)
       let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
       let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  )&& !p.retired)
       let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
       const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p =>  p.retired && p.premining) 
+      let openPools = pools.filter(p => p.isOpen)
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
         v2Pools = groupByNetwork(v2Pools);
         optionPools =groupByNetwork(optionPools)
+        openPools = groupByNetwork(openPools)
       }
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
@@ -145,9 +149,10 @@ export default function useMiningPool(isNew){
       setPools(pools);
       setLegacyPools(legacy);
       setPreminingPools(preminings)
+      setOpenPools(openPools)
       setLoaded(true)
     })
     return () => pools.length = 0
   },[])
-  return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools];
+  return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools];
 }

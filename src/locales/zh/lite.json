@@ -138,5 +138,6 @@
   "main-zone" : "主区",
   "premium-tip":"买方每天需要卖方支付的期权权利金",
   "delta-tip":"由于多空失衡，多数方需要支付少数方的资金",
-  "innovation-zone" : "创新区"
+  "innovation-zone" : "创新区",
+  "open-zone" : "开放区"
 }

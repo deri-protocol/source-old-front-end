@@ -1,5 +1,44 @@
 .mining-info {
   // width: 1205px;
+
+  .filter-area {
+    display: flex;
+    margin-top: 0.2rem;
+    .official-zone,.open-zone {
+      border: 1px solid #aaaaaa;
+      color: #aaaaaa;
+      background-color: #202124;
+      padding: 0.06rem;
+      font-size: 0.12rem;
+      display: inline-block;
+      border-radius: 0.08rem;
+      margin: 0 0.1rem;
+      cursor: pointer;
+    }
+    .separator-line{
+      width: 0.01rem;
+      border-right: 0.01rem solid #aaaaaa;
+      padding: 0.12rem 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  .filter-area.open{
+    .open-zone{
+      background-color: #21639d;
+      color: #ffffff;
+      border: 0px;
+    }
+  }
+  
+  .filter-area.official{
+    .official-zone {
+      background-color:#21639d;
+      color: #ffffff;
+      border: 0px;
+    }
+  }
+
   .mining-info-header,
   .mining-info-footer {
     display: flex;
@@ -267,6 +306,10 @@
             }
             .WMATIC {
               background-image: url(../../../assets/img/polygon.png);
+              background-size: cover;
+            }
+            .zUSD {
+              background-image: url(../../../assets/img/zUSD.png);
               background-size: cover;
             }
 

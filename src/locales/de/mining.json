@@ -85,5 +85,12 @@
   "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8",
   "v2_lite" : "Inno",
   "option":"OPT",
-  "v2" : "Main"
+  "v2" : "Main",
+  "v2_lite_open" : "Offen",
+  "official-zone" : "Inno & Main zone",
+  "open-zone" : "Offen zone",
+  "my-liqudity-providing" : "Meine Liquiditätsversorgung",
+  "add-pool" : "Pool hinzufügen",
+  "coming-soon" : "Kommt bald! Bleiben Sie dran!",
+  "add-pool-text" : "Starte meinen eigenen Pool"
 }
