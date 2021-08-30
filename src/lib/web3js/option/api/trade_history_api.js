@@ -1,20 +1,9 @@
-import { deriToNatural, getBlockInfo, getPastEvents } from '../../shared/utils';
+import { deriToNatural, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig,
-  getRestServerConfig,
-  DeriEnv,
 } from '../../shared/config';
 import { everlastingOptionFactory } from '../factory/pool';
 import { calculateTxFee } from '../../v2/calculation/position';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
-  return await resp.json();
-};
 
 const processTradeEvent = async (
   chainId,

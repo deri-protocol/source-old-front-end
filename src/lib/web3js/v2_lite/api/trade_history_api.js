@@ -1,22 +1,11 @@
-import { deriToNatural, getBlockInfo, getPastEvents } from '../../shared/utils';
+import { deriToNatural, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig,
   getPoolConfig2,
   getPoolSymbolIdList,
-  getRestServerConfig,
-  DeriEnv,
 } from '../../shared/config';
 import { perpetualPoolLiteFactory } from '../factory';
 import { calculateTxFee } from '../../v2/calculation/position';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
-  return await resp.json();
-};
 
 const processTradeEvent = async (
   chainId,

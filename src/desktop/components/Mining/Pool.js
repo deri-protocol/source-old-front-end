@@ -9,9 +9,9 @@ import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
 
 
 function Pool({lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools,legacyPools,preminingPools,openPools,optionPools] = useMiningPool(true);
-  const [curTab, setCurTab] = useState('official')
-  const tabCLassName = classNames('filter-area',{'official' : curTab ==='official','open' : curTab === 'open'})
+  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true);
+  const [curTab, setCurTab] = useState('future')
+  const tabCLassName = classNames('filter-area',curTab)
   const siwtchTab = (tab) => {
     setCurTab(tab);
   }
@@ -22,16 +22,22 @@ function Pool({lang,loading}){
   return (
     <div className="mining-info">
       <div className={tabCLassName}>
-        <span className='official-zone' onClick={() => siwtchTab('official')}>{lang['official-zone']}</span>
+        <span className='future-zone' onClick={() => siwtchTab('future')}>{lang['futures']}</span>
+        <span className='option-zone' onClick={() => siwtchTab('option')}>{lang['options']}</span>
         <span className='separator-line'></span>
         <span className='open-zone' onClick={() => siwtchTab('open')}>{lang['open-zone']}</span>
       </div>
-      {curTab === 'official' && <div className='official-pool'>
+      {curTab === 'future' && <div className='official-pool'>
         <div className="pools">
           {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
         <div className='pools'>
           {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </div>}
+      {curTab === 'option' && <div className='official-pool'>
+        <div className="pools">
+          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
         </div>
       </div>}
       {curTab === 'open' && <div className='pools open-pool'>

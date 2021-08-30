@@ -25,8 +25,7 @@ const getJsonConfig = (version, env) => {
 
 export const getConfig = (version='v2', env='dev') => {
   const config = getJsonConfig(version, env);
-
-  //console.log(configs[env])
+  //console.log('>',config)
   const pools = config.pools;
   if (pools && Array.isArray(pools)) {
     for (let i = 0; i < pools.length; i++) {

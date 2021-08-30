@@ -1,20 +1,9 @@
-import { deriToNatural } from '../../shared/utils';
+import { deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig2,
   getPoolSymbolIdList,
-  getRestServerConfig,
-  DeriEnv,
 } from '../../shared/config';
 import { perpetualPoolFactory } from '../factory';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
-  return await resp.json();
-};
 
 const processTradeEvent = async (
   perpetualPool,

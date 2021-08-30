@@ -5,8 +5,6 @@ export {
   mint,
 } from './contract_transaction_api';
 
-export { fetchRestApi } from './rest_api';
-
 // export v1 api
 export { getTradeHistory2 } from './rest_api';
 

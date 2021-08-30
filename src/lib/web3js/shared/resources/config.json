@@ -654,6 +654,18 @@
       "pools": [
       ],
       "oracle": [
+        {
+          "chainId": "97",
+          "symbol": "BTCUSD",
+          "address": "0x78Db6d02EE87260a5D825B31616B5C29f927E430",
+          "decimal": "18"
+        },
+        {
+          "chainId": "97",
+          "symbol": "ETHUSD",
+          "address": "0xdF0050D6A07C19C6F6505d3e66B68c29F41edA09",
+          "decimal": "18"
+        }
       ]
     }
   },

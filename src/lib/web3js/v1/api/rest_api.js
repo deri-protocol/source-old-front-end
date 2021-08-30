@@ -1,23 +1,10 @@
 // const
-import { DeriEnv, getPoolV1Config, getRestServerConfig  } from '../../shared/config';
-import { bg, deriToNatural } from '../../shared/utils';
+import { getPoolV1Config } from '../../shared/config';
+import { bg, deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getLiquidateHistoryOnline,
   getTradeHistoryOnline,
 } from './trade_history_api';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url, opts) => {
-  const resp = await fetch(url, opts);
-  return await resp.json();
-};
-
-export const fetchRestApi = async (path, opts = { method: 'GET' }) => {
-  return await fetchJson(`${getHttpBase()}${path}`, opts);
-};
 
 /**
  * Get specification from REST API, please refer {@link getSpecification}
