@@ -8,7 +8,6 @@ import {
 import { bg } from '../../shared';
 import {
   getEstimatedFee,
-  getEstimatedFundingRate,
   getEstimatedLiquidityUsed,
   getEstimatedMargin,
   getEstimatedTimePrice,

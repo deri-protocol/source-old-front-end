@@ -530,7 +530,7 @@ export const getEstimatedFundingRate = async (
 ) => {
   const args = [chainId, poolAddress, newNetVolume, symbolId];
   return catchApiError(
-    async (chainId, poolAddress, newNetVolume, symbolId) => {
+    async () => {
       // let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       // if (!res) {
       //   res = await _getFundingRate(chainId, poolAddress, symbolId);
@@ -675,7 +675,7 @@ export const getEstimatedTimePrice = (
         [],
         symbolVolatilities
       );
-      const { poolState, symbolState } = state;
+      const { symbolState } = state;
 
       //const { liquidity } = poolState;
       const index = symbolState.findIndex((s) => s.symbolId === symbolId);

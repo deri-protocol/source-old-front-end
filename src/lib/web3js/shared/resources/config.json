@@ -639,14 +639,42 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3",
-          "decimal": "18"
+          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395",
-          "decimal": "18"
+          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+        },
+        {
+          "chainId": "56",
+          "symbol": "BNBUSD",
+          "address": "0xa356c0559e0DdFF9281bF8f061035E7097a84Fa4"
+        },
+        {
+          "chainId": "56",
+          "symbol": "AXSUSDT",
+          "address": "0xB08D439016AC9223307A73c43Ac959d096bB64De"
+        },
+        {
+          "chainId": "56",
+          "symbol": "MBOXUSDT",
+          "address": "0xDD677a1B0591206F932b946983643638DE814Bcb"
+        },
+        {
+          "chainId": "56",
+          "symbol": "IBSCDEFI",
+          "address": "0x8E31136F6f9247Ef93743bDEbC74dbD48a08E3be"
+        },
+        {
+          "chainId": "56",
+          "symbol": "IGAME",
+          "address": "0x27CF22Dd313723781d3C28664363187e6EB654fE"
+        },
+        {
+          "chainId": "56",
+          "symbol": "ALICEUSDT",
+          "address": "0x3E084344FFD0209A6e9cB817f9Ea6e7348E6e238"
         }
       ]
     },
@@ -657,14 +685,12 @@
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0x78Db6d02EE87260a5D825B31616B5C29f927E430",
-          "decimal": "18"
+          "address": "0x78Db6d02EE87260a5D825B31616B5C29f927E430"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0xdF0050D6A07C19C6F6505d3e66B68c29F41edA09",
-          "decimal": "18"
+          "address": "0xdF0050D6A07C19C6F6505d3e66B68c29F41edA09"
         }
       ]
     }
@@ -672,8 +698,56 @@
   "option": {
     "prod": {
       "pools": [
+        {
+          "pool":   "0xF95AaCfa0fb021E82Be01355eC0CaF02376d35B2",
+          "pToken": "0x89C25A38188378968Dd6A1dDb6fBa9d065A1dbAC",
+          "lToken": "0xEd1B6E794baC052020d5B12e02AAbd0F7B8A474c",
+          "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+          "bTokenSymbol": "BUSD",
+          "initialBlock": "10470593",
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "BTCUSD-50000-C",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "BTCUSD-40000-P",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "ETHUSD-4000-C",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "ETHUSD-3000-P",
+              "unit": "ETH"
+            }
+          ],
+          "chainId": "56",
+          "version": "option"
+        }
       ],
       "oracle": [
+        {
+          "chainId": "56",
+          "symbol": "BTCUSD",
+          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+        },
+        {
+          "chainId": "56",
+          "symbol": "ETHUSD",
+          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+        }
+      ],
+      "poolViewer": [
+        {
+          "chainId": "56",
+          "address": "0xcD16041C20C46CCaA610dbf8dBC2b6B66Abd1A37"
+        }
       ]
     },
     "dev": {
@@ -775,14 +849,12 @@
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1",
-          "decimal": "18"
+          "address": "0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A",
-          "decimal": "18"
+          "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A"
         }
       ],
       "poolViewer": [

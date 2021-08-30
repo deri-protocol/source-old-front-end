@@ -1,4 +1,4 @@
-import { getPoolViewerConfig, getPoolSymbolList, toNumberForObject } from "../../shared"
+import { getPoolViewerConfig, getPoolSymbolList } from "../../shared"
 import { getOraclePricesForOption } from "../../shared/utils/oracle"
 import { ACCOUNT_ADDRESS, CHAIN_ID, OPTION_POOL_ADDRESS, TIMEOUT } from "../../shared/__test__/setup"
 import { everlastingOptionViewerFactory } from "../factory/tokens"

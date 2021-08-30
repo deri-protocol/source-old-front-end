@@ -1,4 +1,4 @@
-import { deriToNatural, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
+import { deriToNatural, bg, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig,
 } from '../../shared/config';
@@ -20,11 +20,12 @@ const processTradeEvent = async (
   const timeStamp = await getBlockInfo(chainId, blockNumber);
 
   const direction = tradeVolume.gt(0) ? 'LONG' : 'SHORT';
-  const price = deriToNatural(info.optionValue);
+  const tradeCost = deriToNatural(info.tradeCost);
   const time = `${+timeStamp.timestamp}000`;
   const volume = tradeVolume.abs();
   const symbolId = info.symbolId
   const index = symbolIdList.indexOf(symbolId)
+  const price = bg(tradeCost).div(bg(tradeVolume).times(symbols[index].multiplier))
 
   if (index > -1) {
     return {

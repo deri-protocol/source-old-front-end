@@ -1,4 +1,3 @@
-import { DeriEnv } from "../../shared"
 import { CHAIN_ID, TIMEOUT } from "../../shared/__test__/setup"
 import { getPoolV2LiteOpenConfigList, getPoolV2LiteOpenOracleInfos } from "../api"
 
