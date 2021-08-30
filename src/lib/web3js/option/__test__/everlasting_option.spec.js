@@ -35,25 +35,25 @@ describe('EverlastingOption', () => {
   it('getAddresses', async() => {
     const res = await everlastingOption.getAddresses()
     expect(res).toHaveProperty('bTokenAddress', '0x2ebE70929bC7D930248040f54135dA12f458690C')
-    expect(res).toHaveProperty('lTokenAddress', '0x1936762A77F3516aaEE9840cFf9BF61c6A98c99a')
-    expect(res).toHaveProperty('pTokenAddress', '0x1527D434007C90230047ed713733a2A95ac04d17')
+    expect(res).toHaveProperty('lTokenAddress', expect.any(String))
+    expect(res).toHaveProperty('pTokenAddress', expect.any(String))
   }, TIMEOUT)
-  it('getProtocolFeeAccrued', async() => {
-    const res = await everlastingOption.getProtocolFeeAccrued()
-    expect(bg(res).toNumber()).toBeGreaterThan(2)
-  }, TIMEOUT)
-  it('OptionPricer', async() => {
-    const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0xeEfaBc1B79Ec13ACA9FCAa96a5eC0811A576BaDc')
-  }, TIMEOUT)
-  it('PmmPricer', async() => {
-    const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0xD8d8D8C994335bC521087281b53433dad5370602')
-  }, TIMEOUT)
-  it('_T', async() => {
-    const res = await everlastingOption._T()
-    expect(bg(res).toNumber()).toBeGreaterThan(0.002)
-  }, TIMEOUT)
+  // it('getProtocolFeeAccrued', async() => {
+  //   const res = await everlastingOption.getProtocolFeeAccrued()
+  //   expect(bg(res).toNumber()).toBeGreaterThan(2)
+  // }, TIMEOUT)
+  // it('OptionPricer', async() => {
+  //   const res = await everlastingOption.OptionPricer()
+  //   expect(res).toEqual('0xeEfaBc1B79Ec13ACA9FCAa96a5eC0811A576BaDc')
+  // }, TIMEOUT)
+  // it('PmmPricer', async() => {
+  //   const res = await everlastingOption.PmmPricer()
+  //   expect(res).toEqual('0xD8d8D8C994335bC521087281b53433dad5370602')
+  // }, TIMEOUT)
+  // it('_T', async() => {
+  //   const res = await everlastingOption._T()
+  //   expect(bg(res).toNumber()).toBeGreaterThan(0.002)
+  // }, TIMEOUT)
   it(
     'getSymbol',
     async () => {
@@ -64,11 +64,9 @@ describe('EverlastingOption', () => {
           alpha: '0.01',
           cumulativePremiumFundingRate: expect.any(String),
           feeRatio: '0.005',
-          intrinsicPrice: expect.any(String),
           isCall: true,
           multiplier: '0.01',
           oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
-          pmmPrice:  expect.any(String),
           strikePrice: '20000',
           symbol: 'BTCUSD-20000-C',
           symbolId: '0',

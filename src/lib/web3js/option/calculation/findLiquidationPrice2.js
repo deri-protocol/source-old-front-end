@@ -37,7 +37,7 @@ function canLiquidateWithPrice(pool, trader, symbols, positions, newUnderlierPri
         let newIntrinsicValue = symbol.isCall ? Math.max(newUnderlierPrice - symbol.strikePrice, 0)
                                               : Math.max(symbol.strikePrice - newUnderlierPrice, 0)
         let [newTimeValue, newDelta] = getEverlastingTimePriceAndDelta(
-            newUnderlierPrice, symbol.strikePrice, symbol.underlierVolatility, pool.premiumFundingPeriod
+            newUnderlierPrice, symbol.strikePrice, symbol.volatility, pool.premiumFundingPeriod
         )
         if (newIntrinsicValue > 0) {
             newDelta += symbol.isCall ? 1 : -1
@@ -46,7 +46,7 @@ function canLiquidateWithPrice(pool, trader, symbols, positions, newUnderlierPri
         let newDynamicMarginRatio = getDynamicInitialMarginRatio(newUnderlierPrice, symbol.strikePrice, symbol.isCall, pool.initialMarginRatio, 0.01)
 
         newDynamicMargin = newDynamicMargin - position.pnl + newPnl
-        newInitialMargin = newInitialMargin - Math.abs(position.volume * symbol.underlierPrice * symbol.multiplier * symbol.dynamicMarginRatio)
+        newInitialMargin = newInitialMargin - Math.abs(position.volume * symbol.spotPrice * symbol.multiplier * symbol.dynamicMarginRatio)
                                             + Math.abs(position.volume * newUnderlierPrice * symbol.multiplier * newDynamicMarginRatio)
     }
 
@@ -76,8 +76,8 @@ export function findLiquidationPrice(pool, trader, symbols, positions) {
     if (trader.maintenanceMargin > trader.dynamicMargin) {
         return {
           numPositions: positions.length,
-          price1: symbols[0].underlierPrice,
-          price2: symbols[0].underlierPrice
+          price1: symbols[0].spotPrice,
+          price2: symbols[0].spotPrice
         }
     }
 
@@ -86,8 +86,8 @@ export function findLiquidationPrice(pool, trader, symbols, positions) {
     let l1, l2
 
 
-    price1 = symbols[0].underlierPrice / 10
-    price2 = symbols[0].underlierPrice
+    price1 = symbols[0].spotPrice / 10
+    price2 = symbols[0].spotPrice
     l1 = canLiquidateWithPrice(pool, trader, symbols, positions, price1)
     l2 = false
     while (true) {
@@ -99,7 +99,7 @@ export function findLiquidationPrice(pool, trader, symbols, positions) {
             final1 = null
             break
         }
-        if (price2 - price1 < symbols[0].underlierPrice / 1000) {
+        if (price2 - price1 < symbols[0].spotPrice / 1000) {
             final1 = (price1 + price2) / 2
             break
         }
@@ -109,8 +109,8 @@ export function findLiquidationPrice(pool, trader, symbols, positions) {
         else price2 = price
     }
 
-    price1 = symbols[0].underlierPrice
-    price2 = symbols[0].underlierPrice * 10
+    price1 = symbols[0].spotPrice
+    price2 = symbols[0].spotPrice * 10
     l1 = false
     l2 = canLiquidateWithPrice(pool, trader, symbols, positions, price2)
     while (true) {
@@ -122,7 +122,7 @@ export function findLiquidationPrice(pool, trader, symbols, positions) {
             final2 = null
             break
         }
-        if (price2 - price1 < symbols[0].underlierPrice / 1000) {
+        if (price2 - price1 < symbols[0].spotPrice / 1000) {
             final2 = (price1 + price2) / 2
             break
         }

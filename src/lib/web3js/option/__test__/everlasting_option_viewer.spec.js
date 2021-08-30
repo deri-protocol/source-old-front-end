@@ -27,9 +27,8 @@ describe('EverlastingOptionViewer', () => {
       // console.log(res.poolState)
       // console.log(res.symbolState[14])
       //res.symbolState.forEach((s) => console.log(s))
-      expect(res.poolState).toHaveProperty('pool', '0x0656414f13850Acb2f44573eD932060Ce59305Fb')
+      expect(res.poolState).toHaveProperty('pool', '0x041FC773fD97f878429d6F40b5B3420ce8e92672')
       expect(res.poolState).toHaveProperty('pToken', expect.any(String))
-      expect(res.poolState).toHaveProperty('pmmPricer', expect.any(String))
       expect(res.poolState).toHaveProperty('optionPricer', expect.any(String))
       expect(res.poolState).toHaveProperty('initialMarginRatio', '0.1')
       expect(res.poolState).toHaveProperty('maintenanceMarginRatio', '0.05')
@@ -57,11 +56,12 @@ describe('EverlastingOptionViewer', () => {
       expect(res.symbolState[0]).toHaveProperty('premiumFundingPerSecond', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('intrinsicValue', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('timeValue', expect.any(String))
-      expect(res.symbolState[0]).toHaveProperty('underlierPrice', expect.any(String))
-      expect(res.symbolState[0]).toHaveProperty('underlierVolatility', expect.any(String))
-      expect(res.symbolState[0]).toHaveProperty('pmmPrice', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('spotPrice', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('volatility', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('dpmmPrice', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('tradersNetCost', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('tradersNetVolume', expect.any(String))
+      expect(res.symbolState[0]).toEqual({})
     },
     TIMEOUT
   );

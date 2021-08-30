@@ -86,18 +86,18 @@ export class EverlastingOption extends ContractBase {
   }
 
   // query
-  async OptionPricer() {
-    const res = await this._call('OptionPricer', []);
-    return res;
-  }
-  async PmmPricer() {
-    const res = await this._call('PmmPricer', []);
-    return res;
-  }
-  async _T() {
-    const res = await this._call('_T', []);
-    return fromWei(res);
-  }
+  // async OptionPricer() {
+  //   const res = await this._call('OptionPricer', []);
+  //   return res;
+  // }
+  // async PmmPricer() {
+  //   const res = await this._call('PmmPricer', []);
+  //   return res;
+  // }
+  // async _T() {
+  //   const res = await this._call('_T', []);
+  //   return fromWei(res);
+  // }
   async getAddresses() {
     const res = await this._call('getAddresses', []);
     return deleteIndexedKey(res);
@@ -122,29 +122,38 @@ export class EverlastingOption extends ContractBase {
       'protocolFeeCollectRatio',
     ]);
   }
-  async getProtocolFeeAccrued() {
-    const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[2])
-  }
+  // async getProtocolFeeAccrued() {
+  //   const res = await this._call('getPoolStateValues', []);
+  //   return fromWei(res[2])
+  // }
+
   async getSymbol(symbolId) {
     const res = await this._call('getSymbol', [symbolId]);
-    return {
-      symbolId: res[0],
-      symbol: res[1],
-      oracleAddress: res[2],
-      volatilityAddress: res[3],
-      multiplier: fromWei(res[4]),
-      feeRatio: fromWei(res[5]),
-      strikePrice: fromWei(res[6]),
-      isCall: res[7],
-      intrinsicPrice: fromWei(res[8]),
-      pmmPrice: fromWei(res[9]),
-      cumulativePremiumFundingRate: fromWei(res[10]),
-      // timeValue: res[12],
-      tradersNetVolume: fromWei(res[11]),
-      tradersNetCost: fromWei(res[12]),
-      alpha: fromWei(res[13]),
-    };
+    return fromWeiForObject(deleteIndexedKey(res), [
+      'strikePrice',
+      'multiplier',
+      'feeRatio',
+      'alpha',
+      'tradersNetVolume',
+      'tradersNetCost',
+      'pmmPrice',
+      'intrinsicValue',
+      'cumulativePremiumFundingRate',
+    ]);
+    // return {
+    //   symbolId: res[0],
+    //   symbol: res[1],
+    //   oracleAddress: res[2],
+    //   volatilityAddress: res[3],
+    //   isCall: res[4],
+    //   strikePrice: fromWei(res[5]),
+    //   multiplier: fromWei(res[6]),
+    //   feeRatio: fromWei(res[7]),
+    //   alpha: fromWei(res[8]),
+    //   tradersNetVolume: fromWei(res[9]),
+    //   tradersNetCost: fromWei(res[10]),
+    //   cumulativePremiumFundingRate: fromWei(res[11]),
+    // };
   }
 
   // tx

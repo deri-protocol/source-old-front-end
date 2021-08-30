@@ -16,7 +16,7 @@
   "min-trade-volume":"最小交易量",
 
   "funding-rate-annual" : "日资金费率",
-  "funding-rate" : "日资金费率",
+  "funding-rate" : "日资金费",
   "funding-rate-d":"应收Delta资金",
   "funding-rate-p":"应收权利金",
   "delta" : "delta",

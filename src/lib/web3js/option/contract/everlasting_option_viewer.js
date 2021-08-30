@@ -25,23 +25,22 @@ export class EverlastingOptionViewer extends ContractBase {
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
         'multiplier',
-        //'deltaFundingCoefficient',
         'strikePrice',
-        'underlierPrice',
-        'timePrice',
+        'spotPrice',
+        'dpmmPrice',
         'dynamicMarginRatio',
         'intrinsicValue',
         'timeValue',
         'delta',
-        'K',
         'alpha',
+        'K',
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
-        'underlierVolatility',
+        'volatility',
       ]);
       return acc.concat([symbol])
     }, [])
@@ -68,23 +67,22 @@ export class EverlastingOptionViewer extends ContractBase {
     const symbolState = res[2].reduce((acc, i) => {
       const symbol = fromWeiForObject(deleteIndexedKey(i), [
         'multiplier',
-        //'deltaFundingCoefficient',
         'strikePrice',
-        'underlierPrice',
-        'timePrice',
+        'spotPrice',
+        'dpmmPrice',
         'dynamicMarginRatio',
         'intrinsicValue',
         'timeValue',
         'delta',
+        'alpha',
         'K',
-        //'quoteBalanceOffset',
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',
         'cumulativePremiumFundingRate',
         'deltaFundingPerSecond',
         'premiumFundingPerSecond',
-        'underlierVolatility',
+        'volatility',
       ]);
       return acc.concat([symbol])
     }, [])
