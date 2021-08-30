@@ -9,6 +9,7 @@ import IndexRoute from '../../../components/IndexRoute/IndexRoute';
 
 const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite')) 
 const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro'))
+const AddPool = LoadableComponent(()=>import('../../pages/Permission/AddPool'))
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
 const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 const LegacyPool = LoadableComponent(() => import('../Mining/legacy/LegacyPool'))
@@ -49,6 +50,7 @@ class Body extends React.Component {
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/futures/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/addpool' component={() => <AddPool lang={dict['permission']}/>}/>
           <Route exact path='/options/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
         </Switch>

@@ -1,4 +1,5 @@
 import './poolPlacehold.less'
+import { Link } from 'react-router-dom'
 
 export default function PoolPlacehold({lang}){
   return(
@@ -12,7 +13,7 @@ export default function PoolPlacehold({lang}){
           <div>{lang['add-pool-text']}</div>
         </div>
         <div className='btn-c'>
-          <button onClick={() => alert(lang['coming-soon'])}>{lang['add']}</button>
+          <Link to='/addpool'><button>{lang['add']}</button></Link> 
         </div>
       </div>
     </div>
