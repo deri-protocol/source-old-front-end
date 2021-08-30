@@ -4,7 +4,6 @@
   "in bsc":"@ BSC",
   "base-token-addresses":"Base Token Addresses",
   "advanced":"advanced",
-  "next":"NEXT",
   "margin-ratio-parameters":"Margin Ratio Parameters",
   "initial-margin":"initial margin",
   "initial-margin-hover":"Recommened value: 10",
@@ -37,7 +36,8 @@
   "transaction-fee-ratio":"transaction fee ratio",
   "confirm":"CONFIRM",
   "cancel":"CANCEL",
-  "send":"SEND  ",
+  "send":"SEND",
+  "next":"NEXT",
   "ok":"OK"
 
 
