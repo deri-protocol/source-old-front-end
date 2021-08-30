@@ -4,7 +4,6 @@ import StepWizard from "react-step-wizard";
 import './addpool.less';
 import down from './img/down.svg';
 import up from './img/up.svg';
-import { set } from 'mobx';
 
 function AddPool({ wallet = {}, lang }) {
   useEffect(() => {
