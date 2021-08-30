@@ -11,7 +11,8 @@ import { inject,  observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import Loading from '../Loading/LoadingMask';
-import withTtip from '../hoc/withTip';
+import withTip from '../hoc/withTip';
+import TipWrapper from '../TipWrapper/TipWrapper';
 
 
 
@@ -328,9 +329,12 @@ function Trade({wallet = {},trading,version,lang,loading}){
               </>}
               {/* v2 */}
               {(version.isV2 || version.isV2Lite || version.isOpen) && <>                
-                <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
+                <TipWrapper renderable={<span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}
-                </span>
+                </span>}/>
+                {/* {withTip(<span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
+                  {lang['dynamic-effective-balance']}
+                </span>)} */}
                 <span className='balance-contract-text mobile' title={lang['dynamic-effective-balance-title']}>
                   {lang['dynamic-effective-balance']}                  
                 </span>
@@ -375,7 +379,7 @@ function Trade({wallet = {},trading,version,lang,loading}){
         {!!trading.volumeDisplay && <>
         <div className='text-info'>
           <div className='title-enter pool'>{lang['pool-liquidity']}</div>
-          <div className='text-enter poolL'>
+          <div className='text-enter pool'>
             <DeriNumberFormat value={ trading.fundingRate.liquidity } decimalScale={2} suffix={` ${spec.bTokenSymbol}` } /> 
           </div>
         </div>
@@ -562,4 +566,4 @@ function Operator({hasConnectWallet,wallet,spec,volume,available,
   )
 }
 
-export default inject('wallet','trading','version','loading')(withTtip(observer(Trade)))
+export default inject('wallet','trading','version','loading')(observer(Trade))
