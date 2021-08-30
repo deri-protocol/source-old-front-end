@@ -33,6 +33,10 @@ export default class Contract {
     if(wallet && wallet.supportChain && config && config.pool !== this.info.pool){
       const spec = await getSpecification(wallet.detail.chainId,config.pool,config.symbolId);
       spec.bTokenSymbol = this.bTokenSymbolDisplay(spec)
+      if(type.isOption){
+        spec.underlier = this.getUnderlierStrike(spec).underlier
+        spec.strike = this.getUnderlierStrike(spec).strike
+      }
       this.setInfo(spec)
     }
     return this.info
@@ -40,6 +44,15 @@ export default class Contract {
 
   setInfo(info){
     this.info = info
+  }
+
+  getUnderlierStrike(spec){
+    let underlier = spec.symbol.split('-')[0]
+    let strike = spec.symbol.split('-')[1]
+    return {
+      underlier:underlier,
+      strike:strike
+    }
   }
 
   bTokenSymbolDisplay(spec){

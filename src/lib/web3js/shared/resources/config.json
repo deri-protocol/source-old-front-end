@@ -699,12 +699,12 @@
     "prod": {
       "pools": [
         {
-          "pool":   "0xF95AaCfa0fb021E82Be01355eC0CaF02376d35B2",
-          "pToken": "0x89C25A38188378968Dd6A1dDb6fBa9d065A1dbAC",
-          "lToken": "0xEd1B6E794baC052020d5B12e02AAbd0F7B8A474c",
+          "pool":   "0x21ff5F186539B454be0133cBe516df06Da62E9e7",
+          "pToken": "0x02bA0190edAE7E78c1bCC4649a1EE059c3bE5735",
+          "lToken": "0xd22273fB47dCC7a986b200c23Ef4C714173ae10E",
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
-          "initialBlock": "10470593",
+          "initialBlock": "10476271",
           "symbols": [
             {
               "symbolId": "0",
