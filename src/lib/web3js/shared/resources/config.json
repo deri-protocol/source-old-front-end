@@ -753,12 +753,12 @@
     "dev": {
       "pools": [
         {
-          "pool":   "0x041FC773fD97f878429d6F40b5B3420ce8e92672",
-          "pToken": "0x99c0b6fA472017306F54066291Edb783f16F3Dc1",
-          "lToken": "0x6A4642a84562f565B2ACFd288E373181620252af",
+          "pool":   "0x33eeDeC1DF73d0F93E126D80aCfEb005162cd242",
+          "pToken": "0x4E314A7C14288DdFC35dcf937571dd2d4d687D95",
+          "lToken": "0x1b79dF02dd711CABd89b1feb1781d3e5Deb9C241",
           "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
           "bTokenSymbol": "BUSD",
-          "initialBlock": "11868521",
+          "initialBlock": "11928101",
           "symbols": [
             {
               "symbolId": "0",

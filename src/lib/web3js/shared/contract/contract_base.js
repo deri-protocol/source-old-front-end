@@ -61,11 +61,10 @@ export class ContractBase {
         gas = parseInt(gas * 1.25);
         break;
       } catch (error) {
-        const res = error.toString().split('\n').join('').match(RE_ERROR_MSG)
-        if (Array.isArray(res) && res.length >= 2) {
-          throw new Error(res[1].trim())
-        }
-        // ignore the metamask error
+        // const res = error.toString().split('\n').join('').match(RE_ERROR_MSG)
+        // if (Array.isArray(res) && res.length >= 2) {
+        //   throw new Error(res[1].trim())
+        // }
       }
     }
     if (gas === 0) gas = MAX_GAS_AMOUNT;

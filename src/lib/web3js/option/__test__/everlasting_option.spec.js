@@ -59,22 +59,18 @@ describe('EverlastingOption', () => {
     async () => {
       const res = await everlastingOption.getSymbol('0');
       //expect(res).toHaveProperty('', '')
-      expect(res).toEqual(
-        expect.objectContaining({
-          alpha: '0.01',
-          cumulativePremiumFundingRate: expect.any(String),
-          feeRatio: '0.005',
-          isCall: true,
-          multiplier: '0.01',
-          oracleAddress: '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1',
-          strikePrice: '20000',
-          symbol: 'BTCUSD-20000-C',
-          symbolId: '0',
-          tradersNetCost: expect.any(String),
-          tradersNetVolume: expect.any(String),
-          volatilityAddress: '0x7A4701A1A93BB7692351aEBcD4F5Fab1d4377BBc',
-        })
-      );
+      expect(res).toHaveProperty('alpha', '0.01')
+      expect(res).toHaveProperty('feeRatio', '0.005')
+      expect(res).toHaveProperty('multiplier', '0.001')
+      expect(res).toHaveProperty('strikePrice', '50000')
+      expect(res).toHaveProperty('symbol', 'BTCUSD-50000-C')
+      expect(res).toHaveProperty('symbolId', '0')
+      expect(res).toHaveProperty('isCall', true)
+      expect(res).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
+      expect(res).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
+      expect(res).toHaveProperty('volatilityAddress', '0xA221f3BCf5cB39412F2689Fed22dfA59031aE71B')
+      expect(res).toHaveProperty('tradersNetCost', expect.any(String))
+      expect(res).toHaveProperty('tradersNetVolume', expect.any(String))
       expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-200)
     },
     TIMEOUT
