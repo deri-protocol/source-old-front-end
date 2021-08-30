@@ -1,10 +1,10 @@
+
 {
   "add-pool":"ADD POOL",
   "bsc":"BSC",
   "in bsc":"@ BSC",
   "base-token-addresses":"Base Token Addresses",
   "advanced":"advanced",
-  "next":"NEXT",
   "margin-ratio-parameters":"Margin Ratio Parameters",
   "initial-margin":"initial margin",
   "initial-margin-hover":"Recommened value: 10",
@@ -20,7 +20,7 @@
   "max-reward-hover":"Recommened value: 1000",
   "min-reward":"min reward",
   "min-reward-hover":"Recommened value: 0",
-  "protocol-fee-collect ratio":"Protocol Fee Collect Ratio",
+  "protocol-fee-collect-ratio":"Protocol Fee Collect Ratio",
   "the-protocol-requires":"The protocol requires base token to be tradable on Pancakeswap",
   "please-provide-the-address":"please provide the address of the token against which the base token is traded on pancakeswap",
   "for-example":"For example, if the base token XXX is traded on Pancakeswap with the pair XXX-WBNB,then you need to fill out the address of WBNB",
@@ -38,8 +38,7 @@
   "confirm":"CONFIRM",
   "cancel":"CANCEL",
   "connect-wallet":"Connect Wallet",
-  "send":"SEND  ",
+  "send":"SEND",
+  "next":"NEXT",
   "ok":"OK"
-
-
 }

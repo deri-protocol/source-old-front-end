@@ -35,8 +35,8 @@
       .context {
         display: flex;
         justify-content: center;
-        padding-top: 94px;
-        padding-bottom: 94px;
+        padding-top: 50px;
+        padding-bottom: 50px;
 
         .box {
           width: 585px;
@@ -44,17 +44,25 @@
       }
     }
 
-    .step1 {
+    .step1,.step3 {
       .context {
+        color: #AAAAAA;
         .box {
+          .base-title {
+            font-weight: 600;
+          }
           .base-token-address {
             width: 580px;
             height: 40px;
             margin-top: 20px;
             background-color: #242625;
             border: 0px;
+            color: #AAA;
+            font-size: 16px;
+            box-sizing: border-box;
             box-shadow: 0 0 0 2px #141414;
             border-radius: 5px;
+
           }
 
           .advanced {
@@ -77,9 +85,61 @@
             }
           }
 
+          .margin-rewards {
+
+            .margin-ratio-parameters,
+            .rewards-for-liquidates {
+              margin-top: 40px;
+
+              .title {
+                font-weight: 600;
+              }
+
+              .parameters {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+
+                .text {
+                  font-size: 16px;
+                }
+
+                .no-fix {
+                  margin-right: 20px;
+                }
+
+                .input-value {
+                  margin-top: 5px;
+
+                  input {
+                    width: 150px;
+                    height: 40px;
+                    background-color: #242625;
+                    border: 0px;
+                    color: #AAA;
+                    font-size: 16px;
+                    box-sizing: border-box;
+                    padding-left: 5px;
+                    box-shadow: 0 0 0 1px #141414;
+                    border-radius: 5px;
+                    vertical-align: bottom;
+                  }
+
+                }
+              }
+
+            }
+          }
+
+          .protocol-collect-ratio {
+            margin-top: 50px;
+            font-weight: 600;
+          }
+
           .next-button {
             margin-top: 50px;
-            button{
+
+            button {
               width: 300px;
               height: 50px;
               line-height: 26px;
@@ -96,7 +156,179 @@
               justify-content: center;
               cursor: pointer;
             }
-            
+
+          }
+        }
+      }
+    }
+
+    .step2 {
+      .context {
+        color: #AAAAAA;
+        font-size: 16px;
+
+        .box {
+          width: 700px;
+
+          .address-input {
+            margin-top: 50px;
+            margin-bottom: 50px;
+
+            input {
+              width: 695px;
+              height: 40px;
+              background-color: #242625;
+              border: 0px;
+              color: #AAA;
+              font-size: 16px;
+              box-sizing: border-box;
+              box-shadow: 0 0 0 2px #141414;
+              border-radius: 5px;
+              box-sizing: border-box;
+            }
+          }
+          .next-button{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            button{
+              width: 260px;
+              height: 50px;
+              line-height: 26px;
+              border-radius: 10px;
+              background-color: #202124;
+              color: #ccc;
+              box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+              font-size: 18px;
+              font-family: Korolev, sans-serif;
+              font-weight: 700;
+              margin: 0 auto;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+    .step3{
+      .context {
+        color: #AAAAAA;
+        .box {
+          width: 620px;
+          .base-title {
+            font-weight: 600;
+          }
+          .base-token-address {
+            width: 620px;
+            height: 40px;
+            margin-top: 20px;
+            background-color: #242625;
+            border: 0px;
+            color: #AAA;
+            font-size: 16px;
+            box-sizing: border-box;
+            box-shadow: 0 0 0 2px #141414;
+            border-radius: 5px;
+
+          }
+
+          .advanced {
+            width: 585px;
+            height: 55px;
+            margin-top: 20px;
+            background-color: #242625;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 10px;
+            box-sizing: border-box;
+            align-items: center;
+
+            .select-advanced {
+              cursor: pointer;
+
+              img {
+                margin-left: 10px;
+              }
+            }
+          }
+
+          .margin-rewards {
+
+            .margin-ratio-parameters,
+            .rewards-for-liquidates {
+              margin-top: 40px;
+
+              .title {
+                font-weight: 600;
+              }
+
+              .parameters {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+
+                .text {
+                  font-size: 16px;
+                }
+
+                .no-fix {
+                  margin-right: 20px;
+                }
+
+                .input-value {
+                  margin-top: 5px;
+
+                  input {
+                    width: 150px;
+                    height: 40px;
+                    background-color: #242625;
+                    border: 0px;
+                    color: #AAA;
+                    font-size: 16px;
+                    box-sizing: border-box;
+                    padding-left: 5px;
+                    box-shadow: 0 0 0 1px #141414;
+                    border-radius: 5px;
+                    vertical-align: bottom;
+                  }
+
+                }
+              }
+
+            }
+          }
+
+          .protocol-collect-ratio {
+            margin-top: 50px;
+            font-weight: 600;
+          }
+
+          .next-button{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            width: 620px;
+            button{
+              width: 260px;
+              height: 50px;
+              line-height: 26px;
+              border-radius: 10px;
+              background-color: #202124;
+              color: #ccc;
+              box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+              font-size: 18px;
+              font-family: Korolev, sans-serif;
+              font-weight: 700;
+              margin: 0 auto;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+            }
           }
         }
       }
