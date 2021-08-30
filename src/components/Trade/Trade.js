@@ -12,6 +12,7 @@ import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import Loading from '../Loading/LoadingMask';
 import { bg } from "../../lib/web3js/indexV2";
+import TipWrapper from '../TipWrapper/TipWrapper';
 
 
 
@@ -313,6 +314,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               </div>
             </>}
             <div className='funding-rate'>
+              <TipWrapper block={false}>
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
@@ -321,7 +323,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
                 <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
               </>}
-
+              </TipWrapper>
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
@@ -345,11 +347,15 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
-                <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
+                <TipWrapper block={false}>
+                  <span className='funding-per' title={trading.optionFundingRateTip}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
+                </TipWrapper>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                <TipWrapper block={false}>
+                  <span className='funding-per' title={trading.fundingRateTip}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                </TipWrapper>
               </>}
             </div>
           </div>
@@ -414,20 +420,19 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                   ({lang['dynamic-balance']})
                 </span>
                   <span className='balance-contract-text mobile v1'>
-
                     {lang['balance-in-contract']}<br />
                   ({lang['dynamic-balance']})
                 </span>
                 </>}
                 {/* v2 */}
-                {(version.isV2 || version.isV2Lite || type.isOption || version.isOpen ) && <>
+                {(version.isV2 || version.isV2Lite || type.isOption) && <TipWrapper block={false}>
                   <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
                     {lang['dynamic-effective-balance']}
                   </span>
                   <span className='balance-contract-text mobile' title={lang['dynamic-effective-balance-title']}>
                     {lang['dynamic-effective-balance']}
                   </span>
-                </>}
+                </TipWrapper>}
                 <span className={`balance-contract-num ${version.current}`}>
                   <DeriNumberFormat value={trading.amount.dynBalance} allowZero={true} decimalScale={2} />
                 </span>
@@ -438,25 +443,27 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                   <DeriNumberFormat value={trading.amount.margin} allowZero={true} decimalScale={2} />
                 </span>
               </div>}
-              {(version.isV2 || version.isV2Lite || type.isOption) && <>
+              {(version.isV2 || version.isV2Lite || type.isOption) && <TipWrapper block={false} >
                 <div className='box-margin'>{lang['margin']}</div>
                 <div className='box-margin'>
                   <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>
                   <span className='margin' ><DeriNumberFormat value={trading.amount.margin} allowZero={true} decimalScale={2} /></span>
                 </div>
-                <div>
+                <div className='margin-held-pos'>
                   <span className='pos-held' title={lang['for-this-pos-title']}>&nbsp;- {lang['for-this-pos']} </span>
                   <span className='margin' ><DeriNumberFormat value={trading.amount.currentSymbolMarginHeld} allowZero={true} decimalScale={2} /></span>
                 </div>
-              </>
+              </TipWrapper>
               }
+              <TipWrapper block={true}>
               <div className='available-balance'>
-                <span className='available-balance pc' title={lang['available-balance-title']} > {lang['available-balance']} </span>
-                <span className='available-balance mobile' >{lang['available-balance']}</span>
-                <span className='available-balance-num'>
-                  <DeriNumberFormat value={trading.amount.available} allowZero={true} decimalScale={2} />
-                </span>
+                  <span className='pc' title={lang['available-balance-title']} > {lang['available-balance']} </span>
+                  <span className='mobile' title={lang['available-balance-title']}>{lang['available-balance']}</span>
+                  <span className='available-balance-num'>
+                    <DeriNumberFormat value={trading.amount.available} allowZero={true} decimalScale={2} />
+                  </span>
               </div>
+              </TipWrapper>
             </div>
           </div>
         </div>

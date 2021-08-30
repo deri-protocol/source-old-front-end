@@ -101,10 +101,10 @@ export default function useMiningPool(isNew){
         lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
       }
       if(isSushiLP(config.pool)){
-        label = 'SUSHI-APY'
+        label = Intl.get('mining','sushi-apy')
       }
       if(isCakeLP(config.pool)){
-        label = 'CAKE-APY'
+        label = Intl.get('mining','cake-apy')
       }
       return Object.assign(config,{
         network : chainInfo[config.chainId].name,

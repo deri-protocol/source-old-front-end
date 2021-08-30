@@ -15,6 +15,7 @@ import marginDetailIcon from '../../../../assets/img/margin-detail.png'
 import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
 import { bg } from '../../../../lib/web3js/indexV2';
 import pnlIcon from '../../../../assets/img/pnl-detail.png'
+import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
 
 
 
@@ -113,7 +114,7 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        <div><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></div>
+        <div><TipWrapper block={false}><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></TipWrapper></div>
         <div className='liquidation-price'>
           {lang['liquidation-price']}
         </div>
@@ -122,7 +123,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='position'>
           {type.isOption ? <DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} /> : <DeriNumberFormat value={trading.position.volume} allowZero={true} />}
           <span className='close-position'>
-            {!closing && <img src={closePosImg} onClick={onClosePosition} title={lang['close-is-position']} />}
+            {!closing && <TipWrapper><img src={closePosImg} onClick={onClosePosition} title={lang['close-is-position']} /></TipWrapper>}
             <span
               className='spinner spinner-border spinner-border-sm'
               style={{ display: closing ? 'block' : 'none', marginLeft: '8px' }}
