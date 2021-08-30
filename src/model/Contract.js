@@ -6,7 +6,7 @@ import type from "./Type";
 
 export default class Contract {
   info = {
-    bTokenSymbol:'BUSD',
+    bTokenSymbol:["BUSD"],
     symbol:'BTCUSD',
     multiplier:'0.0001',
     fundingRateCoefficient:'0.0000025',
