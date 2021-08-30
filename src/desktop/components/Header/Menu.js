@@ -35,7 +35,7 @@ function Menu({ lang, locale }) {
           </li>
           <li>
             {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} target={isApp ? '' : '_blank'} className='option-item'>{lang.trade}</a>
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} target={isApp ? '' : '_blank'} className='option-item'>{lang.options}</a>
               : <Link className='option-item' to='/options/pro'>{lang.options}</Link>
             }
           </li>
