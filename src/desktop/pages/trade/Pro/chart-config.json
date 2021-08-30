@@ -19,8 +19,8 @@
     "mainSeriesProperties.candleStyle.borderColor": "#378658",
     "mainSeriesProperties.candleStyle.borderUpColor": "#4bffb5",
     "mainSeriesProperties.candleStyle.borderDownColor": "#ff4976",
-    "mainSeriesProperties.candleStyle.wickUpColor": "#838ca1",
-    "mainSeriesProperties.candleStyle.wickDownColor": "#838ca1"
+    "mainSeriesProperties.candleStyle.wickUpColor": "#4bffb5",
+    "mainSeriesProperties.candleStyle.wickDownColor": "#ff4976"
   },      
   "toolbar_bg": "#212327",
   "timezone": "Asia/Shanghai", 
