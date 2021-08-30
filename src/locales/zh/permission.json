@@ -37,6 +37,7 @@
   "transaction-fee-ratio":"transaction fee ratio",
   "confirm":"CONFIRM",
   "cancel":"CANCEL",
+  "connect-wallet":"Connect Wallet",
   "send":"SEND  ",
   "ok":"OK"
 

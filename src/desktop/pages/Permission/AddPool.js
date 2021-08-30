@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
 import './addpool.less';
 import down from './img/down.svg';
+import up from './img/up.svg';
 
 function AddPool({ wallet = {}, lang }) {
   return (
@@ -23,6 +24,30 @@ function AddPool({ wallet = {}, lang }) {
 const Step1 = props => {
   const prop = { ...props }
   const { lang, wallet } = { ...prop }
+  const [selectAdvanced,setSelectAdvanced] = useState(false)
+  const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
+  const connect = () => {
+    wallet.connect()
+  }
+  const [btnText,setBtnText] = useState(
+    <button Onclick={connect}>
+      {lang['connect-wallet']}
+    </button>
+  )
+
+  useEffect(()=>{
+    let elem ;
+    if(hasConnectWallet()){
+      elem = <button onClick={() => prop.goToStep(2)}>
+        {lang['next']}
+      </button>
+    }else{
+       elem = <button OnClick={connect}>
+       {lang['connect-wallet']}
+     </button>
+    }
+    setBtnText(elem)
+  },[wallet.detail])
   return (
     <div className='step1'>
       <div className='header'>
@@ -39,13 +64,20 @@ const Step1 = props => {
             </input>
           </div>
           <div className='advanced'>
+          <span className='select-advanced' onClick={() => setSelectAdvanced(!selectAdvanced)} >
             {lang['advanced']}
-            <img src={down}></img>
+            {selectAdvanced ? <img src={up}  /> :<img src={down} />} 
+          </span>
           </div>
-          <div>
-          <button onClick={() => prop.goToStep(2)}>
-            {lang['next']}
-          </button>
+
+          {selectAdvanced && <>
+            <div className='margin-rewards'>
+
+            </div>
+          </>}
+
+          <div className='next-button'>
+              {btnText}
           </div>
         </div>
       </div>
