@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
@@ -6,15 +7,18 @@ import down from './img/down.svg';
 import up from './img/up.svg';
 
 function AddPool({ wallet = {}, lang }) {
+  const StepChange = (name,value)=>{
+    console.log('aaaaaaaaaaaaaa',name,value)
+  }
   useEffect(() => {
   }, [wallet, wallet.detail])
   return (
     <div className='add-pool'>
       <div className='Step-box'>
         <StepWizard
-          initialStep={3}
+          initialStep={1}
         >
-          <Step1 lang={lang} wallet={wallet} />
+          <Step1 lang={lang} wallet={wallet} OnChange={StepChange}  />
           <Step2 lang={lang} wallet={wallet} />
           <Step3 lang={lang} wallet={wallet} />
         </StepWizard>
@@ -23,8 +27,9 @@ function AddPool({ wallet = {}, lang }) {
   )
 }
 
-function Step1({ goToStep, lang, wallet }) {
+function Step1({ goToStep, lang, wallet,OnChange }) {
   const [selectAdvanced, setSelectAdvanced] = useState(true)
+  const [baseTokenAddress,setBaseTokenAddress] = useState('')
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
     wallet.connect()
@@ -39,9 +44,14 @@ function Step1({ goToStep, lang, wallet }) {
     // if(){
 
     // }
+    OnChange('address',baseTokenAddress)
     goToStep(2)
   }
 
+  const addressValue = (event)=>{
+    let {value} = event.target
+    setBaseTokenAddress(value)
+  }
 
   useEffect(() => {
     let elem;
@@ -68,6 +78,8 @@ function Step1({ goToStep, lang, wallet }) {
           <div>
             <input
               className='base-token-address'
+              value = {baseTokenAddress}
+              onChange = {event => addressValue(event)}
             >
             </input>
           </div>
