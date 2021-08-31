@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 // api/stream.js
 import historyProvider from './historyProvider.js.js'
 // we use Socket.io client to connect to cryptocompare's socket.io stream
