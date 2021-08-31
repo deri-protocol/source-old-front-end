@@ -36,6 +36,7 @@ export default class Contract {
       if(type.isOption){
         spec.underlier = this.getUnderlierStrike(spec).underlier
         spec.strike = this.getUnderlierStrike(spec).strike
+        spec.optionType = this.getUnderlierStrike(spec).optionType
       }
       this.setInfo(spec)
     }
@@ -49,9 +50,11 @@ export default class Contract {
   getUnderlierStrike(spec){
     let underlier = spec.symbol.split('-')[0]
     let strike = spec.symbol.split('-')[1]
+    let optionType = spec.symbol.split('-')[2]
     return {
       underlier:underlier,
-      strike:strike
+      strike:strike,
+      optionType:optionType
     }
   }
 

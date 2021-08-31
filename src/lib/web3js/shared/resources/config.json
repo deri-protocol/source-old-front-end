@@ -762,82 +762,22 @@
           "symbols": [
             {
               "symbolId": "0",
-              "symbol": "BTCUSD-20000-C",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "1",
-              "symbol": "BTCUSD-30000-C",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "2",
-              "symbol": "BTCUSD-40000-C",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "3",
-              "symbol": "BTCUSD-20000-P",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "4",
-              "symbol": "BTCUSD-30000-P",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "5",
-              "symbol": "BTCUSD-40000-P",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "6",
-              "symbol": "ETHUSD-1500-C",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "7",
-              "symbol": "ETHUSD-2000-C",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "8",
-              "symbol": "ETHUSD-2500-C",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "9",
-              "symbol": "ETHUSD-1500-P",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "10",
-              "symbol": "ETHUSD-2000-P",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "11",
-              "symbol": "ETHUSD-2500-P",
-              "unit": "ETH"
-            },
-            {
-              "symbolId": "12",
               "symbol": "BTCUSD-50000-C",
               "unit": "BTC"
             },
             {
-              "symbolId": "13",
-              "symbol": "BTCUSD-60000-C",
+              "symbolId": "1",
+              "symbol": "BTCUSD-40000-P",
               "unit": "BTC"
             },
             {
-              "symbolId": "14",
-              "symbol": "ETHUSD-3500-C",
+              "symbolId": "2",
+              "symbol": "ETHUSD-4000-C",
               "unit": "ETH"
             },
             {
-              "symbolId": "15",
-              "symbol": "ETHUSD-4000-C",
+              "symbolId": "3",
+              "symbol": "ETHUSD-3000-P",
               "unit": "ETH"
             }
           ],

@@ -169,9 +169,8 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       let num = trading.contract.multiplier.slice(index);
       let length = num.length - 1 
       let value = target.value
-      let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
-      value = value.replace(reg,'$1');
-      //target.value.substring(0,target.value.indexOf(".") + length)
+      // let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
+      value = target.value.substring(0,target.value.indexOf(".") + length)
       value = value === '0' ? '' : value
       trading.setVolume(value)
     }
