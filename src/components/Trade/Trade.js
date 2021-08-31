@@ -167,7 +167,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     if(type.isOption){
       let index = trading.contract.multiplier.indexOf('.')
       let num = trading.contract.multiplier.slice(index);
-      let length = num.length - 1 
+      let length = num.length 
       let value = target.value
       // let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
       value = target.value.substring(0,target.value.indexOf(".") + length)
