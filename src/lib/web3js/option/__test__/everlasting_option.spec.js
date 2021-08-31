@@ -68,16 +68,17 @@ describe('EverlastingOption', () => {
       expect(res).toHaveProperty('isCall', true)
       expect(res).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
       expect(res).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
-      expect(res).toHaveProperty('volatilityAddress', '0xA221f3BCf5cB39412F2689Fed22dfA59031aE71B')
+      expect(res).toHaveProperty('volatilityAddress', '0x4E7506086457399C6ab5acBc146d3A2eBD26380f')
       expect(res).toHaveProperty('tradersNetCost', expect.any(String))
       expect(res).toHaveProperty('tradersNetVolume', expect.any(String))
-      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-200)
+      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-20000)
+      expect(res).toEqual({})
     },
     TIMEOUT
   );
   it('_getVolSymbolPrices', async() => {
     const res = await everlastingOption._getVolSymbolPrices()
-    expect(res.length).toEqual(2)
+    expect(res.length).toEqual(4)
     expect(bg(res[0][2]).toNumber()).toBeGreaterThan(1)
   }, TIMEOUT)
   it('optionPool pToken', async() => {

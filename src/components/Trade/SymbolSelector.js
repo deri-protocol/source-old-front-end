@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from "mobx-react"
-import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
+import symbolArrowIcon from '../../assets/img/arrow-down.svg'
+import arrowDownIcon from '../../assets/img/arrow-up.svg'
 import classNames from 'classnames';
 
 function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
@@ -43,7 +44,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
         onClick={onDropdown}
         className='btn chec'>
         <SymbolDisplay spec={spec} version={version} type={type} />
-        <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
+        <span className='check-base-down'>{dropdown ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span>
       </button>
         <div className={selectClass}>
           {type.isFuture 
@@ -57,18 +58,28 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
             })
           :
           Object.keys(trading.optionsConfigs).map((symbol,index) => {
-            return (
-              <div className='dropdown-item-wrapper'>
-                <div className='catalog'>{symbol}</div>
-                <div className='sub-menu' key={index} >
-                  {Array.isArray(trading.optionsConfigs[symbol]) && trading.optionsConfigs[symbol].map((config,index) => (
-                    <div className='dropdown-item' onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type} key ={index}/></div>
-                  ))}              
-                </div>
-              </div>
-            )
+            return <SubMenu index={index} symbol={symbol} trading={trading} onSelect={onSelect} version={version} type={type}/>
           })
           }         
+      </div>
+    </div>
+  )
+}
+
+function SubMenu({symbol,trading,onSelect,index,version,type}){
+  const [curPos, setCurPos] = useState(0)
+  const subClassName = classNames('sub-menu',{'show' : index === curPos})
+
+  const switchSubMen = (index) => {
+    curPos === index ? setCurPos(-1) : setCurPos(index)
+  }
+  return (
+    <div className='dropdown-item-wrapper' key={index}>
+      <div className='catalog' onClick={() => switchSubMen(index)}>{symbol}<span className='sub-memu-icon'>{curPos === index ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span></div>
+      <div className={subClassName} key={index} >
+        {Array.isArray(trading.optionsConfigs[symbol]) && trading.optionsConfigs[symbol].map((config,index) => (
+          <div className='dropdown-item' onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type} key ={index}/></div>
+        ))}              
       </div>
     </div>
   )

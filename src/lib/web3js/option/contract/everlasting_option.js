@@ -136,8 +136,6 @@ export class EverlastingOption extends ContractBase {
       'alpha',
       'tradersNetVolume',
       'tradersNetCost',
-      'pmmPrice',
-      'intrinsicValue',
       'cumulativePremiumFundingRate',
     ]);
     // return {

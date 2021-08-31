@@ -27,16 +27,15 @@ describe('trade query api', () => {
         bTokenSymbol: 'BUSD',
         feeRatio: '0.005',
         initialMarginRatioOrigin: '0.1',
-        initialMarginRatio: '0.1',
+        initialMarginRatio: expect.any(String),
         liquidationCutRatio: '0.5',
         maintenanceMarginRatioOrigin: '0.05',
-        maintenanceMarginRatio: '0.05',
+        maintenanceMarginRatio: expect.any(String),
         maxLiquidationReward: '1000',
         minLiquidationReward: '10',
-        multiplier: '0.01',
+        multiplier: '0.001',
         protocolFeeCollectRatio: '0.2',
-        //deltaFundingCoefficient: '0.000001',
-        symbol: 'BTCUSD-20000-C',
+        symbol: 'BTCUSD-50000-C',
         isCall: true,
       });
     },
@@ -98,7 +97,7 @@ describe('trade query api', () => {
         '3',
         '0'
       );
-      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(190);
+      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(10);
     },
     TIMEOUT
   );
@@ -165,7 +164,7 @@ describe('trade query api', () => {
         '3',
         '0'
       );
-      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(0.01);
+      expect(bg(res).toNumber()).toBeGreaterThanOrEqual(0.001);
       expect(bg(res).toNumber()).toBeLessThanOrEqual(10);
     },
     TIMEOUT
@@ -180,7 +179,7 @@ describe('trade query api', () => {
         '0'
       );
       expect(bg(res).toNumber()).toBeGreaterThanOrEqual(MIN_NUMBER);
-      expect(bg(res).toNumber()).toBeLessThanOrEqual(10);
+      expect(bg(res).toNumber()).toBeLessThanOrEqual(1000);
     },
     TIMEOUT
   );

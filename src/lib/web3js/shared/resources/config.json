@@ -699,12 +699,12 @@
     "prod": {
       "pools": [
         {
-          "pool":   "0x21ff5F186539B454be0133cBe516df06Da62E9e7",
-          "pToken": "0x02bA0190edAE7E78c1bCC4649a1EE059c3bE5735",
-          "lToken": "0xd22273fB47dCC7a986b200c23Ef4C714173ae10E",
+          "pool":   "0x4B6F637D0F0292E978cB14Be571FfeeF0146d144",
+          "pToken": "0x4A50B5f2e326eB4b06870FD19d05B151298316e2",
+          "lToken": "0xE07A2220F82A7965c473cd0AD617C8fe6AFA93D9",
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
           "bTokenSymbol": "BUSD",
-          "initialBlock": "10476271",
+          "initialBlock": "10497676",
           "symbols": [
             {
               "symbolId": "0",
@@ -753,12 +753,12 @@
     "dev": {
       "pools": [
         {
-          "pool":   "0x33eeDeC1DF73d0F93E126D80aCfEb005162cd242",
-          "pToken": "0x4E314A7C14288DdFC35dcf937571dd2d4d687D95",
-          "lToken": "0x1b79dF02dd711CABd89b1feb1781d3e5Deb9C241",
+          "pool":   "0xB6432C75c33182523e7Ee642e794CC88083b7034",
+          "pToken": "0x951866878f0510Ef875253C7D29D902F1C8bfC32",
+          "lToken": "0x043669b37f0bE36CB737f4c0E9dC6E2F2C0741A3",
           "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
           "bTokenSymbol": "BUSD",
-          "initialBlock": "11928101",
+          "initialBlock": "11950743",
           "symbols": [
             {
               "symbolId": "0",
