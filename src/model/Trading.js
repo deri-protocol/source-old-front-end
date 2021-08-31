@@ -487,7 +487,7 @@ export default class Trading {
         }        
       }
     }
-    
+    return ''
    
   }
 

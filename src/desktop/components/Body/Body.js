@@ -10,6 +10,7 @@ import IndexRoute from '../../../components/IndexRoute/IndexRoute';
 const Lite = LoadableComponent(()=>import('../../pages/trade/Lite/Lite')) 
 const Pro = LoadableComponent(()=>import('../../pages/trade/Pro/Pro'))
 const AddPool = LoadableComponent(()=>import('../../pages/Permission/AddPool'))
+const AddSymbol = LoadableComponent(()=>import('../../pages/Permission/AddSymbol'))
 const Pool = LoadableComponent(() => import('../Mining/Pool'))
 const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 const LegacyPool = LoadableComponent(() => import('../Mining/legacy/LegacyPool'))
@@ -47,6 +48,7 @@ class Body extends React.Component {
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
+          <Route exact path='/addsymbol/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <AddSymbol lang={dict['permission']}/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/futures/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>

@@ -2,34 +2,79 @@
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
+import {bg} from '../../../lib/web3js/indexV2'
 import './addpool.less';
 import down from './img/down.svg';
 import up from './img/up.svg';
 
 function AddPool({ wallet = {}, lang }) {
-  const StepChange = (name,value)=>{
-    console.log('aaaaaaaaaaaaaa',name,value)
+  const [baseTokenAddress, setBaseTokenAddress] = useState('')
+  const [baseTokenAddressOther, setBaseTokenAddressOther] = useState('')
+  const [initialMargin, setInitialMargin] = useState(10)
+  const [maintenanceMargin, setMaintenanceMargin] = useState(5)
+  const [poolMargin, setPoolMargin] = useState(100)
+  const [cutRatio, setCutRatio] = useState(50)
+  const [maxReward, setMaxReward] = useState(1000)
+  const [minReward, setMinReward] = useState(0)
+  const [params, setParams] = useState([])
+  const StepChange = (name, value) => {
+    console.log(name, value)
+    if (name === 'baseTokenAddress') {
+      setBaseTokenAddress(value)
+    }
+    if (name === 'initialMargin') {
+      setInitialMargin(value)
+    }
+    if (name === 'baseTokenAddressOther') {
+      setBaseTokenAddressOther(value)
+    }
+    if (name === 'maintenanceMargin') {
+      setMaintenanceMargin(value)
+    }
+    if (name === 'poolMargin') {
+      setPoolMargin(value)
+    }
+    if (name === 'cutRatio') {
+      setCutRatio(value)
+    }
+    if (name === 'maxReward') {
+      setMaxReward(value)
+    }
+    if (name === 'minReward') {
+      setMinReward(value)
+    }
+
   }
   useEffect(() => {
   }, [wallet, wallet.detail])
+  useEffect(() => {
+    let arr = [initialMargin, baseTokenAddress, baseTokenAddressOther, maintenanceMargin, poolMargin, cutRatio, maxReward, minReward]
+    setParams(arr)
+  }, [initialMargin, baseTokenAddress, baseTokenAddressOther, maintenanceMargin, poolMargin, cutRatio, maxReward, minReward])
   return (
     <div className='add-pool'>
       <div className='Step-box'>
         <StepWizard
           initialStep={1}
         >
-          <Step1 lang={lang} wallet={wallet} OnChange={StepChange}  />
-          <Step2 lang={lang} wallet={wallet} />
-          <Step3 lang={lang} wallet={wallet} />
+          <Step1 lang={lang} wallet={wallet} OnChange={StepChange} />
+          <Step2 lang={lang} wallet={wallet} OnChange={StepChange} />
+          <Step3 lang={lang} wallet={wallet} params={params} />
         </StepWizard>
       </div>
     </div>
   )
 }
 
-function Step1({ goToStep, lang, wallet,OnChange }) {
-  const [selectAdvanced, setSelectAdvanced] = useState(true)
-  const [baseTokenAddress,setBaseTokenAddress] = useState('')
+function Step1({ goToStep, lang, wallet, OnChange }) {
+  const [selectAdvanced, setSelectAdvanced] = useState(false)
+  const [baseTokenAddress, setBaseTokenAddress] = useState('')
+  const [initialMargin, setInitialMargin] = useState(10)
+  const [maintenanceMargin, setMaintenanceMargin] = useState(5)
+  const [poolMargin, setPoolMargin] = useState(100)
+  const [cutRatio, setCutRatio] = useState(50)
+  const [maxReward, setMaxReward] = useState(1000)
+  const [minReward, setMinReward] = useState(0)
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
     wallet.connect()
@@ -41,16 +86,56 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
   )
 
   const nextStep = () => {
-    // if(){
-
-    // }
-    OnChange('address',baseTokenAddress)
+    if(baseTokenAddress.length !== 42 || baseTokenAddress.indexOf('0x') !== 0){
+      alert(lang['please-enter-a-correct-address']) 
+      return;
+    }
+    if(initialMargin === '' || maintenanceMargin === '' || poolMargin === '' || cutRatio === '' || maxReward === '' || minReward === ''){
+      alert(lang['please-fill-in-the-data-completely']) 
+      return;
+    }
+    OnChange('baseTokenAddress', baseTokenAddress)
+    OnChange('initialMargin', initialMargin)
+    OnChange('maintenanceMargin', maintenanceMargin)
+    OnChange('poolMargin', poolMargin)
+    OnChange('cutRatio', cutRatio)
+    OnChange('maxReward', maxReward)
+    OnChange('minReward', minReward)
     goToStep(2)
   }
-
-  const addressValue = (event)=>{
-    let {value} = event.target
+  const addressValue = (event) => {
+    let { value } = event.target
     setBaseTokenAddress(value)
+  }
+
+  const initialMarginValue = (event) => {
+    let { value } = event.target
+    setInitialMargin(value)
+  }
+
+  const maintenanceMarginValue = (event) => {
+    let { value } = event.target
+    setMaintenanceMargin(value)
+  }
+
+  const poolMarginValue = (event) => {
+    let { value } = event.target
+    setPoolMargin(value)
+  }
+
+  const cutRatioValue = (event) => {
+    let { value } = event.target
+    setCutRatio(value)
+  }
+
+  const maxRewardValue = (event) => {
+    let { value } = event.target
+    setMaxReward(value)
+  }
+
+  const minRewardValue = (event) => {
+    let { value } = event.target
+    setMinReward(value)
   }
 
   useEffect(() => {
@@ -65,7 +150,7 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
       </button>
     }
     setBtnText(elem)
-  }, [wallet, wallet.detail, wallet.detail.account])
+  }, [wallet, wallet.detail, wallet.detail.account, minReward, maxReward, cutRatio, baseTokenAddress, initialMargin, maintenanceMargin, poolMargin])
   return (
     <div className='step1'>
       <div className='header'>
@@ -78,8 +163,8 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
           <div>
             <input
               className='base-token-address'
-              value = {baseTokenAddress}
-              onChange = {event => addressValue(event)}
+              value={baseTokenAddress}
+              onChange={event => addressValue(event)}
             >
             </input>
           </div>
@@ -102,7 +187,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['initial-margin']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' /> %
+                      <input
+                        type='number'
+                        value={initialMargin}
+                        onChange={event => initialMarginValue(event)}
+                      /> %
                     </div>
                   </div>
                   <div>
@@ -110,7 +199,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['maintenance-margin']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' /> %
+                      <input
+                        type='number'
+                        value={maintenanceMargin}
+                        onChange={event => maintenanceMarginValue(event)}
+                      /> %
                     </div>
                   </div>
                   <div>
@@ -118,7 +211,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['pool-margin']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' /> %
+                      <input
+                        type='number'
+                        value={poolMargin}
+                        onChange={event => poolMarginValue(event)}
+                      /> %
                     </div>
                   </div>
                 </div>
@@ -133,7 +230,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['cut-ratio']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' /> %
+                      <input
+                        type='number'
+                        value={cutRatio}
+                        onChange={event => cutRatioValue(event)}
+                      /> %
                     </div>
                   </div>
                   <div className='no-fix'>
@@ -141,7 +242,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['max-reward']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' />
+                      <input
+                        type='number'
+                        value={maxReward}
+                        onChange={event => maxRewardValue(event)}
+                      />
                     </div>
                   </div>
                   <div className='no-fix'>
@@ -149,7 +254,11 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
                       {lang['min-reward']}
                     </div>
                     <div className='input-value'>
-                      <input type='number' />
+                      <input
+                        type='number'
+                        value={minReward}
+                        onChange={event => minRewardValue(event)}
+                      />
                     </div>
                   </div>
                 </div>
@@ -170,8 +279,19 @@ function Step1({ goToStep, lang, wallet,OnChange }) {
   )
 }
 
-function Step2({ goToStep, lang, wallet }) {
-  const nextStep = ()=>{
+function Step2({ goToStep, lang, wallet, OnChange }) {
+  const [baseTokenAddressOther, setBaseTokenAddressOther] = useState('')
+
+  const baseTokenAddressOtherValue = (event) => {
+    let { value } = event.target
+    setBaseTokenAddressOther(value)
+  }
+  const nextStep = () => {
+    if(baseTokenAddressOther.length !== 42 || baseTokenAddressOther.indexOf('0x') !== 0){
+      alert(lang['please-enter-a-correct-address']) 
+      return;
+    }
+    OnChange('baseTokenAddressOther', baseTokenAddressOther)
     goToStep(3)
   }
   return (
@@ -185,19 +305,21 @@ function Step2({ goToStep, lang, wallet }) {
           <div>{lang['the-protocol-requires']}</div>
           <div>{lang['please-provide-the-address']}:</div>
           <div className='address-input'>
-            <input 
+            <input
+              value={baseTokenAddressOther}
+              onChange={event => baseTokenAddressOtherValue(event)}
             />
           </div>
           <div>
             {lang['for-example']}
           </div>
           <div className='next-button'>
-              <button onClick={()=>{goToStep(1)}}>
-                {lang['cancel']}
-              </button>
-              <button onClick={nextStep}>
-                {lang['send']}
-              </button>
+            <button onClick={() => { goToStep(1) }}>
+              {lang['cancel']}
+            </button>
+            <button onClick={nextStep}>
+              {lang['send']}
+            </button>
           </div>
         </div>
       </div>
@@ -205,9 +327,19 @@ function Step2({ goToStep, lang, wallet }) {
   )
 }
 
-function Step3({ goToStep, lang, wallet }) {
-  const add = ()=>{
-    
+function Step3({ goToStep, lang, wallet, params }) {
+  const [paramsArr,setParamsArr] = useState([])
+  const [baseTokenAddress,setBaseTokenAddress] = useState('')
+  const [baseTokenAddressOther,setBaseTokenAddressOther] = useState('')
+  useEffect(()=>{
+    let [initialMargin, baseTokenAddress, baseTokenAddressOther, maintenanceMargin, poolMargin, cutRatio, maxReward, minReward] = [...params]
+    let oneArr = [ bg(poolMargin).div(bg(100)).toString(),bg(initialMargin).div(bg(100)).toString(), bg(maintenanceMargin).div(bg(100)).toString() , minReward,maxReward, bg(cutRatio).div(bg(100)).toString()]
+    setBaseTokenAddress(baseTokenAddress)
+    setBaseTokenAddressOther(baseTokenAddressOther)
+    setParamsArr(oneArr)
+  },[params])
+  const add = () => {
+
   }
   return (
     <div className='step3'>
@@ -217,84 +349,82 @@ function Step3({ goToStep, lang, wallet }) {
       <div className='context'>
         <div className='box'>
           <span className='base-title'> {lang['base-token-addresses']}</span>
-          <div>
-            
+          <div className='address-token'>
+            {params[1]}
           </div>
-         
-
-            <div className='margin-rewards'>
-              <div className='margin-ratio-parameters'>
-                <div className='title'>
-                  {lang['margin-ratio-parameters']}
+          <div className='margin-rewards'>
+            <div className='margin-ratio-parameters'>
+              <div className='title'>
+                {lang['margin-ratio-parameters']}
+              </div>
+              <div className='parameters'>
+                <div>
+                  <div className='text'>
+                    {lang['initial-margin']}
+                  </div>
+                  <div className='input-value'>
+                    {params[0]} %
+                    </div>
                 </div>
-                <div className='parameters'>
-                  <div>
-                    <div className='text'>
-                      {lang['initial-margin']}
-                    </div>
-                    <div className='input-value'>
-                       %
-                    </div>
+                <div>
+                  <div className='text'>
+                    {lang['maintenance-margin']}
                   </div>
-                  <div>
-                    <div className='text'>
-                      {lang['maintenance-margin']}
+                  <div className='input-value'>
+                    {params[3]} %
                     </div>
-                    <div className='input-value'>
-                       %
-                    </div>
+                </div>
+                <div>
+                  <div className='text'>
+                    {lang['pool-margin']}
                   </div>
-                  <div>
-                    <div className='text'>
-                      {lang['pool-margin']}
+                  <div className='input-value'>
+                    {params[4]} %
                     </div>
-                    <div className='input-value'>
-                       %
-                    </div>
-                  </div>
                 </div>
               </div>
-              <div className='rewards-for-liquidates'>
-                <div className='title'>
-                  {lang['rewards-for-liquidates']}
+            </div>
+            <div className='rewards-for-liquidates'>
+              <div className='title'>
+                {lang['rewards-for-liquidates']}
+              </div>
+              <div className='parameters'>
+                <div>
+                  <div className='text'>
+                    {lang['cut-ratio']}
+                  </div>
+                  <div className='input-value'>
+                    {params[5]} %
+                    </div>
                 </div>
-                <div className='parameters'>
-                  <div>
-                    <div className='text'>
-                      {lang['cut-ratio']}
-                    </div>
-                    <div className='input-value'>
-                       %
-                    </div>
+                <div className='no-fix'>
+                  <div className='text'>
+                    {lang['max-reward']}
                   </div>
-                  <div className='no-fix'>
-                    <div className='text'>
-                      {lang['max-reward']}
-                    </div>
-                    <div className='input-value'>
-                      
-                    </div>
+                  <div className='input-value'>
+                    {params[6]}
                   </div>
-                  <div className='no-fix'>
-                    <div className='text'>
-                      {lang['min-reward']}
-                    </div>
-                    <div className='input-value'>
-                     
-                    </div>
+                </div>
+                <div className='no-fix'>
+                  <div className='text'>
+                    {lang['min-reward']}
+                  </div>
+                  <div className='input-value'>
+                    {params[7]}
                   </div>
                 </div>
               </div>
             </div>
+          </div>
           <div className='next-button'>
-          <div className='next-button'>
-              <button onClick={()=>{goToStep(1)}}>
+            <div className='next-button'>
+              <button onClick={() => { goToStep(1) }}>
                 {lang['cancel']}
               </button>
               <button onClick={add}>
                 {lang['ok']}
               </button>
-          </div>
+            </div>
           </div>
         </div>
       </div>

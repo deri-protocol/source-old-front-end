@@ -35,6 +35,7 @@
   "funding-rate-coefficient":"funding rate coefficient",
   "funding-rate-coefficient-hover":"Recommended value: 0.000004 Please refer to the whitepaper for the details of this parameter",
   "transaction-fee-ratio":"transaction fee ratio",
+  "please-enter-a-correct-address":"请输入正确的地址",
   "confirm":"CONFIRM",
   "cancel":"CANCEL",
   "connect-wallet":"Connect Wallet",
