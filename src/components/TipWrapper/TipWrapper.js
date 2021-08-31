@@ -12,19 +12,22 @@ function TipWrapper(props){
         hoverNode.addEventListener('mouseover',event => {
           if(!hover) {
             hover = document.createElement('div')
-            hover.style.cssText = `z-index : 1;max-width : 200px;font-size : 0.1rem ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
+            hover.style.cssText = `z-index : 1;min-width : 100px;max-width : ${window.screen.width}px ;font-size : 0.1rem ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
             document.body.appendChild(hover)
             hover.innerText = event.currentTarget.getAttribute('title')
-            event.target.setAttribute('title','')
+            event.currentTarget.setAttribute('title','')
           } 
           hover.id = id
           hover.style.display = 'block'
-          hover.style.top = `${event.pageY +4}px`
+          const rect = event.currentTarget.getBoundingClientRect()
+          hover.style.top = `${rect.y + rect.height + window.document.documentElement.scrollTop}px`
+          // hover.style.top = `${event.pageY + event.currentTarget.offsetHeight}px`
           if(hover.offsetWidth + event.pageX > window.screen.width){
             if(event.pageX - hover.offsetWidth >= 0){
               hover.style.left = `${event.pageX - hover.offsetWidth}px`
             } else {
-              hover.style.left = `${event.pageX - (hover.offsetWidth / 2)}px`
+              const left = event.pageX - (hover.offsetWidth / 2) > 0 ? (event.pageX - (hover.offsetWidth / 2)) : 0;
+              hover.style.left = `${left}px`
             }
           } else {
             hover.style.left = `${event.pageX}px`

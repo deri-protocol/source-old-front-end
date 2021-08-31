@@ -57,6 +57,7 @@ export default class Trading {
   history = []
   userSelectedDirection = 'long'
   supportChain = true
+  optionsConfigs = {}
 
   constructor(){
     makeObservable(this,{
@@ -72,6 +73,7 @@ export default class Trading {
       supportChain : observable,
       setWallet :action,
       setConfigs : action,
+      setOptionConfigs : action,
       setConfig : action,
       setIndex : action,
       setContract : action,
@@ -147,6 +149,8 @@ export default class Trading {
       }    
       this.resume()
       this.setVolume('')
+    } else{
+      finishedCallback && finishedCallback()
     }
   }
 
@@ -277,7 +281,25 @@ export default class Trading {
   }
 
   setConfigs(configs){
+    if(type.isOption){
+      this.setOptionConfigs(configs)
+    } 
     this.configs = configs
+  }
+
+  setOptionConfigs(configs){
+    this.optionsConfigs = this.groupConfigBySymbol(configs)
+  }
+
+  groupConfigBySymbol(configs = []){
+    return configs.reduce((total,config) => {
+      const symbol = config.symbol.split('-')[0]
+      if(!total[symbol]){
+        total[symbol] = []
+      }
+      total[symbol].push(config)
+      return total;
+    },[])
   }
 
   setConfig(config){
@@ -338,7 +360,7 @@ export default class Trading {
         let num = this.contract.multiplier.slice(index);
         let length = num.length 
         let value = volume.toString()
-        if(value.indexOf(".") != '-1'){
+        if(value.indexOf(".") !== '-1'){
           value = value.substring(0,value.indexOf(".") + length)
         }
         this.setVolume(value)
@@ -351,20 +373,11 @@ export default class Trading {
 
 
   get volumeDisplay(){
-    // if(type.isOption){
-    //   if( this.volume === '' || this.volume === '-' || this.volume === 'e' || isNaN(this.volume)) {
-    //     return '';
-    //   } else {
-    //     return Math.abs(this.volume)
-    //   }
-    // }else if(type.isFuture){
-      if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
-        return '';
-      } else {
-        return Math.abs(this.volume)
-      }
-    // }
-    
+    if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
+      return '';
+    } else {
+      return Math.abs(this.volume)
+    }
   }
   
 
@@ -487,8 +500,7 @@ export default class Trading {
         }        
       }
     }
-    
-   
+    return ''
   }
 
   get optionFundingRateTip(){

@@ -139,16 +139,21 @@
               z-index: 2;
             }
             .dropdown-menu {
-              width: 2rem;
+              width: 1.9rem;
               color: #CCCCCC;
               border: 0;
               border-radius: 0.12rem;
               background: #252628;
               display: none;
               box-shadow: -0.04rem -0.03rem 0.02rem 0.01rem #303031;
+              padding: 0.04rem 0 0 0.12rem;
               display: none;
               span {
                 padding-left: 12px;
+              }
+              .catalog {
+                  font-size: 0.16rem;
+                  font-family: Korolev, sans-serif;
               }
             }
             .dropdown-menu::-webkit-scrollbar {
@@ -156,6 +161,9 @@
               width: 0.1rem;
               height: 0.1rem;
               background-color: rgb(20, 25, 36);
+            }
+            .sub-menu {
+              margin-left: 0.2rem;
             }
         
             /*定义滚动条轨道 内阴影+圆角*/
@@ -177,7 +185,6 @@
               font-size: 0.16rem;
               font-family: Korolev, sans-serif;
               color: #CCCCCC;
-              margin-left: 0.1rem;
               line-height: 0.32rem;
               padding: 4px 0;
               cursor: pointer;

@@ -9,15 +9,13 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
 
 
   const onDropdown = (event) => {
-    if(trading.configs.length > 0){
-      event.preventDefault();
-      setDropdown(!dropdown)    
-    }
+    event.preventDefault();
+    setDropdown(!dropdown)    
   }
 
   //切换交易标的
-  const onSelect = select => {
-    const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
+  const onSelect = selected => {
+    // const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
     if(selected){
       loading.loading();
       trading.pause();
@@ -48,13 +46,29 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
         <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
       </button>
         <div className={selectClass}>
-          {trading.configs.map((config,index) => {
+          {type.isFuture 
+            ? 
+            trading.configs.map((config,index) => {
+              return (
+                <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
+                  <SymbolDisplay spec={config} version={version} type={type}/>
+                </div>
+              )
+            })
+          :
+          Object.keys(trading.optionsConfigs).map((symbol,index) => {
             return (
-              <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
-                <SymbolDisplay spec={config} version={version} type={type}/>
+              <div className='dropdown-item-wrapper'>
+                <div className='catalog'>{symbol}</div>
+                <div className='sub-menu' key={index} >
+                  {Array.isArray(trading.optionsConfigs[symbol]) && trading.optionsConfigs[symbol].map((config,index) => (
+                    <div className='dropdown-item' onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type} key ={index}/></div>
+                  ))}              
+                </div>
               </div>
             )
-          })}         
+          })
+          }         
       </div>
     </div>
   )

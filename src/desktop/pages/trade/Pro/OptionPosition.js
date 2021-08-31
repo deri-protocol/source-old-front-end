@@ -223,11 +223,11 @@ function Position({ wallet, trading, version, lang, type }) {
 function LiqPrice({ wallet, trading, lang }) {
   const [element, setElement] = useState(<span></span>)
 
-  const liqText = (positions) => {
-    let ele = <span>--</span>;
+  const liqText = (positions,index) => {
+    let ele = <span key={index}>--</span>;
     if (positions.numPositions > 1) {
       if (positions.price1 && positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <DeriNumberFormat decimalScale={2} value={positions.price1} />
@@ -237,7 +237,7 @@ function LiqPrice({ wallet, trading, lang }) {
         &nbsp;
         </span>
       } else if (!positions.price1 && !positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
@@ -248,7 +248,7 @@ function LiqPrice({ wallet, trading, lang }) {
         </span>
       } else if (!positions.price1 && positions.price2) {
         ele =
-          <span>
+          <span key={index}>
             <span>{positions.underlier}: </span>
             <span>
               <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
@@ -258,7 +258,7 @@ function LiqPrice({ wallet, trading, lang }) {
         &nbsp;
         </span>
       } else if (positions.price1 && !positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
@@ -271,7 +271,7 @@ function LiqPrice({ wallet, trading, lang }) {
       return ele
     } else {
       if (positions.price1 && positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <DeriNumberFormat decimalScale={2} value={positions.price1} />
@@ -281,7 +281,7 @@ function LiqPrice({ wallet, trading, lang }) {
         &nbsp;
         </span>
       } else if (!positions.price1 && !positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <span > -- </span>
@@ -292,7 +292,7 @@ function LiqPrice({ wallet, trading, lang }) {
         </span>
       } else if (!positions.price1 && positions.price2) {
         ele =
-          <span>
+          <span key={index}>
             <span>{positions.underlier}: </span>
             <span>
               <span > -- </span>
@@ -303,7 +303,7 @@ function LiqPrice({ wallet, trading, lang }) {
         </span>
 
       } else if (positions.price1 && !positions.price2) {
-        ele = <span>
+        ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
             <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
@@ -321,8 +321,8 @@ function LiqPrice({ wallet, trading, lang }) {
     if (wallet.isConnected() && trading.positions) {
       if (trading.positions.length) {
         if (trading.positions[0].liquidationPrice) {
-          let elem = trading.positions[0].liquidationPrice.map(item => {
-            let ele = liqText(item)
+          let elem = trading.positions[0].liquidationPrice.map((item,index) => {
+            let ele = liqText(item,index)
             return ele
           })
           setElement(elem)

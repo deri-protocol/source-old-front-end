@@ -17,8 +17,8 @@ function ContractInfo({ wallet, trading, lang, type }) {
             <div className="text" >
               {trading.contract.bTokenSymbol && trading.contract.bTokenSymbol.map((bToken,index) => {
                 return ( (version.isV2 && type.isFuture )
-                  ? <TipWrapper><span class='btoken-symbol'>{bToken}(<span class='multiplier' title={lang['multiplier-tip']}>{trading.contract.bTokenMultiplier && trading.contract.bTokenMultiplier[index]}x</span>)</span></TipWrapper>
-                  : <span class='btoken-symbol'>{bToken}</span>)  
+                  ? <TipWrapper key={index}><span className='btoken-symbol'>{bToken}(<span className='multiplier' title={lang['multiplier-tip']}>{trading.contract.bTokenMultiplier && trading.contract.bTokenMultiplier[index]}x</span>)</span></TipWrapper>
+                  : <span key={index} className='btoken-symbol'>{bToken}</span>)  
               })}
             </div>
         </div>
