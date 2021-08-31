@@ -58,7 +58,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
             })
           :
           Object.keys(trading.optionsConfigs).map((symbol,index) => {
-            return <SubMenu index={index} symbol={symbol} trading={trading} onSelect={onSelect} version={version} type={type}/>
+            return <SubMenu key={index} index={index} symbol={symbol} trading={trading} onSelect={onSelect} version={version} type={type}/>
           })
           }         
       </div>
@@ -78,7 +78,7 @@ function SubMenu({symbol,trading,onSelect,index,version,type}){
       <div className='catalog' onClick={() => switchSubMen(index)}>{symbol}<span className='sub-memu-icon'>{curPos === index ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span></div>
       <div className={subClassName} key={index} >
         {Array.isArray(trading.optionsConfigs[symbol]) && trading.optionsConfigs[symbol].map((config,index) => (
-          <div className='dropdown-item' onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type} key ={index}/></div>
+          <div className='dropdown-item'  key ={index} onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type}/></div>
         ))}              
       </div>
     </div>
