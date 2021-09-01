@@ -34,6 +34,9 @@ function Menu({ lang, locale }) {
             }
           </li>
           <li>
+            <span className='beta'>
+              {lang['beta']}
+            </span>
             {isProduction
               ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} className='option-item'>{lang.options}</a>
               : <Link className='option-item' to='/options/pro'>{lang.options}</Link>

@@ -2,6 +2,7 @@
   "mining" : "Pools",
   "trade" : "Futures",
   "options":"Options",
+  "beta":"beta",
   "governance" : "Governance",
   "bridge" : "Bridge",
   "docs" : "Docs",

@@ -4,7 +4,7 @@
   "symbol" : "标的",
   "all":"所有",
   "futures":"期货",
-  "options":"期权",
+  "options":"期权 (beta)",
   "retired-text":"以下矿池已退役，不再产生挖矿收益。请移除您的流动性并将其添加至",
   "new-pools":"新流动性池",
   "premining-pools":"预挖矿",
