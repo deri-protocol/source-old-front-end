@@ -68,7 +68,7 @@ describe('EverlastingOption', () => {
       expect(res).toHaveProperty('isCall', true)
       expect(res).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
       expect(res).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
-      expect(res).toHaveProperty('volatilityAddress', '0x4E7506086457399C6ab5acBc146d3A2eBD26380f')
+      expect(res).toHaveProperty('volatilityAddress',  expect.any(String))
       expect(res).toHaveProperty('tradersNetCost', expect.any(String))
       expect(res).toHaveProperty('tradersNetVolume', expect.any(String))
       expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-20000)

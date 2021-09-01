@@ -12,7 +12,7 @@ function TipWrapper(props){
         hoverNode.addEventListener('mouseover',event => {
           if(!hover) {
             hover = document.createElement('div')
-            hover.style.cssText = `z-index : 1;min-width : 100px;max-width : ${window.screen.width}px ;font-size : 0.1rem ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
+            hover.style.cssText = `z-index : 1;min-width : 100px;max-width : ${window.screen.width}px ;font-size : 12px ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
             document.body.appendChild(hover)
             hover.innerText = event.currentTarget.getAttribute('title')
             event.currentTarget.setAttribute('title','')

@@ -1,5 +1,5 @@
 export { DeriEnv } from './env'
-export { VERSIONS, LITE_VERSIONS } from './version';
+export { VERSIONS, LITE_VERSIONS, LITE_AND_OPTION_VERSIONS } from './version';
 export {
   getChainIds,
   getChainProviderUrls,

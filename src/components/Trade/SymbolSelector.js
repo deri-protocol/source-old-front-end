@@ -32,9 +32,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
         setDropdown(false)
       }
     })
-    return () => {
-      // document.body.removeEventListener('click')
-    }
+    return () => {}
   }, [])
 
   return (
