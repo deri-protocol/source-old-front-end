@@ -273,7 +273,7 @@ function LiqPrice({ trading, wallet, lang }) {
   const [element, setElement] = useState(<span></span>);
 
   useEffect(() => {
-    let ele;
+    let ele = '';
     if (wallet.isConnected() && trading.position.liquidationPrice) {
       if (trading.position.liquidationPrice.numPositions > 1) {
         if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {

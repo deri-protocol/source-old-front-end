@@ -158,7 +158,12 @@ function Position({ wallet, trading, version, lang, type }) {
             <div className='position'>
               <DeriNumberFormat value={pos.volume} allowZero={true} />
               <span className='close-position'>
-                <img style={{ display: closingIndex !== index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }} title={lang['close-is-position']} />
+              {/* {closingIndex !== index &&<>
+              title={lang['close-is-position']}
+                <TipWrapper block={false}> */}
+                <img style={{ display: closingIndex !== index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }}  />
+                {/* </TipWrapper>
+              </>}  */}
                 <span
                   className='spinner spinner-border spinner-border-sm'
                   role='status'
@@ -327,6 +332,8 @@ function LiqPrice({ wallet, trading, lang }) {
           })
           setElement(elem)
         }
+      }else{
+        setElement('')
       }
     }
   }, [wallet, trading.positions])
