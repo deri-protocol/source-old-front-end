@@ -1,7 +1,7 @@
 {
   "mining" : "Minen",
-  "trade" : "Trade",
-  "options":"Options",
+  "trade" : "Futures",
+  "options":"Optionen",
   "governance" : "Governance",
   "bridge" : "Brücke",
   "docs" : "Docs",
