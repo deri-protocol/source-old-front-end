@@ -10,10 +10,15 @@ import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
 
 function Pool({lang,loading}){
   const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true);
-  const [curTab, setCurTab] = useState('future')
+  const [curTab, setCurTab] = useState('all')
   const tabCLassName = classNames('filter-area',curTab)
   const siwtchTab = (tab) => {
-    setCurTab(tab);
+    if(tab === curTab){
+      setCurTab('all')
+    }else{
+      setCurTab(tab);
+    }
+    
   }
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
@@ -27,6 +32,17 @@ function Pool({lang,loading}){
         <span className='separator-line'></span>
         <span className='open-zone' onClick={() => siwtchTab('open')}>{lang['open-zone']}</span>
       </div>
+      {curTab === 'all' && <div className='official-pool'>
+        <div className="pools">
+          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+        <div className="pools">
+          {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+        <div className='pools'>
+          {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
+        </div>
+      </div>}
       {curTab === 'future' && <div className='official-pool'>
         <div className="pools">
           {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
