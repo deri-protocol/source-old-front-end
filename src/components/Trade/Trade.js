@@ -33,6 +33,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
   const [markPriceClass, setMarkPriceClass] = useState('rise');
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
+  const [isOptionInput, setIsOptionInput] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const indexPriceRef = useRef();
@@ -169,9 +170,17 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
       let num = trading.contract.multiplier.slice(index);
       let length = num.length 
       let value = target.value
+      if(target.value.indexOf(".") !== -1){
+        value = target.value.substring(0,target.value.indexOf(".") + length)
+        value = value === '0' ? '' : value
+        if(+value === 0){
+          setIsOptionInput(true)
+        }else{
+          setIsOptionInput(false)
+        }
+      }
       // let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
-      value = target.value.substring(0,target.value.indexOf(".") + length)
-      value = value === '0' ? '' : value
+      
       trading.setVolume(value)
     }
     if (target.value === '') {
@@ -397,6 +406,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                 <input
                   type='number'
                   onFocus={onFocus}
+                  step='0.0000000000000000001'
                   onBlur={onBlur}
                   onKeyPress={onKeyPress}
                   disabled={!trading.index || Math.abs(trading.position.margin) === 0}
@@ -409,6 +419,13 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                   {spec.unit}
                 </div>
               </div>
+              {isOptionInput && <>
+                <div className='min-quantity'>
+                {lang['option-input-min-quantity']}
+                &nbsp; {trading.contract.multiplier} &nbsp;
+                {lang['option-input-min-two']}
+              </div>
+              </>}
             </>}
             {(!!trading.volumeDisplay && type.isFuture) && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix='= ' suffix={` ${spec.unit}`} /></div>}
           </div>
