@@ -14,7 +14,7 @@ const socket = io(process.env.REACT_APP_WSS_URL, {
 
 
 function LightChart({symbol,interval = '1',intl,displayCandleData}){
-  const chart = useRef(null)
+  const chartRef = useRef(null)
   const candleSeries = useRef(null);
   const lastData = useRef(null)
   const queryParams = useRef(null);
@@ -40,7 +40,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
       socket.on('kline_update', data => {
         if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
-          candleSeries.current && candleSeries.current.update(data)
+          candleSeries.current.update(data)
           lastData.current = data
           displayCandleData && displayCandleData({data : data})
         }
@@ -48,9 +48,9 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
     }
   }
 
-  const loadChart = async () => {
-    if(symbol){
-      candleSeries.current = chart.current.addCandlestickSeries({
+  const loadChart = async (chart) => {
+    if(symbol && chart){
+       const candlesChart = chart.addCandlestickSeries({
         upColor: "#4bffb5",
         downColor: "#ff4976",
         borderDownColor: "#ff4976",
@@ -58,6 +58,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         wickDownColor: "#ff4976",
         wickUpColor: "#4bffb5"
       });
+      candleSeries.current = candlesChart
       const range = calcRange(interval)
       lastQueryParam.current = queryParams.current
       queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
@@ -68,10 +69,10 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         const {data} = res
         if(data.data instanceof Array){
           const d = data.data
-          candleSeries.current && candleSeries.current.setData(d);
+          candlesChart.setData(d);
           lastData.current = d[d.length-1]
         } else {
-          candleSeries.current && candleSeries.current.setData([])
+          candlesChart.setData([])
         }
         setLoading(false)
         displayCandleData && displayCandleData({data : lastData.current})
@@ -91,14 +92,14 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
   }
 
   const initChart = () => {
-    if(!chart.current) {
-      chart.current = createChart('ligth-chart-container', { 
+    if(chartRef.current && symbol && interval){
+      const chart = createChart(chartRef.current, { 
         localization : {
           timeFormatter : businessDayOrTimestamp => {
             return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
           },
         },
-        // width: '1198',
+        width: '1198',
         height: 478,
         timeScale: {
           rightOffset : 3,
@@ -138,15 +139,16 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
           fontSize: 12
         },
       });
-      chart.current.subscribeCrosshairMove(handleCrosshairMoved);
-      loadChart();
+      chart.subscribeCrosshairMove(handleCrosshairMoved);
+      return chart;
     }
   }
+    
 
   useEffect(() => {
-    initChart();
+    const chart = initChart()
+    loadChart(chart);
     return () => {
-      chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
@@ -154,9 +156,12 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
       }
       connectStatusRef.current = null
-      candleSeries.current = null;
-      chart.current.remove()
-      chart.current = null;
+      if(chart){
+        chart.remove()
+      }
+      // if(chart.current) {
+      //   chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
+      // }
     }
   }, [symbol,interval])
 
@@ -165,7 +170,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
   }, [])
 
   return(
-    <div className='ligth-chart-container' id='ligth-chart-container'>
+    <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>
