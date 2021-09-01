@@ -180,7 +180,9 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
         }
       }
       // let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
-      
+      // if(target.value.indexOf(".") === 0){
+      //   value = 0 + value
+      // }
       trading.setVolume(value)
     }
     if (target.value === '') {
