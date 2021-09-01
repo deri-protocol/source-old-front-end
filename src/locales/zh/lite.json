@@ -12,7 +12,7 @@
   "current-position" : "当前仓位",
   "contract-volume" : "合约量",
   "option-input":"数量",
-  "option-input-min-quantity":"数量太小了, 必须不小于",
+  "option-input-min-quantity":"最小交易量为",
   "index-price" : "指数价格",
   "min-trade-volume":"最小交易量",
 

@@ -12,8 +12,7 @@
   "current-position" : "Aktuelle Position",
   "contract-volume" : "Kontraktmenge",
   "option-input":"Quantität",
-  "option-input-min-quantity":"Die Menge ist zu klein, darf nicht weniger als",
-  "option-input-min-two":"sein",
+  "option-input-min-quantity":"Min Handelsvolumen ist ",
   "index-price" : "Indexpreis",
   "min-trade-volume":"Min Handelsvolumen",
 

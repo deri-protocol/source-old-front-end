@@ -423,7 +423,7 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
                 <div className='min-quantity'>
                 {lang['option-input-min-quantity']}
                 &nbsp; {trading.contract.multiplier} &nbsp;
-                {lang['option-input-min-two']}
+                {spec.unit}
               </div>
               </>}
             </>}
