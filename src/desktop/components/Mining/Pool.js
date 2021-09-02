@@ -30,8 +30,8 @@ function Pool({lang,loading,wallet}){
     <div className="mining-info">
       <div className='checkout-pools'>
         <div className={styleSelectClass}>
-          <div className='card' onClick={() => setCurStyle('card')}></div>
           <div className='list' onClick={() => setCurStyle('list')}></div>
+          <div className='card' onClick={() => setCurStyle('card')}></div>
         </div>
         <div className='switcher'>
           <div className={switchClass} onClick={()=> setSwitchChecked(!switchChecked)}></div>

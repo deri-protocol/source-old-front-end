@@ -31,7 +31,7 @@ function Chart({symbol,lang,intl,version}){
     if(candle && candle.data){
       const {data} = candle
       const riseOrDown = data.close - data.open > 0 ? 'rise' : 'down'
-      setCandleDataDisplay(
+      data.open && data.close && data.high && data.low && setCandleDataDisplay(
         <>
           <span>{lang['open']}</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
           <span>{lang['high']}</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
@@ -55,7 +55,8 @@ function Chart({symbol,lang,intl,version}){
     <div id='tradingview'>
       {Type.isOption &&<div className={switchClass}>
         <span className='mark-price-c' onClick={() => switchChart('mark-price')}>{lang['option-mark-price']}</span>
-        <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || lang['index']} {lang['price']}</span>
+        <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || lang['index']}</span>
+        <span className='option-index-c' onClick={() => switchChart('option-index')}>{`${lang['option']} + ${stripSymbol(symbol) || lang['index']}`}</span>
       </div>}
       <div className={activedClass}>
           <span className='candle-data-area'>
@@ -86,6 +87,9 @@ function Chart({symbol,lang,intl,version}){
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang}/>
+      </div>}
+      {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'option-index' ? 'block' : 'none'}}>
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} mixedChart={true}/>
       </div>}
   </div>
   )

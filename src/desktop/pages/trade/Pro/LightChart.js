@@ -13,7 +13,7 @@ const socket = io(process.env.REACT_APP_WSS_URL, {
 })
 
 
-function LightChart({symbol,interval = '1',intl,displayCandleData}){
+function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
   const chartRef = useRef(null)
   const candleSeries = useRef(null);
   const lastData = useRef(null)
@@ -42,15 +42,32 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
           candleSeries.current.update(data)
           lastData.current = data
-          displayCandleData && displayCandleData({data : data})
+          displayCandleData({data : data})
         }
       })
     }
   }
 
-  const loadChart = async (chart) => {
+  const loadData = async (symbol) => {
+      const range = calcRange(interval)
+      lastQueryParam.current = queryParams.current
+      queryParams.current = {symbol : symbol,interval : intervalRange[interval]}
+      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
+      setLoading(true)
+      const res = await axios.get(url)
+      setLoading(false)
+      const wrapper = res.data.data.splice(0,200).map(res => ({time : res.time,value : res.close}))
+      // wrapper.forEach((item,index) => {
+      //   item.
+      // })
+      console.log(JSON.stringify(wrapper))
+      return res.data && Array.isArray(res.data.data) ? res.data.data  : []
+  }
+
+  const addCandleChart = async (chart,symbol,priceScaleId) => {
     if(symbol && chart){
        const candlesChart = chart.addCandlestickSeries({
+        priceScaleId : priceScaleId,
         upColor: "#4bffb5",
         downColor: "#ff4976",
         borderDownColor: "#ff4976",
@@ -58,28 +75,34 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         wickDownColor: "#ff4976",
         wickUpColor: "#4bffb5"
       });
+      const data = await loadData(symbol)
+      if(data && Array.isArray(data) && data.length > 0 ){
+        candlesChart.setData(data)
+        lastData.current = data[data.length-1]
+      } 
       candleSeries.current = candlesChart
-      const range = calcRange(interval)
-      lastQueryParam.current = queryParams.current
-      queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
-      setLoading(true)
-      const res = await axios.get(url)
-      if(res && res.data) {
-        const {data} = res
-        if(data.data instanceof Array){
-          const d = data.data
-          candlesChart.setData(d);
-          lastData.current = d[d.length-1]
-        } else {
-          candlesChart.setData([])
-        }
-        setLoading(false)
-        displayCandleData && displayCandleData({data : lastData.current})
-        initWebSocket()
-      }
+      displayCandleData({data : lastData.current})
+      initWebSocket()
+    }
+      
+  }
+
+  const addLineSeries = async (chart,symbol) =>{
+    if(chart && symbol){
+      const seriesChart = chart.addLineSeries({
+        priceScaleId: 'right',
+        topColor: "rgba(38,198,218, 0.56)",
+        bottomColor: "rgba(38,198,218, 0.04)",
+        lineColor: "#569bda",
+        lineWidth: 2
+      })
+      const data = await loadData(symbol)
+      const seriesData = data.map(d => ({time : d.time,value : d.close}));
+      seriesChart.setData(seriesData)
     }
   }
+
+
 
   const handleCrosshairMoved = (param) => {
     if (!param.point) {
@@ -114,6 +137,15 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
           borderColor: '#fff',
           mode: 1
         },
+
+        rightPriceScale: {
+          visible: true,
+          borderColor: 'rgba(197, 203, 206, 1)',
+        },
+        leftPriceScale: {
+          visible: true,
+          borderColor: 'rgba(197, 203, 206, 1)',
+        },
         crosshair: {
           mode: CrosshairMode.Normal,    
           vertLine: {
@@ -147,7 +179,15 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
 
   useEffect(() => {
     const chart = initChart()
-    loadChart(chart);
+    if(symbol){
+      if(mixedChart){
+        addLineSeries(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
+        addCandleChart(chart,getFormatSymbol(symbol),'left');  
+      } else {
+        addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');  
+      }
+    }
+    
     return () => {
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
@@ -159,9 +199,6 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       if(chart){
         chart.remove()
       }
-      // if(chart.current) {
-      //   chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
-      // }
     }
   }, [symbol,interval])
 

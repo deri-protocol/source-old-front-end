@@ -45,7 +45,7 @@ export default function useMiningPool(isNew,wallet){
         multiplier : apyPool.multiplier 
       }
       if(wallet.isConnected()){
-        const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId);
+        const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId).catch(e => console.log(e));
         const claimInfo = await getUserInfoAll(wallet.detail.account);
         if(info){
           item['pnl'] = info.pnl

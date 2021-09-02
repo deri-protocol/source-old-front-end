@@ -6,6 +6,7 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { DeriEnv, getUserInfoAllForAirDrop, mintAirdrop } from '../../../lib/web3js/indexV2.js';
 import { useHistory ,Link} from 'react-router-dom';
 import { eqInNumber } from '../../../utils/utils.js';
+import TipWrapper from '../../../components/TipWrapper/TipWrapper.js';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
@@ -112,18 +113,24 @@ function Card({index,item,lang,wallet,pool}){
       </span>
       <span className='col'>
         <div className='col-label'>{lang['multiplier']}</div>
-        <div className='col-value' title={lang['multiplier-tip']}><DeriNumberFormat value={item.multiplier}  suffix='x' /></div>
+        <TipWrapper>
+          <div className='col-value' title={lang['multiplier-tip']}><span className='underline'><DeriNumberFormat value={item.multiplier}  suffix='x' /></span></div>
+        </TipWrapper>
       </span>
       <span className='col'>
         <div className='col-label'>{lang['apy']}</div>
         <div className='col-value'>
         <span>
-          <span className={item.lpApy ? 'sushi-apy-underline' : ''} title={ item.lpApy && lang['deri-apy']}>
-            {item.apy ? <DeriNumberFormat value={item.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
-          </span>
+          <TipWrapper block={false}>
+            <span className={item.lpApy ? 'sushi-apy-underline' : ''} title={ item.lpApy && lang['deri-apy']}>
+              {item.apy ? <DeriNumberFormat value={item.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
+            </span>
+          </TipWrapper>
           {item.lpApy &&<>
           <span> + </span>
-          <span className={item.lpApy ? 'sushi-apy-underline' : '' } title={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+          <TipWrapper block={false}>
+            <span className={item.lpApy ? 'sushi-apy-underline' : '' } title={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+          </TipWrapper>
           </>}
         </span>
         </div>
