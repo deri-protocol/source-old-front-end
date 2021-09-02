@@ -1,5 +1,5 @@
 import { catchTxApiError } from '../../shared/utils';
-import { everlastingOptionFactory } from '../factory.js';
+import { everlastingOptionFactory } from '../factory/pool.js';
 
 export const addLiquidity = async(chainId, poolAddress, accountAddress, amount) => {
   const args = [chainId, poolAddress, accountAddress, amount]

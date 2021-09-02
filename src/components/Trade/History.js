@@ -1,5 +1,5 @@
-import React, { useState ,useEffect} from 'react'
-import { getTradeHistory,DeriEnv } from "../../lib/web3js/indexV2";
+import React, { useState ,useEffect, version} from 'react'
+import { getTradeHistory,DeriEnv ,bg} from "../../lib/web3js/indexV2";
 import dateFormat from 'date-format'
 import NumberFormat from 'react-number-format';
 import useInterval from '../../hooks/useInterval';
@@ -10,23 +10,24 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
-
-function History({wallet ,trading,lang}){
+function History({wallet ,trading,lang,type}){
   const [history, setHistory] = useState([]);  
 
   async function loadHistory (){
-    if(wallet.isConnected() && trading.configs && trading.config){
+    if(wallet.isConnected() && trading.configs && trading.config && trading.contract){
       const all = trading.history
       const his = all.map(item => {
         item.directionText = lang['long-buy']
         if(item.direction === 'SHORT') {
           item.directionText = lang['short-sell']
-        } else if (item.direction.toLowerCase() === 'liquidation') {
+        } else if (item.direction.toLowerCase() === 'liquidation'){
           item.directionText = lang['liquidation']
         }
+        // item.volume = type.isOption ? bg(item.volume).times(bg(trading.contract.multiplier)).toString() : item.volume
         const find = trading.config
         if(find){
-          item.baseTokenText = item.baseToken ?  ` ${find.symbol} / ${find.bTokenSymbol}` : find.symbol
+          item.symbol = item.symbol ? item.symbol : find.symbol
+          item.baseTokenText = item.baseToken ?  ` ${item.symbol} / ${item.baseToken}` : item.symbol
         }
         return item;
       })
@@ -54,11 +55,11 @@ function History({wallet ,trading,lang}){
           </div>
           <div className='time-price-volume'>
             <div className='history-price'>
-              <div className='history-title'>{lang['volume-price']}</div>
+              <div className='history-title'> {type.isOption ? lang['volume-notional-price'] : lang['volume-price']}</div>
               <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
             </div>
           <div className='notional'>
-              <div className='history-title'>{lang['notional']}</div>
+              <div className='history-title'> {type.isOption?lang['contract-value']: lang['notional']}</div>
               <div className='history-text'><DeriNumberFormat value={ his.notional} decimalScale={4}/></div>
             </div>
           <div className='history-fee'>
@@ -99,4 +100,4 @@ function HistoryLine({wallet,his}){
   )
 }
 
-export default inject('wallet','trading')(observer(History))
+export default inject('wallet','trading','type')(observer(History))

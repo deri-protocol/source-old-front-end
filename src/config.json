@@ -27,6 +27,7 @@
         "supportV1" : true,
         "supportInnovation" : true,
         "supportOptions":true,
+        "supportOpen" : true,
         "metamask" : {
           "chainName": "BSC-Mainnet",
           "nativeCurrency": {
@@ -69,7 +70,7 @@
             "symbol": "MATIC",
             "decimals" : 18
           },
-          "rpcUrls": ["https://matic-mainnet.chainstacklabs.com"],
+          "rpcUrls": ["https://polygon-rpc.com"],
           "blockExplorerUrls": ["https://polygonscan.com/"]
         }
       }

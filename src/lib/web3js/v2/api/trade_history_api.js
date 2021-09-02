@@ -1,20 +1,9 @@
-import { deriToNatural } from '../../shared/utils';
+import { deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig2,
   getPoolSymbolIdList,
-  getRestServerConfig,
-  DeriEnv,
 } from '../../shared/config';
 import { perpetualPoolFactory } from '../factory';
-
-const getHttpBase = () => {
-  return getRestServerConfig(DeriEnv.get());
-};
-
-const fetchJson = async (url) => {
-  const resp = await fetch(url);
-  return await resp.json();
-};
 
 const processTradeEvent = async (
   perpetualPool,
@@ -22,7 +11,8 @@ const processTradeEvent = async (
   blockNumber,
   txHash,
   multiplier,
-  feeRatio
+  feeRatio,
+  symbols,
 ) => {
   const tradeVolume = deriToNatural(info.tradeVolume);
   const timeStamp = await perpetualPool._getTimeStamp(blockNumber);
@@ -31,6 +21,7 @@ const processTradeEvent = async (
   const price = deriToNatural(info.price);
   const time = `${+timeStamp.timestamp}000`;
   const symbolId = info.symbolId
+  const symbol = symbols.find((s) => s.symbolId == info.symbolId)
   const transactionFee = perpetualPool._calculateFee(
     tradeVolume,
     price,
@@ -44,6 +35,7 @@ const processTradeEvent = async (
     direction,
     //baseToken: bTokenSymbol,
     symbolId,
+    symbol: symbol && symbol.symbol,
     price: price.toString(),
     notional: notional.toString(),
     volume: volume.toString(),
@@ -96,6 +88,7 @@ const getTradeHistoryOnline = async (
       item.transactionHash,
       multiplier,
       feeRatio,
+      symbols,
     );
     result.unshift(res);
   }
@@ -127,6 +120,7 @@ export const getTradeHistory = async (
             direction: i.direction.trim(),
             //baseToken: i.baseToken.trim(),
             symbolId: i.symbolId,
+            symbol: i.symbol,
             price: deriToNatural(i.price).toString(),
             notional: deriToNatural(i.notional).toString(),
             volume: deriToNatural(i.volume).toString(),

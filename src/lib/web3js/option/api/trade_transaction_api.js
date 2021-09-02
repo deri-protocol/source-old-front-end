@@ -2,7 +2,8 @@ import { getPoolConfig } from '../../shared/config';
 import { bTokenFactory } from '../../shared/factory';
 import { catchTxApiError, bg } from '../../shared/utils';
 //import { isOrderValid } from '../../v2/calculation';
-import { everlastingOptionFactory, pTokenOptionFactory} from '../factory.js';
+import { everlastingOptionFactory } from '../factory/pool.js';
+import { pTokenOptionFactory} from '../factory/tokens';
 
 export const unlock = async (chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress];

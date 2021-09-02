@@ -1,6 +1,13 @@
 import { CHAIN_ID, OPTION_PTOKEN_ADDRESS, OPTION_POOL_ADDRESS, TIMEOUT } from '../../shared/__test__/setup';
 import { bg } from '../../shared';
-import { everlastingOptionFactory, pTokenOptionFactory, lTokenOptionFactory, everlastingOptionViewerFactory } from '../factory';
+import {
+  everlastingOptionFactory,
+} from '../factory/pool';
+import {
+  pTokenOptionFactory,
+  lTokenOptionFactory,
+  everlastingOptionViewerFactory,
+} from '../factory/tokens';
 
 describe('EverlastingOption', () => {
   let everlastingOption
@@ -27,65 +34,51 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('getAddresses', async() => {
     const res = await everlastingOption.getAddresses()
-    expect(res).toEqual(
-      expect.objectContaining({
-        bTokenAddress: '0x4405F3131E2659120E4F931146f032B4c05314E2',
-        lTokenAddress: '0x739235a3F72f76F8aA8A880dE20A9a3849ea8Db8',
-        liquidatorQualifierAddress:
-          '0x0000000000000000000000000000000000000000',
-        pTokenAddress: '0xB7517aCe9B2409C3Fd1f522493f0420B86D1e490',
-        protocolFeeCollector: '0x4aF582Fd437f997F08df645aB6b0c070CC791DeE',
-      })
-    );
+    expect(res).toHaveProperty('bTokenAddress', '0x2ebE70929bC7D930248040f54135dA12f458690C')
+    expect(res).toHaveProperty('lTokenAddress', expect.any(String))
+    expect(res).toHaveProperty('pTokenAddress', expect.any(String))
   }, TIMEOUT)
-  it('getProtocolFeeAccrued', async() => {
-    const res = await everlastingOption.getProtocolFeeAccrued()
-    expect(bg(res).toNumber()).toBeGreaterThan(10)
-  }, TIMEOUT)
-  it('OptionPricer', async() => {
-    const res = await everlastingOption.OptionPricer()
-    expect(res).toEqual('0xE6522df9Eab9D0e454Ba79368ccBae63D005B198')
-  }, TIMEOUT)
-  it('PmmPricer', async() => {
-    const res = await everlastingOption.PmmPricer()
-    expect(res).toEqual('0x4CdE7a44a8d527254161Da62829669D673a3F402')
-  }, TIMEOUT)
-  it('_T', async() => {
-    const res = await everlastingOption._T()
-    expect(bg(res).toNumber()).toBeGreaterThan(0.002)
-  }, TIMEOUT)
+  // it('getProtocolFeeAccrued', async() => {
+  //   const res = await everlastingOption.getProtocolFeeAccrued()
+  //   expect(bg(res).toNumber()).toBeGreaterThan(2)
+  // }, TIMEOUT)
+  // it('OptionPricer', async() => {
+  //   const res = await everlastingOption.OptionPricer()
+  //   expect(res).toEqual('0xeEfaBc1B79Ec13ACA9FCAa96a5eC0811A576BaDc')
+  // }, TIMEOUT)
+  // it('PmmPricer', async() => {
+  //   const res = await everlastingOption.PmmPricer()
+  //   expect(res).toEqual('0xD8d8D8C994335bC521087281b53433dad5370602')
+  // }, TIMEOUT)
+  // it('_T', async() => {
+  //   const res = await everlastingOption._T()
+  //   expect(bg(res).toNumber()).toBeGreaterThan(0.002)
+  // }, TIMEOUT)
   it(
     'getSymbol',
     async () => {
       const res = await everlastingOption.getSymbol('0');
-      expect(res).toEqual(
-        expect.objectContaining({
-          K: '0.9',
-          cumulativeDeltaFundingRate: expect.any(String),
-          cumulativePremiumFundingRate: expect.any(String),
-          diseqFundingCoefficient: '0.000005',
-          feeRatio: '0.005',
-          intrinsicValue: expect.any(String),
-          isCall: true,
-          multiplier: '0.01',
-          oracleAddress: '0x78Db6d02EE87260a5D825B31616B5C29f927E430',
-          quote_balance_offset: expect.any(String),
-          strikePrice: '20000',
-          symbol: 'BTCUSD-20000-C',
-          symbolId: '0',
-          timeValue:  expect.any(String),
-          tradersNetCost: expect.any(String),
-          tradersNetVolume: expect.any(String),
-          volatilityAddress: '0xF6c2582635d26f793898a4BAC5e8843b82eB4121',
-        })
-      );
-      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-100)
+      //expect(res).toHaveProperty('', '')
+      expect(res).toHaveProperty('alpha', '0.01')
+      expect(res).toHaveProperty('feeRatio', '0.005')
+      expect(res).toHaveProperty('multiplier', '0.001')
+      expect(res).toHaveProperty('strikePrice', '50000')
+      expect(res).toHaveProperty('symbol', 'BTCUSD-50000-C')
+      expect(res).toHaveProperty('symbolId', '0')
+      expect(res).toHaveProperty('isCall', true)
+      expect(res).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
+      expect(res).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
+      expect(res).toHaveProperty('volatilityAddress',  expect.any(String))
+      expect(res).toHaveProperty('tradersNetCost', expect.any(String))
+      expect(res).toHaveProperty('tradersNetVolume', expect.any(String))
+      expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThan(-20000)
+      expect(res).toEqual({})
     },
     TIMEOUT
   );
   it('_getVolSymbolPrices', async() => {
     const res = await everlastingOption._getVolSymbolPrices()
-    expect(res.length).toEqual(2)
+    expect(res.length).toEqual(4)
     expect(bg(res[0][2]).toNumber()).toBeGreaterThan(1)
   }, TIMEOUT)
   it('optionPool pToken', async() => {
@@ -100,7 +93,7 @@ describe('EverlastingOption', () => {
   }, TIMEOUT)
   it('optionPool viewer', async() => {
     const viewer = everlastingOptionViewerFactory(CHAIN_ID, everlastingOption.viewerAddress)
-    const res = await viewer.getPoolStates(everlastingOption.contractAddress, [])
+    const res = await viewer.getPoolStates(everlastingOption.contractAddress, [], [])
     expect(res.poolState.pToken).toEqual(OPTION_PTOKEN_ADDRESS)
   }, TIMEOUT)
 });

@@ -149,10 +149,17 @@
 
         .check-baseToken {
           display: flex;
-
+          .option-vol{
+            color: @text;
+          }
           .check-baseToken-btn,
           .price-fundingRate {
             display: inline-block;
+            .vol{
+              font-size: 16px;
+              vertical-align: middle;
+            }
+            
           }
 
           .check-baseToken-btn {
@@ -170,29 +177,74 @@
               top: 62px;
               left: 10px;
               will-change: transform;
+              max-height: 480px;
+              overflow: auto;
+              overflow-x: hidden;
               z-index: 2;
             }
             .dropdown-menu {
-              width: 255px;
+              width: 232px;
               color: #CCCCCC;
               border-radius: 12px;
               background: #252628;
               display: none;
-              box-shadow: -4px -3px 2px 1px #303031;
+              box-shadow: -4px -3px 2px 1px #303031;    
+              padding: 4px 0 0 22px;
               span {
                 padding-left: 12px;
               }
             }
+            .dropdown-menu::-webkit-scrollbar {
+              border-radius: 10px;
+              width: 10px;
+              height: 10px;
+              background-color: rgb(20, 25, 36);
+            }
+        
+            /*定义滚动条轨道 内阴影+圆角*/
+        
+            .dropdown-menu::-webkit-scrollbar-track {
+              box-shadow: inset 0 0 0px rgb(20, 25, 36);
+              border-radius: 10px;
+              background-color: rgb(20, 25, 36);
+            }
+        
+            /*定义滑块 内阴影+圆角*/
+        
+            .dropdown-menu::-webkit-scrollbar-thumb {
+              border-radius: 10px;
+              box-shadow: inset 0 0 0px rgb(20, 25, 36);
+              background-color: gray;
+            }
 
-            .dropdown-item {
-              padding: 6px;
+            .dropdown-item-wrapper,.dropdown-item {
+              padding: 2px 0 ;
               font-size: 16px;
               font-family: Korolev, sans-serif;
               font-weight: 300;
               color: #CCCCCC;
-              margin-left: 14px;
               line-height: 32px;
             }
+
+            .sub-menu {
+              margin-left: 20px;
+              display: none;
+            }
+            .sub-menu.show {
+              display: block;
+            }
+
+            .catalog {
+              display: flex;
+              justify-content: space-between;
+              padding-right: 24px;
+              img {
+                width: 16px;
+              }
+            }
+
+
+            
 
             .dropdown-item:focus,
             .dropdown-item:hover {
@@ -236,6 +288,9 @@
                 // margin-left: 58px;
                 position: absolute;
                 right: 20px;
+                img {
+                  width: 16px;
+                }
               }
             }
 
@@ -263,9 +318,9 @@
             .fall {
               color: @red;
             }
-
             .funding-rate {
               padding-top: 5px;
+              position: relative;
 
               .funding-per {
                 display: inline-block;
@@ -273,6 +328,21 @@
                 border-bottom: 1px #AAAAAA dotted;
                 cursor: pointer;
               }
+              .hover-box {
+                position: absolute;
+                background-color: #2c2d31;
+                border: 1px solid #AAAAAA;
+                color: #AAAAAA;
+                border-radius: 10px;
+                padding: 4px;
+                top: 26px;
+                left: 60px;
+                width: 177px;
+                display: none;
+              }
+            }
+            .funding-rate:hover .hover-box {
+              display: block;
             }
           }
           .options{
@@ -283,12 +353,23 @@
               display: flex;
               justify-content: space-between;
             }
+            .index-prcie{
+              padding-top: 5px;
+            }
+            .funding-rate{
+              padding-top: 0px !important;
+            }
+            .rise,.fall{
+              font-size: 14px;
+              font-weight: 600;
+            }
           }
           
         }
 
         .check-long-short {
           display: flex;
+          margin-top: 20px;
           width: 423px;
           height: 73px;
           // margin-top: 9px;
@@ -342,7 +423,10 @@
           .left {
             font-size: 12px;
             height: 115px;
-
+            .min-quantity{
+              margin-top: 5px;
+              color: #E35061;
+            }
             .current-position {
               margin-left: 20px;
               font-weight: 500;
@@ -375,7 +459,14 @@
                 color: #D4E05C;
                 display: none;
               }
-
+              .option-unit{
+                position: absolute;
+                right: 7px;
+                top: 30px;
+                font-size: 16px;
+                color: @text;
+                display: none;
+              }
               .contrant-input {
                  box-sizing: border-box;
                 width: 229px;
@@ -401,7 +492,7 @@
                 // font-family: 'LED Calculator';
               }
 
-              .contrant-input:focus+.title-volume {
+              .contrant-input:focus+.title-volume,.contrant-input:focus+.option-unit {
                 display: block;
               }
 
@@ -412,11 +503,16 @@
                 font-family: 'LED Calculator';
               }
 
-              .inputFamliy+.title-volume {
+              .inputFamliy+.title-volume,.inputFamliy+.option-unit {
                 display: block;
               }
             }
+            .option-input{
+              .contrant-input{
+                padding-right: 30px  !important;
+              }
 
+            }
             .btc {
               text-align: right;
               padding-right: 17px;
@@ -433,7 +529,7 @@
 
 
             .v2,.v2_lite {
-              .balance-contract-text.pc,.total-held, .pos-held,.available-balance.pc{
+              .balance-contract-text.pc,.total-held, .pos-held,.available-balance .pc{
                 cursor: pointer;
                 border-bottom: 1px dotted #aaaaaa;
               }
@@ -443,7 +539,7 @@
               font-size: 12px;
 
 
-              div {
+              .margin-held-pos,.balance-contract,.box-margin,.available-balance {
                 display: flex;
                 justify-content: space-between;
                 width: 220px;
@@ -476,7 +572,7 @@
               .balance-contract-text.mobile {
                 display: none
               }
-              .available-balance.mobile {
+              .available-balance .mobile {
                 display: none;
               }
 
@@ -515,6 +611,11 @@
 
             .text-enter {
               color: @text;
+            }
+            .transaction-fee-hover{
+              color: #ffffff;
+              border-bottom: 1px #aaaaaa dotted;
+              cursor: pointer;
             }
           }
         }
@@ -578,15 +679,18 @@
           }
           .pnl-box {
             position: absolute;
-            min-width: 249px;
+            min-width: 260px;
             display: none;
             z-index: 1;
             top: 2px;
-            left: 324px;
+            left: 317px;
             background-color: #2c2d31;
             border: 1px solid #AAAAAA;
             color: #AAAAAA;
             border-radius: 10px;
+            max-height: 300px;
+            overflow: auto;
+            overflow-x: hidden;
             font-size: 14px;
             .unrealizePnl-item {
               margin: 10px 0;
@@ -597,6 +701,28 @@
                 color: #fff;
               }
             }
+          }
+          .pnl-box::-webkit-scrollbar {
+            border-radius: 10px;
+            width: 10px;
+            height: 10px;
+            background-color: rgb(20, 25, 36);
+          }
+      
+          /*定义滚动条轨道 内阴影+圆角*/
+      
+          .pnl-box::-webkit-scrollbar-track {
+            box-shadow: inset 0 0 0px rgb(20, 25, 36);
+            border-radius: 10px;
+            background-color: rgb(20, 25, 36);
+          }
+      
+          /*定义滑块 内阴影+圆角*/
+      
+          .pnl-box::-webkit-scrollbar-thumb {
+            border-radius: 10px;
+            box-shadow: inset 0 0 0px rgb(20, 25, 36);
+            background-color: gray;
           }
         }
 
@@ -926,6 +1052,9 @@
         }
         .text {
           padding-right: 55px;
+          > div{
+            display: inline;
+          }
         }
         .multiplier {
           border-bottom: 1px dotted #aaaaaa;
@@ -942,7 +1071,9 @@
     }
   }
 }
-
+.options .trade-body .trade-position .history-info .history-box .view{
+  left: 52px;
+}
 .trading-dialog {
 
   .modal-dialog {
@@ -1123,6 +1254,9 @@
           width: 471px;
           height: 422px;
           padding : 0 10px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
 
           .enter-margin {
             display: flex;
@@ -1204,6 +1338,7 @@
           padding: 0;
           border: 0;
           justify-content: center;
+          margin-bottom: 20px;
 
           button {
             width: 200px;

@@ -1,5 +1,5 @@
 export { DeriEnv } from './env'
-export { VERSIONS, LITE_VERSIONS } from './version';
+export { VERSIONS, LITE_VERSIONS, LITE_AND_OPTION_VERSIONS } from './version';
 export {
   getChainIds,
   getChainProviderUrls,
@@ -28,7 +28,7 @@ export {
   getPoolSymbolList,
   getPoolSymbolIdList,
   getPoolVersion,
-  getPoolLiteViewerConfig,
+  getPoolViewerConfig,
 } from './pool';
 export {
   getPoolV1ConfigList,
@@ -44,8 +44,13 @@ export {
 export { 
   getOracleConfigList,
   getOracleConfig,
+} from './oracle';
+export { 
   isUsedRestOracle,
   mapToSymbol,
   mapToSymbolInternal,
-} from './oracle';
+  mapToBToken,
+  normalizeOptionSymbol,
+  getNormalizedOptionSymbols,
+} from './token';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

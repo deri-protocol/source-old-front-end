@@ -42,7 +42,7 @@ export default function Content({lang}) {
         <div className='index_part2-center'>
           <div className="index_part2-L">
             <div className='index_part2_L-text'>
-              <span className="key">{lang['deri-protocol']} </span>
+              <span className="key">{lang['deri-protocol']} </span><br />
               {lang['deri-describe']}
             </div>
           </div>

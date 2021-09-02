@@ -9,11 +9,9 @@ import {
   getDailyBlockNumberConfig,
   getChainIds,
   getPoolVersion,
-  mapToSymbol,
   getBrokerConfig,
-  mapToSymbolInternal,
-  isUsedRestOracle,
   getPreminingConfigList,
+  DeriEnv,
 } from '../config';
 import { bg } from '../utils';
 import {
@@ -90,7 +88,7 @@ describe('config', () => {
     expect(getFilteredPoolConfigList(POOL_V2_ADDRESS, '0').length).toEqual(2);
   });
   test('getFilteredPoolconfig(1) for option', () => {
-    expect(getFilteredPoolConfigList(OPTION_POOL_ADDRESS, undefined, undefined, 'option').length).toEqual(12);
+    expect(getFilteredPoolConfigList(OPTION_POOL_ADDRESS, undefined, undefined, 'option').length).toEqual(16);
   });
   test('getPoolconfig(0, 1)', () => {
     expect(
@@ -144,7 +142,7 @@ describe('config', () => {
       chainId: '97',
       symbol: 'ETHUSD',
       decimal: '18',
-      address: '0xdF0050D6A07C19C6F6505d3e66B68c29F41edA09',
+      address: '0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A',
     };
     expect(getOracleConfig('97', 'ETHUSD', 'option')).toEqual(output)
   })
@@ -181,7 +179,7 @@ describe('config', () => {
     expect(getPoolConfig2(POOL_V2_ADDRESS, null, '1').symbol).toEqual('ETHUSD')
   })
   test('getOracleConfigList with v2_lite', () => {
-    const output = 7
+    const output = 9
     expect(getOracleConfigList('v2_lite').length).toEqual(output)
   })
   test('getOracleConfigList(v2_lite, prod)', () => {
@@ -226,7 +224,7 @@ describe('config', () => {
         null,
         'v2_lite'
       ).offchainSymbolIds
-    ).toEqual(['2', '3', '4', '5', '6']);
+    ).toEqual(['2', '3', '4', '5', '6', '7', '8']);
   });
   test('getPoolconfig() lToken for option', () => {
     expect(
@@ -236,39 +234,46 @@ describe('config', () => {
         null,
         'option'
       ).lToken
-    ).toEqual('0xc14097dBfC37719dB731F8532AA3F4D0fd305262');
+    ).toEqual('0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C');
   });
-  test('getPoolconfig() volatileSymbols for option', () => {
+  test('getPoolconfig() volatilitySymbols for option', () => {
     expect(
       getPoolConfig(
         OPTION_POOL_ADDRESS,
         null,
         null,
         'option'
-      ).volatileSymbols
+      ).volatilitySymbols
     ).toEqual(['VOL-BTCUSD', 'VOL-ETHUSD']);
   });
   test('getPoolVersion', () => {
     expect(getPoolVersion('0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5')).toEqual('v2')
     expect(getPoolVersion('0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42')).toEqual('v2_lite')
-    expect(getPoolVersion('0x0ee8b0133135268bEc201D8d7752B2f90E5a6c92')).toEqual('option')
-  })
-  test('isUsedRestOracle', () => {
-    expect(isUsedRestOracle('AXSUSDT')).toEqual(true)
-    expect(isUsedRestOracle('MANAUSDT')).toEqual(true)
-    expect(isUsedRestOracle('IBSCDEFI')).toEqual(true)
-    expect(isUsedRestOracle('BTCUSD')).toEqual(false)
-    expect(isUsedRestOracle('iBSCDEFI')).toEqual(false)
-  })
-  test('mapToSymbol', () => {
-    expect(mapToSymbol('IBSCDEFI')).toEqual('iBSCDEFI')
-    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
-  })
-  test('mapToSymbolInternal', () => {
-    expect(mapToSymbolInternal('iBSCDEFI')).toEqual('IBSCDEFI')
-    expect(mapToSymbol('BTCUSD')).toEqual('BTCUSD')
+    DeriEnv.set('prod')
+    expect(getPoolVersion('0x063E74AbB551907833Be79E2C8F279e3afc74711')).toEqual('v2_lite_open')
+    DeriEnv.set('dev')
+    expect(getPoolVersion('0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6')).toEqual('option')
   })
   test('getPreminingContractConfig', () => {
     expect(getPreminingConfigList('prod').length).toEqual(8)
   })
+  test('getPoolConfigList(v2_lite_open, prod)', () => {
+    const output = 2
+    DeriEnv.set('prod')
+    const res = getPoolConfigList('v2_lite_open', 'prod').length
+    DeriEnv.set('dev')
+    expect(bg(res).toNumber()).toBeGreaterThanOrEqual(output)
+  })
+  test('getPoolconfig() for v2_lite_open', () => {
+    DeriEnv.set('prod')
+    expect(
+      getPoolConfig(
+        '0x063E74AbB551907833Be79E2C8F279e3afc74711',
+        '0',
+        '0',
+        'v2_lite_open'
+      ).pToken
+    ).toEqual('0xBfc56891E0c9bFC65c5da29e998F16EAb32ea449');
+    DeriEnv.set('dev')
+   })
 });

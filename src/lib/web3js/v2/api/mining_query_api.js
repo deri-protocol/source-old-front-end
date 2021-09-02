@@ -78,7 +78,6 @@ export const getLiquidityInfo = async (
         .minus(lastCumulativePnl)
         .times(liquidity)
     );
-    //console.log("approximatePnl", approximatePnl.toString())
     return {
       //totalSupply: lTokenTotalSupply.toString(),
       poolLiquidity: poolLiquidity.toString(),

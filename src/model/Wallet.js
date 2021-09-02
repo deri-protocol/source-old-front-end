@@ -17,7 +17,8 @@ class Wallet {
       supportV1 : computed,
       supportAllVersion : computed,
       supportChain : computed,
-      supportInnocation : computed
+      supportInnocation : computed,
+      supportOpen : computed
     })
   }
 
@@ -137,6 +138,10 @@ class Wallet {
 
   get supportInnovation(){
     return this.detail.supportInnovation
+  }
+
+  get supportOpen(){
+    return this.detail.supportOpen
   }
 
 

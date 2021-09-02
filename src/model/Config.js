@@ -1,5 +1,5 @@
 import { makeObservable, observable, action } from "mobx";
-import { getContractAddressConfig, DeriEnv } from "../lib/web3js/indexV2";
+import { getContractAddressConfig, DeriEnv,sortOptionSymbols } from "../lib/web3js/indexV2";
 
 export default class Config {
   all = []
@@ -17,6 +17,9 @@ export default class Config {
       current = 'option'
     }
     let configs = getContractAddressConfig(DeriEnv.get(),current)
+    if(isOptions){
+      configs = sortOptionSymbols(configs)
+    }
     if(!isOptions && version){
       configs = configs.filter(c => c.version === version.current)
       //v2 不需要展示base token,需要合并相同的base token

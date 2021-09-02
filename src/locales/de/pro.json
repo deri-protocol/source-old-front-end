@@ -7,7 +7,14 @@
   "current-position" : "AKTUELLE POSITION",
   "trade-history" : "TRADING-HISTORIE",
   "pool-total-liquidity" : "Pool Gesamtliquidität",
-  "funding-rate-delta":"Funding Rate Delta",
-  "funding-rate-premium":"Funding Rate Premium",
-  "position-info" : "POSITION INFO"
+  "funding-rate-delta":"Delta Funding Daily",
+  "funding-rate-premium":"Premium Funding Daily",
+  "position-info" : "POSITION INFO",
+  "option-mark-price" : "Preis für Option markieren",
+  "open" : "O",
+  "high" : "H",
+  "low" : "L",
+  "close" : "C",
+  "price" : "Preis",
+  "index" : "Index"
 }

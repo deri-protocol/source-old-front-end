@@ -3,7 +3,8 @@ import {
   ContractBase,
   deriToNatural,
   naturalToDeri,
-  getPoolLiteViewerConfig,
+  getPoolViewerConfig,
+  isEqualSet,
 } from '../../shared';
 import { getPriceInfos } from '../../shared/utils/oracle';
 import { perpetualPoolLiteAbi } from './abis';
@@ -23,10 +24,10 @@ export class PerpetualPoolLite extends ContractBase {
     );
     this.offchainSymbolIds = this.config.offchainSymbolIds;
     this.offchainSymbols = this.config.offchainSymbols;
-    this.bTokenAddress = '';
-    this.lTokenAddress = '';
-    this.liquidatorQualifierAddress = '';
-    this.protocolFeeCollector = '';
+    this.bTokenAddress = this.config.bToken
+    this.lTokenAddress = this.config.lToken
+    this.pTokenAddress = this.config.pToken
+    this.viewerAddress = getPoolViewerConfig(this.chainId, 'v2_lite')
   }
 
   async _update() {
@@ -34,27 +35,25 @@ export class PerpetualPoolLite extends ContractBase {
   }
 
   async _updateOffchainSymbols() {
-    if (!this.pTokenAddress) {
-      await this.getAddresses()
-      const pToken = new PTokenLite(this.chainId, this.pTokenAddress)
-      const viewerAddress = getPoolLiteViewerConfig(this.chainId)
-      const [activeSymbolIds, activeSymbols] = await Promise.all([
-        pToken.getActiveSymbolIds(),
-        new PerpetualPoolLiteViewer(
+    if (!this.pToken) {
+      this.pToken = new PTokenLite(this.chainId, this.pTokenAddress)
+    }
+    if (!this.viewer) {
+      this.viewer = new PerpetualPoolLiteViewer(
           this.chainId,
-          viewerAddress
-        ).getOffChainOracleSymbols(this.contractAddress),
-      ]);
+          this.viewerAddress
+      )
+    }
+    //await this.getAddresses()
+    const activeSymbolIds = await this.pToken.getActiveSymbolIds()
+    if (!this.activeSymbolIds || !isEqualSet(new Set(this.activeSymbolIds), new Set(activeSymbolIds))) {
+      const activeSymbols = await this.viewer.getOffChainOracleSymbols(this.contractAddress)
       //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
       this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
-        return activeSymbols[index] == '' ? acc :  acc.concat([i])
-      }, [])
+        return activeSymbols[index] == '' ? acc : acc.concat([i]);
+      }, []);
       this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
-      // console.log(
-      //   'offchainSymbolIds',
-      //   this.offchainSymbolIds,
-      //   this.offchainSymbols
-      // );
+      this.activeSymbolIds = activeSymbolIds;
     }
   }
 
@@ -63,8 +62,6 @@ export class PerpetualPoolLite extends ContractBase {
     this.bTokenAddress = res.bTokenAddress;
     this.lTokenAddress = res.lTokenAddress;
     this.pTokenAddress = res.pTokenAddress;
-    this.liquidatorQualifierAddress = res.liquidatorQualifierAddress;
-    this.protocolFeeCollector = res.protocolFeeCollector;
   }
   async getParameters() {
     const res = await this._call('getParameters');
@@ -79,6 +76,10 @@ export class PerpetualPoolLite extends ContractBase {
       liquidationCutRatio: deriToNatural(res.liquidationCutRatio),
       protocolFeeCollectRatio: deriToNatural(res.protocolFeeCollectRatio),
     };
+  }
+  async getLastUpdateBlock() {
+    const res = await this._call('getLastUpdateBlock');
+    return parseInt(res)
   }
   async getProtocolFeeAccrued() {
     const res = await this._call('getProtocolFeeAccrued');

@@ -2,6 +2,9 @@
   "pool-liq" : "流动性",
   "total" : "总量",
   "symbol" : "标的",
+  "all":"所有",
+  "futures":"期货",
+  "options":"期权 (beta)",
   "retired-text":"以下矿池已退役，不再产生挖矿收益。请移除您的流动性并将其添加至",
   "new-pools":"新流动性池",
   "premining-pools":"预挖矿",
@@ -78,6 +81,14 @@
   "invalid-liquidity" : "无效流动性!",
   "multiplier" : "乘数",
   "multiplier-tip" : "乘数代表每个token用作保证金时的折算比例（用于计算有效保证金）\n如：添加1个B1 toekn作为保证金，乘数为0.8，有效保证金为0.8",
-  "v2_lite" : "创新区",
-  "v2" : "主区"
+  "v2_lite" : "期货-创新区",
+  "option":"期权",
+  "v2" : "期货-主区",
+  "v2_lite_open" : "开放区",
+  "official-zone" : "主区和创新区",
+  "open-zone" : "开放区",
+  "my-liqudity-providing" : "我提供的流动性",
+  "add-pool" : "添加池子",
+  "coming-soon" : "即将开放！敬请期待！\n(现在就有需求者请联系我们)",
+  "add-pool-text" : "创建我的流动性池"
 }

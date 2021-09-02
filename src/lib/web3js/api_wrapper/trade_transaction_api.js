@@ -1,5 +1,5 @@
 import { closePositionOption, depositMarginOption, tradeWithMarginOption, unlockOption, withdrawMarginOption } from '../option/api';
-import { getPoolVersion, unlockDeri } from '../shared';
+import { getPoolVersion, LITE_VERSIONS, unlockDeri } from '../shared';
 import {
   unlock2,
   tradeWithMargin2,
@@ -29,7 +29,7 @@ export const unlock = async (
   bTokenId
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return unlockV2l(chainId, poolAddress, accountAddress);
   } else if (version === 'option') {
     return unlockOption(chainId, poolAddress, accountAddress);
@@ -51,7 +51,7 @@ export const depositMargin = async (
   bTokenId
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return depositMarginV2l(chainId, poolAddress, accountAddress, amount);
   } else if (version === 'option') {
     return depositMarginOption(chainId, poolAddress, accountAddress, amount);
@@ -78,7 +78,7 @@ export const withdrawMargin = async (
   isMaximum
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return withdrawMarginV2l(
       chainId,
       poolAddress,
@@ -117,7 +117,7 @@ export const tradeWithMargin = async (
   symbolId
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return tradeWithMarginV2l(
       chainId,
       poolAddress,
@@ -154,7 +154,7 @@ export const closePosition = async (
   symbolId
 ) => {
   const version = getPoolVersion(poolAddress)
-  if (version === 'v2_lite') {
+  if (LITE_VERSIONS.includes(version)) {
     return closePositionV2l(chainId, poolAddress, accountAddress, symbolId);
   } else if (version === 'option') {
     return closePositionOption(chainId, poolAddress, accountAddress, symbolId);

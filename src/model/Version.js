@@ -38,5 +38,9 @@ class Version {
   get isV2Lite (){
     return this.current === 'v2_lite'
   }
+
+  get isOpen(){
+    return this.current === 'v2_lite_open'
+  }
 }
 export default new Version()

@@ -86,6 +86,17 @@ export const isBrowser = () => typeof window !== 'undefined' && typeof window.do
 export const isNodejs = () => typeof process !== 'undefined' && process.versions != null && process.versions.node != null
 export const isJsDom = () => typeof window !== 'undefined' && navigator.userAgent.includes('jsdom')
 
+// == array set
+export const isEqualSet = (set1, set2) => {
+  if (set1.size !== set2.size) return false;
+  for (let item of set1) {
+    if (!set2.has(item)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 // == contract gen
 export const deleteIndexedKey = (obj) => {
   if (isObject(obj)) {
@@ -111,4 +122,43 @@ export const fromWeiForObject = (obj, keyList = []) => {
     return acc;
   }, {});
 };
+
+export const toNumberForObject = (obj, keyList = []) => {
+  return Object.keys(obj).reduce((acc, i) => {
+    if (keyList.includes(i)) {
+      acc[i] = bg(obj[i]).toNumber();
+    } else {
+      acc[i] = obj[i];
+    }
+    return acc;
+  }, {});
+};
+
+
+// for frontend to display symbols
+export const sortOptionSymbols = (symbolList) => {
+  const symbolArr = symbolList
+    .map((s) => s.symbol)
+    .map((s) => {
+      return s.split('-');
+    });
+  const unique = (value, index, self) => self.indexOf(value) === index
+  const to2 = (i) => i < 10 ? `0${i}` : i
+  const symbol = symbolArr.map((s) => s[0]).filter(unique)
+  const direction = symbolArr.map((s) => s[2]).filter(unique)
+  const price = symbolArr
+    .map((s) => s[1])
+    .filter(unique)
+    .sort((a, b) => parseInt(a) - parseInt(b));
+  return symbolList.map((i, index) => {
+    const index1 =  symbol.indexOf(symbolArr[index][0]) + 1
+    const index2 =  to2(direction.indexOf(symbolArr[index][2]) + 1)
+    const index3 =  to2(price.indexOf(symbolArr[index][1]) + 1)
+    i.index = parseInt(`${index1}${index2}${index3}`)
+    return i
+  }).sort((a, b) => a.index - b.index).map((i) => {
+    delete i.index
+    return i
+  })
+}
 

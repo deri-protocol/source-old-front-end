@@ -20,6 +20,8 @@ export {
   getLiquidityUsed as getLiquidityUsedOption,
   getEstimatedLiquidityUsed as getEstimatedLiquidityUsedOption,
   getFundingRateCache as getFundingRateCacheOption,
+  getPositionInfos as getPositionInfosPosition,
+  getEstimatedTimePrice,
 } from './trade_query_api'
 
 export {
@@ -30,4 +32,4 @@ export {
   closePosition as closePositionOption,
 } from './trade_transaction_api';
 
-//export {} from './trade_history_api'
+export { getTradeHistory as getTradeHistoryOption } from './trade_history_api';

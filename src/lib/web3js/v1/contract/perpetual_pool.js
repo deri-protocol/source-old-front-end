@@ -10,7 +10,7 @@ import {
   processFundingRate,
 } from '../calculation';
 import { ContractBase } from '../../shared/contract';
-import { getPriceFromRest, getPriceInfo } from '../../shared/utils/oracle';
+import { getPriceInfoForV1 } from '../../shared/utils/oracle';
 
 /* eslint-disable */
 const POOL_ABI=[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"lShares","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"AddLiquidity","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"DepositMargin","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"migrationTimestamp","type":"uint256"},{"indexed":false,"internalType":"address","name":"source","type":"address"},{"indexed":false,"internalType":"address","name":"target","type":"address"}],"name":"ExecuteMigration","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"int256","name":"volume","type":"int256"},{"indexed":false,"internalType":"int256","name":"cost","type":"int256"},{"indexed":false,"internalType":"uint256","name":"margin","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"price","type":"uint256"},{"indexed":false,"internalType":"address","name":"liquidator","type":"address"},{"indexed":false,"internalType":"uint256","name":"reward","type":"uint256"}],"name":"Liquidate","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"migrationTimestamp","type":"uint256"},{"indexed":false,"internalType":"address","name":"source","type":"address"},{"indexed":false,"internalType":"address","name":"target","type":"address"}],"name":"PrepareMigration","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"lShares","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"RemoveLiquidity","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"int256","name":"tradeVolume","type":"int256"},{"indexed":false,"internalType":"uint256","name":"price","type":"uint256"}],"name":"Trade","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":false,"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"WithdrawMargin","type":"event"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"addLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"addLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"approveMigration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"controller","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"depositMargin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"depositMargin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"source","type":"address"}],"name":"executeMigration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAddresses","outputs":[{"internalType":"address","name":"bToken","type":"address"},{"internalType":"address","name":"pToken","type":"address"},{"internalType":"address","name":"lToken","type":"address"},{"internalType":"address","name":"oracle","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getParameters","outputs":[{"internalType":"uint256","name":"multiplier","type":"uint256"},{"internalType":"uint256","name":"feeRatio","type":"uint256"},{"internalType":"uint256","name":"minPoolMarginRatio","type":"uint256"},{"internalType":"uint256","name":"minInitialMarginRatio","type":"uint256"},{"internalType":"uint256","name":"minMaintenanceMarginRatio","type":"uint256"},{"internalType":"uint256","name":"minAddLiquidity","type":"uint256"},{"internalType":"uint256","name":"redemptionFeeRatio","type":"uint256"},{"internalType":"uint256","name":"fundingRateCoefficient","type":"uint256"},{"internalType":"uint256","name":"minLiquidationReward","type":"uint256"},{"internalType":"uint256","name":"maxLiquidationReward","type":"uint256"},{"internalType":"uint256","name":"liquidationCutRatio","type":"uint256"},{"internalType":"uint256","name":"priceDelayAllowance","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getStateValues","outputs":[{"internalType":"int256","name":"cumuFundingRate","type":"int256"},{"internalType":"uint256","name":"cumuFundingRateBlock","type":"uint256"},{"internalType":"uint256","name":"liquidity","type":"uint256"},{"internalType":"int256","name":"tradersNetVolume","type":"int256"},{"internalType":"int256","name":"tradersNetCost","type":"int256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"symbol_","type":"string"},{"internalType":"address[4]","name":"addresses_","type":"address[4]"},{"internalType":"uint256[12]","name":"parameters_","type":"uint256[12]"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"liquidate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"liquidate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"migrationDestination","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"migrationTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newPool","type":"address"},{"internalType":"uint256","name":"graceDays","type":"uint256"}],"name":"prepareMigration","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lShares","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"removeLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lShares","type":"uint256"}],"name":"removeLiquidity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newController","type":"address"}],"name":"setController","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"int256","name":"tradeVolume","type":"int256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"trade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"int256","name":"tradeVolume","type":"int256"}],"name":"trade","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"int256","name":"tradeVolume","type":"int256"},{"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"tradeWithMargin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"int256","name":"tradeVolume","type":"int256"},{"internalType":"uint256","name":"bAmount","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"tradeWithMargin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"}],"name":"withdrawMargin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"bAmount","type":"uint256"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"uint256","name":"price","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"withdrawMargin","outputs":[],"stateMutability":"nonpayable","type":"function"}]
@@ -112,8 +112,9 @@ export class PerpetualPool extends ContractBase {
   async _estimatedGas(method, args, accountAddress) {
     // !this.accountAddress &&
     //   console.log('please do setAccount(accountAddress) first');
+    const MAX_GAS_AMOUNT = 582731
     let gas = 0;
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 2; i++) {
       try {
         gas = await this.contract.methods[method](...args).estimateGas({
           from: accountAddress,
@@ -124,8 +125,8 @@ export class PerpetualPool extends ContractBase {
         //console.log("err", err);
       }
     }
-    if (gas == 0) gas = 532731;
-    if (gas > 532731) gas = 532731;
+    if (gas == 0) gas = MAX_GAS_AMOUNT;
+    if (gas > MAX_GAS_AMOUNT) gas = MAX_GAS_AMOUNT;
     return gas;
   }
 
@@ -133,8 +134,8 @@ export class PerpetualPool extends ContractBase {
   async _transact(method, args = [], accountAddress) {
     await this._init()
     const symbol = await this.symbol()
-    const oracle = await getPriceInfo(symbol);
-    let signed = [oracle.timestamp, oracle.price, oracle.v, oracle.r, oracle.s];
+    const oracle = await getPriceInfoForV1(symbol);
+    let signed = [oracle.timestamp, oracle.price, parseInt(oracle.v).toString(), oracle.r, oracle.s];
 
     const gas = await this._estimatedGas(method, [...args, ...signed], accountAddress)
 
@@ -157,7 +158,7 @@ export class PerpetualPool extends ContractBase {
   async getFundingRate() {
     let price, fundingRate, fundingRatePerBlock, liquidityUsed;
     const symbol = await this.symbol()
-    price = await getPriceFromRest(symbol);
+    price = deriToNatural((await getPriceInfoForV1(symbol)).price).toString();
     try {
       const stateValues = await this.getStateValues();
       const parameters = await this.getParameters();
@@ -174,7 +175,7 @@ export class PerpetualPool extends ContractBase {
         liquidity,
         fundingRateCoefficient,
       ];
-      if (validateArgs(...args1)) {
+      if (!validateArgs(...args1)) {
         fundingRate = '0';
         fundingRatePerBlock = '0';
       } else {
@@ -188,7 +189,7 @@ export class PerpetualPool extends ContractBase {
         liquidity,
         minPoolMarginRatio,
       ];
-      if (validateArgs(...args2)) {
+      if (!validateArgs(...args2)) {
         liquidityUsed = '0';
       } else {
         liquidityUsed = calculateLiquidityUsed(...args2);

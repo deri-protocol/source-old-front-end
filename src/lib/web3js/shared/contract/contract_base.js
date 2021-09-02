@@ -2,6 +2,8 @@ import { web3Factory } from '../factory/web3';
 import { numberToHex } from '../utils/convert';
 
 const MAX_GAS_AMOUNT = 832731;
+//const RE_ERROR_MSG = /\"message\":\s\"execution\sreverted:([\w\s]+)\"/
+const RE_ERROR_MSG = /"message":\s"execution\sreverted:([\w\s]+)"/
 
 export class ContractBase {
   constructor(chainId, contractAddress, contractAbi) {
@@ -43,7 +45,7 @@ export class ContractBase {
       }
     }
     if (retry === 0 && !res) {
-      throw new Error(`The contract(${this.contractAddress}) '${method}([${args.join(',')}])' failed with max retry 2.`)
+      throw new Error(`The contract(${this.contractAddress}) '${method}([${args}])' failed with max retry 2.`)
     }
     return res
   }
@@ -59,10 +61,13 @@ export class ContractBase {
         gas = parseInt(gas * 1.25);
         break;
       } catch (error) {
-        // ignore the metamask error
+        const res = error.toString().split('\n').join('').match(RE_ERROR_MSG)
+        if (Array.isArray(res) && res.length >= 2) {
+          throw new Error(res[1].trim())
+        }
       }
     }
-    if (gas == 0 || gas > 10000000) gas = MAX_GAS_AMOUNT;
+    if (gas === 0) gas = MAX_GAS_AMOUNT;
     return gas;
   }
 

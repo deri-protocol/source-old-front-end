@@ -31,7 +31,7 @@ function Account({wallet,lang}){
       if(wallet.isSupportChain(isOptions)) {
         setBtnText(<span>{detail.formatBalance} {detail.symbol} <span className='address'>{formatAddress(detail.account)}</span></span>)
       } else {
-      setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
+        setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
       }
     } else {
       setBtnText(lang['connect-wallet'])

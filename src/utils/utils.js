@@ -103,9 +103,58 @@ export function getParam(param,urlString = window.location.href){
 export function getFormatSymbol(symbol){
   const curChain = restoreChain();
   if(type.isOption){
+    if(symbol.indexOf('-MARKPRICE') !== -1) {
+      symbol = symbol.substr(0,symbol.indexOf('-MARKPRICE'))
+    } else {
+      symbol = symbol.split('-')[0]
+    }
+  }
+  return version.isV2 || version.isV2Lite || type.isOption || version.current === 'v2_lite_open' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+}
+
+export function stripSymbol(symbol){
+  if(!symbol){
+    return symbol;
+  }
+  if(/-/.test(symbol)){
     symbol = symbol.split('-')[0]
   }
-  return version.isV2 || version.isV2Lite || type.isOption ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+  return symbol
+}
+
+
+export const  secondsInRange = {
+  '1' : 60,
+  '5' : 300,
+  '15' : 900,
+  '30' : 1800,
+  '60' : 3600,
+  '1D' : 3600 * 24,
+  '1W' : 3600 * 24 * 7
+}
+export const intervalRange = {
+  '1' : 'min',
+  '5' : '5min',
+  '15' : '15min',
+  '30' : '30min',
+  '60' : 'hour',
+  '1D' : 'day',
+  '1W' : 'week'
+}
+
+ 
+export function calcRange(interval){
+  const timestamp = new Date().getTime() /1000 ;
+  let from,to;
+  if(interval !== '1W') {
+    to = Math.floor(timestamp / secondsInRange[interval] ) * secondsInRange[interval]
+    from  = to - secondsInRange[interval] * 1440
+  } else {
+    to = Math.floor((timestamp - 345600) /secondsInRange[interval]) * secondsInRange[interval] + 345600
+    from = to - secondsInRange[interval] * 1440
+  }
+  return [from,to]
+ 
 }
 
 

@@ -1,31 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from "mobx-react"
-import symbolArrowIcon from '../../assets/img/symbol-arrow.svg'
+import symbolArrowIcon from '../../assets/img/arrow-down.svg'
+import arrowDownIcon from '../../assets/img/arrow-up.svg'
 import classNames from 'classnames';
 
-function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
+function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
   const [dropdown, setDropdown] = useState(false);  
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
 
 
   const onDropdown = (event) => {
-    if(trading.configs.length > 0){
-      event.preventDefault();
-      setDropdown(!dropdown)    
-    }
+    event.preventDefault();
+    setDropdown(!dropdown)    
   }
 
   //切换交易标的
-  const onSelect = select => {
-    const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
+  const onSelect = selected => {
+    // const selected = trading.configs.find(config => config.pool === select.pool && select.symbolId === config.symbolId )
     if(selected){
       loading.loading();
       trading.pause();
       setSpec(selected)
-      trading.onSymbolChange(selected,() => loading.loaded(),isOptions);
+      trading.onSymbolChange(selected,() => loading.loaded(),type.isOption);
       setDropdown(false)
     } 
   }
+
+  useEffect(() => {
+    document.body.addEventListener('click',(event) => {
+      if(document.querySelector('.btn-group') && !document.querySelector('.btn-group').contains(event.target)){
+        setDropdown(false)
+      }
+    })
+    return () => {}
+  }, [])
 
   return (
     <div className='btn-group check-baseToken-btn'>
@@ -33,25 +41,58 @@ function SymbolSelector({trading,version,setSpec,spec,loading,isOptions}) {
         type='button'            
         onClick={onDropdown}
         className='btn chec'>
-        <SymbolDisplay spec={spec} version={version}/>
-        <span className='check-base-down'><img src={symbolArrowIcon} alt=''/></span>
+        <SymbolDisplay spec={spec} version={version} type={type} />
+        <span className='check-base-down'>{dropdown ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span>
       </button>
         <div className={selectClass}>
-          {trading.configs.map((config,index) => {
-            return (
-              <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
-                <SymbolDisplay spec={config} version={version}/>
-              </div>
-            )
-          })}         
+          {type.isFuture 
+            ? 
+            trading.configs.map((config,index) => {
+              return (
+                <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>              
+                  <SymbolDisplay spec={config} version={version} type={type}/>
+                </div>
+              )
+            })
+          :
+          Object.keys(trading.optionsConfigs).map((symbol,index) => {
+            return <SubMenu key={index} index={index} symbol={symbol} trading={trading} onSelect={onSelect} version={version} type={type}/>
+          })
+          }         
       </div>
     </div>
   )
 }
 
-function SymbolDisplay({version,spec}){
+function SubMenu({symbol,trading,onSelect,index,version,type}){
+  const [curPos, setCurPos] = useState(0)
+  const subClassName = classNames('sub-menu',{'show' : index === curPos})
+
+  const switchSubMen = (index) => {
+    curPos === index ? setCurPos(-1) : setCurPos(index)
+  }
   return (
-    (version.isV1 || version.isV2Lite) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
+    <div className='dropdown-item-wrapper' key={index}>
+      <div className='catalog' onClick={() => switchSubMen(index)}>{symbol}<span className='sub-memu-icon'>{curPos === index ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span></div>
+      <div className={subClassName} key={index} >
+        {Array.isArray(trading.optionsConfigs[symbol]) && trading.optionsConfigs[symbol].map((config,index) => (
+          <div className='dropdown-item'  key ={index} onClick={() => onSelect(config)}><SymbolDisplay spec={config} version={version} type={type}/></div>
+        ))}              
+      </div>
+    </div>
   )
 }
-export default inject('trading','version','loading')(observer(SymbolSelector))
+
+function SymbolDisplay({version,spec,type}){
+  if(type.isOption){
+    return (
+      `${spec.symbol || 'BTCUSD-20000-C'}`  
+    )
+  }else{
+    return (
+      (version.isV1 || version.isV2Lite || version.isOpen) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
+    )
+  }
+  
+}
+export default inject('trading','version','loading','type')(observer(SymbolSelector))

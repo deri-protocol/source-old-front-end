@@ -1,6 +1,7 @@
 import { perpetualPoolLiteFactory } from '../factory';
 import { CHAIN_ID, POOL_V2L_ADDRESS, TIMEOUT } from '../../shared/__test__/setup';
 import { bg } from '../../shared/utils';
+import { DeriEnv } from '../../shared';
 
 describe('PerpetualPool', () => {
   let perpetualPool
@@ -33,7 +34,7 @@ describe('PerpetualPool', () => {
     expect(res).toHaveProperty('tradersNetVolume')
     expect(res).toHaveProperty('tradersNetCost')
     expect(bg(res.price).toNumber()).toBeGreaterThanOrEqual(30000)
-    expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThanOrEqual(0)
+    expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThanOrEqual(-10000)
     expect(bg(res.tradersNetVolume).toNumber()).toBeLessThanOrEqual(100000)
   }, TIMEOUT)
 
@@ -45,5 +46,12 @@ describe('PerpetualPool', () => {
   it('getLiquidity()', async() => {
     const output = 200000
     expect(bg(await perpetualPool.getLiquidity()).toNumber()).toBeGreaterThanOrEqual(output)
+  }, TIMEOUT)
+  it('getLastUpdateBlock()', async() => {
+    DeriEnv.set('prod')
+    const pool =  perpetualPoolLiteFactory('56', '0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0')
+    const output = 1000000
+    expect(bg(await pool.getLastUpdateBlock()).toNumber()).toBeGreaterThanOrEqual(output)
+    DeriEnv.set('dev')
   }, TIMEOUT)
 })

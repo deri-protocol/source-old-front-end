@@ -12,6 +12,7 @@ import {
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP,isSushiLP,isCakeLP, eqInNumber } from '../utils/utils';
+import Intl from '../model/Intl';
 
 
 const env = DeriEnv.get();
@@ -25,6 +26,7 @@ export default function useMiningPool(isNew,wallet){
   const [optionPools, setOptionPools] = useState([])
   const [legacyPools, setLegacyPools] = useState([])
   const [preminingPools, setPreminingPools] = useState([])
+  const [openPools, setOpenPools] = useState([])
 
 
   useEffect(() => {
@@ -91,11 +93,11 @@ export default function useMiningPool(isNew,wallet){
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
     const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
+    const openPools = getContractAddressConfig(env,'v2_lite_open')
     const all = []
-    //将不同symbol同一池子合并
-    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).reduce((total,config) => {
+    let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
-      if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
+      if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open')  && pos > -1 && total[pos].symbol.indexOf(config.symbol) === -1) {
         total[pos].symbol += `,${config.symbol}` 
       } else {
         total.push(config)
@@ -115,10 +117,10 @@ export default function useMiningPool(isNew,wallet){
         lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
       }
       if(isSushiLP(config.pool)){
-        label = 'SUSHI-APY'
+        label = Intl.get('mining','sushi-apy')
       }
       if(isCakeLP(config.pool)){
-        label = 'CAKE-APY'
+        label = Intl.get('mining','cake-apy')
       }
       return Object.assign(config,{
         network : chainInfo[config.chainId].name,
@@ -137,7 +139,7 @@ export default function useMiningPool(isNew,wallet){
       const airDrop = {
         network : 'BSC',
         bTokenSymbol : 'GIVEAWAY',
-        liquidity : '34240',
+        liquidity : '2600',
         symbol : '--',
         airdrop : true,
         chainId : 56,
@@ -149,11 +151,13 @@ export default function useMiningPool(isNew,wallet){
       let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
       const legacy = pools.filter(p => p.retired && !p.premining)
       const preminings = pools.filter(p =>  p.retired && p.premining) 
+      let openPools = pools.filter(p => p.isOpen)
       //新版本按照网络来分组
       if(isNew){
         v1Pools = groupByNetwork(v1Pools);
         v2Pools = groupByNetwork(v2Pools);
         optionPools =groupByNetwork(optionPools)
+        openPools = groupByNetwork(openPools)
       }
       setV2Pools(v2Pools);
       setV1Pools(v1Pools);
@@ -161,9 +165,10 @@ export default function useMiningPool(isNew,wallet){
       setPools(pools);
       setLegacyPools(legacy);
       setPreminingPools(preminings)
+      setOpenPools(openPools)
       setLoaded(true)
     })
     return () => pools.length = 0
-  },[wallet.detail.account])
-  return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools];
+  },[])
+  return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools];
 }

@@ -11,10 +11,9 @@ import {  perpetualPoolLiteFactory, pTokenLiteFactory } from "../factory.js"
 import {
   bg,
   catchApiError,
-  getLastUpdatedBlockNumber,
   getLatestBlockNumber,
 } from '../../shared/utils';
-import { getOraclePrice } from '../../shared/utils/oracle'
+import { getOraclePriceFromCache } from '../../shared/utils/oracle'
 import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
@@ -79,11 +78,11 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getLiquidity(),
       pToken.getActiveSymbolIds(),
-      getLastUpdatedBlockNumber(chainId, poolAddress, 5),
+      perpetualPool.getLastUpdateBlock(),
       getLatestBlockNumber(chainId),
       pToken.getPosition(accountAddress, symbolId),
       pToken.getMargin(accountAddress),
-      getOraclePrice(chainId, symbol, 'v2_lite'),
+      getOraclePriceFromCache.get(chainId, symbol, 'v2_lite'),
     ])
     //console.log(latestBlockNumber, lastUpdatedBlockNumber)
     const { volume, cost, lastCumulativeFundingRate } = positionInfo
@@ -99,7 +98,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
 
     promises = []
     for (let i=0; i< symbolIds.length; i++) {
-      promises.push(getOraclePrice(chainId, symbolList[i], 'v2_lite'))
+      promises.push(getOraclePriceFromCache.get(chainId, symbolList[i], 'v2_lite'))
     }
     const symbolPrices = await Promise.all(promises)
     const priceIndex = symbolIds.indexOf(symbolId)
@@ -210,7 +209,7 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
   const pToken = pTokenLiteFactory(chainId, pTokenAddress)
   const [liquidity, price, symbolInfo, parameterInfo, symbolIds] = await Promise.all([
     perpetualPool.getLiquidity(),
-    getOraclePrice(chainId, symbol, 'v2_lite'),
+    getOraclePriceFromCache.get(chainId, symbol, 'v2_lite'),
     perpetualPool.getSymbol(symbolId),
     perpetualPool.getParameters(),
     pToken.getActiveSymbolIds(),
@@ -260,7 +259,7 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
     const { symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite');
     //console.log('symbol',symbol)
     if (!price) {
-      price = await getOraclePrice(chainId, symbol, 'v2_lite')
+      price = await getOraclePriceFromCache.get(chainId, symbol, 'v2_lite')
       priceCache.set(poolAddress, symbolId, price)
     }
     let cache = fundingRateCache.get(chainId, poolAddress, symbolId)
@@ -286,7 +285,7 @@ export const getEstimatedMargin = async(
     //console.log('symbol',symbol)
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     const [price, symbolInfo] = await Promise.all([
-      getOraclePrice(chainId, symbol, 'v2_lite'),
+      getOraclePriceFromCache.get(chainId, symbol, 'v2_lite'),
       perpetualPool.getSymbol(symbolId),
     ])
     priceCache.set(poolAddress, symbolId, price)

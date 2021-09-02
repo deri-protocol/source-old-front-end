@@ -13,6 +13,7 @@ import removeMarginIcon from '../../assets/img/remove-margin.svg'
 import marginDetailIcon from '../../assets/img/margin-detail.png'
 import pnlIcon from '../../assets/img/pnl-detail.png'
 import closePositionIcon from '../../assets/img/close-position-icon.svg'
+import TipWrapper from '../TipWrapper/TipWrapper';
 
 
 
@@ -120,7 +121,9 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         <div className='info-left'>
           <div className='title-text'>{lang['position']}</div>
-          <div className='info-num'>{trading.position.volume}</div>
+          <div className='info-num'>
+            <DeriNumberFormat value={trading.position.volume} allowZero={true} />
+          </div>
         </div>
         <div className='info-right'>
           <div
@@ -134,7 +137,7 @@ function Position({ wallet, trading, version, lang, type }) {
               aria-hidden='true'
               style={{ display: isLiquidation ? 'block' : 'none' }}
             ></span>
-            <img src={closePositionIcon} alt='' /> {lang['close']}
+            <img src={closePositionIcon} /> {lang['close']}
           </div>
         </div>
       </div>
@@ -148,7 +151,7 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         <div className='info-left'>
           <div className='title-text balance-con'>
-            {(version.isV1 || version.isV2Lite) ? <>{lang['balance-in-contract']}<br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
+            {(version.isV1 || version.isV2Lite || type.isOption) ? <>{lang['balance-in-contract']}<br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
           </div>
           <div className='info-num'>
             <DeriNumberFormat decimalScale={2} allowZero={true} value={balanceContract} />
@@ -190,7 +193,8 @@ function Position({ wallet, trading, version, lang, type }) {
           <div className='title-text'>{lang['unrealized-pnl']}</div>
           <div className='info-num'>
             <span className='pnl-list'>
-              <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={8} />{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
+              <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={8} />
+              {(trading.position.unrealizedPnlList ? (version.isV2 || version.isV2Lite) && trading.position.unrealizedPnlList.length : (version.isV2 || version.isV2Lite)) && <img src={pnlIcon} alt='unrealizePnl' />}
               {(version.isV2 || version.isV2Lite) && <div className='pnl-box'>
                 {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item, index) => (
                   <div className='unrealizePnl-item' key={index}>
@@ -203,43 +207,28 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='info-right'></div>
       </div>
-     
-      {type.isFuture && <>
-        <div className='info'>
+      <div className='info'>
+        {type.isFuture && <>
           <div className='info-left'>
-            <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
-            <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
-          </div>
-          <div className='info-right'></div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
+          <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
         </div>
-      </>}
-      {type.isOption && <>
-        {/* <div className='info'>
+        <div className='info-right'></div>
+        </>}
+        {type.isOption && <>
           <div className='info-left'>
-            <div className='title-text '>{lang['time-value']}</div>
-            <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
-          </div>
-          <div className='info-right'></div>
-        </div> */}
-        <div className='info'>
-          <div className='info-left'>
-            <div className='title-text'>{lang['funding-rate-d']}</div>
-            <div className='info-num'><DeriNumberFormat decimalScale={4} value={trading.position.deltaFundingAccrued} /></div>
-          </div>
-          <div className='info-right'></div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
+          <div className='info-num'><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))} decimalScale={8} /></div>
         </div>
-        <div className='info'>
-          <div className='info-left'>
-            <div className='title-text'>{lang['funding-rate-p']}</div>
-            <div className='info-num'><DeriNumberFormat decimalScale={4} value={trading.position.premiumFundingAccrued} /></div>
-          </div>
-          <div className='info-right'></div>
-        </div>
-      </>}
+        <div className='info-right'></div>
+        </>}
+      </div>
       <div className='info'>
         <div className='info-left'>
           <div className='title-text'>{lang['liquidation-price']}</div>
-          <div className='info-num'><DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice} /></div>
+          <div className='info-num'>
+            {type.isOption ? <LiqPrice trading={trading} wallet={wallet} lang={lang} /> : <DeriNumberFormat decimalScale={4} value={trading.position.liquidationPrice} />}
+          </div>
         </div>
         <div className='info-right'></div>
       </div>
@@ -277,5 +266,80 @@ function Position({ wallet, trading, version, lang, type }) {
       />
     </div>
   )
+}
+
+function LiqPrice({ trading, wallet, lang }) {
+
+  const [element, setElement] = useState(<span></span>);
+
+  useEffect(() => {
+    let ele = '';
+    if (wallet.isConnected() && trading.position.liquidationPrice) {
+      if (trading.position.liquidationPrice.numPositions > 1) {
+        if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+          </span>
+        } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+            <span> / </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+          </span>
+        } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+            <span> / </span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
+          </span>
+        } else if (trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
+            <span> / </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+          </span>
+        }
+      } else {
+        if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} />
+            <span> / </span>
+            <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} />
+          </span>
+        } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <span > -- </span>
+            <span> / </span>
+            <span > -- </span>
+          </span>
+        } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <span > -- </span>
+            <span> / </span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
+          </span>
+        } else if (trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
+          ele = <span>
+            <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
+            <span> / </span>
+            <span > -- </span>
+          </span>
+        }
+      }
+      setElement(ele)
+    }
+
+
+  }, [trading.position, wallet.detail])
+
+
+  return (
+    <span>
+      {element}
+    </span>
+  )
+
 }
 export default inject('wallet', 'trading', 'version', 'type')(observer(Position))

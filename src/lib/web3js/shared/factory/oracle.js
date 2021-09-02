@@ -1,4 +1,4 @@
-import { isUsedRestOracle } from '../config';
+import { isUsedRestOracle } from '../config/token';
 import { RestOracle } from '../utils/oracle';
 import { WrappedOracle } from '../contract/oracle/wrapped_oracle';
 import { factory } from '../utils/factory';

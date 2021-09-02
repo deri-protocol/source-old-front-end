@@ -146,12 +146,25 @@ function Card({index,item,lang,wallet,pool}){
     </div>
   )
 }
-export default function List({optionPools,v1Pools,v2Pools,type,lang,wallet}){
+export default function List({optionPools,v1Pools,v2Pools,openPools,type,lang,wallet}){
   return (
-    <div> 
-      {v2Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
-      {optionPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
-      {v1Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+    <div>
+      {type === '' && <>
+        {optionPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+        {v2Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+        {v1Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+        </>
+      }
+      {type === 'futures' && <>
+        {v2Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+        {v1Pools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+      </>} 
+      {type === 'options' && <>
+        {optionPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+      </>}    
+      {type === 'opens' && <>
+        {openPools.map((pool,index) => <ListBox group={pool} lang={lang} index={index} key={index} wallet={wallet}/>)}
+      </>}
     </div>
 
   )

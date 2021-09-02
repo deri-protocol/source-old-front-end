@@ -6,23 +6,28 @@ import { inject, observer } from 'mobx-react'
 function AreaPicker({lang,version,wallet,type}){
   const [current, setCurrent] = useState('main')
   const clazz = classNames('area-picker-wrapper',current)
+  const [styles, setStyles] = useState({})
   const siwtchZone = (zone) => {
     setCurrent(zone)
     if(zone === 'innovation') {
       version.setCurrent('v2_lite')
-    } else {
+    } else if(zone === 'main') {
       version.setCurrent('v2')
+    } else {
+      version.setCurrent('v2_lite_open')
     }
   }
   useEffect(() => {
     siwtchZone('main')
+    wallet.supportOpen ? setStyles({width : `${100 / 3}%` }) : setStyles({width : `${100 /2 }%`})
     return () => {}
-  }, [])
+  }, [wallet.detail])
   return (
-    (( version.isV2 || version.isV2Lite) && wallet.supportInnovation &&!type.isOption) ? <div className='area-picker'>
+    ((version.isV2 || version.isV2Lite || version.isOpen) && wallet.supportInnovation  &&!type.isOption) ? <div className='area-picker'>
       <div className={clazz}>
-        <span className='left' onClick={() => siwtchZone('main')}>{lang['main-zone']}</span>
-        <span className='right' onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
+        <span className='left' style={styles} onClick={() => siwtchZone('main')}>{lang['main-zone']}</span>
+        <span className='middle' style={styles} onClick={() => siwtchZone('innovation')}>{lang['innovation-zone']}</span>
+        {wallet.supportOpen &&<span className='right' style={styles} onClick={() => siwtchZone('open')}>{lang['open-zone']}</span>}
       </div>
     </div> 
     : null

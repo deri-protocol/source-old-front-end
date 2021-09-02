@@ -2,6 +2,9 @@
   "pool-liq" : "Pool Liq",
   "total" : "total",
   "symbol" : "Symbol",
+  "all":"all",
+  "futures":"Futures",
+  "options":"Optionen (Beta)",
   "retired-text":"Es gibt keine Mining-Erträge mehr aus diesen Pools. Bitte entfernen Sie Ihre Liquidität und übertragen Sie sie auf die ",
   "new-pools":" neue Pools",
   "premining-pools":"Premining Pools",
@@ -80,6 +83,14 @@
   "invalid-liquidity" : "Ungültige Liquidität!",
   "multiplier" : "Multiplikator",
   "multiplier-tip" : "Der Multiplikator ist das effektive Verhältnis für die im Liquiditätsmining bereitgestellte  Liquidität.\nZum Beispiel：Bereitstellung von 1 B1-Token für Liquiditätsmining, wenn der Multiplikator von B1 0,8 ist, dann ist der effektive Wert für das Mining 0,8",
-  "v2_lite" : "Inno",
-  "v2" : "Main"
+  "v2_lite" : "FUT-Inno",
+  "option":"OPT",
+  "v2" : "FUT-Main",
+  "v2_lite_open" : "Offen",
+  "official-zone" : "Inno & Main zone",
+  "open-zone" : "Offen zone",
+  "my-liqudity-providing" : "Meine Liquiditätsversorgung",
+  "add-pool" : "Pool hinzufügen",
+  "coming-soon" : "Kommt bald! Bleiben Sie dran!\n(Kontaktieren Sie das Team, wenn Sie es jetzt tun möchten)",
+  "add-pool-text" : "Starte meinen eigenen Pool"
 }

@@ -48,7 +48,7 @@ class Intl {
   }
 
   setLocale(locale){
-    if(locale){
+    if(locale && supportedCatalog[locale]){
       this.locale = locale;
       storeLocale(locale)
     }

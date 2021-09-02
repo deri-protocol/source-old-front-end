@@ -25,18 +25,18 @@ function Mining({wallet,lang}){
 	if(query.has('symbolId')){
 		props['symbolId'] = query.get('symbolId')
 	}
-	const poolInfoClass = classnames('mining-info',currentTab)
+	const poolInfoClass = classnames('mining-info',currentTab,{'open-zone' : version === 'v2_lite_open'})
 	return(
     <div className={poolInfoClass}>
 			<div className="pool-header">
 					<div className="pool-network">
-						{type === 'lp' ? `${baseToken} @ ${networkText}` :  (version === 'v2' || version === 'v2_lite' || version === 'option') ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
+						{type === 'lp' ? `${baseToken} @ ${networkText}` :  (version === 'v2' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') ? `${baseToken} @ ${networkText}` : `${symbol}/${baseToken} @ ${networkText}` }
 					</div>
-					<div className="check-trade-liquidity">
+					{version !== 'v2_lite_open' && <div className="check-trade-liquidity">
 							<div className='liquidity-mining' onClick={() => setCurrentTab('liquidity')} >
 									{lang['liquidity-mining']}
 							</div>
-					</div>
+					</div>}
 			</div>
 			<div className='pool-info'>
 					<LiquidityMining {...props}/>

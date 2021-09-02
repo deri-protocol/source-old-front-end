@@ -1,7 +1,7 @@
-import { bg } from '../utils'
+import { bg, toWei } from '../utils'
 import { oracleFactory } from '../factory'
-import { getPriceFromRest } from '../utils/oracle'
-import { TIMEOUT } from './setup'
+import { getOraclePriceForOption, getPriceFromRest, getOraclePricesForOption, getOracleVolatilitiesForOption } from '../utils/oracle'
+import { CHAIN_ID, TIMEOUT } from './setup'
 
 describe("oracle", () => {
   test('oracle BSC BTCUSD getPrice()', async() => {
@@ -69,4 +69,23 @@ describe("oracle", () => {
     const price = await getPriceFromRest('AXSUSDT')
     expect(bg(price).toNumber()).toBeGreaterThanOrEqual(15)
   }, TIMEOUT)
-}, TIMEOUT)
+  test('getOraclePriceForOption', async() => {
+    const price = await getOraclePriceForOption(CHAIN_ID, 'BTCUSD-20000-C')
+    expect(bg(price).toNumber()).toBeGreaterThanOrEqual(30000)
+  }, TIMEOUT)
+  test('getOraclePricesForOption()', async() => {
+    const input  = ['BTCUSD-30000-C', 'BTCUSD-40000-C', 'ETHUSD-3000-C', 'BTCUSD-50000-P']
+    const res = await getOraclePricesForOption(CHAIN_ID, input);
+    expect(res.length).toEqual(4);
+    expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(10000000000000000000000);
+    expect(bg(res[3]).toNumber()).toBeGreaterThanOrEqual(10000);
+  }, TIMEOUT)
+  test('getOracleVolatilitiesForOption()', async() => {
+    const input  = ['BTCUSD-30000-C', 'BTCUSD-40000-C', 'ETHUSD-3000-C', 'BTCUSD-50000-P']
+    const res = await getOracleVolatilitiesForOption(input);
+    expect(res.length).toEqual(4);
+    expect(bg(res[2]).toNumber()).toBeGreaterThanOrEqual(0);
+    expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(parseInt(toWei('1.5')));
+    expect(bg(res[3]).toNumber()).toBeLessThanOrEqual(parseInt(toWei('1.5')));
+  }, TIMEOUT)
+})

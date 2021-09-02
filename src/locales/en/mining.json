@@ -4,7 +4,7 @@
   "symbol" : "Symbol",
   "all":"all",
   "futures":"futures",
-  "options":"options",
+  "options":"options  (beta)",
   "retired-text":"There is no longer mining harvest from these pools. Please unstake your liquidity and stake into ",
   "new-pools":" new pools.",
   "retired-pools":"Retired Pools",
@@ -84,5 +84,12 @@
   "multiplier-tip" : "The multiplier is the effective ratio of the liquidity provided for mining.\nFor example：providing 1 B1 token for liquidity mining, if the multiplier of B1 is 0.8, then the effective value for mining is 0.8",
   "v2_lite" : "FUT-Inno",
   "option":"OPT",
-  "v2" : "FUT-Main"
+  "v2" : "FUT-Main",
+  "v2_lite_open" : "Open",
+  "official-zone" : "Main & Inno zone",
+  "open-zone" : "Open zone",
+  "my-liqudity-providing" : "My Liquidity Providing",
+  "add-pool" : "ADD POOL",
+  "coming-soon" : "Coming Soon! Stay tuned!\n(Contact the team if you want to do it now)",
+  "add-pool-text" : "Launch my own pool"
 }
