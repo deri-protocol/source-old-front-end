@@ -81,7 +81,7 @@ class Oracle {
 
   unsubscribeBars(symbol){
     if(this.ws){
-      this.ws.emit('un_get_kline_update', {
+      this.ws.emit('un_get_kline', {
         symbol : symbol, 'time_type' : 'min'
       })
     }

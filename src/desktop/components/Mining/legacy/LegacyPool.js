@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 
 
 function Pool({version,lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools,legacy,premining] = useMiningPool(version);
+  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,premining] = useMiningPool(version);
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
     return () => {}
@@ -21,7 +21,7 @@ function Pool({version,lang,loading}){
       </div>
       <div className="retired-mining-info">
         <div className='pools'>
-          {legacy.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
+          {legacyPools.map((pool,index) => <PoolBox pool={pool} key={index} lang={lang}/>)}
           
         </div>
       </div>

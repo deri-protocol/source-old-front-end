@@ -19,8 +19,18 @@
     "mainSeriesProperties.candleStyle.borderColor": "#378658",
     "mainSeriesProperties.candleStyle.borderUpColor": "#4bffb5",
     "mainSeriesProperties.candleStyle.borderDownColor": "#ff4976",
-    "mainSeriesProperties.candleStyle.wickUpColor": "#838ca1",
-    "mainSeriesProperties.candleStyle.wickDownColor": "#838ca1"
+    "mainSeriesProperties.candleStyle.wickUpColor": "#4bffb5",
+    "mainSeriesProperties.candleStyle.wickDownColor": "#ff4976",
+
+    "mainSeriesProperties.haStyle.upColor": "#6ba583",
+    "mainSeriesProperties.haStyle.downColor": "#d75442",
+    "mainSeriesProperties.haStyle.drawWick": true,
+    "mainSeriesProperties.haStyle.drawBorder": true,
+    "mainSeriesProperties.haStyle.borderColor": "#378658",
+    "mainSeriesProperties.haStyle.borderUpColor": "#225437",
+    "mainSeriesProperties.haStyle.borderDownColor": "#5b1a13",
+    "mainSeriesProperties.haStyle.wickColor": "#737375",
+    "mainSeriesProperties.haStyle.barColorsOnPrevClose": false
   },      
   "toolbar_bg": "#212327",
   "timezone": "Asia/Shanghai", 

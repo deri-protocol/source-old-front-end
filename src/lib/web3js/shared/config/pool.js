@@ -135,7 +135,7 @@ const expandPoolConfigV2LiteOpen = (config) => {
           chainId: pool.chainId,
           bToken: pool.bToken,
           bTokenSymbol: pool.bTokenSymbol,
-          symbol: '',
+          symbol: '--',
           symbolId: '',
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,

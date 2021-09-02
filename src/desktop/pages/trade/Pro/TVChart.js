@@ -99,6 +99,9 @@ function TVChart({interval,symbol,showLoad,intl}){
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
+      // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': '#b17630'});    
+      // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': '#ad33b9'});    
+      // widgetRef.current.chart().createStudy('Moving Average', false, true, [99],null, {'Plot.color': '#55b3b5'});    
     })
   }
 

@@ -4,7 +4,7 @@
   "symbol" : "Symbol",
   "all":"all",
   "futures":"futures",
-  "options":"options",
+  "options":"options  (beta)",
   "retired-text":"There is no longer mining harvest from these pools. Please unstake your liquidity and stake into ",
   "new-pools":" new pools.",
   "retired-pools":"Retired Pools",
@@ -90,6 +90,6 @@
   "open-zone" : "Open zone",
   "my-liqudity-providing" : "My Liquidity Providing",
   "add-pool" : "ADD POOL",
-  "coming-soon" : "Coming Soon! Stay tuned!",
+  "coming-soon" : "Coming Soon! Stay tuned!\n(Contact the team if you want to do it now)",
   "add-pool-text" : "Launch my own pool"
 }

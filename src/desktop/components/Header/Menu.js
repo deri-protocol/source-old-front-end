@@ -14,7 +14,7 @@ function Menu({ lang, locale }) {
   return (
     <div className="nav-menu">
       <div className="logo">
-        <a href={`https://deri.finance/?locale=${locale}#index`} rel='noreferrer' target="_blank">
+        <a href={`https://deri.finance/?locale=${locale}#index`} rel='noreferrer' >
           <img src={logo} alt="" />
         </a>
       </div>
@@ -23,31 +23,34 @@ function Menu({ lang, locale }) {
           <li>
             {isProduction
               ?
-              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#mining`} target={isApp ? '' : '_blank'} className='mining-item'>{lang.mining}</a>
+              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#mining`}  className='mining-item'>{lang.mining}</a>
               :
               <Link className='mining-item' to='/mining'>{lang.mining}</Link>}
           </li>
           <li>
             {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/pro`} target={isApp ? '' : '_blank'} className='trade-item'>{lang.trade}</a>
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/pro`} className='trade-item'>{lang.trade}</a>
               : <Link className='trade-item' to='/futures/pro'>{lang.trade}</Link>
             }
           </li>
           <li>
+            <span className='beta'>
+              {lang['beta']}
+            </span>
             {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} target={isApp ? '' : '_blank'} className='option-item'>{lang.trade}</a>
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} className='option-item'>{lang.options}</a>
               : <Link className='option-item' to='/options/pro'>{lang.options}</Link>
             }
           </li>
           <li>
             {isProduction
               ?
-              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`} target='_blank' className='token-item'>{lang['deri-token']}</a>
+              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`}  className='token-item'>{lang['deri-token']}</a>
               :
               <Link className='token-item' to='/deritoken'>{lang['deri-token']}</Link>}
           </li>
           <li>
-            <a target="_blank" rel='noreferrer' className='bridge-item' href={`https://bridge.deri.finance/?locale=${locale}#bridge`}>{lang.bridge}</a>
+            <a rel='noreferrer' className='bridge-item' href={`https://bridge.deri.finance/?locale=${locale}#bridge`}>{lang.bridge}</a>
           </li>
           <li className="ref">
             <a href="https://docs.deri.finance/">{lang['docs']}</a><i><svg data-v-16f7de50="" fill="currentColor" viewBox="0 0 24 24" width="24" height="24" className="Zi Zi--ArrowDown ContentItem-arrowIcon"><path data-v-16f7de50="" d="M12 13L8.285 9.218a.758.758 0 0 0-1.064 0 .738.738 0 0 0 0 1.052l4.249 4.512a.758.758 0 0 0 1.064 0l4.246-4.512a.738.738 0 0 0 0-1.052.757.757 0 0 0-1.063 0L12.002 13z" ></path></svg></i>
@@ -91,7 +94,7 @@ function Menu({ lang, locale }) {
                 }
               </li>
               <li>
-                <a target="_blank" rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
+                <a rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
               </li>
               <li>
                 {isProduction
@@ -104,7 +107,7 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} target='_blank' className='retired-item'>{lang['retired-pools']}</a>
+                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`}  className='retired-item'>{lang['retired-pools']}</a>
                   :
                   <Link className='retired-item' to='/retired'>{lang['retired-pools']}</Link>}
               </li>

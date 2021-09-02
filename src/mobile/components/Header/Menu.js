@@ -37,6 +37,9 @@ export default function Menu({ closeMenu, lang, locale }) {
             <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/futures/lite`}> {lang['trade']} </a>
           </li>
           <li className={isOption ? 'selected' : ''}>
+          <span className='beta'>
+              {lang['beta']}
+            </span>
             <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/options/lite`}> {lang['options']} </a>
           </li>
           <li className={isDeriToken ? 'selected' : ''}>

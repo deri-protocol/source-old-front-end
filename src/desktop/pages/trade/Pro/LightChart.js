@@ -14,7 +14,7 @@ const socket = io(process.env.REACT_APP_WSS_URL, {
 
 
 function LightChart({symbol,interval = '1',intl,displayCandleData}){
-  const chart = useRef(null)
+  const chartRef = useRef(null)
   const candleSeries = useRef(null);
   const lastData = useRef(null)
   const queryParams = useRef(null);
@@ -48,9 +48,9 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
     }
   }
 
-  const loadChart = async () => {
-    if(symbol){
-      candleSeries.current = chart.current.addCandlestickSeries({
+  const loadChart = async (chart) => {
+    if(symbol && chart){
+       const candlesChart = chart.addCandlestickSeries({
         upColor: "#4bffb5",
         downColor: "#ff4976",
         borderDownColor: "#ff4976",
@@ -58,6 +58,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         wickDownColor: "#ff4976",
         wickUpColor: "#4bffb5"
       });
+      candleSeries.current = candlesChart
       const range = calcRange(interval)
       lastQueryParam.current = queryParams.current
       queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
@@ -68,10 +69,10 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         const {data} = res
         if(data.data instanceof Array){
           const d = data.data
-          candleSeries.current.setData(d);
+          candlesChart.setData(d);
           lastData.current = d[d.length-1]
         } else {
-          candleSeries.current.setData([])
+          candlesChart.setData([])
         }
         setLoading(false)
         displayCandleData && displayCandleData({data : lastData.current})
@@ -91,68 +92,63 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
   }
 
   const initChart = () => {
-    chart.current = createChart('ligth-chart-container', { 
-      localization : {
-        timeFormatter : businessDayOrTimestamp => {
-          return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
+    if(chartRef.current && symbol && interval){
+      const chart = createChart(chartRef.current, { 
+        localization : {
+          timeFormatter : businessDayOrTimestamp => {
+            return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
+          },
         },
-      },
-      width: 1198,
-      height: 468,
-      timeScale: {
-        rightOffset : 3,
-        timeVisible : true,
-        borderColor : '#fff',
-        tickMarkFormatter: (time, tickMarkType, locale) => {
-          const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd HH:MM' : 'HH:MM'
-          return dateFormat(time,format)
+        width: '1198',
+        height: 478,
+        timeScale: {
+          rightOffset : 3,
+          timeVisible : true,
+          borderColor : '#fff',
+          tickMarkFormatter: (time, tickMarkType, locale) => {
+            const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd HH:MM' : 'HH:MM'
+            return dateFormat(time,format)
+          },
         },
-      },
-      priceScale: {
-        borderColor: '#fff',
-        mode: 1
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal,    
-        vertLine: {
-          color: '#fff',
-          labelBackgroundColor : '#569bda'
+        priceScale: {
+          borderColor: '#fff',
+          mode: 1
         },
-        horzLine: {
-          color: '#fff',
-          labelBackgroundColor : '#569bda'
+        crosshair: {
+          mode: CrosshairMode.Normal,    
+          vertLine: {
+            color: '#fff',
+            labelBackgroundColor : '#569bda'
+          },
+          horzLine: {
+            color: '#fff',
+            labelBackgroundColor : '#569bda'
+          },
         },
-      },
-      grid: {
-        vertLines: {
-            visible: false,
+        grid: {
+          vertLines: {
+              visible: false,
+          },
+          horzLines: {
+              visible: false,
+          },
         },
-        horzLines: {
-            visible: false,
+        layout: {
+          backgroundColor: '#212327',
+          textColor: '#aaa',
+          fontSize: 12
         },
-      },
-      layout: {
-        backgroundColor: '#212327',
-        textColor: '#aaa',
-        fontSize: 12
-      },
-    });
-  
-    chart.current.subscribeCrosshairMove(handleCrosshairMoved);
+      });
+      chart.subscribeCrosshairMove(handleCrosshairMoved);
+      return chart;
+    }
   }
+    
 
   useEffect(() => {
-    if(chart.current) {
-      chart.current.remove()
-      chart.current = null;
-    }
-    if(candleSeries.current){
-      candleSeries.current = null;
-    }
-    initChart();
-    symbol && loadChart();
+    const chart = initChart()
+    loadChart(chart);
     return () => {
-      chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
       if(lastQueryParam.current){
         socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
       }
@@ -160,6 +156,12 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
       }
       connectStatusRef.current = null
+      if(chart){
+        chart.remove()
+      }
+      // if(chart.current) {
+      //   chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
+      // }
     }
   }, [symbol,interval])
 
@@ -168,7 +170,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
   }, [])
 
   return(
-    <div className='ligth-chart-container' id='ligth-chart-container'>
+    <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>

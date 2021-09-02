@@ -13,6 +13,7 @@ import removeMarginIcon from '../../assets/img/remove-margin.svg'
 import marginDetailIcon from '../../assets/img/margin-detail.png'
 import pnlIcon from '../../assets/img/pnl-detail.png'
 import closePositionIcon from '../../assets/img/close-position-icon.svg'
+import TipWrapper from '../TipWrapper/TipWrapper';
 
 
 
@@ -150,7 +151,7 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         <div className='info-left'>
           <div className='title-text balance-con'>
-            {(version.isV1 || version.isV2Lite) ? <>{lang['balance-in-contract']}<br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
+            {(version.isV1 || version.isV2Lite || type.isOption) ? <>{lang['balance-in-contract']}<br /> ({lang['dynamic-balance']})</> : lang['dynamic-effective-balance']}
           </div>
           <div className='info-num'>
             <DeriNumberFormat decimalScale={2} allowZero={true} value={balanceContract} />
@@ -209,14 +210,14 @@ function Position({ wallet, trading, version, lang, type }) {
       <div className='info'>
         {type.isFuture && <>
           <div className='info-left'>
-          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
           <div className='info-num'><DeriNumberFormat value={(-(trading.position.fundingFee))} decimalScale={8} /></div>
         </div>
         <div className='info-right'></div>
         </>}
         {type.isOption && <>
           <div className='info-left'>
-          <div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div>
+          <TipWrapper><div className='title-text  funding-fee' title={lang['funding-fee-tip']}>{lang['funding-fee']}</div></TipWrapper>
           <div className='info-num'><DeriNumberFormat value={(-(trading.position.premiumFundingAccrued))} decimalScale={8} /></div>
         </div>
         <div className='info-right'></div>
@@ -272,7 +273,7 @@ function LiqPrice({ trading, wallet, lang }) {
   const [element, setElement] = useState(<span></span>);
 
   useEffect(() => {
-    let ele;
+    let ele = '';
     if (wallet.isConnected() && trading.position.liquidationPrice) {
       if (trading.position.liquidationPrice.numPositions > 1) {
         if (trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
@@ -283,13 +284,13 @@ function LiqPrice({ trading, wallet, lang }) {
           </span>
         } else if (!trading.position.liquidationPrice.price1 && !trading.position.liquidationPrice.price2) {
           ele = <span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
             <span> / </span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
           </span>
         } else if (!trading.position.liquidationPrice.price1 && trading.position.liquidationPrice.price2) {
           ele = <span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
             <span> / </span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price2} /> </span>
           </span>
@@ -297,7 +298,7 @@ function LiqPrice({ trading, wallet, lang }) {
           ele = <span>
             <span> <DeriNumberFormat decimalScale={2} value={trading.position.liquidationPrice.price1} /> </span>
             <span> / </span>
-            <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>
+            <TipWrapper block={false}><span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
           </span>
         }
       } else {

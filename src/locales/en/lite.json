@@ -12,6 +12,7 @@
   "current-position" : "Current Position",
   "contract-volume" : "Contract Volume",
   "option-input":"Quantity",
+  "option-input-min-quantity":"Min trading volume is",
   "index-price" : "Index Price",
   "min-trade-volume":"Min Trade Volume",
 

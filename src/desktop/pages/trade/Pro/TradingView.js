@@ -3,6 +3,7 @@ import Chart from "./Chart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import {bg} from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
+import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
 
 function TradingView({ version, trading, lang,type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -47,9 +48,11 @@ function TradingView({ version, trading, lang,type }) {
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
             <div className='trade-dashboard-value'>
-              <span className='funding-per' title={trading.fundingRateTip}>
-                <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
-              </span>
+              <TipWrapper block={false}>
+                <span className='funding-per' title={trading.fundingRateTip || ''}>
+                  <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
+                </span>
+              </TipWrapper>
             </div>
           </div>
           <div className='trade-dashboard-item latest-price'>
@@ -72,9 +75,11 @@ function TradingView({ version, trading, lang,type }) {
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
             <div className='trade-dashboard-value'>
-              <span className='funding-per' title={trading.optionFundingRateTip}>
-                <DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  />
-              </span>
+              <TipWrapper block={false}>
+                <span className='funding-per' title={trading.optionFundingRateTip || ''}>
+                  <DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  />
+                </span>
+              </TipWrapper>
             </div>
           </div>
           <div className='trade-dashboard-item latest-price'>
