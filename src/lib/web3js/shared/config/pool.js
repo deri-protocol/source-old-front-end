@@ -1,9 +1,12 @@
-import { getConfig } from './config';
+import { getJsonConfig } from './config';
 import { DeriEnv } from './env';
 import { getPoolV1ConfigList } from './pool_v1';
 import { LITE_AND_OPTION_VERSIONS, VERSIONS } from './version';
+import { validateObjectKeyExist } from '../utils';
+import { poolProcessor, poolValidator } from './config_processor';
+import { openConfigListCache } from '../../v2_lite_open/api/query_api';
 
-const expendPoolConfigV2 = (config) => {
+const expandPoolConfigV2 = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -36,7 +39,7 @@ const expendPoolConfigV2 = (config) => {
     .flat();
 };
 
-const expendPoolConfigV2Lite = (config) => {
+const expandPoolConfigV2Lite = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -66,7 +69,7 @@ const expendPoolConfigV2Lite = (config) => {
     .flat();
 };
 
-const expendPoolConfigOption = (config) => {
+const expandPoolConfigOption = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -97,14 +100,33 @@ const expendPoolConfigOption = (config) => {
     .flat();
 };
 
-const expendPoolConfigV2LiteOpen = (config) => {
+const expandPoolConfigV2LiteOpen = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
     .map((pool) => {
       let result = [];
-      for (let i = 0; i < pool.symbols.length; i++) {
-        const symbol = pool.symbols[i];
+      if (pool.symbols.length > 0) {
+        for (let i = 0; i < pool.symbols.length; i++) {
+          const symbol = pool.symbols[i];
+          result.push({
+            pool: pool.pool,
+            pToken: pool.pToken,
+            lToken: pool.lToken,
+            initialBlock: pool.initialBlock,
+            chainId: pool.chainId,
+            bToken: pool.bToken,
+            bTokenSymbol: pool.bTokenSymbol,
+            symbol: symbol.symbol,
+            symbolId: symbol.symbolId,
+            offchainSymbolIds: pool.offchainSymbolIds,
+            offchainSymbols: pool.offchainSymbols,
+            unit: symbol.unit,
+            version: 'v2_lite_open',
+            isOpen: true,
+          });
+        }
+      } else {
         result.push({
           pool: pool.pool,
           pToken: pool.pToken,
@@ -113,11 +135,11 @@ const expendPoolConfigV2LiteOpen = (config) => {
           chainId: pool.chainId,
           bToken: pool.bToken,
           bTokenSymbol: pool.bTokenSymbol,
-          symbol: symbol.symbol,
-          symbolId: symbol.symbolId,
+          symbol: '',
+          symbolId: '',
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
-          unit: symbol.unit,
+          unit: '',
           version: 'v2_lite_open',
           isOpen: true,
         });
@@ -127,16 +149,39 @@ const expendPoolConfigV2LiteOpen = (config) => {
     .flat();
 };
 
+export const getConfig = (version='v2', env='dev') => {
+  let config = getJsonConfig(version, env);
+
+  if (version === 'v2_lite_open') {
+    //if (Date.now()/1000 - openConfigListCache.updatedAt() < 15) {
+      //console.log('hit openConfigListCache')
+    config.pools = openConfigListCache.get()
+    //}
+  }
+
+  //console.log('>',config)
+  const pools = config.pools;
+  if (pools && Array.isArray(pools)) {
+    for (let i = 0; i < pools.length; i++) {
+      poolProcessor[version](pools[i])
+      poolValidator[version](pools[i])
+    }
+  }
+  validateObjectKeyExist(['oracle'], config, 'oracle');
+  //validateObjectKeyExist(['brokerManager'], configs[env], 'brokerManager')
+  return config;
+};
+
 export const getPoolConfigList = (version='v2', env = 'dev') => {
   const config = getConfig(version, env)
   if (version === 'v2') {
-    return expendPoolConfigV2(config)
+    return expandPoolConfigV2(config)
   } else if (version === 'v2_lite') {
-    return expendPoolConfigV2Lite(config)
+    return expandPoolConfigV2Lite(config)
   } else if (version === 'v2_lite_open') {
-    return expendPoolConfigV2LiteOpen(config)
+    return expandPoolConfigV2LiteOpen(config)
   } else if (version === 'option') {
-    return expendPoolConfigOption(config)
+    return expandPoolConfigOption(config)
   }
 };
 
@@ -271,7 +316,7 @@ export const getPoolSymbolIdList = (poolAddress) => {
 
 export const getPoolViewerConfig = (chainId, version="v2_lite") => {
   const env = DeriEnv.get()
-  const config = getConfig(version, env)
+  const config = getJsonConfig(version, env)
   const viewers = config.poolViewer.filter((v) => v.chainId === chainId.toString())
   if (viewers.length > 0) {
     return viewers[0].address

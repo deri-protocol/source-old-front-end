@@ -10,7 +10,7 @@ import {
 } from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
 import {
-  getPriceInfo,
+  getOracleVolatilityForOption,
 } from '../../shared/utils/oracle';
 import {
   everlastingOptionViewerFactory,
@@ -136,8 +136,6 @@ export class EverlastingOption extends ContractBase {
       'alpha',
       'tradersNetVolume',
       'tradersNetCost',
-      'pmmPrice',
-      'intrinsicValue',
       'cumulativePremiumFundingRate',
     ]);
     // return {
@@ -159,17 +157,12 @@ export class EverlastingOption extends ContractBase {
   // tx
   async _getVolSymbolPrices() {
     await this._updateConfig();
-    let prices = [];
+    let volatilities = [];
     if (this.volatilitySymbols.length > 0) {
-      const priceInfos = await Promise.all(
-        this.volatilitySymbols.reduce(
-          (acc, i) => acc.concat([getPriceInfo(i, 'option')]),
-          []
-        )
-      );
-      prices = Object.values(priceInfos).reduce((acc, p, index) => {
+      const volatilityInfos = await getOracleVolatilityForOption(this.activeSymbols.map((s) => s.symbol))
+      volatilities = Object.values(volatilityInfos).reduce((acc, p, index) => {
         acc.push([
-          index.toString(),
+          this.activeSymbolIds[index],
           p.timestamp,
           p.volatility,
           parseInt(p.v).toString(),
@@ -180,7 +173,7 @@ export class EverlastingOption extends ContractBase {
       }, []);
     }
     //console.log('prices', prices);
-    return prices;
+    return volatilities;
   }
 
   async addLiquidity(accountAddress, bAmount) {

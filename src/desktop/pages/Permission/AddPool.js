@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
-import {bg} from '../../../lib/web3js/indexV2'
+import Button from '../../../components/Button/Button';
+import {bg,createPool} from '../../../lib/web3js/indexV2'
 import './addpool.less';
 import down from './img/down.svg';
 import up from './img/up.svg';
@@ -18,7 +19,6 @@ function AddPool({ wallet = {}, lang }) {
   const [minReward, setMinReward] = useState(0)
   const [params, setParams] = useState([])
   const StepChange = (name, value) => {
-    console.log(name, value)
     if (name === 'baseTokenAddress') {
       setBaseTokenAddress(value)
     }
@@ -333,13 +333,18 @@ function Step3({ goToStep, lang, wallet, params }) {
   const [baseTokenAddressOther,setBaseTokenAddressOther] = useState('')
   useEffect(()=>{
     let [initialMargin, baseTokenAddress, baseTokenAddressOther, maintenanceMargin, poolMargin, cutRatio, maxReward, minReward] = [...params]
-    let oneArr = [ bg(poolMargin).div(bg(100)).toString(),bg(initialMargin).div(bg(100)).toString(), bg(maintenanceMargin).div(bg(100)).toString() , minReward,maxReward, bg(cutRatio).div(bg(100)).toString()]
+    let oneArr = [ bg(poolMargin).div(bg(100)).toString(),bg(initialMargin).div(bg(100)).toString(), bg(maintenanceMargin).div(bg(100)).toString() , minReward,maxReward, bg(cutRatio).div(bg(100)).toString(),0]
     setBaseTokenAddress(baseTokenAddress)
     setBaseTokenAddressOther(baseTokenAddressOther)
     setParamsArr(oneArr)
   },[params])
-  const add = () => {
+  const add = async () => {
 
+    let res = await createPool(wallet.detail.chainId,wallet.detail.account,paramsArr,baseTokenAddress,baseTokenAddressOther)
+    console.log(res)
+    if(!res.success){
+      alert('falid')
+    }
   }
   return (
     <div className='step3'>
@@ -421,9 +426,9 @@ function Step3({ goToStep, lang, wallet, params }) {
               <button onClick={() => { goToStep(1) }}>
                 {lang['cancel']}
               </button>
-              <button onClick={add}>
-                {lang['ok']}
-              </button>
+              <Button click={add} btnText={lang['ok']} lang={lang}>
+                
+              </Button>
             </div>
           </div>
         </div>

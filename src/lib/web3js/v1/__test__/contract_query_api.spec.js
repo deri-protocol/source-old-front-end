@@ -71,17 +71,17 @@ describe('contract query api', () => {
   test('getEstimatedFundingRate', async() => {
     const res = await getEstimatedFundingRate(chainId, poolAddress, '10')
     expect(res).toHaveProperty('fundingRate1')
-    expect(bg(res.fundingRate1).toNumber()).toBeLessThan(0.00005)
+    expect(res.fundingRate1).toEqual('0.00%')
   }, TIMEOUT)
   test('getLiquidityUsed', async() => {
     const res = await getLiquidityUsed(chainId, poolAddress)
     expect(res).toHaveProperty('liquidityUsed0')
-    expect(res.liquidityUsed0).toEqual('0.0000%')
+    expect(res.liquidityUsed0).toEqual('0.00%')
   }, TIMEOUT)
   test('getEstimatedLiquidityUsed', async() => {
     const res = await getEstimatedLiquidityUsed(chainId, poolAddress, '100')
     //console.log('res', res)
     expect(res).toHaveProperty('liquidityUsed1')
-    expect(res.liquidityUsed1).toEqual('0')
+    expect(res.liquidityUsed1).toEqual('0.00%')
   }, TIMEOUT)
 })

@@ -65,7 +65,6 @@ export class ContractBase {
         if (Array.isArray(res) && res.length >= 2) {
           throw new Error(res[1].trim())
         }
-        // ignore the metamask error
       }
     }
     if (gas === 0) gas = MAX_GAS_AMOUNT;

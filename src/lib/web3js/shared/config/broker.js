@@ -1,11 +1,17 @@
-import { getConfig } from './config';
+import { getJsonConfig } from './config';
+import { DeriEnv } from './env';
 
 export const getBrokerConfigList = (version) => {
-  const config = getConfig(version)
-  return config.brokerManager
+  const config = getJsonConfig(version, DeriEnv.get())
+  if (config.brokerManager) {
+    return config.brokerManager
+  } else {
+    // default value
+    return []
+  }
 };
 
-export const getBrokerConfig = (chainId, version) => {
+export const getBrokerConfig = (version='v2', chainId) => {
   const filteredByChainId = getBrokerConfigList(version).filter((c) =>c.chainId === chainId);
   if (filteredByChainId.length > 0) {
     return filteredByChainId[0];

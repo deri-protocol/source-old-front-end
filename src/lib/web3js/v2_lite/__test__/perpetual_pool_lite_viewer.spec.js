@@ -5,7 +5,19 @@ describe('PerpetualPoolLiteViewer', () => {
   it('getOffChainOracleSymbols', async() => {
     const pool = perpetualPoolLiteViewerFactory(CHAIN_ID, POOL_V2L_VIEWER_ADDRESS)
     const res = await pool.getOffChainOracleSymbols(POOL_ADDRESS_LITE)
-    const output = ["", "", "AXSUSDT", "MANAUSDT", "MBOXUSDT", "IBSCDEFI", "IGAME", "ALICEUSDT", "SANDUSDT"]
+    const output = [
+      '',
+      '',
+      'AXSUSDT',
+      'MANAUSDT',
+      'MBOXUSDT',
+      'IBSCDEFI',
+      'IGAME',
+      'ALICEUSDT',
+      'SANDUSDT',
+      'QUICKUSDT',
+      'GHSTUSDT',
+    ];
     expect(res).toEqual(output)
   }, TIMEOUT)
 })

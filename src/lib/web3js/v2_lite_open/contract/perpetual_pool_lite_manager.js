@@ -1,4 +1,4 @@
-import { ContractBase } from '../../shared'
+import { ContractBase } from '../../shared/contract/contract_base';
 import { perpetualPoolLiteManagerAbi } from './abis.js'
 
 export class PerpetualPoolLiteManager extends ContractBase {

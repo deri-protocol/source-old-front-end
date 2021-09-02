@@ -1,10 +1,10 @@
 import {
   bTokenFactory,
-  ContractBase,
   deriToNatural,
   fetchJson,
   getHttpBase,
 } from '../../shared';
+import { ContractBase } from '../../shared/contract/contract_base';
 import { normalizeSymbolUnit } from '../../shared/config/token';
 import { perpetualPoolLiteAbi } from './abis';
 import { PTokenLite } from './p_token';
@@ -23,6 +23,11 @@ export class PerpetualPoolLite extends ContractBase {
      this.pTokenAddress= res.pTokenAddress;
     }
   }
+  async controller() {
+    const res = await this._call('controller');
+    return res
+  }
+
   async getParameters() {
     const res = await this._call('getParameters');
     return {
@@ -73,11 +78,12 @@ export class PerpetualPoolLite extends ContractBase {
   async getPoolExtraInfo() {
     const url = `${getHttpBase()}/pool_extra_info/${this.contractAddress}`
     const res = await fetchJson(url)
-    // console.log(res)
+    //console.log(res)
     if (res.success) {
       return res.data
     } else {
-      console.log(`-- getInitialBlock(): ${res.message}`)
+
+      console.log(`-- getInitialBlock(): ${url} => ${res.message}`)
       return  {
         block_number: '1000000000',
         version: '',
@@ -105,5 +111,14 @@ export class PerpetualPoolLite extends ContractBase {
       version:extraInfo.version,
       chainId: this.chainId,
     }
+  }
+
+  // tx
+  async addSymbol(accountAddress, parameters) {
+    return await this._transact('addSymbol', parameters, accountAddress)
+  }
+
+  async removeSymbol(accountAddress, symbolId) {
+    return await this._transact('removeSymbol', [symbolId], accountAddress)
   }
 }

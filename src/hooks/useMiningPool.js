@@ -6,6 +6,8 @@ import {
   getPoolInfoApy,
   getLpContractAddressConfig,
   getLpPoolInfoApy,
+  openConfigListCache,
+  getPoolOpenConfigList,
   getPreminingContractConfig
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
@@ -25,8 +27,16 @@ export default function useMiningPool(isNew){
   const [preminingPools, setPreminingPools] = useState([])
   const [openPools, setOpenPools] = useState([])
 
+    
+    const openConfigList = async ()=>{
+      await openConfigListCache.update()
+      const openPools = getPoolOpenConfigList(env,'v2_lite_open')
+      return openPools
+    }
 
-  useEffect(() => {
+
+  useEffect(async() => {
+    
     const mapConfig = async (config) => {
       const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
       const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
@@ -77,7 +87,7 @@ export default function useMiningPool(isNew){
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
     const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
-    const openPools = getContractAddressConfig(env,'v2_lite_open')
+    const openPools = await openConfigList()
     const all = []
     let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)

@@ -367,7 +367,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   const [balance, setBalance] = useState(0);
   const [isClickClaim, setIsClickClaim] = useState(false);
   const config = useConfig();
-  const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['approve']}></Button>);  
+  const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['approve']} ></Button>);  
   const connect = () => {
     wallet.connect()
   }

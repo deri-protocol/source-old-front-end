@@ -1,4 +1,4 @@
-import { ContractBase } from '../../shared/contract'
+import { ContractBase } from '../../shared/contract/contract_base'
 import { deriToNatural, hexToNumber, bg } from '../../shared/utils'
 import { perpetualPoolAbi } from './abis';
 

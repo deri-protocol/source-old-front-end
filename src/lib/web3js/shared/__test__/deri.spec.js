@@ -15,6 +15,6 @@ describe('deri', () => {
   }, TIMEOUT)
   test('balanceof', async() => {
     const res = await deri.balanceOf(ACCOUNT_ADDRESS)
-    expect(bg(res).toNumber()).toBeGreaterThan(112)
+    expect(bg(res).toNumber()).toBeGreaterThan(0)
   }, TIMEOUT)
 })
