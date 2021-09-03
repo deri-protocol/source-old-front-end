@@ -33,10 +33,10 @@ class Body extends React.Component {
           <Route exact path='/team' component={()=><Team lang={dict['team']}/>}></Route>
           <Route exact path='/deritoken' component={() => <Token lang={dict['home']} />}></Route>
           <Route exact path='/logo' component={() => <Download lang={dict['home']} />}></Route>
-          <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
+          {/* <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route> */}
           <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route>
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>
-          <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route>
+          {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
