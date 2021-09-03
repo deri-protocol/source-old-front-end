@@ -79,12 +79,12 @@ export default function Menu({ closeMenu, lang, locale }) {
           <li className="ref">
             {lang['more']} <img src={menuDown} alt="" />
             <ul className="ref-box">
-              <li>
+              {/* <li>
                 <Link to='/broker'>{lang.broker}</Link>
               </li>
               <li>
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
-              </li>
+              </li> */}
               <li>
                 <Link to='/signin'>{lang['signin']}</Link>
               </li>
