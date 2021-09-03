@@ -1,59 +1,22 @@
 import React, { useState, useEffect,useRef } from 'react'
 import dateFormat from 'dateformat'
-import {io} from 'socket.io-client'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase } from '../../../../utils/utils';
-
-
-const socket = io(process.env.REACT_APP_WSS_URL, {
-  transports: ['websocket'],
-  withCredentials: true
-})
+import webSocket from '../../../../model/WebSocket';
 
 
 function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
   const chartRef = useRef(null)
   const lastData = useRef(null)
-  const queryParams = useRef(null);
-  const lastQueryParam = useRef(null);
+  const symbolRef = useRef(null)
+  const candlesChartRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const connectStatusRef = useRef()
-
-  const onConnect = () => {
-    socket.on('connect', () => {
-      if(connectStatusRef.current && queryParams.current){
-        console.log( `kline for :${queryParams.current.symbol} - ${queryParams.current.interval} reconnect`)
-        socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
-      }
-      connectStatusRef.current = true
-    })
-  }
-
-  const unsubscribeMessage = (symbol,interval) => {
-    socket.emit('un_get_kline',{symbol : symbol,'time_type' : interval})
-  }
-
-  const subscribeMessage = (symbol,interval,onMessage) => {
-    if(socket.connected){
-      socket.on('kline_update', data => {
-        if (lastData.current && lastData.current.time <= data.time && data.time_type === interval && equalIgnoreCase(data.symbol,symbol)) {
-          if(onMessage){
-            onMessage(data)
-          }
-          lastData.current = data
-        }
-      })
-      socket.emit('get_kline_update', {'symbol': symbol, 'time_type': interval,updated : true})
-    }
-  }
 
   const loadData = async (symbol) => {
     const range = calcRange(interval)
-    lastQueryParam.current = queryParams.current
-    queryParams.current = {symbol : symbol,interval : intervalRange[interval]}
-    const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
+    const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${symbol}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
     setLoading(true)
     const res = await axios.get(url)
     setLoading(false)
@@ -62,7 +25,7 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
 
   const addCandleChart = async (chart,symbol,priceScaleId) => {
     if(symbol && chart){
-       const candlesChart = chart.addCandlestickSeries({
+       const candlesChart = candlesChartRef.current = chart.addCandlestickSeries({
         priceScaleId : priceScaleId,
         upColor: "#4bffb5",
         downColor: "#ff4976",
@@ -77,9 +40,12 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
         lastData.current = data[data.length-1]
       } 
       displayCandleData({data : lastData.current})
-      subscribeMessage(symbol,queryParams.current.interval,data => {
-        candlesChart.update(data)
-      });
+      webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
+        if (lastData.current && lastData.current.time <= data.time) {
+          candlesChart.update(data)
+          lastData.current = data
+        }
+      })
     }
       
   }
@@ -103,16 +69,14 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
       const data = await loadData(symbol)
       const seriesData = data.map(d => ({time : d.time,value : d.close}));
       seriesChart.setData(seriesData)
-      subscribeMessage(symbol,queryParams.current.interval,data => {
+      webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
         const lineSeriesData = {time : data.time,value : data.close}
         seriesChart.update(lineSeriesData)
-      });
+      })
     }
   }
 
-
-
-  const handleCrosshairMoved = (param) => {
+  const handleCrosshairMoved = param => {
     if (!param.point) {
         return;
     }
@@ -187,32 +151,41 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
 
   useEffect(() => {
     const chart = initChart()
+    const symbols = []
     if(symbol){
       if(mixedChart){
         addLineSeries(chart,getFormatSymbol(symbol),'left');
+        symbols.push(getFormatSymbol(symbol))
         addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
+        symbols.push(getFormatSymbol(`${symbol}-MARKPRICE`))
       } else {
         addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');  
+        symbols.push(getFormatSymbol(`${symbol}-MARKPRICE`))
+      }
+      symbolRef.current = symbols
+    }
+
+    function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
+      console.log(newVisibleLogicalRange)
+      const barsInfo = candlesChartRef.current.barsInLogicalRange(newVisibleLogicalRange);
+      // if there less than 50 bars to the left of the visible area
+      console.log(barsInfo)
+      if (barsInfo !== null && barsInfo.barsBefore < 50) {
+          // try to load additional historical data and prepend it to the series data
       }
     }
+  
+    chart && chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
     
     return () => {
-      if(lastQueryParam.current){
-        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
-      }
-      if(queryParams.current){
-        socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
-      }
-      connectStatusRef.current = null
       if(chart){
         chart.remove()
       }
+      if(symbolRef.current){
+        symbolRef.current.forEach(symbol => webSocket.unsubscribe('un_get_kline',{symbol,time_type : intervalRange[interval]}))
+      }
     }
   }, [symbol,interval])
-
-  useEffect(() => {
-    onConnect();
-  }, [])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
