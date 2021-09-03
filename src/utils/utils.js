@@ -112,6 +112,10 @@ export function getFormatSymbol(symbol){
   return version.isV2 || version.isV2Lite || type.isOption || version.current === 'v2_lite_open' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
+export function equalIgnoreCase(str1,str2){
+  return str1 && str1.toUpperCase() === str2 && str2.toUpperCase()
+}
+
 export function stripSymbol(symbol){
   if(!symbol){
     return symbol;

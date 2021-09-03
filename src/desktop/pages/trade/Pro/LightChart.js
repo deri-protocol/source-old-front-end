@@ -4,7 +4,7 @@ import {io} from 'socket.io-client'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol, calcRange, intervalRange } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase } from '../../../../utils/utils';
 
 
 const socket = io(process.env.REACT_APP_WSS_URL, {
@@ -13,9 +13,8 @@ const socket = io(process.env.REACT_APP_WSS_URL, {
 })
 
 
-function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
+function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
   const chartRef = useRef(null)
-  const candleSeries = useRef(null);
   const lastData = useRef(null)
   const queryParams = useRef(null);
   const lastQueryParam = useRef(null);
@@ -32,36 +31,33 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
     })
   }
 
-  const initWebSocket = () => {
-    if(lastQueryParam.current){
-      socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
-    }
+  const unsubscribeMessage = (symbol,interval) => {
+    socket.emit('un_get_kline',{symbol : symbol,'time_type' : interval})
+  }
+
+  const subscribeMessage = (symbol,interval,onMessage) => {
     if(socket.connected){
-      socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
       socket.on('kline_update', data => {
-        if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
-          candleSeries.current.update(data)
+        if (lastData.current && lastData.current.time <= data.time && data.time_type === interval && equalIgnoreCase(data.symbol,symbol)) {
+          if(onMessage){
+            onMessage(data)
+          }
           lastData.current = data
-          displayCandleData({data : data})
         }
       })
+      socket.emit('get_kline_update', {'symbol': symbol, 'time_type': interval,updated : true})
     }
   }
 
   const loadData = async (symbol) => {
-      const range = calcRange(interval)
-      lastQueryParam.current = queryParams.current
-      queryParams.current = {symbol : symbol,interval : intervalRange[interval]}
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
-      setLoading(true)
-      const res = await axios.get(url)
-      setLoading(false)
-      const wrapper = res.data.data.splice(0,200).map(res => ({time : res.time,value : res.close}))
-      // wrapper.forEach((item,index) => {
-      //   item.
-      // })
-      console.log(JSON.stringify(wrapper))
-      return res.data && Array.isArray(res.data.data) ? res.data.data  : []
+    const range = calcRange(interval)
+    lastQueryParam.current = queryParams.current
+    queryParams.current = {symbol : symbol,interval : intervalRange[interval]}
+    const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
+    setLoading(true)
+    const res = await axios.get(url)
+    setLoading(false)
+    return res.data && Array.isArray(res.data.data) ? res.data.data  : []
   }
 
   const addCandleChart = async (chart,symbol,priceScaleId) => {
@@ -80,25 +76,37 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
         candlesChart.setData(data)
         lastData.current = data[data.length-1]
       } 
-      candleSeries.current = candlesChart
       displayCandleData({data : lastData.current})
-      initWebSocket()
+      subscribeMessage(symbol,queryParams.current.interval,data => {
+        candlesChart.update(data)
+      });
     }
       
   }
 
-  const addLineSeries = async (chart,symbol) =>{
+  const addLineSeries = async (chart,symbol,priceScaleId) =>{
     if(chart && symbol){
+      chart.applyOptions({
+        leftPriceScale: {
+          title : symbol,
+          visible: true,
+          borderColor: 'rgba(197, 203, 206, 1)',
+        }
+      })
       const seriesChart = chart.addLineSeries({
-        priceScaleId: 'right',
-        topColor: "rgba(38,198,218, 0.56)",
-        bottomColor: "rgba(38,198,218, 0.04)",
+        priceScaleId: priceScaleId,
+        topColor: "#569bda",
+        bottomColor: "#569bda",
         lineColor: "#569bda",
         lineWidth: 2
       })
       const data = await loadData(symbol)
       const seriesData = data.map(d => ({time : d.time,value : d.close}));
       seriesChart.setData(seriesData)
+      subscribeMessage(symbol,queryParams.current.interval,data => {
+        const lineSeriesData = {time : data.time,value : data.close}
+        seriesChart.update(lineSeriesData)
+      });
     }
   }
 
@@ -109,8 +117,12 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
         return;
     }
     if(typeof displayCandleData === 'function'){
-      const data = {time : param.time ,data : param.seriesPrices.values().next().value}
-      displayCandleData(data);
+      param.seriesPrices.forEach(item => {
+        if(item.open && item.close && item.high && item.low){
+          const data = {time : param.time ,data : item}
+          displayCandleData(data);
+        }
+      })
     }
   }
 
@@ -129,7 +141,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
           timeVisible : true,
           borderColor : '#fff',
           tickMarkFormatter: (time, tickMarkType, locale) => {
-            const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd HH:MM' : 'HH:MM'
+            const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd' : 'HH:MM'
             return dateFormat(time,format)
           },
         },
@@ -177,14 +189,8 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
     const chart = initChart()
     if(symbol){
       if(mixedChart){
-        addLineSeries(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
-        chart.applyOptions({
-          leftPriceScale: {
-            visible: true,
-            borderColor: 'rgba(197, 203, 206, 1)',
-          }
-        })
-        addCandleChart(chart,getFormatSymbol(symbol),'left');  
+        addLineSeries(chart,getFormatSymbol(symbol),'left');
+        addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
       } else {
         addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');  
       }

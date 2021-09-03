@@ -54,10 +54,10 @@ function TVChart({interval,symbol,showLoad,intl}){
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
     socket.emit('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : queryParamsRef.current.interval,update : true})
-    // updateKlineFun = onRealtimeCallback
     socket.on('kline_update', data => {
-      if (onRealtimeCallback) {
+      if (onRealtimeCallback && data.symbol === queryParamsRef.current.formatSymbol && data.time >= lastDataRef.current.time ) {
         onRealtimeCallback(data)
+        lastDataRef.current = data
       }
     })
   }

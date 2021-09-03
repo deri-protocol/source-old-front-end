@@ -60,10 +60,10 @@ function Chart({symbol,lang,intl,version}){
       </div>}
       <div className={activedClass}>
           <span className='candle-data-area'>
-            <span className='symbol-value' style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
+            <span className='symbol-value' style={{display : chartType === 'mark-price'|| chartType === 'option-index' ? 'inline-block' : 'none'}}>
               {candleDataDisplay && symbol}
             </span>
-            <span className='candle-data' style={{display : chartType === 'mark-price' ? 'inline-block' : 'none'}}>
+            <span className='candle-data' style={{display : chartType === 'mark-price' || chartType === 'option-index' ? 'inline-block' : 'none'}}>
               {candleDataDisplay}
             </span>
           </span>
