@@ -42,7 +42,7 @@ function TVChart({interval,symbol,showLoad,intl}){
         to : to 
       }
     });
-    if(firstDataRequest && res && res.status === 200 && Array.isArray(res.data.data)){
+    if(res && res.status === 200 && Array.isArray(res.data.data)){
       const klineData = res.data.data
       showLoad(false)
       onHistoryCallback(klineData)

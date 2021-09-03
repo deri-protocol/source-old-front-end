@@ -159,9 +159,6 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       if(chart){
         chart.remove()
       }
-      // if(chart.current) {
-      //   chart.current.unsubscribeCrosshairMove(handleCrosshairMoved)
-      // }
     }
   }, [symbol,interval])
 
