@@ -163,7 +163,9 @@ export default function useMiningPool(isNew){
       setLegacyPools(legacy);
       setPreminingPools(preminings)
       setOpenPools(openPools)
-      setLoaded(true)
+      if(openPools.length){
+        setLoaded(true)
+      }
     })
     return () => pools.length = 0
   },[awiteOpenPools])
