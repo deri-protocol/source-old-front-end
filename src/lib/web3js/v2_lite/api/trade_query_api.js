@@ -191,7 +191,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
 export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
-    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
+    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const balance = await bTokenFactory(chainId, bTokenAddress).balanceOf(accountAddress)
     return balance.toString()
   }, args, 'getWalletBalance', '')
@@ -200,7 +200,7 @@ export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
 export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
-    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
+    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const bToken = bTokenFactory(chainId, bTokenAddress)
     return await bToken.isUnlocked(accountAddress, poolAddress)
   }, args, 'isUnlocked', '')

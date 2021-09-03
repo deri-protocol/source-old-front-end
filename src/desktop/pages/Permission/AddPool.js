@@ -342,8 +342,10 @@ function Step3({ goToStep, lang, wallet, params }) {
 
     let res = await createPool(wallet.detail.chainId,wallet.detail.account,paramsArr,baseTokenAddress,baseTokenAddressOther)
     console.log(res)
-    if(!res.success){
-      alert('falid')
+    if(res.success){
+      alert(lang['success'])
+    }else{
+      alert(lang['fail'])
     }
   }
   return (

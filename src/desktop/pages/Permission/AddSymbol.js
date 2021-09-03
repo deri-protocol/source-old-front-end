@@ -44,15 +44,17 @@ function AddSymbol({ wallet = {}, lang }) {
   if (query.has('symbolId')) {
     props['symbolId'] = query.get('symbolId')
   }
-
+  const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const getPoolALLSymbolId = async ()=>{
     let res = await getPoolAllSymbolNames(wallet.detail.chainId,address)
     let id = res.length
-    setOracleConfig(id)
+    setSymbolId(id)
   }
 
   useEffect(()=>{
-    getPoolALLSymbolId();
+    if(hasConnectWallet()){
+      getPoolALLSymbolId();
+    }
   },[wallet,wallet.detail,address])
 
   const StepChange = (name, value) => {
@@ -183,7 +185,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
       </button>
     }
     setBtnText(elem)
-  }, [wallet, wallet.detail, wallet.detail.account])
+  }, [wallet, wallet.detail, wallet.detail.account,oracleConfig,multiplier,fundingRateCoefficient,transactionFeeRatio])
   return (
     <div className='step1'>
       <div className='header'>
@@ -300,7 +302,11 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 function Step2({ goToStep, lang, wallet, props, parameters }) {
   const add = async () => {
     let res = await addSymbol(wallet.detail.chainId, props.address, wallet.detail.account, parameters)
-    console.log(res)
+    if(res.success){
+      alert(lang['success'])
+    }else{
+      alert(lang['fail'])
+    }
   }
   return (
     <div className='step2'>

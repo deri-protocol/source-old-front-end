@@ -39,6 +39,8 @@
   "confirm":"CONFIRM",
   "cancel":"CANCEL",
   "pending":"Pending",
+  "success":"success",
+  "fail":"fail ",
   "connect-wallet":"Connect Wallet",
   "send":"SEND",
   "next":"NEXT",

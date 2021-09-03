@@ -46,11 +46,11 @@ function Mining({wallet,lang}){
 	useEffect(()=>{
 		if(hasConnectWallet()){
 			PoolController()
-			if(version==='v2_lite_open'){
+			if(version === 'v2_lite_open'){
 				openConfigList()
 			}
 		}
-	},[wallet,address])
+	},[wallet,wallet.detail,address])
 
 	const poolInfoClass = classnames('mining-info',currentTab,{'open-zone' : version === 'v2_lite_open'})
 	return(
