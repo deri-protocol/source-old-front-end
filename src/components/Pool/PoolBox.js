@@ -8,6 +8,7 @@ import Button from '../Button/Button.js';
 import { eqInNumber, addParam } from '../../utils/utils.js';
 import classNames from 'classnames';
 import TipWrapper from '../TipWrapper/TipWrapper.js';
+import { version } from '@babel/core';
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
 function PoolBox({wallet,group = {},lang}){
@@ -109,7 +110,11 @@ function Card({wallet,pool,card,index,list,lang}) {
       <div className="info">
         <div className="top-info">
           <div className='pool-top'>
-            <span className={`logo ${card.bTokenSymbol}`} ></span>
+            <span className={`logo ${card.bTokenSymbol}`} >
+              {/* {pool.version === 'v2_lite_open' &&<>
+                <img src = {`https://pancakeswap.finance/images/tokens/${card.bTokenSymbol}.svg`} />
+              </>} */}
+            </span>
             <span className="base-token">{card.bTokenSymbol}</span>
           </div>
           <div className="pool-detail">
