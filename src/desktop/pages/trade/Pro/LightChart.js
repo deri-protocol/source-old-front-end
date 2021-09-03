@@ -142,10 +142,6 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
           visible: true,
           borderColor: 'rgba(197, 203, 206, 1)',
         },
-        leftPriceScale: {
-          visible: true,
-          borderColor: 'rgba(197, 203, 206, 1)',
-        },
         crosshair: {
           mode: CrosshairMode.Normal,    
           vertLine: {
@@ -182,6 +178,12 @@ function LightChart({symbol,interval = '1',intl,displayCandleData,mixedChart}){
     if(symbol){
       if(mixedChart){
         addLineSeries(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
+        chart.applyOptions({
+          leftPriceScale: {
+            visible: true,
+            borderColor: 'rgba(197, 203, 206, 1)',
+          }
+        })
         addCandleChart(chart,getFormatSymbol(symbol),'left');  
       } else {
         addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');  
