@@ -5,7 +5,7 @@ import StepWizard from "react-step-wizard";
 import { useParams } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
-import { bg, addSymbol, getPoolOpenOracleList, DeriEnv } from '../../../lib/web3js/indexV2'
+import { bg, addSymbol, getPoolOpenOracleList, DeriEnv,getPoolAllSymbolNames } from '../../../lib/web3js/indexV2'
 import useQuery from '../../../hooks/useQuery'
 import down from './img/down.svg';
 import up from './img/up.svg';
@@ -17,6 +17,7 @@ function AddSymbol({ wallet = {}, lang }) {
   const [multiplier, setMultiplier] = useState('1')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
+  const [symbolId, setSymbolId] = useState(0)
   const [oracleConfig, setOracleConfig] = useState(
     DeriEnv.get() === 'dev' ?
       {
@@ -30,6 +31,9 @@ function AddSymbol({ wallet = {}, lang }) {
         chainId: '56'
       }
   )
+
+  
+
   const [parameters, setParameters] = useState([]);
   const { version, chainId, symbol, baseToken, address, type } = useParams();
   const query = useQuery();
@@ -40,6 +44,17 @@ function AddSymbol({ wallet = {}, lang }) {
   if (query.has('symbolId')) {
     props['symbolId'] = query.get('symbolId')
   }
+
+  const getPoolALLSymbolId = async ()=>{
+    let res = await getPoolAllSymbolNames(wallet.detail.chainId,address)
+    let id = res.length
+    setOracleConfig(id)
+  }
+
+  useEffect(()=>{
+    getPoolALLSymbolId();
+  },[wallet,wallet.detail,address])
+
   const StepChange = (name, value) => {
     if (name === 'multiplier') {
       setMultiplier(value)
@@ -56,9 +71,9 @@ function AddSymbol({ wallet = {}, lang }) {
   }
 
   useEffect(() => {
-    let arr = [oracleConfig.symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
+    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
     setParameters(arr)
-  }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig])
+  }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig,symbolId])
 
   useEffect(() => {
   }, [wallet, wallet.detail])

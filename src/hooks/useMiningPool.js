@@ -26,16 +26,12 @@ export default function useMiningPool(isNew){
   const [legacyPools, setLegacyPools] = useState([])
   const [preminingPools, setPreminingPools] = useState([])
   const [openPools, setOpenPools] = useState([])
+  const [awiteOpenPools, setAwiteOpenPools] = useState([])
 
     
-    const openConfigList = async ()=>{
-      await openConfigListCache.update()
-      const openPools = getContractAddressConfig(env,'v2_lite_open')
-      return openPools
-    }
+    
 
-
-  useEffect(async() => {
+  useEffect(() => {
     
     const mapConfig = async (config) => {
       const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
@@ -87,7 +83,14 @@ export default function useMiningPool(isNew){
     const liteConfigs = getContractAddressConfig(env,'v2_lite')
     const optionConfigs = getContractAddressConfig(env,'option')
     const preminingPools = getPreminingContractConfig(env);
-    const openPools = await openConfigList()
+    // const openPools = getContractAddressConfig(env,'v2_lite_open')
+    const FopenPools = async () =>{
+      await openConfigListCache.update()
+      const openPools = getContractAddressConfig(env,'v2_lite_open')
+      setAwiteOpenPools(openPools)
+    }
+    FopenPools()
+    const openPools = awiteOpenPools
     const all = []
     let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
       const pos = total.findIndex(item => item.chainId === config.chainId && item.bTokenSymbol === config.bTokenSymbol && config.version === item.version)
@@ -163,6 +166,6 @@ export default function useMiningPool(isNew){
       setLoaded(true)
     })
     return () => pools.length = 0
-  },[])
+  },[awiteOpenPools])
   return [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools];
 }
