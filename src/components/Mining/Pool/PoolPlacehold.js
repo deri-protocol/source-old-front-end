@@ -1,5 +1,6 @@
 import './poolPlacehold.less'
 import { Link } from 'react-router-dom'
+import {isMobile,isBrowser} from 'react-device-detect'
 
 export default function PoolPlacehold({lang}){
   return(
@@ -13,7 +14,12 @@ export default function PoolPlacehold({lang}){
           <div>{lang['add-pool-text']}</div>
         </div>
         <div className='btn-c'>
+        {isMobile &&<>
+          <button onClick={()=>{alert(lang['please-operat'])}}>{lang['add']}</button>
+        </>}
+        {isBrowser &&
           <Link to='/addpool'><button>{lang['add']}</button></Link> 
+        }
         </div>
       </div>
     </div>
