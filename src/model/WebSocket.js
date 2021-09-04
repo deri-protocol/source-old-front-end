@@ -7,15 +7,15 @@ class WebSocket {
       transports: ['websocket'],
       withCredentials: true
     })
-    this.subs = [];
+    this.events = [];
     this.socket.on('connect', () => {
-      this.subs.forEach(event => {
+      console.log('connect')
+      this.events.forEach(event => {
         this.socket.emit(event[0],event[1]);
       })
     })
     this.socket.on('disconnect',event => {
-      console.log('web socket disconnect,will reconnect ')
-      this.socket.connect();
+      console.log('web socket disconnect,will reconnect auto')
     })
   }
 
@@ -26,7 +26,9 @@ class WebSocket {
       }
     })
     this.socket.emit(event, params)
-    this.subs.push([event,params])
+    if(this.events.findIndex(item => item[0] === event && item[1].symbol === params.symbol && item[1].time_type === params.time_type) === -1){
+      this.events.push([event,params])
+    }
   }
 
   unsubscribe(event,params = {}){
