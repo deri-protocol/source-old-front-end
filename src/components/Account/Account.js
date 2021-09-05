@@ -46,7 +46,6 @@ function Account({wallet,lang}){
         setAccountText(detail)
       }
     }
-
     if(!notConnectWalletPage){
       init();
     }

@@ -1,17 +1,20 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect,useRef,useCallback } from 'react'
 import dateFormat from 'dateformat'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase } from '../../../../utils/utils';
 import webSocket from '../../../../model/WebSocket';
+import { init } from 'cjs-module-lexer';
 
 
 function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
+  const containerRef = useRef(null);
   const chartRef = useRef(null)
   const lastData = useRef(null)
   const symbolRef = useRef(null)
   const candlesChartRef = useRef(null);
+  const lineChartRef = useRef(null);
   const [loading, setLoading] = useState(true);
 
   const loadData = async (symbol) => {
@@ -59,7 +62,7 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
           borderColor: 'rgba(197, 203, 206, 1)',
         }
       })
-      const seriesChart = chart.addLineSeries({
+      const seriesChart = lineChartRef.current = chart.addLineSeries({
         priceScaleId: priceScaleId,
         topColor: "#569bda",
         bottomColor: "#569bda",
@@ -91,7 +94,7 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
   }
 
   const initChart = () => {
-    if(chartRef.current && symbol && interval){
+    if(chartRef.current &&  symbol && interval){
       const chart = createChart(chartRef.current, { 
         localization : {
           timeFormatter : businessDayOrTimestamp => {
@@ -147,11 +150,10 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
       return chart;
     }
   }
-    
 
   useEffect(() => {
-    const chart = initChart()
     const symbols = []
+    const chart = containerRef.current = initChart()
     if(symbol){
       if(mixedChart){
         addLineSeries(chart,getFormatSymbol(symbol),'left');
@@ -178,11 +180,13 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
     chart && chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
     
     return () => {
-      if(chart){
-        chart.remove()
-      }
       if(symbolRef.current){
         symbolRef.current.forEach(symbol => webSocket.unsubscribe('un_get_kline',{symbol,time_type : intervalRange[interval]}))
+      }
+      if(chart){
+        candlesChartRef.current &&  chart.removeSeries(candlesChartRef.current)
+        lineChartRef.current && chart.removeSeries(lineChartRef.current)
+        chart.remove();
       }
     }
   }, [symbol,interval])
