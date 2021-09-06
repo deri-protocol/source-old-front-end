@@ -3,12 +3,12 @@ import dateFormat from 'dateformat'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol } from '../../../../utils/utils';
 import webSocket from '../../../../model/WebSocket';
 import { init } from 'cjs-module-lexer';
 
 
-function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
+function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
   const containerRef = useRef(null);
   const chartRef = useRef(null)
   const lastData = useRef(null)
@@ -93,6 +93,18 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
     }
   }
 
+  const switchSeriesChart = (series,priceScaleId) => {
+    series.applyOptions({
+      visible: !series.options().visible,
+    });
+    if(containerRef.current){
+      const chart = containerRef.current
+      chart.applyOptions({
+        [`${priceScaleId}PriceScale`] : {visible : !chart.options()[`${priceScaleId}PriceScale`].visible}
+      })
+    }
+  }
+
   const initChart = () => {
     if(chartRef.current &&  symbol && interval){
       const chart = createChart(chartRef.current, { 
@@ -115,11 +127,6 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
         priceScale: {
           borderColor: '#fff',
           mode: 1
-        },
-
-        rightPriceScale: {
-          visible: true,
-          borderColor: 'rgba(197, 203, 206, 1)',
         },
         crosshair: {
           mode: CrosshairMode.Normal,    
@@ -193,6 +200,10 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart}){
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
+      {mixedChart && <div className='legend'>
+        <div onClick={() => switchSeriesChart(candlesChartRef.current,'right')} ><span className='legend-option-left'> </span><span className='legend-option-right'> </span>{lang['option']}</div>
+        <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{stripSymbol(`${symbol}`)}</div>
+      </div>}
       <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>

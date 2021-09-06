@@ -142,5 +142,6 @@
   "premium-tip":"Die Finanzierungsgebühr, die ein Long-Kontrakt einem Short-Kontrakt als Optionspremium zahlt",
   "delta-tip":"Die Finanzierung, die die Mehrheitsseite der Minderheitsseite aufgrund des Ungleichgewichts zwischen Long und Short zahlt",
   "innovation-zone" : "Inno",
-  "open-zone" : "offen"
+  "open-zone" : "offen",
+  "index-constituent" : "Indexbestandteil"
 }

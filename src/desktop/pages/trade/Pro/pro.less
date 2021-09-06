@@ -493,7 +493,7 @@
 
 
           .conntract-header {
-            margin: 20px 0 12px;
+            margin: 12px 0;
             margin-left: 36px;
             font-size: 15px;
             font-family: Tachyon, sans-serif;
@@ -1504,5 +1504,31 @@
     height: 468px;
     min-width: 712px;
     background-color: #212327;
+    .legend {
+      position: absolute;
+      z-index: 3;
+      left: 78px;
+      font-size: 10px;
+      color: #a7a7af;
+      .legend-option-left,.legend-option-right,.legend-index {
+        margin-right: 10px;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        cursor: pointer;
+      }
+      .legend-option-left {
+        width: 6px;
+        margin-right : 0px;
+        background-color: #4bffb5;
+      }
+      .legend-option-right {
+        width: 6px;
+        background-color: #ff4976;
+      }
+      .legend-index {
+        background-color: #569bda;
+      }
+    }
   }     
 }

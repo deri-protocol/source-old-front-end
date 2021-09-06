@@ -37,7 +37,7 @@ export const unlock = async (chainId, poolAddress, accountAddress) => {
 
   let res;
   try {
-    const tx = await bToken.unlock(accountAddress);
+    const tx = await bToken.unlock(accountAddress, poolAddress);
     res = { success: true, transaction: tx };
   } catch (err) {
     res = { success: false, error: err };

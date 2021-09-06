@@ -11,7 +11,7 @@ import List from './List';
 function Pool({lang,loading,wallet}){
   const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true,wallet);
   const [curTab,setCurTab] = useState('')
-  const [curStyle, setCurStyle] = useState('list')
+  const [curStyle, setCurStyle] = useState('card')
   const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area',curTab)
   const styleSelectClass = classNames('style-select',curStyle)
@@ -29,14 +29,14 @@ function Pool({lang,loading,wallet}){
   return (
     <div className="mining-info">
       <div className='checkout-pools'>
-        <div className={styleSelectClass}>
+        {/* <div className={styleSelectClass}>
           <div className='list' onClick={() => setCurStyle('list')}></div>
           <div className='card' onClick={() => setCurStyle('card')}></div>
         </div>
         <div className='switcher'>
           <div className={switchClass} onClick={()=> setSwitchChecked(!switchChecked)}></div>
           <div className='added-only'>Added Only</div>
-        </div>
+        </div> */}
         <div className={tabCLassName}>
           {/* <div className='all' onClick={() => switchTab('all')}>{lang['all']}</div> */}
           <div className='futures' onClick={() => switchTab('futures')}>{lang['futures']}</div>
