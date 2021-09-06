@@ -1,4 +1,4 @@
-import { ContractBase } from '../../shared/contract';
+import { ContractBase } from '../../shared/contract/contract_base';
 import { deriToNatural } from '../../shared/utils';
 
 /* eslint-disable */

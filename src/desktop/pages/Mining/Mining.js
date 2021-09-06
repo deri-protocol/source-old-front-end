@@ -1,8 +1,8 @@
-import {useState} from 'react'
-import {useParams} from "react-router-dom";
+import {useEffect, useState} from 'react'
+import {useParams,useHistory} from "react-router-dom";
 import LiquidityMining from "../../../components/Mining/Liquidity/LiquidityMining";
 import TradeMining from "../../../components/Mining/Trade/TradeMining";
-import {DeriEnv} from '../../../lib/web3js/indexV2'
+import {DeriEnv,isPoolController,openConfigListCache} from '../../../lib/web3js/indexV2'
 import config from '../../../config.json'
 import './mining.less'
 import './zh-mining.less'
@@ -15,16 +15,43 @@ const {chainInfo} = config[env]
 
 function Mining({wallet,lang}){
 	const [currentTab,setCurrentTab] = useState('liquidity')
+	const history = useHistory();
+	const [isController,setIsController] = useState(false)
 	const {version,chainId,symbol,baseToken,address,type} =  useParams();
 	const query = useQuery();
 	const networkText = chainInfo[chainId] && chainInfo[chainId].name;
 	const props = {version,chainId,symbol,baseToken,address,wallet,type,lang}
+	const url = `/addsymbol/${version || 'v1'}/${chainId}/${type}/${symbol}/${baseToken}/${address}`
 	if(query.has('baseTokenId')) {
 		props['baseTokenId'] = query.get('baseTokenId')
 	}
 	if(query.has('symbolId')){
 		props['symbolId'] = query.get('symbolId')
 	}
+	const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
+
+	const PoolController = async () => {
+		let res = await isPoolController(wallet.detail.chainId,address,wallet.detail.account)
+		setIsController(res)
+	}
+
+	const openConfigList = async ()=>{
+		await openConfigListCache.update()
+	}
+
+	const gotoMining = (url)=>{
+		history.push(url)
+	}
+
+	useEffect(()=>{
+		if(hasConnectWallet()){
+			PoolController()
+			if(version === 'v2_lite_open'){
+				openConfigList()
+			}
+		}
+	},[wallet,wallet.detail,address])
+
 	const poolInfoClass = classnames('mining-info',currentTab,{'open-zone' : version === 'v2_lite_open'})
 	return(
     <div className={poolInfoClass}>
@@ -41,6 +68,13 @@ function Mining({wallet,lang}){
 			<div className='pool-info'>
 					<LiquidityMining {...props}/>
 			</div>
+			{isController && <>
+				<div className='add-symbol'>
+					<button onClick={() => gotoMining(url)} >
+						{lang['add-symbol']}
+					</button>
+				</div>
+			</>}
 		</div>
 	)
 }

@@ -48,6 +48,8 @@ describe('pToken v2 lite', () => {
       '6',
       '7',
       '8',
+      '9',
+      '10',
     ]);
   }, TIMEOUT)
   it('isActiveSymbolId', async() => {

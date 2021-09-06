@@ -26,6 +26,7 @@ import {
 } from '../calculation/trade';
 import { everlastingOptionFactory } from '../factory/pool';
 import { volatilitiesCache } from '../utils';
+import { getIndexInfo } from '../../shared/config/token';
 
 //
 const SECONDS_IN_A_DAY = 86400;
@@ -91,6 +92,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
         liquidationCutRatio: liquidationCutRatio.toString(),
         protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
         isCall: isCall,
+        indexConstituents: getIndexInfo(symbol),
       };
     },
     args,
@@ -107,6 +109,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
       maxLiquidationReward: '',
       liquidationCutRatio: '',
       protocolFeeCollectRatio: '',
+      indexConstituents: { url: '', tokens: [] },
     }
   );
 };

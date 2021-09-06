@@ -135,7 +135,7 @@ describe('config', () => {
       decimal: '18',
       address: BTCUSD_ORACLE_V2_ADDRESS,
     };
-    expect(getOracleConfig('97', 'BTCUSD')).toEqual(output)
+    expect(getOracleConfig('v2', '97', 'BTCUSD')).toEqual(output)
   })
   test('getOracleConfig() for option', () => {
     const output = {
@@ -144,14 +144,14 @@ describe('config', () => {
       decimal: '18',
       address: '0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A',
     };
-    expect(getOracleConfig('97', 'ETHUSD', 'option')).toEqual(output)
+    expect(getOracleConfig('option', '97', 'ETHUSD')).toEqual(output)
   })
   test('getBrokerConfig', () => {
     const output = {
       chainId: '97',
       address: BROKER_MANAGER_V2_ADDRESS,
     };
-    expect(getBrokerConfig('97')).toEqual(output)
+    expect(getBrokerConfig('v2', '97',)).toEqual(output)
   })
   test('getPoolConfig2', () => {
     const output = {
@@ -194,7 +194,7 @@ describe('config', () => {
       decimal: '18',
       address: BTCUSD_ORACLE_V2L_ADDRESS,
     };
-    expect(getOracleConfig('97', 'BTCUSD', 'v2_lite')).toEqual(output)
+    expect(getOracleConfig('v2_lite', '97', 'BTCUSD')).toEqual(output)
   })
   test('getPoolconfig() pToken for v2_lite', () => {
     expect(
@@ -234,7 +234,7 @@ describe('config', () => {
         null,
         'option'
       ).lToken
-    ).toEqual('0xCeBF39aF5e8D9736985ddCb6E45c016Fd146218C');
+    ).toEqual('0x6A4642a84562f565B2ACFd288E373181620252af');
   });
   test('getPoolconfig() volatilitySymbols for option', () => {
     expect(
@@ -252,7 +252,7 @@ describe('config', () => {
     DeriEnv.set('prod')
     expect(getPoolVersion('0x063E74AbB551907833Be79E2C8F279e3afc74711')).toEqual('v2_lite_open')
     DeriEnv.set('dev')
-    expect(getPoolVersion('0x98EfC36182eEC80eC20F600533E87f82AeDbb2e6')).toEqual('option')
+    expect(getPoolVersion('0x041FC773fD97f878429d6F40b5B3420ce8e92672')).toEqual('option')
   })
   test('getPreminingContractConfig', () => {
     expect(getPreminingConfigList('prod').length).toEqual(8)

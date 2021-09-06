@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from 'react'
 import {
-	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo,getLpPoolInfoApy, bg
+	getLiquidityInfo,getPoolInfoApy,isUnlocked,unlock,getPoolLiquidity,openConfigListCache, getWalletBalance, unlockLp, isLpUnlocked, getLpWalletBalance, getLpLiquidityInfo,getLpPoolInfoApy, bg
 } from '../../../lib/web3js/indexV2'
 import AddLiquidity from './Dialog/AddLiquidity';
 import RemoveLiquidity from './Dialog/RemoveLiquidity';
@@ -15,6 +15,9 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
   const [bToken,setBToken] = useState(baseToken)
 	const isLpPool = (type === 'lp')
 	const loadLiquidityInfo = async () => {
+		if(version === 'v2_lite_open'){
+			await openConfigListCache.update()
+		}
 		loading.loading();
 		const apyPool = await getPoolInfoApy(chainId,address,baseTokenId)
 		const pooLiquidity = await getPoolLiquidity(chainId,address,baseTokenId);
@@ -156,6 +159,9 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
   const loadBalance = async () => {
     if(wallet.isConnected() && eqInNumber(wallet.detail.chainId,chainId)){
 			let total = null;
+			if(version === 'v2_lite_open'){
+				await openConfigListCache.update()
+			}
 			if(isLpPool){
 				total = await getLpWalletBalance(wallet.detail.chainId,address,wallet.detail.account);
 			} else {
@@ -175,6 +181,9 @@ const Operator = ({version,wallet,chainId,address,baseToken,isLpPool,liqInfo,loa
 
 
 	const isApprove = async () => {
+		if(version === 'v2_lite_open'){
+			await openConfigListCache.update()
+		}
 		if(isLpPool){
 			const result = await isLpUnlocked(chainId,address,wallet.detail.account) 			 
 			setIsApproved(result);

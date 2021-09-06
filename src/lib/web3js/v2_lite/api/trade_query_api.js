@@ -15,6 +15,7 @@ import {
 } from '../../shared/utils';
 import { getOraclePriceFromCache } from '../../shared/utils/oracle'
 import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { getIndexInfo } from '../../shared/config/token';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
@@ -49,6 +50,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
       maxLiquidationReward: maxLiquidationReward.toString(),
       liquidationCutRatio: liquidationCutRatio.toString(),
       protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
+      indexConstituents: getIndexInfo(symbol),
     }
   }, args, 'getSpecification', {
     symbol: '',
@@ -63,6 +65,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
     maxLiquidationReward: '',
     liquidationCutRatio: '',
     protocolFeeCollectRatio: '',
+    indexConstituents: { url: '', tokens: [] },
   })
 }
 
@@ -188,7 +191,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
 export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
-    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
+    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const balance = await bTokenFactory(chainId, bTokenAddress).balanceOf(accountAddress)
     return balance.toString()
   }, args, 'getWalletBalance', '')
@@ -197,7 +200,7 @@ export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
 export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
-    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
+    const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const bToken = bTokenFactory(chainId, bTokenAddress)
     return await bToken.isUnlocked(accountAddress, poolAddress)
   }, args, 'isUnlocked', '')

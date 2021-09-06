@@ -1,4 +1,4 @@
-import { ContractBase } from '../../shared/contract'
+import { ContractBase } from '../../shared/contract/contract_base'
 import { naturalToDeri } from '../../shared/utils'
 import { MAX_INT256 } from '../../shared/config';
 import { perpetualPoolRouterAbi} from './abis';

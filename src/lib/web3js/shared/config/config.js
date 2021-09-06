@@ -1,10 +1,8 @@
 import { DeriEnv } from './env';
 import jsonConfig from '../resources/config.json';
-import { validateObjectKeyExist } from '../utils';
 import { VERSIONS } from './version';
-import { poolProcessor, poolValidator } from './config_processor';
 
-const getJsonConfig = (version, env) => {
+export const getJsonConfig = (version, env) => {
   env = env || DeriEnv.get();
   // for browser and nodejs
   let configs =
@@ -21,19 +19,4 @@ const getJsonConfig = (version, env) => {
       `getJsonConfig(): invalid config of version '${version}' and env '${env}'`
     );
   }
-};
-
-export const getConfig = (version='v2', env='dev') => {
-  const config = getJsonConfig(version, env);
-  //console.log('>',config)
-  const pools = config.pools;
-  if (pools && Array.isArray(pools)) {
-    for (let i = 0; i < pools.length; i++) {
-      poolProcessor[version](pools[i])
-      poolValidator[version](pools[i])
-    }
-  }
-  validateObjectKeyExist(['oracle'], config, 'oracle');
-  //validateObjectKeyExist(['brokerManager'], configs[env], 'brokerManager')
-  return config;
 };

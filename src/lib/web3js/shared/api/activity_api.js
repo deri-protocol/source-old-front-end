@@ -10,7 +10,7 @@ const AIRDROP_PTOKEN_ADDRESS_BSCTESTNET = '0x3b88a9B5896a49AEb23Ca2Ee9892d28d3B8
 export const getBroker = async(chainId, accountAddress) => {
   chainId = normalizeChainId(chainId)
   accountAddress = normalizeAddress(accountAddress)
-  const {address: brokerAddress} = getBrokerConfig(chainId)
+  const {address: brokerAddress} = getBrokerConfig('v2', chainId)
   let res = ''
   try {
     const brokerManager = brokerManagerFactory(chainId, brokerAddress)
@@ -25,7 +25,7 @@ export const setBroker = async(chainId, accountAddress, brokerAddress) => {
   chainId = normalizeChainId(chainId)
   accountAddress = normalizeAddress(accountAddress)
   brokerAddress = normalizeAddress(brokerAddress);
-  const {address: brokerManagerAddress} = getBrokerConfig(chainId)
+  const {address: brokerManagerAddress} = getBrokerConfig('v2', chainId)
   let res
   try {
     const brokerManager = brokerManagerFactory(chainId, brokerManagerAddress)

@@ -85,7 +85,7 @@ describe('database api', () => {
     'getLpPoolInfoApy',
     async () => {
       const minOutput = 0.001;
-      const maxOutput = 0.8;
+      const maxOutput = 1.1;
       DeriEnv.set('prod');
       const res = await getLpPoolInfoApy(
         '56',
@@ -94,7 +94,7 @@ describe('database api', () => {
       DeriEnv.set('dev');
       expect(bg(res.apy).toNumber()).toBeGreaterThanOrEqual(minOutput);
       expect(bg(res.apy).toNumber()).toBeLessThanOrEqual(maxOutput);
-      expect(bg(res.apy2).toNumber()).toBeGreaterThanOrEqual(minOutput);
+      expect(bg(res.apy2).toNumber()).toBeGreaterThanOrEqual(0);
     },
     TIMEOUT
   );

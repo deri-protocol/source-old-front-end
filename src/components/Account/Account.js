@@ -16,6 +16,7 @@ function Account({wallet,lang}){
   const isTeam = useRouteMatch('/team')
   const isRetired = useRouteMatch('/retired')
   const isOptionsLite = useRouteMatch('/options/lite')
+  const isAddpool = useRouteMatch('/addpool')
   const isOptionsPro = useRouteMatch('/options/pro') 
   const isDownload = useRouteMatch('/logo')
   const config = useConfig();

@@ -6,7 +6,7 @@ import { lTokenLiteFactory, pTokenLiteFactory, perpetualPoolLiteFactory } from '
 
 
 const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
-  const { lToken:lTokenAddress, pToken:pTokenAddress} = getPoolConfig(poolAddress, '0', '0', 'v2_lite')
+  const { lToken:lTokenAddress, pToken:pTokenAddress} = getPoolConfig(poolAddress, '0', null, 'v2_lite')
   const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
   const lToken = lTokenLiteFactory(chainId, lTokenAddress)
   const pToken = pTokenLiteFactory(chainId, pTokenAddress)
