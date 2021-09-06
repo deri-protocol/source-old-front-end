@@ -13,9 +13,6 @@ function LanguageSelector({intl}){
   const onClick = (lang,refresh) => {
     intl.setLocale(lang)
     setShow(false);
-    if(refresh){
-      window.location.href = addParam('locale',lang)
-    }
   }
 
   const onMouseOver = () => {

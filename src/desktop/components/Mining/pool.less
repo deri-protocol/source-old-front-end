@@ -2,53 +2,10 @@
 
   .mining-info {
     width: 1225px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     min-height: calc(100vh - 240px);
-
-    .filter-area {
-      .option-zone,.open-zone,.future-zone {
-        border: 1px solid #aaaaaa;
-        color: #aaaaaa;
-        background-color: #202124;
-        padding: 6px;
-        font-size: 12px;
-        display: inline-block;
-        border-radius: 8px;
-        margin: 0 10px;
-        cursor: pointer;
-      }
-      .separator-line{
-        width: 1px;
-        border-right: 1px solid #aaaaaa;
-        padding: 12px 0;
-        display: inline-block;
-        vertical-align: middle;
-      }
-    }
-    .filter-area.open{
-      .open-zone{
-        background-color: #21639d;
-        color: #ffffff;
-        border: 0px;
-        padding: 8px;
-      }
-    }
-    
-    .filter-area.future{
-      .future-zone {
-        background-color:#21639d;
-        color: #ffffff;
-        padding: 8px;
-        border: 0px;
-      }
-    }
-    .filter-area.option{
-      .option-zone {
-        background-color:#21639d;
-        color: #ffffff;
-        padding: 8px;
-        border: 0px;
-      }
-    }
 
     .mining-info-header,
     .mining-info-footer {
@@ -65,37 +22,149 @@
       }
     }
   }
+  
+
+
   .checkout-pools{
     display: flex;
-    width: 300px;
-    justify-content: space-around;
-    div{
-      padding: 0 20px 0 20px;
-      height: 30px;
-      line-height: 30px;
-      border-radius: 10px;
-      border: 1px solid #fff;
+    width: 600px;
+    align-items: center;
+
+    .switcher{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .added-only{
+        margin-left: 8px;
+      }
+    }
+    .filter-area {
+      display: flex;
+
+       .all,.futures,.options,.opens{
+        border: 1px solid #aaa;
+        color: #aaa;
+        background-color: #202124;
+        padding: 6px;
+        font-size: 12px;
+        display: inline-block;
+        border-radius: 8px;
+        margin: 0 10px;
+        cursor: pointer;
+      }
+    }
+    .filter-area.all {
+      .all {
+        background-color: #21639d;
+        color: #ffffff;
+        border: 0px;
+        padding: 8px;
+      }
+    }
+    .filter-area.opens{
+      .opens{
+        background-color: #21639d;
+        color: #ffffff;
+        border: 0px;
+        padding: 8px;
+      }
+    }
+    
+    .filter-area.futures{
+      .futures {
+        background-color:#21639d;
+        color: #ffffff;
+        padding: 8px;
+        border: 0px;
+      }
+    }
+    .filter-area.options{
+      .options {
+        background-color:#21639d;
+        color: #ffffff;
+        padding: 8px;
+        border: 0px;
+      }
+    }
+
+    // .checkout-pools.all{
+  //   .all{
+  //     border: 1px solid transparent;
+  //     background-color: rgb(1, 81, 128);
+  //   }
+  // }
+  // .checkout-pools.futures{
+  //   .futures{
+  //     border: 1px solid transparent;
+  //     background-color:  rgb(1, 81, 128);
+  //   }
+  // }
+  // .checkout-pools.options{
+  //   .options{
+  //     border: 1px solid transparent;
+  //     background-color:  rgb(1, 81, 128);
+  //   }
+  // }
+
+    .separator-line{
+      width: 1px;
+      border-right: 1px solid #aaaaaa;
+      padding: 12px 0;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .style-select.card {
+      .card {
+        background: url(../../../assets/img/card-style-icon-select.png) center no-repeat;
+        background-size: 21px 21px;
+      }
+    }
+    .style-select.list {
+      .list {
+        background: url(../../../assets/img/list-style-icon-selected.png) center no-repeat; 
+        background-size: 21px 21px;
+      }
+    }
+    .style-select {
+      display: flex;
+      flex-direction: row;
+      width: 60px;
+      height: 21px;
+      justify-content: space-around;
+      cursor: pointer;
+
+      .card {
+        background: url(../../../assets/img/card-style-icon.png) center no-repeat;
+        background-size: 21px 21px;
+        width: 21px;
+      }
+      .list {
+        background: url(../../../assets/img/list-style-icon.png) center no-repeat;
+        background-size: 21px 21px;
+        width: 21px;
+      }
+    }
+
+    .switch-btn {
+      background: url(../../../assets/img/ios-switch-icon.png) center no-repeat; 
+      width: 50px;
+      height: 27px;
       cursor: pointer;
     }
-  }
-  .checkout-pools.all{
-    .all{
-      border: 1px solid transparent;
-      background-color: rgb(1, 81, 128);
+    .switch-btn.checked {
+      background: url(../../../assets/img/ios-switch-icon-selecct.png) center no-repeat; 
+      width: 50px;
+      height: 27px;
+      cursor: pointer;
     }
-  }
-  .checkout-pools.futures{
-    .futures{
-      border: 1px solid transparent;
-      background-color:  rgb(1, 81, 128);
+
+    .added-only {
+      margin-right: 30px;
     }
+
   }
-  .checkout-pools.options{
-    .options{
-      border: 1px solid transparent;
-      background-color:  rgb(1, 81, 128);
-    }
-  }
+  
 
     .mining-info-header {
       flex-direction: row-reverse;
@@ -106,9 +175,102 @@
       margin-top: 20px;
     }
 
-    .sushi-apy-underline {
+    .underline,.sushi-apy-underline {
       cursor: pointer;
       border-bottom: 1px dashed #aaa;
+    }
+
+    
+
+    .logo {
+      width: 96px;
+      height: 96px;
+      background-repeat: no-repeat;
+      background-position: center;
+      display: inline-block;
+    }
+
+    .BUSD {
+      background-image: url(../../../assets/img/busd.png);
+      background-size: cover;
+    }
+
+    .HUSD {
+      background-image: url(../../../assets/img/husd.png);
+      background-size: cover;
+    }
+
+    .hSlp {
+      display: inline-block;
+      cursor: pointer;
+      border-bottom: 1px dashed #FFFFFF;
+    }
+
+    .DERI-USDT {
+      background-image: url(../../../assets/img/slp.png);
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .USDT {
+      background-image: url(../../../assets/img/usdt.png);
+      background-size: cover;
+    }
+
+    .BAC {
+      background-image: url(../../../assets/img/bac.png);
+      background-size: cover;
+    }
+
+    .DERI {
+      background-image: url(../../../assets/img/deri.png);
+      background-size: cover;
+    }
+
+    .CAKE-LP {
+      background-image: url(../../../assets/img/cake.png);
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .GIVEAWAY {
+      background-image: url(../../../assets/img/deri.png);
+      background-size: 100%;
+    }
+
+    .BETH {
+      background-image: url(../../../assets/img/beth.png);
+      background-size: cover;
+    }
+
+    .amUSDC {
+      background-image: url(../../../assets/img/amUSDC.png);
+      background-size: cover;
+    }
+
+    .AUTO {
+      background-image: url(../../../assets/img/auto.png);
+      background-size: cover;
+    }
+
+    .CAKE {
+      background-image: url(../../../assets/img/cake-logo.png);
+      background-size: cover;
+    }
+
+    .WBNB {
+      background-image: url(../../../assets/img/wbnb.png);
+      background-size: cover;
+    }
+
+    .WMATIC {
+      background-image: url(../../../assets/img/polygon.png);
+      background-size: cover;
+    }
+
+    .zUSD {
+      background-image: url(../../../assets/img/zUSD.png);
+      background-size: cover;
     }
 
     .pools {
@@ -269,112 +431,6 @@
                   width: 134px;
                 }
               }
-
-              .logo {
-                width: 96px;
-                height: 96px;
-                background-repeat: no-repeat;
-                background-position: center;
-                display: inline-block;
-              }
-              .bg-logo{
-                width: 96px;
-                height: 96px;
-                background-repeat: no-repeat;
-                background-position: center;
-                display: flex;
-                background-image: url(../../../assets/img/logo-bg.png);
-                background-size: cover;
-                align-items: center;
-                justify-content: center;
-                img{
-                  width: 54px;
-                  height: 54px;
-                }
-              }
-
-              .BUSD {
-                background-image: url(../../../assets/img/busd.png);
-                background-size: cover;
-              }
-
-              .HUSD {
-                background-image: url(../../../assets/img/husd.png);
-                background-size: cover;
-              }
-
-              .hSlp {
-                display: inline-block;
-                cursor: pointer;
-                border-bottom: 1px dashed #FFFFFF;
-              }
-
-              .DERI-USDT {
-                background-image: url(../../../assets/img/slp.png);
-                background-size: 80px;
-                background-repeat: no-repeat;
-              }
-
-              .USDT {
-                background-image: url(../../../assets/img/usdt.png);
-                background-size: cover;
-              }
-
-              .BAC {
-                background-image: url(../../../assets/img/bac.png);
-                background-size: cover;
-              }
-
-              .DERI {
-                background-image: url(../../../assets/img/deri.png);
-                background-size: cover;
-              }
-
-              .CAKE-LP {
-                background-image: url(../../../assets/img/cake.png);
-                background-size: 80px;
-                background-repeat: no-repeat;
-              }
-
-              .GIVEAWAY {
-                background-image: url(../../../assets/img/deri.png);
-                background-size: 100%;
-              }
-
-              .BETH {
-                background-image: url(../../../assets/img/beth.png);
-                background-size: cover;
-              }
-
-              .amUSDC {
-                background-image: url(../../../assets/img/amUSDC.png);
-                background-size: cover;
-              }
-
-              .AUTO {
-                background-image: url(../../../assets/img/auto.png);
-                background-size: cover;
-              }
-
-              .CAKE {
-                background-image: url(../../../assets/img/cake-logo.png);
-                background-size: cover;
-              }
-
-              .WBNB {
-                background-image: url(../../../assets/img/wbnb.png);
-                background-size: cover;
-              }
-
-              .WMATIC {
-                background-image: url(../../../assets/img/polygon.png);
-                background-size: cover;
-              }
-              .zUSD {
-                background-image: url(../../../assets/img/zUSD.png);
-                background-size: cover;
-              }
-
               .pool-detail {
                 padding: 0 20px;
 
@@ -444,5 +500,90 @@
       }
 
 
+    }
+
+    .pool-list{
+      border : 1px solid #707070;
+      border-radius: 20px;
+      margin : 20px 0px;
+
+      .pool-list-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 40px 0 20px;
+        align-items: center;
+        height: 75px;
+        background: #000;
+        border-radius: 20px 20px 0 0;
+        .list-header-left {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          .l-h-network {
+            margin: 4px 0;
+            color: #d4e05c;
+            font-size: 15px;
+            font-family: Tachyon;
+            margin-bottom: 4px;
+          }
+          
+          .l-h-y-ad {
+            .add {
+              margin-left: 10px;
+              a {
+                color: #fff;
+              }
+              a:hover{
+                text-decoration: underline;
+              }
+            }
+            .symbol-value {
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              max-width: 850px;
+              display: inline-block;
+              vertical-align: bottom;
+            }
+
+          }
+        }
+      }
+      .pool-list-body {
+        .list-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 1px solid #707070;
+          padding: 27px 40px 27px 12px;
+
+          .col.btoken {
+            display: flex;
+            align-items: center;
+          }
+          .col {
+            display: inline-block;
+            text-align: center;
+            .base-token,.staking {
+              margin-left: 14px;
+              font-size: 16px;
+              font-weight: bold;
+              a {
+                color: #fff;
+              }
+            }
+            .logo {
+              width: 60px;
+              height: 60px;
+            }
+            .col-label {
+              color : #AAAAAA;
+              font-size: 16px;
+              margin-bottom: 8px;
+            }
+          }
+        }
+      }
     }
   }

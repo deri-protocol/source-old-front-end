@@ -108,6 +108,12 @@ function ContractInfo({ wallet, trading, lang, type }) {
             <NumberFormat displayType='text' value={trading.contract.feeRatio * 100} decimalScale={3} suffix='%' />
           </div>
         </div>
+        {trading.contract.indexConstituents && trading.contract.indexConstituents.tokens.length > 0 && <div  className="info">
+          <div className="title">{lang['index-constituent']}</div>
+          <div className="text">
+            {trading.contract.indexConstituents.tokens.join(' | ')}
+          </div>
+        </div>}
       </div>
     </div>
   )
