@@ -52,7 +52,7 @@ export const mapToSymbol = (symbol) => {
 
 export const mapToSymbolInternal = (symbol) => {
   const index = Object.values(offchainSymbolPairs).indexOf(symbol)
-  if (index !== -1) {
+  if (index > -1) {
     return Object.keys(offchainSymbolPairs)[index]
   } else {
     return symbol
@@ -84,4 +84,27 @@ export const normalizeSymbolUnit = (symbol) => {
   }
   console.log(`symbol(${symbol}) is not a string type`);
   return symbol;
+};
+
+export const getIndexInfo = (symbol) => {
+  const internalSymbol = mapToSymbolInternal(symbol);
+  const customIndexs = {
+    IGAME: {
+      tokens: ['AXS', 'MANA', 'SAND', 'ALICE', 'TLM', 'DPET', 'SKILL'],
+      url: 'https://docs.deri.finance/products/index/game-index',
+    },
+    IBSCDEFI: {
+      tokens: ['CAKE', 'XVS', 'MDX', 'AUTO', 'BAKE', 'BUNNY'],
+      url: 'https://docs.deri.finance/products/index/bsc-defi-index',
+    },
+    IMEME: {
+      tokens: ['DOGE', 'SHIB', 'ELON', 'LOWB', 'PIG', 'SAFEMOON', 'MONA'],
+      url: 'https://docs.deri.finance/products/index/meme-index',
+    },
+  };
+  if (Object.keys(customIndexs).includes(internalSymbol)) {
+    return customIndexs[internalSymbol];
+  } else {
+    return { tokens: [], url: '' };
+  }
 };

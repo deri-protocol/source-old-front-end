@@ -36,7 +36,7 @@ describe('trade_query_api', () => {
         liquidationCutRatio: '0.5',
         protocolFeeCollectRatio: '0.2',
       };
-      expect(await getSpecification(CHAIN_ID, POOL_V2L_ADDRESS, '0')).toEqual(
+      expect(await getSpecification(CHAIN_ID, POOL_V2L_ADDRESS, '5')).toEqual(
         output
       );
     },

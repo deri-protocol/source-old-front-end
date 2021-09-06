@@ -15,6 +15,7 @@ import {
 } from '../../shared/utils';
 import { getOraclePriceFromCache } from '../../shared/utils/oracle'
 import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { getIndexInfo } from '../../shared/config/token';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
@@ -49,6 +50,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
       maxLiquidationReward: maxLiquidationReward.toString(),
       liquidationCutRatio: liquidationCutRatio.toString(),
       protocolFeeCollectRatio: protocolFeeCollectRatio.toString(),
+      indexConstituents: getIndexInfo(symbol),
     }
   }, args, 'getSpecification', {
     symbol: '',
@@ -63,6 +65,7 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
     maxLiquidationReward: '',
     liquidationCutRatio: '',
     protocolFeeCollectRatio: '',
+    indexConstituents: { url: '', tokens: [] },
   })
 }
 
