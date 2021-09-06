@@ -123,7 +123,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='position'>
           {type.isOption ? <DeriNumberFormat value={bg(trading.position.volume).times(bg(trading.contract.multiplier)).toString()} allowZero={true} /> : <DeriNumberFormat value={trading.position.volume} allowZero={true} />}
           <span className='close-position'>
-            {!closing && <TipWrapper><img src={closePosImg} onClick={onClosePosition} title={lang['close-is-position']} /></TipWrapper>}
+            {!closing && <img src={closePosImg} onClick={onClosePosition}  />}
             <span
               className='spinner spinner-border spinner-border-sm'
               style={{ display: closing ? 'block' : 'none', marginLeft: '8px' }}
