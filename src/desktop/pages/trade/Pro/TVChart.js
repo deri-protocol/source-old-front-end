@@ -45,7 +45,7 @@ function TVChart({interval,symbol,showLoad,intl}){
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
     webSocket.subscribe('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : intervalRange[resolution]},data => {
-      if (data.time >= lastDataRef.current.time ) {
+      if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
         onRealtimeCallback(data)
         lastDataRef.current = data
       }
