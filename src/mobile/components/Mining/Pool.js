@@ -33,9 +33,7 @@ function Pool({lang,loading}){
         <span className='open-zone' onClick={() => siwtchTab('open')}>{lang['open-zone']}</span>
       </div>
       {curTab === 'all' &&<div className="pools">
-      <div className="pools">
           {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
         {v2Pools.concat(v1Pools).map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
       </div>}
       {curTab === 'future' &&<div className="pools">
