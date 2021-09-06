@@ -56,7 +56,7 @@ function AddPool({ wallet = {}, lang }) {
     <div className='add-pool'>
       <div className='Step-box'>
         <StepWizard
-          initialStep={3}
+          initialStep={1}
         >
           <Step1 lang={lang} wallet={wallet} OnChange={StepChange} />
           <Step2 lang={lang} wallet={wallet} OnChange={StepChange} />
