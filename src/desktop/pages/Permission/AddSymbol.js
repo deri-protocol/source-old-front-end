@@ -5,12 +5,13 @@ import StepWizard from "react-step-wizard";
 import { useParams } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
-import { bg, addSymbol, getPoolOpenOracleList, DeriEnv,getPoolAllSymbolNames } from '../../../lib/web3js/indexV2'
+import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames } from '../../../lib/web3js/indexV2'
 import useQuery from '../../../hooks/useQuery'
 import down from './img/down.svg';
 import up from './img/up.svg';
 import warn from './img/warn.svg';
 import symbolArrowIcon from '../../../assets/img/symbol-arrow.svg'
+import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
 function AddSymbol({ wallet = {}, lang }) {
@@ -32,7 +33,7 @@ function AddSymbol({ wallet = {}, lang }) {
       }
   )
 
-  
+
 
   const [parameters, setParameters] = useState([]);
   const { version, chainId, symbol, baseToken, address, type } = useParams();
@@ -45,17 +46,17 @@ function AddSymbol({ wallet = {}, lang }) {
     props['symbolId'] = query.get('symbolId')
   }
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
-  const getPoolALLSymbolId = async ()=>{
-    let res = await getPoolAllSymbolNames(wallet.detail.chainId,address)
+  const getPoolALLSymbolId = async () => {
+    let res = await getPoolAllSymbolNames(wallet.detail.chainId, address)
     let id = res.length
     setSymbolId(id)
   }
 
-  useEffect(()=>{
-    if(hasConnectWallet()){
+  useEffect(() => {
+    if (hasConnectWallet()) {
       getPoolALLSymbolId();
     }
-  },[wallet,wallet.detail,address])
+  }, [wallet, wallet.detail, address])
 
   const StepChange = (name, value) => {
     if (name === 'multiplier') {
@@ -75,7 +76,7 @@ function AddSymbol({ wallet = {}, lang }) {
   useEffect(() => {
     let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
     setParameters(arr)
-  }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig,symbolId])
+  }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig, symbolId])
 
   useEffect(() => {
   }, [wallet, wallet.detail])
@@ -101,18 +102,18 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const [dropdown, setDropdown] = useState(false);
   const [oracleConfigs, setOracleConfigs] = useState([])
   const [oracleConfig, setOracleConfig] = useState(DeriEnv.get() === 'dev' ?
-  {
-    symbol: "BTCUSD",
-    symbolId: 0,
-    address: "0x78Db6d02EE87260a5D825B31616B5C29f927E430",
-    chainId: '96'
-  }
-  : {
-    symbol: "BTCUSD",
-    symbolId: 0,
-    address: "0x5632A70669411D4de43d405E1880018ff85daaD3",
-    chainId: '56'
-  })
+    {
+      symbol: "BTCUSD",
+      symbolId: 0,
+      address: "0x78Db6d02EE87260a5D825B31616B5C29f927E430",
+      chainId: '96'
+    }
+    : {
+      symbol: "BTCUSD",
+      symbolId: 0,
+      address: "0x5632A70669411D4de43d405E1880018ff85daaD3",
+      chainId: '56'
+    })
   const selectClass = classNames('dropdown-menu', { 'show': dropdown })
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
@@ -185,7 +186,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
       </button>
     }
     setBtnText(elem)
-  }, [wallet, wallet.detail, wallet.detail.account,oracleConfig,multiplier,fundingRateCoefficient,transactionFeeRatio])
+  }, [wallet, wallet.detail, wallet.detail.account, oracleConfig, multiplier, fundingRateCoefficient, transactionFeeRatio])
   return (
     <div className='step1'>
       <div className='header'>
@@ -250,7 +251,11 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                 <div className='parameters'>
                   <div>
                     <div className='text'>
-                      {lang['multiplier']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['multiplier-hover']}>
+                          {lang['multiplier']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -262,7 +267,11 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      {lang['funding-rate-coefficient']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['funding-rate-coefficient-hover']}>
+                          {lang['funding-rate-coefficient']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -274,7 +283,11 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      {lang['transaction-fee-ratio']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['transaction-fee-ratio-hover']}>
+                          {lang['transaction-fee-ratio']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -302,9 +315,9 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 function Step2({ goToStep, lang, wallet, props, parameters }) {
   const add = async () => {
     let res = await addSymbol(wallet.detail.chainId, props.address, wallet.detail.account, parameters)
-    if(res.success){
+    if (res.success) {
       alert(lang['success'])
-    }else{
+    } else {
       alert(lang['fail'])
     }
   }
@@ -345,7 +358,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
                     {lang['funding-rate-coefficient']}
                   </div>
                   <div className='input-value'>
-                  {parameters[4]}
+                    {parameters[4]}
                   </div>
                 </div>
                 <div>

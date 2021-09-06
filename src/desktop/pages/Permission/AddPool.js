@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
 import Button from '../../../components/Button/Button';
-import {bg,createPool} from '../../../lib/web3js/indexV2'
+import { bg, createPool } from '../../../lib/web3js/indexV2'
 import './addpool.less';
 import down from './img/down.svg';
 import up from './img/up.svg';
+import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 
 function AddPool({ wallet = {}, lang }) {
   const [baseTokenAddress, setBaseTokenAddress] = useState('')
@@ -86,12 +87,12 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
   )
 
   const nextStep = () => {
-    if(baseTokenAddress.length !== 42 || baseTokenAddress.indexOf('0x') !== 0){
-      alert(lang['please-enter-a-correct-address']) 
+    if (baseTokenAddress.length !== 42 || baseTokenAddress.indexOf('0x') !== 0) {
+      alert(lang['please-enter-a-correct-address'])
       return;
     }
-    if(initialMargin === '' || maintenanceMargin === '' || poolMargin === '' || cutRatio === '' || maxReward === '' || minReward === ''){
-      alert(lang['please-fill-in-the-data-completely']) 
+    if (initialMargin === '' || maintenanceMargin === '' || poolMargin === '' || cutRatio === '' || maxReward === '' || minReward === '') {
+      alert(lang['please-fill-in-the-data-completely'])
       return;
     }
     OnChange('baseTokenAddress', baseTokenAddress)
@@ -184,7 +185,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                 <div className='parameters'>
                   <div>
                     <div className='text'>
-                      {lang['initial-margin']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['initial-margin-hover']}>
+                          {lang['initial-margin']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -196,7 +201,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      {lang['maintenance-margin']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['maintenance-margin-hover']}>
+                          {lang['maintenance-margin']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -208,7 +217,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      {lang['pool-margin']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['pool-margin-hover']}>
+                          {lang['pool-margin']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -227,7 +240,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                 <div className='parameters'>
                   <div>
                     <div className='text'>
-                      {lang['cut-ratio']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['cut-ratio-hover']}>
+                          {lang['cut-ratio']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -239,7 +256,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   </div>
                   <div className='no-fix'>
                     <div className='text'>
-                      {lang['max-reward']}
+                      <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['max-reward-hover']}>
+                          {lang['max-reward']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -251,7 +272,11 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   </div>
                   <div className='no-fix'>
                     <div className='text'>
-                      {lang['min-reward']}
+                    <TipWrapper block={false}>
+                        <span className='hover-title' title={lang['min-reward-hover']}>
+                          {lang['min-reward']}
+                        </span>
+                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -287,8 +312,8 @@ function Step2({ goToStep, lang, wallet, OnChange }) {
     setBaseTokenAddressOther(value)
   }
   const nextStep = () => {
-    if(baseTokenAddressOther.length !== 42 || baseTokenAddressOther.indexOf('0x') !== 0){
-      alert(lang['please-enter-a-correct-address']) 
+    if (baseTokenAddressOther.length !== 42 || baseTokenAddressOther.indexOf('0x') !== 0) {
+      alert(lang['please-enter-a-correct-address'])
       return;
     }
     OnChange('baseTokenAddressOther', baseTokenAddressOther)
@@ -328,23 +353,23 @@ function Step2({ goToStep, lang, wallet, OnChange }) {
 }
 
 function Step3({ goToStep, lang, wallet, params }) {
-  const [paramsArr,setParamsArr] = useState([])
-  const [baseTokenAddress,setBaseTokenAddress] = useState('')
-  const [baseTokenAddressOther,setBaseTokenAddressOther] = useState('')
-  useEffect(()=>{
+  const [paramsArr, setParamsArr] = useState([])
+  const [baseTokenAddress, setBaseTokenAddress] = useState('')
+  const [baseTokenAddressOther, setBaseTokenAddressOther] = useState('')
+  useEffect(() => {
     let [initialMargin, baseTokenAddress, baseTokenAddressOther, maintenanceMargin, poolMargin, cutRatio, maxReward, minReward] = [...params]
-    let oneArr = [ bg(poolMargin).div(bg(100)).toString(),bg(initialMargin).div(bg(100)).toString(), bg(maintenanceMargin).div(bg(100)).toString() , minReward,maxReward, bg(cutRatio).div(bg(100)).toString(),0]
+    let oneArr = [bg(poolMargin).div(bg(100)).toString(), bg(initialMargin).div(bg(100)).toString(), bg(maintenanceMargin).div(bg(100)).toString(), minReward, maxReward, bg(cutRatio).div(bg(100)).toString(), 0]
     setBaseTokenAddress(baseTokenAddress)
     setBaseTokenAddressOther(baseTokenAddressOther)
     setParamsArr(oneArr)
-  },[params])
+  }, [params])
   const add = async () => {
 
-    let res = await createPool(wallet.detail.chainId,wallet.detail.account,paramsArr,baseTokenAddress,baseTokenAddressOther)
+    let res = await createPool(wallet.detail.chainId, wallet.detail.account, paramsArr, baseTokenAddress, baseTokenAddressOther)
     console.log(res)
-    if(res.success){
+    if (res.success) {
       alert(lang['success'])
-    }else{
+    } else {
       alert(lang['fail'])
     }
   }
@@ -429,7 +454,7 @@ function Step3({ goToStep, lang, wallet, params }) {
                 {lang['cancel']}
               </button>
               <Button click={add} btnText={lang['ok']} lang={lang}>
-                
+
               </Button>
             </div>
           </div>
