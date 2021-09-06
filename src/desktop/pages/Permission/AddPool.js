@@ -56,7 +56,7 @@ function AddPool({ wallet = {}, lang }) {
     <div className='add-pool'>
       <div className='Step-box'>
         <StepWizard
-          initialStep={1}
+          initialStep={3}
         >
           <Step1 lang={lang} wallet={wallet} OnChange={StepChange} />
           <Step2 lang={lang} wallet={wallet} OnChange={StepChange} />
@@ -272,7 +272,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   </div>
                   <div className='no-fix'>
                     <div className='text'>
-                    <TipWrapper block={false}>
+                      <TipWrapper block={false}>
                         <span className='hover-title' title={lang['min-reward-hover']}>
                           {lang['min-reward']}
                         </span>
@@ -447,6 +447,11 @@ function Step3({ goToStep, lang, wallet, params }) {
                 </div>
               </div>
             </div>
+          </div>
+          <div className='github-fock'>
+            <a target="_blank" href='https://github.com/deri-finance/deri-open-zone' >
+              {lang['github-fock']}
+            </a>
           </div>
           <div className='next-button'>
             <div className='next-button'>

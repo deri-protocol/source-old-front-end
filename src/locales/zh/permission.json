@@ -36,6 +36,7 @@
   "transaction-fee-ratio":"交易手续费比率",
   "please-enter-a-correct-address":"请输入正确的地址",
   "please-fill-in-the-data-completely":"请完整填写资料",
+  "github-fock":"Please upload the token icon to github",
   "confirm":"确认",
   "cancel":"取消",
   "pending":"进行中",
