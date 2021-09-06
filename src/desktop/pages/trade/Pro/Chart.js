@@ -83,13 +83,13 @@ function Chart({symbol,lang,intl,version}){
           </div>
       </div>
       <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
-        <TVChart symbol={symbol} interval={currentInterval} showLoad={isShow => setLoading(isShow)}/>
+        <TVChart symbol={symbol} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang}/>
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} preload={chartType === 'mark-price'}/>
       </div>}
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'option-index' ? 'block' : 'none'}}>
-        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} mixedChart={true}/>
+        <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} mixedChart={true} preload={chartType === 'option-index'}/>
       </div>}
   </div>
   )

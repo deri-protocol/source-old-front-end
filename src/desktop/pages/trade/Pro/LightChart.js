@@ -8,7 +8,7 @@ import webSocket from '../../../../model/WebSocket';
 import { init } from 'cjs-module-lexer';
 
 
-function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
+function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,showLoad,preload}){
   const containerRef = useRef(null);
   const chartRef = useRef(null)
   const lastData = useRef(null)
@@ -20,9 +20,9 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
   const loadData = async (symbol) => {
     const range = calcRange(interval)
     const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${symbol}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
-    setLoading(true)
+    showLoad(true)
     const res = await axios.get(url)
-    setLoading(false)
+    showLoad(false)
     return res.data && Array.isArray(res.data.data) ? res.data.data  : []
   }
 
@@ -161,7 +161,7 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
   useEffect(() => {
     const symbols = []
     const chart = containerRef.current = initChart()
-    if(symbol){
+    if(symbol && preload){
       if(mixedChart){
         addLineSeries(chart,getFormatSymbol(symbol),'left');
         symbols.push(getFormatSymbol(symbol))
@@ -195,8 +195,10 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
         lineChartRef.current && chart.removeSeries(lineChartRef.current)
         chart.remove();
       }
+      candlesChartRef.current = null;
+      lineChartRef.current = null
     }
-  }, [symbol,interval])
+  }, [symbol,interval,preload])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
@@ -204,11 +206,11 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang}){
         <div onClick={() => switchSeriesChart(candlesChartRef.current,'right')} ><span className='legend-option-left'> </span><span className='legend-option-right'> </span>{lang['option']}</div>
         <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{stripSymbol(`${symbol}`)}</div>
       </div>}
-      <div className='loading' style={{display : loading ? 'block' : 'none'}}>
+      {/* <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>
           </div>
-      </div>
+      </div> */}
     </div>
   )
 }

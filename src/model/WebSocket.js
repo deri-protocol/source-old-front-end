@@ -19,8 +19,8 @@ class WebSocket {
     })
   }
 
-  subscribe(event = 'get_kline_update',params = {},onMessage){
-    this.socket.on('kline_update',data => {
+  subscribe(event = 'get_kline_update',params = {},onMessage,listener = 'kline_update'){
+    this.socket.on(listener,data => {
       if (data.time_type === params.time_type && equalIgnoreCase(data.symbol,params.symbol) && onMessage) {
         onMessage(data)
       }

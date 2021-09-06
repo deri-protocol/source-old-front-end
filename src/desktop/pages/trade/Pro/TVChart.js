@@ -9,7 +9,7 @@ import webSocket from '../../../../model/WebSocket';
 const supported_resolutions = ["1","5","15","30","60","240","1D","5D","1W","1M"];
 const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 
-function TVChart({interval,symbol,showLoad,intl}){
+function TVChart({interval,symbol,showLoad,intl,preload}){
   const widgetRef = useRef(null);
   const lastDataRef = useRef(null);
   const datafeedRef = useRef({
@@ -97,7 +97,7 @@ function TVChart({interval,symbol,showLoad,intl}){
 
 
   useEffect(() => {
-    if(symbol && interval){
+    if(symbol && interval && preload){
       initialize();
     }
     return () => {
@@ -106,7 +106,7 @@ function TVChart({interval,symbol,showLoad,intl}){
       }
       unsubscribeBars();
     }
-  }, [symbol,interval])
+  }, [symbol,interval,preload])
 
   return(
     <div id='tv-container'></div>
