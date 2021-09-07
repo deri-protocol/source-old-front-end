@@ -8,23 +8,27 @@ import Card from './Card';
 import List from './List';
 
 
-function Pool({lang,loading,wallet}){
-  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true,wallet);
-  const [curTab,setCurTab] = useState('')
+function Pool({ lang, loading, wallet }) {
+  const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools, openPools] = useMiningPool(true, wallet);
+  const [curTab, setCurTab] = useState('')
   const [curStyle, setCurStyle] = useState('card')
   const [switchChecked, setSwitchChecked] = useState(false)
-  const tabCLassName = classNames('filter-area',curTab)
-  const styleSelectClass = classNames('style-select',curStyle)
-  const switchClass = classNames('switch-btn' ,{checked : switchChecked})
+  const tabCLassName = classNames('filter-area', curTab)
+  const styleSelectClass = classNames('style-select', curStyle)
+  const switchClass = classNames('switch-btn', { checked: switchChecked })
   const switchTab = (current) => {
-    setCurTab(current)
+    if (current === curTab) {
+      setCurTab('')
+    } else {
+      setCurTab(current)
+    }
   };
 
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
     console.log(wallet.isConnected())
-    return () => {}
-  }, [loaded,wallet])
+    return () => { }
+  }, [loaded, wallet])
 
   return (
     <div className="mining-info">
@@ -45,8 +49,8 @@ function Pool({lang,loading,wallet}){
           <div className='opens' onClick={() => switchTab('opens')}>{lang['open-zone']}</div>
         </div>
       </div>
-      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet}/> : <Card  type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang}/>}
+      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet} /> : <Card type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} />}
     </div>
   )
 }
-export default inject('version','loading','wallet')(observer(Pool))
+export default inject('version', 'loading', 'wallet')(observer(Pool))

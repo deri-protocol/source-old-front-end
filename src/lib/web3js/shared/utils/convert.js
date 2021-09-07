@@ -149,7 +149,7 @@ export const sortOptionSymbols = (symbolList) => {
   const price = symbolArr
     .map((s) => s[1])
     .filter(unique)
-    .sort((a, b) => parseInt(a) - parseInt(b));
+    .sort((a, b) => parseInt(b) - parseInt(a));
   return symbolList.map((i, index) => {
     const index1 =  symbol.indexOf(symbolArr[index][0]) + 1
     const index2 =  to2(direction.indexOf(symbolArr[index][2]) + 1)

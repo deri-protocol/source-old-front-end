@@ -386,7 +386,7 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   }
 
   const send = async () =>{
-    if(amount == '' || amount == 0){
+    if(amount === '' || amount === 0){
       alert(lang['amount-must-be-greater-than-zero'])
       return;
     }
@@ -541,8 +541,8 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   }, [wallet.detail,initialize]); 
   useEffect(() => {
     if(isValid){
-      // wallet.switchNetwork(config[initialize.to_chainId])
-      if(initialize.to_chainId != wallet.detail.chainId){
+      wallet.switchNetwork(config[initialize.to_chainId])
+      if(initialize.to_chainId !== wallet.detail.chainId){
         setShowMessage(true)
         setMessage({
           img:exclamatory_green,

@@ -338,7 +338,6 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
             {parameters[1]}
           </div>
 
-
           <div className='margin-rewards'>
             <div className='margin-ratio-parameters'>
               <div className='title'>

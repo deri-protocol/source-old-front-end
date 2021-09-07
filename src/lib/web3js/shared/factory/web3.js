@@ -3,8 +3,11 @@ import { normalizeChainId } from '../utils/validate';
 import { getChainProviderUrl } from '../utils/chain';
 import { isBrowser, isJsDom } from '../utils/convert';
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
 export const web3Factory = (function () {
   const web3InstanceMap = {};
+  let pending = {}
   return {
     async get(chainId) {
       chainId = normalizeChainId(chainId)
@@ -30,11 +33,43 @@ export const web3Factory = (function () {
         web3InstanceMap[chainId] = new Web3(window.ethereum);
         return web3InstanceMap[chainId];
       } else {
-        const providerUrl = await getChainProviderUrl(chainId);
-        web3InstanceMap[chainId] = new Web3(
-          new Web3.providers.HttpProvider(providerUrl)
-        );
-        return web3InstanceMap[chainId];
+        if (pending[chainId]) {
+          let retry = 10
+          while (retry > 0) {
+            await delay(300)
+            if (pending[chainId]) {
+              retry -= 1
+            } else {
+              if (web3InstanceMap[chainId]) {
+                return web3InstanceMap[chainId];
+              } else {
+                const providerUrl = await getChainProviderUrl(chainId);
+                web3InstanceMap[chainId] = new Web3(
+                  new Web3.providers.HttpProvider(providerUrl)
+                );
+                return web3InstanceMap[chainId];
+              }
+            }
+          }
+          const providerUrl = await getChainProviderUrl(chainId);
+          web3InstanceMap[chainId] = new Web3(
+            new Web3.providers.HttpProvider(providerUrl)
+          );
+          return web3InstanceMap[chainId];
+        } else {
+          pending[chainId] = true
+          try {
+            const providerUrl = await getChainProviderUrl(chainId);
+            web3InstanceMap[chainId] = new Web3(
+              new Web3.providers.HttpProvider(providerUrl)
+            );
+            delete pending[chainId]
+          } catch(err) {
+            console.log(err.toString())
+            delete pending[chainId]
+          }
+          return web3InstanceMap[chainId];
+        }
       }
     },
   };

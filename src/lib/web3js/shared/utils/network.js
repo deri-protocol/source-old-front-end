@@ -45,6 +45,8 @@ const getBlockNumber = async (url) => {
 
 export const getLatestRPCServer = async (urls = []) => {
   urls = shuffleArray(urls)
+  // pick 2 random urls
+  urls = urls.length >= 2 ? urls.slice(0,2) : urls
   let promises = []
   for (let i = 0; i < urls.length; i++) {
     promises.push(getBlockNumber(urls[i]));

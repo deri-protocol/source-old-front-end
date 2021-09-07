@@ -496,6 +496,11 @@
           "symbol": "AGLDUSDT",
           "address": "0x98C5C70DbFbA9Fc278fDeC7222AdC80C66e05aF1",
           "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "NULSUSDT",
+          "address": "0x4210fC21C0E407c14CA934d180CB840e0dF4687d"
         }
       ],
       "poolViewer": [
@@ -707,6 +712,11 @@
           "chainId": "56",
           "symbol": "ALICEUSDT",
           "address": "0x3E084344FFD0209A6e9cB817f9Ea6e7348E6e238"
+        },
+        {
+          "chainId": "56",
+          "symbol": "NULSUSDT",
+          "address": "0x4210fC21C0E407c14CA934d180CB840e0dF4687d"
         }
       ]
     },
@@ -757,6 +767,11 @@
               "symbolId": "3",
               "symbol": "ETHUSD-3000-P",
               "unit": "ETH"
+            },
+            {
+              "symbolId": "4",
+              "symbol": "BTCUSD-60000-C",
+              "unit": "BTC"
             }
           ],
           "chainId": "56",
