@@ -50,6 +50,7 @@
   "liquidity-share-value" : "流动性份额价值",
   "connect-wallet" : "连接钱包",
   "wrong-network" : "网络错误",
+  "add-symbol":"添加 SYMBOL",
   "approve" : "授权",
   "approve-failed" : "授权失败",
 
