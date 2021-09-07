@@ -16,5 +16,6 @@
   "low" : "L",
   "close" : "C",
   "price" : "Price",
-  "index" : "Index"
+  "index" : "Index",
+  "option" : "Option"
 }

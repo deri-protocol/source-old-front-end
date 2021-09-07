@@ -122,7 +122,7 @@
       position: relative;
       background:#1B1C22;
       display: inline-block;
-      width: 100%;
+      width: 95%;
       // margin-top: 0.2rem;
       border-radius: 0.2rem;
       font-family: Korolev,sans-seri;
@@ -147,6 +147,7 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
+          max-width: 2.5rem;
           .pool-desc {
             display: inline-grid;
           }
@@ -180,7 +181,7 @@
         .version {
           font-size: 0.16rem;
           line-height: 0.75rem;
-          margin-right: 0.3rem;
+          margin-right: 0.5rem;
           white-space: nowrap;
         }
         .network {
@@ -209,6 +210,19 @@
           border-bottom-right-radius: 0;
           border-bottom-left-radius: 0;
         } 
+        .bg-logo{
+          width: 94px;
+          height: 94px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-image: url('../../../assets/img/logo-bg.png');
+          background-size: cover;
+          img{
+            width: 54px;
+            height: 54px;
+          }
+        }
 
         .info:last-child{
           margin-right: 0px;

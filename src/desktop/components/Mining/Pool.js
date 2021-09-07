@@ -1,66 +1,52 @@
 import React, { useEffect, useState } from 'react'
-import PoolBox from '../../../components/Pool/PoolBox';
 import useMiningPool from '../../../hooks/useMiningPool';
 import classNames from 'classnames';
 import './pool.less'
 import './zh-pool.less'
 import { inject, observer } from 'mobx-react';
-import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
+import Card from './Card';
+import List from './List';
 
 
-function Pool({lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true);
-  const [curTab, setCurTab] = useState('all')
+function Pool({lang,loading,wallet}){
+  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,preminingPools,openPools] = useMiningPool(true,wallet);
+  const [curTab,setCurTab] = useState('')
+  const [curStyle, setCurStyle] = useState('card')
+  const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area',curTab)
-  const siwtchTab = (tab) => {
-    if(tab === curTab){
-      setCurTab('all')
-    }else{
-      setCurTab(tab);
-    }
-    
-  }
+  const styleSelectClass = classNames('style-select',curStyle)
+  const switchClass = classNames('switch-btn' ,{checked : switchChecked})
+  const switchTab = (current) => {
+    setCurTab(current)
+  };
+
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
+    console.log(wallet.isConnected())
     return () => {}
-  }, [loaded])
+  }, [loaded,wallet])
+
   return (
     <div className="mining-info">
-      <div className={tabCLassName}>
-        <span className='future-zone' onClick={() => siwtchTab('future')}>{lang['futures']}</span>
-        <span className='option-zone' onClick={() => siwtchTab('option')}>{lang['options']}</span>
-        <span className='separator-line'></span>
-        <span className='open-zone' onClick={() => siwtchTab('open')}>{lang['open-zone']}</span>
+      <div className='checkout-pools'>
+        {/* <div className={styleSelectClass}>
+          <div className='list' onClick={() => setCurStyle('list')}></div>
+          <div className='card' onClick={() => setCurStyle('card')}></div>
+        </div>
+        <div className='switcher'>
+          <div className={switchClass} onClick={()=> setSwitchChecked(!switchChecked)}></div>
+          <div className='added-only'>Added Only</div>
+        </div> */}
+        <div className={tabCLassName}>
+          {/* <div className='all' onClick={() => switchTab('all')}>{lang['all']}</div> */}
+          <div className='futures' onClick={() => switchTab('futures')}>{lang['futures']}</div>
+          <div className='options' onClick={() => switchTab('options')}>{lang['options']}</div>
+          <div className='separator-line'></div>
+          <div className='opens' onClick={() => switchTab('opens')}>{lang['open-zone']}</div>
+        </div>
       </div>
-      {curTab === 'all' && <div className='official-pool'>
-        <div className="pools">
-          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-        <div className="pools">
-          {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-        <div className='pools'>
-          {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-      </div>}
-      {curTab === 'future' && <div className='official-pool'>
-        <div className="pools">
-          {v2Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-        <div className='pools'>
-          {v1Pools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-      </div>}
-      {curTab === 'option' && <div className='official-pool'>
-        <div className="pools">
-          {optionPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        </div>
-      </div>}
-      {curTab === 'open' && <div className='pools open-pool'>
-        {openPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        <PoolPlacehold lang={lang}></PoolPlacehold>
-      </div>}
+      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet}/> : <Card  type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang}/>}
     </div>
   )
 }
-export default inject('version','loading')(observer(Pool))
+export default inject('version','loading','wallet')(observer(Pool))

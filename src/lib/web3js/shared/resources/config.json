@@ -266,6 +266,11 @@
               "symbolId": "4",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "AGLDUSDT",
+              "unit": "AGLD"
             }
           ],
           "chainId": "56",
@@ -304,6 +309,11 @@
               "symbolId": "4",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "AGLDUSDT",
+              "unit": "AGLD"
             }
           ],
           "chainId": "56",
@@ -342,6 +352,11 @@
               "symbolId": "4",
               "symbol": "GHSTUSDT",
               "unit": "GHST"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "AGLDUSDT",
+              "unit": "AGLD"
             }
           ],
           "chainId": "137",
@@ -380,6 +395,11 @@
               "symbolId": "4",
               "symbol": "GHSTUSDT",
               "unit": "GHST"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "AGLDUSDT",
+              "unit": "AGLD"
             }
           ],
           "chainId": "137",
@@ -436,6 +456,12 @@
           "decimal": "18"
         },
         {
+          "chainId": "137",
+          "symbol": "AGLDUSDT",
+          "address": "0x656C0948fB841B4c199Ec9F6c02ecf21c52924D8",
+          "decimal": "18"
+        },
+        {
           "chainId": "56",
           "symbol": "AXSUSDT",
           "address": "0xB08D439016AC9223307A73c43Ac959d096bB64De",
@@ -463,6 +489,12 @@
           "chainId": "56",
           "symbol": "ALICEUSDT",
           "address": "0x3E084344FFD0209A6e9cB817f9Ea6e7348E6e238",
+          "decimal": "18"
+        },
+        {
+          "chainId": "56",
+          "symbol": "AGLDUSDT",
+          "address": "0x98C5C70DbFbA9Fc278fDeC7222AdC80C66e05aF1",
           "decimal": "18"
         }
       ],

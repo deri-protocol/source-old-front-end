@@ -87,10 +87,12 @@
   "option":"OPT",
   "v2" : "FUT-Main",
   "v2_lite_open" : "Offen",
+  "add-symbol":"ADD SYMBOL",
   "official-zone" : "Inno & Main zone",
   "open-zone" : "Offen zone",
   "my-liqudity-providing" : "Meine Liquiditätsversorgung",
   "add-pool" : "Pool hinzufügen",
+  "please-operate":"Please operate on the PC side",
   "coming-soon" : "Kommt bald! Bleiben Sie dran!\n(Kontaktieren Sie das Team, wenn Sie es jetzt tun möchten)",
   "add-pool-text" : "Starte meinen eigenen Pool"
 }

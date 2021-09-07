@@ -1,56 +1,35 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect,useRef,useCallback } from 'react'
 import dateFormat from 'dateformat'
-import {io} from 'socket.io-client'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol, calcRange, intervalRange } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol } from '../../../../utils/utils';
+import webSocket from '../../../../model/WebSocket';
+import { init } from 'cjs-module-lexer';
 
 
-const socket = io(process.env.REACT_APP_WSS_URL, {
-  transports: ['websocket'],
-  withCredentials: true
-})
-
-
-function LightChart({symbol,interval = '1',intl,displayCandleData}){
+function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,showLoad,preload}){
+  const containerRef = useRef(null);
   const chartRef = useRef(null)
-  const candleSeries = useRef(null);
   const lastData = useRef(null)
-  const queryParams = useRef(null);
-  const lastQueryParam = useRef(null);
+  const symbolRef = useRef(null)
+  const candlesChartRef = useRef(null);
+  const lineChartRef = useRef(null);
   const [loading, setLoading] = useState(true);
-  const connectStatusRef = useRef()
 
-  const onConnect = () => {
-    socket.on('connect', () => {
-      if(connectStatusRef.current && queryParams.current){
-        console.log( `kline for :${queryParams.current.symbol} - ${queryParams.current.interval} reconnect`)
-        socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
-      }
-      connectStatusRef.current = true
-    })
+  const loadData = async (symbol) => {
+    const range = calcRange(interval)
+    const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${symbol}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
+    showLoad(true)
+    const res = await axios.get(url)
+    showLoad(false)
+    return res.data && Array.isArray(res.data.data) ? res.data.data  : []
   }
 
-  const initWebSocket = () => {
-    if(lastQueryParam.current){
-      socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
-    }
-    if(socket.connected){
-      socket.emit('get_kline_update', {'symbol': queryParams.current.symbol, 'time_type': queryParams.current.interval,updated : true})
-      socket.on('kline_update', data => {
-        if (lastData.current.time <= data.time && data.time_type === queryParams.current.interval && data.symbol.toUpperCase() === queryParams.current.symbol.toUpperCase()) {
-          candleSeries.current.update(data)
-          lastData.current = data
-          displayCandleData && displayCandleData({data : data})
-        }
-      })
-    }
-  }
-
-  const loadChart = async (chart) => {
+  const addCandleChart = async (chart,symbol,priceScaleId) => {
     if(symbol && chart){
-       const candlesChart = chart.addCandlestickSeries({
+       const candlesChart = candlesChartRef.current = chart.addCandlestickSeries({
+        priceScaleId : priceScaleId,
         upColor: "#4bffb5",
         downColor: "#ff4976",
         borderDownColor: "#ff4976",
@@ -58,41 +37,76 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
         wickDownColor: "#ff4976",
         wickUpColor: "#4bffb5"
       });
-      candleSeries.current = candlesChart
-      const range = calcRange(interval)
-      lastQueryParam.current = queryParams.current
-      queryParams.current = {symbol : getFormatSymbol(`${symbol}-MARKPRICE`),interval : intervalRange[interval]}
-      const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${queryParams.current.symbol}&time_type=${queryParams.current.interval}&from=${range[0]}&to=${range[1]}`
-      setLoading(true)
-      const res = await axios.get(url)
-      if(res && res.data) {
-        const {data} = res
-        if(data.data instanceof Array){
-          const d = data.data
-          candlesChart.setData(d);
-          lastData.current = d[d.length-1]
-        } else {
-          candlesChart.setData([])
+      const data = await loadData(symbol)
+      if(data && Array.isArray(data) && data.length > 0 ){
+        candlesChart.setData(data)
+        lastData.current = data[data.length-1]
+      } 
+      displayCandleData({data : lastData.current})
+      webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
+        if (lastData.current && lastData.current.time <= data.time) {
+          candlesChart.update(data)
+          lastData.current = data
         }
-        setLoading(false)
-        displayCandleData && displayCandleData({data : lastData.current})
-        initWebSocket()
-      }
+      })
+    }
+      
+  }
+
+  const addLineSeries = async (chart,symbol,priceScaleId) =>{
+    if(chart && symbol){
+      chart.applyOptions({
+        leftPriceScale: {
+          title : symbol,
+          visible: true,
+          borderColor: 'rgba(197, 203, 206, 1)',
+        }
+      })
+      const seriesChart = lineChartRef.current = chart.addLineSeries({
+        priceScaleId: priceScaleId,
+        topColor: "#569bda",
+        bottomColor: "#569bda",
+        lineColor: "#569bda",
+        lineWidth: 2
+      })
+      const data = await loadData(symbol)
+      const seriesData = data.map(d => ({time : d.time,value : d.close}));
+      seriesChart.setData(seriesData)
+      webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
+        const lineSeriesData = {time : data.time,value : data.close}
+        seriesChart.update(lineSeriesData)
+      })
     }
   }
 
-  const handleCrosshairMoved = (param) => {
+  const handleCrosshairMoved = param => {
     if (!param.point) {
         return;
     }
     if(typeof displayCandleData === 'function'){
-      const data = {time : param.time ,data : param.seriesPrices.values().next().value}
-      displayCandleData(data);
+      param.seriesPrices.forEach(item => {
+        if(item.open && item.close && item.high && item.low){
+          const data = {time : param.time ,data : item}
+          displayCandleData(data);
+        }
+      })
+    }
+  }
+
+  const switchSeriesChart = (series,priceScaleId) => {
+    series.applyOptions({
+      visible: !series.options().visible,
+    });
+    if(containerRef.current){
+      const chart = containerRef.current
+      chart.applyOptions({
+        [`${priceScaleId}PriceScale`] : {visible : !chart.options()[`${priceScaleId}PriceScale`].visible}
+      })
     }
   }
 
   const initChart = () => {
-    if(chartRef.current && symbol && interval){
+    if(chartRef.current &&  symbol && interval){
       const chart = createChart(chartRef.current, { 
         localization : {
           timeFormatter : businessDayOrTimestamp => {
@@ -106,7 +120,7 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
           timeVisible : true,
           borderColor : '#fff',
           tickMarkFormatter: (time, tickMarkType, locale) => {
-            const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd HH:MM' : 'HH:MM'
+            const format = (interval === '1W' || interval === '1D') ? 'yyyy-mm-dd' : 'HH:MM'
             return dateFormat(time,format)
           },
         },
@@ -143,36 +157,60 @@ function LightChart({symbol,interval = '1',intl,displayCandleData}){
       return chart;
     }
   }
-    
 
   useEffect(() => {
-    const chart = initChart()
-    loadChart(chart);
-    return () => {
-      if(lastQueryParam.current){
-        socket.emit('un_get_kline',{symbol : lastQueryParam.current.symbol,'time_type' : lastQueryParam.current.interval})
+    const symbols = []
+    const chart = containerRef.current = initChart()
+    if(symbol && preload){
+      if(mixedChart){
+        addLineSeries(chart,getFormatSymbol(symbol),'left');
+        symbols.push(getFormatSymbol(symbol))
+        addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');
+        symbols.push(getFormatSymbol(`${symbol}-MARKPRICE`))
+      } else {
+        addCandleChart(chart,getFormatSymbol(`${symbol}-MARKPRICE`),'right');  
+        symbols.push(getFormatSymbol(`${symbol}-MARKPRICE`))
       }
-      if(queryParams.current){
-        socket.emit('un_get_kline',{symbol : queryParams.current.symbol,'time_type' : queryParams.current.interval})
-      }
-      connectStatusRef.current = null
-      if(chart){
-        chart.remove()
+      symbolRef.current = symbols
+    }
+
+    function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
+      console.log(newVisibleLogicalRange)
+      const barsInfo = candlesChartRef.current.barsInLogicalRange(newVisibleLogicalRange);
+      // if there less than 50 bars to the left of the visible area
+      console.log(barsInfo)
+      if (barsInfo !== null && barsInfo.barsBefore < 50) {
+          // try to load additional historical data and prepend it to the series data
       }
     }
-  }, [symbol,interval])
-
-  useEffect(() => {
-    onConnect();
-  }, [])
+  
+    chart && chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
+    
+    return () => {
+      if(symbolRef.current){
+        symbolRef.current.forEach(symbol => webSocket.unsubscribe('un_get_kline',{symbol,time_type : intervalRange[interval]}))
+      }
+      if(chart){
+        candlesChartRef.current &&  chart.removeSeries(candlesChartRef.current)
+        lineChartRef.current && chart.removeSeries(lineChartRef.current)
+        chart.remove();
+      }
+      candlesChartRef.current = null;
+      lineChartRef.current = null
+    }
+  }, [symbol,interval,preload])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
-      <div className='loading' style={{display : loading ? 'block' : 'none'}}>
+      {mixedChart && <div className='legend'>
+        <div onClick={() => switchSeriesChart(candlesChartRef.current,'right')} ><span className='legend-option-left'> </span><span className='legend-option-right'> </span>{lang['option']}</div>
+        <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{stripSymbol(`${symbol}`)}</div>
+      </div>}
+      {/* <div className='loading' style={{display : loading ? 'block' : 'none'}}>
           <div className='spinner-border' role='status'>
               <span className='sr-only'></span>
           </div>
-      </div>
+      </div> */}
     </div>
   )
 }

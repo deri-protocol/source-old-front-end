@@ -18,7 +18,7 @@ function BrokerBind({wallet={},lang}){
         return;
       }
       let bindAddress = address.toLocaleLowerCase();
-      if(bindAddress.length != 42 || bindAddress.indexOf('0x') != 0){
+      if(bindAddress.length !== 42 || bindAddress.indexOf('0x') !== 0){
         alert(lang['please-enter-a-correct-address']) 
         return;
       }

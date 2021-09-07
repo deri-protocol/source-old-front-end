@@ -164,7 +164,7 @@ export const RestOracle = (symbol) => {
 export const getOraclePrice = async (chainId, symbol, version='v2') => {
   chainId = normalizeChainId(chainId);
   symbol = mapToSymbolInternal(symbol)
-  const config = getOracleConfig(chainId, symbol, version);
+  const config = getOracleConfig(version, chainId, symbol);
   if (config && config.address) {
     const oracle = oracleFactory(
       chainId,

@@ -15,7 +15,7 @@ describe('lp pool query api', () => {
     const res = await getLpLiquidityInfo(1, slpAddress, accountAddress)
     DeriEnv.set('dev')
     const minOutput = 1.5
-    const maxOutput = 1.8
+    const maxOutput = 1.9
     expect(bg(res.poolLiquidity).toNumber()).toBeGreaterThanOrEqual(minOutput)
     expect(bg(res.poolLiquidity).toNumber()).toBeLessThanOrEqual(maxOutput)
   }, TIMEOUT)

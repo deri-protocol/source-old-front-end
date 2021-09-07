@@ -9,7 +9,7 @@ import {
   calculateLiquidityUsed,
   processFundingRate,
 } from '../calculation';
-import { ContractBase } from '../../shared/contract';
+import { ContractBase } from '../../shared/contract/contract_base';
 import { getPriceInfoForV1 } from '../../shared/utils/oracle';
 
 /* eslint-disable */

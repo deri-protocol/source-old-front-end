@@ -10,7 +10,7 @@ export const unlock = async (chainId, poolAddress, accountAddress) => {
     const { bToken: bTokenAddress } = getPoolConfig(
       poolAddress,
       '0',
-      '0',
+      null,
       'v2_lite'
     );
     const bToken = bTokenFactory(chainId, bTokenAddress);

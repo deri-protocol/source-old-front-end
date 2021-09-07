@@ -12,6 +12,7 @@ const offchainSymbolPairs = {
   SANDUSDT: 'SANDUSDT',
   QUICKUSDT: 'QUICKUSDT',
   GHSTUSDT: 'GHSTUSDT',
+  AGLDUSDT: 'AGLDUSDT',
 };
 
 export const normalizeOptionSymbol = (optionSymbol) => {

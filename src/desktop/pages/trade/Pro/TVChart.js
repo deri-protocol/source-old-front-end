@@ -1,24 +1,17 @@
 import React,{useRef,useEffect} from 'react'
-import {io} from 'socket.io-client'
 import { widget} from '../../../../lib/charting_library'
-import { getFormatSymbol, intervalRange, calcRange } from '../../../../utils/utils';
+import { getFormatSymbol, intervalRange, } from '../../../../utils/utils';
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import chartConfig from './chart-config.json'
+import webSocket from '../../../../model/WebSocket';
 
 const supported_resolutions = ["1","5","15","30","60","240","1D","5D","1W","1M"];
 const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
-const socket = io(process.env.REACT_APP_WSS_URL, {
-  transports: ['websocket'],
-  withCredentials: true
-})
 
-function TVChart({interval,symbol,showLoad,intl}){
+function TVChart({interval,symbol,showLoad,intl,preload}){
   const widgetRef = useRef(null);
-  const queryParamsRef = useRef(null);
-  const lastQueryParamsRef = useRef(null);
   const lastDataRef = useRef(null);
-  const connectStatusRef = useRef()
   const datafeedRef = useRef({
     onReady: (callback) => {
       setTimeout(() => callback({supported_resolutions: supported_resolutions}),0);
@@ -32,12 +25,10 @@ function TVChart({interval,symbol,showLoad,intl}){
  
 
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) => {
-    lastQueryParamsRef.current = queryParamsRef.current
-    queryParamsRef.current = {symbol : symbolInfo.name.toUpperCase(),formatSymbol : getFormatSymbol(symbolInfo.name),interval : intervalRange[resolution]}
     const res = await axios.get(GET_KLINE_URL,{
       params : {
-        symbol : queryParamsRef.current.formatSymbol,
-        time_type: queryParamsRef.current.interval,
+        symbol : getFormatSymbol(symbolInfo.name),
+        time_type: intervalRange[resolution],
         from : from ,
         to : to 
       }
@@ -53,18 +44,17 @@ function TVChart({interval,symbol,showLoad,intl}){
   }
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
-    socket.emit('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : queryParamsRef.current.interval,update : true})
-    // updateKlineFun = onRealtimeCallback
-    socket.on('kline_update', data => {
-      if (onRealtimeCallback) {
+    webSocket.subscribe('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : intervalRange[resolution]},data => {
+      if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
         onRealtimeCallback(data)
+        lastDataRef.current = data
       }
     })
   }
 
   const unsubscribeBars = subscriptUID => {
-    if(queryParamsRef.current){
-      socket.emit('un_get_kline',{symbol : queryParamsRef.current.formatSymbol,time_type : queryParamsRef.current.interval})
+    if(symbol){
+      webSocket.unsubscribe('un_get_kline',{symbol : getFormatSymbol(symbol),time_type : intervalRange[interval]})
     }
   }
 
@@ -105,25 +95,9 @@ function TVChart({interval,symbol,showLoad,intl}){
     })
   }
 
-  const initWebSocket = () => {
-    socket.on('connect',() => {
-      if(connectStatusRef.current){
-        console.log( `kline for : ${queryParamsRef.current.formatSymbol} - ${queryParamsRef.current.interval} reconnect`)
-        socket.emit('get_kline_update',{symbol : queryParamsRef.current.formatSymbol,time_type : queryParamsRef.current.interval,update : true})
-      }
-      connectStatusRef.current = true
-    })
-  }
 
   useEffect(() => {
-    initWebSocket();
-    return () => {}
-  }, [])
-
-
-
-  useEffect(() => {
-    if(symbol && interval){
+    if(symbol && interval && preload){
       initialize();
     }
     return () => {
@@ -132,7 +106,7 @@ function TVChart({interval,symbol,showLoad,intl}){
       }
       unsubscribeBars();
     }
-  }, [symbol,interval])
+  }, [symbol,interval,preload])
 
   return(
     <div id='tv-container'></div>
