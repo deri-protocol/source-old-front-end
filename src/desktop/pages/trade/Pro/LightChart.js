@@ -3,7 +3,7 @@ import dateFormat from 'dateformat'
 import {createChart,CrosshairMode} from 'lightweight-charts'
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
-import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol } from '../../../../utils/utils';
+import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol, secondsInRange } from '../../../../utils/utils';
 import webSocket from '../../../../model/WebSocket';
 
 
@@ -14,13 +14,15 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
   const symbolRef = useRef(null)
   const candlesChartRef = useRef(null);
   const lineChartRef = useRef(null);
+  const lineSeriesHistoryRef = useRef(null);
+  const candlesSeriesHistoryRef = useRef(null);
 
-  const loadData = async (symbol) => {
-    const range = calcRange(interval)
+  const loadData = async (symbol,from,to,hiddenLoading) => {
+    const range = from && to ? [from,to] : calcRange(interval)
     const url = `${process.env.REACT_APP_HTTP_URL}/get_kline?symbol=${symbol}&time_type=${intervalRange[interval]}&from=${range[0]}&to=${range[1]}`
-    showLoad(true)
+    !hiddenLoading && showLoad(true)
     const res = await axios.get(url)
-    showLoad(false)
+    !showLoad(false)
     return res.data && Array.isArray(res.data.data) ? res.data.data  : []
   }
 
@@ -39,6 +41,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       if(data && Array.isArray(data) && data.length > 0 ){
         candlesChart.setData(data)
         lastData.current = data[data.length-1]
+        candlesSeriesHistoryRef.current = data
       } 
       displayCandleData({data : lastData.current})
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
@@ -70,6 +73,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       const data = await loadData(symbol)
       const seriesData = data.map(d => ({time : d.time,value : d.close}));
       seriesChart.setData(seriesData)
+      lineSeriesHistoryRef.current = seriesData
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
         const lineSeriesData = {time : data.time,value : data.close}
         seriesChart.update(lineSeriesData)
@@ -174,14 +178,27 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       symbolRef.current = symbols
     }
 
-    function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
-      // console.log(newVisibleLogicalRange)
+     const onVisibleLogicalRangeChanged = async () => {
       const logicalRange = chart.timeScale().getVisibleLogicalRange();
       const barsInfo = candlesChartRef.current.barsInLogicalRange(logicalRange);
-      // if there less than 50 bars to the left of the visible area
       console.log(barsInfo)
-      if (barsInfo !== null && barsInfo.barsBefore < 50) {
-          // try to load additional historical data and prepend it to the series data
+      if (barsInfo !== null && barsInfo.barsBefore < -10) {
+          const to = (candlesSeriesHistoryRef.current[0].time - 1 * secondsInRange[interval]) / 1000
+          const from = to - 10 * secondsInRange[interval]
+          const symbol = getFormatSymbol(`${trading.config.symbol}-MARKPRICE`)
+          const data = await loadData(symbol,from,to,true)
+          let history ;
+          if(lineSeriesHistoryRef.current && lineChartRef.current){
+            history = [...data,...lineSeriesHistoryRef.current];
+            lineSeriesHistoryRef.current = history;
+            lineChartRef.current.setData(history)
+          }
+          if(candlesSeriesHistoryRef.current && candlesChartRef.current) {
+            history = []
+            history = [...data,...candlesSeriesHistoryRef.current];
+            candlesSeriesHistoryRef.current = history;
+            candlesChartRef.current.setData(history);
+          }
       }
     }
   
