@@ -26,13 +26,19 @@ class WebSocket {
       }
     })
     this.socket.emit(event, params)
-    if(this.events.findIndex(item => item[0] === event && item[1].symbol === params.symbol && item[1].time_type === params.time_type) === -1){
+    if(this.findEvent(event,params) === -1){
       this.events.push([event,params])
     }
   }
 
+  findEvent(event,params){
+    return this.events.findIndex(item => item[0] === event && item[1].symbol === params.symbol && item[1].time_type === params.time_type);
+  }
+
   unsubscribe(event,params = {}){
     this.socket.emit(event,params)
+    const pos = this.findEvent(event,params)
+    this.events.splice(pos,1)
   }
 }
 export default new WebSocket()

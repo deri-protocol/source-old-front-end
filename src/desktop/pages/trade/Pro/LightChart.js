@@ -175,8 +175,9 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
     }
 
     function onVisibleLogicalRangeChanged(newVisibleLogicalRange) {
-      console.log(newVisibleLogicalRange)
-      const barsInfo = candlesChartRef.current.barsInLogicalRange(newVisibleLogicalRange);
+      // console.log(newVisibleLogicalRange)
+      const logicalRange = chart.timeScale().getVisibleLogicalRange();
+      const barsInfo = candlesChartRef.current.barsInLogicalRange(logicalRange);
       // if there less than 50 bars to the left of the visible area
       console.log(barsInfo)
       if (barsInfo !== null && barsInfo.barsBefore < 50) {

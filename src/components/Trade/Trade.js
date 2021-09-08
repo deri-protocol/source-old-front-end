@@ -10,7 +10,6 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject, observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
-import Loading from '../Loading/LoadingMask';
 import { bg } from "../../lib/web3js/indexV2";
 import TipWrapper from '../TipWrapper/TipWrapper';
 
@@ -21,7 +20,7 @@ const DepositDialog = withModal(DepositMargin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Trade({ wallet = {}, trading, version, lang, loading, type }) {
+function Trade({ wallet = {}, trading, version, lang, type }) {
   const [direction, setDirection] = useState('long');
   const [markPrice, setMarkPrice] = useState();
   const [spec, setSpec] = useState({});
@@ -250,7 +249,10 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     if (trading.config) {
       setSpec(trading.config)
     }
-    return () => { };
+    return () => { 
+      setMarkPriceAfter('')
+      setFundingRateAfter('');
+    };
   }, [trading.config]);
 
   useEffect(() => {
