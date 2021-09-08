@@ -79,9 +79,9 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   //交易费用
   const loadTransactionFee = async () => {
-    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
+    if (hasConnectWallet() && trading.config && trading.volumeDisplay) {
       let volume = volumeMu(trading.volumeDisplay)
-      const transFee = await getEstimatedFee(wallet.detail.chainId, spec.pool, Math.abs(volume), spec.symbolId);
+      const transFee = await getEstimatedFee(wallet.detail.chainId, trading.config.pool, Math.abs(volume), trading.config.symbolId);
       if (!isNaN(transFee)) {
         setTransFee((+transFee).toFixed(2));
       }
@@ -94,11 +94,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   //计算流动性的变化
   const calcLiquidityUsed = async () => {
-    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay && type.isFuture) {
+    if (hasConnectWallet() && trading.config && trading.volumeDisplay && type.isFuture) {
       const { detail } = wallet
       const volume = direction === 'long' ? trading.volumeDisplay : -trading.volumeDisplay
-      const curLiqUsed = await getLiquidityUsed(detail.chainId, spec.pool, spec.symbolId)
-      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId, spec.pool, volume, spec.symbolId)
+      const curLiqUsed = await getLiquidityUsed(detail.chainId, trading.config.pool, trading.config.symbolId)
+      const afterLiqUsed = await getEstimatedLiquidityUsed(detail.chainId, trading.config.pool, volume, trading.config.symbolId)
       if (curLiqUsed && afterLiqUsed) {
         setLiqUsedPair({ curLiqUsed: curLiqUsed.liquidityUsed0, afterLiqUsed: afterLiqUsed.liquidityUsed1 })
       }
@@ -107,10 +107,10 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   //计算funding rate的变化
   const calcFundingRateAfter = async () => {
-    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
+    if (hasConnectWallet() && trading.config && trading.volumeDisplay) {
       let num = volumeMu(trading.volumeDisplay)
       const volume = (direction === 'long' ? num : -num)
-      const fundingAfter = await getEstimatedFundingRate(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
+      const fundingAfter = await getEstimatedFundingRate(wallet.detail.chainId, trading.config.pool, volume, trading.config.symbolId);
       if (fundingAfter) {
         let funding = type.isOption ? fundingAfter.deltaFunding1  : fundingAfter.fundingRate1
         setFundingRateAfter(funding);
@@ -120,10 +120,10 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   //计算markPrice
   const calcMarkPriceAfter = async () => {
-    if (hasConnectWallet() && hasSpec() && trading.volumeDisplay) {
+    if (hasConnectWallet() && trading.config && trading.volumeDisplay) {
       let num = volumeMu(trading.volumeDisplay)
       const volume = (direction === 'long' ? num : -num)
-      const markPriceAfter = await getEstimatedTimePrice(wallet.detail.chainId, spec.pool, volume, spec.symbolId);
+      const markPriceAfter = await getEstimatedTimePrice(wallet.detail.chainId, trading.config.pool, volume, trading.config.symbolId);
       if (markPriceAfter) {
         // let markP = getIntrinsicPrice(trading.index, trading.position.strikePrice, trading.position.isCall).plus(markPriceAfter).toString()
         setMarkPriceAfter(markPriceAfter);
@@ -411,14 +411,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   placeholder={lang['option-input']}
                 />
                 <div className='option-unit' >
-                  {spec.unit}
+                  {trading.config && trading.config.unit}
                 </div>
               </div>
               {isOptionInput && <>
                 <div className='min-quantity'>
                 {lang['option-input-min-quantity']}
                 &nbsp; {trading.contract.multiplier} &nbsp;
-                {spec.unit}
+                {trading.config && trading.config.unit}
               </div>
               </>}
             </>}
@@ -523,7 +523,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
                 </div>
               </div>
               
@@ -531,7 +531,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             <div className='text-info'>
               <div className='title-enter'>{lang['transaction-fee']}</div>
               <div className='text-enter'>
-                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
+                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
               </div>
              
             </div>
