@@ -101,7 +101,7 @@ function Menu({ lang, locale }) {
                   ?
                   <a className='signin-item' href={`https://${host}/#/signin`}>{lang['signin']}</a>
                   :
-                  <Link className='signin-item' to='/signin'>{lang['signin']}</Link>
+                  <Link className='signin-item' to='/nuls'>{lang['signin']}</Link>
                 }
               </li>
               <li>

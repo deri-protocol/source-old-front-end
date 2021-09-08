@@ -6,8 +6,43 @@ import deriimg from './img/deri.svg'
 import success from './img/success.svg'
 import undone from './img/undone.svg'
 import right from './img/right.svg'
-
+import Button from '../Button/Button'
 function Nuls({ wallet = {}, lang }) {
+  const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['connect-wallet']}></Button>)
+  const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
+  const [isApprove, setIsApprove] = useState(false);
+  const [isRegsiter, setIsRegsiter] = useState(false);
+  const connect = () => {
+    wallet.connect()
+  }
+
+  const approve = async () => {
+
+  }
+  const claimPtoken = async () => {
+
+  }
+  const reg = async ()=>{
+
+  }
+  useEffect(() => {
+    let element;
+    if (hasConnectWallet()) {
+      if (!isApprove) {
+        element = <Button className='btn' btnText={lang['approve']} click={approve} lang={lang} />
+      } else {
+        if(isRegsiter){
+          element = <Button className='btn' btnText={lang['claim']} click={claimPtoken} lang={lang} />
+        }else{
+          element = <Button className='btn' btnText={lang['register']} click={reg} lang={lang} />
+        }
+      }
+    } else {
+      element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
+    }
+    setActionElement(element)
+  }, [wallet.detail, isApprove,isRegsiter])
+
   return (
     <div className='nuls-box'>
       <div className='title'>
@@ -63,8 +98,14 @@ function Nuls({ wallet = {}, lang }) {
               </div>
             </div>
             <div className='button'>
+              {actionElement}
             </div>
           </div>
+
+        </div>
+      </div>
+      <div className='rule'>
+        <div className='rule-title'>
 
         </div>
       </div>

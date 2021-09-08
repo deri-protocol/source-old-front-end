@@ -3,8 +3,11 @@
   "title-one":"Share Value of 20,000 busd NULS pool",
   "user-tasks":"USER TASKS",
   "register":"REGISTER",
+  "approve":"APPROVE",
   "claim":"CLAIM",
   "trade":"TRADE",
   "rules":"Activity Rules",
+  "connect-wallet":"Connect Wallet",
+  "pending":"Pending",
   "rules-one":""
 }
