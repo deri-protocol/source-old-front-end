@@ -1,5 +1,6 @@
 import { getPositionInfo ,bg,getPositionInfos} from "../lib/web3js/indexV2"
 import { eqInNumber } from '../utils/utils';
+import type from "./Type";
 
 export default class Position {
 
@@ -7,7 +8,6 @@ export default class Position {
    callbackALL = ()=>{}
    wallet = null;
    spec = null
-   isOption =null;
  
    mockPositionInfo = {
     averageEntryPrice: "",
@@ -39,33 +39,32 @@ export default class Position {
      }
    }
 
-   async loadAll(wallet,spec,callback,isOption){
-    this.isOption = isOption
-      if(wallet && wallet.isConnected() && wallet.isSupportChain(isOption) && spec && spec.pool){
-        let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
-        let positions = [] 
-        if(res.length){
-          positions = res.map(item=>{
-            item.balanceContract = bg(item.margin).plus(item.unrealizedPnl).toString()
-            item.direction = (+item.volume) > 0 ? 'LONG' : (!item.volume || eqInNumber(item.volume, 0) || !item.volume ? '--' : 'SHORT')
-            return item
-          })
+   async loadAll(wallet,spec,callback){
+    if(wallet && wallet.isConnected() && wallet.isSupportChain(type.isOption) && spec && spec.pool){
+      let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
+      let positions = [] 
+      if(res.length){
+        positions = res.map(item=>{
+          item.balanceContract = bg(item.margin).plus(item.unrealizedPnl).toString()
+          item.direction = (+item.volume) > 0 ? 'LONG' : (!item.volume || eqInNumber(item.volume, 0) || !item.volume ? '--' : 'SHORT')
+          return item
+        })
+      }
+      if(positions){
+        if(callback){
+          callback(positions)
         }
-        if(positions){
-          if(callback){
-            callback(positions)
-          }
-        }
-        this.startAll(wallet,spec,callback)
-        return positions;
-       }
+      }
+      this.startAll(wallet,spec,callback)
+      return positions;
+    }
    }
 
    startAll(wallet,spec,callback){
     if(this.intervalAll !== null){
       clearInterval(this.intervalAll);
     }
-   this.intervalAll = window.setInterval(() => this.loadAll(wallet,spec,callback,this.isOption),3000)      
+   this.intervalAll = window.setInterval(() => this.loadAll(wallet,spec,callback),3000)      
    if(wallet){
      this.wallet= wallet; 
    }

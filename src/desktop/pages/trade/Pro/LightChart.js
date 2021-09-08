@@ -5,17 +5,15 @@ import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol } from '../../../../utils/utils';
 import webSocket from '../../../../model/WebSocket';
-import { init } from 'cjs-module-lexer';
 
 
-function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,showLoad,preload}){
+function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,preload,trading}){
   const containerRef = useRef(null);
   const chartRef = useRef(null)
   const lastData = useRef(null)
   const symbolRef = useRef(null)
   const candlesChartRef = useRef(null);
   const lineChartRef = useRef(null);
-  const [loading, setLoading] = useState(true);
 
   const loadData = async (symbol) => {
     const range = calcRange(interval)
@@ -105,8 +103,8 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,sho
     }
   }
 
-  const initChart = () => {
-    if(chartRef.current &&  symbol && interval){
+  const initChart = (symbol) => {
+    if(chartRef.current &&   symbol && interval){
       const chart = createChart(chartRef.current, { 
         localization : {
           timeFormatter : businessDayOrTimestamp => {
@@ -160,8 +158,10 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,sho
 
   useEffect(() => {
     const symbols = []
-    const chart = containerRef.current = initChart()
-    if(symbol && preload){
+    let chart ;
+    if(trading.config && preload){
+      const {symbol} = trading.config
+      chart = containerRef.current = initChart(symbol)
       if(mixedChart){
         addLineSeries(chart,getFormatSymbol(symbol),'left');
         symbols.push(getFormatSymbol(symbol))
@@ -198,20 +198,15 @@ function LightChart({symbol,interval = '1',displayCandleData,mixedChart,lang,sho
       candlesChartRef.current = null;
       lineChartRef.current = null
     }
-  }, [symbol,interval,preload])
+  }, [interval,preload,trading.config])
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
       {mixedChart && <div className='legend'>
         <div onClick={() => switchSeriesChart(candlesChartRef.current,'right')} ><span className='legend-option-left'> </span><span className='legend-option-right'> </span>{lang['option']}</div>
-        <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{stripSymbol(`${symbol}`)}</div>
+        <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{trading.config && stripSymbol(`${trading.config.symbol}`)}</div>
       </div>}
-      {/* <div className='loading' style={{display : loading ? 'block' : 'none'}}>
-          <div className='spinner-border' role='status'>
-              <span className='sr-only'></span>
-          </div>
-      </div> */}
     </div>
   )
 }
-export default  inject('intl')(observer(LightChart))
+export default  inject('intl','trading')(observer(LightChart))

@@ -253,15 +253,6 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
     return () => { };
   }, [trading.config]);
 
-
-  useEffect(() => {
-    loading.loading()
-    trading.init(wallet, version, type.isOption, () => {
-      loading.loaded();
-    })
-  }, [wallet.detail.account, version.current, type.isOption])
-
-
   useEffect(() => {
     if (trading.margin) {
       trading.direction && setDirection(trading.direction)
@@ -327,13 +318,13 @@ function Trade({ wallet = {}, trading, version, lang, loading, type }) {
               
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
-                <TipWrapper block={false}>
+                <TipWrapper block={false} title={trading.optionFundingRateTip}>
                   <span className='funding-per' title={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
                 </TipWrapper>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <TipWrapper block={false}>
+                <TipWrapper block={false} title={trading.fundingRateTip}>
                   <span className='funding-per' title={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
@@ -711,4 +702,4 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
   )
 }
 
-export default inject('wallet', 'trading', 'version', 'loading', 'type')(observer(Trade))
+export default inject('wallet', 'trading', 'version','type')(observer(Trade))

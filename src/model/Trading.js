@@ -10,6 +10,7 @@ import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
 import version from './Version'
 import type from './Type'
+import Type from "./Type";
 
 /**
  * 交易模型
@@ -108,7 +109,8 @@ export default class Trading {
    * 初始化
    * wallet and version changed will init
    */
-  async init(wallet,version,isOption,finishedCallback){  
+  async init(wallet,finishedCallback){  
+    const isOption = Type.isOption
     const all = await this.configInfo.load(version,isOption);
     //如果连上钱包，有可能当前链不支持
     if(wallet.isConnected()){
@@ -157,12 +159,10 @@ export default class Trading {
   async loadByConfig(wallet,config,symbolChanged,finishedCallback,isOption){
      //切换指数
     if(symbolChanged && config){
-      const symbol = getFormatSymbol(config.symbol)
-      this.oracle.unsubscribeBars(symbol);
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
-      this.oracle.load(symbol)
+      this.oracle.load(getFormatSymbol(config.symbol))
     }
     if(wallet && wallet.isConnected && config){
       Promise.all([
@@ -173,7 +173,7 @@ export default class Trading {
         this.contractInfo.load(wallet,config,isOption),
         this.loadFundingRate(wallet,config,isOption),
         this.historyInfo.load(wallet,config,isOption),
-        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOption),
+        isOption && this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOption),
       ]).then(results => {
         if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
@@ -369,6 +369,23 @@ export default class Trading {
       }
       
     }
+  }
+
+  clean(){
+    this.oracle.clean();
+    this.positionInfo.pause();
+    this.version = null;
+    this.configs = [] 
+    this.config = null;
+    this.index = ''
+    this.volume = ''
+    this.fundingRate = {}
+    this.position = {}
+    this.positions = []
+    this.contract = {}
+    this.history = []
+    this.userSelectedDirection = 'long'
+    this.optionsConfigs = {}
   }
 
 

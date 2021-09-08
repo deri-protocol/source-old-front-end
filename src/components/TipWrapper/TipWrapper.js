@@ -7,16 +7,20 @@ function TipWrapper(props){
     if(currentNode){
       const hoverNodes = currentNode.querySelectorAll('[title]')
       hoverNodes.forEach(hoverNode => {
-        const id = `hover-box-${new Date().getTime()}`
-        let hover = document.body.querySelector(`#${id}`)
+        let hover = 
         hoverNode.addEventListener('mouseover',event => {
-          if(!hover) {
-            hover = document.createElement('div')
-            hover.style.cssText = `z-index : 1;min-width : 100px;max-width : ${window.screen.width}px ;font-size : 12px ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
-            document.body.appendChild(hover)
-            hover.innerText = event.currentTarget.getAttribute('title')
-            event.currentTarget.setAttribute('title','')
-          } 
+          const id = `hover-box-${new Date().getTime()}`
+          hover = document.body.querySelector(`#${id}`)
+          hover = document.createElement('div')
+          hover.style.cssText = `z-index : 9;min-width : 100px;max-width : ${window.screen.width}px ;font-size : 12px ;position : absolute;background-color: #2c2d31;border: 1px solid #AAAAAA;color: #AAAAAA;border-radius: 10px;padding: 4px;`
+          document.body.appendChild(hover)
+          const currentTarget = event.currentTarget
+          const title = currentTarget.getAttribute('title')
+          hover.innerText = title || currentTarget.getAttribute('origin-title')
+          if(title) {
+            currentTarget.setAttribute('origin-title',title)
+            currentTarget.setAttribute('title','')
+          }
           hover.id = id
           hover.style.display = 'block'
           const rect = event.currentTarget.getBoundingClientRect()
@@ -35,13 +39,15 @@ function TipWrapper(props){
         })
         currentNode.addEventListener('mouseout',event => {
           if(hover){
-            hover.style.display = 'none'
+            // hover.style.display = 'none'
+            hover.remove()
+            // document.body.removeChild(hover)
           }
         })   
       });
     }
   return () => {ref.current = null}
-  }, [])
+  }, [props.title])
   return props.block ? <div ref={ref}>{props.children}</div> : <span ref={ref}>{props.children}</span>
 }
 

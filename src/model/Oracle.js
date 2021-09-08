@@ -32,7 +32,7 @@ class Oracle {
       }
     })
     if(symbol !== this.symbol){
-      webSocket.unsubscribe('un_get_kline',{symbol : this.symbol,time_type : 'min'});
+      this.unsubscribeBars(this.symbol)
     }
     this.setSymbol(symbol)
     this.setTimeType(timeType);
@@ -56,6 +56,10 @@ class Oracle {
 
   pause(){
     this.setPause(true)
+  }
+
+  clean(){
+    this.unsubscribeBars(this.symbol);
   }
 
   setIndex(index){

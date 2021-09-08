@@ -6,11 +6,22 @@ import ContractInfo from '../ContractInfo/ContractInfo';
 import Trade from './Trade';
 import { inject, observer } from 'mobx-react';
 
-function LiteTrade({wallet,trading,isPro,lang}){
+function LiteTrade({wallet,trading,isPro,lang,loading,version,type}){
   const [curTab, setCurTab] = useState('trade');
   const switchTab = current => setCurTab(current);
   const tradeClassName = classNames('trade-position',curTab)
 
+  useEffect(() => {
+    if(wallet.detail.account){
+      loading.loading()
+      trading.init(wallet,() => {
+        loading.loaded();
+      })
+    }
+    return () => {
+      trading.clean()
+    } ;
+  }, [wallet.detail.account,version.current])
 
   return (
       <div className={tradeClassName}>
@@ -42,4 +53,4 @@ function LiteTrade({wallet,trading,isPro,lang}){
   )
 }
 
-export default inject('wallet','trading')(observer(LiteTrade))
+export default inject('wallet','trading','loading','version','type')(observer(LiteTrade))
