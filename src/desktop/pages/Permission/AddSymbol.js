@@ -15,7 +15,7 @@ import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
 function AddSymbol({ wallet = {}, lang }) {
-  const [multiplier, setMultiplier] = useState('1')
+  const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [symbolId, setSymbolId] = useState(0)
@@ -95,12 +95,23 @@ function AddSymbol({ wallet = {}, lang }) {
 }
 
 function Step1({ goToStep, lang, wallet, props, OnChange }) {
-  const [multiplier, setMultiplier] = useState('1')
+  const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [selectAdvanced, setSelectAdvanced] = useState(true)
   const [dropdown, setDropdown] = useState(false);
   const [oracleConfigs, setOracleConfigs] = useState([])
+  const multiplierList = {
+    "BTCUSD":"0.0001",
+    "ETHUSD":"0.001",
+    "BNBUSD":"0.01",
+    "AXSUSDT":"1",
+    "MBOXUSDT":"1",
+    "IBSCDEFI":"0.01",
+    "IGAME":"0.01",
+    "ALICEUSDT":"0.1",
+    "NULSUSDT":"1",
+  }
   const [oracleConfig, setOracleConfig] = useState(DeriEnv.get() === 'dev' ?
     {
       symbol: "BTCUSD",
@@ -134,6 +145,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const onSelect = (select) => {
     const selected = oracleConfigs.find(config => config.address === select.address && select.chainId === config.chainId)
     if (selected) {
+      setMultiplier(multiplierList[selected.symbol])
       setOracleConfig(selected)
       setDropdown(false)
     }
