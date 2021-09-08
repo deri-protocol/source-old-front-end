@@ -106,6 +106,7 @@
         "viewUrl" : "https://explorer-mumbai.maticvigil.com/",
         "supportV2" : true,
         "supportInnovation" : true,
+        "supportOptions":true,
         "metamask" : {
           "chainName": "POLYGON-Testnet",
           "nativeCurrency": {

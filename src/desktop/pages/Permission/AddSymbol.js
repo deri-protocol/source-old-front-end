@@ -235,13 +235,13 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
               {oracleConfig ? oracleConfig.symbol : ''}
             </div>
           </div>
-          <div className='advanced'>
-            <span className='select-advanced' onClick={() => setSelectAdvanced(!selectAdvanced)} >
+          <div className='advanced'  onClick={() => setSelectAdvanced(!selectAdvanced)}>
+            <span className='select-advanced' >
               {lang['advanced']}
-              {selectAdvanced ? <img src={up} /> : <img src={down} />}
             </span>
+            {selectAdvanced ? <img src={up} /> : <img src={down} />}
           </div>
-
+          {!selectAdvanced && <div className='advanced-border'></div>}
           {selectAdvanced && <>
             <div className='margin-rewards'>
               <div className='margin-ratio-parameters'>

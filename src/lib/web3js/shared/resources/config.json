@@ -830,6 +830,48 @@
           ],
           "chainId": "97",
           "version": "option"
+        },
+        {
+          "pool":   "0x6A29172e302cCB50d65d58Ad912A0925b888e96f",
+          "pToken": "0xe6068048626B03590de7B1FF8d38b35B9C2c9F48",
+          "lToken": "0x1AfA31fAe49fe8973FA3E4a2105A7c483f8E60F3",
+          "bToken": "0xa544e477866a29685E4155E27f9bD886C63880a0",
+          "bTokenSymbol": "USDC",
+          "initialBlock": "18616094",
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "BTCUSD-50000-C",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "BTCUSD-40000-P",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "ETHUSD-4000-C",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "ETHUSD-3000-P",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "4",
+              "symbol": "BTCUSD-60000-C",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "BTCUSD-50000-P",
+              "unit": "BTC"
+            }
+          ],
+          "chainId": "80001",
+          "version": "option"
         }
       ],
       "oracle": [
@@ -842,12 +884,26 @@
           "chainId": "97",
           "symbol": "ETHUSD",
           "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A"
+        },
+        {
+          "chainId": "80001",
+          "symbol": "BTCUSD",
+          "address": "0x74a02A2BC1Ef0F3E2b7B16c638EC12787DE58F91"
+        },
+        {
+          "chainId": "80001",
+          "symbol": "ETHUSD",
+          "address": "0xc0797C024e79E6e4D9473aE00c7fFCD4cce84Cc8"
         }
       ],
       "poolViewer": [
         {
           "chainId": "97",
           "address": "0x45539c5a1DE06df0bF9078b891def90F55ca00a0"
+        },
+        {
+          "chainId": "80001",
+          "address": "0xbDab21c2FA271f504D9112835dDD6Cd9a8A75540"
         }
       ]
     }

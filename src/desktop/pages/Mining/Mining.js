@@ -68,7 +68,7 @@ function Mining({wallet,lang}){
 			<div className='pool-info'>
 					<LiquidityMining {...props}/>
 			</div>
-			{isController && <>
+			{(isController && version === 'v2_lite_open') && <>
 				<div className='add-symbol'>
 					<button onClick={() => gotoMining(url)} >
 						{lang['add-symbol']}

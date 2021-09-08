@@ -37,13 +37,14 @@ describe('EverlastingOptionViewer', () => {
       expect(res.poolState).toHaveProperty('totalInitialMargin', expect.any(String))
       expect(res.poolState).toHaveProperty('curTimestamp', expect.any(String))
       expect(res.poolState).toHaveProperty('preTimestamp', expect.any(String))
-      expect(res.poolState).toHaveProperty('premiumFundingCoefficient', expect.any(String))
-      expect(res.poolState).toHaveProperty('premiumFundingPeriod', expect.any(String))
+      expect(res.poolState).toHaveProperty('fundingCoefficient', expect.any(String))
+      expect(res.poolState).toHaveProperty('fundingPeriod', expect.any(String))
 
-      expect(Object.keys(res.symbolState[0]).length).toEqual(20)
+      expect(Object.keys(res.symbolState[0]).length).toEqual(25)
       expect(res.symbolState[0]).toHaveProperty('symbolId', '0')
       expect(res.symbolState[0]).toHaveProperty('symbol', 'BTCUSD-50000-C')
-      expect(res.symbolState[0]).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
+      //expect(res.symbolState[0]).toHaveProperty('oracleAddress', '0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1')
+      expect(res.symbolState[0]).toHaveProperty('oracleAddress', '0x74a02A2BC1Ef0F3E2b7B16c638EC12787DE58F91')
       expect(res.symbolState[0]).toHaveProperty('volatilityAddress', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('isCall', true)
       expect(res.symbolState[0]).toHaveProperty('multiplier', '0.001')
@@ -52,8 +53,8 @@ describe('EverlastingOptionViewer', () => {
       expect(res.symbolState[0]).toHaveProperty('K', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('alpha', '0.01')
       expect(res.symbolState[0]).toHaveProperty('delta', expect.any(String))
-      expect(res.symbolState[0]).toHaveProperty('cumulativePremiumFundingRate', expect.any(String))
-      expect(res.symbolState[0]).toHaveProperty('premiumFundingPerSecond', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('cumulativeFundingRate', expect.any(String))
+      expect(res.symbolState[0]).toHaveProperty('fundingPerSecond', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('intrinsicValue', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('timeValue', expect.any(String))
       expect(res.symbolState[0]).toHaveProperty('spotPrice', expect.any(String))
@@ -155,9 +156,9 @@ describe('EverlastingOptionViewer', () => {
         expect.objectContaining({
           volume: expect.any(String),
           cost: expect.any(String),
-          lastCumulativePremiumFundingRate: expect.any(String),
+          lastCumulativeFundingRate: expect.any(String),
           pnl: expect.any(String),
-          premiumFundingAccrued: expect.any(String),
+          fundingAccrued: expect.any(String),
         })
       );
     },

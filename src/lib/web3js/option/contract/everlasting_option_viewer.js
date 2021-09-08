@@ -37,9 +37,9 @@ export class EverlastingOptionViewer extends ContractBase {
         'tradersNetVolume',
         'tradersNetCost',
         'cumulativeDeltaFundingRate',
-        'cumulativePremiumFundingRate',
+        'cumulativeFundingRate',
         'deltaFundingPerSecond',
-        'premiumFundingPerSecond',
+        'fundingPerSecond',
         'volatility',
       ]);
       return acc.concat([symbol])
@@ -48,8 +48,8 @@ export class EverlastingOptionViewer extends ContractBase {
       poolState: fromWeiForObject(deleteIndexedKey(res[0]), [
         'initialMarginRatio',
         'maintenanceMarginRatio',
-        'premiumFundingPeriod',
-        'premiumFundingCoefficient',
+        'fundingPeriod',
+        'fundingCoefficient',
         'liquidity',
         'totalDynamicEquity',
         'totalInitialMargin',

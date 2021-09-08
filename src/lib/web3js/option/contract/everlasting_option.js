@@ -136,7 +136,7 @@ export class EverlastingOption extends ContractBase {
       'alpha',
       'tradersNetVolume',
       'tradersNetCost',
-      'cumulativePremiumFundingRate',
+      'cumulativeFundingRate',
     ]);
     // return {
     //   symbolId: res[0],
@@ -150,7 +150,7 @@ export class EverlastingOption extends ContractBase {
     //   alpha: fromWei(res[8]),
     //   tradersNetVolume: fromWei(res[9]),
     //   tradersNetCost: fromWei(res[10]),
-    //   cumulativePremiumFundingRate: fromWei(res[11]),
+    //   cumulativeFundingRate: fromWei(res[11]),
     // };
   }
 

@@ -187,7 +187,7 @@ export const getPositionInfo = async (
         unrealizedPnlList: symbolState
           .filter((s, index) => positionState[index].pnl !== '0')
           .map((s) => [s.symbol, positionState[symbolState.findIndex((oS) => oS.symbolId === s.symbolId)].pnl]),
-        premiumFundingAccrued: positionState[symbolIndex].premiumFundingAccrued,
+        premiumFundingAccrued: positionState[symbolIndex].fundingAccrued,
         isCall: symbol.isCall,
         volatility: bg(volPrice).times(100).toString(),
         liquidationPrice: getLiquidationPrice(state, symbolId),
@@ -282,7 +282,7 @@ export const getPositionInfos = async (
               initialMarginRatio
             ).toString(),
             unrealizedPnl: positionState[vIndex].pnl,
-            premiumFundingAccrued: positionState[vIndex].premiumFundingAccrued,
+            premiumFundingAccrued: positionState[vIndex].fundingAccrued,
             isCall: s.isCall,
             volatility: deriToNatural(volPrices[vIndex]).times(100).toString(),
             liquidationPrice: liquidationPrices,
@@ -403,12 +403,12 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
     liquidity,
     totalDynamicEquity,
     prices,
-    liquidityUsed: liquidityUsedInAmount.div(liquidity),
-    premiumFunding: bg(symbolInfo.premiumFundingPerSecond)
+    liquidityUsed: bg(liquidity).eq(0) ? bg(0) : liquidityUsedInAmount.div(liquidity),
+    premiumFunding: bg(symbolInfo.fundingPerSecond)
       .div(symbolInfo.multiplier)
       .times(SECONDS_IN_A_DAY)
       .toString(),
-    premiumFundingPerSecond: bg(symbolInfo.premiumFundingPerSecond).div(
+    premiumFundingPerSecond: bg(symbolInfo.fundingPerSecond).div(
       symbolInfo.multiplier
     ),
   };
@@ -644,7 +644,7 @@ export const getEstimatedLiquidityUsed = async (
         }
       }, bg(0));
       return {
-        liquidityUsed1: liquidityUsedInAmount
+        liquidityUsed1: bg(liquidity).eq(0) ? '0' : liquidityUsedInAmount
           .div(liquidity)
           .times(100)
           .toString(),
