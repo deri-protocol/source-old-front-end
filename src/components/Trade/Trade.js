@@ -400,10 +400,8 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='contrant option-input'>
                 <input
                   type='number'
+                  step={trading.contract.multiplier}
                   onFocus={onFocus}
-                  step='0.0000000000000000001'
-                  min='0.0000000001'
-                  max='99999999999'
                   onBlur={onBlur}
                   onKeyPress={onKeyPress}
                   disabled={!trading.index || Math.abs(trading.position.margin) === 0}
