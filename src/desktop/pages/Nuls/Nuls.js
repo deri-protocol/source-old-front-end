@@ -1,11 +1,11 @@
 /* eslint-disable import/no-anonymous-default-export */
-import Sign from '../../../components/SignIn/Signin'
-import './signin.less'
+import Nuls from '../../../components/Nuls/Nuls'
+import './nuls.less'
 
 export default function({lang}){
   return(
     <div>
-      <Sign lang={lang} />
+      <Nuls lang={lang} />
     </div>
   )
 }
