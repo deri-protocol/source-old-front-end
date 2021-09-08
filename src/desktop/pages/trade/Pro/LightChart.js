@@ -202,7 +202,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       }
     }
   
-    chart && chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
+    // chart && chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
     
     return () => {
       if(symbolRef.current){

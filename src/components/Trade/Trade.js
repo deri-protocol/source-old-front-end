@@ -250,8 +250,8 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setSpec(trading.config)
     }
     return () => { 
-      setMarkPriceAfter('')
-      setFundingRateAfter('');
+      // setMarkPriceAfter('')
+      // setFundingRateAfter('');
     };
   }, [trading.config]);
 
