@@ -27,12 +27,15 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
   }
 
   useEffect(() => {
-    document.body.addEventListener('click',(event) => {
+    const onClick = (event) => {
       if(document.querySelector('.btn-group') && !document.querySelector('.btn-group').contains(event.target)){
         setDropdown(false)
       }
-    })
-    return () => {}
+    }
+    document.body.addEventListener('click',onClick)
+    return () => {
+      document.body.removeEventListener('click',onClick)
+    }
   }, [])
 
   return (
