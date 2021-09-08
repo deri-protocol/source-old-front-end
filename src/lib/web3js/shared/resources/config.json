@@ -772,6 +772,11 @@
               "symbolId": "4",
               "symbol": "BTCUSD-60000-C",
               "unit": "BTC"
+            },
+            {
+              "symbolId": "5",
+              "symbol": "BTCUSD-50000-P",
+              "unit": "BTC"
             }
           ],
           "chainId": "56",
@@ -793,7 +798,7 @@
       "poolViewer": [
         {
           "chainId": "56",
-          "address": "0xcD16041C20C46CCaA610dbf8dBC2b6B66Abd1A37"
+          "address": "0x33D0EB220185d3F2A04260b1Ef5ED2e4b90C30D2"
         }
       ]
     },
@@ -899,7 +904,7 @@
       "poolViewer": [
         {
           "chainId": "97",
-          "address": "0x45539c5a1DE06df0bF9078b891def90F55ca00a0"
+          "address": "0x72f82A5160F3a84aA584380641fb68780a104F2B"
         },
         {
           "chainId": "80001",
