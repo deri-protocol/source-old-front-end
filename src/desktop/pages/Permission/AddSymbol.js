@@ -15,7 +15,7 @@ import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
 function AddSymbol({ wallet = {}, lang }) {
-  const [multiplier, setMultiplier] = useState('1')
+  const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [symbolId, setSymbolId] = useState(0)
@@ -74,7 +74,7 @@ function AddSymbol({ wallet = {}, lang }) {
   }
 
   useEffect(() => {
-    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
+    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, bg(transactionFeeRatio).div(bg(100)).toString(), fundingRateCoefficient]
     setParameters(arr)
   }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig, symbolId])
 
@@ -95,12 +95,23 @@ function AddSymbol({ wallet = {}, lang }) {
 }
 
 function Step1({ goToStep, lang, wallet, props, OnChange }) {
-  const [multiplier, setMultiplier] = useState('1')
+  const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [selectAdvanced, setSelectAdvanced] = useState(true)
   const [dropdown, setDropdown] = useState(false);
   const [oracleConfigs, setOracleConfigs] = useState([])
+  const multiplierList = {
+    "BTCUSD":"0.0001",
+    "ETHUSD":"0.001",
+    "BNBUSD":"0.01",
+    "AXSUSDT":"1",
+    "MBOXUSDT":"1",
+    "IBSCDEFI":"0.01",
+    "IGAME":"0.01",
+    "ALICEUSDT":"0.1",
+    "NULSUSDT":"1",
+  }
   const [oracleConfig, setOracleConfig] = useState(DeriEnv.get() === 'dev' ?
     {
       symbol: "BTCUSD",
@@ -134,6 +145,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const onSelect = (select) => {
     const selected = oracleConfigs.find(config => config.address === select.address && select.chainId === config.chainId)
     if (selected) {
+      setMultiplier(multiplierList[selected.symbol])
       setOracleConfig(selected)
       setDropdown(false)
     }
@@ -357,7 +369,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
                     {lang['funding-rate-coefficient']}
                   </div>
                   <div className='input-value'>
-                    {parameters[4]}
+                    {parameters[5]}
                   </div>
                 </div>
                 <div>
@@ -365,7 +377,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
                     {lang['transaction-fee-ratio']}
                   </div>
                   <div className='input-value'>
-                    {parameters[5] * 100}  %
+                    {bg(parameters[4]).times(bg(100)).toString()}  %
                   </div>
                 </div>
               </div>

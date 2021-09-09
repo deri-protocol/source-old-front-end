@@ -1,5 +1,4 @@
 import React, { useState, useEffect ,useRef} from 'react'
-import datafeeds from './datafeeds/index'
 import classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import Type from '../../../../model/Type';
@@ -7,7 +6,7 @@ import LightChart from './LightChart';
 import { stripSymbol } from '../../../../utils/utils';
 import TVChart from './TVChart';
 
-function Chart({symbol,lang,intl,version}){
+function Chart({symbol,lang}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [chartType, setChartType] = useState('')

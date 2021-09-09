@@ -4,7 +4,7 @@ import symbolArrowIcon from '../../assets/img/arrow-down.svg'
 import arrowDownIcon from '../../assets/img/arrow-up.svg'
 import classNames from 'classnames';
 
-function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
+function SymbolSelector({trading,version,loading,type}) {
   const [dropdown, setDropdown] = useState(false);  
   const selectClass = classNames('dropdown-menu',{'show' : dropdown})
 
@@ -20,19 +20,22 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
     if(selected){
       loading.loading();
       trading.pause();
-      setSpec(selected)
+      trading.setConfig(selected)
       trading.onSymbolChange(selected,() => loading.loaded(),type.isOption);
       setDropdown(false)
     } 
   }
 
   useEffect(() => {
-    document.body.addEventListener('click',(event) => {
+    const onClick = (event) => {
       if(document.querySelector('.btn-group') && !document.querySelector('.btn-group').contains(event.target)){
         setDropdown(false)
       }
-    })
-    return () => {}
+    }
+    document.body.addEventListener('click',onClick)
+    return () => {
+      document.body.removeEventListener('click',onClick)
+    }
   }, [])
 
   return (
@@ -41,7 +44,7 @@ function SymbolSelector({trading,version,setSpec,spec,loading,type}) {
         type='button'            
         onClick={onDropdown}
         className='btn chec'>
-        <SymbolDisplay spec={spec} version={version} type={type} />
+        <SymbolDisplay spec={trading.config} version={version} type={type} />
         <span className='check-base-down'>{dropdown ? <img src={arrowDownIcon} alt=''/> : <img src={symbolArrowIcon} alt=''/>}</span>
       </button>
         <div className={selectClass}>
@@ -86,11 +89,11 @@ function SubMenu({symbol,trading,onSelect,index,version,type}){
 function SymbolDisplay({version,spec,type}){
   if(type.isOption){
     return (
-      `${spec.symbol || 'BTCUSD-60000-C'}`  
-    )
+        `${(spec && spec.symbol) || 'BTCUSD-60000-C'}`
+      )
   }else{
     return (
-      (version.isV1 || version.isV2Lite || version.isOpen) ? `${spec.symbol || 'BTCUSD'} / ${spec.bTokenSymbol || 'BUSD'} (10X)` : `${spec.symbol || 'BTCUSD'} (10X)`  
+      (version.isV1 || version.isV2Lite || version.isOpen) ? `${(spec && spec.symbol) || 'BTCUSD'} / ${ (spec && spec.bTokenSymbol ) || 'BUSD'} (10X)` : `${(spec && spec.symbol) || 'BTCUSD'} (10X)`  
     )
   }
   
