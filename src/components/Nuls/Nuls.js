@@ -106,7 +106,7 @@ function Nuls({ wallet = {}, lang }) {
       </div>
       <div className='rule'>
         <div className='rule-title'>
-
+          
         </div>
       </div>
     </div>
