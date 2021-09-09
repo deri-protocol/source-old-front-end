@@ -13,6 +13,7 @@ function Nuls({ wallet = {}, lang }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const [isApprove, setIsApprove] = useState(false);
   const [isClaim, setIsClaim] = useState(false);
+  const [isTrade, setIsTrade] = useState(false)
   const connect = () => {
     wallet.connect()
   }
@@ -82,7 +83,7 @@ function Nuls({ wallet = {}, lang }) {
               </div>
               <div className='step-img'>
                 <div>
-                  <img src={undone} />
+                  {isClaim ? <img src={success} /> : <img src={undone} />}
                 </div>
                 <div>
                   {lang['claim']}
@@ -96,7 +97,7 @@ function Nuls({ wallet = {}, lang }) {
               </div>
               <div className='step-img'>
                 <div>
-                  <img src={undone} />
+                  {isTrade ? <img src={success} /> : <img src={undone} />}
                 </div>
                 <div>
                   {lang['trade']}
@@ -119,7 +120,7 @@ function Nuls({ wallet = {}, lang }) {
           {lang['title-two']}
         </span>
         <div className='text'>
-          {lang['title-frou']}
+          {lang['title-three']}
         </div>
       </div>
       <div className='rules'>
