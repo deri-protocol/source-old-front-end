@@ -163,4 +163,9 @@ describe('EverlastingOptionViewer', () => {
     },
     TIMEOUT
   );
+  it('test only', async()=> {
+    const viewer = everlastingOptionViewerFactory('56', '0x33D0EB220185d3F2A04260b1Ef5ED2e4b90C30D2')
+    const res = await viewer.getTraderStates('0x776F280eEC075938855f115DE5e50682A76eBdBD', '0xFefC938c543751babc46cc1D662B982bd1636721', [], [])
+    console.log(JSON.stringify(res, null, 2))
+  }, TIMEOUT)
 })

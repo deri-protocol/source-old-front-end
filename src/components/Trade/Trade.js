@@ -301,7 +301,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     <div className='trade-info'>
       <div className='trade-peration'>
         <div className='check-baseToken'>
-          <SymbolSelector setSpec={setSpec} spec={spec} isOption={type.isOption} />
+          <SymbolSelector setSpec={setSpec} spec={trading.config} isOption={type.isOption} />
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
             {type.isFuture && <>
               <div className='index-prcie'>

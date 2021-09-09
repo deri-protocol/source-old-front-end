@@ -74,7 +74,7 @@ function AddSymbol({ wallet = {}, lang }) {
   }
 
   useEffect(() => {
-    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
+    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier,  bg(transactionFeeRatio).div(bg(100)).toString(),fundingRateCoefficient]
     setParameters(arr)
   }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig, symbolId])
 

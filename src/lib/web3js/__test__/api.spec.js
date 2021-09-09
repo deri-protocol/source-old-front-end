@@ -3,6 +3,7 @@ import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V1_ADDRESS, OPTION_POOL_ADDRESS } from '
 import { bg } from '../shared/utils';
 import { getLiquidityInfo, isUnlocked } from '../indexV2';
 import { getContractAddressConfig } from '../api_wrapper';
+import { DeriEnv } from '../shared';
 
 describe('api', () => {
   test('isUnlocked()', async () => {
@@ -37,5 +38,11 @@ describe('api', () => {
   it('getPoolConfigList option', () => {
     const res = getContractAddressConfig('dev', 'option')
     expect(res.length).toEqual(12)
+  })
+  it('getPoolConfigList option', () => {
+    DeriEnv.set('prod')
+    const res = getContractAddressConfig()
+    DeriEnv.set('dev')
+    expect(res.length).toEqual(45)
   })
 });

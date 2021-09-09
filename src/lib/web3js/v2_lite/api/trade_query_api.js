@@ -12,6 +12,7 @@ import {
   bg,
   catchApiError,
   getLatestBlockNumber,
+  getLastUpdatedBlockNumber,
 } from '../../shared/utils';
 import { getOraclePriceFromCache } from '../../shared/utils/oracle'
 import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
@@ -75,18 +76,30 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
     const { pToken: pTokenAddress, symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite')
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     const pToken = pTokenLiteFactory(chainId, pTokenAddress)
-    const [ parameterInfo, symbolInfo, liquidity, symbolIds, lastUpdatedBlockNumber, latestBlockNumber, positionInfo, margin, latestPrice] = await Promise.all([
-    //const [ parameterInfo, symbolInfo, liquidity, symbolIds, latestBlockNumber, positionInfo, margin, latestPrice] = await Promise.all([
+    const [
+      parameterInfo,
+      symbolInfo,
+      liquidity,
+      symbolIds,
+      lastUpdatedBlockNumber,
+      latestBlockNumber,
+      positionInfo,
+      margin,
+      latestPrice,
+    ] = await Promise.all([
+      //const [ parameterInfo, symbolInfo, liquidity, symbolIds, latestBlockNumber, positionInfo, margin, latestPrice] = await Promise.all([
       perpetualPool.getParameters(),
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getLiquidity(),
       pToken.getActiveSymbolIds(),
-      perpetualPool.getLastUpdateBlock(),
+      chainId.toString() === '97'
+        ? getLastUpdatedBlockNumber(chainId, poolAddress, 5)
+        : perpetualPool.getLastUpdateBlock(),
       getLatestBlockNumber(chainId),
       pToken.getPosition(accountAddress, symbolId),
       pToken.getMargin(accountAddress),
       getOraclePriceFromCache.get(chainId, symbol, 'v2_lite'),
-    ])
+    ]);
     //console.log(latestBlockNumber, lastUpdatedBlockNumber)
     const { volume, cost, lastCumulativeFundingRate } = positionInfo
     const { multiplier, fundingRateCoefficient, tradersNetVolume, cumulativeFundingRate } = symbolInfo
