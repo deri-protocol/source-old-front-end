@@ -46,8 +46,7 @@ function Nuls({ wallet = {}, lang }) {
   return (
     <div className='nuls-box'>
       <div className='title'>
-        {lang['title']}<br />
-        {lang['title-one']}
+        {lang['title']}
       </div>
       <div className='logo'>
         <img className='nuls-img' src={nulsimg} />
@@ -106,7 +105,6 @@ function Nuls({ wallet = {}, lang }) {
       </div>
       <div className='rule'>
         <div className='rule-title'>
-          
         </div>
       </div>
     </div>

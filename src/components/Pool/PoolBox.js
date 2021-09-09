@@ -10,7 +10,6 @@ import { eqInNumber, addParam } from '../../utils/utils.js';
 import classNames from 'classnames';
 import TipWrapper from '../TipWrapper/TipWrapper.js';
 import { version } from '@babel/core';
-import zusd from '../../assets/img/zUSD.png'
 import errorimg from '../../assets/img/ErrorImg.png'
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
