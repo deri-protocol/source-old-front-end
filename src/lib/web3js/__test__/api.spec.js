@@ -2,7 +2,7 @@
 import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V1_ADDRESS, OPTION_POOL_ADDRESS } from '../shared/__test__/setup';
 import { bg } from '../shared/utils';
 import { getLiquidityInfo, isUnlocked } from '../indexV2';
-import { getContractAddressConfig } from '../api_wrapper';
+import { getContractAddressConfig, getPoolConfigList } from '../api_wrapper';
 import { DeriEnv } from '../shared';
 
 describe('api', () => {
@@ -39,10 +39,11 @@ describe('api', () => {
     const res = getContractAddressConfig('dev', 'option')
     expect(res.length).toEqual(12)
   })
-  it('getPoolConfigList option', () => {
+  it('getPoolConfigList all', () => {
     DeriEnv.set('prod')
-    const res = getContractAddressConfig()
+    const res = getPoolConfigList()
     DeriEnv.set('dev')
-    expect(res.length).toEqual(45)
+    expect(res.length).toEqual(7)
+    //expect(res).toEqual({})
   })
 });

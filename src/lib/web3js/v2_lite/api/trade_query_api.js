@@ -92,7 +92,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       perpetualPool.getSymbol(symbolId),
       perpetualPool.getLiquidity(),
       pToken.getActiveSymbolIds(),
-      chainId.toString() === '97'
+      poolAddress === '0x3422DcB21c32d91aDC8b7E89017e9BFC13ee2d42'
         ? getLastUpdatedBlockNumber(chainId, poolAddress, 5)
         : perpetualPool.getLastUpdateBlock(),
       getLatestBlockNumber(chainId),

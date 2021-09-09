@@ -1,7 +1,7 @@
 export {
   DeriEnv,
-  getPoolConfigList,
-  getFilteredPoolConfigList,
+  //getPoolConfigList,
+  //getFilteredPoolConfigList,
   getLpConfigList as getLpContractAddressConfig,
   getPreminingConfigList as getPreminingContractConfig,
 } from './shared/config';

@@ -4,6 +4,7 @@ import {
   getPoolV1ConfigList,
   VERSIONS,
 } from '../shared/config';
+import { getJsonConfig } from '../shared/config/config';
 import { ALL_EXCEPT_OPEN_VERSIONS } from '../shared/config/version';
 
 export const getContractAddressConfig = (env, version) => {
@@ -17,4 +18,19 @@ export const getContractAddressConfig = (env, version) => {
   } else {
     throw new Error(`getContractAddressConfig: invalid version: ${version}`);
   }
+};
+
+export const getPoolConfigList = (env) => {
+  env = env || DeriEnv.get();
+  return ALL_EXCEPT_OPEN_VERSIONS.reduce((acc, v) => {
+    let res = []
+    const config = getJsonConfig(v, env);
+    if (config && config.pools) {
+      res = config.pools.map((p) => {
+        p.version = v
+        return p
+      })
+    }
+    return [...acc, ...res];
+  }, []);
 };
