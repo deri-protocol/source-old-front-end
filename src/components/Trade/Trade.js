@@ -34,16 +34,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [inputing, setInputing] = useState(false);
   const [isOptionInput, setIsOptionInput] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
-  const [loaded, setLoaded] = useState(false)
   const indexPriceRef = useRef();
   const markPriceRef = useRef();
   const directionClazz = classNames('checked-long', 'check-long-short', ' long-short', { 'checked-short': direction === 'short' })
   const volumeClazz = classNames('contrant-input', { 'inputFamliy': trading.volume !== '' })
 
 
-
-  //是否有 spec
-  const hasSpec = () => spec && spec.pool
 
   //是否有链接钱包
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
@@ -523,7 +519,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
                 </div>
               </div>
               
@@ -531,7 +527,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             <div className='text-info'>
               <div className='title-enter'>{lang['transaction-fee']}</div>
               <div className='text-enter'>
-                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
+                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
               </div>
              
             </div>
@@ -549,8 +545,8 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           afterTrade={afterTrade}
           position={trading.position}
           trading={trading}
-          symbolId={trading.config && trading.config.symbolId}
-          bTokenId={trading.config && trading.config.bTokenId}
+          // symbolId={trading.config.symbolId}
+          // bTokenId={trading.config.bTokenId}
           version={version}
           lang={lang}
           type={type}
@@ -564,7 +560,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang, type, markPriceAfter }) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter }) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -577,7 +573,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
   }
 
   const approve = async () => {
-    const res = await wallet.approve(spec.pool, bTokenId)
+    const res = await wallet.approve(spec.pool, spec.bTokenId)
     if (res.success) {
       setIsApprove(true);
       loadApprove();
@@ -602,14 +598,14 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
   //load Approve status
   const loadApprove = async () => {
     if (hasConnectWallet() && spec) {
-      const result = await wallet.isApproved(spec.pool, bTokenId)
+      const result = await wallet.isApproved(spec.pool, spec.bTokenId)
       setIsApprove(result);
     }
   }
 
   const loadBalance = async () => {
     if (wallet.isConnected() && spec) {
-      const balance = await getWalletBalance(wallet.detail.chainId, spec.pool, wallet.detail.account, bTokenId).catch(e => console.error('getWalletBalance was error,maybe network is Wrong'))
+      const balance = await getWalletBalance(wallet.detail.chainId, spec.pool, wallet.detail.account, spec.bTokenId).catch(e => console.error('getWalletBalance was error,maybe network is Wrong'))
       if (balance) {
         setBalance(balance)
       }
@@ -670,7 +666,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
             wallet={wallet}
             modalIsOpen={depositIsOpen}
             onClose={afterDepositAndWithdraw}
-            spec={trading.config}
+            spec={spec}
             afterDepositAndWithdraw={afterDepositAndWithdraw}
             position={trading.position}
             overlay={{ background: '#1b1c22', top: 80 }}

@@ -98,13 +98,13 @@ export default function useMiningPool(isNew,wallet){
       const liteConfigs = getContractAddressConfig(env,'v2_lite')
       const optionConfigs = getContractAddressConfig(env,'option')
       const preminingPools = getPreminingContractConfig(env);
-      const getOpenPools = async () => {
-        await openConfigListCache.update()
-        return getContractAddressConfig(env, 'v2_lite_open')
-      }
-      const openPools = await getOpenPools()
+      // const getOpenPools = async () => {
+      //   await openConfigListCache.update()
+      //   return getContractAddressConfig(env, 'v2_lite_open')
+      // }
+      // const openPools = await getOpenPools()
       const all = []
-      let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).concat(openPools).reduce((total,config) => {
+      let configs = v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs).reduce((total,config) => {
         const pos = total.findIndex(item => item.chainId === config.chainId && (item.pool === config.pool) && config.version === item.version)
         if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open')  
             && pos > -1) {

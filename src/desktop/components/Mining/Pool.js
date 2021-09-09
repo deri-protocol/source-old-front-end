@@ -6,21 +6,31 @@ import './zh-pool.less'
 import { inject, observer } from 'mobx-react';
 import Card from './Card';
 import List from './List';
+import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
 
+const env = DeriEnv.get();
 
 function Pool({ lang, loading, wallet }) {
-  const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools, openPools] = useMiningPool(true, wallet);
+  const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools] = useMiningPool(true, wallet);
+  const [openPools, setOpenPools] = useState([])
   const [curTab, setCurTab] = useState('')
   const [curStyle, setCurStyle] = useState('card')
-  const [switchChecked, setSwitchChecked] = useState(false)
+  // const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area', curTab)
-  const styleSelectClass = classNames('style-select', curStyle)
-  const switchClass = classNames('switch-btn', { checked: switchChecked })
-  const switchTab = (current) => {
-    if (current === curTab) {
-      setCurTab('')
-    } else {
-      setCurTab(current)
+  // const styleSelectClass = classNames('style-select', curStyle)
+  // const switchClass = classNames('switch-btn', { checked: switchChecked })
+
+  const getOpenPools = async () => {
+    await openConfigListCache.update()
+    return getContractAddressConfig(env, 'v2_lite_open')
+  }
+  const switchTab = async (current) => {
+    setCurTab(current)
+    if(current === 'opens') {
+      loading.loading()
+      const openPools = await getOpenPools()
+      loading.loaded();
+      setOpenPools(openPools)
     }
   };
 
@@ -49,7 +59,8 @@ function Pool({ lang, loading, wallet }) {
           <div className='opens' onClick={() => switchTab('opens')}>{lang['open-zone']}</div>
         </div>
       </div>
-      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet} /> : <Card type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} />}
+      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet} /> 
+                           : <Card type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} />}
     </div>
   )
 }
