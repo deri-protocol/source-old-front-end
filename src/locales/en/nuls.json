@@ -1,5 +1,9 @@
 {
-  "title":"Deri Protocol x NULS trading Competition,Win up to $6,000 in DERI and NULS",
+  "title":"Deri Protocol x NULS trading Competition",
+  "title-one":"Reward Pool: ",
+  "title-num":" $6,000",
+  "title-two":" in DERI ",
+  "title-three":"Time: From September 13 10:00 AM UTC to September 20 10:00 AM UTC",
   "user-tasks":"USER TASKS",
   "register":"REGISTER",
   "approve":"APPROVE",
@@ -19,7 +23,7 @@
   "notes-two":"Trading volume counts both buys and sells, excluding any wash trades",
   "notes-three":"Deri Protocol and NULS reserves the right to disqualify trades that are deemed to be wash trades, as well as trades that display attributes of self-dealing or market manipulation",
   "notes-four":"Deri Protocol and NULS reserves the right to cancel or amend any Activity or Activity Rules at our sole discretion",
+  "in-celebration-of-the":"In celebration of the NULS perpetual pool in the Open Zone, Deri Protocol and NULS roll out this promotional event with total rewards worth $6,000 in DERI and NULS",
   "connect-wallet":"Connect Wallet",
-  "pending":"Pending",
-  "link-official-event-page":"Link: Official Event Page"
+  "pending":"Pending"
 }
