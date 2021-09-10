@@ -167,7 +167,7 @@ describe('EverlastingOptionViewer', () => {
     // const viewer = everlastingOptionViewerFactory('56', '0x33D0EB220185d3F2A04260b1Ef5ED2e4b90C30D2')
     // const res = await viewer.getTraderStates('0x776F280eEC075938855f115DE5e50682A76eBdBD', '0xFefC938c543751babc46cc1D662B982bd1636721', [], [])
     // console.log(JSON.stringify(res, null, 2))
-    const viewer = everlastingOptionViewerFactory('97', '0xAaED814B98750AC28c5845318e12C5044e7589f7')
+    const viewer = everlastingOptionViewerFactory('97', '0x2cADdC11aDD70E520D950A51606243970A54d80a')
     const res = await viewer.getTraderStates('0x0D0c982af263a02DF481A642798ab815832904B7', '0xFefC938c543751babc46cc1D662B982bd1636721', [], [])
     console.log(JSON.stringify(res, null, 2))
   }, TIMEOUT)

@@ -559,8 +559,8 @@ export default class Trading {
 
   get TransactionFeeTip(){
     if(this.contract && (this.contract.feeRatioITM && this.contract.feeRatioOTM)){
-        return `${Intl.get('lite','transaction-fee-tip-in-the-money')} * ${bg(this.contract.feeRatioITM).times(bg(100)).toString()} %` +
-        `\n ${Intl.get('lite','transaction-fee-tip-out-of-money')} ${this.contract.underlier} ${Intl.get('lite','price')} * ${bg(this.contract.feeRatioOTM).times(bg(100)).toString()} %`
+        return `${Intl.get('lite','transaction-fee-tip-in-the-money')} ${this.contract.underlier} ${Intl.get('lite','price')}  * ${bg(this.contract.feeRatioITM).times(bg(100)).toString()} %` +
+        `\n ${Intl.get('lite','transaction-fee-tip-out-of-money')} * ${bg(this.contract.feeRatioOTM).times(bg(100)).toString()} %`
     }
     return ''
   }

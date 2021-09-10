@@ -105,11 +105,16 @@ function ContractInfo({ wallet, trading, lang, type }) {
             </div>
           </>}
           <div className="text">
-            {trading.contract.strike >= trading.index && <>
-              {lang['eo-mark-price']} * <NumberFormat displayType='text' value={trading.contract.feeRatioOTM * 100} decimalScale={3} suffix='%' />
+            {type.isOption && <>
+              {trading.contract.strike >= trading.index && <>
+                {lang['eo-mark-price']} * <NumberFormat displayType='text' value={trading.contract.feeRatioOTM * 100} decimalScale={3} suffix='%' />
+              </>}
+              {trading.contract.strike < trading.index && <>
+                {trading.contract.underlier} {lang['price']} * <NumberFormat displayType='text' value={trading.contract.feeRatioITM * 100} decimalScale={3} suffix='%' />
+              </>}
             </>}
-            {trading.contract.strike < trading.index && <>
-              {trading.contract.underlier} {lang['price']} * <NumberFormat displayType='text' value={trading.contract.feeRatioITM * 100} decimalScale={3} suffix='%' />
+            {type.isFuture && <>
+              <NumberFormat displayType='text' value={trading.contract.feeRatio * 100} decimalScale={3} suffix='%' />
             </>}
           </div>
         </div>
