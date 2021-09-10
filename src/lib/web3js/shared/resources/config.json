@@ -805,7 +805,7 @@
     "dev": {
       "pools": [
         {
-          "pool":   "0x8d51b91e48380622E3274D32B64D39897b492E97",
+          "pool":   "0x0D0c982af263a02DF481A642798ab815832904B7",
           "pToken": "0x4047a31aa3CA9AfFC820E3153A1D79b3c2074CF2",
           "lToken": "0x6D89257cF3c614304A6508BC6A268e3e7998BaF2",
           "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
@@ -904,7 +904,7 @@
       "poolViewer": [
         {
           "chainId": "97",
-          "address": "0x72f82A5160F3a84aA584380641fb68780a104F2B"
+          "address": "0xAaED814B98750AC28c5845318e12C5044e7589f7"
         },
         {
           "chainId": "80001",
