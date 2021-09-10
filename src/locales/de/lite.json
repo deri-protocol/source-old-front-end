@@ -128,6 +128,8 @@
   "funding-rate-premium-tip":"Premium Finanzierungsgebühr",
   "transaction-fee-tip":"Transaktionsgebühr für 1",
   "transaction-fee-tip1":"Markierungspreis * ",
+  "transaction-fee-tip-in-the-money":"In-the-money: Transaction Fee = Option Mark Price ",
+  "transaction-fee-tip-out-of-money":"Out-of-money: Transaction Fee =  ",
   "funding-rate-per-block":"Finanzierungsrate (pro block)",
   "funding-rate-per-second":"Finanzierungsrate (per second)",
   "1-long-contract-pays-1-short-contract" : "1 long-Kontrakt zahlt 1 Short-Kontrakt",
