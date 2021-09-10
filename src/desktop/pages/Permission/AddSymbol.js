@@ -74,7 +74,7 @@ function AddSymbol({ wallet = {}, lang }) {
   }
 
   useEffect(() => {
-    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, fundingRateCoefficient, bg(transactionFeeRatio).div(bg(100)).toString()]
+    let arr = [symbolId, oracleConfig.symbol, oracleConfig.address, multiplier, bg(transactionFeeRatio).div(bg(100)).toString(), fundingRateCoefficient]
     setParameters(arr)
   }, [multiplier, fundingRateCoefficient, transactionFeeRatio, oracleConfig, symbolId])
 
@@ -369,7 +369,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
                     {lang['funding-rate-coefficient']}
                   </div>
                   <div className='input-value'>
-                    {parameters[4]}
+                    {parameters[5]}
                   </div>
                 </div>
                 <div>
@@ -377,12 +377,13 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
                     {lang['transaction-fee-ratio']}
                   </div>
                   <div className='input-value'>
-                    {parameters[5] * 100}  %
+                    {bg(parameters[4]).times(bg(100)).toString()}  %
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          
           <div className='next-button'>
             <div className='next-button'>
               <button onClick={() => { goToStep(1) }}>
