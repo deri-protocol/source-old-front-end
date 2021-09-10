@@ -222,7 +222,7 @@ export function combineSymbolfromPoolConfig(configs){
   },[]);
 }
 
-export async function mapPoolInfo(config,wallet){
+export async function mapPoolInfo(config,wallet,chainInfo){
   const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
   const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
   const pool = config.pool || ''

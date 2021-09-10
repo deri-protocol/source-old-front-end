@@ -7,7 +7,7 @@ import { inject, observer } from 'mobx-react';
 
 
 function Pool({version,lang,loading}){
-  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,premining] = useMiningPool(version);
+  const [loaded,pools,v1Pools,v2Pools,optionPools,legacyPools,premining] = useMiningPool(version,null,true);
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
     return () => {}

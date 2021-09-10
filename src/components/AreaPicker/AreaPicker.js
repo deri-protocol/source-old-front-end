@@ -18,7 +18,7 @@ function AreaPicker({lang,version,wallet,type}){
     }
   }
   useEffect(() => {
-    siwtchZone('main')
+    // siwtchZone('main')
     wallet.supportOpen ? setStyles({width : `${100 / 3}%` }) : setStyles({width : `${100 /2 }%`})
     return () => {}
   }, [wallet.detail])

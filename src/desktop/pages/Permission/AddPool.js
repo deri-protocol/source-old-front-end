@@ -187,7 +187,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['initial-margin-hover']}>
+                        <span className='hover-title' tip={lang['initial-margin-hover']}>
                           {lang['initial-margin']}
                         </span>
                       </TipWrapper>
@@ -203,7 +203,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['maintenance-margin-hover']}>
+                        <span className='hover-title' tip={lang['maintenance-margin-hover']}>
                           {lang['maintenance-margin']}
                         </span>
                       </TipWrapper>
@@ -219,7 +219,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['pool-margin-hover']}>
+                        <span className='hover-title' tip={lang['pool-margin-hover']}>
                           {lang['pool-margin']}
                         </span>
                       </TipWrapper>
@@ -242,7 +242,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['cut-ratio-hover']}>
+                        <span className='hover-title' tip={lang['cut-ratio-hover']}>
                           {lang['cut-ratio']}
                         </span>
                       </TipWrapper>
@@ -258,7 +258,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div className='no-fix'>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['max-reward-hover']}>
+                        <span className='hover-title' tip={lang['max-reward-hover']}>
                           {lang['max-reward']}
                         </span>
                       </TipWrapper>
@@ -274,7 +274,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
                   <div className='no-fix'>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['min-reward-hover']}>
+                        <span className='hover-title' tip={lang['min-reward-hover']}>
                           {lang['min-reward']}
                         </span>
                       </TipWrapper>

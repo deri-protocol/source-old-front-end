@@ -6,11 +6,7 @@ import {
   getPoolInfoApy,
   getLpContractAddressConfig,
   getLpPoolInfoApy,
-  getPreminingContractConfig,
-  getUserInfoAll,
-  getLiquidityInfo,
-  openConfigListCache,
-  getPoolOpenConfigList
+  getPreminingContractConfig
 } from '../lib/web3js/indexV2'
 import config from '../config.json'
 import { formatAddress, isLP, isSushiLP, isCakeLP, eqInNumber, groupByNetwork, combineSymbolfromPoolConfig, mapPoolInfo } from '../utils/utils';
@@ -21,7 +17,7 @@ import { version } from '@babel/core';
 const env = DeriEnv.get();
 const { chainInfo } = config[env]
 
-export default function useMiningPool(isNew,wallet){
+export default function useMiningPool(isNew,wallet,retired){
   const [loaded,setLoaded] = useState(false)
   const [pools, setPools] = useState([])
   const [v1Pools, setV1Pools] = useState([])
@@ -29,18 +25,22 @@ export default function useMiningPool(isNew,wallet){
   const [optionPools, setOptionPools] = useState([])
   const [legacyPools, setLegacyPools] = useState([])
   const [preminingPools, setPreminingPools] = useState([])
-  const [openPools, setOpenPools] = useState([])
 
 
   useEffect(() => {
     const loadConfig = async () => {
       let v2Configs = getContractAddressConfig(env,'v2')
-      let v1Configs = getContractAddressConfig(env,'v1')
       const liteConfigs = getContractAddressConfig(env,'v2_lite')
       const optionConfigs = getContractAddressConfig(env,'option')
-      const preminingPools = getPreminingContractConfig(env);
-      let configs = combineSymbolfromPoolConfig(v2Configs.concat(v1Configs).concat(preminingPools).concat(liteConfigs).concat(optionConfigs));
-      configs = configs.map((config) => mapPoolInfo(config,wallet))
+      let configs = v2Configs.concat(liteConfigs).concat(optionConfigs);
+      if(retired){
+        let v1Configs = getContractAddressConfig(env,'v1')
+        const preminingPools = getPreminingContractConfig(env);
+        configs = v1Configs.concat(preminingPools);
+      }
+      configs = combineSymbolfromPoolConfig(configs);
+      configs = configs.map((config) => mapPoolInfo(config,wallet,chainInfo))
+
       const slpConfig = getLpContractAddressConfig(env).map(async config => {
         const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
         const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
@@ -100,12 +100,11 @@ export default function useMiningPool(isNew,wallet){
         setPools(pools);
         setLegacyPools(legacy);
         setPreminingPools(preminings)
-        setOpenPools(openPools)
         setLoaded(true)
       })
     }
     loadConfig();
     return () => pools.length = 0
   }, [])
-  return [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools, openPools];
+  return [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools];
 }

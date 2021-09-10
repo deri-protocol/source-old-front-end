@@ -8,13 +8,13 @@ describe('LTokenOption', () => {
     lTokenOption = lTokenOptionFactory(CHAIN_ID, OPTION_LTOKEN_ADDRESS)
   })
   it('name', async() => {
-    expect(await lTokenOption.name()).toEqual('Deri Liquidity Token')
+    expect(await lTokenOption.name()).toEqual('Deri Option Liquidity Token')
   }, TIMEOUT)
   it('pool', async() => {
     expect(await lTokenOption.pool()).toEqual(OPTION_POOL_ADDRESS)
   }, TIMEOUT)
   it('symbol', async() => {
-    expect(await lTokenOption.symbol()).toEqual('DLT')
+    expect(await lTokenOption.symbol()).toEqual('DOLT')
   }, TIMEOUT)
   it('totalSupply', async() => {
     const res = await lTokenOption.totalSupply()

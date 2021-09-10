@@ -2,7 +2,7 @@ import { catchApiError } from "../../shared/utils/api"
 import { DeriEnv } from "../../shared/config/env"
 import { getOracleConfigList } from "../../shared/config/oracle"
 import { getJsonConfig } from "../../shared/config/config"
-import { isBrowser, normalizeChainId, toChecksumAddress, validateObjectKeyExist } from "../../shared/utils"
+import { normalizeChainId, toChecksumAddress, validateObjectKeyExist } from "../../shared/utils"
 import { poolProcessor, poolValidator } from "../../shared/config/config_processor"
 import { getPoolViewerConfig } from "../../shared"
 import { expandPoolConfigV2LiteOpen, getPoolV2LiteManagerConfig, openPoolChainIds } from "../config"
@@ -65,16 +65,32 @@ export const getPoolOpenOracleList = (chainId) => {
 };
 
 export const getPoolController = async(chainId, poolAddress) => {
-  chainId = normalizeChainId(chainId)
-  const perpetualPoolLite = perpetualPoolLiteFactory(chainId, poolAddress)
-  return await perpetualPoolLite.controller()
+  chainId = normalizeChainId(chainId);
+  return catchApiError(
+    async (chainId, poolAddress) => {
+      const perpetualPoolLite = perpetualPoolLiteFactory(chainId, poolAddress);
+      return await perpetualPoolLite.controller();
+    },
+    [chainId, poolAddress],
+    'getPoolController',
+    ''
+  );
 }
-export const isPoolController = async(chainId, poolAddress, controller) => {
-  chainId = normalizeChainId(chainId)
-  const perpetualPoolLite = perpetualPoolLiteFactory(chainId, poolAddress)
-  const poolController = await perpetualPoolLite.controller()
-  return toChecksumAddress(controller) === toChecksumAddress(poolController)
-}
+export const isPoolController = async (chainId, poolAddress, controller) => {
+  chainId = normalizeChainId(chainId);
+  return catchApiError(
+    async (chainId, poolAddress, controller) => {
+      const perpetualPoolLite = perpetualPoolLiteFactory(chainId, poolAddress);
+      const poolController = await perpetualPoolLite.controller();
+      return (
+        toChecksumAddress(controller) === toChecksumAddress(poolController)
+      );
+    },
+    [chainId, poolAddress, controller],
+    'isPoolController',
+    false
+  );
+};
 
 export const getExpandedPoolOpenConfigList = async () => {
   const env = DeriEnv.get()
@@ -93,11 +109,18 @@ export const getExpandedPoolOpenConfigList = async () => {
   return expandPoolConfigV2LiteOpen(config);
 }
 
-export const getPoolAllSymbolNames = async(chainId, poolAddress) => {
-  const viewerAddress = getPoolViewerConfig(chainId, 'v2_lite')
-  const poolViewer = perpetualPoolLiteViewerFactory(chainId, viewerAddress)
-  return await poolViewer.getOffChainOracleSymbols(poolAddress)
-}
+export const getPoolAllSymbolNames = async (chainId, poolAddress) => {
+  return catchApiError(
+    async () => {
+      const viewerAddress = getPoolViewerConfig(chainId, 'v2_lite');
+      const poolViewer = perpetualPoolLiteViewerFactory(chainId, viewerAddress);
+      return await poolViewer.getOffChainOracleSymbols(poolAddress);
+    },
+    [chainId.toString(), poolAddress],
+    'getPoolAllSymbolNames ',
+    []
+  );
+};
 
 
 // v2lite open config list cache

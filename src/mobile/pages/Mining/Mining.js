@@ -29,7 +29,7 @@ function Mining({wallet,lang}){
 	}
 	const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
-	const PoolController = async () => {
+	const isPoolAdmin = async () => {
 		let res = await isPoolController(wallet.detail.chainId,address,wallet.detail.account)
 		setIsController(res)
 	}
@@ -44,9 +44,9 @@ function Mining({wallet,lang}){
 
 	useEffect(()=>{
 		if(hasConnectWallet()){
-			PoolController()
 			if(version === 'v2_lite_open'){
 				openConfigList()
+				isPoolAdmin()
 			}
 		}
 	},[wallet,wallet.detail,address])

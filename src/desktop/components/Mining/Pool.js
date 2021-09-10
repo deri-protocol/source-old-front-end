@@ -8,8 +8,10 @@ import Card from './Card';
 import List from './List';
 import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
 import { combineSymbolfromPoolConfig, groupByNetwork, mapPoolInfo } from '../../../utils/utils';
+import config from './../../../config.json'
 
 const env = DeriEnv.get();
+const { chainInfo } = config[env]
 
 function Pool({ lang, loading, wallet }) {
   const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools] = useMiningPool(true, wallet);
@@ -27,20 +29,24 @@ function Pool({ lang, loading, wallet }) {
   }
   const switchTab = async (current) => {
     setCurTab(current)
-    if(current === 'opens') {
+    if(current === 'opens' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
-      openPools = openPools.map(config => mapPoolInfo(config,wallet))
-      openPools = groupByNetwork(openPools);
-      loading.loaded();
-      setOpenPools(openPools)
+      openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
+      Promise.all(openPools).then(pools => {
+        openPools = groupByNetwork(pools);
+        setOpenPools(openPools)
+        loading.loaded();
+      })
     }
   };
 
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
     console.log(wallet.isConnected())
-    return () => { }
+    return () => { 
+
+    }
   }, [loaded, wallet])
 
   return (

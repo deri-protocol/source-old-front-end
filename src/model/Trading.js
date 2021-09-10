@@ -162,18 +162,17 @@ export default class Trading {
       this.oracle.addListener('trading',data => {
         this.setIndex(data.close)
       })
-      this.oracle.load(getFormatSymbol(config.symbol))
     }
     if(wallet && wallet.isConnected && config){
       Promise.all([
         this.positionInfo.load(wallet,config,(position) => {
           this.setPosition(position)
           this.syncFundingRate(wallet,config,isOption)
-        },isOption),
+        }),
         this.contractInfo.load(wallet,config,isOption),
         this.loadFundingRate(wallet,config,isOption),
         this.historyInfo.load(wallet,config,isOption),
-        isOption && this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions),isOption),
+        isOption && this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions)),
       ]).then(results => {
         if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
@@ -185,6 +184,9 @@ export default class Trading {
         } 
       }).finally(e => {
         finishedCallback && finishedCallback()
+        this.oracle.load(getFormatSymbol(config.symbol))
+        this.positionInfo.start()
+        isOption && this.positionInfo.startAll();
       })
     } else {
       finishedCallback && finishedCallback()
@@ -273,7 +275,7 @@ export default class Trading {
   resume(){
     this.setPaused(false)
     this.oracle.resume();
-    this.positionInfo.resume(this.wallet,this.config);
+    this.positionInfo.resume();
   }
 
   setWallet(wallet){
@@ -373,7 +375,7 @@ export default class Trading {
 
   clean(){
     this.oracle.clean();
-    this.positionInfo.pause();
+    this.positionInfo.clean();
     this.version = null;
     this.configs = [] 
     this.config = null;
