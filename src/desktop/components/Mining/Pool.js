@@ -7,6 +7,7 @@ import { inject, observer } from 'mobx-react';
 import Card from './Card';
 import List from './List';
 import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
+import { combineSymbolfromPoolConfig, groupByNetwork, mapPoolInfo } from '../../../utils/utils';
 
 const env = DeriEnv.get();
 
@@ -28,7 +29,9 @@ function Pool({ lang, loading, wallet }) {
     setCurTab(current)
     if(current === 'opens') {
       loading.loading()
-      const openPools = await getOpenPools()
+      let openPools = combineSymbolfromPoolConfig(await getOpenPools());
+      openPools = openPools.map(config => mapPoolInfo(config,wallet))
+      openPools = groupByNetwork(openPools);
       loading.loaded();
       setOpenPools(openPools)
     }
