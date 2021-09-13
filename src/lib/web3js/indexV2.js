@@ -19,4 +19,7 @@ export * from './option/api'
 
 export * from './v2_lite_open/api'
 
+export * from './activity/api'
+
 export * from './api_wrapper';
+

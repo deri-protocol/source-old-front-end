@@ -8,25 +8,97 @@ import success from './img/success.svg'
 import undone from './img/undone.svg'
 import right from './img/right.svg'
 import Button from '../Button/Button'
+import {
+  isPTokenAirdropped,
+  isUserPTokenLiteExist,
+  totalAirdropCount,
+  isBTokenUnlocked,
+  hasRequiredBalance,
+  getTradeHistory,
+  unlockBToken,
+  DeriEnv,
+  airdropPTokenLite
+} from "../../lib/web3js/indexV2";
 function Nuls({ wallet = {}, lang }) {
   const [actionElement, setActionElement] = useState(<Button className='btn' btnText={lang['connect-wallet']}></Button>)
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const [isApprove, setIsApprove] = useState(false);
   const [isClaim, setIsClaim] = useState(false);
-  const [isTrade, setIsTrade] = useState(false)
+  const [isTrade, setIsTrade] = useState(false);
+  const [isBalance,setIsBalacne] = useState(false);
+  const [isHasPToken,setIsHasPToken] = useState(false)
+  const config = DeriEnv.get() === 'dev' ? {
+    poolAddress:'0xb18e2815c005a99BE77c8719c79ec2451A59aDAD'
+  } : {
+    poolAddress :'0xB8b79fd4BCB7dc0Ef352F258b4f9eC53306439fd'
+  }
   const connect = () => {
     wallet.connect()
   }
 
   const approve = async () => {
-
+    let res = await unlockBToken(wallet.detail.chainId,config.poolAddress,wallet.detail.account)
+    if(res.success){
+      setIsApprove(true)
+    }
   }
+
+  const getHasPToken = async ()=>{
+    let res = await isUserPTokenLiteExist(wallet.detail.chainId,config.poolAddress,wallet.detail.account)
+    setIsHasPToken(res)
+  }
+
   const claimPtoken = async () => {
+    if(!isBalance){
+      alert(lang['less-nuls'])
+      return
+    }
+    if(isHasPToken){
+      alert(lang['use-a-new-address'])
+      return
+    }
+
+    let res = await airdropPTokenLite(wallet.detail.chainId,wallet.detail.account)
+    if(res.success){
+      setIsClaim(true)
+    }else{
+      alert(lang['faild'])
+    }
 
   }
-  const reg = async () => {
 
+  const getBalance = async ()=>{
+    let res = await hasRequiredBalance(wallet.detail.chainId,config.poolAddress,wallet.detail.account)
+    setIsBalacne(res)
   }
+
+  const getIsApprove = async ()=>{
+    let res = await isBTokenUnlocked(wallet.detail.chainId,config.poolAddress,wallet.detail.account)
+    setIsApprove(res)
+  }
+
+  const getIsClaim = async ()=>{
+    let res = await isPTokenAirdropped(wallet.detail.chainId,wallet.detail.account)
+    setIsClaim(res)
+  }
+
+  const getIsTrade = async () =>{
+    let res = await getTradeHistory(wallet.detail.chainId,config.poolAddress,wallet.detail.account,'0')
+    if(res.length > 0){
+      setIsTrade(true)
+    }
+  }
+
+  useEffect(()=>{
+    if(hasConnectWallet()){
+      getIsApprove()
+      getIsClaim()
+      getBalance()
+      getHasPToken()
+      getIsTrade()
+    }
+  },[wallet.detail])
+
   useEffect(() => {
     let element;
     if (hasConnectWallet()) {
@@ -34,7 +106,9 @@ function Nuls({ wallet = {}, lang }) {
         element = <Button className='btn' btnText={lang['register']} click={approve} lang={lang} />
       } else {
         if (isClaim) {
-          element = <a href='https://app.deri.finance/#/futures/pro' className='btn' />
+          element = <a href='https://app.deri.finance/#/futures/pro' className='btn'>
+            {lang['trade']}
+          </a>
         } else {
           element = <Button className='btn' btnText={lang['claim']} click={claimPtoken} lang={lang} />
         }
@@ -44,7 +118,7 @@ function Nuls({ wallet = {}, lang }) {
       element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
     }
     setActionElement(element)
-  }, [wallet.detail, isApprove, isClaim])
+  }, [wallet.detail, isApprove, isClaim,isBalance,isHasPToken])
 
   return (
     <div className='nuls-box'>

@@ -1,67 +1,136 @@
 import {
-  getPoolConfig,
+  //getPoolConfig,
   ContractBase,
   deriToNatural,
   naturalToDeri,
   getPoolViewerConfig,
-  isEqualSet,
+  //isEqualSet,
+  bTokenFactory,
 } from '../../shared';
 import { getPriceInfos } from '../../shared/utils/oracle';
 import { perpetualPoolLiteAbi } from './abis';
 //import { MAX_INT256} from '../../shared/config'
-import { PTokenLite } from './p_token';
+//import { PTokenLite } from './p_token';
 import { PerpetualPoolLiteViewer } from './perpetual_pool_lite_viewer';
+import { lTokenLiteFactory, pTokenLiteFactory } from '../factory';
 
 export class PerpetualPoolLite extends ContractBase {
   constructor(chainId, contractAddress) {
     super(chainId, contractAddress, perpetualPoolLiteAbi);
 
-    this.config = getPoolConfig(
-      contractAddress,
-      undefined,
-      undefined,
-      'v2_lite'
-    );
-    this.offchainSymbolIds = this.config.offchainSymbolIds;
-    this.offchainSymbols = this.config.offchainSymbols;
-    this.bTokenAddress = this.config.bToken
-    this.lTokenAddress = this.config.lToken
-    this.pTokenAddress = this.config.pToken
-    this.viewerAddress = getPoolViewerConfig(this.chainId, 'v2_lite')
+    // this.config = getPoolConfig(
+    //   contractAddress,
+    //   undefined,
+    //   undefined,
+    //   'v2_lite'
+    // );
+    // this.offchainSymbolIds = this.config.offchainSymbolIds;
+    // this.offchainSymbols = this.config.offchainSymbols;
+    // this.bTokenAddress = this.config.bToken;
+    // this.lTokenAddress = this.config.lToken;
+    // this.pTokenAddress = this.config.pToken;
+    // this.viewerAddress = getPoolViewerConfig(this.chainId, 'v2_lite');
   }
 
-  async _update() {
-    await Promise.all([this.getAddresses()]);
-  }
-
-  async _updateOffchainSymbols() {
-    if (!this.pToken) {
-      this.pToken = new PTokenLite(this.chainId, this.pTokenAddress)
+  async init() {
+    await this._init();
+    if (!this.addresses || !this.pToken || !this.viewer ) {
+      [this.addresses, this.parameters] = await Promise.all([
+        this.getAddresses(),
+        this.getParameters(),
+      ]);
+      const viewerAddress = getPoolViewerConfig(this.chainId, 'v2_lite');
+      // console.log(this.addresses, this.parameters)
+      const { bTokenAddress, lTokenAddress, pTokenAddress } = this.addresses;
+      this.bToken = bTokenFactory(this.chainId, bTokenAddress);
+      this.pToken = pTokenLiteFactory(this.chainId, pTokenAddress);
+      this.lToken = lTokenLiteFactory(this.chainId, lTokenAddress);
+      this.viewer = new PerpetualPoolLiteViewer(this.chainId, viewerAddress);
     }
-    if (!this.viewer) {
-      this.viewer = new PerpetualPoolLiteViewer(
-          this.chainId,
-          this.viewerAddress
+  }
+
+  async updateActiveSymbols() {
+    await this.init()
+    if (this.pToken && this.viewer) {
+      [
+        this.bTokenSymbol,
+        this.activeSymbolIds,
+        this.offChainOracleSymbols,
+      ] = await Promise.all([
+        this.bToken.symbol(),
+        this.pToken.getActiveSymbolIds(),
+        this.viewer.getOffChainOracleSymbols(this.contractAddress),
+      ]);
+      this.offChainOracleSymbolIds = this.activeSymbolIds.reduce(
+        (acc, i, index) => {
+          return this.offChainOracleSymbols[index] === '' ? acc : [...acc, i];
+        },
+        []
+      );
+      this.offChainOracleSymbols = this.offChainOracleSymbols.filter(
+        (s) => s && s !== ''
+      );
+    }
+  }
+
+  async getSymbols() {
+    return await Promise.all(
+      this.activeSymbolIds.reduce(
+        (acc, symbolId) => [...acc, this.getSymbol(symbolId)],
+        []
       )
-    }
-    //await this.getAddresses()
-    const activeSymbolIds = await this.pToken.getActiveSymbolIds()
-    if (!this.activeSymbolIds || !isEqualSet(new Set(this.activeSymbolIds), new Set(activeSymbolIds))) {
-      const activeSymbols = await this.viewer.getOffChainOracleSymbols(this.contractAddress)
-      //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
-      this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
-        return activeSymbols[index] == '' ? acc : acc.concat([i]);
-      }, []);
-      this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
-      this.activeSymbolIds = activeSymbolIds;
-    }
+    );
   }
+  async getPositions(accountAddress) {
+    return await Promise.all(
+      this.activeSymbolIds.reduce(
+        (acc, symbolId) => [
+          ...acc,
+          this.pToken.getPosition(accountAddress, symbolId),
+        ],
+        []
+      )
+    );
+  }
+
+  // async _update() {
+  //   await Promise.all([this.getAddresses()]);
+  // }
+
+  // async _updateOffchainSymbols() {
+  //   if (!this.pToken) {
+  //     this.pToken = new PTokenLite(this.chainId, this.pTokenAddress);
+  //   }
+  //   if (!this.viewer) {
+  //     this.viewer = new PerpetualPoolLiteViewer(
+  //       this.chainId,
+  //       this.viewerAddress
+  //     );
+  //   }
+  //   //await this.getAddresses()
+  //   const activeSymbolIds = await this.pToken.getActiveSymbolIds();
+  //   if (
+  //     !this.activeSymbolIds ||
+  //     !isEqualSet(new Set(this.activeSymbolIds), new Set(activeSymbolIds))
+  //   ) {
+  //     const activeSymbols = await this.viewer.getOffChainOracleSymbols(
+  //       this.contractAddress
+  //     );
+  //     //console.log('activeSymbolIds', activeSymbolIds, activeSymbols)
+  //     this.offchainSymbolIds = activeSymbolIds.reduce((acc, i, index) => {
+  //       return activeSymbols[index] == '' ? acc : acc.concat([i]);
+  //     }, []);
+  //     this.offchainSymbols = activeSymbols.filter((s) => s && s !== '');
+  //     this.activeSymbolIds = activeSymbolIds;
+  //   }
+  // }
 
   async getAddresses() {
     const res = await this._call('getAddresses');
-    this.bTokenAddress = res.bTokenAddress;
-    this.lTokenAddress = res.lTokenAddress;
-    this.pTokenAddress = res.pTokenAddress;
+    // this.bTokenAddress = res.bTokenAddress;
+    // this.lTokenAddress = res.lTokenAddress;
+    // this.pTokenAddress = res.pTokenAddress;
+    return res;
   }
   async getParameters() {
     const res = await this._call('getParameters');
@@ -79,7 +148,7 @@ export class PerpetualPoolLite extends ContractBase {
   }
   async getLastUpdateBlock() {
     const res = await this._call('getLastUpdateBlock');
-    return parseInt(res)
+    return parseInt(res);
   }
   async getProtocolFeeAccrued() {
     const res = await this._call('getProtocolFeeAccrued');
@@ -119,14 +188,14 @@ export class PerpetualPoolLite extends ContractBase {
   // }
 
   async _getSymbolPrices() {
-    let prices = []
-    await this._updateOffchainSymbols()
-    if (this.offchainSymbolIds.length > 0) {
-      const priceInfos = await getPriceInfos(this.offchainSymbols);
+    let prices = [];
+    await this.updateActiveSymbols()
+    if (this.offChainOracleSymbolIds.length > 0) {
+      const priceInfos = await getPriceInfos(this.offChainOracleSymbols);
       prices = Object.values(priceInfos).reduce((acc, p, index) => {
         acc.push([
-          this.offchainSymbolIds[
-            this.offchainSymbols.indexOf(Object.keys(priceInfos)[index])
+          this.offChainOracleSymbolIds[
+            this.offChainOracleSymbols.indexOf(Object.keys(priceInfos)[index])
           ],
           p.timestamp,
           p.price,

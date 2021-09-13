@@ -22,6 +22,18 @@ describe('PerpetualPool', () => {
     expect(await perpetualPool.getParameters()).toEqual(output)
   }, TIMEOUT)
 
+  it('getAddresses()', async() => {
+    const res = await perpetualPool.getAddresses()
+    expect(res).toHaveProperty('bTokenAddress')
+    expect(res).toHaveProperty('lTokenAddress')
+    expect(res).toHaveProperty('pTokenAddress')
+  }, TIMEOUT)
+
+  it('bTokenSymbol()', async() => {
+    await perpetualPool.init()
+    expect(await perpetualPool.bToken.symbol()).toEqual('BUSD')
+  }, TIMEOUT)
+
   it('getSymbol()', async() => {
     const res = await perpetualPool.getSymbol('0')
     expect(res).toHaveProperty('price')

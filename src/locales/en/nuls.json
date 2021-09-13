@@ -9,6 +9,8 @@
   "approve":"APPROVE",
   "claim":"CLAIM",
   "trade":"TRADE",
+  "less-nuls":"Less nuls than the minimum requirement",
+  "use-a-new-address":"Use a new address to participate, thanks!",
   "rules":"Detailed  Rules",
   "rules-one":"The first 500 new users who register during the competition period with more than 100 NULS in the wallet address will be eligible to claim Ptoken",
   "rules-two":"The top 15 users ranked by PnL across eligible NULS - margined perpetual contracts will share a pool of $2,000 in NULS",
@@ -25,5 +27,6 @@
   "notes-four":"Deri Protocol and NULS reserves the right to cancel or amend any Activity or Activity Rules at our sole discretion",
   "in-celebration-of-the":"In celebration of the NULS perpetual pool in the Open Zone, Deri Protocol and NULS roll out this promotional event with total rewards worth $6,000 in DERI and NULS",
   "connect-wallet":"Connect Wallet",
+  "faild":"Claim faild",
   "pending":"Pending"
 }
