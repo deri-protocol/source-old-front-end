@@ -5,18 +5,24 @@ import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { getFormatSymbol, calcRange, intervalRange, equalIgnoreCase, stripSymbol, secondsInRange } from '../../../../utils/utils';
 import webSocket from '../../../../model/WebSocket';
+import classNames from 'classnames';
 
 
 function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,preload,trading}){
   const containerRef = useRef(null);
   const chartRef = useRef(null)
-  const lastData = useRef(null)
+  const firstData = useRef(null)
   const symbolRef = useRef(null)
   const candlesChartRef = useRef(null);
   const lineChartRef = useRef(null);
-  const lineSeriesHistoryRef = useRef(null);
-  const candlesSeriesHistoryRef = useRef(null);
-  const loadDataRef = useRef(false)
+  const lineSeriesHistoryRef = useRef([]);
+  const candlesSeriesHistoryRef = useRef([]);
+  const [scrolling, setScrolling] = useState(false)
+
+  const scrollClassName = classNames('scroll-mask',{
+    show : scrolling
+  })
+
 
   const loadData = async (symbol,from,to,hiddenLoading) => {
     const range = from && to ? [from,to] : calcRange(interval)
@@ -41,14 +47,13 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       const data = await loadData(symbol)
       if(data && Array.isArray(data) && data.length > 0 ){
         candlesChart.setData(data)
-        lastData.current = data[data.length-1]
+        firstData.current = data[0]
         candlesSeriesHistoryRef.current = data
       } 
-      displayCandleData({data : lastData.current})
+      displayCandleData({data : data[data.length-1]})
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        if (lastData.current && lastData.current.time <= data.time && loadDataRef.current !== false) {
+        if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
           candlesChart.update(data)
-          lastData.current = data
           candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
         }
       })
@@ -77,7 +82,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       seriesChart.setData(seriesData)
       lineSeriesHistoryRef.current = seriesData
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        if(loadDataRef.current !== false){
+        if(!lineSeriesHistoryRef.current.some(his => his.time === data.time )){
           const lineSeriesData = {time : data.time,value : data.close}
           seriesChart.update(lineSeriesData)
         }
@@ -91,7 +96,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
     }
     if(typeof displayCandleData === 'function'){
       param.seriesPrices.forEach(item => {
-        if(item.open && item.close && item.high && item.low){
+        if(item && item.open && item.close && item.high && item.low){
           const data = {time : param.time ,data : item}
           displayCandleData(data);
         }
@@ -183,33 +188,35 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
     }
     let timer = null;
     const onVisibleLogicalRangeChanged = () => {
-      if(timer == null){
+      if(timer == null && !scrolling){
         timer = setTimeout(async () => {
           const logicalRange = chart.timeScale().getVisibleLogicalRange();
           const barsInfo = candlesChartRef.current && candlesChartRef.current.barsInLogicalRange(logicalRange);
-          console.log(barsInfo)
-          loadDataRef.current = true
-          if (barsInfo !== null && barsInfo.barsBefore < -10) {
+          if (barsInfo !== null && barsInfo.barsBefore < 0) {
+            setScrolling(true)
             const to = Math.floor((candlesSeriesHistoryRef.current[0].time - 1 * secondsInRange[interval]) / 1000,0)
-            const from = to - Math.abs(Math.floor(barsInfo.barsBefore,0)) * secondsInRange[interval]
+            const from = to - (Math.abs(Math.floor(barsInfo.barsBefore,0)) -1) * secondsInRange[interval]
             const symbol = getFormatSymbol(`${trading.config.symbol}-MARKPRICE`)
-            console.log('from,to ',from,to)
-            const data = await loadData(symbol,from,to,true)
+            const markPriceData = await loadData(symbol,from,to,true)
             let history ;
-            if(lineSeriesHistoryRef.current && lineChartRef.current){
-              history = [...data,...lineSeriesHistoryRef.current];
-              lineSeriesHistoryRef.current = history;
-              lineChartRef.current.setData(history)
-            }
-            if(candlesSeriesHistoryRef.current && candlesChartRef.current) {
-              history = [...data,...candlesSeriesHistoryRef.current];
-              candlesSeriesHistoryRef.current = history;
+            if(candlesSeriesHistoryRef.current && candlesChartRef.current && markPriceData.length > 0) {
+              history = [...markPriceData,...candlesSeriesHistoryRef.current];
               candlesChartRef.current.setData(history);
+              candlesSeriesHistoryRef.current = history;
             }
+            if(mixedChart && markPriceData.length > 0){
+              const indexPriceData = await loadData(getFormatSymbol(`${trading.config.symbol}`),from,to,true)
+              if(lineSeriesHistoryRef.current && lineChartRef.current && indexPriceData.length > 0){
+                const seriesData = indexPriceData.map(d => ({time : d.time,value : d.close}));
+                history = [...seriesData,...lineSeriesHistoryRef.current];
+                lineChartRef.current.setData(history)
+                lineSeriesHistoryRef.current = history;
+              }
+            }
+            setScrolling(false)
           }
           timer = null;
-          loadDataRef.current = false
-        },50)
+        },200)
       }
     }
   
@@ -231,6 +238,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
 
   return(
     <div className='ligth-chart-container' id='ligth-chart-container' ref={chartRef}>
+      <div className={scrollClassName} ></div>
       {mixedChart && <div className='legend'>
         <div onClick={() => switchSeriesChart(candlesChartRef.current,'right')} ><span className='legend-option-left'> </span><span className='legend-option-right'> </span>{lang['option']}</div>
         <div onClick={() => switchSeriesChart(lineChartRef.current,'left')} ><span  className='legend-index'></span>{trading.config && stripSymbol(`${trading.config.symbol}`)}</div>

@@ -165,10 +165,10 @@ export function calcRange(interval){
   let from,to;
   if(interval !== '1W') {
     to = Math.floor(timestamp / secondsInRange[interval] ) * secondsInRange[interval]
-    from  = to - secondsInRange[interval] * 1440
+    from  = to - secondsInRange[interval] * 200
   } else {
     to = Math.floor((timestamp - 345600) /secondsInRange[interval]) * secondsInRange[interval] + 345600
-    from = to - secondsInRange[interval] * 1440
+    from = to - secondsInRange[interval] * 200
   }
   return [from,to]
  
