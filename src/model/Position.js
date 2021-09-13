@@ -95,8 +95,6 @@ export default class Position {
     },3000)
    }
 
-   
-
    pause(){
     this.paused = true
    }

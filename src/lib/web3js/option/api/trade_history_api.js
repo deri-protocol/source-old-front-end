@@ -1,9 +1,8 @@
-import { deriToNatural, bg, getBlockInfo, getPastEvents, getHttpBase, fetchJson } from '../../shared/utils';
+import { deriToNatural, naturalToDeri, bg, getBlockInfo, getPastEvents, getHttpBase, fetchJson, max } from '../../shared/utils';
 import {
   getPoolConfig,
 } from '../../shared/config';
-import { everlastingOptionFactory } from '../factory/pool';
-import { calculateTxFee } from '../../v2/calculation/position';
+import { everlastingOptionFactory, optionPricerFactory } from '../factory/pool';
 
 const processTradeEvent = async (
   chainId,
@@ -11,10 +10,10 @@ const processTradeEvent = async (
   blockNumber,
   txHash,
   multiplier,
-  feeRatio,
   bTokenSymbol,
   symbolIdList,
   symbols,
+  pricer,
 ) => {
   const tradeVolume = deriToNatural(info.tradeVolume);
   const timeStamp = await getBlockInfo(chainId, blockNumber);
@@ -24,9 +23,24 @@ const processTradeEvent = async (
   const time = `${+timeStamp.timestamp}000`;
   const volume = tradeVolume.abs();
   const symbolId = info.symbolId
+  const volatility = info.volatility
   const index = symbolIdList.indexOf(symbolId)
   const price = bg(tradeCost).div(bg(tradeVolume).times(symbols[index].multiplier))
+  const indexPrice = deriToNatural(info.spotPrice)
 
+  const intrinsicValue = symbols[index].isCall
+    ? max(indexPrice.minus(symbols[index].strikePrice), bg(0))
+    : max(bg(symbols[index].strikePrice).minus(indexPrice), bg(0));
+  let timeValue = '0';
+  if (intrinsicValue.lte(0)) {
+    const res  = await pricer.getEverlastingTimeValueAndDelta(
+      naturalToDeri(indexPrice),
+      naturalToDeri(symbols[index].strikePrice),
+      volatility,
+      naturalToDeri(bg(1).div(365).toString())
+    );
+    timeValue = res.timeValue
+  }
   if (index > -1) {
     return {
       direction,
@@ -34,10 +48,30 @@ const processTradeEvent = async (
       symbolId,
       symbol: symbols[index].symbol,
       price: price.toString(),
+      indexPrice: indexPrice.toString(),
       volume: volume.times(symbols[index].multiplier).toString(),
       transactionHash: txHash.toString(),
-      notional: tradeVolume.abs().times(price).times(multiplier[index]).toString(),
-      transactionFee: calculateTxFee( tradeVolume, price, multiplier[index], feeRatio[index]).toString(),
+      notional: tradeVolume
+        .abs()
+        .times(indexPrice)
+        .times(multiplier[index])
+        .toString(),
+      contractValue: tradeVolume
+        .abs()
+        .times(price)
+        .times(multiplier[index])
+        .toString(),
+      transactionFee: intrinsicValue.gt(0)
+        ? volume
+            .times(symbols[index].multiplier)
+            .times(indexPrice)
+            .times(symbols[index].feeRatioITM)
+            .toString()
+        : volume
+            .times(symbols[index].multiplier)
+            .times(timeValue)
+            .times(symbols[index].feeRatioOTM)
+            .toString(),
       time,
     };
   } else {
@@ -54,8 +88,9 @@ const getTradeHistoryOnline = async (
 
   // const symbolIdList = getPoolSymbolIdList(poolAddress)
   //console.log('symbolIdList', symbolIdList);
-  const { bTokenSymbol } = getPoolConfig(poolAddress, undefined, undefined, 'option')
+  const { bTokenSymbol, pricer:pricerAddress } = getPoolConfig(poolAddress, undefined, undefined, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
+  const pricer = optionPricerFactory(chainId, pricerAddress)
   const [toBlock] = await Promise.all([
     getBlockInfo(chainId, 'latest'),
     optionPool._updateConfig(),
@@ -68,7 +103,6 @@ const getTradeHistoryOnline = async (
   }
   let symbols = await Promise.all(promises)
   const multiplier = symbols.map((i) => i.multiplier.toString());
-  const feeRatio = symbols.map((i) => i.feeRatio.toString());
 
   const filters =  { account: accountAddress }
   let events = await getPastEvents(chainId, optionPool.contract,
@@ -89,10 +123,10 @@ const getTradeHistoryOnline = async (
       item.blockNumber,
       item.transactionHash,
       multiplier,
-      feeRatio,
       bTokenSymbol,
       optionPool.activeSymbolIds,
       symbols,
+      pricer,
     );
     result.unshift(res);
   }
@@ -134,8 +168,10 @@ export const getTradeHistory = async (
               baseToken: i.baseToken.trim(),
               symbolId: i.symbolId,
               symbol: i.symbol,
-              price: deriToNatural(i.price).toString(),
+              price: deriToNatural(i.price).div(symbols[index].multiplier).toString(),
+              indexPrice: deriToNatural(i.indexPrice).toString(),
               notional: deriToNatural(i.notional).toString(),
+              contractValue: deriToNatural(i.contractValue).toString(),
               volume: deriToNatural(i.volume).times(symbols[index].multiplier).toString(),
               transactionFee: deriToNatural(i.transactionFee).toString(),
               transactionHash: i.transactionHash,

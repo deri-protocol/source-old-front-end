@@ -84,6 +84,7 @@ const expandPoolConfigOption = (config) => {
           initialBlock: pool.initialBlock,
           chainId: pool.chainId,
           bToken: pool.bToken,
+          pricer: pool.pricer,
           bTokenSymbol: pool.bTokenSymbol,
           symbol: symbol.symbol,
           symbolId: symbol.symbolId,

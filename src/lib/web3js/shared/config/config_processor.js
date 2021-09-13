@@ -128,6 +128,7 @@ const validatePoolOption = (pool) => {
       'lToken',
       'initialBlock',
       'bToken',
+      'pricer',
       'bTokenSymbol',
       'symbols',
       'chainId',
