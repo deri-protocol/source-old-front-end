@@ -19,7 +19,7 @@ describe('PTokenOption', () => {
   it(
     'name',
     async () => {
-      expect(await pTokenOption.name()).toEqual('Deri Position Token');
+      expect(await pTokenOption.name()).toEqual('Deri Option Position Token');
     },
     TIMEOUT
   );
@@ -33,7 +33,7 @@ describe('PTokenOption', () => {
   it(
     'symbol',
     async () => {
-      expect(await pTokenOption.symbol()).toEqual('DPT');
+      expect(await pTokenOption.symbol()).toEqual('DOPT');
     },
     TIMEOUT
   );

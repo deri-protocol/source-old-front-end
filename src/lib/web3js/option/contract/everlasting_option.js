@@ -132,7 +132,8 @@ export class EverlastingOption extends ContractBase {
     return fromWeiForObject(deleteIndexedKey(res), [
       'strikePrice',
       'multiplier',
-      'feeRatio',
+      'feeRatioITM',
+      'feeRatioOTM',
       'alpha',
       'tradersNetVolume',
       'tradersNetCost',

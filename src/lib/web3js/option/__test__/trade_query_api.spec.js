@@ -166,6 +166,7 @@ describe('trade query api', () => {
       );
       expect(bg(res).toNumber()).toBeGreaterThanOrEqual(0.001);
       expect(bg(res).toNumber()).toBeLessThanOrEqual(10);
+      expect(res).toEqual({});
     },
     TIMEOUT
   );
