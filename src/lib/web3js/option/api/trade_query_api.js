@@ -1,5 +1,6 @@
 import {
   bg,
+  max,
   bTokenFactory,
   catchApiError,
   deriToNatural,
@@ -440,34 +441,23 @@ export const getEstimatedFee = async (
       const symbol = symbols[curSymbolIndex];
       //console.log(ivolume, prices[curSymbolIndex], symbol, intrinsicPrice.toString())
       let fee
-      if (symbol.isCall) {
-        fee = bg(symbol.spotPrice).minus(symbol.strikePrice).gt(0)
-          ? bg(volume)
-              .abs()
-              .times(symbol.multiplier)
-              .times(symbol.spotPrice)
-              .times(symbolInfo.feeRatioITM)
-              .toString()
-          : bg(volume)
-              .abs()
-              .times(symbol.multiplier)
-              .times(symbol.timeValue)
-              .times(symbolInfo.feeRatioOTM)
-              .toString();
+      const intrinsicValue = symbol.isCall
+        ? max(bg(symbol.spotPrice).minus(symbol.strikePrice), bg(0))
+        : max(bg(symbol.strikePrice).minus(symbol.spotPrice), bg(0));
+      if (bg(intrinsicValue).gt(0)) {
+        fee = bg(volume)
+          .abs()
+          .times(symbol.multiplier)
+          .times(symbol.spotPrice)
+          .times(symbolInfo.feeRatioITM)
+          .toString();
       } else {
-        fee = bg(symbol.strikePrice).minus(symbol.spotPrice).lt(0)
-          ? bg(volume)
-              .abs()
-              .times(symbol.multiplier)
-              .times(symbol.spotPrice)
-              .times(symbolInfo.feeRatioITM)
-              .toString()
-          : bg(volume)
-              .abs()
-              .times(symbol.multiplier)
-              .times(symbol.timeValue)
-              .times(symbolInfo.feeRatioOTM)
-              .toString();
+        fee = bg(volume)
+          .abs()
+          .times(symbol.multiplier)
+          .times(symbol.timeValue)
+          .times(symbolInfo.feeRatioOTM)
+          .toString();
       }
       return fee
     },
