@@ -190,6 +190,7 @@ export const getLpConfigList = (env = 'dev') => {
         bTokenSymbol: 'DERI-USDT SLP',
         symbol: '--',
         type: 'slp',
+        isLp: true,
       },
       {
         pool:   '0x4de2Ac273aD1BBe2F5C41f986d7b3cef8383Df98',
@@ -204,6 +205,7 @@ export const getLpConfigList = (env = 'dev') => {
         symbol: '--',
         type: 'clp',
         retired: true,
+        isLp: true,
       },
       {
         pool:   '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
@@ -217,6 +219,7 @@ export const getLpConfigList = (env = 'dev') => {
         bTokenSymbol: 'CAKE-LP SYRUP',
         symbol: '--',
         type: 'clp2',
+        isLp: true,
       },
     ];
   } else {

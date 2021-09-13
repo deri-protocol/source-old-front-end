@@ -1,5 +1,6 @@
 import {
   bg,
+  max,
   bTokenFactory,
   catchApiError,
   deriToNatural,
@@ -19,7 +20,6 @@ import {
   dynamicInitialPoolMarginRatio,
   getAverageEntryPrice,
   //getDeltaFundingPerSecond,
-  getIntrinsicPrice,
   getLiquidationPrice,
   getLiquidationPrices,
   getMarginHeldBySymbol,
@@ -64,7 +64,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
       const symbolInfo = symbolState[symbolIndex];
       const { dynamicMarginRatio, isCall } =
         symbolInfo;
-      const { symbol, multiplier, feeRatio } = symbolInfo2;
+      const { symbol, multiplier, feeRatioOTM, feeRatioITM } = symbolInfo2;
       const {
         initialMarginRatio,
         maintenanceMarginRatio,
@@ -78,7 +78,8 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
         symbol,
         bTokenSymbol,
         multiplier: multiplier.toString(),
-        feeRatio: feeRatio.toString(),
+        feeRatioOTM: feeRatioOTM.toString(),
+        feeRatioITM: feeRatioITM.toString(),
         //minPoolMarginRatio: minPoolMarginRatio.toString(),
         initialMarginRatioOrigin: initialMarginRatio.toString(),
         initialMarginRatio: dynamicMarginRatio.toString(),
@@ -438,18 +439,27 @@ export const getEstimatedFee = async (
         );
       }
       const symbol = symbols[curSymbolIndex];
-      const intrinsicPrice = getIntrinsicPrice(
-        prices[curSymbolIndex],
-        symbol.strikePrice,
-        symbol.isCall
-      );
-      //console.log(volume, prices[curSymbolIndex], symbol, intrinsicPrice.toString())
-      return bg(volume)
-        .abs()
-        .times(intrinsicPrice.plus(symbol.timeValue))
-        .times(symbol.multiplier)
-        .times(symbolInfo.feeRatio)
-        .toString();
+      //console.log(ivolume, prices[curSymbolIndex], symbol, intrinsicPrice.toString())
+      let fee
+      const intrinsicValue = symbol.isCall
+        ? max(bg(symbol.spotPrice).minus(symbol.strikePrice), bg(0))
+        : max(bg(symbol.strikePrice).minus(symbol.spotPrice), bg(0));
+      if (bg(intrinsicValue).gt(0)) {
+        fee = bg(volume)
+          .abs()
+          .times(symbol.multiplier)
+          .times(symbol.spotPrice)
+          .times(symbolInfo.feeRatioITM)
+          .toString();
+      } else {
+        fee = bg(volume)
+          .abs()
+          .times(symbol.multiplier)
+          .times(symbol.timeValue)
+          .times(symbolInfo.feeRatioOTM)
+          .toString();
+      }
+      return fee
     },
     args,
     'getFundingFee',

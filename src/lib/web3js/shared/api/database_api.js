@@ -91,9 +91,11 @@ export const getUserInfoTotal = async (userAddress) => {
  * @returns {string} response.total
  */
 export const getUserInfoAll = async (userAddress) => {
-  const userInfo = await getUserInfo(userAddress);
-  const userInfoHarvest = await getUserInfoHarvest(userAddress);
-  const userInfoTotal = await getUserInfoTotal(userAddress);
+  const [userInfo, userInfoHarvest, userInfoTotal] = await Promise.all([
+    getUserInfo(userAddress),
+    getUserInfoHarvest(userAddress),
+    getUserInfoTotal(userAddress),
+  ]);
   return Object.assign(userInfo, userInfoHarvest, userInfoTotal);
 };
 

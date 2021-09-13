@@ -383,6 +383,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
               </div>
             </div>
           </div>
+          
           <div className='next-button'>
             <div className='next-button'>
               <button onClick={() => { goToStep(1) }}>

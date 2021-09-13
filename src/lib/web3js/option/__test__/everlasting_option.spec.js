@@ -60,7 +60,8 @@ describe('EverlastingOption', () => {
       const res = await everlastingOption.getSymbol('0');
       //expect(res).toHaveProperty('', '')
       expect(res).toHaveProperty('alpha', '0.01')
-      expect(res).toHaveProperty('feeRatio', '0.005')
+      expect(res).toHaveProperty('feeRatioOTM', '0.0015')
+      expect(res).toHaveProperty('feeRatioITM', '0.04')
       expect(res).toHaveProperty('multiplier', '0.001')
       expect(res).toHaveProperty('strikePrice', '50000')
       expect(res).toHaveProperty('symbol', 'BTCUSD-50000-C')
@@ -84,12 +85,12 @@ describe('EverlastingOption', () => {
   it('optionPool pToken', async() => {
     const pToken = pTokenOptionFactory(CHAIN_ID, everlastingOption.pTokenAddress)
     const res = await pToken.symbol()
-    expect(res).toEqual('DPT')
+    expect(res).toEqual('DOPT')
   }, TIMEOUT)
   it('optionPool lToken', async() => {
     const lToken = lTokenOptionFactory(CHAIN_ID, everlastingOption.lTokenAddress)
     const res = await lToken.symbol()
-    expect(res).toEqual('DLT')
+    expect(res).toEqual('DOLT')
   }, TIMEOUT)
   it('optionPool viewer', async() => {
     const viewer = everlastingOptionViewerFactory(CHAIN_ID, everlastingOption.viewerAddress)

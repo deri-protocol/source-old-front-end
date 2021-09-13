@@ -92,8 +92,6 @@ export default class Position {
     }
    }
 
-   
-
    pause(){
     clearInterval(this.interval);
     this.interval = null;
