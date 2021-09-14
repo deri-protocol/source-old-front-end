@@ -56,7 +56,7 @@ export default function MatrixRain({lang}){
             drops[i]++;
         }
     }
-    setInterval(draw, 33);
+    setInterval(draw, 50);
   }, [])
   return (
     <canvas ref={canvasRef}>
