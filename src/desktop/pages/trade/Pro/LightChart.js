@@ -216,7 +216,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
             setScrolling(false)
           }
           timer = null;
-        },200)
+        },500)
       }
     }
   
