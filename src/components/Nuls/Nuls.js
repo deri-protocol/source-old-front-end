@@ -15,6 +15,7 @@ import {
   isBTokenUnlocked,
   hasRequiredBalance,
   getTradeHistory,
+  openConfigListCache,
   unlockBToken,
   DeriEnv,
   airdropPTokenLite
@@ -26,6 +27,8 @@ function Nuls({ wallet = {}, lang }) {
   const [isClaim, setIsClaim] = useState(false);
   const [isTrade, setIsTrade] = useState(false);
   const [isBalance,setIsBalacne] = useState(false);
+  const [isThanFiveHundred,setIsThanFiveHundred] = useState(false)
+
   const [isHasPToken,setIsHasPToken] = useState(false)
   const config = DeriEnv.get() === 'dev' ? {
     poolAddress:'0xb18e2815c005a99BE77c8719c79ec2451A59aDAD'
@@ -34,6 +37,13 @@ function Nuls({ wallet = {}, lang }) {
   }
   const connect = () => {
     wallet.connect()
+  }
+
+  const getTotalAirdropCount = async ()=>{
+    let res = await totalAirdropCount(wallet.detail.chainId)
+    if(+res >= 500){
+      setIsThanFiveHundred(true)
+    }
   }
 
   const approve = async () => {
@@ -83,6 +93,7 @@ function Nuls({ wallet = {}, lang }) {
   }
 
   const getIsTrade = async () =>{
+    await openConfigListCache.update()
     let res = await getTradeHistory(wallet.detail.chainId,config.poolAddress,wallet.detail.account,'0')
     if(res.length > 0){
       setIsTrade(true)
@@ -96,6 +107,7 @@ function Nuls({ wallet = {}, lang }) {
       getBalance()
       getHasPToken()
       getIsTrade()
+      getTotalAirdropCount()
     }
   },[wallet.detail])
 
@@ -105,7 +117,7 @@ function Nuls({ wallet = {}, lang }) {
       if (!isApprove) {
         element = <Button className='btn' btnText={lang['register']} click={approve} lang={lang} />
       } else {
-        if (isClaim) {
+        if (isClaim || isThanFiveHundred) {
           element = <a href='https://app.deri.finance/#/futures/pro' className='btn'>
             {lang['trade']}
           </a>
@@ -118,7 +130,7 @@ function Nuls({ wallet = {}, lang }) {
       element = <Button className='btn btn-danger connect' btnText={lang['connect-wallet']} click={connect} lang={lang} />
     }
     setActionElement(element)
-  }, [wallet.detail, isApprove, isClaim,isBalance,isHasPToken])
+  }, [wallet.detail, isApprove, isClaim,isBalance,isHasPToken,isThanFiveHundred])
 
   return (
     <div className='nuls-box'>
@@ -181,6 +193,7 @@ function Nuls({ wallet = {}, lang }) {
             <div className='button'>
               {actionElement}
             </div>
+            {isThanFiveHundred ? <div className='exceed'>{lang['exceed-participants']}</div>:''}
           </div>
 
         </div>
@@ -204,11 +217,36 @@ function Nuls({ wallet = {}, lang }) {
         <div className='text'>
           {lang['rules-one']}
         </div>
+        
         <div className='text'>
           {lang['rules-two']}
         </div>
+        <div className='text-n'>
+          {lang['rules-two-one']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-two']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-three']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-four']}
+        </div>
         <div className='text'>
           {lang['rules-three']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-one']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-two']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-three']}
+        </div>
+        <div className='text-n'>
+          {lang['rules-two-four']}
         </div>
         <div className='rules-title'>
           {lang['how-to-participate']}
@@ -221,6 +259,9 @@ function Nuls({ wallet = {}, lang }) {
         </div>
         <div className='text'>
           {lang['step-three']}
+          <a href='https://docs.deri.finance/guides/trading'>
+            {lang['step-three-a']}
+          </a>
         </div>
         <div className='rules-title'>
           {lang['notes']}
