@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import './list.less'
 import Table from './Table'
+import config from '../../../config.json'
+const HEADERS = ['BASE TOKEN','ADDRESS','LIQUIDITY','TRADING VOLUME']
+const COLUMNS = ['baseToken','address','liquidity','volume']
+const NETWORKDS = ['56','1','137']
+const chainConfig = config['prod']['chainInfo']
+const TABLE_CONFIG = NETWORKDS.map(chainId => (
+  [chainConfig[chainId].code,HEADERS,COLUMNS,`${process.env.REACT_APP_HTTP_URL}/get_summary_data_by_network?chainId=${chainId}`]
+))
 
 export default function List(){
   const [liqSummaryData, setLiqSummaryData] = useState([])
@@ -28,11 +36,9 @@ export default function List(){
         <div className='liquidity-chart'></div>
         <div className='trade-chart'></div>
       </div>
-      <div className='liqudity'>
-        <Table tittle='LIQUDITY' data={liqSummaryData}/>
-        <Table tittle='LIQUDITY' data={tradeSummaryData}/>
+      <div className='table-by-network'>
+        {TABLE_CONFIG.map(config => <Table title={config[0]} headers={config[1]} colums={config[2]} url={config[3]}/>)}
       </div>
-      <div className='trade'></div>
     </div>
   )
 }
