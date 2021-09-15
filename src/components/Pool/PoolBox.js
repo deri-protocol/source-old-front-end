@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import config from '../../config.json'
-import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock } from '../../lib/web3js/indexV2';
+import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock ,getPoolLiquidity,getPoolInfoApy} from '../../lib/web3js/indexV2';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
@@ -55,6 +55,7 @@ function PoolBox({ wallet, group = {}, lang }) {
 function Card({ wallet, pool, card, index, list, lang }) {
   const [buttonElement, setButtonElement] = useState('');
   const [connected, setConnected] = useState(false)
+  const [detail, setDetail] = useState({})
   const history = useHistory();
   const gotoMining = url => {
     history.push(url)
@@ -80,9 +81,20 @@ function Card({ wallet, pool, card, index, list, lang }) {
     }
   }
 
-  const ErrorImg = (event) => {
+  const onImgError = (event) => {
     event.target.src = errorimg
   }
+
+  const loadCardInfo = async (config) => {
+    const apyInfo = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId)
+    const liq = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId)
+    setDetail({
+      liquidity : liq.liquidity,
+      apy :  ((+apyInfo.apy) * 100).toFixed(2),
+      multiplier : apyInfo.multiplier 
+    })
+  }
+  
 
   useEffect(() => {
     if (pool && pool.airdrop) {
@@ -109,8 +121,8 @@ function Card({ wallet, pool, card, index, list, lang }) {
         </button>
       )
     }
-    return () => { };
-  }, [wallet.detail.account, connected]);
+    loadCardInfo(card)
+  }, [wallet.detail.account, connected,card]);
   return (
     <>
       <div className="info">
@@ -122,7 +134,7 @@ function Card({ wallet, pool, card, index, list, lang }) {
             </>}
             {pool.version === 'v2_lite_open' && <>
             <span className='bg-logo' >
-              <img onError={ErrorImg} src={`https://raw.githubusercontent.com/deri-finance/deri-open-zone/main/img/${card.bTokenSymbol}.png`} />
+              <img onError={onImgError} src={`https://raw.githubusercontent.com/deri-finance/deri-open-zone/main/img/${card.bTokenSymbol}.png`} />
             </span>
             </>}
 
@@ -131,13 +143,13 @@ function Card({ wallet, pool, card, index, list, lang }) {
           <div className="pool-detail">
             <div className='liq'>
               <span className='title'>{card.airdrop ? lang['total'] : lang['pool-liq']}</span>
-              <DeriNumberFormat value={card.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0} />
+              <DeriNumberFormat value={detail.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0} />
             </div>
             <div className='multiplier'>
               {card.multiplier && <>
                 <span>{lang['multiplier']}</span>
                 <TipWrapper block={false}>
-                  <span className='multiplier-value' tip={lang['multiplier-tip']}>{card.multiplier}x</span>
+                  <span className='multiplier-value' tip={lang['multiplier-tip']}>{detail.multiplier}x</span>
                 </TipWrapper>
               </>}
             </div>
@@ -145,8 +157,8 @@ function Card({ wallet, pool, card, index, list, lang }) {
               {!card.isOpen && <>
                 <span>{lang['apy']}</span>
                 <TipWrapper block={false}>
-                  <span className={card.lpApy ? 'sushi-apy-underline' : ''} tip={card.lpApy && lang['deri-apy']}>
-                    {card.apy ? <DeriNumberFormat value={card.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} /> : '--'}
+                  <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={detail.lpApy && lang['deri-apy']}>
+                    {detail.apy ? <DeriNumberFormat value={detail.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} /> : '--'}
                   </span>
                   {card.lpApy && card.lpApy > 0 && <>
                     <span> + </span>
