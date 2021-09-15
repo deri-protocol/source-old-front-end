@@ -37,7 +37,7 @@ describe('api', () => {
   }, TIMEOUT );
   it('getPoolConfigList option', () => {
     const res = getContractAddressConfig('dev', 'option')
-    expect(res.length).toEqual(12)
+    expect(res.length).toEqual(4)
   })
   it('getPoolConfigList all', () => {
     DeriEnv.set('prod')
@@ -45,5 +45,13 @@ describe('api', () => {
     DeriEnv.set('dev')
     expect(res.length).toEqual(7)
     //expect(res).toEqual({})
+  })
+  it('getPoolConfigList testnet', () => {
+    DeriEnv.set('testnet')
+    const res = getPoolConfigList()
+    DeriEnv.set('dev')
+    console.log(JSON.stringify(res, null, 2))
+    //expect(res.length).toEqual(7)
+    expect(res).toEqual({})
   })
 });

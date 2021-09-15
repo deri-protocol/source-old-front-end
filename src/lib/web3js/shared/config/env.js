@@ -4,10 +4,10 @@ export const DeriEnv = (() => {
   return {
     get: () => _deriEnv,
     set: (value) => {
-      if (value === 'dev' || value === 'prod' || value === 'production') {
+      if (value === 'dev' || value === 'prod' || value === 'testnet') {
         _deriEnv = value;
       } else {
-        throw new Error("please use 'dev' or 'prod' for DeriEnv");
+        throw new Error("please use 'dev', 'testnet' or 'prod' for DeriEnv");
       }
     },
   };

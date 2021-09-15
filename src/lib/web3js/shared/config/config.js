@@ -9,7 +9,7 @@ export const getJsonConfig = (version, env) => {
     typeof jsonConfig === 'object' ? jsonConfig : JSON.parse(jsonConfig);
   if (configs[version] && VERSIONS.includes(version)) {
     configs = configs[version];
-    if (['prod', 'dev'].includes(env)) {
+    if (['prod', 'dev', 'testnet'].includes(env)) {
       if (configs && configs[env]) {
         return configs[env];
       }
