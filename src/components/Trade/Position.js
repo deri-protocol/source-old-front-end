@@ -158,7 +158,7 @@ function Position({ wallet, trading, version, lang, type }) {
           </div>
         </div>
         <div className={`info-right action ${version.current}`}>
-          {(version.isV1 || version.isV2Lite || type.isOption) ? <>
+          {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen) ? <>
             <div
               className='add-margin'
               id='openAddMargin'

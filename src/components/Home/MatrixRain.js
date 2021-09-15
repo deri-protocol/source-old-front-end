@@ -6,57 +6,60 @@ export default function MatrixRain({lang}){
   const canvasRef = useRef(null)
   
   useEffect(() => {
-    var c = canvasRef.current;
-    var ctx = canvasRef.current.getContext("2d");
+    // var c = canvasRef.current;
+    // var ctx = canvasRef.current.getContext("2d");
 
     
 
-    const rect = c.getBoundingClientRect();
-    c.height = rect.height;
-    c.width = window.innerWidth;
+    // const rect = c.getBoundingClientRect();
+    // c.height = rect.height;
+    // c.width = window.innerWidth;
 
-    var greece = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    var greecea = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    var greeceb = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    var hex = "0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"
-    var characters = (greece + greecea + greeceb+ hex).split("");
-    var font_size = 14;
-    var columns = c.width/font_size;    // number of columns for the rain
+    // var greece = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
+    // var greecea = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
+    // var greeceb = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
+    // var hex = "0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"
+    var canvas = canvasRef.current,
+    ctx = canvas.getContext('2d');
+
+    // Setting the width and height of the canvas
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = window.innerWidth;
+    canvas.height = rect.height;
+
+    // Setting up the letters
+    var letters = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101 Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ωΑ Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω';
+    letters = letters.split('');
+
+    // Setting up the columns
+    var fontSize = 14,
+        columns = canvas.width / fontSize;
+
+    // Setting up the drops
     var drops = [];
-    for (var x = 0; x < columns; x++)
-        drops[x] = 1;
-
-    function getColor() {
-      return 'rgba(13,14,16,0.1)';
-      return "rgba(" + moment().format('HH') + ","
-                  + moment().format('mm') + ","
-                  + moment().format('ss')  + ", 0.05)";
+    for (var i = 0; i < columns; i++) {
+      drops[i] = 1;
     }
 
-    function getColorHex() {
-        return "#" + moment().format('HHmmss');
-    }
-
+    // Setting up the draw function
     function draw() {
-        ctx.fillStyle = getColor();
-        ctx.fillRect(0, 0, c.width, c.height);
+      ctx.fillStyle = 'rgba(13, 14, 16, .1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < drops.length; i++) {
+        var text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillStyle = '#0f0';
 
-        ctx.fillStyle = "#21639e"; // grey text
-        ctx.font = font_size + "px arial";
-
-        for (var i = 0; i < drops.length; i++) {
-            // a random character to print
-            var text = characters[Math.floor(Math.random() * characters.length)];
-            // x = i * font_size, y = value of drops[i] * font_size
-            ctx.fillText(text, i * font_size, drops[i] * font_size);
-
-            if (drops[i] * font_size > c.height && Math.random() > 0.975)
-                drops[i] = 0;
-
-            drops[i]++;
+        ctx.font = fontSize + "px arial";
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        drops[i]++;
+        if (drops[i] * fontSize > canvas.height && Math.random() > .95) {
+          drops[i] = 0;
         }
+      }
     }
-    setInterval(draw, 50);
+
+    // Loop the animation
+    setInterval(draw, 100);
   }, [])
   return (
     <canvas ref={canvasRef}>

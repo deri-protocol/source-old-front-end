@@ -50,7 +50,7 @@ function Pool({ lang, loading, wallet }) {
   }, [loaded, wallet])
 
   return (
-    <div className="mining-info">
+    <div className="pool-list">
       <div className='checkout-pools'>
         {/* <div className={styleSelectClass}>
           <div className='list' onClick={() => setCurStyle('list')}></div>
