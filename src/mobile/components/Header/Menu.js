@@ -13,8 +13,6 @@ export default function Menu({ closeMenu, lang, locale }) {
   const isDeriToken = useRouteMatch('/deritoken') ? true : false
   const isBridge = useRouteMatch('/bridge') ? true : false
 
-
-
   useEffect(() => {
     document.querySelectorAll('.menu li a').forEach(e => e.addEventListener('click', closeMenu));
     return () => { };
