@@ -30,7 +30,7 @@ export default function Card({optionPools,v1Pools,v2Pools,openPools,type,lang}){
       </div>}
       {type === 'opens' && <div className='pools open-pool'>
         {openPools.map((pool,index) => <PoolBox group={pool} key={index} lang={lang}/>)}
-        <PoolPlacehold lang={lang}></PoolPlacehold>
+        {openPools.length > 0 && <PoolPlacehold lang={lang}></PoolPlacehold>}
       </div>}
     </div>
   )

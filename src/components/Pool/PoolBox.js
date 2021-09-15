@@ -10,7 +10,6 @@ import { eqInNumber, addParam } from '../../utils/utils.js';
 import classNames from 'classnames';
 import TipWrapper from '../TipWrapper/TipWrapper.js';
 import { version } from '@babel/core';
-import zusd from '../../assets/img/zUSD.png'
 import errorimg from '../../assets/img/ErrorImg.png'
 const chainConfig = config[DeriEnv.get()]['chainInfo'];
 
@@ -138,7 +137,7 @@ function Card({ wallet, pool, card, index, list, lang }) {
               {card.multiplier && <>
                 <span>{lang['multiplier']}</span>
                 <TipWrapper block={false}>
-                  <span className='multiplier-value' title={lang['multiplier-tip']}>{card.multiplier}x</span>
+                  <span className='multiplier-value' tip={lang['multiplier-tip']}>{card.multiplier}x</span>
                 </TipWrapper>
               </>}
             </div>
@@ -146,12 +145,12 @@ function Card({ wallet, pool, card, index, list, lang }) {
               {!card.isOpen && <>
                 <span>{lang['apy']}</span>
                 <TipWrapper block={false}>
-                  <span className={card.lpApy ? 'sushi-apy-underline' : ''} title={card.lpApy && lang['deri-apy']}>
+                  <span className={card.lpApy ? 'sushi-apy-underline' : ''} tip={card.lpApy && lang['deri-apy']}>
                     {card.apy ? <DeriNumberFormat value={card.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} /> : '--'}
                   </span>
                   {card.lpApy && card.lpApy > 0 && <>
                     <span> + </span>
-                    <span className={card.lpApy ? 'sushi-apy-underline' : ''} title={card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
+                    <span className={card.lpApy ? 'sushi-apy-underline' : ''} tip={card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
                   </>}
                 </TipWrapper>
               </>}

@@ -30,8 +30,8 @@ function Mining({wallet,lang}){
 	}
 	const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
-	const PoolController = async () => {
-		let res = await isPoolController(wallet.detail.chainId,address,wallet.detail.account)
+	const isPoolAdmin = async () => {
+		let res = await isPoolController(wallet.detail.chainId,address,wallet.detail.account).catch(e => console.log(e))
 		setIsController(res)
 	}
 
@@ -39,14 +39,14 @@ function Mining({wallet,lang}){
 		await openConfigListCache.update()
 	}
 
-	const gotoMining = (url)=>{
+	const goToMining = (url)=>{
 		history.push(url)
 	}
 
 	useEffect(()=>{
 		if(hasConnectWallet()){
-			PoolController()
 			if(version === 'v2_lite_open'){
+				isPoolAdmin()
 				openConfigList()
 			}
 		}
@@ -70,7 +70,7 @@ function Mining({wallet,lang}){
 			</div>
 			{(isController && version === 'v2_lite_open') && <>
 				<div className='add-symbol'>
-					<button onClick={() => gotoMining(url)} >
+					<button onClick={() => goToMining(url)} >
 						{lang['add-symbol']}
 					</button>
 				</div>

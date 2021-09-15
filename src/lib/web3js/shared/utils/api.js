@@ -23,7 +23,8 @@ export const catchApiError = async (func, args, methodName, defaultValue) => {
     const res = await func(...args)
     return res
   } catch (err) {
-    console.log(`${methodName}: `, err)
+    console.log(`${methodName}: `, err.toString())
+    //console.log(`${methodName}: `, err)
   }
   return defaultValue
 }
@@ -35,7 +36,7 @@ export const catchTxApiError = async (func, args) => {
     const result = await func(...args);
     res = { success: true, transaction: result };
   } catch (err) {
-    res = { success: false, error: err };
+    res = { success: false, error: err.toString() };
   }
   return res;
 };

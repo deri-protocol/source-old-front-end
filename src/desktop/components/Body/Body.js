@@ -20,6 +20,7 @@ const Token = LoadableComponent(() => import('../../pages/Token/Token'))
 const Team = LoadableComponent(() => import('../../pages/Team/Team'))
 const Bridge = LoadableComponent(() => import('../../pages/Bridge/Bridge'))
 const Signin = LoadableComponent(() => import('../../pages/Signin/Signin'))
+const Nuls = LoadableComponent(() => import('../../pages/Nuls/Nuls'))
 const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
@@ -43,6 +44,7 @@ class Body extends React.Component {
           <Route exact path='/bridge' component={() => <Bridge lang={dict['bridge']} />}></Route>
           {/* <Route exact path='/broker' component={() => <Broker lang={dict['broker']} />}></Route> */}
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>
+          <Route exact path='/nuls' component={() => <Nuls lang={dict['nuls']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>

@@ -13,8 +13,6 @@ export default function Menu({ closeMenu, lang, locale }) {
   const isDeriToken = useRouteMatch('/deritoken') ? true : false
   const isBridge = useRouteMatch('/bridge') ? true : false
 
-
-
   useEffect(() => {
     document.querySelectorAll('.menu li a').forEach(e => e.addEventListener('click', closeMenu));
     return () => { };
@@ -86,7 +84,7 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
               </li> */}
               <li>
-                <Link to='/signin'>{lang['signin']}</Link>
+                <Link to='/nuls'>{lang['signin']}</Link>
               </li>
               <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>
