@@ -100,17 +100,19 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [selectAdvanced, setSelectAdvanced] = useState(true)
   const [dropdown, setDropdown] = useState(false);
+  const [isDefault, setIsDefault] = useState(true);
+  const [chainLinkAddress, setChainLinkAddress] = useState('')
   const [oracleConfigs, setOracleConfigs] = useState([])
   const multiplierList = {
-    "BTCUSD":"0.0001",
-    "ETHUSD":"0.001",
-    "BNBUSD":"0.01",
-    "AXSUSDT":"1",
-    "MBOXUSDT":"1",
-    "IBSCDEFI":"0.01",
-    "IGAME":"0.01",
-    "ALICEUSDT":"0.1",
-    "NULSUSDT":"1",
+    "BTCUSD": "0.0001",
+    "ETHUSD": "0.001",
+    "BNBUSD": "0.01",
+    "AXSUSDT": "1",
+    "MBOXUSDT": "1",
+    "IBSCDEFI": "0.01",
+    "IGAME": "0.01",
+    "ALICEUSDT": "0.1",
+    "NULSUSDT": "1",
   }
   const [oracleConfig, setOracleConfig] = useState(DeriEnv.get() === 'dev' ?
     {
@@ -152,6 +154,10 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   }
 
   const nextStep = () => {
+    if(!oracleConfig.symbol){
+      alert(lang['please-enter-a-correct-address'])
+      return;
+    }
     OnChange('multiplier', multiplier)
     OnChange('fundingRateCoefficient', fundingRateCoefficient)
     OnChange('transactionFeeRatio', transactionFeeRatio)
@@ -174,10 +180,31 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
     setTransactionFeeRatio(value)
   }
 
+  const chainLinkAddressValue = (event) => {
+    let { value } = event.target
+    setChainLinkAddress(value)
+  }
+
   const oracleList = async () => {
     let res = await getPoolOpenOracleList(wallet.detail.chainId)
     setOracleConfig(res[0])
     setOracleConfigs(res)
+  }
+
+  const setDefault = () => {
+    setIsDefault(!isDefault)
+    if(isDefault){
+      setOracleConfig({})
+    }else{
+      setOracleConfig(oracleConfigs[0])
+    }
+  }
+
+  const generateOracle = () => {
+    if(!chainLinkAddress){
+      alert(lang['please-enter-a-correct-address'])
+      return;
+    }
   }
 
   useEffect(() => {
@@ -209,36 +236,69 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
         <div className='box'>
           <span className='base-title'> {lang['oracle']}</span>
           <div className='select-oracle'>
-            <div className='radio'>
-            </div>
+            {isDefault ?
+              <div className='radio'>
+              </div>
+              : <div className='radio-no' onClick={setDefault}></div>}
             <span>{lang['choose-from-exsting-ones']}</span>
+
+            {!isDefault ?
+              <div className='radio optional'>
+              </div>
+              : <div className='radio-no optional' onClick={setDefault}></div>}
+            <span>{lang['generate-oracle-address']}</span>
           </div>
-          <div className='select-symbol'>
-            <div className='btn-group check-baseToken-btn'>
-              <button
-                type='button'
-                onClick={onDropdown}
-                className='btn chec'>
-                <SymbolDisplay spec={oracleConfig} />
-                <span className='check-base-down'><img src={symbolArrowIcon} alt='' /></span>
-              </button>
-              <div className={selectClass}>
-                {oracleConfigs.map((config, index) => {
-                  return (
-                    <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>
-                      <SymbolDisplay spec={config} />
-                    </div>
-                  )
-                })}
+
+          {isDefault && <>
+            <div className='select-symbol'>
+              <div className='btn-group check-baseToken-btn'>
+                <button
+                  type='button'
+                  onClick={onDropdown}
+                  className='btn chec'>
+                  <SymbolDisplay spec={oracleConfig} />
+                  <span className='check-base-down'><img src={symbolArrowIcon} alt='' /></span>
+                </button>
+                <div className={selectClass}>
+                  {oracleConfigs.map((config, index) => {
+                    return (
+                      <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>
+                        <SymbolDisplay spec={config} />
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-          <div className='warn'>
+          </>}
+
+
+          {!isDefault && <>
+            <div className='optional-oracle'>
+              <div className='input'>
+                <input
+                  type='text'
+                  value={chainLinkAddress}
+                  placeholder={lang['chain-link-address']}
+                  onChange={event => chainLinkAddressValue(event)}
+                />
+                <Button className='btn' click={generateOracle} btnText={lang['generate']} lang={lang}></Button>
+              </div>
+              <div className='optional-oracle-address'>
+              <input
+                  type='text'
+                  value={oracleConfig.address}
+                />
+              </div>
+            </div>
+          </>}
+
+          {/* <div className='warn'>
             <img src={warn} />
             <span>
               {lang['please-contact-the-team']}
             </span>
-          </div>
+          </div> */}
           <div className='symbol-name'>
             <div className='symbol-title'>
               {lang['symbol-name']}
@@ -247,7 +307,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
               {oracleConfig ? oracleConfig.symbol : ''}
             </div>
           </div>
-          <div className='advanced'  onClick={() => setSelectAdvanced(!selectAdvanced)}>
+          <div className='advanced' onClick={() => setSelectAdvanced(!selectAdvanced)}>
             <span className='select-advanced' >
               {lang['advanced']}
             </span>
@@ -383,7 +443,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
               </div>
             </div>
           </div>
-          
+
           <div className='next-button'>
             <div className='next-button'>
               <button onClick={() => { goToStep(1) }}>
