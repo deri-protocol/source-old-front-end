@@ -25,6 +25,9 @@ const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
 
+const InfoList = LoadableComponent(() => import('../../pages/Info/List'))
+const InfoDetail = LoadableComponent(() => import('../../pages/Info/Detail'))
+
 @withRouter
 @withLanguage
 class Body extends React.Component {
@@ -55,6 +58,8 @@ class Body extends React.Component {
           <Route exact path='/addpool' component={() => <AddPool lang={dict['permission']}/>}/>
           <Route exact path='/options/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
+          <Route path='/info' component={() => <InfoList/>}/>
+          <Route path='/info/:add/detail' component={() => <InfoDetail/>}/>
         </Switch>
       </div>
     )
