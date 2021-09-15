@@ -39,7 +39,7 @@ function Mining({wallet,lang}){
 		await openConfigListCache.update()
 	}
 
-	const gotoMining = (url)=>{
+	const goToMining = (url)=>{
 		history.push(url)
 	}
 
@@ -70,7 +70,7 @@ function Mining({wallet,lang}){
 			</div>
 			{(isController && version === 'v2_lite_open') && <>
 				<div className='add-symbol'>
-					<button onClick={() => gotoMining(url)} >
+					<button onClick={() => goToMining(url)} >
 						{lang['add-symbol']}
 					</button>
 				</div>
