@@ -771,7 +771,7 @@
     "dev": {
       "pools": [
         {
-          "pool":   "0x0D0c982af263a02DF481A642798ab815832904B7",
+          "pool": "0x0D0c982af263a02DF481A642798ab815832904B7",
           "pToken": "0x4047a31aa3CA9AfFC820E3153A1D79b3c2074CF2",
           "lToken": "0x6D89257cF3c614304A6508BC6A268e3e7998BaF2",
           "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
@@ -802,6 +802,39 @@
           ],
           "chainId": "97",
           "version": "option"
+        },
+        {
+          "pool": "0x8be6b446dA75Bc0B4eb321cB89079A3eA96666b2",
+          "pToken": "0x8F038C454B6E68B2988706a1a5f78dE2C4634097",
+          "lToken": "0x15cF2147Dc2E5Db1DEF4818bAF36C7C7a7b9F970",
+          "bToken": "0xa544e477866a29685E4155E27f9bD886C63880a0",
+          "pricer": "0x798762FFefc1b0Ee63ad1bfA9c2bE6807F5FC918",
+          "bTokenSymbol": "USDC",
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "BTCUSD-50000-C",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "BTCUSD-40000-P",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "ETHUSD-4000-C",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "ETHUSD-3000-P",
+              "unit": "ETH"
+            }
+          ],
+          "initialBlock": "18948137",
+          "version": "option",
+          "chainId": "80001"
         }
       ],
       "oracle": [
@@ -818,12 +851,12 @@
         {
           "chainId": "80001",
           "symbol": "BTCUSD",
-          "address": "0x74a02A2BC1Ef0F3E2b7B16c638EC12787DE58F91"
+          "address": "0x4770703aA9bE39F187A1efAf0F2f0ba00Fc3A4Ce"
         },
         {
           "chainId": "80001",
           "symbol": "ETHUSD",
-          "address": "0xc0797C024e79E6e4D9473aE00c7fFCD4cce84Cc8"
+          "address": "0xa34500afF55Cd0aA772539E175746f30e5c4b37C"
         }
       ],
       "poolViewer": [
@@ -833,7 +866,7 @@
         },
         {
           "chainId": "80001",
-          "address": "0xbDab21c2FA271f504D9112835dDD6Cd9a8A75540"
+          "address": "0x77e27DF02b290e5680A5B00a88E09E612265AFDE"
         }
       ]
     }

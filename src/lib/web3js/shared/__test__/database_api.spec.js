@@ -2,7 +2,9 @@ import {
   getUserInfo,
   getUserInfoAll,
   getPoolLiquidity,
+  getPoolLiquidityAll,
   getPoolInfoApy,
+  getPoolInfoApyAll,
   getLpPoolInfoApy,
   getUserInfoAllForAirDrop,
   getUserInfoInPool,
@@ -138,5 +140,72 @@ describe('database api', () => {
     },
     TIMEOUT
   );
+  it(
+    'getPoolLiquidityAll',
+    async () => {
+      DeriEnv.set('prod');
+      const res = await getPoolLiquidityAll([
+        {
+          pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+          version: 'v2',
+          chainId: '56',
+          bTokenId: '0',
+        },
+        {
+          pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+          version: 'v2',
+          chainId: '56',
+          bTokenId: '1',
+        },
+        {
+          pool: '0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0',
+          chainId: '56',
+          version: 'v2_lite',
+        },
+        {
+          pool: '0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4',
+          chainId: '56',
+          version: 'option',
+        },
+      ]);
+      DeriEnv.set('dev');
+      expect(res).toEqual([]);
+    },
+    TIMEOUT
+  );
+  it(
+    'getPoolInfoApyAll',
+    async () => {
+      DeriEnv.set('prod');
+      const res = await getPoolInfoApyAll([
+        {
+          pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+          version: 'v2',
+          chainId: '56',
+          bTokenId: '0',
+        },
+        {
+          pool: '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+          version: 'v2',
+          chainId: '56',
+          bTokenId: '1',
+        },
+        {
+          pool: '0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0',
+          chainId: '56',
+          version: 'v2_lite',
+        },
+        {
+          pool: '0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4',
+          chainId: '56',
+          version: 'option',
+        },
+      ]);
+      DeriEnv.set('dev');
+      expect(res).toEqual([]);
+    },
+    TIMEOUT
+  );
+
 
 });

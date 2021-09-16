@@ -104,8 +104,9 @@
   "liquidation-price" : "Liq Price (Est.)",
   "liquidation-failed" : "Liquidation failed",
   "close-position-failed" : "Close position failed",
-  "liq-price-hover":" Cannot calculate a liquidation price for this direction. Please manage your positions carefully.",
-
+  "liq-price-hover-one":"We try our best to estimate your liquidation prices (if existing) for the up and down directions respectively",
+  "liq-price-hover-two":"will be displayed if the estimation shows your positions will not be liquidated in this direction",
+  "liq-price-hover-three":"will be displayed if the estimation cannot determine your positions' liquidation price in this direction",
   "history" : "HISTORY",
   "volume-price" : "Volume @ Price",
   "volume-notional-price":"Volume ( Notional ) @ Price",

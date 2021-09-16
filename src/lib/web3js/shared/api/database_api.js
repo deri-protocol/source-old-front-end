@@ -129,6 +129,56 @@ export const getPoolLiquidity = async (chainId, poolAddress) => {
   }
 };
 
+export const getPoolLiquidityAll = async (pools) => {
+  // use the dev database
+  const db = databaseFactory();
+  if (Array.isArray(pools)) {
+    const keys = pools.reduce((acc, pool) => {
+      if (pool.version === 'v2' && pool.bTokenId) {
+        return acc.concat([
+          `${pool.chainId}.${pool.pool}.liquidity${pool.bTokenId}`,
+        ]);
+      } else {
+        return acc.concat([`${pool.chainId}.${pool.pool}.liquidity`]);
+      }
+    }, []);
+    try {
+      const res = await db.getValues(keys);
+      if (res) {
+        return res.map((i) => deriToNatural(i));
+      }
+    } catch (err) {
+      console.log(err.toString());
+    }
+    return [];
+  }
+};
+
+export const getPoolInfoApyAll = async (pools) => {
+  // use the dev database
+  const db = databaseFactory(true);
+  if (Array.isArray(pools)) {
+    const keys = pools.reduce((acc, pool) => {
+      const poolNetwork = getNetworkName(pool.chainId.toString());
+      if (pool.version === 'v2' && pool.bTokenId) {
+        return acc.concat([`${poolNetwork}.${pool.pool}.apy${pool.bTokenId}`]);
+      } else {
+        return acc.concat([`${poolNetwork}.${pool.pool}.apy`]);
+      }
+    }, []);
+    try {
+      console.log('keys', keys)
+      const res = await db.getValues(keys);
+      if (res) {
+        return res.map((i) => deriToNatural(i));
+      }
+    } catch (err) {
+      console.log(err.toString());
+    }
+    return [];
+  }
+};
+
 /**
  * Get pool apy
  * @async

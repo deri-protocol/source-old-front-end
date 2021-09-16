@@ -8,19 +8,17 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 export const web3Factory = (function () {
   const web3InstanceMap = {};
   let pending = {}
+  let walletChainId = null
   return {
     async get(chainId) {
       chainId = normalizeChainId(chainId)
       if (Object.keys(web3InstanceMap).includes(chainId)) {
+        //console.log('hit web3 cache')
         return web3InstanceMap[chainId];
       }
       // for mining page should not depends wallet network
-      let walletChainId
-      if (typeof window === 'object' && window.ethereum) {
+      if (!walletChainId && typeof window === 'object' && window.ethereum) {
         walletChainId = await window.ethereum.request({ method: 'net_version' })
-      } else {
-        // MetaMask plugin is not installed in the browser
-        console.log('Please install MetaMask first');
       }
       // using metaMask ethereum object
       if (
@@ -30,36 +28,35 @@ export const web3Factory = (function () {
         walletChainId &&
         chainId === walletChainId.toString()
       ) {
+        //console.log('new ethereum web3 cache')
         web3InstanceMap[chainId] = new Web3(window.ethereum);
         return web3InstanceMap[chainId];
       } else {
         if (pending[chainId]) {
+          // wait for init
           let retry = 10
           while (retry > 0) {
-            await delay(300)
-            if (pending[chainId]) {
-              retry -= 1
+            await delay(500)
+            if (Object.keys(web3InstanceMap).includes(chainId)) {
+              // console.log('hit web3 cache')
+              return web3InstanceMap[chainId];
             } else {
-              if (web3InstanceMap[chainId]) {
-                return web3InstanceMap[chainId];
-              } else {
-                const providerUrl = await getChainProviderUrl(chainId);
-                web3InstanceMap[chainId] = new Web3(
-                  new Web3.providers.HttpProvider(providerUrl)
-                );
-                return web3InstanceMap[chainId];
-              }
+              retry -= 1
             }
           }
+          // timeout
           const providerUrl = await getChainProviderUrl(chainId);
+          //console.log('new web3 cache')
           web3InstanceMap[chainId] = new Web3(
             new Web3.providers.HttpProvider(providerUrl)
           );
           return web3InstanceMap[chainId];
         } else {
+          // first init
           pending[chainId] = true
           try {
             const providerUrl = await getChainProviderUrl(chainId);
+            //console.log('new web3 cache')
             web3InstanceMap[chainId] = new Web3(
               new Web3.providers.HttpProvider(providerUrl)
             );
