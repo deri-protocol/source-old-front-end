@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 import NumberFormat from 'react-number-format'
 
 export default function DeriNumberFormat(props){
-  const [renderablity, setRenderablity] = useState('--');
+  const [renderablity, setRenderablity] = useState(<span className='loading-line'></span>);
 
   useEffect(() => {
     const {allowZero,...others} = props 

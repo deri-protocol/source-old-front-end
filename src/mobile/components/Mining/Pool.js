@@ -23,7 +23,11 @@ function Pool({lang,loading}){
     return getContractAddressConfig(env, 'v2_lite_open')
   }
   const siwtchTab = async (current) => {
-    setCurTab(current);
+    if(current === curTab){
+      setCurTab('')
+    } else {
+      setCurTab(current)
+    }
     if(current === 'open' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());

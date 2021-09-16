@@ -42,14 +42,14 @@ export default function useMiningPool(isNew,wallet,retired){
       configs = configs.map((config) => mapPoolInfo(config,wallet,chainInfo))
 
       const slpConfig = getLpContractAddressConfig(env).map(async config => {
-        const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
-        const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
+        // const liqInfo = await getPoolLiquidity(config.chainId,config.pool) || {}
+        // const apyPool = await getPoolInfoApy(config.chainId,config.pool) || {} 
         const pool = config.pool || ''      
         let lpApy;
         let label;
         if(isLP(config.pool)){
-          let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
-          lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
+          // let lapy = await getLpPoolInfoApy(config.chainId,config.pool);
+          // lpApy = lapy && ((+lapy.apy2) * 100).toFixed(2);           
         }
         if(isSushiLP(config.pool)){
           label = Intl.get('mining','sushi-apy')
@@ -59,10 +59,10 @@ export default function useMiningPool(isNew,wallet,retired){
         }
         return Object.assign(config,{
           network : chainInfo[config.chainId].name,
-          liquidity : liqInfo.liquidity,
-          apy : ((+apyPool.apy) * 100).toFixed(2),
+          // liquidity : liqInfo.liquidity,
+          // apy : ((+apyPool.apy) * 100).toFixed(2),
           formatAdd : formatAddress(pool),
-          lpApy : lpApy,
+          // lpApy : lpApy,
           address : pool,
           type : 'lp',
           label:label,

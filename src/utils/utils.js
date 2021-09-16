@@ -223,30 +223,30 @@ export function combineSymbolfromPoolConfig(configs){
 }
 
 export async function mapPoolInfo(config,wallet,chainInfo){
-  const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
-  const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
+  // const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
+  // const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
   const pool = config.pool || ''
   const item = { 
     network : chainInfo[config.chainId] && chainInfo[config.chainId].name,
-    liquidity : liqPool.liquidity,
-    apy :  ((+apyPool.apy) * 100).toFixed(2),
+    // liquidity : liqPool.liquidity,
+    // apy :  ((+apyPool.apy) * 100).toFixed(2),
     formatAdd : formatAddress(pool),
     address : pool,
     type : 'perpetual',
     buttonText : 'STAKING',
-    multiplier : apyPool.multiplier 
+    multiplier : 1
   }
-  if(wallet && wallet.isConnected()){
-    const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId).catch(e => console.log(e));
-    const claimInfo = await getUserInfoAll(wallet.detail.account);
-    if(info){
-      item['pnl'] = info.pnl
-    }
-    if(claimInfo){
-      item['claimed'] = claimInfo.total;
-      item['unclaimed'] = claimInfo.amount
-    }
-  }
+  // if(wallet && wallet.isConnected()){
+  //   const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId).catch(e => console.log(e));
+  //   const claimInfo = await getUserInfoAll(wallet.detail.account);
+  //   if(info){
+  //     item['pnl'] = info.pnl
+  //   }
+  //   if(claimInfo){
+  //     item['claimed'] = claimInfo.total;
+  //     item['unclaimed'] = claimInfo.amount
+  //   }
+  // }
 
   return Object.assign(config,item)
 }
