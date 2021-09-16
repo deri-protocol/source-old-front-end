@@ -38,7 +38,7 @@ export default function List(){
         <div className='trade-chart'></div>
       </div>
       <div className='table-by-network'>
-        {TABLE_CONFIG.map(config => <Table title={config[0]} headers={config[1]} colums={config[2]} url={config[3]}/>)}
+        {TABLE_CONFIG.map(config => <Table title={config[0]} headers={config[1]} columns={config[2]} url={config[3]}/>)}
       </div>
     </div>
   )

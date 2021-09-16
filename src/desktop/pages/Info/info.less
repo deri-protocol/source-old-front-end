@@ -17,7 +17,6 @@
 
     .info-table {
       margin: 20px 0;
-      background-color: #2C2D31;
       .t-title {
         color: #D4E05C;
         font-size: 14px;
@@ -25,11 +24,15 @@
         border-radius: 10px 10px 0 0;
         padding: 14px;
       }
+      .col {
+        width: 150px;
+        flex-grow: 1;
+      }
       .theader {
         color: #ffffff;
         display: flex;
-        font-size: 14px;
-        justify-content: space-between;
+        font-size: 14px;    
+        justify-content: space-around;
         border-bottom: 1px solid #0d0e0f;
         padding: 4px 0;
       }
@@ -37,15 +40,34 @@
         background: #2C2D31;
         .col {
           padding: 10px;
+          .direction,.action{
+            border: 1px solid #ffffff;
+            padding: 2px 20px;
+            border-radius: 10px;
+            color: #fff;
+          }
+          .direction.short,.action.removeliquidity {
+            background-color: #E35061;
+          }
+          .direction.long,action.addliquidity {
+            background-color: #3EBF38;
+          }
         }
         .row {
           display: flex;
+          justify-content: space-around;
           border-bottom: 1px solid #0d0e0f;
           padding: 2px 0;
         }
       }
-      .pagination {
-
+      .row.pagination {
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        .arrow {
+          margin :  0 10px;
+          cursor: pointer;
+        }
       }
     }
   }

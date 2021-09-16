@@ -47,7 +47,7 @@ export default function MatrixRain({lang}){
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < drops.length; i++) {
         var text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillStyle = '#0f0';
+        ctx.fillStyle = '#00659f';
 
         ctx.font = fontSize + "px arial";
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
