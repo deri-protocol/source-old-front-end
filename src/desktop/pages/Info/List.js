@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import './list.less'
+import './info.less'
 import Table from './Table'
 import config from '../../../config.json'
 const HEADERS = ['BASE TOKEN','ADDRESS','LIQUIDITY','TRADING VOLUME']
 const COLUMNS = ['baseToken','address','liquidity','volume']
 const NETWORKDS = ['56','1','137']
+
 const chainConfig = config['prod']['chainInfo']
 const TABLE_CONFIG = NETWORKDS.map(chainId => (
   [chainConfig[chainId].code,HEADERS,COLUMNS,`${process.env.REACT_APP_HTTP_URL}/get_summary_data_by_network?chainId=${chainId}`]

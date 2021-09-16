@@ -60,8 +60,8 @@ class Body extends React.Component {
           <Route exact path='/addpool' component={() => <AddPool lang={dict['permission']}/>}/>
           <Route exact path='/options/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
-          <Route path='/info' component={() => <InfoList/>}/>
-          <Route path='/info/:add/detail' component={() => <InfoDetail/>}/>
+          <Route exact path='/info' component={() => <InfoList/>}/>
+          <Route exact path='/info/:add' component={() => <InfoDetail/>}/>
         </Switch>
       </div>
     )
