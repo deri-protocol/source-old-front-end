@@ -154,6 +154,38 @@
 }
 
 
+@-webkit-keyframes spin {
+  to {
+      -webkit-transform: translateY(-6em);
+      transform: translateY(-6em)
+  }
+}
+
+@keyframes spin {
+  to {
+      -webkit-transform: translateY(-6em);
+      transform: translateY(-6em)
+  }
+}
+.loading-line {
+  display: inline-block;
+  overflow: hidden;
+  height: 1.3em;
+  margin-top: -.3em;
+  line-height: 1.5em;
+  vertical-align: text-bottom;
+}
+
+.loading-line:after {
+  content: "/\A–\A\\\A|";
+  text-align: center;
+  -webkit-animation: spin 1s steps(4) infinite;
+  animation: spin 1s steps(4) infinite;
+  display: inline-table;
+  white-space: pre;
+}
+
+
 
 html {
   -webkit-font-smoothing: antialiased;

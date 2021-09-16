@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import config from '../../config.json'
-import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock ,getPoolLiquidity,getPoolInfoApy} from '../../lib/web3js/indexV2';
+import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock ,getPoolLiquidity,getPoolInfoApy,getLpPoolInfoApy} from '../../lib/web3js/indexV2';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
@@ -88,11 +88,17 @@ function Card({ wallet, pool, card, index, list, lang }) {
   const loadCardInfo = async (config) => {
     const apyInfo = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId)
     const liq = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId)
-    setDetail({
+    const detail = {
       liquidity : liq.liquidity,
       apy :  ((+apyInfo.apy) * 100).toFixed(2),
-      multiplier : apyInfo.multiplier 
-    })
+      multiplier : apyInfo.multiplier
+    }
+    if(config.isLp){
+      const lapy = await getLpPoolInfoApy(config.chainId,config.pool);
+      const lpApy = ((+lapy.apy2) * 100).toFixed(2); 
+      detail['lpApy'] = lpApy
+    }
+    setDetail(detail)
   }
   
 
@@ -143,28 +149,30 @@ function Card({ wallet, pool, card, index, list, lang }) {
           <div className="pool-detail">
             <div className='liq'>
               <span className='title'>{card.airdrop ? lang['total'] : lang['pool-liq']}</span>
-              <DeriNumberFormat value={detail.liquidity} displayType='text' thousandSeparator={true} decimalScale={card.lpApy ? 7 : 0} />
+              <DeriNumberFormat value={detail.liquidity} displayType='text' thousandSeparator={true} decimalScale={detail.lpApy ? 7 : 0} />
             </div>
             <div className='multiplier'>
-              {card.multiplier && <>
+              {detail.multiplier && <>
                 <span>{lang['multiplier']}</span>
                 <TipWrapper block={false}>
                   <span className='multiplier-value' tip={lang['multiplier-tip']}>{detail.multiplier}x</span>
                 </TipWrapper>
               </>}
             </div>
-            <div className="apy">
+            <div className={`apy ${detail.lpApy && 'lp-apy'}`}>
               {!card.isOpen && <>
                 <span>{lang['apy']}</span>
-                <TipWrapper block={false}>
-                  <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={detail.lpApy && lang['deri-apy']}>
-                    {detail.apy ? <DeriNumberFormat value={detail.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} /> : '--'}
+                <TipWrapper block={false} title={detail.lpApy}>
+                  <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={detail.lpApy ? lang['deri-apy'] : ''}>
+                    <DeriNumberFormat value={detail.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} />
                   </span>
-                  {card.lpApy && card.lpApy > 0 && <>
-                    <span> + </span>
-                    <span className={card.lpApy ? 'sushi-apy-underline' : ''} tip={card.lpApy && card.label}> <DeriNumberFormat value={card.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
-                  </>}
                 </TipWrapper>
+                  {detail.lpApy && detail.lpApy > 0 && <>
+                    <span>+</span>
+                    <TipWrapper block={false}>
+                      <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={card.label}><DeriNumberFormat value={detail.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
+                    </TipWrapper>
+                  </>}
               </>}
             </div>
           </div>
