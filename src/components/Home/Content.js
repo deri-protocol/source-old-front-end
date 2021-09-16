@@ -44,7 +44,7 @@ export default function Content({lang}) {
           <div className="index_part2-L">
             <div className='index_part2_L-text'>
               <span className="key">{lang['deri-protocol']} </span><br />
-              {lang['deri-describe']}
+              = {lang['deri-describe']}
             </div>
           </div>
           <div className='index_part2-R'>
