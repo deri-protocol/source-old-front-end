@@ -104,7 +104,7 @@
   "liquidation-price" : "清算价格",
   "liquidation-failed" : "清算失败",
   "close-position-failed" : "平仓失败",
-  "liq-price-hover-one":"我们尽力为您估算您在两个方向上分别的清算价格。",
+  "liq-price-hover-one":"我们尽力为您估算您在两个方向上分别的清算价格。\n -- : 您的仓位不会在这个价格变动方向上被清算 \n ? : 表示我们的程序无法确定您的仓位在这个价格变动方向上的清算价格。 ",
   "liq-price-hover-two":"您的仓位不会在这个价格变动方向上被清算",
   "liq-price-hover-three":"表示我们的程序无法确定您的仓位在这个价格变动方向上的清算价格。",
 

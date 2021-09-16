@@ -104,7 +104,7 @@
   "liquidation-price" : "Liq Price (Est.)",
   "liquidation-failed" : "Liquidation failed",
   "close-position-failed" : "Close position failed",
-  "liq-price-hover-one":"We try our best to estimate your liquidation prices (if existing) for the up and down directions respectively",
+  "liq-price-hover-one":"We try our best to estimate your liquidation prices (if existing) for the up and down directions respectively \n -- : will be displayed if the estimation shows your positions will not be liquidated in this direction \n ? : will be displayed if the estimation cannot determine your positions' liquidation price in this direction",
   "liq-price-hover-two":"will be displayed if the estimation shows your positions will not be liquidated in this direction",
   "liq-price-hover-three":"will be displayed if the estimation cannot determine your positions' liquidation price in this direction",
   "history" : "HISTORY",
