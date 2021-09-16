@@ -137,8 +137,8 @@ function Position({ wallet, trading, version, lang, type }) {
           </span>
         </div>
         <div className='liquidation-price'>
-        <TipWrapper block={false}><span className='funding-fee' tip={lang['liq-price-hover-one']}>{lang['liquidation-price']} : </span></TipWrapper> 
-          <LiqPrice wallet={wallet} trading={trading} lang={lang} />
+        <TipWrapper block={false}><span className='funding-fee' tip={lang['liq-price-hover-one']}>{lang['liquidation-price']}  </span></TipWrapper>  
+        : <LiqPrice wallet={wallet} trading={trading} lang={lang} />
         </div>
       </div>
 
