@@ -82,8 +82,9 @@ export const getLiquidationPrice = (state, symbolId)  => {
     toNumberForObject(poolState, [
       'initialMarginRatio',
       'maintenanceMarginRatio',
-      'premiumFundingPeriod',
-      'premiumFundingCoefficient',
+      'fundingPeriod',
+      'fundingCoefficient',
+      'marginMultiplier',
       'liquidity',
       'totalDynamicEquity',
       'totalInitialMargin',
@@ -105,7 +106,7 @@ export const getLiquidationPrice = (state, symbolId)  => {
           'strikePrice',
           'spotPrice',
           'dpmmPrice',
-          'underlierVolatility',
+          'volatility',
           'timePrice',
           'dynamicMarginRatio',
           'intrinsicValue',
@@ -114,8 +115,8 @@ export const getLiquidationPrice = (state, symbolId)  => {
           'K',
           'tradersNetVolume',
           'tradersNetCost',
-          'cumulativePremiumFundingRate',
-          'premiumFundingPerSecond',
+          'cumulativeFundingRate',
+          'fundingPerSecond',
         ])
       ),
     symbolState

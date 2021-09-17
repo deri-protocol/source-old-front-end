@@ -4,16 +4,17 @@ import { getOracleConfigList } from "../../shared/config/oracle"
 import { getJsonConfig } from "../../shared/config/config"
 import { normalizeChainId, toChecksumAddress, validateObjectKeyExist } from "../../shared/utils"
 import { poolProcessor, poolValidator } from "../../shared/config/config_processor"
-import { getPoolViewerConfig } from "../../shared"
-import { expandPoolConfigV2LiteOpen, getPoolV2LiteManagerConfig, openPoolChainIds } from "../config"
-import { perpetualPoolLiteFactory, perpetualPoolLiteManagerFactory, perpetualPoolLiteViewerFactory } from "../factory"
+import { fetchJson, getBlockInfo, getHttpBase, getPastEvents, getPoolViewerConfig } from "../../shared"
+import { expandPoolConfigV2LiteOpen, getOracleFactoryChainlinkConfig, getPoolV2LiteManagerConfig, openPoolChainIds } from "../config"
+import { oracleFactoryChainlinkFactory, perpetualPoolLiteFactory, perpetualPoolLiteManagerFactory, perpetualPoolLiteViewerFactory } from "../factory"
+import { oracleFactoryChainlinkAbi } from "../contract/abi/oracleFactoryChainlinkAbi"
 
 export const getPoolOpenConfigList = async (...args) => {
   return catchApiError(
     async () => {
       let configs = [];
       const chainIds = openPoolChainIds()
-      configs = chainIds.reduce(async (acc, chainId) => {
+      configs = await chainIds.reduce(async (acc, chainId) => {
         //console.log('chainId', chainId)
         const { address: poolManagerAddress } = getPoolV2LiteManagerConfig(
           chainId
@@ -44,7 +45,7 @@ export const getPoolOpenConfigList = async (...args) => {
         );
         return acc.concat(res);
       }, []);
-      return configs;
+      return configs.sort((a,b) => parseInt(a.initialBlock) - parseInt(b.initialBlock));
     },
     args,
     'getPoolOpenConfigList',
@@ -52,13 +53,63 @@ export const getPoolOpenConfigList = async (...args) => {
   );
 };
 
-export const getPoolOpenOracleList = (chainId) => {
-  chainId = normalizeChainId(chainId)
+export const getPoolOpenOracleList = async(...args) => {
   return catchApiError(
-    async () => {
-      return getOracleConfigList('v2_lite_open', DeriEnv.get()).filter((o) => o.chainId === chainId);
+    async (chainId, accountAddress) => {
+    chainId = normalizeChainId(chainId)
+    const oracleFactoryConfig = getOracleFactoryChainlinkConfig(chainId);
+    const oracleFactory = oracleFactoryChainlinkFactory(
+      chainId,
+      oracleFactoryConfig.address
+    );
+    await oracleFactory._init()
+    let eventBlock, oracles= [];
+    const res = await fetchJson(
+      `${getHttpBase()}/oracle/${chainId}/${accountAddress}`
+    );
+    if (res && res.success) {
+      eventBlock = parseInt(res.data.eventBlock);
+      if (res.data.oracles && Array.isArray(res.data.oracles)) {
+        oracles = res.data.oracles;
+      }
+      if (eventBlock === 0) {
+        eventBlock = parseInt(oracleFactoryConfig.initialBlock);
+      }
+      const toBlock = await getBlockInfo(chainId, 'latest');
+      // fetch online
+      let events = await getPastEvents(
+        chainId,
+        oracleFactory.contract,
+        'CreateOracleChainlink',
+        {},
+        eventBlock,
+        toBlock.number
+      );
+      if (events.length > 0) {
+        for (let i = 0; i < events.length; i++) {
+          const event = events[i];
+          const info = event.returnValues;
+          oracles.push({
+            chainId,
+            symbol: info.symbol,
+            address: info.oracle,
+            blockNumber: event.blockNumber,
+          });
+        }
+        return oracles
+          .sort((a, b) => parseInt(b.blockNumber) - parseInt(a.blockNumber))
+          .reduce((acc, i) => {
+            return acc.find((a) => a.symbol === i.symbol) ? acc : [...acc, i];
+          }, []);
+      } else {
+        return oracles
+      }
+    } else {
+      return [];
+    }
+      //return getOracleConfigList('v2_lite_open', DeriEnv.get()).filter((o) => o.chainId === chainId);
     },
-    [],
+    args,
     'getPoolOpenOracleInfos',
     []
   );
@@ -111,13 +162,27 @@ export const getExpandedPoolOpenConfigList = async () => {
 
 export const getPoolAllSymbolNames = async (chainId, poolAddress) => {
   return catchApiError(
-    async () => {
+    async (chainId, poolAddress) => {
       const viewerAddress = getPoolViewerConfig(chainId, 'v2_lite');
       const poolViewer = perpetualPoolLiteViewerFactory(chainId, viewerAddress);
       return await poolViewer.getOffChainOracleSymbols(poolAddress);
     },
     [chainId.toString(), poolAddress],
     'getPoolAllSymbolNames ',
+    []
+  );
+};
+
+export const getPoolAcitveSymbolIds = async (...args) => {
+  return catchApiError(
+    async (chainId, poolAddress) => {
+      chainId = chainId.toString()
+      const perpetualPoolLite = perpetualPoolLiteFactory(chainId, poolAddress);
+      await perpetualPoolLite.init()
+      return await perpetualPoolLite.pToken.getActiveSymbolIds()
+    },
+    args,
+    'getPoolActiveSymbolIds',
     []
   );
 };
@@ -156,20 +221,3 @@ export const openConfigListCache = (() => {
     }
   }
 })()
-
-// // init
-// const initCache = () => {
-//   if (isBrowser()) {
-//     if(window.ethereum) {
-//       window.ethereum.request({ method: 'net_version' }).then((chainId) => {
-//         if (['1', '56', '137', '128'].includes(chainId)) {
-//           DeriEnv.set('prod')
-//           openConfigListCache.update().then((res) => console.log(res))
-//         } else {
-//           openConfigListCache.update().then((res) => console.log(res))
-//         }
-//       })
-//     }
-//   }
-// };
-// initCache()

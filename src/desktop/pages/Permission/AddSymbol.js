@@ -5,7 +5,7 @@ import StepWizard from "react-step-wizard";
 import { useParams } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
-import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames } from '../../../lib/web3js/indexV2'
+import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames,getPoolAcitveSymbolIds,createOracle } from '../../../lib/web3js/indexV2'
 import useQuery from '../../../hooks/useQuery'
 import down from './img/down.svg';
 import up from './img/up.svg';
@@ -47,8 +47,12 @@ function AddSymbol({ wallet = {}, lang }) {
   }
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const getPoolALLSymbolId = async () => {
-    let res = await getPoolAllSymbolNames(wallet.detail.chainId, address)
-    let id = res.length
+    let res = await getPoolAcitveSymbolIds(wallet.detail.chainId, address)
+    res =  res.map(item => {
+      return item = +item
+    })
+    res = res.sort(function(a,b){ return  b - a})
+    let id = +res[0]+1
     setSymbolId(id)
   }
 
@@ -98,7 +102,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
-  const [selectAdvanced, setSelectAdvanced] = useState(true)
+  const [selectAdvanced, setSelectAdvanced] = useState(false)
   const [dropdown, setDropdown] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
   const [chainLinkAddress, setChainLinkAddress] = useState('')
@@ -131,7 +135,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
     wallet.connect()
-  }
+  } 
   const [btnText, setBtnText] = useState(
     <button OnClick={connect}>
       {lang['connect-wallet']}
@@ -186,7 +190,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   }
 
   const oracleList = async () => {
-    let res = await getPoolOpenOracleList(wallet.detail.chainId)
+    let res = await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
     setOracleConfig(res[0])
     setOracleConfigs(res)
   }
@@ -204,6 +208,15 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
     if(!chainLinkAddress){
       alert(lang['please-enter-a-correct-address'])
       return;
+    }
+
+    let res = await createOracle(wallet.detail.chainId,wallet.detail.account,chainLinkAddress)
+    if(res.success){
+      let oracle =  await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
+      setOracleConfig(oracle[0])
+      setOracleConfigs(oracle)
+    }else{
+      alert(lang['fail'])
     }
   }
   

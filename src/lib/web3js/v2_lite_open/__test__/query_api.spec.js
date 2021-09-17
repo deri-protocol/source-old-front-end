@@ -2,6 +2,7 @@ import { DeriEnv } from "../../shared"
 import { CHAIN_ID, TIMEOUT } from "../../shared/__test__/setup"
 import {
   getExpandedPoolOpenConfigList,
+  getPoolAcitveSymbolIds,
   getPoolAllSymbolNames,
   getPoolController,
   getPoolOpenConfigList,
@@ -25,9 +26,9 @@ describe('v2_lite_open api',() => {
     expect(res).toEqual([])
   }, TIMEOUT)
   it('getPoolOpenOracleList', async() => {
-    const res = await getPoolOpenOracleList('97')
+    const res = await getPoolOpenOracleList('97', '0x2bAa211D7E62593bA379dF362F23e7B813d760Ad')
     expect(res.length).toEqual(2)
-    expect(res[0].address).toEqual('0x78Db6d02EE87260a5D825B31616B5C29f927E430')
+    expect(res[0].address).toEqual('0x947De810AD61BF89eb2cfBf8f8800E0D01A0EDE0')
     expect(res[0].symbol).toEqual('BTCUSD')
   }, TIMEOUT)
   it('getPoolController', async() => {
@@ -43,9 +44,14 @@ describe('v2_lite_open api',() => {
     expect(await isPoolController('56', '0x063E74AbB551907833Be79E2C8F279e3afc74711','0xE2ce09b2aa18Fe63aED37c49259Ae84827c9AE18')).toEqual(true)
     DeriEnv.set('dev')
   }, TIMEOUT)
-  it('isPoolController', async() => {
+  it('getPoolAllSymbolNames', async() => {
     DeriEnv.set('prod')
-    expect(await getPoolAllSymbolNames('56', '0x063E74AbB551907833Be79E2C8F279e3afc74711')).toEqual(true)
+    expect(await getPoolAllSymbolNames('56', '0x063E74AbB551907833Be79E2C8F279e3afc74711')).toEqual(['', ''])
+    DeriEnv.set('dev')
+  }, TIMEOUT)
+  it('getPoolActiveSymbolIds', async() => {
+    DeriEnv.set('prod')
+    expect(await getPoolAcitveSymbolIds('56', '0x063E74AbB551907833Be79E2C8F279e3afc74711')).toEqual(['0', '1'])
     DeriEnv.set('dev')
   }, TIMEOUT)
 })
