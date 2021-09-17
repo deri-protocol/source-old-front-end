@@ -2,18 +2,28 @@ import React, { useState, useEffect } from 'react'
 import './info.less'
 import Table from './Table'
 import config from '../../../config.json'
-const HEADERS = ['BASE TOKEN','ADDRESS','LIQUIDITY','TRADING VOLUME']
-const COLUMNS = ['baseToken','address','liquidity','volume']
-const NETWORKDS = ['56','1','137']
+import axios from 'axios'
+import { formatAddress } from '../../../utils/utils'
+import DeriNumberFormat from '../../../utils/DeriNumberFormat'
+import { Link } from 'react-router-dom'
+const HEADERS = ['Catalog','BASE TOKEN','ADDRESS','LIQUIDITY','TRADING NOTIONAL']
+const COLUMNS = ['catalog','bToken','address','liquidity','notional']
 
-const chainConfig = config['prod']['chainInfo']
-const TABLE_CONFIG = NETWORKDS.map(chainId => (
-  [chainConfig[chainId].code,HEADERS,COLUMNS,`${process.env.REACT_APP_HTTP_URL}/get_summary_data_by_network?chainId=${chainId}`]
-))
+const GET_POOL_URL=`${process.env.REACT_APP_INFO_HTTP_URL}/get_pools`
 
+const columnFormat = {
+  catalog : data => <span className='catalog'>{data.catalog}</span>,
+  address : data => <Link to={`/info/${data.address}`}> {formatAddress(data.address)}</Link>,
+  liquidity : data => <DeriNumberFormat value={data.liquidity}  suffix={` ${data.bToken.split('|')[0]}`}  thousandSeparator={true} decimalScale={2}/>,  
+  notional : data =>  <DeriNumberFormat value={data.notional} suffix={` ${data.bToken.split('|')[0]}`}  thousandSeparator={true} decimalScale={2}/> ,
+  // price : data =>  <DeriNumberFormat value={data.price} thousandSeparator={true} decimalScale={2}/>,
+  // direction : data => <span className={`direction ${data.direction}`}>{data.direction}</span>,
+  // action : data => <span className={`action ${data.action}`}>{data.action}</span>
+}
 export default function List(){
   const [liqSummaryData, setLiqSummaryData] = useState([])
   const [tradeSummaryData, setTradeSummaryData] = useState([])
+  const [allPoolData, setAllPoolData] = useState({})
   const loadLiquditySummaryData = async () => {
 
   }
@@ -21,12 +31,15 @@ export default function List(){
   const loadTradeSummaryData = async () => {
 
   }
+  const loadAllPoolData = async () => {
+    const res = await axios.get(GET_POOL_URL);
+    if(res.status === 200 && res.data.data){
+      setAllPoolData(res.data.data)
+    }
+  }
 
   useEffect(() => {
-    const loadData = async () => {
-
-    }
-    loadData();
+    loadAllPoolData();
   }, [])
 
 
@@ -38,7 +51,7 @@ export default function List(){
         <div className='trade-chart'></div>
       </div>
       <div className='table-by-network'>
-        {TABLE_CONFIG.map(config => <Table title={config[0]} headers={config[1]} columns={config[2]} url={config[3]}/>)}
+        {Object.keys(allPoolData).map(chain => <Table title={chain} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} dataSet={allPoolData[chain]}/>)}
       </div>
     </div>
   )

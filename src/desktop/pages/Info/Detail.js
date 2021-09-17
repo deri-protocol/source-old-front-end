@@ -37,8 +37,8 @@ export default function Detail({}){
         <div className='trade-chart'></div>
       </div>
       <div className='table-by-network'>
-        <Table title='LIQUIDITY' headers={LIQUIDITY_HEADER} columns={LIQUIDITY_COLUMNS} columnRenders={columnFormat} url={getLiquidityDataUrl}/>
-        <Table title='TRADE' headers={TRADE_HEADER} columns={TRADE_COLUMNS} columnRenders={columnFormat}  url={getTradeDataUrl}/>
+        <Table title='LIQUIDITY' headers={LIQUIDITY_HEADER} columns={LIQUIDITY_COLUMNS} columnRenders={columnFormat} url={getLiquidityDataUrl} pagination={true}/>
+        <Table title='TRADE' headers={TRADE_HEADER} columns={TRADE_COLUMNS} columnRenders={columnFormat}  url={getTradeDataUrl} pagination={true}/>
       </div>
     </div>
   )

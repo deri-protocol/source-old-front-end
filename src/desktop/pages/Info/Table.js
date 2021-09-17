@@ -1,32 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-export default function Table({title,url,headers,columns,columnRenders,pagination}){
+export default function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination}){
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [count, setCount] = useState()
   const [pageSize, setPageSize] = useState(10)
 
-  const loadData = async url => {
-    const res = await axios.get(`${url}&page=${page}&page_amount=${pageSize}`);
+  const loadData = async (url,page) => {
+    let restUrl = url;
+    if(pagination){
+      restUrl = `${restUrl}&page=${page}&page_amount=${pageSize}`
+    }
+    const res = await axios.get(restUrl);
     if(res.status === 200 && Array.isArray(res.data.data)){
       setCount(res.data.count / pageSize)
       if(res.data.count % pageSize > 0 ){
         setCount(Math.floor(res.data.count / pageSize) +1)
       }
       setData(res.data.data)
+      setPage(page)
     }
   }
 
   const prePage = () => {
-
+    if(page === 1){
+      return;
+    }
+    loadData(url,page - 1)
   }
   const nextPage = () => {
+    if(page === count){
+      return;
+    }
 
+    loadData(url,page +1)
   }
 
   useEffect(() => {
-    loadData(url);
+    if(dataSet){
+      setData(dataSet)
+    } else {
+      loadData(url,1);
+    }
   }, [url])
   return(
     <div className='info-table'>
@@ -40,9 +56,9 @@ export default function Table({title,url,headers,columns,columnRenders,paginatio
             {columns.map(col => <div className='col'>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
             <div></div>
           </div>))}
-        <div className='pagination row'>
-          <span className='arrow' onClick={prePage}> &lt; </span><span>Page {page} of {count}</span><span className='arrow' onClick={prePage}> &gt; </span>
-        </div>
+        {pagination && <div className='pagination row'>
+          <span className='arrow' onClick={prePage}> &lt; </span><span>Page {page} of {count}</span><span className='arrow' onClick={nextPage}> &gt; </span>
+        </div>}
       </div>
     </div>
   )
