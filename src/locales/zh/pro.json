@@ -14,7 +14,7 @@
   "open" : "开",
   "high" : "高",
   "low" : "低",
-  "close" : "收",
+  "closed" : "收",
   "price" : "价格",
   "index" : "指数",
   "option" : "期权"

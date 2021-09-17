@@ -288,7 +288,7 @@ function Broker({ wallet = {}, lang ,loading}) {
             <div className='claim-deri'>
               <div className='claimed-deri'>
                 <div className='unclaimed-title'>
-                  <span  title={lang['your-total-unclaimed-deri-title']}>
+                  <span  tip={lang['your-total-unclaimed-deri-title']}>
                     {lang['current-epoch-remaining-time']}
                   </span>
                   <span className='deri-text'>
@@ -296,7 +296,7 @@ function Broker({ wallet = {}, lang ,loading}) {
                   </span>
                 </div>
                 <div className='unclaimed-title'>
-                  <span  title={lang['your-total-unclaimed-deri-title']}>
+                  <span  tip={lang['your-total-unclaimed-deri-title']}>
                     {lang['my-trading-volume-in-current-hour']} 
                   </span>
                   <span className='deri-text'>
@@ -304,7 +304,7 @@ function Broker({ wallet = {}, lang ,loading}) {
                   </span>
                 </div>
                 <div className='claimed-title'>
-                  <span className='hover-title' title={lang['your-total-claimed-deri-title']}>
+                  <span className='hover-title' tip={lang['your-total-claimed-deri-title']}>
                   {lang['claimed-deri']}
                   </span>
                   <span className='deri-text'>
@@ -312,7 +312,7 @@ function Broker({ wallet = {}, lang ,loading}) {
                   </span>
                 </div>
                 <div className='unclaimed-title'>
-                  <span className='hover-title' title={lang['your-total-unclaimed-deri-title']}>
+                  <span className='hover-title' tip={lang['your-total-unclaimed-deri-title']}>
                     {lang['unclaimed-deri']}
                   </span>
                   <span className='deri-text'>

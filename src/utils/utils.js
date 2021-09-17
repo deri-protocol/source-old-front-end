@@ -3,10 +3,23 @@
 import BigNumber from 'bignumber.js'
 import version from '../model/Version';
 import type from '../model/Type';
+import config from '../config.json'
+
+import {
+  DeriEnv,
+  getPoolLiquidity,
+  getPoolInfoApy,
+  getUserInfoAll,
+  getLiquidityInfo
+} from '../lib/web3js/indexV2'
 const versionKey = 'deri-current-version'
 
+
+const env = DeriEnv.get();
+const { chainInfo } = config[env]
+
 export function bg(value, base = 0) {
-  if (base == 0) {
+  if (base === 0) {
     return BigNumber(value);
   } else if (base > 0) {
     return BigNumber(value).times(BigNumber("1" + "0".repeat(base)));
@@ -152,13 +165,90 @@ export function calcRange(interval){
   let from,to;
   if(interval !== '1W') {
     to = Math.floor(timestamp / secondsInRange[interval] ) * secondsInRange[interval]
-    from  = to - secondsInRange[interval] * 1440
+    from  = to - secondsInRange[interval] * 200
   } else {
     to = Math.floor((timestamp - 345600) /secondsInRange[interval]) * secondsInRange[interval] + 345600
-    from = to - secondsInRange[interval] * 1440
+    from = to - secondsInRange[interval] * 200
   }
   return [from,to]
  
+}
+
+export function groupByNetwork(pools){
+  const all = []
+  pools.reduce((total, pool) => {
+    const find = total.find(item => eqInNumber(item['pool']['address'], pool['address']))
+    if (find && find.list.length < 5) {
+      find['list'].push(pool)
+    } else {
+      const poolInfo = {
+        pool: {
+          network: pool.network,
+          symbol: pool.symbol,
+          address: pool.address,
+          formatAdd: pool.formatAdd,
+          version: pool.version,
+          // innoDisplay : pool.version=== 'v2_lite' ? Intl.get('mining','v2_lite') : pool.version,
+          chainId: pool.chainId,
+          airdrop: pool.airdrop,
+          type: pool.type,
+          bTokenSymbol: pool.bTokenSymbol,
+          bTokenId: pool.bTokenId,
+          symbolId: pool.symbolId
+        },
+        list: [pool]
+      }
+      total.push(poolInfo)
+    }
+    return total;
+  }, all)
+  return all;
+}
+
+export function combineSymbolfromPoolConfig(configs){
+  return configs.reduce((total,config) => {
+    const pos = total.findIndex(item => item.chainId === config.chainId && (item.pool === config.pool) && config.version === item.version)
+    if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open')  
+        && pos > -1) {
+      if(total[pos].symbol.indexOf(config.symbol) === -1){
+        total[pos].symbol += `,${config.symbol}` 
+      } else if(total.findIndex(item => item.bTokenSymbol === config.bTokenSymbol) === -1) {
+        total.push(config)
+      }
+    } else{
+      total.push(config)
+    }
+    return total;
+  },[]);
+}
+
+export async function mapPoolInfo(config,wallet,chainInfo){
+  // const liqPool = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId) || {}
+  // const apyPool = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId) || {}
+  const pool = config.pool || ''
+  const item = { 
+    network : chainInfo[config.chainId] && chainInfo[config.chainId].name,
+    // liquidity : liqPool.liquidity,
+    // apy :  ((+apyPool.apy) * 100).toFixed(2),
+    formatAdd : formatAddress(pool),
+    address : pool,
+    type : 'perpetual',
+    buttonText : 'STAKING',
+    multiplier : 1
+  }
+  // if(wallet && wallet.isConnected()){
+  //   const info = await getLiquidityInfo(config.chainId,config.pool,wallet.detail.account,config.bTokenId).catch(e => console.log(e));
+  //   const claimInfo = await getUserInfoAll(wallet.detail.account);
+  //   if(info){
+  //     item['pnl'] = info.pnl
+  //   }
+  //   if(claimInfo){
+  //     item['claimed'] = claimInfo.total;
+  //     item['unclaimed'] = claimInfo.amount
+  //   }
+  // }
+
+  return Object.assign(config,item)
 }
 
 

@@ -15,7 +15,7 @@ export default function PoolPlacehold({lang}){
         </div>
         <div className='btn-c'>
         {isMobile &&<>
-          <button onClick={()=>{alert(lang['please-operat'])}}>{lang['add']}</button>
+          <button onClick={()=>{alert(lang['please-operate'])}}>{lang['add']}</button>
         </>}
         {isBrowser &&
           <Link to='/addpool'><button>{lang['add']}</button></Link> 

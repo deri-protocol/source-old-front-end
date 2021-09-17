@@ -101,12 +101,12 @@ function PoolBox({wallet,version,pool,lang}){
               <div className="apy">
                 <span>{lang['apy']}</span>
                 <span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} title={ pool.lpApy && lang['deri-apy']}>
+                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} tip={ pool.lpApy && lang['deri-apy']}>
                     {pool.apy ? <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
                   </span>
                   {pool.lpApy &&<>
                   <span> + </span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } title={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } tip={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                   </>}
                 </span>
                 

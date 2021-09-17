@@ -10,7 +10,7 @@
   "claim":"领取",
   "trade":"交易",
   "exceed-participants":"More than 500 addresses completed Claim",
-  "less-nuls":"NULS 低于最低要求",
+  "less-nuls":"NULS低于最低100枚持币要求",
   "use-a-new-address":"使用新地址参与，谢谢！",
   "rules":"详细规则",
   "rules-one":"前500个完成注册且钱包内有至少100个NULS的用户可以额外领取$1000等值的Ptoken",
