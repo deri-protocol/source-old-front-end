@@ -105,9 +105,9 @@
   "liquidation-price": "Liquidationspreis",
   "liquidation-failed": "Liquidation fehlgeschlagen",
   "close-position-failed": "Position schließen fehlgeschlagen",
-  "liq-price-hover-one":"We try our best to estimate your liquidation prices (if existing) for the up and down directions respectively \n -- : will be displayed if the estimation shows your positions will not be liquidated in this direction \n ? : will be displayed if the estimation cannot determine your positions' liquidation price in this direction",
-  "liq-price-hover-two": "will be displayed if the estimation shows your positions will not be liquidated in this direction",
-  "liq-price-hover-three": "will be displayed if the estimation cannot determine your positions' liquidation price in this direction",
+  "liq-price-hover-one":"Wir versuchen unser Bestmöglichstes, um Ihre Liquidationspreise (falls vorhanden) für die jeweiligen Auf- und Abwärtsrichtungen zu schätzen \n -- : wird angezeigt, wenn die Schätzung der Liquidationspreise Ihrer Positionen in dieser Richtung, nicht möglich ist. Ihre Positionen können in dieser Richtung nicht liquidiert werden \n ? :  wird angezeigt, wenn die Liquidationspreise Ihrer Positionen in dieser Richtung nicht geschätzt oder bestimmt werden können",
+  "liq-price-hover-two": " wird angezeigt, wenn die Schätzung der Liquidationspreise Ihrer Positionen in dieser Richtung, nicht möglich ist. Ihre Positionen können in dieser Richtung nicht liquidiert werden",
+  "liq-price-hover-three": " wird angezeigt, wenn die Liquidationspreise Ihrer Positionen in dieser Richtung nicht geschätzt oder bestimmt werden können",
 
   "history": "HISTORIE",
   "volume-price": "Volumen @ Preis",
