@@ -200,12 +200,13 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
     }
   }
 
-  const generateOracle = () => {
+  const generateOracle = async () => {
     if(!chainLinkAddress){
       alert(lang['please-enter-a-correct-address'])
       return;
     }
   }
+  
 
   useEffect(() => {
     if (hasConnectWallet()) {
@@ -324,7 +325,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['multiplier-hover']}>
+                        <span className='hover-title' tip={lang['multiplier-hover']}>
                           {lang['multiplier']}
                         </span>
                       </TipWrapper>
@@ -340,7 +341,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   <div>
                     <div className='text'>
                       <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['funding-rate-coefficient-hover']}>
+                        <span className='hover-title' tip={lang['funding-rate-coefficient-hover']}>
                           {lang['funding-rate-coefficient']}
                         </span>
                       </TipWrapper>
@@ -355,11 +356,9 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      <TipWrapper block={false}>
-                        <span className='hover-title' title={lang['transaction-fee-ratio-hover']}>
+                        <span className='hover-title-fee'>
                           {lang['transaction-fee-ratio']}
                         </span>
-                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
