@@ -7,7 +7,7 @@ import {
   //isEqualSet,
   bTokenFactory,
 } from '../../shared';
-import { getPriceInfos } from '../../shared/utils/oracle';
+import { checkOffChainOracleSymbol, getPriceInfos } from '../../shared/utils/oracle';
 import { perpetualPoolLiteAbi } from './abis';
 //import { MAX_INT256} from '../../shared/config'
 //import { PTokenLite } from './p_token';
@@ -34,7 +34,7 @@ export class PerpetualPoolLite extends ContractBase {
 
   async init() {
     await this._init();
-    if (!this.addresses || !this.pToken || !this.viewer ) {
+    if (!this.addresses || !this.pToken) {
       [this.addresses, this.parameters] = await Promise.all([
         this.getAddresses(),
         this.getParameters(),
@@ -45,22 +45,35 @@ export class PerpetualPoolLite extends ContractBase {
       this.bToken = bTokenFactory(this.chainId, bTokenAddress);
       this.pToken = pTokenLiteFactory(this.chainId, pTokenAddress);
       this.lToken = lTokenLiteFactory(this.chainId, lTokenAddress);
-      this.viewer = new PerpetualPoolLiteViewer(this.chainId, viewerAddress);
+      //this.viewer = new PerpetualPoolLiteViewer(this.chainId, viewerAddress);
+      this.bTokenSymbol = await this.bToken.symbol();
     }
-  }
-
-  async updateActiveSymbols() {
-    await this.init()
-    if (this.pToken && this.viewer) {
-      [
-        this.bTokenSymbol,
-        this.activeSymbolIds,
-        this.offChainOracleSymbols,
-      ] = await Promise.all([
-        this.bToken.symbol(),
-        this.pToken.getActiveSymbolIds(),
-        this.viewer.getOffChainOracleSymbols(this.contractAddress),
-      ]);
+    const symbolIds = await this.pToken.getActiveSymbolIds();
+    if (
+      !this.activeSymbolIds ||
+      this.activeSymbolIds.toString !== symbolIds.toString()
+    ) {
+      this.activeSymbolIds = symbolIds;
+      this.symbols = await Promise.all(
+        this.activeSymbolIds.reduce(
+          (acc, symbolId) => [...acc, this.getSymbol(symbolId)],
+          []
+        )
+      );
+      this.activeSymbolNames = this.symbols.map((s) => s.symbol);
+      this.offChainOracleSymbols = await Promise.all(
+        this.symbols.map((s) => s.oracleAddress).reduce(
+          (acc, o, index) => [
+            ...acc,
+            checkOffChainOracleSymbol(
+              this.chainId,
+              o,
+              this.symbols[index].symbol
+            ),
+          ],
+          []
+        )
+      );
       this.offChainOracleSymbolIds = this.activeSymbolIds.reduce(
         (acc, i, index) => {
           return this.offChainOracleSymbols[index] === '' ? acc : [...acc, i];
@@ -70,10 +83,43 @@ export class PerpetualPoolLite extends ContractBase {
       this.offChainOracleSymbols = this.offChainOracleSymbols.filter(
         (s) => s && s !== ''
       );
+      //console.log('offchain', this.offChainOracleSymbols);
     }
   }
 
+  // async updateActiveSymbols() {
+  //   await this.init()
+  //   const symbolIds = await this.pToken.getActiveSymbolIds();
+  //   if (
+  //     !this.activeSymbolIds ||
+  //     this.activeSymbolIds.toString !== symbolIds.toString()
+  //   ) {
+  //     this.activeSymbolIds = symbolIds;
+  //   }
+  //   if (this.pToken) {
+  //     [
+  //       this.bTokenSymbol,
+  //       this.activeSymbolIds,
+  //       this.offChainOracleSymbols,
+  //     ] = await Promise.all([
+  //       this.bToken.symbol(),
+  //       this.pToken.getActiveSymbolIds(),
+  //       this.viewer.getOffChainOracleSymbols(this.contractAddress),
+  //     ]);
+  //     this.offChainOracleSymbolIds = this.activeSymbolIds.reduce(
+  //       (acc, i, index) => {
+  //         return this.offChainOracleSymbols[index] === '' ? acc : [...acc, i];
+  //       },
+  //       []
+  //     );
+  //     this.offChainOracleSymbols = this.offChainOracleSymbols.filter(
+  //       (s) => s && s !== ''
+  //     );
+  //   }
+  // }
+
   async getSymbols() {
+    await this.init()
     return await Promise.all(
       this.activeSymbolIds.reduce(
         (acc, symbolId) => [...acc, this.getSymbol(symbolId)],
@@ -82,6 +128,7 @@ export class PerpetualPoolLite extends ContractBase {
     );
   }
   async getPositions(accountAddress) {
+    await this.init()
     return await Promise.all(
       this.activeSymbolIds.reduce(
         (acc, symbolId) => [
@@ -189,7 +236,7 @@ export class PerpetualPoolLite extends ContractBase {
 
   async _getSymbolPrices() {
     let prices = [];
-    await this.updateActiveSymbols()
+    await this.init()
     if (this.offChainOracleSymbolIds.length > 0) {
       const priceInfos = await getPriceInfos(this.offChainOracleSymbols);
       prices = Object.values(priceInfos).reduce((acc, p, index) => {

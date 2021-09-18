@@ -7,7 +7,6 @@ import { poolProcessor, poolValidator } from "../../shared/config/config_process
 import { fetchJson, getBlockInfo, getHttpBase, getPastEvents, getPoolViewerConfig } from "../../shared"
 import { expandPoolConfigV2LiteOpen, getOracleFactoryChainlinkConfig, getPoolV2LiteManagerConfig, openPoolChainIds } from "../config"
 import { oracleFactoryChainlinkFactory, perpetualPoolLiteFactory, perpetualPoolLiteManagerFactory, perpetualPoolLiteViewerFactory } from "../factory"
-import { oracleFactoryChainlinkAbi } from "../contract/abi/oracleFactoryChainlinkAbi"
 
 export const getPoolOpenConfigList = async (...args) => {
   return catchApiError(
@@ -45,7 +44,7 @@ export const getPoolOpenConfigList = async (...args) => {
         );
         return acc.concat(res);
       }, []);
-      return configs.sort((a,b) => parseInt(a.initialBlock) - parseInt(b.initialBlock));
+      return configs.sort((a,b) => parseInt(b.initialBlock) - parseInt(a.initialBlock));
     },
     args,
     'getPoolOpenConfigList',
@@ -80,7 +79,7 @@ export const getPoolOpenOracleList = async(...args) => {
       let events = await getPastEvents(
         chainId,
         oracleFactory.contract,
-        'CreateOracleChainlink',
+        'CreateOracle',
         {},
         eventBlock,
         toBlock.number

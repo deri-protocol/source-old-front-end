@@ -27,9 +27,9 @@ describe('v2_lite_open api',() => {
   }, TIMEOUT)
   it('getPoolOpenOracleList', async() => {
     const res = await getPoolOpenOracleList('97', '0x2bAa211D7E62593bA379dF362F23e7B813d760Ad')
-    expect(res.length).toEqual(2)
-    expect(res[0].address).toEqual('0x947De810AD61BF89eb2cfBf8f8800E0D01A0EDE0')
-    expect(res[0].symbol).toEqual('BTCUSD')
+    expect(res.length).toEqual(3)
+    expect(res[0].address).toEqual('0x8708Dda3A108cC1a92AF9013cbB6E7594e87520b')
+    expect(res[0].symbol).toEqual('DOTUSD')
   }, TIMEOUT)
   it('getPoolController', async() => {
     expect(await getPoolController('97', '0x6045E17Fb8BB3ECE597a9F4BA5AfB275A8129A8B')).toEqual('0x4C059dD7b01AAECDaA3d2cAf4478f17b9c690080')

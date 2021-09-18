@@ -24,8 +24,8 @@ export class OracleFactoryChainlink extends ContractBase {
   }
 
   // tx
-  async createOracle(accountAddress, symbol, feed) {
-    return await this._transact('createOracle', [symbol, feed], accountAddress)
+  async createOracle(accountAddress, symbol) {
+    return await this._transact('createOracle', [symbol], accountAddress)
   }
 
 }

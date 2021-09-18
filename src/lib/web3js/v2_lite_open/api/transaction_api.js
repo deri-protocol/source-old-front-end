@@ -47,8 +47,7 @@ export const createOracle = async(...args) => {
         // send tx
         return await oracleFactory.createOracle(
           accountAddress,
-          symbol,
-          feedAddress
+          symbol
         );
       } else {
         throw new Error(

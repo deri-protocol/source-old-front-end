@@ -94,7 +94,7 @@ describe('trade_query_api', () => {
       expect(res).toHaveProperty('tradersNetVolume');
       expect(res).toHaveProperty('volume');
       expect(bg(res.fundingRate0).toNumber()).toBeGreaterThanOrEqual(-0.1);
-      expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(10000);
+      expect(bg(res.liquidity).toNumber()).toBeGreaterThanOrEqual(1000);
       expect(bg(res.tradersNetVolume).toNumber()).toBeGreaterThanOrEqual(-10000);
       expect(bg(res.tradersNetVolume).toNumber()).toBeLessThanOrEqual(10000);
     },

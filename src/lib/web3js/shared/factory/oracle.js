@@ -2,6 +2,7 @@ import { isUsedRestOracle } from '../config/token';
 import { RestOracle } from '../utils/oracle';
 import { WrappedOracle } from '../contract/oracle/wrapped_oracle';
 import { factory } from '../utils/factory';
+import { SymbolOracleOffChain } from '../contract/oracle/symbol_oracle_off_chain';
 
 export const oracleFactory = (function () {
   const instanceMap = {};
@@ -25,3 +26,4 @@ export const oracleFactory = (function () {
 })();
 
 export const wrappedOracleFactory = factory(WrappedOracle);
+export const symbolOracleOffChainFactory = factory(SymbolOracleOffChain);

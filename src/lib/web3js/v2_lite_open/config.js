@@ -46,14 +46,16 @@ export const getOracleFactoryChainlinkConfig = (chainId) => {
   const configs = {
     prod: [
       {
-        chainId: "56",
-        address: "0xa3FF45DA84AC1A77f3BE5575be8Ff3d8aD76bf95",
+        chainId: '56',
+        address: '',
+        initialBlock: '',
       },
     ],
     dev: [
       {
-        chainId: "97",
-        address: "0xb2A57Be443C75AB9e6662FfA83E3ba6455D0AA7F",
+        chainId: '97',
+        address: '0xFD1f981375f95e971E8fC0756f4daAF5784e5376',
+        initialBlock: '12440610',
       },
     ],
   };

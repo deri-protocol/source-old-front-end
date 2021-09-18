@@ -192,7 +192,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     wallet.refresh();
   }
 
-
   useEffect(() => {
     if (trading.position && trading.position.volume) {
       makeLongOrShort((+trading.position.volume))
