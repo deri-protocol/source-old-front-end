@@ -28,55 +28,49 @@ export default function MatrixRain({lang}){
     canvas.height = rect.height;
 
     // Setting up the letters
-    var letters = 'ΑΒΓΔΕΖΗΘΙΚΛΜ0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101ΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω';
-    letters = letters.split('');
+    var letters = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω';
+    var number =  '0101010101010101010101010101010101010101010101010'
+    letters = (letters + number).split('');
 
     // Setting up the columns
     var fontsSizes = [24,18,14]
     var fontSize = fontsSizes[0],
         columns = canvas.width / fontSize;
 
+    var styles = [{fontSize : 18,color : '#246CAD'},
+                  {fontSize : 15,color : '#1F619E'},
+                  {fontSize : 12,color : '#23598B'},
+                  {fontSize : 9,color : '#174268'}]
+    var symbols = ['+','-']
     // Setting up the drops
     var drops = [];
+    var dropsStyles = []
     for (var i = 0; i < columns; i++) {
       drops[i] = 1;
+      dropsStyles[i] = styles[Math.floor(Math.random() * styles.length)]
     }
-    var random = 0
-    var selectedColumns= []
-    var selectedFontSize = fontsSizes[Math.floor(Math.random() * fontsSizes.length)]
-    for (let i = 0 ; i < Math.floor(columns / 0.8) ; i++){
-      selectedColumns.push(Math.floor(Math.random() * columns))
-    }
+
     // Setting up the draw function
     function draw() {
-      ctx.fillStyle = 'rgba(13, 14, 16, 0.1)';
+      ctx.fillStyle = 'rgba(13, 14, 15, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       for (var i = 0; i < drops.length; i++) {
         var text = letters[Math.floor(Math.random() * letters.length)];
-        if(selectedColumns.includes(i)){
-          ctx.font = selectedFontSize + 'px arial'
-          ctx.fillStyle = '#0068A3';
-        } else {
-          ctx.fillStyle = 'rgb(36,108,173)';
-          ctx.font = fontSize + "px arial";
-          random = 1
-        }
-        ctx.fillText(text, i * fontSize + random, drops[i] * fontSize);
+        var style = dropsStyles[i];
+        ctx.font = style.fontSize + 'px arial'
+        ctx.fillStyle = style.color
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
         drops[i]++;
         if (drops[i] * fontSize > canvas.height && Math.random() > .97) {
           drops[i] = 0;
-          if(selectedColumns.includes(i)){
-            var pos = selectedColumns.indexOf(i);
-            random = random + Math.floor(Math.random() * selectedFontSize)
-            selectedColumns.splice(pos,1,Math.floor(Math.random() * columns))
-            // selectedFontSize = fontsSizes[Math.floor(Math.random() * fontsSizes.length)]
-          }
+          var next = styles[Math.floor(Math.random() * styles.length)]
+          styles.splice(i,1,next)
         }
       }
     }
 
     // Loop the animation
-    setInterval(draw, 33);
+    setInterval(draw, 150);
   }, [])
   return (
     <canvas ref={canvasRef}>
