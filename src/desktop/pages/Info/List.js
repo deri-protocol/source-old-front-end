@@ -6,6 +6,8 @@ import axios from 'axios'
 import { formatAddress } from '../../../utils/utils'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import { Link } from 'react-router-dom'
+import Chart from './Chart'
+import HistogramSeries from './HistogramSeries'
 const HEADERS = ['Catalog','BASE TOKEN','ADDRESS','LIQUIDITY','TRADING NOTIONAL']
 const COLUMNS = ['catalog','bToken','address','liquidity','notional']
 
@@ -46,9 +48,9 @@ export default function List(){
   return(
     <div className='info'>
       <div className='title'>DERI INFO</div>
-      <div className='chart'>
-        <div className='liquidity-chart'></div>
-        <div className='trade-chart'></div>
+      <div className='chart-box'>
+        <div className='chart'><Chart title='LIQUIDITY' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>
+        <div className='chart'><Chart title='Trade Volume' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='histogram'/> </div>
       </div>
       <div className='table-by-network'>
         {Object.keys(allPoolData).map(chain => <Table title={chain} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} dataSet={allPoolData[chain]}/>)}
