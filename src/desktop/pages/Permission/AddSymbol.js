@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
 import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames,getPoolAcitveSymbolIds,createOracle } from '../../../lib/web3js/indexV2'
@@ -102,7 +102,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
-  const [selectAdvanced, setSelectAdvanced] = useState(false)
+  const [selectAdvanced, setSelectAdvanced] = useState(true)
   const [dropdown, setDropdown] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
   const [chainLinkAddress, setChainLinkAddress] = useState('')
@@ -327,7 +327,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
             </span>
             {selectAdvanced ? <img src={up} /> : <img src={down} />}
           </div>
-          {!selectAdvanced && <div className='advanced-border'></div>}
+          <div className='advanced-border'></div>
           {selectAdvanced && <>
             <div className='margin-rewards'>
               <div className='margin-ratio-parameters'>
@@ -397,10 +397,13 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 }
 
 function Step2({ goToStep, lang, wallet, props, parameters }) {
+  const history = useHistory();
+  let url = '/mining'
   const add = async () => {
     let res = await addSymbol(wallet.detail.chainId, props.address, wallet.detail.account, parameters)
     if (res.success) {
       alert(lang['success'])
+      history.push(url)
     } else {
       alert(lang['fail'])
     }
@@ -414,7 +417,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
         <div className='box'>
           <span className='oracle-title'> {lang['oracle']}</span>
           <div className='oracle-name'>
-            {parameters[1]}
+            {parameters[2]}
           </div>
 
           <span className='symbol-title'> {lang['symbol-name']}</span>

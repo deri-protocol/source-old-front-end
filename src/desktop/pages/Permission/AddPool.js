@@ -175,7 +175,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
             </span>
             {selectAdvanced ? <img src={up} /> : <img src={down} />}
           </div>
-          {!selectAdvanced && <div className='advanced-border'></div>}
+          <div className='advanced-border'></div>
 
           {selectAdvanced && <>
             <div className='margin-rewards'>
