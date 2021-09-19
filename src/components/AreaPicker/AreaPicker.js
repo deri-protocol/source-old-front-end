@@ -13,12 +13,18 @@ function AreaPicker({lang,version,wallet,type}){
       version.setCurrent('v2_lite')
     } else if(zone === 'main') {
       version.setCurrent('v2')
-    } else {
+    } else if(zone === 'open'){
       version.setCurrent('v2_lite_open')
     }
   }
   useEffect(() => {
-    // siwtchZone('main')
+    if(version.isV2Lite){
+      siwtchZone('innovation')
+    } else if(version.isV2){
+      siwtchZone('main')
+    } else if(version.isOpen && wallet.supportOpen) {
+      siwtchZone('open')
+    }
     wallet.supportOpen ? setStyles({width : `${100 / 3}%` }) : setStyles({width : `${100 /2 }%`})
     return () => {}
   }, [wallet.detail])

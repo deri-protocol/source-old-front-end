@@ -20,7 +20,7 @@ function SymbolSelector({trading,version,loading,type}) {
     if(selected){
       loading.loading();
       trading.pause();
-      trading.setConfig(selected)
+      // trading.setConfig(selected)
       trading.onSymbolChange(selected,() => loading.loaded(),type.isOption);
       setDropdown(false)
     } 
