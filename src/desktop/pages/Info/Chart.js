@@ -2,49 +2,41 @@ import { useRef,useEffect,useState } from "react"
 import { createChart, CrosshairMode } from "lightweight-charts";
 import axios from "axios";
 import dateFormat from 'dateformat'
-import { reaction } from "mobx";
 import { convertToInternationalCurrencySystem } from "../../../utils/utils";
 
 export default function AreaSeries({title,url,seriesType}){
   const chartRef = useRef(null);
   const series = useRef(null)
   const [curValue, setCurValue] = useState(0)
+  const [curDate, setCurDate] = useState('')
 
   const initChart = () => {
     const rect = document.querySelector('.info-chart').getBoundingClientRect()
     const chart = createChart(chartRef.current, { 
       localization : {
-        // timeFormatter : businessDayOrTimestamp => {
-        //   return dateFormat(businessDayOrTimestamp,'dd')
-        // },
         priceFormatter: price => '$ ' + convertToInternationalCurrencySystem(price)
       },
       timeScale: {
-        rightOffset : 1,
+        rightOffset : 0,
+        leftOffset : 5,
         timeVisible : true,
         borderColor : '#fff',
-        borderVisible :  false,
-        fixLeftEdge : true,
-        tickMarkFormatter: (time, tickMarkType, locale) => {
-          const format = 'dd'
-          return dateFormat(time,format)
-        },
+        borderVisible :  false
       },
       width: rect.width,
       height: rect.height,
       priceScale: {
         position: 'none',
         borderColor: '#fff',
-        mode: 1,
         borderVisible : false,
         scaleMargins: {
-          top: 0.60,
-          bottom: 0,
+          top: 0.3,
+          bottom: 0
         },
       },
 
-      // handleScroll: true,
-      // handleScale: false,
+      handleScroll: false,
+      handleScale: false,
       crosshair: {
         mode: CrosshairMode.Normal,  
         vertLine: {
@@ -74,7 +66,17 @@ export default function AreaSeries({title,url,seriesType}){
         fontSize: 12
       },
     });
-    // chart.subscribeCrosshairMove(handleCrosshairMoved);
+    chart.subscribeCrosshairMove((param) => {
+      if (!param.point) {
+        return;
+      }
+      param.seriesPrices.forEach(item => {
+        if(item){
+          setCurValue(item)
+        }
+      })
+      param.time && setCurDate(`${param.time.year}-${param.time.month}-${param.time.day}`)
+    });
     return chart;
   }
 
@@ -91,9 +93,12 @@ export default function AreaSeries({title,url,seriesType}){
     
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
-      const data = res.data.data.map(d => ({time : d.timestamp * 1000,value : d.value}))
+      const data = res.data.data.map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : d.value}))
       areaSeries.setData(data)
-      setCurValue(data[data.length -1].value)
+      const last = data[data.length -1]
+      setCurValue(last.value)
+      const time = `${last.time.year}-${last.time.month}-${last.time.day}`
+      setCurDate(time)
     }
     series.current = areaSeries
     chart.timeScale().fitContent();
@@ -102,25 +107,38 @@ export default function AreaSeries({title,url,seriesType}){
 
   const addHistogramSeries = async (chart) => {
     const histogramSeries = chart.addHistogramSeries({
+      color: '#3EBF38',
       priceLineVisible : false,
       lastValueVisible: false,
-      color: '#3EBF38',
-      base : 0
+      // lineWidth: 2,
+      priceFormat: {
+        type: "volume",
+        priceFormatter: price => '$ ' + price
+      },
+      scaleMargins: {
+        top: 0.2,
+        bottom: 0
+      }
     })
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
-      const data = res.data.data.map(d => ({time : d.timestamp * 1000,value : d.value}))
+      const data = res.data.data.sort((item1,item2) => {
+        if(item1.timestamp > item2.timestamp) {
+          return 1
+        } else if(item1.timestamp < item2.timestamp){
+          return -1
+        } else {
+          return 0
+        }
+      }).map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : Number(d.value)}))
+      
       histogramSeries.setData(data)
-      setCurValue(data[data.length -1].value)
+      const last = data[data.length -1]
+      setCurValue(last.value)
+      const time = `${last.time.year}-${last.time.month}-${last.time.day}`
+      setCurDate(time)
     }
     series.current = histogramSeries
-    histogramSeries.applyOptions({
-      priceFormat: {
-          type: 'volume',
-          // precision: 2,
-          minMove: 1,
-      },
-    });
     chart.timeScale().fitContent();
     return histogramSeries;
   }
@@ -146,7 +164,8 @@ export default function AreaSeries({title,url,seriesType}){
     <div className='info-chart'>
       <div className='chart-title'>
         <div className='title-label'>{title}</div>
-        <div className='title-value'>${convertToInternationalCurrencySystem(curValue)}</div>
+        <div className='title-value'>${convertToInternationalCurrencySystem(curValue)} </div>
+        <div>{curDate}</div>
         </div>
       <div className='series' ref={chartRef}></div>
     </div>
