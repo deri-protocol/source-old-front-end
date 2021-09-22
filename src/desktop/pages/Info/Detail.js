@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import { formatAddress } from '../../../utils/utils'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import moment from 'moment'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min'
 
 const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','NOTIONAL','AMOUNT','TIME']
 const LIQUIDITY_COLUMNS = ['action','account','notional','amount','timestamp']
@@ -25,13 +26,14 @@ const columnFormat = {
 }
 
 
-export default function Detail({}){
+export default function Detail(){
   const {add} =  useParams();
   const getLiquidityDataUrl = `${GET_LIQUIDITY_URL}/get_liquidity?pool=${add}`
   const getTradeDataUrl = `${GET_LIQUIDITY_URL}/get_trade?pool=${add}`
+  formatAddress
   return(
     <div className='info'>
-      <div className='title'>DERI INFO</div>
+      <div className='title'><Link to='/info'>DERI INFO</Link> &gt; {formatAddress(add)}</div>
       <div className='chart'>
         <div className='liquidity-chart'></div>
         <div className='trade-chart'></div>

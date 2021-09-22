@@ -1,45 +1,63 @@
-import { useRef,useEffect } from "react"
+import { useRef,useEffect,useState } from "react"
 import { createChart, CrosshairMode } from "lightweight-charts";
 import axios from "axios";
 import dateFormat from 'dateformat'
+import { reaction } from "mobx";
+import { convertToInternationalCurrencySystem } from "../../../utils/utils";
 
 export default function AreaSeries({title,url,seriesType}){
   const chartRef = useRef(null);
+  const series = useRef(null)
+  const [curValue, setCurValue] = useState(0)
 
   const initChart = () => {
     const rect = document.querySelector('.info-chart').getBoundingClientRect()
     const chart = createChart(chartRef.current, { 
-      // localization : {
-      //   timeFormatter : businessDayOrTimestamp => {
-      //     return dateFormat(businessDayOrTimestamp,'yyyy-mm-dd HH:MM')
-      //   },
-      // },
+      localization : {
+        // timeFormatter : businessDayOrTimestamp => {
+        //   return dateFormat(businessDayOrTimestamp,'dd')
+        // },
+        priceFormatter: price => '$ ' + convertToInternationalCurrencySystem(price)
+      },
       timeScale: {
-        rightOffset : 3,
+        rightOffset : 1,
         timeVisible : true,
         borderColor : '#fff',
         borderVisible :  false,
+        fixLeftEdge : true,
         tickMarkFormatter: (time, tickMarkType, locale) => {
-          const format = 'yyyy-mm-dd'
+          const format = 'dd'
           return dateFormat(time,format)
         },
       },
-      width: 510,
+      width: rect.width,
       height: rect.height,
       priceScale: {
+        position: 'none',
         borderColor: '#fff',
         mode: 1,
         borderVisible : false,
+        scaleMargins: {
+          top: 0.60,
+          bottom: 0,
+        },
       },
+
+      // handleScroll: true,
+      // handleScale: false,
       crosshair: {
-        mode: CrosshairMode.Normal,    
+        mode: CrosshairMode.Normal,  
         vertLine: {
           color: '#fff',
-          labelBackgroundColor : '#569bda'
+          labelBackgroundColor : '#569bda',
+          labelVisible : false,  
+          visible : false
         },
         horzLine: {
           color: '#fff',
-          labelBackgroundColor : '#569bda'
+          labelBackgroundColor : '#569bda',
+          labelVisible : false,  
+          visible : false
         },
       },
       grid: {
@@ -52,7 +70,7 @@ export default function AreaSeries({title,url,seriesType}){
       },
       layout: {
         backgroundColor: '#212327',
-        textColor: '#aaa',
+        textColor: '#fff',
         fontSize: 12
       },
     });
@@ -62,45 +80,74 @@ export default function AreaSeries({title,url,seriesType}){
 
   const addAreaSeries = async(chart) => {
     const areaSeries = chart.addAreaSeries({
-      topColor: 'rgba(0, 101, 159, 0.5)',
-      bottomColor: 'rgba(0, 101, 159, 0)',
-      lineColor: 'rgba(0, 101, 159, 1)'
+      priceLineVisible : false,
+      lastValueVisible: false,
+      // crosshairMarkerVisible : false,
+      topColor: 'RGBA(62,191,56,.5)',
+      bottomColor: 'RGBA(62,191,56,0)',
+      lineColor: 'RGB(62,191,56)'
     })
+  
     
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
-      areaSeries.setData(res.data.data.map(d => ({time : d.timestamp * 1000,value : d.liquidity})))
+      const data = res.data.data.map(d => ({time : d.timestamp * 1000,value : d.value}))
+      areaSeries.setData(data)
+      setCurValue(data[data.length -1].value)
     }
+    series.current = areaSeries
+    chart.timeScale().fitContent();
+    return areaSeries;
   }
 
   const addHistogramSeries = async (chart) => {
     const histogramSeries = chart.addHistogramSeries({
-      color: '#00659f'
+      priceLineVisible : false,
+      lastValueVisible: false,
+      color: '#3EBF38',
+      base : 0
     })
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
-      histogramSeries.setData(res.data.data.map(d => ({time : d.timestamp * 1000,value : d.liquidity})))
+      const data = res.data.data.map(d => ({time : d.timestamp * 1000,value : d.value}))
+      histogramSeries.setData(data)
+      setCurValue(data[data.length -1].value)
     }
+    series.current = histogramSeries
+    histogramSeries.applyOptions({
+      priceFormat: {
+          type: 'volume',
+          // precision: 2,
+          minMove: 1,
+      },
+    });
+    chart.timeScale().fitContent();
+    return histogramSeries;
   }
 
   useEffect(() => {
     const chart = initChart();
-    const series = []
     if(seriesType === 'area'){
-      series.push(addAreaSeries(chart))
+      addAreaSeries(chart)
     }
     if(seriesType === 'histogram'){
-      series.push(addHistogramSeries(chart))
+      addHistogramSeries(chart)
     }
+
     return () => {
-      series.forEach(s => s && chart.removeSeries(s));
-      chart.remove();
+      if(chart){
+        chart.removeSeries(series.current);
+        chart.remove();
+      }
     }
   }, [url,seriesType])
 
   return(
     <div className='info-chart'>
-      <div title={title}></div>
+      <div className='chart-title'>
+        <div className='title-label'>{title}</div>
+        <div className='title-value'>${convertToInternationalCurrencySystem(curValue)}</div>
+        </div>
       <div className='series' ref={chartRef}></div>
     </div>
   )

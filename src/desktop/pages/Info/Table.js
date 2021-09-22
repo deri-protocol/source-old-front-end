@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { inject, observer } from 'mobx-react'
 
-export default function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination}){
+function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination,loading,onRowClick}){
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
   const [count, setCount] = useState()
@@ -12,6 +13,7 @@ export default function Table({title,dataSet,url,headers,columns,columnRenders =
     if(pagination){
       restUrl = `${restUrl}&page=${page}&page_amount=${pageSize}`
     }
+    loading.loading()
     const res = await axios.get(restUrl);
     if(res.status === 200 && Array.isArray(res.data.data)){
       setCount(res.data.count / pageSize)
@@ -20,6 +22,7 @@ export default function Table({title,dataSet,url,headers,columns,columnRenders =
       }
       setData(res.data.data)
       setPage(page)
+      loading.loaded()
     }
   }
 
@@ -52,7 +55,7 @@ export default function Table({title,dataSet,url,headers,columns,columnRenders =
           {headers.map(header => <div className='col'>{header}</div>)}
         </div>
         {data.map(d => (
-          <div className='row'>
+          <div className='row' onClick={() => onRowClick && onRowClick(d)}>
             {columns.map(col => <div className='col'>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
             <div></div>
           </div>))}
@@ -63,3 +66,4 @@ export default function Table({title,dataSet,url,headers,columns,columnRenders =
     </div>
   )
 }
+export default inject('loading')(observer(Table))
