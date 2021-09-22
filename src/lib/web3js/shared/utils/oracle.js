@@ -198,7 +198,7 @@ export const getOraclePriceFromCache2 = (function () {
   let cache = {};
   return {
     async get(chainId, symbol = '_', oracleAddress, version = 'v2_lite') {
-      const key = `${chainId}_${oracleAddress}`
+      const key = `${chainId}_${symbol}_${oracleAddress}`
       if (
         Object.keys(cache).includes(key) &&
         Math.floor(Date.now() / 1000) - cache[key].timestamp < 5

@@ -35,7 +35,7 @@ export const createOracle = async(...args) => {
   return catchTxApiError(async(chainId, accountAddress, feedAddress) => {
       chainId = normalizeChainId(chainId)
       feedAddress = toChecksumAddress(feedAddress)
-      const feedContract = chainlinkFeedFactory('97', feedAddress)
+      const feedContract = chainlinkFeedFactory(chainId, feedAddress)
       const symbol = await feedContract.symbol()
       if (typeof symbol === 'string' && symbol !== '') {
         const oracleFactoryConfig = getOracleFactoryChainlinkConfig(chainId);

@@ -24,7 +24,7 @@ function Pool({lang,loading}){
   }
   const siwtchTab = async (current) => {
     if(current === curTab){
-      setCurTab('')
+      setCurTab('all')
     } else {
       setCurTab(current)
     }

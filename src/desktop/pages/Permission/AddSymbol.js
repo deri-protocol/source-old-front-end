@@ -14,7 +14,7 @@ import symbolArrowIcon from '../../../assets/img/symbol-arrow.svg'
 import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
-function AddSymbol({ wallet = {}, lang }) {
+function AddSymbol({ wallet = {}, lang,loading }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
@@ -52,7 +52,10 @@ function AddSymbol({ wallet = {}, lang }) {
       return item = +item
     })
     res = res.sort(function(a,b){ return  b - a})
-    let id = +res[0]+1
+    let id = 0
+    if(res.length){
+     id = +res[0]+1
+    }
     setSymbolId(id)
   }
 
@@ -90,7 +93,7 @@ function AddSymbol({ wallet = {}, lang }) {
         <StepWizard
           initialStep={1}
         >
-          <Step1 lang={lang} wallet={wallet} props={props} OnChange={StepChange} />
+          <Step1 lang={lang} wallet={wallet} props={props} loading={loading}  OnChange={StepChange} />
           <Step2 lang={lang} wallet={wallet} props={props} parameters={parameters} />
         </StepWizard>
       </div>
@@ -98,7 +101,7 @@ function AddSymbol({ wallet = {}, lang }) {
   )
 }
 
-function Step1({ goToStep, lang, wallet, props, OnChange }) {
+function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
@@ -191,6 +194,11 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 
   const oracleList = async () => {
     let res = await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
+    loading.loaded()
+    res.sort(function(a,b){
+      return (+a.blockNumber - (+b.blockNumber))
+    })
+    setMultiplier(multiplierList[res[0].symbol])
     setOracleConfig(res[0])
     setOracleConfigs(res)
   }
@@ -223,6 +231,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 
   useEffect(() => {
     if (hasConnectWallet()) {
+      loading.loading()
       oracleList()
     }
   }, [wallet.detail.chainId])
@@ -484,4 +493,4 @@ function SymbolDisplay({ spec }) {
 
 }
 
-export default inject('wallet')(observer(AddSymbol))
+export default inject('wallet','loading')(observer(AddSymbol))

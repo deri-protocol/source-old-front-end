@@ -18,6 +18,7 @@ import './zh-bridge.less'
 function Bridge({ wallet = {},lang }) {
   const isdev = DeriEnv.get() == 'dev' ? true : false;
   const [amount, setAmount] = useState('');
+  const config = useConfig();
   const [showMessage, setShowMessage] = useState(false);
   const [sending, setSending] = useState(false);
   const [initialize, setInitialize] = useState(isdev ?
@@ -133,6 +134,7 @@ function Bridge({ wallet = {},lang }) {
         setTo_img(isNetwork(res.toChainId,lang).img)
         setAmount(bg(res.amount,-18))
         setSending(res.valid)
+        
       }
     }
   }
@@ -374,6 +376,9 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   const valid = async () =>{
     if(hasConnectWallet()){
       let res = await getUserWormholeSignature(wallet.detail.account);
+      if(res.valid){
+        wallet.switchNetwork(config[res.toChainId])
+      }
       setIsValid(res.valid)
     }
   }
@@ -541,14 +546,16 @@ function Operator({hasConnectWallet,wallet,amount,lang,initialize,setAmountMessa
   }, [wallet.detail,initialize]); 
   useEffect(() => {
     if(isValid){
-      wallet.switchNetwork(config[initialize.to_chainId])
-      if(initialize.to_chainId !== wallet.detail.chainId){
+      if((+initialize.to_chainId) !== wallet.detail.chainId){
         setShowMessage(true)
         setMessage({
           img:exclamatory_green,
           text:`${lang['send-finished-one']} ${isNetwork(initialize.to_chainId,lang).netWork} ${lang['send-finished-two']}`,
           color:'message_green'
         })
+      }else{
+        setShowMessage(false)
+        setMessage({})
       }
       setAmountMessage([
         {

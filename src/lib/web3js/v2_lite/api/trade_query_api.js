@@ -80,10 +80,17 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
     const parameterInfo = perpetualPool.parameters 
     const symbolIds = perpetualPool.activeSymbolIds
     const symbolIndex = symbolIds.indexOf(symbolId)
+
     if (symbolIndex > -1) {
-      const symbol = perpetualPool.symbols[symbolIndex].symbol
+      let promises = [];
+      for (let i = 0; i < symbolIds.length; i++) {
+        promises.push(perpetualPool.getSymbol(symbolIds[i]));
+      }
+      const symbols = await Promise.all(promises);
+
+      const symbol = symbols[symbolIndex].symbol
       const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
-      const oracleAddress = isOffchainOracleSymbol ? '' : perpetualPool.symbols[symbolIndex].oracleAddress
+      const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
       const [
         symbolInfo,
         liquidity,
@@ -115,15 +122,21 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         minMaintenanceMarginRatio,
       } = parameterInfo;
 
-      const symbols = perpetualPool.symbols
+      // promises = [];
+      // for (let i = 0; i < symbolIds.length; i++) {
+      //   promises.push(perpetualPool.getSymbol(symbolIds[i]));
+      // }
+      //const symbols = await Promise.all(promises);
+
       const symbolList = symbols.map((s) => s.symbol);
 
-      let promises = [];
+      promises = [];
       for (let i = 0; i < symbolIds.length; i++) {
         const isOffchain = perpetualPool.offChainOracleSymbolIds.indexOf(symbolIds[i]) > -1
-        const address = isOffchain ? '' : perpetualPool.symbols[i].oracleAddress
+        const address = isOffchain ? '' : symbols[i].oracleAddress
+        const _symbol = symbolList[i]
         promises.push(
-          getOraclePriceFromCache2.get(chainId, symbolList[i], address),
+          getOraclePriceFromCache2.get(chainId, _symbol, address),
         );
       }
       const symbolPrices = await Promise.all(promises);
@@ -267,14 +280,21 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
   const parameterInfo = perpetualPool.parameters
   const symbolIds = perpetualPool.activeSymbolIds
   const symbolIndex = symbolIds.indexOf(symbolId)
+
+  let promises = [];
+  for (let i = 0; i < symbolIds.length; i++) {
+    promises.push(perpetualPool.getSymbol(symbolIds[i]));
+  }
+  const symbols = await Promise.all(promises);
+
   if (symbolIndex > -1) {
-    const symbolInfo = perpetualPool.symbols[symbolIndex];
-    const symbol = perpetualPool.symbols[symbolIndex].symbol;
+    const symbolInfo = symbols[symbolIndex];
+    const symbol = symbols[symbolIndex].symbol;
     const isOffchainOracleSymbol =
       perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1;
     const oracleAddress = isOffchainOracleSymbol
       ? ''
-      : perpetualPool.symbols[symbolIndex].oracleAddress;
+      : symbols[symbolIndex].oracleAddress;
     const [liquidity, price] = await Promise.all([
       perpetualPool.getLiquidity(),
        getOraclePriceFromCache2.get(chainId, symbol, oracleAddress),
@@ -297,7 +317,6 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
     const fundingRatePerBlock = calculateFundingRate(...fundingRateArgs);
     const fundingRate = processFundingRate(chainId, fundingRatePerBlock);
 
-    const symbols = perpetualPool.symbols
     const liquidityUsedInAmount = symbols.reduce((accum, a) => {
       return accum.plus(
         bg(a.tradersNetVolume)
@@ -332,8 +351,16 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
   return catchApiError(async(chainId, poolAddress, volume, symbolId) => {
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     await perpetualPool.init()
+
+    const symbolIds = perpetualPool.activeSymbolIds
     const symbolIndex = perpetualPool.activeSymbolIds.indexOf(symbolId)
-    const symbol = perpetualPool.symbols[symbolIndex]
+
+    let promises = [];
+    for (let i = 0; i < symbolIds.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIds[i]));
+    }
+    const symbols = await Promise.all(promises);
+    const symbol = symbols[symbolIndex]
     let price = priceCache.get(poolAddress, symbolId)
     //console.log('symbol',symbol)
 
@@ -370,14 +397,19 @@ export const getEstimatedMargin = async(
     await perpetualPool.init()
     const symbolIds = perpetualPool.activeSymbolIds
     const symbolIndex = symbolIds.indexOf(symbolId)
+    let promises = [];
+    for (let i = 0; i < symbolIds.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIds[i]));
+    }
+    const symbols = await Promise.all(promises);
     if (symbolIndex > -1) {
-      const symbol = perpetualPool.symbols[symbolIndex].symbol
+      const symbol = symbols[symbolIndex].symbol
       const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
-      const oracleAddress = isOffchainOracleSymbol ? '' : perpetualPool.symbols[symbolIndex].oracleAddress
+      const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
 
       const price =  await getOraclePriceFromCache2.get(chainId, symbol, oracleAddress, 'v2_lite')
       priceCache.set(poolAddress, symbolId, price)
-      const { multiplier } = perpetualPool.symbols[symbolIndex]
+      const { multiplier } = symbols[symbolIndex]
       return bg(volume).abs().times(price).times(multiplier).div(bg(leverage)).toString()
     } else {
       throw new Error(`-- getEstimatedMargin: invalid symbolId(${symbolId})`)

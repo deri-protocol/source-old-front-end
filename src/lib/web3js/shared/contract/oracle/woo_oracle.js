@@ -1,6 +1,6 @@
 import { ContractBase } from "../contract_base";
 import { wooOracleAbi } from '../abis';
-import { bg } from '../../utils';
+import { deriToNatural } from "../../utils";
 
 export class WooOracle extends ContractBase {
   constructor(chainId, address, symbol, decimal='18') {
@@ -10,7 +10,10 @@ export class WooOracle extends ContractBase {
   }
 
   async getPrice() {
-    const res = await this._call('_I_')
-    return bg(res, `-${this.decimal}`).toString();
+    //console.log('hit woo oracle')
+    const res = await this._call('getPrice');
+    if (res) {
+      return deriToNatural(res).toString()
+    }
   }
 }

@@ -98,12 +98,12 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+          "address": "0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+          "address": "0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206"
         },
         {
           "chainId": "56",
@@ -672,12 +672,12 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+          "address": "0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+          "address": "0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206"
         }
       ]
     },
