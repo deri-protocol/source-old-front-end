@@ -7,8 +7,9 @@ import { convertToInternationalCurrencySystem } from "../../../utils/utils";
 export default function AreaSeries({title,url,seriesType}){
   const chartRef = useRef(null);
   const series = useRef(null)
-  const [curValue, setCurValue] = useState(0)
+  const [curValue, setCurValue] = useState('')
   const [curDate, setCurDate] = useState('')
+  const lastDataRef = useRef()
 
   const initChart = () => {
     const rect = document.querySelector('.info-chart').getBoundingClientRect()
@@ -40,14 +41,10 @@ export default function AreaSeries({title,url,seriesType}){
       crosshair: {
         mode: CrosshairMode.Normal,  
         vertLine: {
-          color: '#fff',
-          labelBackgroundColor : '#569bda',
           labelVisible : false,  
-          visible : false
+          // visible : false
         },
         horzLine: {
-          color: '#fff',
-          labelBackgroundColor : '#569bda',
           labelVisible : false,  
           visible : false
         },
@@ -66,8 +63,15 @@ export default function AreaSeries({title,url,seriesType}){
         fontSize: 12
       },
     });
-    chart.subscribeCrosshairMove((param) => {
+    return chart;
+  }
+
+  const crosshairMove = param => {
       if (!param.point) {
+        setCurDate('')
+        if(lastDataRef.current){
+          setCurValue(lastDataRef.current.value)
+        }
         return;
       }
       param.seriesPrices.forEach(item => {
@@ -75,16 +79,13 @@ export default function AreaSeries({title,url,seriesType}){
           setCurValue(item)
         }
       })
-      param.time && setCurDate(`${param.time.year}-${param.time.month}-${param.time.day}`)
-    });
-    return chart;
+      param.time && setCurDate(`${param.time.year}-${param.time.month}-${param.time.day} (UTC+8)`)
   }
 
   const addAreaSeries = async(chart) => {
     const areaSeries = chart.addAreaSeries({
       priceLineVisible : false,
       lastValueVisible: false,
-      // crosshairMarkerVisible : false,
       topColor: 'RGBA(62,191,56,.5)',
       bottomColor: 'RGBA(62,191,56,0)',
       lineColor: 'RGB(62,191,56)'
@@ -97,8 +98,7 @@ export default function AreaSeries({title,url,seriesType}){
       areaSeries.setData(data)
       const last = data[data.length -1]
       setCurValue(last.value)
-      const time = `${last.time.year}-${last.time.month}-${last.time.day}`
-      setCurDate(time)
+      lastDataRef.current = last
     }
     series.current = areaSeries
     chart.timeScale().fitContent();
@@ -110,7 +110,6 @@ export default function AreaSeries({title,url,seriesType}){
       color: '#3EBF38',
       priceLineVisible : false,
       lastValueVisible: false,
-      // lineWidth: 2,
       priceFormat: {
         type: "volume",
         priceFormatter: price => '$ ' + price
@@ -135,8 +134,7 @@ export default function AreaSeries({title,url,seriesType}){
       histogramSeries.setData(data)
       const last = data[data.length -1]
       setCurValue(last.value)
-      const time = `${last.time.year}-${last.time.month}-${last.time.day}`
-      setCurDate(time)
+      lastDataRef.current = last
     }
     series.current = histogramSeries
     chart.timeScale().fitContent();
@@ -151,10 +149,11 @@ export default function AreaSeries({title,url,seriesType}){
     if(seriesType === 'histogram'){
       addHistogramSeries(chart)
     }
-
+    chart.subscribeCrosshairMove(crosshairMove);
     return () => {
       if(chart){
         chart.removeSeries(series.current);
+        chart.unsubscribeCrosshairMove(crosshairMove)
         chart.remove();
       }
     }
@@ -165,7 +164,7 @@ export default function AreaSeries({title,url,seriesType}){
       <div className='chart-title'>
         <div className='title-label'>{title}</div>
         <div className='title-value'>${convertToInternationalCurrencySystem(curValue)} </div>
-        <div>{curDate}</div>
+        <div className='title-date'>{curDate} </div>
         </div>
       <div className='series' ref={chartRef}></div>
     </div>

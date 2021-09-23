@@ -1,21 +1,21 @@
-.body .info {
+.info .body .info {
   color: #ffffff;
   font-family: ArialMT, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  min-width: calc(100vw - 100px);
   min-height: calc(100vh - 80px);
   margin: auto;
 
   .title {
     color: #D4E05C;
     font-size: 16px;
-    // font-family: Tachyon;
     margin-bottom: 20px;
     a {
       color: #D4E05C;
-      text-decoration: #fff;
+    }
+    a:hover {
+      text-decoration:underline;
     }
   }
   .chart-box {
@@ -34,10 +34,20 @@
           padding: 0 0 0 10px;
           position: absolute;
           z-index: 2;
+          .title-label {
+            font-size: 20px;
+            color: #00659f;
+          }
           .title-value {
             margin-top: 10px;
-            // font-size: 18px;
+            font-size: 30px;
+            font-weight: bold;
             color: #ffffff;
+          }
+          .title-date {
+            color: #ffffff;
+            margin-top: 10px;
+            font-size: 12px;
           }
         }
       }
@@ -54,6 +64,7 @@
 
     .info-table {
       margin: 20px 0;
+      color : #aaa;
       a {
         color: inherit;
       }
@@ -83,8 +94,8 @@
         background: #2C2D31;
         .col {
           padding: 10px;
-          .direction,.action,.catalog{
-            border: 1px solid #ffffff;
+          .direction,.action{
+            // border: 1px solid #ffffff;
             padding: 2px 20px;
             border-radius: 10px;
             color: #fff;
@@ -109,9 +120,7 @@
           background-color: #0d0e0f;
         }
         .row:hover {
-          // background-color: #0d0e0f;
           color: #fff;
-          cursor: pointer;
         }
       }
       .row.pagination {

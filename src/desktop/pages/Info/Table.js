@@ -55,7 +55,7 @@ function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination,
           {headers.map(header => <div className='col'>{header}</div>)}
         </div>
         {data.map(d => (
-          <div className='row' onClick={() => onRowClick && onRowClick(d)}>
+          <div className='row' onClick={() => onRowClick && onRowClick(d)} style={{cursor : onRowClick ? 'pointer' : 'normal'}}>
             {columns.map(col => <div className='col'>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
             <div></div>
           </div>))}

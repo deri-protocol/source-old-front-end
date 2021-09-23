@@ -59,8 +59,10 @@ export function sessionStorageKey(version){
 }
 
 export function convertToInternationalCurrencySystem (labelValue) {
+  
   // Nine Zeroes for Billions
-  return Math.abs(Number(labelValue)) >= 1.0e+9
+  return Number.isNaN(labelValue) ? ''
+  : Math.abs(Number(labelValue)) >= 1.0e+9
 
   ? (Math.abs(Number(labelValue)) / 1.0e+9).toFixed(2) + "B"
   // Six Zeroes for Millions 
@@ -72,7 +74,7 @@ export function convertToInternationalCurrencySystem (labelValue) {
 
   ? (Math.abs(Number(labelValue)) / 1.0e+3).toFixed(2) + "K"
 
-  : Math.abs(Number(labelValue));
+  : Math.abs(Number(labelValue).toFixed(2));
 
 }
 

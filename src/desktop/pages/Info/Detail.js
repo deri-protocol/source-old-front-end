@@ -5,13 +5,14 @@ import { useParams } from 'react-router-dom'
 import { formatAddress } from '../../../utils/utils'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import moment from 'moment'
-import { Link } from 'react-router-dom/cjs/react-router-dom.min'
+import Chart from './Chart'
+import { Link } from 'react-router-dom'
 
-const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','NOTIONAL','AMOUNT','TIME']
+const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','LIQUIDITY','AMOUNT','TIMESTAMP (UTC+8)']
 const LIQUIDITY_COLUMNS = ['action','account','notional','amount','timestamp']
 const GET_LIQUIDITY_URL = `${process.env.REACT_APP_INFO_HTTP_URL}`
 
-const TRADE_HEADER = ['DIRECTION','ACCOUNT','VOLUME','PRICE','NOTIONAL','TIME']
+const TRADE_HEADER = ['DIRECTION','ACCOUNT','VOLUME','PRICE','NOTIONAL','TIMESTAMP (UTC+8)']
 const TRADE_COLUMNS = ['direction','account','volume','price','notional','timestamp']
 
 
@@ -27,16 +28,16 @@ const columnFormat = {
 
 
 export default function Detail(){
-  const {add} =  useParams();
+  const {network,add,catalog,bToken} =  useParams();
   const getLiquidityDataUrl = `${GET_LIQUIDITY_URL}/get_liquidity?pool=${add}`
   const getTradeDataUrl = `${GET_LIQUIDITY_URL}/get_trade?pool=${add}`
-  formatAddress
+
   return(
-    <div className='info'>
-      <div className='title'><Link to='/info'>DERI INFO</Link> &gt; {formatAddress(add)}</div>
-      <div className='chart'>
-        <div className='liquidity-chart'></div>
-        <div className='trade-chart'></div>
+    <div className='info' style={{'min-width': `calc(100vw - ${window.screen.width * 0.3}px)`}}>
+<div className='title'><Link to='/info'>DERI INFO</Link> &gt; {`${network} - ${catalog.toUpperCase()} - ${formatAddress(add)} (${bToken})`}</div>
+      <div className='chart-box'>
+        <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history?pool=${add}`} seriesType='area'/> </div>
+        <div className='chart'><Chart title='Trade Notional' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history?pool=${add}`} seriesType='histogram'/> </div>
       </div>
       <div className='table-by-network'>
         <Table title='LIQUIDITY' headers={LIQUIDITY_HEADER} columns={LIQUIDITY_COLUMNS} columnRenders={columnFormat} url={getLiquidityDataUrl} pagination={true}/>
