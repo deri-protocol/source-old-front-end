@@ -39,6 +39,17 @@ function Pool({ lang, loading, wallet }) {
       openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);
+        for (let j = 0,leng = openPools.length;j < leng ;j++){
+          let index,tem;
+          for(let i = 0,len = openPools.length; i< len; i++){
+            if(openPools[i].pool.symbol === '--'){
+              index = i
+              tem = openPools[i]
+            }
+          }
+          openPools.splice(index,1)
+          openPools.push(tem)
+        }
         setOpenPools(openPools)
         loading.loaded();
       })
