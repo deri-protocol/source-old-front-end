@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
-import { useParams } from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
-import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames } from '../../../lib/web3js/indexV2'
+import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames,getPoolAcitveSymbolIds,createOracle } from '../../../lib/web3js/indexV2'
 import useQuery from '../../../hooks/useQuery'
 import down from './img/down.svg';
 import up from './img/up.svg';
@@ -14,7 +14,7 @@ import symbolArrowIcon from '../../../assets/img/symbol-arrow.svg'
 import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
-function AddSymbol({ wallet = {}, lang }) {
+function AddSymbol({ wallet = {}, lang,loading }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
@@ -47,8 +47,15 @@ function AddSymbol({ wallet = {}, lang }) {
   }
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const getPoolALLSymbolId = async () => {
-    let res = await getPoolAllSymbolNames(wallet.detail.chainId, address)
-    let id = res.length
+    let res = await getPoolAcitveSymbolIds(wallet.detail.chainId, address)
+    res =  res.map(item => {
+      return item = +item
+    })
+    res = res.sort(function(a,b){ return  b - a})
+    let id = 0
+    if(res.length){
+     id = +res[0]+1
+    }
     setSymbolId(id)
   }
 
@@ -86,7 +93,7 @@ function AddSymbol({ wallet = {}, lang }) {
         <StepWizard
           initialStep={1}
         >
-          <Step1 lang={lang} wallet={wallet} props={props} OnChange={StepChange} />
+          <Step1 lang={lang} wallet={wallet} props={props} loading={loading}  OnChange={StepChange} />
           <Step2 lang={lang} wallet={wallet} props={props} parameters={parameters} />
         </StepWizard>
       </div>
@@ -94,23 +101,25 @@ function AddSymbol({ wallet = {}, lang }) {
   )
 }
 
-function Step1({ goToStep, lang, wallet, props, OnChange }) {
+function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
   const [selectAdvanced, setSelectAdvanced] = useState(true)
   const [dropdown, setDropdown] = useState(false);
+  const [isDefault, setIsDefault] = useState(true);
+  const [chainLinkAddress, setChainLinkAddress] = useState('')
   const [oracleConfigs, setOracleConfigs] = useState([])
   const multiplierList = {
-    "BTCUSD":"0.0001",
-    "ETHUSD":"0.001",
-    "BNBUSD":"0.01",
-    "AXSUSDT":"1",
-    "MBOXUSDT":"1",
-    "IBSCDEFI":"0.01",
-    "IGAME":"0.01",
-    "ALICEUSDT":"0.1",
-    "NULSUSDT":"1",
+    "BTCUSD": "0.0001",
+    "ETHUSD": "0.001",
+    "BNBUSD": "0.01",
+    "AXSUSDT": "1",
+    "MBOXUSDT": "1",
+    "IBSCDEFI": "0.01",
+    "IGAME": "0.01",
+    "ALICEUSDT": "0.1",
+    "NULSUSDT": "1",
   }
   const [oracleConfig, setOracleConfig] = useState(DeriEnv.get() === 'dev' ?
     {
@@ -129,7 +138,7 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
     wallet.connect()
-  }
+  } 
   const [btnText, setBtnText] = useState(
     <button OnClick={connect}>
       {lang['connect-wallet']}
@@ -152,6 +161,10 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
   }
 
   const nextStep = () => {
+    if(!oracleConfig.symbol){
+      alert(lang['please-enter-a-correct-address'])
+      return;
+    }
     OnChange('multiplier', multiplier)
     OnChange('fundingRateCoefficient', fundingRateCoefficient)
     OnChange('transactionFeeRatio', transactionFeeRatio)
@@ -174,14 +187,51 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
     setTransactionFeeRatio(value)
   }
 
+  const chainLinkAddressValue = (event) => {
+    let { value } = event.target
+    setChainLinkAddress(value)
+  }
+
   const oracleList = async () => {
-    let res = await getPoolOpenOracleList(wallet.detail.chainId)
+    let res = await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
+    loading.loaded()
+    res.sort(function(a,b){
+      return (+a.blockNumber - (+b.blockNumber))
+    })
+    setMultiplier(multiplierList[res[0].symbol])
     setOracleConfig(res[0])
     setOracleConfigs(res)
   }
 
+  const setDefault = () => {
+    setIsDefault(!isDefault)
+    if(isDefault){
+      setOracleConfig({})
+    }else{
+      setOracleConfig(oracleConfigs[0])
+    }
+  }
+
+  const generateOracle = async () => {
+    if(!chainLinkAddress){
+      alert(lang['please-enter-a-correct-address'])
+      return;
+    }
+
+    let res = await createOracle(wallet.detail.chainId,wallet.detail.account,chainLinkAddress)
+    if(res.success){
+      let oracle =  await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
+      setOracleConfig(oracle[0])
+      setOracleConfigs(oracle)
+    }else{
+      alert(lang['fail'])
+    }
+  }
+  
+
   useEffect(() => {
     if (hasConnectWallet()) {
+      loading.loading()
       oracleList()
     }
   }, [wallet.detail.chainId])
@@ -209,36 +259,69 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
         <div className='box'>
           <span className='base-title'> {lang['oracle']}</span>
           <div className='select-oracle'>
-            <div className='radio'>
-            </div>
+            {isDefault ?
+              <div className='radio'>
+              </div>
+              : <div className='radio-no' onClick={setDefault}></div>}
             <span>{lang['choose-from-exsting-ones']}</span>
+
+            {!isDefault ?
+              <div className='radio optional'>
+              </div>
+              : <div className='radio-no optional' onClick={setDefault}></div>}
+            <span>{lang['generate-oracle-address']}</span>
           </div>
-          <div className='select-symbol'>
-            <div className='btn-group check-baseToken-btn'>
-              <button
-                type='button'
-                onClick={onDropdown}
-                className='btn chec'>
-                <SymbolDisplay spec={oracleConfig} />
-                <span className='check-base-down'><img src={symbolArrowIcon} alt='' /></span>
-              </button>
-              <div className={selectClass}>
-                {oracleConfigs.map((config, index) => {
-                  return (
-                    <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>
-                      <SymbolDisplay spec={config} />
-                    </div>
-                  )
-                })}
+
+          {isDefault && <>
+            <div className='select-symbol'>
+              <div className='btn-group check-baseToken-btn'>
+                <button
+                  type='button'
+                  onClick={onDropdown}
+                  className='btn chec'>
+                  <SymbolDisplay spec={oracleConfig} />
+                  <span className='check-base-down'><img src={symbolArrowIcon} alt='' /></span>
+                </button>
+                <div className={selectClass}>
+                  {oracleConfigs.map((config, index) => {
+                    return (
+                      <div className='dropdown-item' key={index} onClick={(e) => onSelect(config)}>
+                        <SymbolDisplay spec={config} />
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
-          </div>
-          <div className='warn'>
+          </>}
+
+
+          {!isDefault && <>
+            <div className='optional-oracle'>
+              <div className='input'>
+                <input
+                  type='text'
+                  value={chainLinkAddress}
+                  placeholder={lang['chain-link-address']}
+                  onChange={event => chainLinkAddressValue(event)}
+                />
+                <Button className='btn' click={generateOracle} btnText={lang['generate']} lang={lang}></Button>
+              </div>
+              <div className='optional-oracle-address'>
+              <input
+                  type='text'
+                  value={oracleConfig.address}
+                />
+              </div>
+            </div>
+          </>}
+
+          {/* <div className='warn'>
             <img src={warn} />
             <span>
               {lang['please-contact-the-team']}
             </span>
-          </div>
+          </div> */}
           <div className='symbol-name'>
             <div className='symbol-title'>
               {lang['symbol-name']}
@@ -247,13 +330,13 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
               {oracleConfig ? oracleConfig.symbol : ''}
             </div>
           </div>
-          <div className='advanced'  onClick={() => setSelectAdvanced(!selectAdvanced)}>
+          <div className='advanced' onClick={() => setSelectAdvanced(!selectAdvanced)}>
             <span className='select-advanced' >
               {lang['advanced']}
             </span>
             {selectAdvanced ? <img src={up} /> : <img src={down} />}
           </div>
-          {!selectAdvanced && <div className='advanced-border'></div>}
+          <div className='advanced-border'></div>
           {selectAdvanced && <>
             <div className='margin-rewards'>
               <div className='margin-ratio-parameters'>
@@ -295,11 +378,9 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                      <TipWrapper block={false}>
-                        <span className='hover-title' tip={lang['transaction-fee-ratio-hover']}>
+                        <span className='hover-title-fee'>
                           {lang['transaction-fee-ratio']}
                         </span>
-                      </TipWrapper>
                     </div>
                     <div className='input-value'>
                       <input
@@ -325,10 +406,13 @@ function Step1({ goToStep, lang, wallet, props, OnChange }) {
 }
 
 function Step2({ goToStep, lang, wallet, props, parameters }) {
+  const history = useHistory();
+  let url = '/mining'
   const add = async () => {
     let res = await addSymbol(wallet.detail.chainId, props.address, wallet.detail.account, parameters)
     if (res.success) {
       alert(lang['success'])
+      history.push(url)
     } else {
       alert(lang['fail'])
     }
@@ -342,7 +426,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
         <div className='box'>
           <span className='oracle-title'> {lang['oracle']}</span>
           <div className='oracle-name'>
-            {parameters[1]}
+            {parameters[2]}
           </div>
 
           <span className='symbol-title'> {lang['symbol-name']}</span>
@@ -383,7 +467,7 @@ function Step2({ goToStep, lang, wallet, props, parameters }) {
               </div>
             </div>
           </div>
-          
+
           <div className='next-button'>
             <div className='next-button'>
               <button onClick={() => { goToStep(1) }}>
@@ -409,4 +493,4 @@ function SymbolDisplay({ spec }) {
 
 }
 
-export default inject('wallet')(observer(AddSymbol))
+export default inject('wallet','loading')(observer(AddSymbol))

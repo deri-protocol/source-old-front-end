@@ -1,7 +1,7 @@
 import { getOracleConfig } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
-import { oracleFactory } from '../factory/oracle';
+import { oracleFactory, symbolOracleOffChainFactory, wrappedOracleFactory } from '../factory/oracle';
 import { deriToNatural, toWei } from './convert';
 import {
   getVolatilitySymbols,
@@ -180,6 +180,42 @@ export const getOraclePrice = async (chainId, symbol, version='v2') => {
   }
 };
 
+export const getOraclePrice2 = async (chainId, symbol, oracleAddress, version='v2_lite') => {
+  chainId = normalizeChainId(chainId);
+  symbol = mapToSymbolInternal(symbol)
+  if (oracleAddress !== '') {
+    const oracle = wrappedOracleFactory(chainId, oracleAddress)
+    return await oracle.getPrice();
+  } else {
+    // for new added symbol and not updated to config yet
+    const priceInfo = await getPriceInfo(symbol, version);
+    return deriToNatural(priceInfo.price).toString();
+  }
+};
+
+// cache
+export const getOraclePriceFromCache2 = (function () {
+  let cache = {};
+  return {
+    async get(chainId, symbol = '_', oracleAddress, version = 'v2_lite') {
+      const key = `${chainId}_${symbol}_${oracleAddress}`
+      if (
+        Object.keys(cache).includes(key) &&
+        Math.floor(Date.now() / 1000) - cache[key].timestamp < 5
+      ) {
+        return cache[key].data;
+      } else {
+        const data = await getOraclePrice2(chainId, symbol, oracleAddress, version);
+        cache[key] = {
+          data,
+          timestamp: Math.floor(Date.now() / 1000),
+        };
+        return cache[key].data;
+      }
+    },
+  };
+})();
+
 export const getOraclePriceForOption = async (chainId, symbol) => {
   return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
 };
@@ -228,4 +264,19 @@ export const getOracleVolatilitiesForOption = async (symbols) => {
   return symbols.map((s) => {
     return oracleSymbolVolatilities[oracleSymbols.indexOf(normalizeOptionSymbol(s))].volatility;
   });
+};
+
+// check symbol is used offchain oracle
+export const checkOffChainOracleSymbol = async (chainId, oracleAddress, symbol) => {
+  try {
+    await symbolOracleOffChainFactory(chainId, oracleAddress).signer()
+    return symbol
+  } catch (err) {
+  }
+  try {
+    await symbolOracleOffChainFactory(chainId, oracleAddress).signatory()
+    return symbol
+  } catch (err) {
+  }
+  return ""
 };

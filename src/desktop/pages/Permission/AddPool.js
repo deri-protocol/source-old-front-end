@@ -175,7 +175,7 @@ function Step1({ goToStep, lang, wallet, OnChange }) {
             </span>
             {selectAdvanced ? <img src={up} /> : <img src={down} />}
           </div>
-          {!selectAdvanced && <div className='advanced-border'></div>}
+          <div className='advanced-border'></div>
 
           {selectAdvanced && <>
             <div className='margin-rewards'>
@@ -449,11 +449,11 @@ function Step3({ goToStep, lang, wallet, params }) {
               </div>
             </div>
           </div>
-          {/* <div className='github-fock'>
+          <div className='github-fock'>
             <a target="_blank" href='https://github.com/deri-finance/deri-open-zone' >
               {lang['github-fock']}
             </a>
-          </div> */}
+          </div>
           <div className='next-button'>
             <div className='next-button'>
               <button onClick={() => { goToStep(1) }}>

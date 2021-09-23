@@ -35,7 +35,7 @@ function Chart({symbol,lang}){
           <span>{lang['open']}</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
           <span>{lang['high']}</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
           <span>{lang['low']}</span><span className={riseOrDown}>{data.low.toFixed(2)}</span>
-          <span>{lang['close']}</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
+          <span>{lang['closed']}</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
         </>
       )
     }
