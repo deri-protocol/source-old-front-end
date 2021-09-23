@@ -30,6 +30,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [markPriceClass, setMarkPriceClass] = useState('rise');
+  const [optionInputHolder ,setOptionInputHolder] = useState('0.000')
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
   const [isOptionInput, setIsOptionInput] = useState(false);
@@ -257,6 +258,22 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     return () => { };
   }, [trading.margin]);
 
+  useEffect(()=>{
+    let holder =  '0.000'
+    if(trading.contract.multiplier === '0.0001'){
+      holder = '0.0000'
+    }else if(trading.contract.multiplier === '0.001'){
+      holder = '0.000'
+    }else if(trading.contract.multiplier === '0.01'){
+      holder = '0.00'
+    }else if(trading.contract.multiplier === '0.1'){
+      holder = '0.0'
+    }else if(trading.contract.multiplier === '1'){
+      holder = '0'
+    }
+    setOptionInputHolder(holder)
+  },[trading.contract])
+
   useEffect(() => {
     if (trading.index && wallet.isConnected() && wallet.supportChain) {
       setSlideFreeze(false)
@@ -403,7 +420,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   onChange={event => volumeChange(event)}
                   value={trading.volumeDisplay}
                   className={volumeClazz}
-                  placeholder={lang['option-input']}
+                  placeholder={optionInputHolder}
                 />
                 <div className='option-unit' >
                   {trading.config && trading.config.unit}
@@ -483,6 +500,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
             {type.isFuture && <>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['trade-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={trading.index} decimalScale={4} />
+                </div>
+              </div>
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
