@@ -83,9 +83,9 @@ export default function useMiningPool(isNew,wallet,retired){
         }
         let timestamp = new Date()
         //1632650400000
-        if(timestamp.getTime() <= 1632650400000){
-          pools.push(airDrop)
-        }
+        // if(timestamp.getTime() <= 1632650400000){
+        //   pools.push(airDrop)
+        // }
         let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
         let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  ) && !p.retired)
         let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
