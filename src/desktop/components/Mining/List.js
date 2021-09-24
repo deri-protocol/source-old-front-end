@@ -114,7 +114,7 @@ function Card({index,item,lang,wallet,pool}){
       <span className='col'>
         <div className='col-label'>{lang['multiplier']}</div>
         <TipWrapper>
-          <div className='col-value' title={lang['multiplier-tip']}><span className='underline'><DeriNumberFormat value={item.multiplier}  suffix='x' /></span></div>
+          <div className='col-value' tip={lang['multiplier-tip']}><span className='underline'><DeriNumberFormat value={item.multiplier}  suffix='x' /></span></div>
         </TipWrapper>
       </span>
       <span className='col'>
@@ -122,14 +122,14 @@ function Card({index,item,lang,wallet,pool}){
         <div className='col-value'>
         <span>
           <TipWrapper block={false}>
-            <span className={item.lpApy ? 'sushi-apy-underline' : ''} title={ item.lpApy && lang['deri-apy']}>
+            <span className={item.lpApy ? 'sushi-apy-underline' : ''} tip={ item.lpApy && lang['deri-apy']}>
               {item.apy ? <DeriNumberFormat value={item.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
             </span>
           </TipWrapper>
           {item.lpApy &&<>
           <span> + </span>
           <TipWrapper block={false}>
-            <span className={item.lpApy ? 'sushi-apy-underline' : '' } title={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+            <span className={item.lpApy ? 'sushi-apy-underline' : '' } tip={ item.lpApy && item.label}> <DeriNumberFormat value={item.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
           </TipWrapper>
           </>}
         </span>

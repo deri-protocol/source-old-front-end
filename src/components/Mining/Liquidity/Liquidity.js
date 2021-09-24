@@ -107,14 +107,14 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				</div>
 				{version === 'v2' && <div className='odd text'>
 					<div className='text-title'>{lang['multiplier']}</div>
-					<div className='text-num multiplier' title={lang['multiplier-tip']}>{liquidity.multiplier}</div>
+					<div className='text-num multiplier' tip={lang['multiplier-tip']}>{liquidity.multiplier}</div>
 				</div>	}
 				{version !== 'v2_lite_open' && <div className="odd text">
 					<div className="text-title">{lang['apy']}</div>
 							<div className='text-num' >
-								<span title={isLP(address) && lang['deri-apy']} className={`${isLP(address) && 'sushi-apy-underline'}`}>
+								<span tip={isLP(address) && lang['deri-apy']} className={`${isLP(address) && 'sushi-apy-underline'}`}>
 									<DeriNumberFormat value={ liquidity.apy } decimalScale={2} suffix='%'/></span>
-									{isLP(address) && liquidity.lpApy > 0 && <><span> +</span> <span className="sushi-apy-underline text-num" title={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
+									{isLP(address) && liquidity.lpApy > 0 && <><span> +</span> <span className="sushi-apy-underline text-num" tip={isSushiLP(address) ? lang['sushi-apy'] : lang['cake-apy']}> 
 									<DeriNumberFormat value={  liquidity.lpApy } allowZero={true}  decimalScale={2} suffix='%'/></span></>}
 						</div>					
 				</div>}

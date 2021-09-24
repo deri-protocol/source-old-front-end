@@ -14,7 +14,7 @@
   "open" : "O",
   "high" : "H",
   "low" : "L",
-  "close" : "C",
+  "closed" : "C",
   "price" : "Price",
   "index" : "Index",
   "option" : "Option"

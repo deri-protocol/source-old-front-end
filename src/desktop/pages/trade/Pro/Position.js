@@ -114,7 +114,7 @@ function Position({ wallet, trading, version, lang, type }) {
         </div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        <div><TipWrapper block={false}><span className='funding-fee' title={lang['funding-fee-tip'] || ''} >{lang['funding-fee']}</span></TipWrapper></div>
+        <div><TipWrapper block={false}><span className='funding-fee' tip={lang['funding-fee-tip'] || ''} >{lang['funding-fee']}</span></TipWrapper></div>
         <div className='liquidation-price'>
           {lang['liquidation-price']}
         </div>
@@ -151,7 +151,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='margin'><DeriNumberFormat value={trading.position.marginHeld} decimalScale={2} /></div>
         <div className='pnl'>
           <span className='pnl-list unrealized-pnl'>
-            <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={6} />{(version.isV2 || version.isV2Lite) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
+            <DeriNumberFormat value={trading.position.unrealizedPnl} decimalScale={6} />{(version.isV2 || version.isV2Lite || version.isOpen) && trading.position.unrealizedPnl && <img src={pnlIcon} alt='unrealizePnl' />}
             {(version.isV2 || version.isV2Lite || version.isOpen) && <div className='pnl-box'>
               {trading.position.unrealizedPnlList && trading.position.unrealizedPnlList.map((item, index) => (
                 <div className='unrealizePnl-item' key={index}>

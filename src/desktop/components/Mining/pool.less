@@ -1,6 +1,6 @@
 .mining {
 
-  .mining-info {
+  .pool-list {
     width: 1225px;
     display: flex;
     flex-direction: column;
@@ -314,6 +314,7 @@
         border-radius: 20px;
         font-family: Korolev, sans-seri;
         margin-right: 10px;
+
         .logo {
           width: 96px;
           height: 96px;
@@ -459,9 +460,13 @@
                   font-size: 16px;
                   margin-top: 8px;
                 }
+                .lp-apy {
+                  width: 200px;
+                }
 
                 .apy,.multiplier {
                   height: 22px;
+                  white-space: nowrap;
 
                   .multiplier-value {
                     border-bottom: 1px dotted #aaa;
@@ -522,7 +527,7 @@
     }
 
     .pool-list{
-      border : 1px solid #707070;
+      // border : 1px solid #707070;
       border-radius: 20px;
       margin : 20px 0px;
 

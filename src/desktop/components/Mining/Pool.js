@@ -6,32 +6,66 @@ import './zh-pool.less'
 import { inject, observer } from 'mobx-react';
 import Card from './Card';
 import List from './List';
+import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
+import { combineSymbolfromPoolConfig, groupByNetwork, mapPoolInfo } from '../../../utils/utils';
+import config from './../../../config.json'
 
+const env = DeriEnv.get();
+const { chainInfo } = config[env]
 
 function Pool({ lang, loading, wallet }) {
-  const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools, openPools] = useMiningPool(true, wallet);
+  const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools] = useMiningPool(true, wallet);
+  const [openPools, setOpenPools] = useState([])
   const [curTab, setCurTab] = useState('')
   const [curStyle, setCurStyle] = useState('card')
-  const [switchChecked, setSwitchChecked] = useState(false)
+  // const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area', curTab)
-  const styleSelectClass = classNames('style-select', curStyle)
-  const switchClass = classNames('switch-btn', { checked: switchChecked })
-  const switchTab = (current) => {
-    if (current === curTab) {
+  // const styleSelectClass = classNames('style-select', curStyle)
+  // const switchClass = classNames('switch-btn', { checked: switchChecked })
+
+  const getOpenPools = async () => {
+    await openConfigListCache.update()
+    return getContractAddressConfig(env, 'v2_lite_open')
+  }
+  const switchTab = async (current) => {
+    if(current === curTab){
       setCurTab('')
     } else {
       setCurTab(current)
+    }
+    if(current === 'opens' && openPools.length === 0) {
+      loading.loading()
+      let openPools = combineSymbolfromPoolConfig(await getOpenPools());
+      openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
+      Promise.all(openPools).then(pools => {
+        openPools = groupByNetwork(pools);
+        for (let j = 0,leng = openPools.length;j < leng ;j++){
+          let index,tem;
+          for(let i = 0,len = openPools.length; i< len; i++){
+            if(openPools[i].pool.symbol === '--'){
+              index = i
+              tem = openPools[i]
+            }
+          }
+          openPools.splice(index,1)
+          openPools.push(tem)
+        }
+        setOpenPools(openPools)
+        loading.loaded();
+      })
     }
   };
 
   useEffect(() => {
     loaded ? loading.loaded() : loading.loading()
     console.log(wallet.isConnected())
-    return () => { }
+    return () => { 
+
+    }
   }, [loaded, wallet])
 
   return (
-    <div className="mining-info">
+    <div className="pool-list">
       <div className='checkout-pools'>
         {/* <div className={styleSelectClass}>
           <div className='list' onClick={() => setCurStyle('list')}></div>
@@ -49,7 +83,8 @@ function Pool({ lang, loading, wallet }) {
           <div className='opens' onClick={() => switchTab('opens')}>{lang['open-zone']}</div>
         </div>
       </div>
-      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet} /> : <Card type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} />}
+      {curStyle === 'list' ? <List type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} wallet={wallet} /> 
+                           : <Card type={curTab} optionPools={optionPools} v1Pools={v1Pools} v2Pools={v2Pools} openPools={openPools} lang={lang} />}
     </div>
   )
 }

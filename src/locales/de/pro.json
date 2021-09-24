@@ -10,12 +10,12 @@
   "funding-rate-delta":"Delta Funding Daily",
   "funding-rate-premium":"Premium Funding Daily",
   "position-info" : "POSITION INFO",
-  "option-mark-price" : "Preis für Option markieren",
+  "option-mark-price" : "Option Markierungspreis",
   "open" : "O",
   "high" : "H",
   "low" : "L",
-  "close" : "C",
+  "closed" : "C",
   "price" : "Preis",
   "index" : "Index",
-  "option" : "Möglichkeit"
+  "option" : "Option"
 }

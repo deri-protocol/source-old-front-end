@@ -30,20 +30,17 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [markPriceClass, setMarkPriceClass] = useState('rise');
+  const [optionInputHolder ,setOptionInputHolder] = useState('0.000')
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
   const [isOptionInput, setIsOptionInput] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
-  const [loaded, setLoaded] = useState(false)
   const indexPriceRef = useRef();
   const markPriceRef = useRef();
   const directionClazz = classNames('checked-long', 'check-long-short', ' long-short', { 'checked-short': direction === 'short' })
   const volumeClazz = classNames('contrant-input', { 'inputFamliy': trading.volume !== '' })
 
 
-
-  //是否有 spec
-  const hasSpec = () => spec && spec.pool
 
   //是否有链接钱包
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
@@ -196,7 +193,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     wallet.refresh();
   }
 
-
   useEffect(() => {
     if (trading.position && trading.position.volume) {
       makeLongOrShort((+trading.position.volume))
@@ -262,6 +258,22 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     return () => { };
   }, [trading.margin]);
 
+  useEffect(()=>{
+    let holder =  '0.000'
+    if(trading.contract.multiplier === '0.0001'){
+      holder = '0.0000'
+    }else if(trading.contract.multiplier === '0.001'){
+      holder = '0.000'
+    }else if(trading.contract.multiplier === '0.01'){
+      holder = '0.00'
+    }else if(trading.contract.multiplier === '0.1'){
+      holder = '0.0'
+    }else if(trading.contract.multiplier === '1'){
+      holder = '0'
+    }
+    setOptionInputHolder(holder)
+  },[trading.contract])
+
   useEffect(() => {
     if (trading.index && wallet.isConnected() && wallet.supportChain) {
       setSlideFreeze(false)
@@ -320,14 +332,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
-                <TipWrapper block={false} title={trading.optionFundingRateTip}>
-                  <span className='funding-per' title={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
+                <TipWrapper block={false} tip={trading.optionFundingRateTip}>
+                  <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
                 </TipWrapper>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <TipWrapper block={false} title={trading.fundingRateTip}>
-                  <span className='funding-per' title={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                <TipWrapper block={false} tip={trading.fundingRateTip}>
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
             </div>
@@ -354,13 +366,13 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false}>
-                  <span className='funding-per' title={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
+                  <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4}  /></span>
                 </TipWrapper>
               </>}
               {type.isFuture && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
                 <TipWrapper block={false}>
-                  <span className='funding-per' title={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
             </div>
@@ -408,7 +420,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   onChange={event => volumeChange(event)}
                   value={trading.volumeDisplay}
                   className={volumeClazz}
-                  placeholder={lang['option-input']}
+                  placeholder={optionInputHolder}
                 />
                 <div className='option-unit' >
                   {trading.config && trading.config.unit}
@@ -440,10 +452,10 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 </>}
                 {/* v2 */}
                 {(version.isV2 || version.isV2Lite || type.isOption || version.isOpen) && <TipWrapper block={false}>
-                  <span className='balance-contract-text pc' title={lang['dynamic-effective-balance-title']}>
+                  <span className='balance-contract-text pc' tip={lang['dynamic-effective-balance-title']}>
                     {lang['dynamic-effective-balance']}
                   </span>
-                  <span className='balance-contract-text mobile' title={lang['dynamic-effective-balance-title']}>
+                  <span className='balance-contract-text mobile' tip={lang['dynamic-effective-balance-title']}>
                     {lang['dynamic-effective-balance']}
                   </span>
                 </TipWrapper>}
@@ -460,19 +472,19 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               {(version.isV2 || version.isV2Lite || type.isOption || version.isOpen) && <TipWrapper block={false} >
                 <div className='box-margin'>{lang['margin']}</div>
                 <div className='box-margin'>
-                  <span className='total-held' title={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>
+                  <span className='total-held' tip={lang['total-held-title']}>&nbsp;- {lang['total-held']}</span>
                   <span className='margin' ><DeriNumberFormat value={trading.amount.margin} allowZero={true} decimalScale={2} /></span>
                 </div>
                 <div className='margin-held-pos'>
-                  <span className='pos-held' title={lang['for-this-pos-title']}>&nbsp;- {lang['for-this-pos']} </span>
+                  <span className='pos-held' tip={lang['for-this-pos-title']}>&nbsp;- {lang['for-this-pos']} </span>
                   <span className='margin' ><DeriNumberFormat value={trading.amount.currentSymbolMarginHeld} allowZero={true} decimalScale={2} /></span>
                 </div>
               </TipWrapper>
               }
               <TipWrapper block={true}>
                 <div className='available-balance'>
-                    <span className='pc' title={lang['available-balance-title']} > {lang['available-balance']} </span>
-                    <span className='mobile' title={lang['available-balance-title']}>{lang['available-balance']}</span>
+                    <span className='pc' tip={lang['available-balance-title']} > {lang['available-balance']} </span>
+                    <span className='mobile' tip={lang['available-balance-title']}>{lang['available-balance']}</span>
                     <span className='available-balance-num'>
                       <DeriNumberFormat value={trading.amount.available} allowZero={true} decimalScale={2} />
                     </span>
@@ -488,6 +500,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
             {type.isFuture && <>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['trade-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={trading.index} decimalScale={4} />
+                </div>
+              </div>
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
@@ -523,7 +541,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} thousandSeparator={true} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
                 </div>
               </div>
               
@@ -531,7 +549,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             <div className='text-info'>
               <div className='title-enter'>{lang['transaction-fee']}</div>
               <div className='text-enter'>
-                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config && trading.config.bTokenSymbol}`} />
+                <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
               </div>
              
             </div>
@@ -549,8 +567,8 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           afterTrade={afterTrade}
           position={trading.position}
           trading={trading}
-          symbolId={trading.config && trading.config.symbolId}
-          bTokenId={trading.config && trading.config.bTokenId}
+          // symbolId={trading.config.symbolId}
+          // bTokenId={trading.config.bTokenId}
           version={version}
           lang={lang}
           type={type}
@@ -564,7 +582,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, symbolId, bTokenId, version, lang, type, markPriceAfter }) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter }) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -577,7 +595,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
   }
 
   const approve = async () => {
-    const res = await wallet.approve(spec.pool, bTokenId)
+    const res = await wallet.approve(spec.pool, spec.bTokenId)
     if (res.success) {
       setIsApprove(true);
       loadApprove();
@@ -602,14 +620,14 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
   //load Approve status
   const loadApprove = async () => {
     if (hasConnectWallet() && spec) {
-      const result = await wallet.isApproved(spec.pool, bTokenId)
+      const result = await wallet.isApproved(spec.pool, spec.bTokenId)
       setIsApprove(result);
     }
   }
 
   const loadBalance = async () => {
     if (wallet.isConnected() && spec) {
-      const balance = await getWalletBalance(wallet.detail.chainId, spec.pool, wallet.detail.account, bTokenId).catch(e => console.error('getWalletBalance was error,maybe network is Wrong'))
+      const balance = await getWalletBalance(wallet.detail.chainId, spec.pool, wallet.detail.account, spec.bTokenId).catch(e => console.error('getWalletBalance was error,maybe network is Wrong'))
       if (balance) {
         setBalance(balance)
       }
@@ -670,7 +688,7 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
             wallet={wallet}
             modalIsOpen={depositIsOpen}
             onClose={afterDepositAndWithdraw}
-            spec={trading.config}
+            spec={spec}
             afterDepositAndWithdraw={afterDepositAndWithdraw}
             position={trading.position}
             overlay={{ background: '#1b1c22', top: 80 }}

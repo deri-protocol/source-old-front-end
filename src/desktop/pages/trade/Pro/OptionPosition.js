@@ -137,8 +137,8 @@ function Position({ wallet, trading, version, lang, type }) {
           </span>
         </div>
         <div className='liquidation-price'>
-          <span>{lang['liquidation-price']} : </span>
-          <LiqPrice wallet={wallet} trading={trading} lang={lang} />
+        <TipWrapper block={false}><span className='funding-fee' tip={lang['liq-price-hover-one']}>{lang['liquidation-price']}  </span></TipWrapper>  
+        : <LiqPrice wallet={wallet} trading={trading} lang={lang} />
         </div>
       </div>
 
@@ -149,7 +149,7 @@ function Position({ wallet, trading, version, lang, type }) {
         <div className='direction'>{lang['direction']}</div>
         <div className='margin'>{lang['margin']}</div>
         <div className='unrealized-pnl'>{lang['unrealized-pnl']}</div>
-        <div><TipWrapper><span className='funding-fee' title={lang['funding-fee-tip']} >{lang['funding-fee']}</span></TipWrapper> </div>
+        <div><TipWrapper><span className='funding-fee' tip={lang['funding-fee-tip']} >{lang['funding-fee']}</span></TipWrapper> </div>
       </div>
       {positions.map((pos, index) => {
         return (
@@ -159,7 +159,7 @@ function Position({ wallet, trading, version, lang, type }) {
               <DeriNumberFormat value={pos.volume} allowZero={true} />
               <span className='close-position'>
               {/* {closingIndex !== index &&<>
-              title={lang['close-is-position']}
+              tip={lang['close-is-position']}
                 <TipWrapper block={false}> */}
                 <img style={{ display: closingIndex !== index ? 'inline-block' : 'none' }} src={closePosImg} onClick={() => { onClosePosition(pos.symbolId, pos.volume, index) }}  />
                 {/* </TipWrapper>
@@ -245,9 +245,9 @@ function LiqPrice({ wallet, trading, lang }) {
         ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
-          <TipWrapper block={false}> <span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+          <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-three']}> ? </span></TipWrapper>
             <span> / </span>
-            <TipWrapper block={false}>   <span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+            <TipWrapper block={false}>   <span className='funding-fee' tip={lang['liq-price-hover-three']}> ? </span></TipWrapper>
           </span>
         &nbsp;
         </span>
@@ -256,7 +256,7 @@ function LiqPrice({ wallet, trading, lang }) {
           <span key={index}>
             <span>{positions.underlier}: </span>
             <span>
-            <TipWrapper block={false}> <span className='funding-fee' title={lang['liq-price-hover']}> ? </span>  </TipWrapper>
+            <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-three']}> ? </span>  </TipWrapper>
               <span> / </span>
               <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
             </span>
@@ -268,7 +268,7 @@ function LiqPrice({ wallet, trading, lang }) {
           <span>
             <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
             <span> / </span>
-            <TipWrapper block={false}> <span className='funding-fee' title={lang['liq-price-hover']}> ? </span></TipWrapper>
+            <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-three']}> ? </span></TipWrapper>
           </span>
         &nbsp;
         </span>
@@ -289,9 +289,9 @@ function LiqPrice({ wallet, trading, lang }) {
         ele = <span key={index}>
           <span>{positions.underlier}: </span>
           <span>
-            <span > -- </span>
+          <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-two']}> -- </span></TipWrapper>
             <span> / </span>
-            <span > -- </span>
+          <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-two']}> -- </span></TipWrapper>
           </span>
         &nbsp;
         </span>
@@ -300,7 +300,7 @@ function LiqPrice({ wallet, trading, lang }) {
           <span key={index}>
             <span>{positions.underlier}: </span>
             <span>
-              <span > -- </span>
+            <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-two']}> -- </span></TipWrapper>
               <span> / </span>
               <span> <DeriNumberFormat decimalScale={2} value={positions.price2} /> </span>
             </span>
@@ -313,7 +313,7 @@ function LiqPrice({ wallet, trading, lang }) {
           <span>
             <span> <DeriNumberFormat decimalScale={2} value={positions.price1} /> </span>
             <span> / </span>
-            <span > -- </span>
+            <TipWrapper block={false}> <span className='funding-fee' tip={lang['liq-price-hover-two']}> -- </span></TipWrapper>
           </span>
         &nbsp;
         </span>
