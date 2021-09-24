@@ -46,3 +46,5 @@ export {
   addLpLiquidity,
   removeLpLiquidity,
 } from './lp_pool_transaction_api';
+
+export { mintTERC20 } from './ERC20_api'

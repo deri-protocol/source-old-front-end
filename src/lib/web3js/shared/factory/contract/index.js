@@ -1,5 +1,6 @@
 export {
-  bTokenFactory
+  bTokenFactory,
+  TERC20Factory,
 } from './b_token'
 
 export {

@@ -2,7 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import logo from '../../../assets/img/logo.png'
 import { useRouteMatch } from 'react-router-dom'
+import {DeriEnv} from '../../../lib/web3js/indexV2'
 import Version from '../../../components/Version/Version'
+const env = DeriEnv.get();
 
 function Menu({ lang, locale }) {
   const isLite = useRouteMatch('/futures/lite')
@@ -111,6 +113,14 @@ function Menu({ lang, locale }) {
                   :
                   <Link className='retired-item' to='/retired'>{lang['retired-pools']}</Link>}
               </li>
+              {env === 'testnet' && <li>
+                {isProduction
+                  ?
+                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#faucet`}  className='retired-item'>{lang['faucet']}</a>
+                  :
+                  <Link className='retired-item' to='/faucet'>{lang['faucet']}</Link>}
+              </li>}
+              
 
             </ul>
           </li>

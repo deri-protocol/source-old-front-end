@@ -4,7 +4,9 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import logo from '../../img/deri-logo.png'
 import menuDown from '../../img/menu-down.png'
 import Footer from './Footer'
+import {DeriEnv} from '../../../lib/web3js/indexV2'
 import './menu.less'
+const env = DeriEnv.get();
 
 export default function Menu({ closeMenu, lang, locale }) {
   const isMining = useRouteMatch('/mining') ? true : false
@@ -84,14 +86,19 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
               </li> */}
               <li>
+                <a rel='noreferrer' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang['governance']}</a>
+              </li>
+              <li>
                 <Link to='/nuls'>{lang['signin']}</Link>
               </li>
               <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>
               </li>
-              <li>
-                <a rel='noreferrer' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang['governance']}</a>
-              </li>
+              {env === 'testnet' && <li>
+                <Link to='/faucet'>{lang['faucet']}</Link>
+              </li> }
+              
+              
             </ul>
           </li>
         </ul>

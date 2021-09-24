@@ -7,6 +7,7 @@ export {
 } from './database';
 export {
   bTokenFactory,
+  TERC20Factory,
 
   brokerManagerFactory,
   pTokenAirdropFactory,
