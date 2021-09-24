@@ -3,6 +3,7 @@ export {
   getPoolOpenOracleList,
   isPoolController,
   getPoolAllSymbolNames,
+  getPoolAcitveSymbolIds,
   openConfigListCache,
 } from './query_api';
-export { createPool, addSymbol } from './transaction_api';
+export { createPool, addSymbol, createOracle } from './transaction_api';

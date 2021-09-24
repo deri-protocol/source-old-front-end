@@ -98,12 +98,12 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+          "address": "0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+          "address": "0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206"
         },
         {
           "chainId": "56",
@@ -113,12 +113,12 @@
         {
           "chainId": "137",
           "symbol": "BTCUSD",
-          "address": "0xa9C75fb1CE5196Bb9378E128aCe516836B169D59"
+          "address": "0x55fb310E3E36A2CfbB582Ce0B5B3f323bDEF2E4d"
         },
         {
           "chainId": "137",
           "symbol": "ETHUSD",
-          "address": "0x608BF34A55d65441DA93363Dd3dB4369a981454e"
+          "address": "0x1B531b26f1844c3479C6A5A518C2F3317f52D954"
         }
       ]
     },
@@ -223,25 +223,20 @@
     "testnet": {
       "pools": [
         {
-          "pool": "0x54a71Cad29C314eA081b2B0b1Ac25a7cE3b7f7A5",
-          "pToken": "0x270128C2d7E8713c8c25F7800738C29214eAFeBA",
-          "lToken": "0x904262d92B21e5214278632d01405738d841d82a",
-          "router": "0x07fb21FE50A31dFaf312dFa9f5BA5CF14DC7E1e6",
+          "pool": "0xb47829DbD89d0a13605415C8EFfDb952d7D822ca",
+          "pToken": "0x69f92396102E370A4FE836C66007b4e55F57eDa9",
+          "lToken": "0xb9C5B74116c5A5492Fe7E765C84181666fe5c499",
+          "router": "0x59AC28dA13D095926648e902c586a81E3320E5cA",
           "bTokens": [
             {
               "bTokenId": "0",
-              "bTokenSymbol": "BUSD",
-              "bToken": "0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF"
+              "bTokenSymbol": "TBUSD",
+              "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323"
             },
             {
               "bTokenId": "1",
-              "bTokenSymbol": "AUTO",
-              "bToken": "0xd2F37BADdB702FF778aA038C63b7068054d93508"
-            },
-            {
-              "bTokenId": "2",
-              "bTokenSymbol": "CAKE",
-              "bToken": "0x5b403E0f6686725171c2Baa7A0b7cD4253B0bc57"
+              "bTokenSymbol": "TWETH",
+              "bToken": "0x8e60B350FA4fbaF209712bB721373364DE858A5d"
             }
           ],
           "symbols": [
@@ -256,7 +251,7 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "9516935",
+          "initialBlock": "12633837",
           "version": "v2",
           "chainId": "97"
         }
@@ -264,19 +259,19 @@
       "brokerManager": [
         {
           "chainId": "97",
-          "address": "0xe4101EC5F4EF144e97DdE7542A605c8813a975Fc"
+          "address": "0x0000000000000000000000000000000000000000"
         }
       ],
       "oracle": [
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0x713a13df8985EF58FB50b21929f2cdBa38A1aFC7"
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x787D28E9Df65Ec90A57F8e38Ef192715f23B3a55"
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
         }
       ]
     }
@@ -545,6 +540,16 @@
               "symbolId": "1",
               "symbol": "ETHUSD",
               "unit": "ETH"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "AXSUSDT",
+              "unit": "AXS"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "MBOXUSDT",
+              "unit": "MBOX"
             }
           ],
           "initialBlock": "12238607",
@@ -574,17 +579,27 @@
           "chainId": "97",
           "symbol": "ETHUSD",
           "address": "0x787D28E9Df65Ec90A57F8e38Ef192715f23B3a55"
+        },
+        {
+          "chainId": "97",
+          "symbol": "AXSUSDT",
+          "address": "0x7dFd554d047cBeC0c57124BaCb661b2aEffa9792"
+        },
+        {
+          "chainId": "97",
+          "symbol": "MBOXUSDT",
+          "address": "0xB38d9FB6D41170be7Df580A9D26941336dC49e90"
         }
       ]
     },
     "testnet": {
       "pools": [
         {
-          "pool": "0x6832DFE1359c158a15E50b31B97b3BCD9cb12701",
-          "pToken": "0xbcf960bCb46a521A7a965B9eecba97C4928a7553",
-          "lToken": "0x96E8387Bb68F4a67E2FcfFFEe7078D1cc7A5E188",
-          "bToken": "0x4038191eFb39Fe1d21a48E061F8F14cF4981A0aF",
-          "bTokenSymbol": "BUSD",
+          "pool": "0x43701b4bf0430DeCFA41210327fE67Bf4651604C",
+          "pToken": "0x166a9cB3ad589f2F03c57d7819C16DdEcB58Fb3d",
+          "lToken": "0x0D413A61F6247e06B60a9c58c13Bd39020164300",
+          "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
+          "bTokenSymbol": "TBUSD",
           "symbols": [
             {
               "symbolId": "0",
@@ -597,7 +612,7 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "12238607",
+          "initialBlock": "12635442",
           "version": "v2_lite",
           "chainId": "97"
         }
@@ -605,25 +620,25 @@
       "poolViewer": [
         {
           "chainId": "97",
-          "address": "0xaBeB6F87ab3810655a5702C00d4D646dC85d7a0C"
+          "address": "0x0000000000000000000000000000000000000000"
         }
       ],
       "brokerManager": [
         {
           "chainId": "97",
-          "address": "0xe4101EC5F4EF144e97DdE7542A605c8813a975Fc"
+          "address": "0x0000000000000000000000000000000000000000"
         }
       ],
       "oracle": [
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0xBD76fDBB9D4fe95F7dEdf96E85E37FD55b8bF500"
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x787D28E9Df65Ec90A57F8e38Ef192715f23B3a55"
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
         }
       ]
     }
@@ -635,12 +650,12 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+          "address": "0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+          "address": "0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206"
         },
         {
           "chainId": "56",
@@ -690,12 +705,12 @@
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0xBD76fDBB9D4fe95F7dEdf96E85E37FD55b8bF500"
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x787D28E9Df65Ec90A57F8e38Ef192715f23B3a55"
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
         }
       ]
     },
@@ -705,12 +720,12 @@
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0xBD76fDBB9D4fe95F7dEdf96E85E37FD55b8bF500"
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x787D28E9Df65Ec90A57F8e38Ef192715f23B3a55"
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
         }
       ]
     }
@@ -772,12 +787,12 @@
         {
           "chainId": "56",
           "symbol": "BTCUSD",
-          "address": "0x5632A70669411D4de43d405E1880018ff85daaD3"
+          "address": "0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302"
         },
         {
           "chainId": "56",
           "symbol": "ETHUSD",
-          "address": "0xC6D5bD993A7906D608F93574b16EdCf274381395"
+          "address": "0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206"
         }
       ]
     },
@@ -815,36 +830,14 @@
           "initialBlock": "12205325",
           "version": "option",
           "chainId": "97"
-        }
-      ],
-      "poolViewer": [
-        {
-          "chainId": "97",
-          "address": "0x2cADdC11aDD70E520D950A51606243970A54d80a"
-        }
-      ],
-      "oracle": [
-        {
-          "chainId": "97",
-          "symbol": "BTCUSD",
-          "address": "0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1"
         },
         {
-          "chainId": "97",
-          "symbol": "ETHUSD",
-          "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A"
-        }
-      ]
-    },
-    "testnet": {
-      "pools": [
-        {
-          "pool": "0x0D0c982af263a02DF481A642798ab815832904B7",
-          "pToken": "0x4047a31aa3CA9AfFC820E3153A1D79b3c2074CF2",
-          "lToken": "0x6D89257cF3c614304A6508BC6A268e3e7998BaF2",
-          "bToken": "0x2ebE70929bC7D930248040f54135dA12f458690C",
-          "pricer": "0xEEF78BF814dcC426D0f1099f31Ba695659f5E2d7",
-          "bTokenSymbol": "BUSD",
+          "pool": "0x8be6b446dA75Bc0B4eb321cB89079A3eA96666b2",
+          "pToken": "0x8F038C454B6E68B2988706a1a5f78dE2C4634097",
+          "lToken": "0x15cF2147Dc2E5Db1DEF4818bAF36C7C7a7b9F970",
+          "bToken": "0xa544e477866a29685E4155E27f9bD886C63880a0",
+          "pricer": "0x798762FFefc1b0Ee63ad1bfA9c2bE6807F5FC918",
+          "bTokenSymbol": "USDC",
           "symbols": [
             {
               "symbolId": "0",
@@ -867,7 +860,76 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "12205325",
+          "initialBlock": "18948137",
+          "version": "option",
+          "chainId": "80001"
+        }
+      ],
+      "poolViewer": [
+        {
+          "chainId": "97",
+          "address": "0x2cADdC11aDD70E520D950A51606243970A54d80a"
+        },
+        {
+          "chainId": "80001",
+          "address": "0x77e27DF02b290e5680A5B00a88E09E612265AFDE"
+        }
+      ],
+      "oracle": [
+        {
+          "chainId": "97",
+          "symbol": "BTCUSD",
+          "address": "0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1"
+        },
+        {
+          "chainId": "97",
+          "symbol": "ETHUSD",
+          "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A"
+        },
+        {
+          "chainId": "80001",
+          "symbol": "BTCUSD",
+          "address": "0x4770703aA9bE39F187A1efAf0F2f0ba00Fc3A4Ce"
+        },
+        {
+          "chainId": "80001",
+          "symbol": "ETHUSD",
+          "address": "0xa34500afF55Cd0aA772539E175746f30e5c4b37C"
+        }
+      ]
+    },
+    "testnet": {
+      "pools": [
+        {
+          "pool": "0x15B3642ddC6283682039c1c993c622FE1CfB9F9d",
+          "pToken": "0xd40f2d26576B81D35bA628cf4a15BeA0aABec6bF",
+          "lToken": "0xEB37C464E7C2A8BCB3327d36fa0aF9f11a573B3A",
+          "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
+          "pricer": "0xFC78Fb1c56d9b6B55c265696349B91843Ba71dAD",
+          "bTokenSymbol": "TBUSD",
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "BTCUSD-50000-C",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "BTCUSD-40000-P",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "2",
+              "symbol": "ETHUSD-4000-C",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "3",
+              "symbol": "ETHUSD-3000-P",
+              "unit": "ETH"
+            }
+          ],
+          "initialBlock": "12635838",
           "version": "option",
           "chainId": "97"
         }
@@ -882,12 +944,12 @@
         {
           "chainId": "97",
           "symbol": "BTCUSD",
-          "address": "0x18C036Ee25E205c224bD78f10aaf78715a2B6Ff1"
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
         },
         {
           "chainId": "97",
           "symbol": "ETHUSD",
-          "address": "0x073C99954e1cf5eb6f4Ef6f1B7FF21ACf735Ee6A"
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
         }
       ]
     }

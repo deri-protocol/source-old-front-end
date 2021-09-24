@@ -6,16 +6,25 @@ import { lTokenLiteFactory, pTokenLiteFactory, perpetualPoolLiteFactory } from '
 
 
 const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {
-  const { lToken:lTokenAddress, pToken:pTokenAddress} = getPoolConfig(poolAddress, '0', null, 'v2_lite')
+  //const { lToken:lTokenAddress, pToken:pTokenAddress} = getPoolConfig(poolAddress, '0', null, 'v2_lite')
   const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
-  const lToken = lTokenLiteFactory(chainId, lTokenAddress)
-  const pToken = pTokenLiteFactory(chainId, pTokenAddress)
-  const [parameterInfo, liquidity, lTokenBalance, lTokenTotalSupply, symbolIds] = await Promise.all([
-    perpetualPool.getParameters(),
+  await perpetualPool.init()
+  // const bTokenSymbol = perpetualPool.bTokenSymbol
+  // const lToken = lTokenLiteFactory(chainId, lTokenAddress)
+  // const pToken = pTokenLiteFactory(chainId, pTokenAddress)
+  const lToken = perpetualPool.lToken
+  // const pToken = perpetualPool.pToken
+  const parameterInfo = perpetualPool.parameters
+  const symbolIds = perpetualPool.activeSymbolIds
+  //const symbolIndex = symbolIds.indexOf(symbolId)
+  //const symbols = perpetualPool.symbols
+
+  const [liquidity, lTokenBalance, lTokenTotalSupply] = await Promise.all([
+    //perpetualPool.getParameters(),
     perpetualPool.getLiquidity(),
     lToken.balanceOf(accountAddress),
     lToken.totalSupply(),
-    pToken.getActiveSymbolIds(),
+    //pToken.getActiveSymbolIds(),
   ])
   const { minPoolMarginRatio } = parameterInfo;
   let promises = []

@@ -1,7 +1,7 @@
-import { catchTxApiError, naturalToDeri } from "../../shared"
+import { catchTxApiError, naturalToDeri, toChecksumAddress } from "../../shared"
 import { normalizeChainId } from "../../shared/utils/validate";
-import { getPoolV2LiteManagerConfig } from "../config";
-import { perpetualPoolLiteFactory, perpetualPoolLiteManagerFactory } from "../factory";
+import { getOracleFactoryChainlinkConfig, getPoolV2LiteManagerConfig } from "../config";
+import { chainlinkFeedFactory, oracleFactoryChainlinkFactory, perpetualPoolLiteFactory, perpetualPoolLiteManagerFactory } from "../factory";
 
 // parameters: [symbolId, symbol, oracleAddress, multiplier, feeRatio, fundingRateCoefficient]
 export const createPool = async(...args) => {
@@ -28,5 +28,31 @@ export const addSymbol = async(...args) => {
       const newParameters = parameters.map((p, index) => index > 2 ? naturalToDeri(p).toString() : p)
       // send tx
      return await perpetualPoolLite.addSymbol(accountAddress, newParameters)
+  }, args)
+}
+
+export const createOracle = async(...args) => {
+  return catchTxApiError(async(chainId, accountAddress, feedAddress) => {
+      chainId = normalizeChainId(chainId)
+      feedAddress = toChecksumAddress(feedAddress)
+      const feedContract = chainlinkFeedFactory(chainId, feedAddress)
+      const symbol = await feedContract.symbol()
+      if (typeof symbol === 'string' && symbol !== '') {
+        const oracleFactoryConfig = getOracleFactoryChainlinkConfig(chainId);
+        const oracleFactory = oracleFactoryChainlinkFactory(
+          chainId,
+          oracleFactoryConfig.address
+        );
+        // process parameters
+        // send tx
+        return await oracleFactory.createOracle(
+          accountAddress,
+          symbol
+        );
+      } else {
+        throw new Error(
+          `-- createOracle: cannot get description of feedAddress(${feedAddress})`
+        );
+      }
   }, args)
 }

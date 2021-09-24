@@ -41,6 +41,33 @@ export const getPoolV2LiteManagerConfig = (chainId) => {
   }
 };
 
+export const getOracleFactoryChainlinkConfig = (chainId) => {
+  chainId = normalizeChainId(chainId)
+  const configs = {
+    prod: [
+      {
+        chainId: '56',
+        address: '0x5052fa10d68F4146B66bc15fd8cCb1674B482026',
+        initialBlock: '11017943',
+      },
+    ],
+    dev: [
+      {
+        chainId: '97',
+        address: '0xFD1f981375f95e971E8fC0756f4daAF5784e5376',
+        initialBlock: '12440610',
+      },
+    ],
+  };
+  const env = DeriEnv.get();
+  const res = configs[env].find((c) => c.chainId === chainId);
+  if (res && res.address) {
+    return res
+  } else {
+    throw new Error(`-- getOracleFactoryChainlinkConfig: cannot find config with env(${env}) and chainId(${chainId})`)
+  }
+};
+
 
 export const expandPoolConfigV2LiteOpen = (config) => {
   const pools = config.pools;

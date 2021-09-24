@@ -2,6 +2,7 @@ import { bg, toWei } from '../utils'
 import { oracleFactory } from '../factory'
 import { getOraclePriceForOption, getPriceFromRest, getOraclePricesForOption, getOracleVolatilitiesForOption } from '../utils/oracle'
 import { CHAIN_ID, TIMEOUT } from './setup'
+import { DeriEnv } from '../config/env'
 
 describe("oracle", () => {
   test('oracle BSC BTCUSD getPrice()', async() => {
@@ -87,5 +88,26 @@ describe("oracle", () => {
     expect(bg(res[2]).toNumber()).toBeGreaterThanOrEqual(0);
     expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(parseInt(toWei('1.5')));
     expect(bg(res[3]).toNumber()).toBeLessThanOrEqual(parseInt(toWei('1.5')));
+  }, TIMEOUT)
+  test('woo oracle bsc BTCUSD getPrice()', async() => {
+    DeriEnv.set('prod')
+    const oracle = oracleFactory('56', '0xC686B6336c0F949EAdFa5D61C4aAaE5Fe0687302', 'BTCUSD')
+    const price = await oracle.getPrice()
+    DeriEnv.set('dev')
+    expect(bg(price).toNumber()).toBeGreaterThanOrEqual(10000)
+  }, TIMEOUT)
+  test('woo oracle bsc ETHUSD getPrice()', async() => {
+    DeriEnv.set('prod')
+    const oracle = oracleFactory('56', '0x60Dda0aD29f033d36189bCe4C818fe9Ce3a95206', 'ETHUSD')
+    const price = await oracle.getPrice()
+    DeriEnv.set('dev')
+    expect(bg(price).toNumber()).toBeGreaterThanOrEqual(1000)
+  }, TIMEOUT)
+  test('woo oracle bsc BNBUSD getPrice()', async() => {
+    DeriEnv.set('prod')
+    const oracle = oracleFactory('56', '0xa356c0559e0DdFF9281bF8f061035E7097a84Fa4', 'BNBUSD')
+    const price = await oracle.getPrice()
+    DeriEnv.set('dev')
+    expect(bg(price).toNumber()).toBeGreaterThanOrEqual(100)
   }, TIMEOUT)
 })
