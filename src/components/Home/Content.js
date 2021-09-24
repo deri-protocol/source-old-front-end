@@ -31,10 +31,10 @@ export default function Content({lang}) {
     <div>
       <div className='index_part1'>
         <MatrixRain lang={lang}/>
-        <div className='index_part1-1 px1200'>
+        <div className='index_part1-1'>
           <div className="slogon">
             <div className='index_part1-3'>{lang['deri-protocol']}</div>
-            <div>= {lang['deri-describe']}</div>
+            <div className='describe'>= ( <span> <a href='https://app.deri.finance/#/futures/pro'>  {lang['perpetual-futures']} </a></span>  +  <span className='moblie '> <a href='https://app.deri.finance/#/options/pro'>{lang['everlasting-options']}</a> </span> ) <span className='moblie no-d'>{lang['deri-describe']}</span> </div>
           </div>
           {/* <div className='index_part1-1_title'>
           
