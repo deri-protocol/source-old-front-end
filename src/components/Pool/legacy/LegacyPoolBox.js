@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {useHistory} from 'react-router-dom'
 import config from  '../../../config.json'
-import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock } from '../../../lib/web3js/indexV2';
+import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock ,getPoolInfoApy,getPoolLiquidity,getLpPoolInfoApy} from '../../../lib/web3js/indexV2';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../../Button/Button.js';
@@ -14,6 +14,7 @@ const chainConfig = config[DeriEnv.get()]['chainInfo'];
 function PoolBox({wallet,version,pool,lang}){
   const [buttonElement, setButtonElement] = useState('');
   const logoClassName = `logo ${pool.bTokenSymbol}`
+  const [detail, setDetail] = useState({})
   const history = useHistory();
 
   const isShowDecimal = (address)=>{
@@ -40,6 +41,22 @@ function PoolBox({wallet,version,pool,lang}){
     if(!res.success){
       alert(lang['claim-failed'])
     }
+  }
+
+  const loadLiqAndApy = async (config) => {
+    const apyInfo = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId)
+    const liq = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId)
+    const detail = {
+      liquidity : liq.liquidity,
+      apy :  ((+apyInfo.apy) * 100).toFixed(2),
+      multiplier : apyInfo.multiplier
+    }
+    if(config.isLp){
+      const lapy = await getLpPoolInfoApy(config.chainId,config.pool);
+      const lpApy = ((+lapy.apy2) * 100).toFixed(2); 
+      detail['lpApy'] = lpApy
+    }
+    setDetail(detail)
   }
 
   useEffect(() => {
@@ -73,6 +90,9 @@ function PoolBox({wallet,version,pool,lang}){
           </button>
         )
     }    
+    if(pool){
+      loadLiqAndApy(pool);
+    }
     return () => {};
   }, [pool]);
 
@@ -92,7 +112,7 @@ function PoolBox({wallet,version,pool,lang}){
               <div className="base-token">{pool.bTokenSymbol}</div>
               <div>
                 <span className='title'>{pool.airdrop ? lang['total'] : lang['pool-liq']}</span>
-                <DeriNumberFormat value={pool.liquidity} displayType='text' thousandSeparator={true} decimalScale={isShowDecimal(pool.pool) ? 7 : 0}/>
+                <DeriNumberFormat value={detail.liquidity} displayType='text' thousandSeparator={true} decimalScale={isShowDecimal(pool.pool) ? 7 : 0}/>
               </div>
               <div>
                 <span>{lang['symbol']}</span>
@@ -101,12 +121,12 @@ function PoolBox({wallet,version,pool,lang}){
               <div className="apy">
                 <span>{lang['apy']}</span>
                 <span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : ''} tip={ pool.lpApy && lang['deri-apy']}>
-                    {pool.apy ? <DeriNumberFormat value={pool.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
+                  <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={ detail.lpApy && lang['deri-apy']}>
+                    {detail.apy ? <DeriNumberFormat value={detail.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2}/> : '--'}                 
                   </span>
-                  {pool.lpApy &&<>
+                  {detail.lpApy &&<>
                   <span> + </span>
-                  <span className={pool.lpApy ? 'sushi-apy-underline' : '' } tip={ pool.lpApy && pool.label}> <DeriNumberFormat value={pool.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
+                  <span className={detail.lpApy ? 'sushi-apy-underline' : '' } tip={ detail.lpApy && pool.label}> <DeriNumberFormat value={detail.lpApy} displayType='text' suffix='%' decimalScale={2}/></span>
                   </>}
                 </span>
                 
