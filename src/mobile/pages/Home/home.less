@@ -29,10 +29,13 @@
 
   .index_part1 {
     margin-top: 6.15764vh;
-    height: 100vh;
+    height: calc(100vh - 0.5rem);
     width: 100vw;
     overflow: hidden;
     position: relative;
+    canvas {
+      height: 100%;
+    }
 
     img,
     .index_part1-1 {
@@ -77,7 +80,7 @@
     font-size: 2.46305vh;
     z-index: 1;
     position: relative;
-    top: -31vh;
+    top: -60vh;
     padding: 0 2.66667vw;
 
     .index_part2-center {
