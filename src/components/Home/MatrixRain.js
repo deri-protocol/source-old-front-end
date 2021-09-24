@@ -6,19 +6,6 @@ export default function MatrixRain({lang}){
   const canvasRef = useRef(null)
   
   useEffect(() => {
-    // var c = canvasRef.current;
-    // var ctx = canvasRef.current.getContext("2d");
-
-    
-
-    // const rect = c.getBoundingClientRect();
-    // c.height = rect.height;
-    // c.width = window.innerWidth;
-
-    // var greece = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    // var greecea = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    // var greeceb = 'Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ ς σ τ υ φ χ ψ ω'
-    // var hex = "0101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101"
     var canvas = canvasRef.current,
     ctx = canvas.getContext('2d');
 
@@ -41,12 +28,12 @@ export default function MatrixRain({lang}){
                   {fontSize : 15,color : '#1F619E'},
                   {fontSize : 12,color : '#23598B'},
                   {fontSize : 9,color : '#174268'}]
-    var symbols = ['+','-']
     // Setting up the drops
     var drops = [];
     var dropsStyles = []
+    var interval = 100
     for (var i = 0; i < columns; i++) {
-      drops[i] = 1;
+      drops[i] = Math.floor(Math.random() * (canvas.height / fontSize));
       dropsStyles[i] = styles[Math.floor(Math.random() * styles.length)]
     }
 
@@ -65,12 +52,13 @@ export default function MatrixRain({lang}){
           drops[i] = 0;
           var next = styles[Math.floor(Math.random() * styles.length)]
           styles.splice(i,1,next)
+          // interval = 150
         }
       }
     }
 
     // Loop the animation
-    setInterval(draw, 150);
+    setInterval(draw, interval);
   }, [])
   return (
     <canvas ref={canvasRef}>
