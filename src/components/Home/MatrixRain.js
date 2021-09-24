@@ -1,20 +1,26 @@
-import { useRef ,useEffect} from "react"
+import { useRef ,useState,useEffect} from "react"
 import './matrix-rain.less'
 import moment from 'moment'
 
-export default function MatrixRain({lang}){
+export default function MatrixRain(){
   const canvasRef = useRef(null)
+  const [size, setSize] = useState({width : window.innerWidth,height : window.innerHeight})
+
+  useEffect(() => {
+    const onResize = () => {
+      setSize({width : window.innerWidth,height : window.innerHeight});
+    }
+    window.addEventListener("resize", onResize);
+    return () => {
+        window.removeEventListener("resize", onResize);
+    }
+  },[]);
   
   useEffect(() => {
     var canvas = canvasRef.current,
     ctx = canvas.getContext('2d');
-
-    // Setting the width and height of the canvas
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    // alert(window.innerHeight)
-    // Setting up the letters
+    canvas.width = size.width;
+    canvas.height = size.height;
     var letters = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω';
     var number =  '0101010101010101010101010101010101010101010101010'
     letters = (letters + number).split('');
@@ -57,8 +63,9 @@ export default function MatrixRain({lang}){
     }
 
     // Loop the animation
-    setInterval(draw, interval);
-  }, [])
+    const inte = setInterval(draw, interval);
+    return () => clearInterval(inte)
+  }, [size.width,size.height])
   return (
     <canvas ref={canvasRef}>
     </canvas>
