@@ -12,8 +12,8 @@ export default function MatrixRain({lang}){
     // Setting the width and height of the canvas
     const rect = canvas.getBoundingClientRect();
     canvas.width = window.innerWidth;
-    canvas.height = rect.height;
-
+    canvas.height = window.innerHeight;
+    // alert(window.innerHeight)
     // Setting up the letters
     var letters = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩαβγδεζηθικλμνξοπρςστυφχψω';
     var number =  '0101010101010101010101010101010101010101010101010'
@@ -24,10 +24,10 @@ export default function MatrixRain({lang}){
     var fontSize = fontsSizes[0],
         columns = canvas.width / fontSize;
 
-    var styles = [{fontSize : 18,color : '#246CAD'},
+    var styles = [{fontSize : 18,color : '#246CFF'},
+                  {fontSize : 18,color : '#00659f'},
                   {fontSize : 15,color : '#1F619E'},
-                  {fontSize : 12,color : '#23598B'},
-                  {fontSize : 9,color : '#174268'}]
+                  {fontSize : 12,color : '#23598B'}]
     // Setting up the drops
     var drops = [];
     var dropsStyles = []
@@ -52,7 +52,6 @@ export default function MatrixRain({lang}){
           drops[i] = 0;
           var next = styles[Math.floor(Math.random() * styles.length)]
           styles.splice(i,1,next)
-          // interval = 150
         }
       }
     }
