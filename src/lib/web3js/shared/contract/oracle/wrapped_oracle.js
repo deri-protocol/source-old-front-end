@@ -11,6 +11,7 @@ export class WrappedOracle extends ContractBase {
 
   // decimals refers https://docs.chain.link/docs/matic-addresses
   async getPrice() {
+    // console.log('hit wrapped oracle')
     const res = await this._call('getPrice');
     if (res) {
       return deriToNatural(res).toString()

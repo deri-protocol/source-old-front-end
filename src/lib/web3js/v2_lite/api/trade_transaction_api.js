@@ -7,14 +7,16 @@ import { perpetualPoolLiteFactory, pTokenLiteFactory } from '../factory.js';
 export const unlock = async (chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress];
   return catchTxApiError(async (chainId, poolAddress, accountAddress) => {
-    const { bToken: bTokenAddress } = getPoolConfig(
-      poolAddress,
-      '0',
-      null,
-      'v2_lite'
-    );
-    const bToken = bTokenFactory(chainId, bTokenAddress);
-    return await bToken.unlock(accountAddress, poolAddress);
+    const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
+    await perpetualPool.init()
+    // const { bToken: bTokenAddress } = getPoolConfig(
+    //   poolAddress,
+    //   '0',
+    //   null,
+    //   'v2_lite'
+    // );
+    // const bToken = bTokenFactory(chainId, bTokenAddress);
+    return await perpetualPool.bToken.unlock(accountAddress, poolAddress);
   }, args);
 };
 
@@ -27,7 +29,8 @@ export const depositMargin = async (
   const args = [chainId, poolAddress, accountAddress, amount];
   return catchTxApiError(
     async (chainId, poolAddress, accountAddress, amount) => {
-      const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
+      const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
+      await perpetualPool.init()
       return await perpetualPool.addMargin(accountAddress, amount);
     },
     args
@@ -45,6 +48,7 @@ export const withdrawMargin = async (
   return catchTxApiError(
     async (chainId, poolAddress, accountAddress, amount, isMaximum) => {
       const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
+      await perpetualPool.init()
       return await perpetualPool.removeMargin(
         accountAddress,
         amount,
@@ -65,19 +69,25 @@ export const tradeWithMargin = async (
   const args = [chainId, poolAddress, accountAddress, newVolume, symbolId];
   return catchTxApiError(
     async (chainId, poolAddress, accountAddress, newVolume, symbolId) => {
-      const { pToken: pTokenAddress } = getPoolConfig(
-        poolAddress,
-        '0',
-        '0',
-        'v2_lite'
-      );
-      const pToken = pTokenLiteFactory(chainId, pTokenAddress);
       const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
-      const [parameterInfo, liquidity, margin, symbolIds] = await Promise.all([
-        perpetualPool.getParameters(),
+      await perpetualPool.init()
+      // const { pToken: pTokenAddress } = getPoolConfig(
+      //   poolAddress,
+      //   '0',
+      //   '0',
+      //   'v2_lite'
+      // );
+      // const pToken = pTokenLiteFactory(chainId, pTokenAddress);
+      // const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
+      const pToken = perpetualPool.pToken
+      const parameterInfo = perpetualPool.parameters
+      // const symbols = perpetualPool.symbols
+      const symbolIds = perpetualPool.activeSymbolIds
+      const [liquidity, margin] = await Promise.all([
+        //perpetualPool.getParameters(),
         perpetualPool.getLiquidity(),
         pToken.getMargin(accountAddress),
-        pToken.getActiveSymbolIds(),
+        //pToken.getActiveSymbolIds(),
       ]);
       const { minInitialMarginRatio, minPoolMarginRatio } = parameterInfo;
       let promises = [];
@@ -151,15 +161,17 @@ export const closePosition = async (
   const args = [chainId, poolAddress, accountAddress, symbolId];
   return catchTxApiError(
     async (chainId, poolAddress, accountAddress, symbolId) => {
-      const { pToken: pTokenAddress } = getPoolConfig(
-        poolAddress,
-        '0',
-        '0',
-        'v2_lite'
-      );
+      // const { pToken: pTokenAddress } = getPoolConfig(
+      //   poolAddress,
+      //   '0',
+      //   '0',
+      //   'v2_lite'
+      // );
 
       const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress);
-      const pToken = pTokenLiteFactory(chainId, pTokenAddress);
+      await perpetualPool.init()
+      //const pToken = pTokenLiteFactory(chainId, pTokenAddress);
+      const pToken = perpetualPool.pToken
       const { volume } = await pToken.getPosition(accountAddress, symbolId);
       if (!volume.eq(0)) {
         const newVolume = volume.negated();

@@ -465,7 +465,7 @@
                 top: 30px;
                 font-size: 16px;
                 color: @text;
-                display: none;
+                // display: none;
               }
               .contrant-input {
                  box-sizing: border-box;
@@ -492,7 +492,7 @@
                 // font-family: 'LED Calculator';
               }
 
-              .contrant-input:focus+.title-volume,.contrant-input:focus+.option-unit {
+              .contrant-input:focus+.title-volume {
                 display: block;
               }
 
@@ -503,13 +503,16 @@
                 font-family: 'LED Calculator';
               }
 
-              .inputFamliy+.title-volume,.inputFamliy+.option-unit {
+              .inputFamliy+.title-volume {
                 display: block;
               }
             }
             .option-input{
               .contrant-input{
+                text-align: right;
+                font-size: 30px !important;
                 padding-right: 30px  !important;
+                font-family: 'LED Calculator';
               }
 
             }

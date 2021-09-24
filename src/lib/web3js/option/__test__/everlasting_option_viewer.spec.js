@@ -175,8 +175,8 @@ describe('EverlastingOptionViewer', () => {
     console.log('symbolVolatilities', symbolVolatilities)
 
     const res = await viewer.getTraderStates('0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4', '0x5b984a638506797d1e6e50B4e310d8ab377D3F49', [], symbolVolatilities)
-    console.log(getLiquidationPrice(res, '4'))
-    //console.log(JSON.stringify(res, null, 2))
+    //console.log(getLiquidationPrice(res, '4'))
+    console.log(JSON.stringify(res, null, 2))
     DeriEnv.set('dev')
     // const viewer = everlastingOptionViewerFactory('97', '0x2cADdC11aDD70E520D950A51606243970A54d80a')
     // const res = await viewer.getTraderStates('0x0D0c982af263a02DF481A642798ab815832904B7', '0xFefC938c543751babc46cc1D662B982bd1636721', [], [])

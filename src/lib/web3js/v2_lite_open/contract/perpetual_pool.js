@@ -14,8 +14,21 @@ export class PerpetualPoolLite extends ContractBase {
     super(chainId, contractAddress, perpetualPoolLiteAbi);
   }
 
+  async init() {
+    await this._init();
+    if (!this.pTokenAddress|| !this.pToken ) {
+      await  this.updateAddresses()
+      // console.log(this.addresses, this.parameters)
+      //this.bToken = bTokenFactory(this.chainId, bTokenAddress);
+      //this.lToken = lTokenLiteFactory(this.chainId, lTokenAddress);
+      this.pToken = new PTokenLite(this.chainId, this.pTokenAddress);
+
+    }
+  }
+
+
   async updateAddresses() {
-    if (!this.bTokenAddress) {
+    if (!this.bTokenAddress || !this.pTokenAddress) {
      const res = await this._call('getAddresses');
     // update this state
      this.bTokenAddress = res.bTokenAddress;
@@ -23,6 +36,7 @@ export class PerpetualPoolLite extends ContractBase {
      this.pTokenAddress= res.pTokenAddress;
     }
   }
+
   async controller() {
     const res = await this._call('controller');
     return res
