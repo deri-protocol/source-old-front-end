@@ -15,7 +15,8 @@ export default function AreaSeries({title,url,seriesType}){
     const rect = document.querySelector('.info-chart').getBoundingClientRect()
     const chart = createChart(chartRef.current, { 
       localization : {
-        priceFormatter: price => '$ ' + convertToInternationalCurrencySystem(price)
+        priceFormatter: price => '$ ' + convertToInternationalCurrencySystem(price),
+        locale: 'en-US'
       },
       timeScale: {
         rightOffset : 0,
@@ -30,10 +31,11 @@ export default function AreaSeries({title,url,seriesType}){
         position: 'none',
         borderColor: '#fff',
         borderVisible : false,
-        scaleMargins: {
-          top: 0.3,
-          bottom: 0
-        },
+        mode: 0,
+        // scaleMargins: {
+        //   top: 0.3,
+        //   bottom: 0
+        // },
       },
 
       handleScroll: false,
@@ -42,7 +44,7 @@ export default function AreaSeries({title,url,seriesType}){
         mode: CrosshairMode.Normal,  
         vertLine: {
           labelVisible : false,  
-          // visible : false
+          visible : false
         },
         horzLine: {
           labelVisible : false,  
@@ -86,15 +88,28 @@ export default function AreaSeries({title,url,seriesType}){
     const areaSeries = chart.addAreaSeries({
       priceLineVisible : false,
       lastValueVisible: false,
-      topColor: 'RGBA(62,191,56,.5)',
-      bottomColor: 'RGBA(62,191,56,0)',
-      lineColor: 'RGB(62,191,56)'
+      topColor: 'RGBA(0,101,159,.5)',
+      bottomColor: 'RGBA(0,101,159,0)',
+      lineColor: 'RGB(0,101,159)',
+      priceFormat: {        
+        precision: 1,
+        minMove : '1000',
+      }
     })
   
     
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
-      const data = res.data.data.map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : d.value}))
+      let data = res.data.data.sort((item1,item2) => {
+        if(item1.timestamp > item2.timestamp) {
+          return 1
+        } else if(item1.timestamp < item2.timestamp){
+          return -1
+        } else {
+          return 0
+        }
+      })
+      data = data.map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : d.value}))
       areaSeries.setData(data)
       const last = data[data.length -1]
       setCurValue(last.value)
@@ -107,7 +122,7 @@ export default function AreaSeries({title,url,seriesType}){
 
   const addHistogramSeries = async (chart) => {
     const histogramSeries = chart.addHistogramSeries({
-      color: '#3EBF38',
+      color: '#00659F',
       priceLineVisible : false,
       lastValueVisible: false,
       priceFormat: {
@@ -152,8 +167,10 @@ export default function AreaSeries({title,url,seriesType}){
     chart.subscribeCrosshairMove(crosshairMove);
     return () => {
       if(chart){
-        chart.removeSeries(series.current);
         chart.unsubscribeCrosshairMove(crosshairMove)
+        if(series.current){
+          chart.removeSeries(series.current);
+        }
         chart.remove();
       }
     }
@@ -163,7 +180,7 @@ export default function AreaSeries({title,url,seriesType}){
     <div className='info-chart'>
       <div className='chart-title'>
         <div className='title-label'>{title}</div>
-        <div className='title-value'>${convertToInternationalCurrencySystem(curValue)} </div>
+        <div className='title-value'>{curValue ? `$${convertToInternationalCurrencySystem(curValue)}` : ''} </div>
         <div className='title-date'>{curDate} </div>
         </div>
       <div className='series' ref={chartRef}></div>

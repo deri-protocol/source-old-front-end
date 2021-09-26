@@ -8,6 +8,8 @@ export default function IndexRoute(){
     return  <Redirect to='/governance'/> 
   } else if(/^https?:\/\/bridge/.test(url)) {
     return  <Redirect to='/bridge'/> 
-  } 
+  } else if(/^https?:\/\/info/.test(url)) {
+    return <Redirect to='/info'/>
+  }
   return <Redirect to='/index'/>
 }
