@@ -21,7 +21,7 @@ function Header ({intl}){
       <Menu lang={lang} locale={intl.locale}/>                            
       <div className='nav-right'>
         {showWallet && <Account lang={lang}/>}
-        <div className='use-deri'><Link to='/lite' target='_blank'>{lang['use-deri']}</Link></div>
+        {/* <div className='use-deri'><Link to='/lite' target='_blank'>{lang['use-deri']}</Link></div> */}
         <LanguageSelector/>
       </div>
       </div>

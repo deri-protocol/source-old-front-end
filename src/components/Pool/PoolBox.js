@@ -127,7 +127,14 @@ function Card({ wallet, pool, card, index, list, lang }) {
         </button>
       )
     }
-    loadCardInfo(card)
+    if(pool && pool.airdrop){
+      setDetail( {
+        liquidity : card.liquidity,
+        airdrop : pool.airdrop
+      })
+    } else {
+      loadCardInfo(card)
+    }
   }, [wallet.detail.account, connected,card]);
   return (
     <>
@@ -160,7 +167,7 @@ function Card({ wallet, pool, card, index, list, lang }) {
               </>}
             </div>
             <div className={`apy ${detail.lpApy && 'lp-apy'}`}>
-              {!card.isOpen && <>
+              {!card.isOpen && !card.airdrop && <>
                 <span>{lang['apy']}</span>
                 <TipWrapper block={false} title={detail.lpApy}>
                   <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={detail.lpApy ? lang['deri-apy'] : ''}>
