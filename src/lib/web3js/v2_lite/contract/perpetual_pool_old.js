@@ -5,15 +5,14 @@ import {
   naturalToDeri,
   //isEqualSet,
   bTokenFactory,
-  fromWei,
 } from '../../shared';
 import { checkOffChainOracleSymbol, getPriceInfos } from '../../shared/utils/oracle';
-import { perpetualPoolLiteAbi } from './abis';
+import { perpetualPoolLiteOldAbi} from './abis';
 import { lTokenLiteFactory, pTokenLiteFactory } from '../factory';
 
-export class PerpetualPoolLite extends ContractBase {
+export class PerpetualPoolLiteOld extends ContractBase {
   constructor(chainId, contractAddress) {
-    super(chainId, contractAddress, perpetualPoolLiteAbi);
+    super(chainId, contractAddress, perpetualPoolLiteOldAbi);
   }
 
   async init() {
@@ -117,18 +116,17 @@ export class PerpetualPoolLite extends ContractBase {
       protocolFeeCollectRatio: deriToNatural(res.protocolFeeCollectRatio),
     };
   }
-
   async getLastUpdateBlock() {
-    const res = await this._call('getPoolStateValues', []);
-    return res[1]
-  }
-  async getLiquidity() {
-    const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[0])
+    const res = await this._call('getLastUpdateBlock');
+    return parseInt(res);
   }
   async getProtocolFeeAccrued() {
-    const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[2])
+    const res = await this._call('getProtocolFeeAccrued');
+    return deriToNatural(res);
+  }
+  async getLiquidity() {
+    const res = await this._call('getLiquidity');
+    return deriToNatural(res);
   }
   // async getBTokenOracle(bTokenId) {
   //   //bTokenId = parseInt(bTokenId)

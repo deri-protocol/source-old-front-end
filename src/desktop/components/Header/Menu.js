@@ -116,9 +116,9 @@ function Menu({ lang, locale }) {
               {env === 'testnet' && <li>
                 {isProduction
                   ?
-                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#faucet`}  className='retired-item'>{lang['faucet']}</a>
+                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#faucet`}  className='faucet-item'>{lang['faucet']}</a>
                   :
-                  <Link className='retired-item' to='/faucet'>{lang['faucet']}</Link>}
+                  <Link className='faucet-item' to='/faucet'>{lang['faucet']}</Link>}
               </li>}
               
 

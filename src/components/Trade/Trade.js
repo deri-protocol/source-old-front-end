@@ -70,7 +70,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setDirection('long')
     } else {
       setDirection('short')
-    }
+    } 
   }
 
 
