@@ -54,12 +54,16 @@ function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination,
         <div className='theader'>
           {headers.map(header => <div className='col'>{header}</div>)}
         </div>
-        {data.map(d => (
+        {data.length > 0 ? data.map(d => (
           <div className='row' onClick={() => onRowClick && onRowClick(d)} style={{cursor : onRowClick ? 'pointer' : 'normal'}}>
             {columns.map(col => <div className='col'>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
-            <div></div>
-          </div>))}
-        {pagination && <div className='pagination row'>
+          </div>))
+          :
+          <div className='row'><div className='col no-data'>No Data</div></div>
+          }
+         
+
+        {pagination && data.length > 0 && <div className='pagination row'>
           <span className='arrow' onClick={prePage}> &lt; </span><span>Page {page} of {count}</span><span className='arrow' onClick={nextPage}> &gt; </span>
         </div>}
       </div>
