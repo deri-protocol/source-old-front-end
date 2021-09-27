@@ -46,14 +46,14 @@ export default function Footer({lang}){
                 <div className="fa fa-paper-plane"></div>
               </div>
             </a>
-            <a  rel='noreferrer' className="iocn_a" >
+            {/* <a  rel='noreferrer' className="iocn_a" >
             <div className="circle">
               <div className='wechat'>
                 <div className='down_box'></div>
               </div>
               <div className="fa fa-wechat"></div>
             </div>
-          </a>
+          </a> */}
         </div>
 
         <div className="banquan">© 2021 {lang['deri-protocol']}</div>
