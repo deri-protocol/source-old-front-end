@@ -31,22 +31,22 @@ export default function Content({lang}) {
     <div>
       <div className='index_part1'>
         <MatrixRain lang={lang}/>
-        <div className='index_part1-1 px1200'>
-          <div className='index_part1-1_title'>
+        <div className='index_part1-1'>
+          <div className="slogon">
+            <div className='index_part1-3'>{lang['deri-protocol']}</div>
+            <div className='describe'>= ( <span> <a href='https://app.deri.finance/#/futures/pro'>  {lang['perpetual-futures']} </a></span>  +  <span className='moblie '> <a href='https://app.deri.finance/#/options/pro'>{lang['everlasting-options']}</a> </span> ) <span className='moblie no-d'>{lang['deri-describe']}</span> </div>
+          </div>
+          {/* <div className='index_part1-1_title'>
+          
             <div className='index_part1-2'>{lang['the']}</div>
             <div className='index_part1-3'>{lang['defi-way']}</div>
             <div className='index_part1-4'>{lang['to-trade-derivatives']}</div>
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className='index_part2 px1200'>
+      {/* <div className='index_part2 px1200'>
         <div className='index_part2-center'>
-          <div className="index_part2-L">
-            <div className='index_part2_L-text'>
-              <span className="key">{lang['deri-protocol']} </span><br />
-              = {lang['deri-describe']}
-            </div>
-          </div>
+          
           <div className='index_part2-R'>
             <div> <span>{lang['we-are-on']} </span>   
               <a target="_blank"  rel='noreferrer' href="https://app.sushi.com/swap?inputCurrency=outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9" className="Body-link">{lang['sushi']}</a>
@@ -60,7 +60,7 @@ export default function Content({lang}) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className='index_part3 px1200 big_square'>
         <div className='top_pater'>
           <div className='bottom_square'></div>

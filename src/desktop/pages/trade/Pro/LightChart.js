@@ -42,7 +42,12 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
         borderDownColor: "#ff4976",
         borderUpColor: "#4bffb5",
         wickDownColor: "#ff4976",
-        wickUpColor: "#4bffb5"
+        wickUpColor: "#4bffb5",
+        priceFormat: {        
+            // precision: 4,
+            minMove : '0.0001',
+            // formatter: price => '$' + price.toFixed(4),
+        }
       });
       const data = await loadData(symbol)
       if(data && Array.isArray(data) && data.length > 0 ){
@@ -52,10 +57,10 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       } 
       displayCandleData({data : data[data.length-1]})
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
+        // if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
           candlesChart.update(data)
-          candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
-        }
+          // candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
+        // }
       })
     }
       
@@ -82,10 +87,10 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       seriesChart.setData(seriesData)
       lineSeriesHistoryRef.current = seriesData
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        if(!lineSeriesHistoryRef.current.some(his => his.time === data.time )){
+        // if(!lineSeriesHistoryRef.current.some(his => his.time === data.time )){
           const lineSeriesData = {time : data.time,value : data.close}
           seriesChart.update(lineSeriesData)
-        }
+        // }
       })
     }
   }

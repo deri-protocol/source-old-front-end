@@ -19,10 +19,11 @@ function Account({wallet,lang}){
   const isAddpool = useRouteMatch('/addpool')
   const isOptionsPro = useRouteMatch('/options/pro') 
   const isDownload = useRouteMatch('/logo')
+  const isInfo = useRouteMatch('/info')
   const config = useConfig();
 
   const isOptions = isOptionsLite || isOptionsPro
-  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired || isDownload
+  const notConnectWalletPage  = isIndex || isMining || isTeam || isRoot || isRetired || isDownload || isInfo
   
 
 
