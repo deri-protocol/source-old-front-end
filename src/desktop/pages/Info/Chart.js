@@ -32,10 +32,10 @@ export default function AreaSeries({title,url,seriesType}){
         borderColor: '#fff',
         borderVisible : false,
         mode: 0,
-        // scaleMargins: {
-        //   top: 0.3,
-        //   bottom: 0
-        // },
+        scaleMargins: {
+          top: 0.3,
+          bottom: 0.01
+        },
       },
 
       handleScroll: false,
