@@ -5,7 +5,6 @@ import {
   naturalToDeri,
   //isEqualSet,
   bTokenFactory,
-  fromWei,
 } from '../../shared';
 import { checkOffChainOracleSymbol, getPriceInfos } from '../../shared/utils/oracle';
 import { perpetualPoolLiteAbi } from './abis';
@@ -124,11 +123,11 @@ export class PerpetualPoolLite extends ContractBase {
   }
   async getLiquidity() {
     const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[0])
+    return deriToNatural(res[0])
   }
   async getProtocolFeeAccrued() {
     const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[2])
+    return deriToNatural(res[2])
   }
   // async getBTokenOracle(bTokenId) {
   //   //bTokenId = parseInt(bTokenId)
