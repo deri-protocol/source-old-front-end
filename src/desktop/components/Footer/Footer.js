@@ -78,14 +78,14 @@ function Footer({intl}){
               <div className="fa fa-paper-plane"></div>
             </div>
           </a>
-          <a target="_blank" rel='noreferrer' className="iocn-a" >
+          {/* <a target="_blank" rel='noreferrer' className="iocn-a" >
             <div className="circle">
               <div className='wechat'>
                 <div className='down-box'></div>
               </div>
               <div className="fa fa-wechat"></div>
             </div>
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
