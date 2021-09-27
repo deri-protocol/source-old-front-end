@@ -45,7 +45,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
         wickUpColor: "#4bffb5",
         priceFormat: {        
             // precision: 4,
-            minMove : '0.0001',
+            // minMove : '0.0001',
             // formatter: price => '$' + price.toFixed(4),
         }
       });
@@ -197,7 +197,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
         timer = setTimeout(async () => {
           const logicalRange = chart.timeScale().getVisibleLogicalRange();
           const barsInfo = candlesChartRef.current && candlesChartRef.current.barsInLogicalRange(logicalRange);
-          if (barsInfo !== null && barsInfo.barsBefore < 0) {
+          if (barsInfo !== null && barsInfo.barsBefore < -10) {
             setScrolling(true)
             const to = Math.floor((candlesSeriesHistoryRef.current[0].time - 1 * secondsInRange[interval]) / 1000,0)
             const from = to - (Math.abs(Math.floor(barsInfo.barsBefore,0)) -1) * secondsInRange[interval]
