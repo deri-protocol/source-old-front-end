@@ -33,7 +33,7 @@ export default function Detail(){
   const getTradeDataUrl = `${GET_LIQUIDITY_URL}/get_trade?pool=${add}`
 
   return(
-    <div className='info' style={{'min-width': `calc(100vw - ${window.screen.width * 0.3}px)`}}>
+    <div className='info' style={{'width': `calc(100vw - ${window.screen.width * 0.25}px)`}}>
     <div className='title'><Link to='/info'>Deri Overview</Link> &gt; {`${network} - ${catalog.toUpperCase()} - ${formatAddress(add)} (${bToken})`}</div>
       <div className='chart-box'>
         <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history?pool=${add}`} seriesType='area'/> </div>

@@ -15,7 +15,7 @@ function Mask({loading}){
     return () => {
     }
   }, [loading.isShowMask])
-  return <LoadingMask modalIsOpen={isOpen} overlay={{background : 'none'}}/>
+  return <LoadingMask modalIsOpen={isOpen} overlay={{background : 'none',top : '80px'}}/>
 }
 
 const MaskWrapper = inject('loading')(observer(Mask))
