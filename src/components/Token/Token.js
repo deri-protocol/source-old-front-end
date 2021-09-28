@@ -79,13 +79,13 @@ function Token({ wallet = {}, lang,loading }) {
     useEffect(() => {
         if (hasConnectWallet()) {
             let address;
-            if (wallet.detail.chainId == 56) {
+            if (wallet.detail.chainId === 56) {
                 address = '0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5'
-            } else if (wallet.detail.chainId == 1) {
+            } else if (wallet.detail.chainId === 1) {
                 address = '0xa487bf43cf3b10dffc97a9a744cbb7036965d3b9'
-            } else if (wallet.detail.chainId == 128) {
+            } else if (wallet.detail.chainId === 128) {
                 address = '0x2bdA3e331Cf735D9420e41567ab843441980C4B8'
-            } else if (wallet.detail.chainId == 137) {
+            } else if (wallet.detail.chainId === 137) {
                 address = '0x3d1d2afd191b165d140e3e8329e634665ffb0e5e'
             }
             setDeriTokenAddress(address)

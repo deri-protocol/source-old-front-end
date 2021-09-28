@@ -5,6 +5,7 @@ echo PUBLIC_URL=/ > .env.production
 echo REACT_APP_WSS_URL=wss://oracle4.deri.finance >> .env.production
 echo REACT_APP_HTTP_URL=https://oracle4.deri.finance >> .env.production
 echo REACT_APP_REST_SERVER_URL=https://api.deri.finance >> .env.production
+echo REACT_APP_INFO_HTTP_URL=https://infoapi.deri.finance >> .env.production
 yarn build --nomaps 
 repo=/tmp/build/app
 # rm -rf $repo

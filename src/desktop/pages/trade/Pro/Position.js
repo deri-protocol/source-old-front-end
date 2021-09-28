@@ -18,8 +18,6 @@ import pnlIcon from '../../../../assets/img/pnl-detail.png'
 import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
 
 
-
-
 const DepositDialog = withModal(DepositMargin);
 const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)

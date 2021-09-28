@@ -9,7 +9,6 @@ import {bg} from '../../../lib/web3js/indexV2'
 export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPriceAfter,trading}) {
   const [pending, setPending] = useState(false);
 
-
   const trade = async () => {
     setPending(true)
     volume = type.isOption ? bg(volume).div(bg(trading.contract.multiplier)).toString() : volume
@@ -30,11 +29,6 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
       onClose()
     }
   }
-
-
-
-
-
 
   const afterTradePosition = direction === 'long' ? ((+volume) + (+position)) : (+position) - (+volume)
 
