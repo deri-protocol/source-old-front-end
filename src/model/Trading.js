@@ -243,13 +243,11 @@ export default class Trading {
 
   async refresh(){
     this.pause()
-    const position = await this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+    this.positionInfo.load(this.wallet,this.config, async (position)  => {       
       this.setPosition(position);
       this.syncFundingRate();
     });
-    if(position){
-      this.setPosition(position)
-    }
+    type.isOption && this.positionInfo.loadAll(this.wallet,this.config,positions => this.setPositions(positions))
     this.syncFundingRate();
     this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
     const history = await this.historyInfo.load(this.wallet,this.config)

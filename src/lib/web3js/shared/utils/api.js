@@ -36,7 +36,7 @@ export const catchTxApiError = async (func, args) => {
     const result = await func(...args);
     res = { success: true, transaction: result };
   } catch (err) {
-    res = { success: false, error: err.toString() };
+    res = { success: false, error: err.message};
   }
   return res;
 };
