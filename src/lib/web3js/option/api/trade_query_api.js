@@ -43,7 +43,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
         optionPool.getParameters(),
       ]);
 
-      const symbols = optionPool.updateSymbols();
+      const symbols = await optionPool.updateSymbols();
       const [symbolPrices, symbolVolatilities] = await Promise.all([
         getOraclePricesForOption(
           chainId,
@@ -134,7 +134,7 @@ export const getPositionInfo = async (
       await optionPool._updateConfig();
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-      const symbols = optionPool.updateSymbols();
+      const symbols = await optionPool.updateSymbols();
       let symbolPrices = [],
         symbolVolatilities = [],
         volPrice;
@@ -226,7 +226,7 @@ export const getPositionInfos = async (
       await optionPool._updateConfig();
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-      const symbols = optionPool.updateSymbols();
+      const symbols = await optionPool.updateSymbols();
       const [symbolPrices, symbolVolatilities, volPrices] = await Promise.all([
         getOraclePricesForOption(
           chainId,
@@ -346,7 +346,7 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
   await optionPool._updateConfig();
   //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress);
   //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-  const symbols = optionPool.updateSymbols();
+  const symbols = await optionPool.updateSymbols();
   const [symbolPrices, symbolVolatilities] = await Promise.all([
     getOraclePricesForOption(
       chainId,

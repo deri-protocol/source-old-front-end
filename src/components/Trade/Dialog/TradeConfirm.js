@@ -31,12 +31,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
     }
   }
 
-
-
-
-
-
-  const afterTradePosition = direction === 'long' ? ((+volume) + (+position)) : (+position) - (+volume)
+  const afterTradePosition = direction === 'long' ? bg(volume).plus(bg(position)).toString() : bg(position).minus(bg(volume)).toString() 
 
   return (
     <div className='modal-dialog'>
