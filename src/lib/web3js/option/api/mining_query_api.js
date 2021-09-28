@@ -18,6 +18,7 @@ const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
     'option'
   );
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
+  await optionPool._updateConfig()
   const lToken = lTokenOptionFactory(chainId, lTokenAddress);
   const [
     lTokenBalance,
@@ -25,10 +26,9 @@ const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
   ] = await Promise.all([
     lToken.balanceOf(accountAddress),
     lToken.totalSupply(),
-    optionPool._updateConfig(),
   ]);
 
-  const symbols = optionPool.activeSymbols
+  const symbols = await optionPool.updateSymbols()
   const symbolVolatilities = await volatilitiesCache.get(poolAddress, symbols.map((s) => s.symbol))
   const state = await optionPool.viewer.getPoolStates(poolAddress, [], symbolVolatilities)
   const { poolState } = state;

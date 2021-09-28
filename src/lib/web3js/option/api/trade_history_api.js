@@ -97,11 +97,7 @@ const getTradeHistoryOnline = async (
   ]);
   fromBlock = parseInt(fromBlock);
 
-  let promises= []
-  for (let i = 0; i < optionPool.activeSymbolIds.length; i++) {
-    promises.push(optionPool.getSymbol(optionPool.activeSymbolIds[i]));
-  }
-  let symbols = await Promise.all(promises)
+  let symbols = await optionPool.updateSymbols()
   const multiplier = symbols.map((i) => i.multiplier.toString());
 
   const filters =  { account: accountAddress }
@@ -156,7 +152,7 @@ export const getTradeHistory = async (
         tradeHistory = res.data.tradeHistory;
       }
     }
-    const symbols = optionPool.activeSymbols
+    const symbols = await optionPool.updateSymbols()
     if (tradeHistory.length > 0) {
       tradeHistory = tradeHistory
         //.filter((i) => i)

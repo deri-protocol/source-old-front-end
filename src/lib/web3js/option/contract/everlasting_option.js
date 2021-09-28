@@ -56,10 +56,7 @@ export class EverlastingOption extends ContractBase {
     ) {
       // symbol is updated
       const activeSymbols = await Promise.all(
-      activeSymbolIds.reduce(
-          (acc, i) => acc.concat([this.getSymbol(i)]),
-          []
-        )
+        activeSymbolIds.reduce((acc, i) => acc.concat([this.getSymbol(i)]), [])
       );
       const symbolVolatilities = await volatilitiesCache.get(
         this.contractAddress,
@@ -104,11 +101,11 @@ export class EverlastingOption extends ContractBase {
   }
   async getLastTimestamp() {
     const res = await this._call('getPoolStateValues', []);
-    return res[1]
+    return res[1];
   }
   async getLiquidity() {
     const res = await this._call('getPoolStateValues', []);
-    return fromWei(res[0])
+    return fromWei(res[0]);
   }
   async getParameters() {
     const res = await this._call('getParameters', []);
@@ -154,13 +151,30 @@ export class EverlastingOption extends ContractBase {
     //   cumulativeFundingRate: fromWei(res[11]),
     // };
   }
+  async updateSymbols() {
+    if (!this.pToken) {
+      this.pToken = pTokenOptionFactory(this.chainId, this.pTokenAddress);
+    }
+    if (!this.activeSymbolIds) {
+      this.activeSymbolIds = await this.pToken.getActiveSymbolIds();
+    }
+    this.activeSymbols = await Promise.all(
+      this.activeSymbolIds.reduce(
+        (acc, i) => acc.concat([this.getSymbol(i)]),
+        []
+      )
+    );
+    return this.activeSymbols
+  }
 
   // tx
   async _getVolSymbolPrices() {
     await this._updateConfig();
     let volatilities = [];
     if (this.volatilitySymbols.length > 0) {
-      const volatilityInfos = await getOracleVolatilityForOption(this.activeSymbols.map((s) => s.symbol))
+      const volatilityInfos = await getOracleVolatilityForOption(
+        this.activeSymbols.map((s) => s.symbol)
+      );
       volatilities = Object.values(volatilityInfos).reduce((acc, p, index) => {
         acc.push([
           this.activeSymbolIds[index],
