@@ -10,7 +10,7 @@ import { DeriEnv } from './lib/web3js/indexV2';
 import version from './model/Version';
 import intl from './model/Intl';
 import loading from './model/Loading';
-import type from './model/Type';
+import   type from './model/Type';
 
 const wallet = new Wallet();
 const trading = new Trading()
