@@ -18,6 +18,7 @@ const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
+const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/DipHistoryTwo'))
 const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 
 @withRouter
@@ -40,6 +41,7 @@ class Body extends React.Component {
           <Route exact path='/nuls' component={() => <Nuls lang={dict['nuls']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
