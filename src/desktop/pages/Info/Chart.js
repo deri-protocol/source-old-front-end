@@ -72,7 +72,7 @@ export default function AreaSeries({title,url,seriesType}){
       if (!param.point) {
         setCurDate('')
         if(lastDataRef.current){
-          setCurValue(lastDataRef.current.value)
+          setCurValue(lastDataRef.current)
         }
         return;
       }
@@ -81,7 +81,7 @@ export default function AreaSeries({title,url,seriesType}){
           setCurValue(item)
         }
       })
-      param.time && setCurDate(`${param.time.year}-${param.time.month}-${param.time.day} (UTC+8)`)
+      param.time && setCurDate(`${param.time.year}-${param.time.month}-${param.time.day} (UTC)`)
   }
 
   const addAreaSeries = async(chart) => {
@@ -111,8 +111,8 @@ export default function AreaSeries({title,url,seriesType}){
       })
       data = data.map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : d.value}))
       areaSeries.setData(data)
-      const last = data[data.length -1]
-      setCurValue(last.value)
+      const last = data[data.length -1].value
+      setCurValue(last)
       lastDataRef.current = last
     }
     series.current = areaSeries
@@ -147,8 +147,8 @@ export default function AreaSeries({title,url,seriesType}){
       }).map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : Number(d.value)}))
       
       histogramSeries.setData(data)
-      const last = data[data.length -1]
-      setCurValue(last.value)
+      const last = res.data.last_24h ? res.data.last_24h : data[data.length -1].value
+      setCurValue(last)
       lastDataRef.current = last
     }
     series.current = histogramSeries

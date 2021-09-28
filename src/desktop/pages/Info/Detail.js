@@ -8,17 +8,17 @@ import moment from 'moment'
 import Chart from './Chart'
 import { Link } from 'react-router-dom'
 
-const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','LIQUIDITY','AMOUNT','TIMESTAMP (UTC+8)']
+const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','LIQUIDITY','AMOUNT','TIMESTAMP (UTC)']
 const LIQUIDITY_COLUMNS = ['action','account','notional','amount','timestamp']
 const GET_LIQUIDITY_URL = `${process.env.REACT_APP_INFO_HTTP_URL}`
 
-const TRADE_HEADER = ['DIRECTION','ACCOUNT','SYMBOL','PRICE','VOLUME','NOTIONAL','TIMESTAMP (UTC+8)']
+const TRADE_HEADER = ['DIRECTION','ACCOUNT','SYMBOL','PRICE','VOLUME','NOTIONAL','TIMESTAMP (UTC)']
 const TRADE_COLUMNS = ['direction','account','symbol','price','volume','notional','timestamp']
 
 
 const columnFormat = {
   account : data => formatAddress(data.account),
-  timestamp : data =>  moment(new Date(data.timestamp * 1000)).format('YYYY-MM-DD HH:mm:ss'),
+  timestamp : data =>  moment(new Date(data.timestamp * 1000)).utc().format('YYYY-MM-DD HH:mm:ss'),
   notional : data => <DeriNumberFormat value={data.notional} prefix='$' thousandSeparator={true} decimalScale={5}/>,  
   amount : data =>  <DeriNumberFormat value={data.amount} suffix={` ${data.bToken}`} thousandSeparator={true} decimalScale={5}/> ,
   price : data =>  <DeriNumberFormat value={data.price} thousandSeparator={true}  decimalScale={5}/>,

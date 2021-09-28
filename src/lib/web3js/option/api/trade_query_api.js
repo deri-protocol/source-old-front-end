@@ -43,20 +43,14 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
         optionPool.getParameters(),
       ]);
 
-      const symbols = await optionPool.updateSymbols();
-      const [symbolPrices, symbolVolatilities] = await Promise.all([
-        getOraclePricesForOption(
-          chainId,
-          symbols.map((s) => s.symbol)
-        ),
-        volatilitiesCache.get(
-          poolAddress,
-          symbols.map((s) => s.symbol)
-        ),
-      ]);
+      const symbols = optionPool.activeSymbols
+      const symbolVolatilities = await volatilitiesCache.get(
+        poolAddress,
+        symbols.map((s) => s.symbol)
+      );
       const state = await optionPool.viewer.getPoolStates(
         poolAddress,
-        symbolPrices,
+        [],
         symbolVolatilities
       );
       const { symbolState } = state;
@@ -134,16 +128,11 @@ export const getPositionInfo = async (
       await optionPool._updateConfig();
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-      const symbols = await optionPool.updateSymbols();
-      let symbolPrices = [],
-        symbolVolatilities = [],
+      const symbols = optionPool.activeSymbols
+      let symbolVolatilities = [],
         volPrice;
       if (symbols && symbols.length > 0) {
-        [symbolPrices, symbolVolatilities, volPrice] = await Promise.all([
-          getOraclePricesForOption(
-            chainId,
-            symbols.map((s) => s.symbol)
-          ),
+        [symbolVolatilities, volPrice] = await Promise.all([
           volatilitiesCache.get(
             poolAddress,
             symbols.map((s) => s.symbol)
@@ -154,7 +143,7 @@ export const getPositionInfo = async (
       const state = await optionPool.viewer.getTraderStates(
         poolAddress,
         accountAddress,
-        symbolPrices,
+        [],
         symbolVolatilities
       );
       const { poolState, symbolState, traderState, positionState } = state;
@@ -226,12 +215,12 @@ export const getPositionInfos = async (
       await optionPool._updateConfig();
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-      const symbols = await optionPool.updateSymbols();
-      const [symbolPrices, symbolVolatilities, volPrices] = await Promise.all([
-        getOraclePricesForOption(
-          chainId,
-          symbols.map((s) => s.symbol)
-        ),
+      const symbols = optionPool.activeSymbols
+      const [symbolVolatilities, volPrices] = await Promise.all([
+        // getOraclePricesForOption(
+        //   chainId,
+        //   symbols.map((s) => s.symbol)
+        // ),
         volatilitiesCache.get(
           poolAddress,
           symbols.map((s) => s.symbol)
@@ -241,7 +230,7 @@ export const getPositionInfos = async (
       const state = await optionPool.viewer.getTraderStates(
         poolAddress,
         accountAddress,
-        symbolPrices,
+        [],
         symbolVolatilities
       );
       const { poolState, traderState, positionState, symbolState } = state;
@@ -346,20 +335,11 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
   await optionPool._updateConfig();
   //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress);
   //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
-  const symbols = await optionPool.updateSymbols();
-  const [symbolPrices, symbolVolatilities] = await Promise.all([
-    getOraclePricesForOption(
-      chainId,
-      symbols.map((s) => s.symbol)
-    ),
-    volatilitiesCache.get(
-      poolAddress,
-      symbols.map((s) => s.symbol)
-    ),
-  ]);
+  const symbols = optionPool.activeSymbols;
+  const symbolVolatilities = await volatilitiesCache.get( poolAddress, symbols.map((s) => s.symbol))
   const state = await optionPool.viewer.getPoolStates(
     poolAddress,
-    symbolPrices,
+    [],
     symbolVolatilities
   );
   const { poolState, symbolState } = state;

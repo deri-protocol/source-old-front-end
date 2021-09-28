@@ -105,6 +105,8 @@ export default class Position {
    }
 
    clean(){
+     this.started = false;
+     this.startedAll = false;
      this.paused = false;
      this.timer = null;
    }

@@ -28,7 +28,7 @@ const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
     lToken.totalSupply(),
   ]);
 
-  const symbols = await optionPool.updateSymbols()
+  const symbols = optionPool.activeSymbols
   const symbolVolatilities = await volatilitiesCache.get(poolAddress, symbols.map((s) => s.symbol))
   const state = await optionPool.viewer.getPoolStates(poolAddress, [], symbolVolatilities)
   const { poolState } = state;

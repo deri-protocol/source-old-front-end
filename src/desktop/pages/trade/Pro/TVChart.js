@@ -79,11 +79,13 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
   }
 
   const initialize = () => {
+    const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
     const widgetOptions = {
 			symbol: symbol,
       datafeed: datafeedRef.current,
       interval: interval,
       locale: intl.locale,
+      timezone : timezone,
       ...chartConfig
     }
     widgetRef.current  = new widget(widgetOptions);

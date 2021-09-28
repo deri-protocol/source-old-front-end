@@ -243,7 +243,7 @@ export default class Trading {
 
   async refresh(){
     this.pause()
-    this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+    this.positionInfo.load(this.wallet,this.config, position  => {       
       this.setPosition(position);
       this.syncFundingRate();
     });
@@ -254,6 +254,8 @@ export default class Trading {
     if(history){
       this.setHistory(history)
     }
+    this.positionInfo.start();
+    this.positionInfo.startAll();
     this.setVolume('')
     this.resume();
   }
