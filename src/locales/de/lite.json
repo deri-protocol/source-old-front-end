@@ -36,6 +36,7 @@
   "contract-info": "KONTRAKT INFO",
   "base-token": "Basis Token",
   "symbol": "Symbol",
+  "symbol-option" : "Symbol",
   "multiplier": "Multiplikator",
   "funding-rate-coefficient": "Finanzierungsrate Koeffizient",
   "delta-funding-coefficient": "Delta Finanzierungskoeffizient",

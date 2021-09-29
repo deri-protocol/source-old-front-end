@@ -655,6 +655,16 @@
               "symbolId": "5",
               "symbol": "BTCUSD-50000-P",
               "unit": "BTC"
+            },
+            {
+              "symbolId": "6",
+              "symbol": "ETHUSD-3000-C",
+              "unit": "ETH"
+            },
+            {
+              "symbolId": "7",
+              "symbol": "ETHUSD-2000-P",
+              "unit": "ETH"
             }
           ],
           "initialBlock": "10736176",
