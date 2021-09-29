@@ -28,13 +28,10 @@ function History({ wallet, trading, lang, type }) {
     }
   }
 
-
   useEffect(() => {
     loadHistory()
     return () => { };
   }, [wallet.detail.account, trading.config, trading.history]);
-
-
 
   return (
     <div className='history-box'>
@@ -78,7 +75,7 @@ function History({ wallet, trading, lang, type }) {
           </div>
         )
       })}
-      {history.length == 0 ? <div className='no-data'>{lang['no-data']}</div> : ''}
+      {history.length === 0 ? <div className='no-data'>{lang['no-data']}</div> : ''}
     </div>
   )
 }
