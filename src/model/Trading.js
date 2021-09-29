@@ -221,9 +221,7 @@ export default class Trading {
     }
     return defaultConfig;    
   }
-
  
-
   //存起来
   store(config){
     storeConfig(version.current,config)
@@ -369,7 +367,6 @@ export default class Trading {
       }else{
         this.setVolume(volume.toFixed(0))
       }
-      
     }
   }
 
@@ -390,7 +387,6 @@ export default class Trading {
     this.optionsConfigs = {}
   }
 
-
   get volumeDisplay(){
     if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
       return '';
@@ -399,7 +395,6 @@ export default class Trading {
     }
   }
   
-
   get amount(){
     const position = this.position
     const contract = this.contract;
@@ -450,8 +445,6 @@ export default class Trading {
       currentSymbolMarginHeld : currentSymbolMarginHeld,
       leverage : leverage
     }
-    
-    
   }
 
   get direction(){    

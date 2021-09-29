@@ -23,7 +23,10 @@ function ContractInfo({ wallet, trading, lang, type }) {
             </div>
         </div>
         <div className="info">
-          <div className="title">{lang['symbol']}</div>
+          <div className="title">
+            {type.isOption && lang['symbol-option']}
+            {type.isFuture && lang['symbol']} 
+          </div>
           <div className="text">
             {trading.contract.symbol}
           </div>
