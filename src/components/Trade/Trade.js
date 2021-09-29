@@ -224,7 +224,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setIndexPriceClass('rise')
     }
     indexPriceRef.current = trading.index
+    if(trading.index){
+      document.querySelector('head title').innerText = `$${trading.index}`
+    }
     return () => {
+      document.querySelector('head title').innerText = 'deri'
     };
   }, [trading.index]);
 
