@@ -35,7 +35,8 @@ export class PerpetualPoolLite extends ContractBase {
     // update symbolIds
     if (
       !this.activeSymbolIds ||
-      this.activeSymbolIds.toString() !== symbolIds.toString()
+      this.activeSymbolIds.toString() !== symbolIds.toString() ||
+      !this.offChainOracleSymbolIds
     ) {
       this.activeSymbolIds = symbolIds;
       this.symbols = await Promise.all(
@@ -46,17 +47,19 @@ export class PerpetualPoolLite extends ContractBase {
       );
       this.activeSymbolNames = this.symbols.map((s) => s.symbol);
       this.offChainOracleSymbols = await Promise.all(
-        this.symbols.map((s) => s.oracleAddress).reduce(
-          (acc, o, index) => [
-            ...acc,
-            checkOffChainOracleSymbol(
-              this.chainId,
-              o,
-              this.symbols[index].symbol
-            ),
-          ],
-          []
-        )
+        this.symbols
+          .map((s) => s.oracleAddress)
+          .reduce(
+            (acc, o, index) => [
+              ...acc,
+              checkOffChainOracleSymbol(
+                this.chainId,
+                o,
+                this.symbols[index].symbol
+              ),
+            ],
+            []
+          )
       );
       this.offChainOracleSymbolIds = this.activeSymbolIds.reduce(
         (acc, i, index) => {

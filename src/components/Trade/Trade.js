@@ -12,6 +12,7 @@ import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import { bg } from "../../lib/web3js/indexV2";
 import TipWrapper from '../TipWrapper/TipWrapper';
+import { convertToInternationalCurrencySystem } from '../../utils/utils';
 
 
 
@@ -225,12 +226,16 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     }
     indexPriceRef.current = trading.index
     if(trading.index){
-      document.querySelector('head title').innerText = `$${trading.index}`
+      const formatIndex = trading.index.toLocaleString(
+        undefined, { minimumFractionDigits: 2 }
+      )
+      const symbol = trading.config && trading.config.symbol.split('-')[0]
+      document.querySelector('head title').innerText = `$${formatIndex} ${symbol}.deri`
     }
     return () => {
       document.querySelector('head title').innerText = 'deri'
     };
-  }, [trading.index]);
+  }, [trading.index,trading.config]);
 
   useEffect(() => {
     if (type.isOption) {
