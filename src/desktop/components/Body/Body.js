@@ -30,7 +30,7 @@ const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/Dip
 const InfoList = LoadableComponent(() => import('../../pages/Info/List'))
 const InfoDetail = LoadableComponent(() => import('../../pages/Info/Detail'))
 
-const TradingMining = LoadableComponent(() => import('../../pages/Market/TradingMining/Index'))
+const TradingMining = LoadableComponent(() => import('../../pages/Marketing/TradingMining/Index'))
 
 @withRouter
 @withLanguage
