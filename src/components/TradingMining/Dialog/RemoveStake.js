@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import NumberFormat from 'react-number-format'
-import Button from '../../../Button/Button';
-import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
+import Button from '../../Button/Button';
+import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 
-export default function AddStake({ wallet, lang, onClose, balance,afterAdd }) {
+export default function RemoveStake({ wallet, lang, onClose, balance,afterAdd }) {
   const [amount, setAmount] = useState('0');
   const [addValue, setAddValue] = useState('')
   const [decimal, setDecimal] = useState('00');
@@ -26,7 +26,7 @@ export default function AddStake({ wallet, lang, onClose, balance,afterAdd }) {
     <div className='modal-dialog'>
       <div className='modal-content'>
         <div className='modal-header'>
-          <div className='title'>{lang['add-stake']}</div>
+          <div className='title'>{lang['remove-stake']}</div>
           <div className='close' onClick={onClose}>
             <span>&times;</span>
           </div>
@@ -63,7 +63,7 @@ export default function AddStake({ wallet, lang, onClose, balance,afterAdd }) {
               <span className='max-btn-left' onClick={addAll}>{lang['add-all']}</span>
             </div>
             <div className='add-margin-btn'>
-                <Button className='margin-btn' click={addLiq} btnText={lang['add']} afterClick={afterAdd} lang={lang}/>
+                <Button className='margin-btn' click={addLiq} btnText={lang['remove-stake']} afterClick={afterAdd} lang={lang}/>
               </div>
           </div>
         </div>
