@@ -99,9 +99,9 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a className='signin-item' href={`https://${host}/#/nuls`}>{lang['signin']}</a>
+                  <a className='signin-item' href={`https://${host}/#/trading-mining`}>{lang['signin']}</a>
                   :
-                  <Link className='signin-item' to='/nuls'>{lang['signin']}</Link>
+                  <Link className='signin-item' to='/trading-mining'>{lang['signin']}</Link>
                 }
               </li>
               <li>

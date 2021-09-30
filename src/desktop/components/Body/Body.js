@@ -66,7 +66,7 @@ class Body extends React.Component {
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
           <Route exact path='/info' component={() => <InfoList/>}/>
           <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
-          <Route exact path='/trading-mining' component={() => <TradingMining/>}/>
+          <Route exact path='/trading-mining' component={() => <TradingMining lang={dict['tradingMining']}/>}/>
         </Switch>
       </div>
     )
