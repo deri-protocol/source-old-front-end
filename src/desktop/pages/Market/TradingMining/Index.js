@@ -1,4 +1,4 @@
-import CountDown from "./CountDown";
+import CountDown from "../../../../components/Countdown/CountDown";
 
 export default function Index(){
   return (
@@ -11,7 +11,7 @@ export default function Index(){
 
       </div>
       <div className='trading'>
-        
+
       </div>
     </div>
   )
