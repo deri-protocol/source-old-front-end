@@ -13,6 +13,10 @@ function Staking({ wallet={}, lang }) {
   const [poolTotalStaked, setPoolTotalStaked] = useState(10)
   const [yourStaked, setYourStaked] = useState(10)
 
+  useEffect(()=>{
+
+  },[wallet,wallet.detail])
+
   return (
     <div>
       <div className='staking-title'>
@@ -134,6 +138,5 @@ const Operator = ({wallet,lang})=>{
     </div>
   )
 }
-inject('wallet')(observer(Operator))
 export default inject('wallet')(observer(Staking))
 
