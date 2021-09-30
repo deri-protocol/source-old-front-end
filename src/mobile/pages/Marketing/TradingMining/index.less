@@ -1,31 +1,37 @@
 .trading-mining {
   font-family: ArialMT, sans-serif;
-  font-size: 20px;
+  font-size: 0.2rem;
   font-weight: 300;
 
   .title {
     font-family: Tachyon, sans-serif;
     color: #D4E05C;
-    font-size: 34px;
+    font-size: 0.32rem;
     letter-spacing: 2px;
     text-align: center;
+    margin-top: 20px;
   }
 
   .count-down-box {
-    width: 1100px;
+    width: 100%;
     height: 200px;
     margin-top: 20px;
   }
 
   .staking,.trading {
-    width: 1100px;
+    width: 100%;
     .staking-title,.trading-title {
+      width: 340px;
       color: #D4E05C;
-      font-size: 28px;
+      font-size: 0.28rem;
+      margin: 0 auto;
     }
 
     .staking-provide,.trading-provide {
+      width: 340px;
+      margin: 0 auto;
       margin-top: 10px;
+      margin-left: 20px;
     }
 
     .staking-info ,.trading-info{
@@ -35,20 +41,19 @@
       .trading-scored,
       .trading-staked
       {
-        display: flex;
-        justify-content: space-between;
         margin-top: 50px;
-
         .staking-total,
         .staking-your,
         .trading-total,
         .trading-your
          {
-          width: 520px;
-          height: 190px;
+          width: 340px;
+          height: 120px;
+          margin: 0 auto;
           border: 1px solid #0D0E0F;
           background-color: #202124;
           border-radius: 20px;
+          margin-top: 20px;
 
           .staking-info-title,.trading-info-title {
             padding: 20px 0px 0px 20px;
@@ -57,10 +62,10 @@
           .staking-info-num,.trading-info-num {
             text-align: right;
             padding-right: 50px;
-            font-size: 45px;
+            font-size: 0.32rem;
             font-weight: 400;
             color: #CCCCCC;
-            margin-top: 30px;
+            margin-top: 10px;
           }
         }
       }
@@ -68,25 +73,22 @@
     }
 
     .staking-button,.trading-button {
-      display: flex;
-      justify-content: space-between;
       align-items: center;
       border: 1px dashed #CCC;
       border-radius: 20px;
-      margin-top: 50px;
       padding: 20px;
       box-sizing: border-box;
-      height: 115px;
-
+      width: 340px;
+      margin: 0 auto;
+      margin-top: 50px;
       .staking-add-remove,.trading-add-remove {
-        display: flex;
-        justify-content: space-between;
+        text-align: center;
         .btn {
           width: 200px;
           height: 45px;
           background: #202124;
-          margin-left: 30px;
-          font-size: 16px;
+          margin-top: 20px;
+          font-size: 0.16rem;
           border: 0;
           color: #cccccc;
           font-weight: bold;
@@ -101,6 +103,7 @@
     a{
       line-height: 45px;
       text-align: center;
+      display: inline-block;
     }
     .rules{
       margin-top: 50px;
