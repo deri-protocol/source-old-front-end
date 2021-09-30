@@ -78,7 +78,7 @@ function Staking({ wallet={}, lang }) {
 const AddDialog = withModal(AddStake)
 const RemoveDialog = withModal(RemoveStake)
 
-const Operator = ({wallet,lang})=>{
+let Operator = ({wallet,lang})=>{
   const [buttonElment, setButtonElment] = useState(null);
   const [isApproved,setIsApproved] = useState(false)
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
@@ -134,6 +134,6 @@ const Operator = ({wallet,lang})=>{
     </div>
   )
 }
-inject('wallet')(observer(Operator))
-export default inject('wallet')(observer(Staking))
+Operator = inject('wallet')(observer(Operator))
+export default Staking;
 
