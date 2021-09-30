@@ -5,7 +5,7 @@ import './index.less'
 export default function Index({lang}){
   return (
     <div className='trading-mining'>
-      <div className='title'>DERI TRADING MINING</div>
+      {/* <div className='title'>{lang['title']}</div> */}
       <div className='count-down-box'>
         <CountDown/>
       </div>
