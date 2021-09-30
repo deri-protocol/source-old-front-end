@@ -18,7 +18,7 @@ export default function CountDown({beginTimestamp = Date.now(),lastTimestamp = m
           h = moment.duration(duration).hours(),
           m = moment.duration(duration).minutes(),
           s = moment.duration(duration).seconds();
-        d = d < 10 ? '0' + d : d;
+        // d = d < 10 ? '0' + d : d;
         h = h < 10 ? '0' + h : h;
         m = m < 10 ? '0' + m : m;
         s = s < 10 ? '0' + s : s;
