@@ -512,13 +512,22 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
       promises.push(perpetualPool.getSymbol(symbolIdList[i]))
     }
     const symbols = await Promise.all(promises)
+
+    promises = []
+    const symbolList = symbols.map((s) => s.symbol)
+    for (let i=0; i< symbols.length; i++) {
+      promises.push(getOraclePrice(chainId, symbolList[i]))
+    }
+    const symbolPrices = await Promise.all(promises)
+    //console.log(symbolPrices)
+
     const marginHeld = symbols.reduce((accum, a, index) => {
-      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).abs().times(minInitialMarginRatio))
+      return accum.plus(bg(symbolPrices[index]).times(a.multiplier).times(positions[index].volume).abs().times(minInitialMarginRatio))
     }, bg(0))
     //console.log('marginHeld', marginHeld.toString())
 
     const pnl = symbols.reduce((accum, a, index) => {
-      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
+      return accum.plus(bg(symbolPrices[index]).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
     }, bg(0))
     //console.log('pnl', pnl.toString())
 

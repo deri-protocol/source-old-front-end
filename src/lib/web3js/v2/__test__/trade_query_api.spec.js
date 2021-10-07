@@ -164,4 +164,16 @@ describe('Trade query api', () => {
   //   DeriEnv.set('dev')
   //   expect(fundingFee2).toEqual(output)
   // }, TIMEOUT)
+  it('getPoolBTokenBySymbol()', async () => {
+    DeriEnv.set('prod')
+    const input = [
+      '56',
+      '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+      '0x6746ccfcbda2dd4c3f1ef35839f97c064d687273',
+      '0',
+    ];
+    const res = await getPoolBTokensBySymbolId(...input);
+    expect(res).toEqual({})
+    DeriEnv.set('dev')
+  });
 })
