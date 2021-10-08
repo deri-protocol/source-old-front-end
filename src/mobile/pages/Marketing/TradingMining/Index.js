@@ -7,7 +7,7 @@ export default function Index({lang}){
     <div className='trading-mining'>
       <div className='title'>{lang['title']}</div>
       <div className='count-down-box'>
-        <CountDown/>
+        <CountDown lang={lang}/>
       </div>
       <div className='staking'>
         <Staking lang={lang} />

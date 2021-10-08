@@ -12,101 +12,301 @@
   }
 
   .count-down-box {
-    width: 1100px;
+    width: 1200px;
     height: 200px;
     margin-top: 20px;
+    margin: 0 auto;
   }
 
-  .staking,.trading {
-    width: 1100px;
-    .staking-title,.trading-title {
-      color: #D4E05C;
-      font-size: 28px;
-    }
+  .staking {
+    width: 1200px;
+    margin: 0 auto;
 
-    .staking-provide,.trading-provide {
-      margin-top: 10px;
-    }
+    .rewards-bnb-deri {
+      display: flex;
+      justify-content: space-around;
 
-    .staking-info ,.trading-info{
+      .bnb-total,
+      .deri-total {
+        width: 520px;
+        height: 210px;
+        background-color: #0D0E0F;
+        border-radius: 20px;
 
-      .staking-scored,
-      .staking-staked,
-      .trading-scored,
-      .trading-staked
-      {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 50px;
+        .bnb-title,
+        .deri-title {
+          font-size: 18px;
+          color: #D4E05C;
+          padding-left: 20px;
+          padding-top: 10px;
+          font-family: Tachyon;
+        }
 
-        .staking-total,
-        .staking-your,
-        .trading-total,
-        .trading-your
-         {
-          width: 520px;
-          height: 190px;
-          border: 1px solid #0D0E0F;
+        .bnb-num,
+        .deri-num {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          width: 518px;
+          margin: 0 auto;
+          height: 170px;
+          margin-top: 6px;
           background-color: #202124;
           border-radius: 20px;
+          font-size: 60px;
+          font-weight: bold;
 
-          .staking-info-title,.trading-info-title {
-            padding: 20px 0px 0px 20px;
-          }
-
-          .staking-info-num,.trading-info-num {
-            text-align: right;
-            padding-right: 50px;
-            font-size: 45px;
-            font-weight: 400;
-            color: #CCCCCC;
-            margin-top: 30px;
+          img {
+            width: 80px;
+            height: 80px;
           }
         }
       }
-
     }
+  }
 
-    .staking-button,.trading-button {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px dashed #CCC;
-      border-radius: 20px;
-      margin-top: 50px;
-      padding: 20px;
-      box-sizing: border-box;
-      height: 115px;
+  .trading {
+    width: 1400px;
+    margin-top: 50px;
 
-      .staking-add-remove,.trading-add-remove {
+    .trading-top {
+      .trading-title {
+        font-size: 21px;
+        color: #CCCCCC;
+      }
+
+      .trading-top-list {
         display: flex;
         justify-content: space-between;
-        .btn {
-          width: 200px;
-          height: 45px;
-          background: #202124;
-          margin-left: 30px;
-          font-size: 16px;
-          border: 0;
-          color: #cccccc;
-          font-weight: bold;
-          box-shadow: 0px 0px 7px rgb(170 170 170 / 80%);
-          border-radius: 10px;
+        margin-top: 20px;
+
+        .list {
+          width: 780px;
+          height: 956px;
+          background-color: #0D0E0F;
+          border-radius: 20px;
+
+          .list-title {
+            padding-left: 20px;
+            padding-top: 14px;
+            color: #D4E05C;
+            font-family: Tachyon;
+          }
+
+          .list-box {
+            width: 778px;
+            margin: 0 auto;
+            background-color: #202124;
+            height: 906px;
+            margin-top: 10px;
+            border-radius: 20px;
+
+            .list-box-title {
+              display: flex;
+              justify-content: space-between;
+              padding-left: 30px;
+              padding-right: 30px;
+              padding-top: 30px;
+              font-size: 21px;
+              font-weight: 300;
+
+            }
+
+            .list-info {
+              margin-left: 30px;
+
+              .no {
+                color: #CCCCCC;
+                width: 35px;
+                height: 35px;
+                text-align: center;
+                white-space: nowrap;
+              }
+
+              .address {
+                width: 100px;
+                text-align: center;
+                white-space: nowrap;
+              }
+
+              .feespaid,
+              .avgcoeff {
+                width: 100px;
+                text-align: center;
+                white-space: nowrap;
+              }
+
+              .score {
+                width: 57px;
+                text-align: center;
+                white-space: nowrap;
+              }
+
+              .rewardBNB {
+                width: 126px;
+                text-align: center;
+                white-space: nowrap;
+              }
+
+              .top-three {
+                color: #D4E05C;
+                font-size: 25px;
+                font-weight: bold;
+              }
+
+              .list-info-box {
+                display: flex;
+                justify-content: space-between;
+                padding-top: 45px;
+                height: 35px;
+                padding-right: 30px;
+                position: relative;
+              }
+
+              .progress {
+                width: 350px;
+                height: 10px;
+                position: absolute;
+                left: 220px;
+                top: 75px;
+
+                .progress-box {
+                  width: 0%;
+                  height: 10px;
+                  background-color: #246CAD;
+
+                }
+
+                .one-progress {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+
+        .your-rewards {
+          width: 560px;
+
+          .your-estimated-rewards {
+            height: 244px;
+            background-color: #0D0E0F;
+            border-radius: 20px;
+
+            .your-rewards-title {
+              font-size: 18px;
+              color: #D4E05C;
+              padding-left: 20px;
+              padding-top: 20px;
+              font-family: Tachyon;
+            }
+
+            .your-rewards-info {
+              display: flex;
+              justify-content: space-around;
+              align-items: center;
+              height: 188px;
+
+              img {
+                width: 31px;
+                height: 31px;
+              }
+
+              .your-bnb,
+              .your-deri {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 45px;
+                width: 150px;
+                color: #CCCCCC;
+                font-weight: 400;
+              }
+            }
+          }
+
+          .your-score-fee-coeff {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 188px;
+            background-color: #202124;
+            border-radius: 20px;
+            border: 1px solid #0D0E0F;
+            margin-top: 20px;
+            font-size: 21px;
+            box-sizing: border-box;
+            .your-score-num,
+            .your-fee-num,
+            .your-coeff-num {
+              font-size: 45px;
+              font-weight: 400;
+              color: #CCCCCC;
+              margin-top: 20px;
+              text-align: center;
+            }
+          }
+
+          .raise-score {
+            width: 560px;
+            height: 276px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 1px dashed #CCCCCC;
+            padding: 20px;
+            box-sizing: border-box;
+
+            .raise-score-title {
+              font-size: 18px;
+              color: #D4E05C;
+              padding-left: 20px;
+              padding-top: 10px;
+              font-family: Tachyon;
+            }
+
+            .button-link {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              a {
+                background: #202124;
+                box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+                border-radius: 10px;
+                color: #ccc;
+                width: 160px;
+                height: 45px;
+                text-align: center;
+                line-height: 45px;
+                font-weight: 400;
+                margin-top: 40px;
+              }
+            }
+            .des{
+              margin-top: 40px;
+              font-size: 16px;
+            }
+            
+          }
+          .pool-total-scored{
+            height: 188px;
+            background-color: #202124;
+            border-radius: 20px;
+            border: 1px solid #0D0E0F;
+            margin-top: 20px;
+            font-size: 21px;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #CCCCCC;
+            .pool-total-num{
+              margin-top:30px ;
+              font-size: 45px;
+              font-weight: 400;
+            }
+          }
         }
       }
     }
   }
-  .trading{
-    margin-top: 50px;
-    a{
-      line-height: 45px;
-      text-align: center;
-    }
-    .rules{
-      margin-top: 50px;
-    }
-  }
-  
 
-  
 }

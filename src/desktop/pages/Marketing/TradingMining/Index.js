@@ -13,7 +13,7 @@ export default function Index({lang}){
         <Staking lang={lang} />
       </div>
       <div className='trading'>
-        <Trading lang={lang} />
+        <Trading lang={lang} /> 
       </div>
     </div>
   )
