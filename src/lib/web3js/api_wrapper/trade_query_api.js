@@ -39,6 +39,7 @@ import {
   getFundingRateV2,
   getLiquidityUsedV2,
   getFundingRateCacheV2,
+  getEstimatedLiquidatePriceV2,
 } from '../v2/api';
 
 import {
@@ -139,6 +140,28 @@ export const isUnlocked = async (
     return isUnlocked2(chainId, poolAddress, accountAddress);
   } else {
     return isUnlockedV2(chainId, poolAddress, accountAddress, bTokenId);
+  }
+};
+
+export const getEstimatedLiquidatePrice = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  newVolume,
+  symbolId
+) => {
+  const version = getPoolVersion(poolAddress)
+  if (LITE_VERSIONS.includes(version)) {
+    return getEstimatedLiquidatePriceV2(chainId, poolAddress, accountAddress, newVolume, symbolId);
+  } else if (version === 'option') {
+    // place holder
+    return ''
+  }
+  if (symbolId === undefined) {
+    // place holder
+    return ''
+  } else {
+    return getEstimatedLiquidatePriceV2(chainId, poolAddress, accountAddress, newVolume, symbolId);
   }
 };
 

@@ -40,3 +40,19 @@ export const fundingRateCache = (function () {
     },
   };
 })();
+
+export const liquidatePriceCache = (function() {
+  let _cache = {}
+  return {
+    get(address) {
+      if (Object.keys(_cache).includes(address)) {
+        return _cache[address]
+      } else {
+        return {}
+      }
+    },
+    set(address, val) {
+      _cache[address] = val
+    },
+  }
+})()

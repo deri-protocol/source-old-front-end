@@ -9,7 +9,7 @@ import {
 import { bg, min, max } from '../../shared/utils'
 import { getOraclePrice } from '../../shared/utils/oracle'
 import { getIndexInfo } from '../../shared/config/token';
-import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import {
   calculateEntryPrice,
   calculateLiquidationPrice,
@@ -173,6 +173,17 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
       latestBlockNumber,
       volume,
     );
+
+    // set liquidatePrice cache
+    liquidatePriceCache.set(poolAddress, {
+      volume,
+      margin,
+      totalCost,
+      dynamicCost,
+      price,
+      multiplier,
+      minMaintenanceMarginRatio,
+    });
   return {
       price: price,
       volume: volume.toString(),
@@ -220,6 +231,39 @@ export const getWalletBalance = async (
   }
   return '';
 }
+
+export const getEstimatedLiquidatePrice = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  newVolume,
+  symbolId,
+) => {
+  try {
+    let {
+      volume,
+      margin,
+      totalCost,
+      dynamicCost,
+      price,
+      multiplier,
+      minMaintenanceMarginRatio,
+    } = liquidatePriceCache.get(poolAddress);
+    totalCost = bg(totalCost).plus(bg(newVolume).times(price).times(multiplier))
+    //console.log(totalCost.toString())
+    return calculateLiquidationPrice(
+      bg(volume).plus(newVolume),
+      margin,
+      totalCost,
+      dynamicCost,
+      multiplier,
+      minMaintenanceMarginRatio
+    ).toString();
+  } catch (err) {
+    console.log(`${err}`);
+  }
+  return '';
+};
 
 export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => {
   try {
