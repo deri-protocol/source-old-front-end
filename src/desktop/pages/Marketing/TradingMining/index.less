@@ -1,6 +1,6 @@
 .trading-mining {
   font-family: ArialMT, sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 300;
 
   .title {
@@ -9,17 +9,19 @@
     font-size: 34px;
     letter-spacing: 2px;
     text-align: center;
+    font-weight: 400;
+    margin-bottom: 40px;
   }
 
   .count-down-box {
     width: 1200px;
     margin-top: 20px;
-    margin: 60px auto 60px;
+    margin: auto;
   }
 
   .staking {
     width: 1200px;
-    margin: 0 auto;
+    margin: 45px auto 0;
 
     .rewards-bnb-deri {
       display: flex;
@@ -52,7 +54,7 @@
           margin-top: 6px;
           background-color: #202124;
           border-radius: 20px;
-          font-size: 60px;
+          font-size: 54px;
           font-weight: bold;
 
           img {
@@ -70,18 +72,18 @@
 
     .trading-top {
       .trading-title {
-        font-size: 21px;
+        font-size: 20px;
         color: #CCCCCC;
       }
 
       .trading-top-list {
         display: flex;
         justify-content: space-between;
-        margin-top: 50px;
+        margin-top: 30px;
 
         .list {
           width: 780px;
-          height: 956px;
+          height: 890px;
           background-color: #0D0E0F;
           border-radius: 20px;
 
@@ -96,7 +98,7 @@
             width: 778px;
             margin: 0 auto;
             background-color: #202124;
-            height: 906px;
+            height: 842px;
             margin-top: 10px;
             border-radius: 20px;
 
@@ -106,7 +108,7 @@
               padding-left: 30px;
               padding-right: 30px;
               padding-top: 30px;
-              font-size: 21px;
+              font-size: 20px;
               font-weight: 300;
 
             }
@@ -156,7 +158,7 @@
               .list-info-box {
                 display: flex;
                 justify-content: space-between;
-                padding-top: 45px;
+                padding-top: 40px;
                 height: 35px;
                 padding-right: 30px;
                 position: relative;
@@ -202,7 +204,7 @@
 
             .your-rewards-info {
               display: flex;
-              justify-content: space-around;
+              justify-content: normal;
               align-items: center;
               height: 188px;
 
@@ -214,12 +216,20 @@
               .your-bnb,
               .your-deri {
                 display: flex;
-                justify-content: space-between;
+                justify-content: normal;
                 align-items: center;
                 font-size: 45px;
                 width: 150px;
                 color: #CCCCCC;
                 font-weight: 400;
+                white-space: nowrap;
+                margin-left: 20px;
+                .span{
+                  margin-left: 15px;
+                }
+              }
+              .your-deri{
+                margin-left: 100px;
               }
             }
           }
@@ -232,35 +242,35 @@
             background-color: #202124;
             border-radius: 20px;
             border: 1px solid #0D0E0F;
-            margin-top: 20px;
-            font-size: 21px;
+            margin-top: 40px;
+            font-size: 20px;
             box-sizing: border-box;
 
             .your-score-num,
             .your-fee-num,
             .your-coeff-num {
-              font-size: 45px;
+              font-size: 40px;
               font-weight: 400;
               color: #CCCCCC;
               margin-top: 20px;
               text-align: center;
+              white-space: nowrap
             }
           }
 
           .raise-score {
             width: 560px;
-            height: 276px;
+            height: 378px;
             border-radius: 20px;
-            margin-top: 20px;
-            border: 1px dashed #CCCCCC;
-            padding: 20px;
+            // margin-top: 40px;
+            // border: 1px dashed #CCCCCC;
+            // padding: 20px;
             box-sizing: border-box;
 
             .raise-score-title {
               font-size: 18px;
               color: #D4E05C;
-              padding-left: 20px;
-              padding-top: 10px;
+              // padding-top: 10px;
               font-family: Tachyon;
             }
 
@@ -286,6 +296,7 @@
             .des {
               margin-top: 40px;
               font-size: 16px;
+              line-height: 30px;
             }
 
           }
@@ -296,7 +307,7 @@
             border-radius: 20px;
             border: 1px solid #0D0E0F;
             margin-top: 20px;
-            font-size: 21px;
+            font-size: 20px;
             padding: 20px;
             box-sizing: border-box;
             color: #CCCCCC;
@@ -327,7 +338,7 @@
       justify-content: space-between;
       align-items: center;
 
-      .frist,
+      .first,
       .second,
       .third,
       .fourth,
@@ -348,7 +359,7 @@
         }
 
         .dial-time {
-          font-size: 10px;
+          font-size: 14px;
           color: #CCCCCC;
           text-align: center;
           margin-top: 10px;
@@ -364,17 +375,36 @@
 
           .one-dial-box {
             width: 230px;
-            height: 233px;
+            height: 222px;
             position: absolute;
             border: 2px solid #246CAD;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-
+            .points{
+              position: absolute;
+              font-size: 14px;
+              width: 50px;
+            }
+            .first-points{
+              left: 40px;
+            }
+            .second-points{
+              left: 50px;
+              top: 80px;
+            }
+            .third-points{
+              left: 80px;
+              top: 65px;
+            }
+            .fourth-points{
+              left: 90px;
+              top: 65px;
+            }
             .two-dial-box {
               width: 170px;
-              height: 173px;
+              height: 165px;
               border: 10px solid #246CAD;
               border-radius: 50%;
               position: relative;
@@ -383,10 +413,9 @@
                 list-style: none;
 
               }
-
               .cover {
                 width: 170px;
-                height: 173px;
+                height: 165px;
                 background-color: #0D0E0F;
                 border-radius: 50%;
                 // left: 50%;
@@ -398,35 +427,38 @@
               .s-two,
               .s-three,
               .s-four {
-                width: 56px;
+                width: 71px;
                 height: 3px;
                 background-color: #246CAD;
                 margin-left: -1px;
-                left: 12%;
+                left: 5%;
                 // top: 30px;
                 top: 50%;
                 transform-origin: bottom;
                 z-index: 1;
               }
+              .s-four{
+                width: 65px;
+              }
 
               .s-one {
                 animation: rotate-one 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 65px 3px;
+                transform-origin: 77px -5px;
               }
 
               .s-two {
                 animation: rotate-two 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 65px 3px;
+                transform-origin: 78px -1px;
               }
 
               .s-three {
                 animation: rotate-three 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 68px 1px;
+                transform-origin: 80px 1px;
               }
 
               .s-four {
                 animation: rotate-four 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 68px 1px;
+                transform-origin: 78px 1px;
               }
 
               @keyframes rotate-one {
@@ -482,11 +514,11 @@
               }
 
               .line {
-                width: 225px;
+                width: 220px;
                 height: 2px;
                 background-color: #246CAD;
                 margin-left: -1px;
-                left: -16%;
+                left: -13%;
                 top: 50%;
                 position: absolute;
               }
@@ -562,7 +594,7 @@
         color: #D4E05C;
         font-family: Tachyon;
         margin-top: 10px;
-        margin-left: 10px;
+        margin-left: 20px;
       }
 
       .total-score-box {
@@ -581,5 +613,8 @@
   }
 
 
+}
+.mobile-list{
+  display: none;
 }
 

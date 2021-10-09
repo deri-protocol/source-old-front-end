@@ -14,7 +14,7 @@
 
   .count-down-box {
     width: 100%;
-    margin: 60px auto 90px;
+    margin: auto;
   }
 
   .staking {
@@ -43,7 +43,8 @@
           justify-content: space-around;
           align-items: center;
           margin: 0 auto;
-          height: 91px;
+          width: 99%;
+          height: 90px;
           margin-top: 6px;
           background-color: #202124;
           border-radius: 20px;
@@ -54,6 +55,9 @@
             width: 80px;
             height: 80px;
           }
+        }
+        .deri-num{
+          height: 109px;
         }
       }
     }
@@ -77,7 +81,7 @@
           height: 956px;
           background-color: #0D0E0F;
           border-radius: 20px;
-
+          margin-top: 20px;
           .list-title {
             padding-left: 20px;
             padding-top: 14px;
@@ -86,12 +90,31 @@
           }
 
           .list-box {
-            width: 778px;
+            width: 99%;
             margin: 0 auto;
             background-color: #202124;
             height: 906px;
             margin-top: 10px;
             border-radius: 20px;
+            .no {
+              color: #CCCCCC;
+              width: 10%;
+              text-align: center;
+              img{
+                width: 28px;
+                height: 28px;
+              }
+            }
+
+            .address {
+              width: 25%;
+              text-align: center;
+              white-space: nowrap;
+            }
+            .score{
+              width: 15%;
+              text-align: center;
+            }
 
             .list-box-title {
               display: flex;
@@ -106,42 +129,10 @@
 
             .list-info {
               margin-left: 30px;
-              // .no {
-              //   color: #CCCCCC;
-              //   width: 35px;
-              //   height: 35px;
-              //   text-align: center;
-              //   white-space: nowrap;
-              // }
-
-              // .address {
-              //   width: 100px;
-              //   text-align: center;
-              //   white-space: nowrap;
-              // }
-
-              // .feespaid,
-              // .avgcoeff {
-              //   width: 100px;
-              //   text-align: center;
-              //   white-space: nowrap;
-              // }
-
-              // .score {
-              //   width: 57px;
-              //   text-align: center;
-              //   white-space: nowrap;
-              // }
-
-              // .rewardBNB {
-              //   width: 126px;
-              //   text-align: center;
-              //   white-space: nowrap;
-              // }
-
+              font-size: 0.14rem;
               .top-three {
                 color: #D4E05C;
-                font-size: 25px;
+                font-size: 0.18rem;
                 font-weight: bold;
               }
 
@@ -177,15 +168,15 @@
         }
 
         .your-rewards {
-          width: 560px;
-
+          width: 95%;
+          margin: 0 auto;
           .your-estimated-rewards {
-            height: 244px;
+            height: 246px;
             background-color: #0D0E0F;
             border-radius: 20px;
 
             .your-rewards-title {
-              font-size: 18px;
+              font-size: 0.18rem;
               color: #D4E05C;
               padding-left: 20px;
               padding-top: 20px;
@@ -193,11 +184,15 @@
             }
 
             .your-rewards-info {
-              display: flex;
-              justify-content: space-around;
-              align-items: center;
-              height: 188px;
-
+              height: 190px;
+              width: 99%;
+              margin:0 auto;
+              border-radius: 20px;
+              background-color: #202124;
+              margin-top: 11px;
+              padding-top: 20px;
+              padding-left: 30px;
+              box-sizing: border-box;
               img {
                 width: 31px;
                 height: 31px;
@@ -206,46 +201,52 @@
               .your-bnb,
               .your-deri {
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
-                font-size: 45px;
-                width: 150px;
+                font-size: 0.36rem;
+                margin-top: 10px;
+                width: 170px;
                 color: #CCCCCC;
                 font-weight: 400;
+                white-space: nowrap;
+                .span{
+                  margin-left: 20px;
+                }
               }
             }
           }
 
           .your-score-fee-coeff {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 188px;
+            height: 340px;
+            margin: 0 auto;
             background-color: #202124;
             border-radius: 20px;
             border: 1px solid #0D0E0F;
             margin-top: 20px;
             font-size: 21px;
             box-sizing: border-box;
+            padding-left: 30px;
+            padding-top: 20px;
             .your-score-num,
             .your-fee-num,
             .your-coeff-num {
-              font-size: 45px;
+              font-size: 0.36rem;
               font-weight: 400;
               color: #CCCCCC;
+            }
+            .your-score,.your-fee,.your-coeff{
               margin-top: 20px;
-              text-align: center;
             }
           }
 
           .raise-score {
-            width: 560px;
-            height: 276px;
+            height: 450px;
             border-radius: 20px;
-            margin-top: 20px;
-            border: 1px dashed #CCCCCC;
-            padding: 20px;
+            margin: 0 auto;
+            // margin-top: 20px;
+            // border: 1px dashed #CCCCCC;
+            // padding: 20px;
             box-sizing: border-box;
+
 
             .raise-score-title {
               font-size: 18px;
@@ -256,44 +257,97 @@
             }
 
             .button-link {
-              display: flex;
-              justify-content: space-between;
-              align-items: center;
-
+              margin-top: 20px;
               a {
+                margin: 0 auto;
+                display: block;
                 background: #202124;
                 box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
                 border-radius: 10px;
                 color: #ccc;
-                width: 160px;
+                width: 200px;
                 height: 45px;
                 text-align: center;
                 line-height: 45px;
-                margin-top: 40px;
+                margin-top: 20px;
               }
             }
             .des{
               margin-top: 40px;
-              font-size: 16px;
+              font-size:0.14rem;
             }
             
           }
-          .pool-total-scored{
-            height: 188px;
-            background-color: #202124;
-            border-radius: 20px;
-            border: 1px solid #0D0E0F;
+          .totalpoints{
             margin-top: 20px;
-            font-size: 21px;
-            padding: 20px;
-            box-sizing: border-box;
-            color: #CCCCCC;
-            .pool-total-num{
-              margin-top:30px ;
-              font-size: 45px;
-              font-weight: 400;
+            .total-points-title{
+              font-size: 0.14rem;
+              color: #CCCCCC;
+            }
+            .dial{
+              background-color: #0D0E0F;
+              border-radius: 20px;
+              margin-top: 20px;
+              height: 514px;
+              .total-points{
+                font-size: 0.18rem;
+                color: #D4E05C;
+                padding-top: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
+                font-family: Tachyon;
+                display: flex;
+                justify-content: space-between;
+              }
+              .dial-box{
+                width: 99%;
+                height: 459px;
+                margin: 0 auto;
+                background-color: #202124;
+                border-radius: 20px;
+                margin-top: 10px;
+                border: 1px solid transparent;
+                .dial-box-info{
+                  width: 300px;
+                  height: 87px;
+                  background-color: #0D0E0F;
+                  border-radius: 20px;
+                  font-size: 0.10rem;
+                  color: #CCCCCC;
+                  margin: 0 auto;
+                  padding: 12px 0  0 12px;
+                  box-sizing: border-box;
+                  .dial-box-info-title{
+                    font-size: 0.12rem;
+                    font-family: Tachyon;
+                    color: #D4E05C;
+                  }
+                  .dial-box-info-time{
+                    margin-top: 5px;
+                  }
+                  .dial-box-info-points{
+                    color: #fff;
+                    font-size: 0.18rem;
+                    margin-top: 5px;
+                  }
+                  .fourth{
+                    margin-top: -5px;
+                  }
+                }
+                .dial-box-info:nth-child(1){
+                  margin-top:20px;
+                }
+                .add{
+                  text-align: center;
+                  img{
+                    width: 10px;
+                    height: 10px;
+                  }
+                }
+              }
             }
           }
+          
         }
       }
     }
@@ -302,3 +356,6 @@
 
   
 }
+  .desktop-list{
+    display: none;
+  }

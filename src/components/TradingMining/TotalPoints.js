@@ -10,7 +10,7 @@ export default function TotalPoints({ lang }) {
           {lang['the-trading-mining-event-has-four-quarters']}
         </div>
         <div className='dial'>
-          <div className='frist'>
+          <div className='first'>
             <div className='dial-title'>
               {lang['the-first']}
             </div>
@@ -35,6 +35,9 @@ export default function TotalPoints({ lang }) {
                   <div class="cover"></div>
                   <div className='s-one'></div>
                   <div class="dotted"></div>
+                </div>
+                <div className='points first-points'>
+                  {lang['the-first-points']}
                 </div>
               </div>
             </div>
@@ -66,6 +69,9 @@ export default function TotalPoints({ lang }) {
                   <div className='s-two'></div>
                   <div class="dotted"></div>
                 </div>
+                <div className='points second-points'>
+                  {lang['the-second-points']}
+                </div>
               </div>
             </div>
           </div>
@@ -95,6 +101,9 @@ export default function TotalPoints({ lang }) {
                   <div class="cover"></div>
                   <div className='s-three'></div>
                   <div class="dotted"></div>
+                </div>
+                <div className='points third-points'>
+                  {lang['the-third-points']}
                 </div>
               </div>
             </div>
@@ -126,7 +135,11 @@ export default function TotalPoints({ lang }) {
                   <div className='s-four'></div>
                   <div class="dotted"></div>
                 </div>
+                <div className='points fourth-points'>
+                  {lang['the-fourth-points']}
+                </div>
               </div>
+
             </div>
           </div>
           <img src={arr} className='arr-img'></img>
