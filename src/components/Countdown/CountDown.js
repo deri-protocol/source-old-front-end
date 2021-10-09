@@ -4,10 +4,12 @@ import './countDown.less'
 import FlipDown from './Flipdown'
 
 
-export default function CountDown({lastTimestamp = moment('2021-10-13 00:00:00').unix() +1 ,lang}){
+export default function CountDown({lastTimestamp ,lang,onEnd}){
   useEffect(() => {
-    const flipdown = new FlipDown(lastTimestamp,{theme : 'light'})
-    flipdown.start()
+    const flipdown = new FlipDown(lastTimestamp /1000 + 1,{theme : 'light'})
+    flipdown.start().ifEnded(() => {
+      onEnd && onEnd();
+    });
   }, [lastTimestamp])
   return (
     <div className='count-down'>
