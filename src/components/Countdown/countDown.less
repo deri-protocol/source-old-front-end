@@ -4,7 +4,7 @@
   flex-direction: column;
   .tip{
     color: #cccccc;
-    font-size: 14px;
+    font-size: 32px;
     text-align: center;
     margin-bottom: 20px;
   }
@@ -25,8 +25,8 @@
   color: #000000;
 }
 /* Delimeters */
-.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
-.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n):not(.rotor-group:nth-child(4)):before,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n):not(.rotor-group:nth-child(4)):after {
   background-color: #151515;
 }
 /* Rotor tops */
@@ -266,7 +266,7 @@
 
   .flipdown .rotor-group:nth-child(n):not(.rotor-group:nth-child(4)):before,
   .flipdown .rotor-group:nth-child(n):not(.rotor-group:nth-child(4)):after {
-    left: 69px;
+    left: 74px;
   }
 
   .flipdown .rotor-group:nth-child(n):not(.rotor-group:nth-child(4)):before {
