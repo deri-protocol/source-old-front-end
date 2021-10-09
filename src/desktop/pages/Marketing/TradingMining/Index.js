@@ -1,6 +1,7 @@
 import CountDown from "../../../../components/Countdown/CountDown";
 import Trading from "../../../../components/TradingMining/Trading";
 import Staking from "../../../../components/TradingMining/Staking";
+import TotalPoints from "../../../../components/TradingMining/TotalPoints";
 import './index.less'
 export default function Index({lang}){
   return (
@@ -11,6 +12,9 @@ export default function Index({lang}){
       </div>
       <div className='staking'>
         <Staking lang={lang} />
+      </div>
+      <div>
+        <TotalPoints lang={lang} />
       </div>
       <div className='trading'>
         <Trading lang={lang} /> 

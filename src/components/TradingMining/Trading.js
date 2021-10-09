@@ -112,7 +112,6 @@ function Trading({ wallet, lang }) {
   )
 
   useEffect(() => {
-    console.log()
     document.getElementsByClassName('ten-progress')[0].style.width = '10%'
     document.getElementsByClassName('nine-progress')[0].style.width = '20%'
     document.getElementsByClassName('eight-progress')[0].style.width = '30%'

@@ -26,5 +26,15 @@
   "staking":"STAKING",
   "futures":"FUTURES",
   "options":"OPTIONS",
+  "the-trading-mining-event-has-four-quarters":"The trading mining event has four quarters",
+  "the-first":"The First",
+  "the-second":"The Second",
+  "the-third":"The Third",
+  "the-fourth":"The Fourth",
+  "totalpoints":"Totalpoints",
+  "the-first-time":"10:00 AM, October 13th to 09:59 AM, October 20th",
+  "the-second-time":"10:00 AM, October 20th to 09:59 AM, October 27th",
+  "the-third-time":"10:00 AM, October 13th to 09:59 AM, October 20th",
+  "the-fourth-time":"10:00:00 AM, November 3rd and 09:59:59  AM,November 10th UTC",
   "activity-rules":"Activity Rules"
 }

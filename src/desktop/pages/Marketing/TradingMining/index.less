@@ -14,7 +14,7 @@
   .count-down-box {
     width: 1200px;
     margin-top: 20px;
-    margin: 60px auto 90px;
+    margin: 60px auto 60px;
   }
 
   .staking {
@@ -66,7 +66,7 @@
 
   .trading {
     width: 1400px;
-    margin-top: 50px;
+    margin-top: 30px;
 
     .trading-top {
       .trading-title {
@@ -77,7 +77,7 @@
       .trading-top-list {
         display: flex;
         justify-content: space-between;
-        margin-top: 20px;
+        margin-top: 50px;
 
         .list {
           width: 780px;
@@ -235,6 +235,7 @@
             margin-top: 20px;
             font-size: 21px;
             box-sizing: border-box;
+
             .your-score-num,
             .your-fee-num,
             .your-coeff-num {
@@ -281,13 +282,15 @@
                 margin-top: 40px;
               }
             }
-            .des{
+
+            .des {
               margin-top: 40px;
               font-size: 16px;
             }
-            
+
           }
-          .pool-total-scored{
+
+          .pool-total-scored {
             height: 188px;
             background-color: #202124;
             border-radius: 20px;
@@ -297,8 +300,9 @@
             padding: 20px;
             box-sizing: border-box;
             color: #CCCCCC;
-            .pool-total-num{
-              margin-top:30px ;
+
+            .pool-total-num {
+              margin-top: 30px;
               font-size: 45px;
               font-weight: 400;
             }
@@ -308,4 +312,274 @@
     }
   }
 
+  .total-points {
+    width: 1400px;
+    margin-top: 30px;
+
+    .total-points-title {
+      color: #CCCCCC;
+    }
+
+    .dial {
+      margin-top: 30px;
+      height: 208px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .frist,
+      .second,
+      .third,
+      .fourth,
+      .total-score {
+        width: 260px;
+        height: 208px;
+        background-color: #0D0E0F;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+
+        .dial-title {
+          font-size: 15px;
+          color: #D4E05C;
+          font-family: Tachyon;
+          text-align: center;
+          margin-top: 10px;
+        }
+
+        .dial-time {
+          font-size: 10px;
+          color: #CCCCCC;
+          text-align: center;
+          margin-top: 10px;
+          padding:0 10px 0 10px;
+        }
+
+        .dial-box {
+          margin-top: 5px;
+          position: relative;
+          width: 230px;
+          height: 233px;
+          margin: 0 auto;
+
+          .one-dial-box {
+            width: 230px;
+            height: 233px;
+            position: absolute;
+            border: 2px solid #246CAD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+
+            .two-dial-box {
+              width: 170px;
+              height: 173px;
+              border: 10px solid #246CAD;
+              border-radius: 50%;
+              position: relative;
+
+              li {
+                list-style: none;
+
+              }
+
+              .cover {
+                width: 170px;
+                height: 173px;
+                background-color: #0D0E0F;
+                border-radius: 50%;
+                // left: 50%;
+                // top: 50%;
+                /* 进行定位 */
+              }
+
+              .s-one,
+              .s-two,
+              .s-three,
+              .s-four {
+                width: 56px;
+                height: 3px;
+                background-color: #246CAD;
+                margin-left: -1px;
+                left: 12%;
+                // top: 30px;
+                top: 50%;
+                transform-origin: bottom;
+                z-index: 1;
+              }
+
+              .s-one {
+                animation: rotate-one 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 65px 3px;
+              }
+
+              .s-two {
+                animation: rotate-two 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 65px 3px;
+              }
+
+              .s-three {
+                animation: rotate-three 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 68px 1px;
+              }
+
+              .s-four {
+                animation: rotate-four 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 68px 1px;
+              }
+
+              @keyframes rotate-one {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(30deg);
+                }
+              }
+
+              @keyframes rotate-two {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(60deg);
+                }
+              }
+
+              @keyframes rotate-three {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(135deg);
+                }
+              }
+
+              @keyframes rotate-four {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(180deg);
+                }
+              }
+
+              .dotted {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                border: 3px solid #246CAD;
+                left: 50%;
+                top: 50%;
+                margin-left: -10px;
+                margin-top: -10px;
+                z-index: 1;
+              }
+
+              .line {
+                width: 225px;
+                height: 2px;
+                background-color: #246CAD;
+                margin-left: -1px;
+                left: -16%;
+                top: 50%;
+                position: absolute;
+              }
+
+              .line:nth-child(2) {
+                transform: rotate(15deg);
+              }
+
+              .line:nth-child(3) {
+                transform: rotate(30deg);
+              }
+
+              .line:nth-child(4) {
+                transform: rotate(45deg);
+              }
+
+              .line:nth-child(5) {
+                transform: rotate(60deg);
+              }
+
+              .line:nth-child(6) {
+                transform: rotate(75deg);
+              }
+
+              .line:nth-child(7) {
+                transform: rotate(90deg);
+              }
+
+              .line:nth-child(8) {
+                transform: rotate(105deg);
+              }
+
+              .line:nth-child(9) {
+                transform: rotate(120deg);
+              }
+
+              .line:nth-child(10) {
+                transform: rotate(135deg);
+              }
+
+              .line:nth-child(11) {
+                transform: rotate(150deg);
+              }
+
+              .line:nth-child(12) {
+                transform: rotate(165deg);
+              }
+
+            }
+
+            .two-dial-box>div {
+              position: absolute;
+            }
+          }
+        }
+
+      }
+    }
+
+    .arr-img {
+      width: 47px;
+      height: 40px;
+    }
+
+    .add-img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .total-score {
+      .total-score-title {
+        font-size: 18px;
+        color: #D4E05C;
+        font-family: Tachyon;
+        margin-top: 10px;
+        margin-left: 10px;
+      }
+
+      .total-score-box {
+        height: 156px;
+        width: 256.66px;
+        margin: 0 auto;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 156px;
+        background-color: #202124;
+        font-size: 45px;
+        margin-top: 18px;
+        font-weight: 400;
+      }
+    }
+  }
+
+
 }
+
