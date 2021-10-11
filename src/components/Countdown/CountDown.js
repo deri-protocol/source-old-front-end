@@ -6,7 +6,7 @@ import FlipDown from './Flipdown'
 
 export default function CountDown({lastTimestamp ,lang,onEnd}){
   useEffect(() => {
-    const flipdown = new FlipDown(lastTimestamp /1000 + 1,{theme : 'light'})
+    const flipdown = new FlipDown(lastTimestamp,{theme : 'light'})
     flipdown.start().ifEnded(() => {
       onEnd && onEnd();
     });
