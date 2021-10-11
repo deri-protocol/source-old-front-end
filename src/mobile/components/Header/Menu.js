@@ -84,7 +84,7 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <Link to='/brokerbind'>{lang['broker-bind']}</Link>
               </li> */}
               <li>
-                <Link to='/nuls'>{lang['signin']}</Link>
+                <Link to='/trade-to-earn'>{lang['signin']}</Link>
               </li>
               <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>

@@ -267,7 +267,7 @@ function Trading({ wallet, lang }) {
               <div className='button-link'>
                 <a href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
                   {lang['staking']}
-                </a>
+                </a> 
                 <a href='https://app.deri.finance/#/futures/pro'>
                   {lang['futures']}
                 </a>
