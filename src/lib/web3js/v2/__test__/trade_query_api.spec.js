@@ -26,6 +26,7 @@ import {
   getEstimatedFundingRate,
   getEstimatedLiquidityUsed,
   getEstimatedFee,
+  getEstimatedLiquidatePrice,
   // getFundingFee
 } from '../api/trade_query_api'
 import { TIMEOUT, POOL_V2_ADDRESS, ACCOUNT_ADDRESS } from '../../shared/__test__/setup';
@@ -35,7 +36,7 @@ describe('Trade query api', () => {
     const input = ['97', POOL_V2_ADDRESS, '0', '0', true]
     const output = {
       symbol: 'BTCUSD',
-      bTokenSymbol: ['BUSD','AUTO','CAKE'],
+      bTokenSymbol: ['BUSD', 'AUTO', 'CAKE'],
       bTokenMultiplier: ['1', '0.5', '0.5'],
       multiplier: '0.0001',
       feeRatio: '0.0005',
@@ -49,7 +50,11 @@ describe('Trade query api', () => {
       maxLiquidationReward: '1000',
       liquidationCutRatio: '0.5',
       protocolFeeCollectRatio: '0.2',
-    }
+      indexConstituents: {
+        tokens: [],
+        url: '',
+      },
+    };
     expect(await getSpecification(...input)).toEqual(output)
   }, TIMEOUT)
   it('getWalletBalance()', async() => {
@@ -91,6 +96,11 @@ describe('Trade query api', () => {
     expect(bg(res.volume).toNumber()).toBeLessThanOrEqual(10000);
     expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
     expect(Array.isArray(res.unrealizedPnlList)).toBe(true)
+
+    //expect(res.liquidationPrice).toEqual('');
+
+    const input2 = ['97', POOL_V2_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '500', '0']
+    expect(await getEstimatedLiquidatePrice(...input2)).toEqual('')
   }, TIMEOUT)
   it('isUnlocked()', async() => {
     const input = ['97', POOL_V2_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '0', true]
@@ -164,4 +174,16 @@ describe('Trade query api', () => {
   //   DeriEnv.set('dev')
   //   expect(fundingFee2).toEqual(output)
   // }, TIMEOUT)
+  it('getPoolBTokenBySymbol()', async () => {
+    DeriEnv.set('prod')
+    const input = [
+      '56',
+      '0x19c2655A0e1639B189FB0CF06e02DC0254419D92',
+      '0x6746ccfcbda2dd4c3f1ef35839f97c064d687273',
+      '0',
+    ];
+    const res = await getPoolBTokensBySymbolId(...input);
+    expect(res).toEqual({})
+    DeriEnv.set('dev')
+  });
 })

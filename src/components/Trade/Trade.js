@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import { priceCache, getIntrinsicPrice, PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, getEstimatedTimePrice } from '../../lib/web3js/indexV2'
+import { priceCache, getIntrinsicPrice, PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, getEstimatedTimePrice,getEstimatedLiquidatePrice } from '../../lib/web3js/indexV2'
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
@@ -27,6 +27,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [spec, setSpec] = useState({});
   const [fundingRateAfter, setFundingRateAfter] = useState('');
   const [markPriceAfter, setMarkPriceAfter] = useState('');
+  const [liquidationPrice, setLiquidationPrice] = useState('')
   const [transFee, setTransFee] = useState('');
   const [liqUsedPair, setLiqUsedPair] = useState({});
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -129,6 +130,17 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     }
   }
 
+  const calcLiqPriceAfter = async () => {
+    if (hasConnectWallet() && trading.config && trading.volumeDisplay) {
+      let num = volumeMu(trading.volumeDisplay)
+      const volume = (direction === 'long' ? num : -num)
+      const price = await getEstimatedLiquidatePrice(wallet.detail.chainId,trading.config.pool,wallet.detail.account,volume,trading.config.symbolId)
+      if(price){
+        setLiquidationPrice(price);
+      }
+    }
+  }
+
 
   //处理输入相关方法
   const onFocus = event => {
@@ -210,6 +222,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       }
       calcLiquidityUsed();
       loadTransactionFee();
+      calcLiqPriceAfter();
     } else if (wallet.detail.account) {
       trading.resume()
     }
@@ -560,8 +573,13 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='text-enter'>
                 <DeriNumberFormat value={transFee} allowZero={true} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
               </div>
-             
             </div>
+            {type.isFuture && <div className='text-info'>
+              <div className='title-enter'>{lang['liquidation-price']}</div>
+              <div className='text-enter'>
+                {liquidationPrice > 0 ? <DeriNumberFormat value={liquidationPrice}  decimalScale={2}  /> : '--'}
+              </div>
+            </div>}
           </>}
         </div>
         <Operator hasConnectWallet={hasConnectWallet}

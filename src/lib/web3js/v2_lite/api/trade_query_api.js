@@ -14,7 +14,7 @@ import {
   getLatestBlockNumber,
 } from '../../shared/utils';
 import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
-import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import { getIndexInfo } from '../../shared/config/token';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
@@ -216,6 +216,15 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         volume
       );
 
+      liquidatePriceCache.set(poolAddress, {
+        volume,
+        margin,
+        totalCost,
+        dynamicCost,
+        price,
+        multiplier,
+        minMaintenanceMarginRatio,
+      });
       return {
         price,
         volume: volume.toString(),
