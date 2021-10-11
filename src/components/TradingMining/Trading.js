@@ -9,159 +9,158 @@ import add from './img/add.svg'
 import bnbLogo from './img/bnb.svg'
 import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
+import { formatAddress } from '../../utils/utils';
+import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward } from '../../lib/web3js/indexV2'
+import { set } from 'mobx';
 
 function Trading({ wallet, lang }) {
-  const [yourBNB, setYourBNB] = useState('100')
-  const [yourDERI, setYourDERI] = useState('1000')
-  const [yourScored, setYourScored] = useState('10000')
-  const [yourFee, setYourFee] = useState('1000')
-  const [yourCoeff, setYourCoeff] = useState('10000')
-  const [list, setList] = useState(
-    [
-      {
-        'no': 1,
-        'progress': 'one-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '1000000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '200000'
-      },
-      {
-        'no': 2,
-        'progress': 'two-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '1000000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '100000'
-      },
+  const [yourBNB, setYourBNB] = useState('')
+  const [yourDERI, setYourDERI] = useState('')
+  const [yourScored, setYourScored] = useState('')
+  const [yourFee, setYourFee] = useState('')
+  const [yourCoeff, setYourCoeff] = useState('')
+  const [list, setList] = useState([])
+  const numToEn = (num) => {
+    let en;
+    switch (num) {
+      case 1:
+        en = 'one'
+        break;
+      case 2:
+        en = 'two'
+        break;
+      case 3:
+        en = 'three'
+        break;
+      case 4:
+        en = 'four'
+        break;
+      case 5:
+        en = 'five'
+        break;
+      case 6:
+        en = 'six'
+        break;
+      case 7:
+        en = 'seven'
+        break;
+      case 8:
+        en = 'eight'
+        break;
+      case 9:
+        en = 'nine'
+        break;
+      case 10:
+        en = 'ten'
+        break;
+      default:
+        break;
+    }
+    return en
+  }
 
-      {
-        'no': 3,
-        'progress': 'three-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '1000000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '50000'
-      },
-      {
-        'no': 4,
-        'progress': 'four-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '1000000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
-      {
-        'no': 5,
-        'progress': 'five-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '1000000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
-      {
-        'no': 6,
-        'progress': 'six-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '10000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
-      {
-        'no': 7,
-        'progress': 'seven-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '10000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
-      {
-        'no': 8,
-        'progress': 'eight-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '10000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
-      {
-        'no': 9,
-        'progress': 'nine-progress progress-box',
-        'userAddr': '0Xfe...6721',
-        'feesPaid': '10000',
-        'avgCoeff': '20',
-        'score': '139',
-        'rewardBNB': '25000'
-      },
+  const getUserStaking = async ()=>{
+    let res = await getUserStakingInfo(wallet.detail.account)
+    setYourScored(res.score)
+    setYourFee(res.feePaid)
+    setYourCoeff(res.coef)
+  }
 
-    ]
-  )
+  const getUserReward = async ()=>{
+    let res = await getUserStakingReward(wallet.detail.account)
+    setYourBNB(res.rewardBNB)
+    setYourDERI(res.rewardDERI)
+  }
+
+  const getList = async () => {
+    let res = await getStakingTop10Users()
+    if (res) {
+      res = res.map((item, index) => {
+        let obj = {}
+        obj.no = item.no
+        item.userAddr = formatAddress(item.userAddr)
+        obj.userAddr = item.userAddr
+        obj.feesPaid = item.feePaid
+        obj.avgCoeff = item.evgCoeff
+        obj.score = item.score
+        obj.rewardBNB = item.rewardBNB
+        obj.progress = `${numToEn(item.no)}-progress progress-box`
+        obj.progressSlider = (item.score / res[0].score) * 100
+        return obj
+      })
+      setList(res)
+    }
+  }
 
   useEffect(() => {
+    getList()
+  }, [])
 
-    // if (list.length >= 10) {
-    //   document.getElementsByClassName('ten-progress')[0].style.width = '10%'
-    //   document.getElementsByClassName('nine-progress')[0].style.width = '20%'
-    //   document.getElementsByClassName('eight-progress')[0].style.width = '30%'
-    //   document.getElementsByClassName('seven-progress')[0].style.width = '40%'
-    //   document.getElementsByClassName('six-progress')[0].style.width = '50%'
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 9) {
-    //   document.getElementsByClassName('nine-progress')[0].style.width = '20%'
-    //   document.getElementsByClassName('eight-progress')[0].style.width = '30%'
-    //   document.getElementsByClassName('seven-progress')[0].style.width = '40%'
-    //   document.getElementsByClassName('six-progress')[0].style.width = '50%'
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 8) {
-    //   document.getElementsByClassName('eight-progress')[0].style.width = '30%'
-    //   document.getElementsByClassName('seven-progress')[0].style.width = '40%'
-    //   document.getElementsByClassName('six-progress')[0].style.width = '50%'
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 7) {
-    //   document.getElementsByClassName('seven-progress')[0].style.width = '40%'
-    //   document.getElementsByClassName('six-progress')[0].style.width = '50%'
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 6) {
-    //   document.getElementsByClassName('six-progress')[0].style.width = '50%'
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 5) {
-    //   document.getElementsByClassName('five-progress')[0].style.width = '60%'
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 4) {
-    //   document.getElementsByClassName('four-progress')[0].style.width = '70%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // } else if (list.length >= 3) {
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    //   document.getElementsByClassName('three-progress')[0].style.width = '80%'
-    // } else if (list.length >= 2) {
-    //   document.getElementsByClassName('two-progress')[0].style.width = '90%'
-    // }
-  }, [wallet.detail.account, list])
+  useEffect(()=>{
+    if(wallet.isConnected()){
+      getUserReward()
+      getUserStaking()
+    }
+  },[wallet.detail.account])
+
+  // useEffect(() => {
+
+  //   if (list.length >= 10) {
+  //     document.getElementsByClassName('ten-progress')[0].style.width = `${list[9].progressSlider}%`
+  //     document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
+  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 9) {
+  //     document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
+  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 8) {
+  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 7) {
+  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 6) {
+  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 5) {
+  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 4) {
+  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 3) {
+  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   } else if (list.length >= 2) {
+  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+  //   }
+  // }, [list])
   return (
     <div className='trading-top'>
 
@@ -197,13 +196,13 @@ function Trading({ wallet, lang }) {
                         {item.userAddr}
                       </div>
                       <div className='feespaid'>
-                        $ <DeriNumberFormat value={item.feesPaid} thousandSeparator={true} />
+                        $ <DeriNumberFormat value={item.feesPaid} decimalScale={2} thousandSeparator={true} />
                       </div>
                       <div className='avgcoeff'>
-                        <DeriNumberFormat value={item.avgCoeff} thousandSeparator={true} />
+                        <DeriNumberFormat value={item.avgCoeff} decimalScale={2} thousandSeparator={true} />
                       </div>
                       <div className='score'>
-                        {item.score}
+                        <DeriNumberFormat value={item.score} decimalScale={2} thousandSeparator={true} />
                       </div>
                       <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                         $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
@@ -219,7 +218,7 @@ function Trading({ wallet, lang }) {
             </div>
           </div> */}
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
@@ -259,7 +258,7 @@ function Trading({ wallet, lang }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div> */}
+            </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
@@ -267,7 +266,7 @@ function Trading({ wallet, lang }) {
               <div className='button-link'>
                 <a href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
                   {lang['staking']}
-                </a> 
+                </a>
                 <a href='https://app.deri.finance/#/futures/pro'>
                   {lang['futures']}
                 </a>
@@ -459,7 +458,7 @@ function Trading({ wallet, lang }) {
 
       </div>
       <div className='activity-rules'>
-        {/* <a href=''>{lang['detailed-rules']}</a>  */}
+        <a href=''>{lang['detailed-rules']}</a>
       </div>
     </div>
   )

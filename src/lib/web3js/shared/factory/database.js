@@ -24,6 +24,20 @@ export const databaseFactory = (() => {
   };
 })();
 
+export const databaseActivityFactory = (() => {
+  const databaseInstanceMap = {};
+  return () => {
+    const address = DeriEnv.get() === 'prod' ? '0x75E04C816F206939a92AE7B23015ce3ef21aE571' : '0x7C1267188379f57d92e640E519151229E1eA5565'
+    const key = address;
+    if (Object.keys(databaseInstanceMap).includes(key)) {
+      return databaseInstanceMap[key];
+    }
+    const database = new DatabaseContract(address);
+    databaseInstanceMap[key] = database;
+    return database;
+  };
+})();
+
 export const databaseWormholeFactory = (() => {
   const databaseInstanceMap = {};
   return (useProductionDB = false) => {

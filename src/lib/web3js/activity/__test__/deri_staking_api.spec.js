@@ -1,19 +1,15 @@
-import { getStakingBalance, getTotalStakingBalance, getTotalStakingScore, getStakingScore } from "../api/deri_staking"
+import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward } from "../api/deri_staking"
 
-const STAKING_ACCOUNT_ADDRESS = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
 const TIMEOUT = 20000
 
 describe('deri staking', () => {
-  it('getDeriBalance', async() => {
-    expect(await getStakingBalance('97', STAKING_ACCOUNT_ADDRESS)).toEqual('17')
+  it('getStakingTop10Users', async() => {
+    expect(await getStakingTop10Users()).toEqual([])
   }, TIMEOUT)
-  it('getTotalDeriBalance', async() => {
-    expect(await getTotalStakingBalance('97')).toEqual('17')
+  it('getUserStakingInfo', async() => {
+    expect(await getUserStakingInfo('0xe33dc6024fb048d894deea298e5468bbb2108b7b')).toEqual({})
   }, TIMEOUT)
-  it('getStakingStore', async() => {
-    expect(await getStakingScore('97', STAKING_ACCOUNT_ADDRESS)).toEqual('')
-  }, TIMEOUT)
-  it('getTotalStakingStore', async() => {
-    expect(await getTotalStakingScore('97')).toEqual('')
+  it('getUserStakingReward', async() => {
+    expect(await getUserStakingReward('0x432fcd67815d5cc72808a7815a02373fdee7d740')).toEqual({})
   }, TIMEOUT)
 })

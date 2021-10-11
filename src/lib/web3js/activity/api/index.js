@@ -10,11 +10,7 @@ export {
 } from './ptoken_airdrop';
 
 export {
-  getTotalStakingScore,
-  getTotalStakingBalance,
-  getStakingScore,
-  getStakingBalance,
-
-  withdrawStaking,
-  depositStaking,
+  getStakingTop10Users,
+  getUserStakingInfo,
+  getUserStakingReward,
 } from './deri_staking';

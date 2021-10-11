@@ -6,7 +6,7 @@ import TotalPoints from "../../../../components/TradingMining/TotalPoints";
 import './index.less'
 import moment from 'moment';
 export default function Index({lang}){
-  const eventEndTimestamp = moment('2021-10-14 00:00:00')
+  const eventEndTimestamp = moment('2021-10-13 10:00:00')
   const [timeover, setTimeover] = useState(eventEndTimestamp.isBefore(moment()) ? true : false)
   return (
     <div className='trading-mining'>

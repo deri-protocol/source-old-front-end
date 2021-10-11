@@ -5,7 +5,7 @@ import Trading from "../../../../components/TradingMining/Trading";
 import Staking from "../../../../components/TradingMining/Staking";
 import './index.less'
 export default function Index({lang}){
-  const eventEndTimestamp = moment('2021-10-14 00:00:00')
+  const eventEndTimestamp = moment('2021-10-13 18:00:00')
   const [timeover, setTimeover] = useState(eventEndTimestamp.isBefore(moment()) ? true : false)
   return (
     <div className='trading-mining'>
