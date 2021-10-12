@@ -37,9 +37,11 @@
   "the-second-points":"20,000 points",
   "the-third-points":"30,000 points",
   "the-fourth-points":"50,000 points",
-  "the-first-time":"10:00 AM, October 13th to 09:59 AM, October 20th",
-  "the-second-time":"10:00 AM, October 20th to 09:59 AM, October 27th",
-  "the-third-time":"10:00 AM, October 13th to 09:59 AM, October 20th",
-  "the-fourth-time":"10:00:00 AM, November 3rd and 09:59:59  AM,November 10th UTC",
+  "total-contrib-value":"Total Contrib. value",
+  "your-contrib-value":"Your Contrib. value",
+  "the-first-time":"10:00:00 AM, Oct 13th - 09:59:59 AM, Oct 20th UTC",
+  "the-second-time":"10:00:00 AM, Oct 20th - 09:59:59 AM, Oct 27th UTC",
+  "the-third-time":"10:00:00 AM, Oct 27th - 09:59:59 AM, Nov 3rd UTC",
+  "the-fourth-time":"10:00:00 AM, Nov 3rd - 09:59:59  AM, Nov 10th UTC",
   "detailed-rules":"Detailed Rules"
 }

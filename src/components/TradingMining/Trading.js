@@ -10,7 +10,7 @@ import bnbLogo from './img/bnb.svg'
 import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { formatAddress } from '../../utils/utils';
-import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward } from '../../lib/web3js/indexV2'
+import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward,getUserStakingContribution } from '../../lib/web3js/indexV2'
 import { set } from 'mobx';
 
 function Trading({ wallet, lang }) {
@@ -19,6 +19,8 @@ function Trading({ wallet, lang }) {
   const [yourScored, setYourScored] = useState('')
   const [yourFee, setYourFee] = useState('')
   const [yourCoeff, setYourCoeff] = useState('')
+  const [userContrib,setUserContrib] = useState('')
+  const [totalContrib,setTotalContrib] = useState('')
   const [list, setList] = useState([])
   const numToEn = (num) => {
     let en;
@@ -59,14 +61,20 @@ function Trading({ wallet, lang }) {
     return en
   }
 
-  const getUserStaking = async ()=>{
+  const getUserStaking = async () => {
     let res = await getUserStakingInfo(wallet.detail.account)
     setYourScored(res.score)
     setYourFee(res.feePaid)
     setYourCoeff(res.coef)
   }
 
-  const getUserReward = async ()=>{
+  const getUserContribution = async ()=>{
+    let res = await getUserStakingContribution(wallet.detail.account)
+    setUserContrib(res.userContrib)
+    setTotalContrib(res.totalContrib)
+  }
+
+  const getUserReward = async () => {
     let res = await getUserStakingReward(wallet.detail.account)
     setYourBNB(res.rewardBNB)
     setYourDERI(res.rewardDERI)
@@ -96,12 +104,13 @@ function Trading({ wallet, lang }) {
     getList()
   }, [])
 
-  useEffect(()=>{
-    if(wallet.isConnected()){
+  useEffect(() => {
+    if (wallet.isConnected()) {
       getUserReward()
       getUserStaking()
+      getUserContribution()
     }
-  },[wallet.detail.account])
+  }, [wallet.detail.account])
 
   // useEffect(() => {
 
@@ -218,7 +227,7 @@ function Trading({ wallet, lang }) {
             </div>
           </div> */}
           <div className='your-rewards'>
-            <div className='your-estimated-rewards'>
+            {/* <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
@@ -258,6 +267,15 @@ function Trading({ wallet, lang }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
+            </div> */}
+            <div className='deri-total'>
+              <div className='deri-title'>
+                {lang['transaction-sharing-pool']}
+              </div>
+              <div className='deri-num'>
+                <img src={deriLogo}></img>
+                <span>$ 1,000,000</span>
+              </div>
             </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
@@ -279,7 +297,18 @@ function Trading({ wallet, lang }) {
                 {lang['the-individual']}
               </div>
             </div>
+            <div className='total-your-contrib'>
+              <div className='total-contrib'>
+                <div className='total-your-contrib-title'>
 
+                </div>
+                <div className='total-your-contrib-num'></div>
+              </div>
+              {/* <div className='your-contrib'>
+                <div className='total-your-contrib-title'></div>
+                <div className='total-your-contrib-num'></div>
+              </div> */}
+            </div>
           </div>
         </div>
       </div>

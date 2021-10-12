@@ -70,7 +70,42 @@
   .trading {
     width: 1400px;
     margin-top: 30px;
+    .bnb-total,
+    .deri-total {
+      width: 520px;
+      height: 210px;
+      background-color: #0D0E0F;
+      border-radius: 20px;
 
+      .bnb-title,
+      .deri-title {
+        font-size: 18px;
+        color: #D4E05C;
+        padding-left: 20px;
+        padding-top: 10px;
+        font-family: Tachyon;
+      }
+
+      .bnb-num,
+      .deri-num {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 518px;
+        margin: 0 auto;
+        height: 170px;
+        margin-top: 6px;
+        background-color: #202124;
+        border-radius: 20px;
+        font-size: 54px;
+        font-weight: bold;
+
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+    }
     .trading-top {
       .trading-title {
         font-size: 20px;
@@ -186,8 +221,10 @@
         }
 
         .your-rewards {
-          width: 560px;
-
+          // width: 560px;
+          width: 1400px;
+          display: flex;
+          justify-content: space-between;
           .your-estimated-rewards {
             height: 244px;
             background-color: #0D0E0F;
@@ -258,8 +295,10 @@
           }
 
           .raise-score {
-            width: 560px;
-            height: 378px;
+            // width: 560px;
+            width: 835px;
+            // height: 378px;
+            height: 240px;
             border-radius: 20px;
             // margin-top: 40px;
             // border: 1px dashed #CCCCCC;
@@ -275,7 +314,7 @@
 
             .button-link {
               display: flex;
-              justify-content: space-between;
+              // justify-content: space-between;
               align-items: center;
 
               a {
@@ -283,19 +322,23 @@
                 box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
                 border-radius: 10px;
                 color: #ccc;
+                margin-left: 40px;
                 width: 160px;
                 height: 45px;
                 text-align: center;
                 line-height: 45px;
                 font-weight: 400;
-                margin-top: 40px;
+                margin-top: 30px;
+              }
+              a:nth-child(1){
+                margin-left: 0px;
               }
             }
 
             .des {
-              margin-top: 40px;
+              margin-top: 30px;
               font-size: 16px;
-              line-height: 30px;
+              line-height: 20px;
             }
 
           }

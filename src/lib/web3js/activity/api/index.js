@@ -13,4 +13,5 @@ export {
   getStakingTop10Users,
   getUserStakingInfo,
   getUserStakingReward,
+  getUserStakingContribution,
 } from './deri_staking';

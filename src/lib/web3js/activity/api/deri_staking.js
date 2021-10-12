@@ -1,4 +1,4 @@
-import { catchApiError, bg, deriToNatural, databaseActivityFactory } from '../../shared';
+import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress } from '../../shared';
 
 const range = (n) => (new Array(n)).fill(0).map((i,index) => index)
 
@@ -54,7 +54,7 @@ export const getStakingTop10Users = async () => {
     },
     [],
     'getStakingTop10Users',
-    ''
+    [],
   );
 };
 
@@ -62,34 +62,40 @@ export const getUserStakingInfo = async (accountAddress) => {
   const args = [accountAddress];
   return catchApiError(
     async (accountAddress) => {
+      accountAddress = toChecksumAddress(accountAddress)
       const db = databaseActivityFactory();
       const key = [
-        `TE.${accountAddress}.fee`,
-        `TE.${accountAddress}.coef`,
-        `TE.${accountAddress}.Q1.cont`,
-        `TE.${accountAddress}.Q2.cont`,
-        `TE.${accountAddress}.Q3.cont`,
-        `TE.${accountAddress}.Q4.cont`,
         `TE.Q1.cont`,
         `TE.Q2.cont`,
         `TE.Q3.cont`,
         `TE.Q4.cont`,
+        `TE.${accountAddress}.Q1.cont`,
+        `TE.${accountAddress}.Q2.cont`,
+        `TE.${accountAddress}.Q3.cont`,
+        `TE.${accountAddress}.Q4.cont`,
+        `TE.${accountAddress}.fee`,
+        `TE.${accountAddress}.coef`,
       ];
       const res = await db.getValues(key)
-      const scoreQ1 = bg(10000).times(bg(res[2]).div(res[6]))
-      const scoreQ2 = bg(20000).times(bg(res[3]).div(res[7]))
-      const scoreQ3 = bg(30000).times(bg(res[4]).div(res[8]))
-      const scoreQ4 = bg(50000).times(bg(res[5]).div(res[9]))
+      const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
+      const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
+      const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
+      const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
       return {
         userAddr: accountAddress,
-        feePaid: deriToNatural(res[0]).toString(),
-        coef: deriToNatural(res[1]).toString(),
+        feePaid: deriToNatural(res[8]).toString(),
+        coef: deriToNatural(res[9]).toString(),
         score: bg(scoreQ1).plus(scoreQ2).plus(scoreQ3).plus(scoreQ4).toString()
       }
     },
     args,
     'getUserStakingInfo',
-    ''
+    {
+      userAddr: '',
+      feePaid: '',
+      coef: '',
+      score: '',
+    }
   );
 };
 
@@ -97,16 +103,17 @@ export const getUserStakingReward = async (accountAddress) => {
   const args = [accountAddress];
   return catchApiError(
     async (accountAddress) => {
+      accountAddress = toChecksumAddress(accountAddress)
       const db = databaseActivityFactory();
       const key = [
-        `TE.${accountAddress}.Q1.cont`,
-        `TE.${accountAddress}.Q2.cont`,
-        `TE.${accountAddress}.Q3.cont`,
-        `TE.${accountAddress}.Q4.cont`,
         `TE.Q1.cont`,
         `TE.Q2.cont`,
         `TE.Q3.cont`,
         `TE.Q4.cont`,
+        `TE.${accountAddress}.Q1.cont`,
+        `TE.${accountAddress}.Q2.cont`,
+        `TE.${accountAddress}.Q3.cont`,
+        `TE.${accountAddress}.Q4.cont`,
         `TE.top.1.account`,
         `TE.top.2.account`,
         `TE.top.3.account`,
@@ -119,14 +126,14 @@ export const getUserStakingReward = async (accountAddress) => {
         `TE.top.10.account`,
       ];
       const res = await db.getValues(key);
-      const scoreQ1 = bg(10000).times(bg(res[0]).div(res[4]));
-      const scoreQ2 = bg(20000).times(bg(res[1]).div(res[5]));
-      const scoreQ3 = bg(30000).times(bg(res[2]).div(res[6]));
-      const scoreQ4 = bg(50000).times(bg(res[3]).div(res[7]));
+      const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
+      const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
+      const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
+      const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
       const score = bg(scoreQ1).plus(scoreQ2).plus(scoreQ3).plus(scoreQ4);
       const rewardDERI = bg(1000000).times(bg(score).div(110000)).toString();
 
-      const topUsers = res.slice(8).map((u) => u.slice(0, 42));
+      const topUsers = res.slice(8).map((u) => toChecksumAddress(u.slice(0, 42)));
       let rewardBNB = '0';
       if (topUsers.includes(accountAddress)) {
         if (accountAddress === topUsers[0]) {
@@ -144,12 +151,46 @@ export const getUserStakingReward = async (accountAddress) => {
         }
       }
       return {
+        userAddr: accountAddress,
         rewardBNB,
         rewardDERI,
       };
     },
     args,
     'getUserStakingReward',
-    { rewardBNB: '', rewardDERI: '' }
+    { userAddr: '', rewardBNB: '', rewardDERI: '' }
+  );
+};
+
+export const getUserStakingContribution = async (accountAddress) => {
+  const args = [accountAddress];
+  return catchApiError(
+    async (accountAddress) => {
+      accountAddress = toChecksumAddress(accountAddress);
+      const db = databaseActivityFactory();
+      const key = [
+        `TE.Q1.cont`,
+        `TE.Q2.cont`,
+        `TE.Q3.cont`,
+        `TE.Q4.cont`,
+        `TE.${accountAddress}.Q1.cont`,
+        `TE.${accountAddress}.Q2.cont`,
+        `TE.${accountAddress}.Q3.cont`,
+        `TE.${accountAddress}.Q4.cont`,
+      ];
+      const res = await db.getValues(key);
+      return {
+        userAddr: accountAddress,
+        totalContrib: deriToNatural(
+          bg(res[0]).plus(res[1]).plus(res[2]).plus(res[3])
+        ).toString(),
+        userContrib: deriToNatural(
+          bg(res[4]).plus(res[5]).plus(res[6]).plus(res[7])
+        ).toString(),
+      };
+    },
+    args,
+    'getUserStakingContribution',
+    { userAddr: '', totalContrib: '', userContrib: '' }
   );
 };
