@@ -91,13 +91,19 @@ const getTradeHistoryOnline = async (
   const { bTokenSymbol, pricer:pricerAddress } = getPoolConfig(poolAddress, undefined, undefined, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
   const pricer = optionPricerFactory(chainId, pricerAddress)
-  const [toBlock] = await Promise.all([
+  const [toBlock, ] = await Promise.all([
     getBlockInfo(chainId, 'latest'),
     optionPool._updateConfig(),
   ]);
   fromBlock = parseInt(fromBlock);
 
-  let symbols = optionPool.activeSymbols
+
+  let promises= []
+  for (let i=0; i<optionPool.activeSymbolIds.length; i++) {
+    promises.push(optionPool.getSymbol(optionPool.activeSymbolIds[i].toString()))
+  }
+  let symbols = await Promise.all(promises)
+  //let symbols = optionPool.activeSymbols
   const multiplier = symbols.map((i) => i.multiplier.toString());
 
   const filters =  { account: accountAddress }
