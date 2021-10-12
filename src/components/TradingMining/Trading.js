@@ -10,6 +10,7 @@ import bnbLogo from './img/bnb.svg'
 import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { formatAddress } from '../../utils/utils';
+import TipWrapper from '../TipWrapper/TipWrapper'
 import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
 import { set } from 'mobx';
 
@@ -66,7 +67,7 @@ function Trading({ wallet, lang }) {
     setYourScored(res.score)
     setYourFee(res.feePaid)
     setYourCoeff(res.coef)
-    
+
   }
 
   const getUserContribution = async () => {
@@ -105,11 +106,11 @@ function Trading({ wallet, lang }) {
     let interval = null;
     interval = window.setInterval(() => {
       getList()
-    },60000)
+    }, 60000)
     getList()
     return () => {
       interval && clearInterval(interval);
-		};
+    };
   }, [])
 
   useEffect(() => {
@@ -120,7 +121,7 @@ function Trading({ wallet, lang }) {
         getUserStaking()
         getUserContribution()
       }
-    },60000)
+    }, 60000)
     if (wallet.isConnected()) {
       getUserReward()
       getUserStaking()
@@ -128,7 +129,7 @@ function Trading({ wallet, lang }) {
     }
     return () => {
       interval && clearInterval(interval);
-		};
+    };
   }, [wallet.detail.account])
 
   // useEffect(() => {
@@ -193,11 +194,11 @@ function Trading({ wallet, lang }) {
     <div className='trading-top'>
 
       <div className='desktop-list'>
-        <div className='trading-title'>
+        {/* <div className='trading-title'>
           {lang['earn-deri-for-trading-perpetual']}
-        </div>
+        </div> */}
         <div className='trading-top-list'>
-          <div className='list'>
+          {/* <div className='list'>
             <div className='list-title'>
               {lang['top-ten-users']}
             </div>
@@ -207,10 +208,10 @@ function Trading({ wallet, lang }) {
                 <span className='address'>{lang['user-addr']}</span>
                 <span className='feespaid'>{lang['fees-paid']}</span>
                 <span className='avgcoeff'>{lang['avg-coeff']}</span>
-                <span className='score'>{lang['score']}</span>
+                <span className='score'>{lang['score']}</span> */}
                 {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
-              </div>
-              <div className='list-info'>
+              {/* </div> */}
+              {/* <div className='list-info'>
                 {list.map((item, index) => {
                   return (
                     <div className='list-info-box' key={index}>
@@ -231,11 +232,11 @@ function Trading({ wallet, lang }) {
                       </div>
                       <div className='score'>
                         <DeriNumberFormat value={item.score} decimalScale={2} thousandSeparator={true} />
-                      </div>
+                      </div> */}
                       {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                         $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
                       </div> */}
-                      <div className='progress'>
+                      {/* <div className='progress'>
                         <div className={item.progress}></div>
                       </div>
                     </div>
@@ -243,24 +244,24 @@ function Trading({ wallet, lang }) {
                 })}
               </div>
             </div>
-          </div>
+          </div> */}
           <div className='your-rewards'>
-            <div className='your-estimated-rewards'>
+            {/* <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
               <div className='your-rewards-info'>
-                {/* <div className='your-bnb'>
+                <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'>$ {yourBNB ? <DeriNumberFormat decimalScale={2} value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div> */}
+                </div>
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
                   <span className='span'>$ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "--"} </span>
                 </div>
               </div>
-            </div>
-            <div className='your-score-fee-coeff'>
+            </div> */}
+            {/* <div className='your-score-fee-coeff'>
               <div className='your-score'>
                 <div className='your-score-title'>
                   {lang['your-scored']}
@@ -285,8 +286,8 @@ function Trading({ wallet, lang }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div>
-            {/* <div className='deri-total'>
+            </div> */}
+            <div className='deri-total'>
               <div className='deri-title'>
                 {lang['transaction-sharing-pool']}
               </div>
@@ -294,25 +295,44 @@ function Trading({ wallet, lang }) {
                 <img src={deriLogo}></img>
                 <span>$ 1,000,000</span>
               </div>
-            </div> */}
+            </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
+                
               </div>
               <div className='button-link'>
-                <a href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
-                  {lang['staking']}
-                </a>
-                <a href='https://app.deri.finance/#/futures/pro'>
-                  {lang['futures']}
-                </a>
-                <a href='https://app.deri.finance/#/options/pro'>
-                  {lang['options']}
-                </a>
+                <TipWrapper block={false} tip={lang['staking-hover']}>
+                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
+                    {lang['staking']}
+                  </a>
+                </TipWrapper>
+                <TipWrapper block={false} tip={lang['futures-hover']} >
+                  <a tip={lang['futures-hover']} href='https://app.deri.finance/#/futures/pro'>
+                    {lang['futures']}
+                  </a>
+                </TipWrapper>
+                <TipWrapper block={false} tip={lang['options-hover']}>
+                  <a tip={lang['options-hover']} href='https://app.deri.finance/#/options/pro'>
+                    {lang['options']}
+                  </a>
+                </TipWrapper>
               </div>
               <div className='des'>
-                {lang['the-trading-rewards']}<br></br>
-                {lang['the-individual']}
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
+                  <span className='des-tip' tip={lang['the-quater-points']}>
+                  this quater's points
+                  </span> 
+                </TipWrapper>
+                &nbsp; per their transaction fees multiplied by the&nbsp;
+                <TipWrapper block={false} tip={lang['boosting-factor']}>
+                  <span className='des-tip' tip={lang['boosting-factor']}>
+                    boosting factors
+                  </span> 
+                </TipWrapper>
+               .
+                {/* <br></br> */}
+                {/* {lang['the-individual']} */}
               </div>
             </div>
             <div className='total-your-contrib'>
@@ -322,7 +342,7 @@ function Trading({ wallet, lang }) {
                 </div>
                 <div className='total-your-contrib-num'></div>
               </div>
-              <div className='your-contrib'>
+              {/* <div className='your-contrib'>
                 <div className='total-contrib-value'>
                   <div className='total-your-contrib-title'>
                     <span>{lang['total-contrib-value']}</span>
@@ -343,7 +363,7 @@ function Trading({ wallet, lang }) {
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -398,26 +418,44 @@ function Trading({ wallet, lang }) {
                 {lang['raise-score']}
               </div>
               <div className='button-link'>
-                <a href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
-                  {lang['staking']}
-                </a>
-                <a href='https://app.deri.finance/#/futures/pro'>
-                  {lang['futures']}
-                </a>
-                <a href='https://app.deri.finance/#/options/pro'>
-                  {lang['options']}
-                </a>
+                <TipWrapper block={false} tip={lang['staking-hover']}>
+                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
+                    {lang['staking']}
+                  </a>
+                </TipWrapper>
+                <TipWrapper block={false} tip={lang['futures-hover']} >
+                  <a tip={lang['futures-hover']} href='https://app.deri.finance/#/futures/pro'>
+                    {lang['futures']}
+                  </a>
+                </TipWrapper>
+                <TipWrapper block={false} tip={lang['options-hover']}>
+                  <a tip={lang['options-hover']} href='https://app.deri.finance/#/options/pro'>
+                    {lang['options']}
+                  </a>
+                </TipWrapper>
               </div>
               <div className='des'>
-                {lang['the-trading-rewards']}<br></br>
-                {lang['the-individual']}
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
+                  <span className='des-tip' tip={lang['the-quater-points']}>
+                  this quater's points
+                  </span> 
+                </TipWrapper>
+                &nbsp; per their transaction fees multiplied by the&nbsp;
+                <TipWrapper block={false} tip={lang['boosting-factor']}>
+                  <span className='des-tip' tip={lang['boosting-factor']}>
+                    boosting factors
+                  </span> 
+                </TipWrapper>
+               .
+                {/* <br></br> */}
+                {/* {lang['the-individual']} */}
               </div>
             </div>
 
             <div className='totalpoints'>
-              <div className='total-points-title'>
+              {/* <div className='total-points-title'>
                 {lang['the-trading-mining-event-has-four-quarters']}
-              </div>
+              </div> */}
               <div className='dial'>
                 <div className='total-points'>
                   <span>{lang['totalpoints']}</span>
@@ -522,9 +560,9 @@ function Trading({ wallet, lang }) {
         </div>
 
       </div>
-      <div className='activity-rules'>
+      {/* <div className='activity-rules'>
         <a href=''>{lang['detailed-rules']}</a>
-      </div>
+      </div> */}
     </div>
   )
 }

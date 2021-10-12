@@ -146,6 +146,9 @@
             text-align: center;
             white-space: nowrap;
           }
+          .avgcoeff{
+            width: 140px;
+          }
 
           .score {
             width: 120px;
@@ -207,10 +210,10 @@
               }
 
               .progress {
-                width: 350px;
+                width: 430px;
                 height: 10px;
                 position: absolute;
-                left: 275px;
+                left: 255px;
                 top: 75px;
 
                 .progress-box {
@@ -229,11 +232,11 @@
         }
 
         .your-rewards {
-          width: 560px;
+          // width: 560px;
 
-          // width: 1400px;
-          // display: flex;
-          // justify-content: space-between;
+          width: 1400px;
+          display: flex;
+          justify-content: space-between;
           .your-estimated-rewards {
             height: 244px;
             background-color: #0D0E0F;
@@ -306,15 +309,16 @@
           }
 
           .raise-score {
-            width: 560px;
-            // width: 835px;
-            height: 252px;
-            // height: 240px;
+            // width: 560px;
+            width: 835px;
+            // height: 252px;
+            height: 207px;
             border-radius: 20px;
-            margin-top: 40px;
+            // margin-top: 40px;
             border: 1px dashed #CCCCCC;
             padding: 20px;
             box-sizing: border-box;
+            margin-left: 40px;
 
             .raise-score-title {
               font-size: 18px;
@@ -325,32 +329,39 @@
 
             .button-link {
               display: flex;
-              justify-content: space-between;
-              align-items: center;
+              // justify-content: space-between;
+              // align-items: center;
 
               a {
                 background: #202124;
                 box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
                 border-radius: 10px;
                 color: #ccc;
-                margin-left: 40px;
+                // margin-left: 40px;
                 width: 160px;
                 height: 45px;
+                display: inline-block;
                 text-align: center;
                 line-height: 45px;
                 font-weight: 400;
                 margin-top: 20px;
               }
-
-              a:nth-child(1) {
+              span{
+                margin-left: 40px;
+              }
+              span:nth-child(1) {
                 margin-left: 0px;
               }
             }
 
             .des {
               margin-top: 30px;
-              font-size: 16px;
-              line-height: 20px;
+              font-size: 14px;
+              line-height: 25px;
+              .des-tip{
+                display: inline-block;
+                border-bottom: 1px dashed #fff;
+              }
             }
 
           }
@@ -426,7 +437,7 @@
         }
 
         .dial-time {
-          font-size: 14px;
+          font-size: 12px;
           color: #CCCCCC;
           text-align: center;
           margin-top: 10px;
@@ -434,11 +445,11 @@
         }
 
         .dial-box {
-          margin-top: 5px;
           position: relative;
           width: 230px;
           height: 233px;
           margin: 0 auto;
+          margin-top: 17px;
 
           .one-dial-box {
             width: 230px;
@@ -453,27 +464,15 @@
             .points {
               position: absolute;
               font-size: 14px;
-              width: 50px;
+              width: 96px;
+              left: 75px;
+              top: 82px;
             }
 
-            .first-points {
-              left: 40px;
-            }
-
-            .second-points {
-              left: 50px;
-              top: 80px;
-            }
-
-            .third-points {
-              left: 80px;
-              top: 65px;
-            }
-
-            .fourth-points {
-              left: 90px;
-              top: 65px;
-            }
+            // .fourth-points {
+            //   left: 75px;
+            //   top: 82px;
+            // }
 
             .two-dial-box {
               width: 170px;
@@ -523,7 +522,7 @@
 
               .s-two {
                 animation: rotate-two 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 78px -1px;
+                transform-origin: 80px  1px;
               }
 
               .s-three {
@@ -542,7 +541,7 @@
                 }
 
                 100% {
-                  transform: rotate(30deg);
+                  transform: rotate(16.36deg);
                 }
               }
 
@@ -552,7 +551,7 @@
                 }
 
                 100% {
-                  transform: rotate(60deg);
+                  transform: rotate(49.08deg);
                 }
               }
 
@@ -562,7 +561,7 @@
                 }
 
                 100% {
-                  transform: rotate(135deg);
+                  transform: rotate(98.16deg);
                 }
               }
 
@@ -599,47 +598,47 @@
               }
 
               .line:nth-child(2) {
-                transform: rotate(15deg);
+                transform: rotate(16.36deg);
               }
 
               .line:nth-child(3) {
-                transform: rotate(30deg);
+                transform: rotate(32.72deg);
               }
 
               .line:nth-child(4) {
-                transform: rotate(45deg);
+                transform: rotate(49.08deg);
               }
 
               .line:nth-child(5) {
-                transform: rotate(60deg);
+                transform: rotate(65.44deg);
               }
 
               .line:nth-child(6) {
-                transform: rotate(75deg);
+                transform: rotate(81.8deg);
               }
 
               .line:nth-child(7) {
-                transform: rotate(90deg);
+                transform: rotate(98.16deg);
               }
 
               .line:nth-child(8) {
-                transform: rotate(105deg);
+                transform: rotate(114.52deg);
               }
 
               .line:nth-child(9) {
-                transform: rotate(120deg);
+                transform: rotate(130.88deg);
               }
 
               .line:nth-child(10) {
-                transform: rotate(135deg);
+                transform: rotate(147.24deg);
               }
 
               .line:nth-child(11) {
-                transform: rotate(150deg);
+                transform: rotate(163.6deg);
               }
 
               .line:nth-child(12) {
-                transform: rotate(165deg);
+                transform: rotate(180deg);
               }
 
             }

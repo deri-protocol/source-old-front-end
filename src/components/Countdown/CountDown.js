@@ -13,7 +13,7 @@ export default function CountDown({lastTimestamp ,lang,onEnd}){
   }, [lastTimestamp])
   return (
     <div className='count-down'>
-      <div className='tip'>Time Remaining</div>
+      <div className='tip'>Time to Start</div>
       <div id="flipdown" class="flipdown"></div>
     </div>
   )
