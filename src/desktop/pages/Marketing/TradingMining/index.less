@@ -119,7 +119,7 @@
 
         .list {
           width: 780px;
-          height: 890px;
+          height: 970px;
           background-color: #0D0E0F;
           border-radius: 20px;
 
@@ -134,7 +134,7 @@
             width: 778px;
             margin: 0 auto;
             background-color: #202124;
-            height: 842px;
+            height: 922px;
             margin-top: 10px;
             border-radius: 20px;
 
@@ -158,6 +158,7 @@
                 height: 35px;
                 text-align: center;
                 white-space: nowrap;
+                line-height: 35px;
               }
 
               .address {
@@ -194,6 +195,7 @@
               .list-info-box {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 padding-top: 40px;
                 height: 35px;
                 padding-right: 30px;
@@ -210,6 +212,7 @@
                 .progress-box {
                   width: 0%;
                   height: 10px;
+                  border-radius: 5px;
                   background-color: #246CAD;
                 }
                 .one-progress{
@@ -221,10 +224,10 @@
         }
 
         .your-rewards {
-          // width: 560px;
-          width: 1400px;
-          display: flex;
-          justify-content: space-between;
+          width: 560px;
+          // width: 1400px;
+          // display: flex;
+          // justify-content: space-between;
           .your-estimated-rewards {
             height: 244px;
             background-color: #0D0E0F;
@@ -254,7 +257,7 @@
                 display: flex;
                 justify-content: normal;
                 align-items: center;
-                font-size: 45px;
+                font-size: 40px;
                 width: 150px;
                 color: #CCCCCC;
                 font-weight: 400;
@@ -295,26 +298,26 @@
           }
 
           .raise-score {
-            // width: 560px;
-            width: 835px;
-            // height: 378px;
-            height: 240px;
+            width: 560px;
+            // width: 835px;
+            height: 252px;
+            // height: 240px;
             border-radius: 20px;
-            // margin-top: 40px;
-            // border: 1px dashed #CCCCCC;
-            // padding: 20px;
+            margin-top: 40px;
+            border: 1px dashed #CCCCCC;
+            padding: 20px;
             box-sizing: border-box;
 
             .raise-score-title {
               font-size: 18px;
               color: #D4E05C;
-              // padding-top: 10px;
+              padding-top: 0px;
               font-family: Tachyon;
             }
 
             .button-link {
               display: flex;
-              // justify-content: space-between;
+              justify-content: space-between;
               align-items: center;
 
               a {
@@ -328,7 +331,7 @@
                 text-align: center;
                 line-height: 45px;
                 font-weight: 400;
-                margin-top: 30px;
+                margin-top: 20px;
               }
               a:nth-child(1){
                 margin-left: 0px;
@@ -343,7 +346,7 @@
 
           }
 
-          .pool-total-scored {
+          .your-contrib {
             height: 188px;
             background-color: #202124;
             border-radius: 20px;
@@ -353,11 +356,16 @@
             padding: 20px;
             box-sizing: border-box;
             color: #CCCCCC;
-
-            .pool-total-num {
+            padding:  20px 40px;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            .total-your-contrib-num {
               margin-top: 30px;
-              font-size: 45px;
+              font-size: 40px;
               font-weight: 400;
+              display: flex;
+              justify-content: space-between;
             }
           }
         }

@@ -10,7 +10,7 @@ import bnbLogo from './img/bnb.svg'
 import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { formatAddress } from '../../utils/utils';
-import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward,getUserStakingContribution } from '../../lib/web3js/indexV2'
+import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
 import { set } from 'mobx';
 
 function Trading({ wallet, lang }) {
@@ -19,8 +19,8 @@ function Trading({ wallet, lang }) {
   const [yourScored, setYourScored] = useState('')
   const [yourFee, setYourFee] = useState('')
   const [yourCoeff, setYourCoeff] = useState('')
-  const [userContrib,setUserContrib] = useState('')
-  const [totalContrib,setTotalContrib] = useState('')
+  const [userContrib, setUserContrib] = useState('')
+  const [totalContrib, setTotalContrib] = useState('')
   const [list, setList] = useState([])
   const numToEn = (num) => {
     let en;
@@ -68,7 +68,7 @@ function Trading({ wallet, lang }) {
     setYourCoeff(res.coef)
   }
 
-  const getUserContribution = async ()=>{
+  const getUserContribution = async () => {
     let res = await getUserStakingContribution(wallet.detail.account)
     setUserContrib(res.userContrib)
     setTotalContrib(res.totalContrib)
@@ -101,15 +101,33 @@ function Trading({ wallet, lang }) {
   }
 
   useEffect(() => {
+    let interval = null;
+    interval = window.setInterval(() => {
+      getList()
+    },60000)
     getList()
+    return () => {
+      interval && clearInterval(interval);
+		};
   }, [])
 
   useEffect(() => {
+    let interval = null;
+    interval = window.setInterval(() => {
+      if (wallet.isConnected()) {
+        getUserReward()
+        getUserStaking()
+        getUserContribution()
+      }
+    },60000)
     if (wallet.isConnected()) {
       getUserReward()
       getUserStaking()
       getUserContribution()
     }
+    return () => {
+      interval && clearInterval(interval);
+		};
   }, [wallet.detail.account])
 
   // useEffect(() => {
@@ -174,11 +192,11 @@ function Trading({ wallet, lang }) {
     <div className='trading-top'>
 
       <div className='desktop-list'>
-        {/* <div className='trading-title'>
+        <div className='trading-title'>
           {lang['earn-deri-for-trading-perpetual']}
-        </div> */}
+        </div>
         <div className='trading-top-list'>
-          {/* <div className='list'>
+          <div className='list'>
             <div className='list-title'>
               {lang['top-ten-users']}
             </div>
@@ -223,22 +241,21 @@ function Trading({ wallet, lang }) {
                   )
                 })}
               </div>
-
             </div>
-          </div> */}
+          </div>
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
               <div className='your-rewards-info'>
                 <div className='your-bnb'>
                   <img src={bnbLogo}></img>
-                  <span className='span'>$ {yourBNB ? <DeriNumberFormat value={yourBNB} thousandSeparator={true} /> : "--"}</span>
+                  <span className='span'>$ {yourBNB ? <DeriNumberFormat decimalScale={2} value={yourBNB} thousandSeparator={true} /> : "--"}</span>
                 </div>
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
-                  <span className='span'>$ {yourDERI ? <DeriNumberFormat value={yourDERI} thousandSeparator={true} /> : "--"} </span>
+                  <span className='span'>$ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "--"} </span>
                 </div>
               </div>
             </div>
@@ -248,7 +265,7 @@ function Trading({ wallet, lang }) {
                   {lang['your-scored']}
                 </div>
                 <div className='your-score-num'>
-                  {yourScored ? <DeriNumberFormat value={yourScored} thousandSeparator={true} /> : "--"}
+                  {yourScored ? <DeriNumberFormat value={yourScored} decimalScale={2} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-fee'>
@@ -256,7 +273,7 @@ function Trading({ wallet, lang }) {
                   {lang['your-fees-paid']}
                 </div>
                 <div className='your-fee-num'>
-                  $  {yourFee ? <DeriNumberFormat value={yourFee} thousandSeparator={true} /> : "--"}
+                  $  {yourFee ? <DeriNumberFormat value={yourFee} decimalScale={2} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-coeff'>
@@ -264,11 +281,11 @@ function Trading({ wallet, lang }) {
                   {lang['your-coeff']}
                 </div>
                 <div className='your-coeff-num'>
-                  {yourCoeff ? <DeriNumberFormat value={yourCoeff} thousandSeparator={true} /> : "--"}
+                  {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div> */}
-            <div className='deri-total'>
+            </div>
+            {/* <div className='deri-total'>
               <div className='deri-title'>
                 {lang['transaction-sharing-pool']}
               </div>
@@ -276,7 +293,7 @@ function Trading({ wallet, lang }) {
                 <img src={deriLogo}></img>
                 <span>$ 1,000,000</span>
               </div>
-            </div>
+            </div> */}
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
@@ -304,10 +321,28 @@ function Trading({ wallet, lang }) {
                 </div>
                 <div className='total-your-contrib-num'></div>
               </div>
-              {/* <div className='your-contrib'>
-                <div className='total-your-contrib-title'></div>
-                <div className='total-your-contrib-num'></div>
-              </div> */}
+              <div className='your-contrib'>
+                <div className='total-contrib-value'>
+                  <div className='total-your-contrib-title'>
+                    <span>{lang['total-contrib-value']}</span>
+                  </div>
+                  <div className='total-your-contrib-num'>
+                    <span>
+                      {totalContrib ? <DeriNumberFormat value={totalContrib} decimalScale={2} thousandSeparator={true} /> : '--'}
+                    </span>
+                  </div>
+                </div>
+                <div className='your-contrib-value'>
+                  <div className='total-your-contrib-title'>
+                    <span>{lang['your-contrib-value']}</span>
+                  </div>
+                  <div className='total-your-contrib-num'>
+                    <span>
+                      {userContrib ? <DeriNumberFormat value={userContrib} decimalScale={2} thousandSeparator={true} /> : '--'}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

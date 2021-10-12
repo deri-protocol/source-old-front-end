@@ -6,9 +6,6 @@ export default function TotalPoints({ lang }) {
   return (
     <div className='total-points'>
       <div className='desktop-total-score'>
-        <div className='total-points-title'>
-          {lang['the-trading-mining-event-has-four-quarters']}
-        </div>
         <div className='dial'>
           <div className='first'>
             <div className='dial-title'>

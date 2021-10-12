@@ -1,3 +1,4 @@
+import { DeriEnv } from "../../shared"
 import { getStakingTop10Users, getUserStakingContribution, getUserStakingInfo, getUserStakingReward } from "../api/deri_staking"
 
 const TIMEOUT = 20000

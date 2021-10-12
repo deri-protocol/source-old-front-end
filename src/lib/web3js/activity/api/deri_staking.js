@@ -1,6 +1,8 @@
-import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress } from '../../shared';
+import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress, DeriEnv } from '../../shared';
 
 const range = (n) => (new Array(n)).fill(0).map((i,index) => index)
+
+const keyPrefix = () => (DeriEnv.get() === 'prod' ? 'TE' : 'TE1');
 
 export const getStakingTop10Users = async () => {
   return catchApiError(
@@ -9,9 +11,9 @@ export const getStakingTop10Users = async () => {
       const key = range(10).reduce(
         (acc, i) =>
           acc.concat([
-            `TE.top.${i + 1}.account`,
-            `TE.top.${i + 1}.fee`,
-            `TE.top.${i + 1}.score`,
+            `${keyPrefix()}.top.${i + 1}.account`,
+            `${keyPrefix()}.top.${i + 1}.fee`,
+            `${keyPrefix()}.top.${i + 1}.score`,
           ]),
         []
       );
@@ -47,7 +49,7 @@ export const getStakingTop10Users = async () => {
             });
           }
         }
-        return result
+        return result.filter((r) => r.userAddr !== '0x0000000000000000000000000000000000000000')
       } else {
         return []
       }
@@ -65,16 +67,16 @@ export const getUserStakingInfo = async (accountAddress) => {
       accountAddress = toChecksumAddress(accountAddress)
       const db = databaseActivityFactory();
       const key = [
-        `TE.Q1.cont`,
-        `TE.Q2.cont`,
-        `TE.Q3.cont`,
-        `TE.Q4.cont`,
-        `TE.${accountAddress}.Q1.cont`,
-        `TE.${accountAddress}.Q2.cont`,
-        `TE.${accountAddress}.Q3.cont`,
-        `TE.${accountAddress}.Q4.cont`,
-        `TE.${accountAddress}.fee`,
-        `TE.${accountAddress}.coef`,
+        `${keyPrefix()}.Q1.cont`,
+        `${keyPrefix()}.Q2.cont`,
+        `${keyPrefix()}.Q3.cont`,
+        `${keyPrefix()}.Q4.cont`,
+        `${keyPrefix()}.${accountAddress}.Q1.cont`,
+        `${keyPrefix()}.${accountAddress}.Q2.cont`,
+        `${keyPrefix()}.${accountAddress}.Q3.cont`,
+        `${keyPrefix()}.${accountAddress}.Q4.cont`,
+        `${keyPrefix()}.${accountAddress}.fee`,
+        `${keyPrefix()}.${accountAddress}.coef`,
       ];
       const res = await db.getValues(key)
       const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
@@ -106,24 +108,24 @@ export const getUserStakingReward = async (accountAddress) => {
       accountAddress = toChecksumAddress(accountAddress)
       const db = databaseActivityFactory();
       const key = [
-        `TE.Q1.cont`,
-        `TE.Q2.cont`,
-        `TE.Q3.cont`,
-        `TE.Q4.cont`,
-        `TE.${accountAddress}.Q1.cont`,
-        `TE.${accountAddress}.Q2.cont`,
-        `TE.${accountAddress}.Q3.cont`,
-        `TE.${accountAddress}.Q4.cont`,
-        `TE.top.1.account`,
-        `TE.top.2.account`,
-        `TE.top.3.account`,
-        `TE.top.4.account`,
-        `TE.top.5.account`,
-        `TE.top.6.account`,
-        `TE.top.7.account`,
-        `TE.top.8.account`,
-        `TE.top.9.account`,
-        `TE.top.10.account`,
+        `${keyPrefix()}.Q1.cont`,
+        `${keyPrefix()}.Q2.cont`,
+        `${keyPrefix()}.Q3.cont`,
+        `${keyPrefix()}.Q4.cont`,
+        `${keyPrefix()}.${accountAddress}.Q1.cont`,
+        `${keyPrefix()}.${accountAddress}.Q2.cont`,
+        `${keyPrefix()}.${accountAddress}.Q3.cont`,
+        `${keyPrefix()}.${accountAddress}.Q4.cont`,
+        `${keyPrefix()}.top.1.account`,
+        `${keyPrefix()}.top.2.account`,
+        `${keyPrefix()}.top.3.account`,
+        `${keyPrefix()}.top.4.account`,
+        `${keyPrefix()}.top.5.account`,
+        `${keyPrefix()}.top.6.account`,
+        `${keyPrefix()}.top.7.account`,
+        `${keyPrefix()}.top.8.account`,
+        `${keyPrefix()}.top.9.account`,
+        `${keyPrefix()}.top.10.account`,
       ];
       const res = await db.getValues(key);
       const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
@@ -169,14 +171,14 @@ export const getUserStakingContribution = async (accountAddress) => {
       accountAddress = toChecksumAddress(accountAddress);
       const db = databaseActivityFactory();
       const key = [
-        `TE.Q1.cont`,
-        `TE.Q2.cont`,
-        `TE.Q3.cont`,
-        `TE.Q4.cont`,
-        `TE.${accountAddress}.Q1.cont`,
-        `TE.${accountAddress}.Q2.cont`,
-        `TE.${accountAddress}.Q3.cont`,
-        `TE.${accountAddress}.Q4.cont`,
+        `${keyPrefix()}.Q1.cont`,
+        `${keyPrefix()}.Q2.cont`,
+        `${keyPrefix()}.Q3.cont`,
+        `${keyPrefix()}.Q4.cont`,
+        `${keyPrefix()}.${accountAddress}.Q1.cont`,
+        `${keyPrefix()}.${accountAddress}.Q2.cont`,
+        `${keyPrefix()}.${accountAddress}.Q3.cont`,
+        `${keyPrefix()}.${accountAddress}.Q4.cont`,
       ];
       const res = await db.getValues(key);
       return {
