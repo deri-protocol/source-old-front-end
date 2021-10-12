@@ -1,4 +1,4 @@
-import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress, DeriEnv } from '../../shared';
+import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress, DeriEnv, max } from '../../shared';
 
 const range = (n) => (new Array(n)).fill(0).map((i,index) => index)
 
@@ -14,18 +14,19 @@ export const getStakingTop10Users = async () => {
             `${keyPrefix()}.top.${i + 1}.account`,
             `${keyPrefix()}.top.${i + 1}.fee`,
             `${keyPrefix()}.top.${i + 1}.score`,
+            `${keyPrefix()}.top.${i + 1}.cont`,
           ]),
         []
       );
       //console.log(key)
       const res = await db.getValues(key)
       //console.log(res)
-      if (Array.isArray(res) && res.length === 3 * 10) {
+      if (Array.isArray(res) && res.length === 4 * 10) {
         let result = []
         for (let i = 0; i < res.length; i++) {
-          if ((i + 1) % 3 === 0) {
-            const info = res.slice(i - 2, i + 1);
-            const index = (i + 1) / 3
+          if ((i + 1) % 4 === 0) {
+            const info = res.slice(i - 3, i + 1);
+            const index = (i + 1) / 4
             result.push({
               no: index,
               userAddr: info[0].slice(0, 42),
@@ -33,7 +34,7 @@ export const getStakingTop10Users = async () => {
               score: deriToNatural(info[2]).toString(),
               evgCoeff: deriToNatural(info[1]).eq(0)
                 ? '0'
-                : bg(info[2]).div(info[1]).toString(),
+                : bg(info[3]).div(info[1]).toString(),
               rewardBNB:
                 index <= 5
                   ? index <= 4
@@ -83,10 +84,12 @@ export const getUserStakingInfo = async (accountAddress) => {
       const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
       const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
       const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
+
+      const coef = deriToNatural(res[9])
       return {
         userAddr: accountAddress,
         feePaid: deriToNatural(res[8]).toString(),
-        coef: deriToNatural(res[9]).toString(),
+        coef: max(coef, bg(1)).toString(),
         score: bg(scoreQ1).plus(scoreQ2).plus(scoreQ3).plus(scoreQ4).toString()
       }
     },

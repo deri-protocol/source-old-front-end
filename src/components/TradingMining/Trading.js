@@ -66,6 +66,7 @@ function Trading({ wallet, lang }) {
     setYourScored(res.score)
     setYourFee(res.feePaid)
     setYourCoeff(res.coef)
+    
   }
 
   const getUserContribution = async () => {
@@ -207,7 +208,7 @@ function Trading({ wallet, lang }) {
                 <span className='feespaid'>{lang['fees-paid']}</span>
                 <span className='avgcoeff'>{lang['avg-coeff']}</span>
                 <span className='score'>{lang['score']}</span>
-                <span className='rewardBNB'>{lang['reward-BNB']}</span>
+                {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
               </div>
               <div className='list-info'>
                 {list.map((item, index) => {
@@ -223,17 +224,17 @@ function Trading({ wallet, lang }) {
                         {item.userAddr}
                       </div>
                       <div className='feespaid'>
-                        $ <DeriNumberFormat value={item.feesPaid} decimalScale={2} thousandSeparator={true} />
+                        $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
                       </div>
                       <div className='avgcoeff'>
-                        <DeriNumberFormat value={item.avgCoeff} decimalScale={2} thousandSeparator={true} />
+                        <DeriNumberFormat value={item.avgCoeff} decimalScale={4} thousandSeparator={true} />
                       </div>
                       <div className='score'>
                         <DeriNumberFormat value={item.score} decimalScale={2} thousandSeparator={true} />
                       </div>
-                      <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
+                      {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                         $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                      </div>
+                      </div> */}
                       <div className='progress'>
                         <div className={item.progress}></div>
                       </div>
@@ -249,10 +250,10 @@ function Trading({ wallet, lang }) {
                 {lang['your-rstimated-rewards']}
               </div>
               <div className='your-rewards-info'>
-                <div className='your-bnb'>
+                {/* <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'>$ {yourBNB ? <DeriNumberFormat decimalScale={2} value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div>
+                </div> */}
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
                   <span className='span'>$ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "--"} </span>
@@ -273,7 +274,7 @@ function Trading({ wallet, lang }) {
                   {lang['your-fees-paid']}
                 </div>
                 <div className='your-fee-num'>
-                  $  {yourFee ? <DeriNumberFormat value={yourFee} decimalScale={2} thousandSeparator={true} /> : "--"}
+                  $  {yourFee ? <DeriNumberFormat value={yourFee} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-coeff'>
