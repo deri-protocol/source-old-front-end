@@ -48,7 +48,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						shares : shares.toFixed(2),
 						formatShares : shares.toFixed(2),
 						totalShares : bg(shares).toString(),
-						values : total.toFixed(2),
+						values : total.toFixed(4),
 						lpApy,
 						unit : lang['shares'],
 						sharesTitle : lang['staked-balance']
@@ -135,7 +135,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
 				</div>}
 				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') && <div className="odd claim-network">
-					<div className="text-title money"> <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={2}/></div>						
+					<div className="text-title money"> ≈ <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={4}/></div>						
 					{/* <div className="text-title money"> {liquidity.values ? (+liquidity.values).toFixed(2) : '--'}</div>						 */}
 				</div>}
 				<Operator version={version} wallet={wallet} chainId={chainId} address={address} liqInfo={liquidity} baseToken={bToken} isLpPool={isLpPool} loadLiqidityInfo={loadLiquidityInfo} symbolId={symbolId} baseTokenId={baseTokenId} lang={lang}/>

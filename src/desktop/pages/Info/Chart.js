@@ -34,7 +34,7 @@ export default function AreaSeries({title,url,seriesType}){
         mode: 0,
         scaleMargins: {
           top: 0.3,
-          bottom: 0.01
+          // bottom: 0.01
         },
       },
 
@@ -134,6 +134,14 @@ export default function AreaSeries({title,url,seriesType}){
         bottom: 0
       }
     })
+    histogramSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.1,
+        bottom: 0,
+      },
+    });  
+  
+
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
       const data = res.data.data.sort((item1,item2) => {
