@@ -280,7 +280,11 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='your-fee'>
                 <div className='your-fee-title'>
-                  {lang['your-fees-paid']}
+                  <TipWrapper block={false} >
+                    <span tip='Fees paid by trading Perpetual futures in Main & Inno Zone or Everlasting Options on BSC'>
+                      {lang['your-fees-paid']}
+                    </span>
+                  </TipWrapper>
                 </div>
                 <div className='your-fee-num'>
                   $  {yourFee ? <DeriNumberFormat value={yourFee} decimalScale={4} thousandSeparator={true} /> : "--"}
@@ -288,7 +292,11 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='your-coeff'>
                 <div className='your-coeff-title'>
-                  {lang['your-coeff']}
+                  <TipWrapper block={false} >
+                    <span tip={lang['boosting-factor']}>
+                      {lang['your-coeff']}
+                    </span>
+                  </TipWrapper>
                 </div>
                 <div className='your-coeff-num'>
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
@@ -401,17 +409,26 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='your-fee'>
                 <div className='your-fee-title'>
-                  {lang['your-fees-paid']}
+                  <TipWrapper block={false} >
+                    <span tip='Fees paid by trading Perpetual futures in Main & Inno Zone or Everlasting Options on BSC'>
+                      {lang['your-fees-paid']}
+                    </span>
+                  </TipWrapper>
                 </div>
                 <div className='your-fee-num'>
-                  $  {yourFee ? <DeriNumberFormat decimalScale={4} value={yourFee} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-coeff'>
                 <div className='your-coeff-title'>
-                  {lang['your-coeff']}
+                  <TipWrapper block={false} >
+                    <span tip={lang['boosting-factor']}>
+                      {lang['your-coeff']}
+                    </span>
+                  </TipWrapper>
+
                 </div>
                 <div className='your-coeff-num'>
+
                   {yourCoeff ? <DeriNumberFormat decimalScale={2} value={yourCoeff} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
