@@ -108,7 +108,7 @@ function Trading({ wallet, lang, loading }) {
     let interval = null;
     interval = window.setInterval(() => {
       getList()
-    }, 60000)
+    }, 30000)
     getList()
     return () => {
       interval && clearInterval(interval);
@@ -123,7 +123,7 @@ function Trading({ wallet, lang, loading }) {
         getUserStaking()
         getUserContribution()
       }
-    }, 60000)
+    }, 30000)
     if (wallet.isConnected()) {
       getUserReward()
       getUserStaking()
@@ -210,7 +210,11 @@ function Trading({ wallet, lang, loading }) {
                 <span className='address'>{lang['user-addr']}</span>
                 <span className='feespaid'>{lang['fees-paid']}</span>
                 <span className='avgcoeff'>{lang['avg-coeff']}</span>
-                <span className='score'>{lang['score']}</span>
+                <TipWrapper block={false} >
+                  <span className='score' tip=' estimated points based on the current weights'>
+                    <span className='score-hover'>{lang['score']}</span>
+                  </span>
+                </TipWrapper>
                 {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
               </div>
               <div className='list-info'>
@@ -266,7 +270,9 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-score-fee-coeff'>
               <div className='your-score'>
                 <div className='your-score-title'>
-                  {lang['your-scored']}
+                  <TipWrapper block={false} >
+                    <span tip='estimated points based on your current weights'>{lang['your-scored']}</span>
+                  </TipWrapper>
                 </div>
                 <div className='your-score-num'>
                   {yourScored ? <DeriNumberFormat value={yourScored} decimalScale={2} thousandSeparator={true} /> : "--"}
@@ -323,8 +329,8 @@ function Trading({ wallet, lang, loading }) {
               <div className='des'>
                 Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
                   <span className='des-tip' tip={lang['the-quarter-points']}>
-                  this quarter's points
-                  </span> 
+                    this quarter's points
+                  </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>
@@ -385,7 +391,9 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-score-fee-coeff'>
               <div className='your-score'>
                 <div className='your-score-title'>
-                  {lang['your-scored']}
+                  <TipWrapper block={false} >
+                    <span tip='estimated points based on your current weights'>{lang['your-scored']}</span>
+                  </TipWrapper>
                 </div>
                 <div className='your-score-num'>
                   {yourScored ? <DeriNumberFormat decimalScale={2} value={yourScored} thousandSeparator={true} /> : "--"}
@@ -463,8 +471,8 @@ function Trading({ wallet, lang, loading }) {
               <div className='des'>
                 Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
                   <span className='des-tip' tip={lang['the-quater-points']}>
-                  this quarter's points
-                  </span> 
+                    this quarter's points
+                  </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>
@@ -554,7 +562,11 @@ function Trading({ wallet, lang, loading }) {
                   <span className='no'>{lang['no']}</span>
                   <span className='address'>{lang['user-addr']}</span>
                   <span className='feespaid'>{lang['fees-paid']}</span>
-                  <span className='score'>{lang['score']}</span>
+                  <TipWrapper block={false} >
+                    <span className='score score-hover' tip=' estimated points based on the current weights'>
+                      {lang['score']}
+                    </span>
+                  </TipWrapper>
                   {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
                 <div className='list-info'>

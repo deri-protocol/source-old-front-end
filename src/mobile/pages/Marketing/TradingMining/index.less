@@ -124,26 +124,26 @@
 
         .list {
           width: 100%;
-          height: 956px;
+          height: 705px;
           background-color: #0D0E0F;
           border-radius: 20px;
           margin-top: 20px;
-
+          
           .list-title {
             padding-left: 20px;
             padding-top: 14px;
             color: #D4E05C;
             font-family: Tachyon;
           }
+          
 
           .list-box {
             width: 99%;
             margin: 0 auto;
             background-color: #202124;
-            height: 906px;
+            height: 655px;
             margin-top: 10px;
             border-radius: 20px;
-
             .no {
               color: #FFF;
               width: 10%;
@@ -159,17 +159,40 @@
               width: 25%;
               text-align: center;
               white-space: nowrap;
+             
             }
+           .list-info-box{
+             .address{
+              margin-left: -13px;
+             }
+             .feespaid{
+               margin-left: -13px;
+             }
+             .score{
+               margin-right: 20px;
+             }
+           }
 
             .score {
               width: 15%;
               text-align: center;
+              white-space: nowrap;
+              display: inline-block;
+              box-sizing: border-box;
             }
+            .score-hover{
+              display: inline-block;
+              border-bottom: 1px dashed #fff;
+              cursor: pointer;
+              width: 100%;
+              // margin-left: 10px;
+            }
+            
 
             .list-box-title {
               display: flex;
               justify-content: space-between;
-              padding-left: 25px;
+              padding-left: 15px;
               padding-right: 25px;
               padding-top: 30px;
               font-size: 0.16rem;
@@ -178,7 +201,7 @@
             }
 
             .list-info {
-              margin-left: 25px;
+              margin-left: 15px;
               font-size: 0.14rem;
 
               .top-three {
@@ -281,7 +304,11 @@
             box-sizing: border-box;
             padding-left: 30px;
             padding-top: 20px;
-
+            .your-score-title{
+              display: inline-block;
+              border-bottom: 1px dashed #fff;
+              cursor: pointer;
+            }
             .your-score-num,
             .your-fee-num,
             .your-coeff-num {
@@ -313,7 +340,7 @@
 
             .total-your-contrib-num {
               margin-top: 30px;
-              font-size: 40px;
+              font-size: 0.28rem;
               font-weight: 400;
               display: flex;
               justify-content: space-between;
