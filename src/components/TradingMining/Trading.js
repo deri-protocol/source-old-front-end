@@ -14,7 +14,7 @@ import TipWrapper from '../TipWrapper/TipWrapper'
 import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
 import { set } from 'mobx';
 
-function Trading({ wallet, lang }) {
+function Trading({ wallet, lang, loading }) {
   const [yourBNB, setYourBNB] = useState('')
   const [yourDERI, setYourDERI] = useState('')
   const [yourScored, setYourScored] = useState('')
@@ -84,6 +84,7 @@ function Trading({ wallet, lang }) {
 
   const getList = async () => {
     let res = await getStakingTop10Users()
+    loading.loaded()
     if (res) {
       res = res.map((item, index) => {
         let obj = {}
@@ -103,6 +104,7 @@ function Trading({ wallet, lang }) {
   }
 
   useEffect(() => {
+    loading.loading();
     let interval = null;
     interval = window.setInterval(() => {
       getList()
@@ -132,64 +134,64 @@ function Trading({ wallet, lang }) {
     };
   }, [wallet.detail.account])
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (list.length >= 10) {
-  //     document.getElementsByClassName('ten-progress')[0].style.width = `${list[9].progressSlider}%`
-  //     document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
-  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
-  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
-  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 9) {
-  //     document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
-  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
-  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
-  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 8) {
-  //     document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
-  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
-  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 7) {
-  //     document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
-  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 6) {
-  //     document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 5) {
-  //     document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 4) {
-  //     document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 3) {
-  //     document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   } else if (list.length >= 2) {
-  //     document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
-  //   }
-  // }, [list])
+    if (list.length >= 10) {
+      document.getElementsByClassName('ten-progress')[0].style.width = `${list[9].progressSlider}%`
+      document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
+      document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+      document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+      document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 9) {
+      document.getElementsByClassName('nine-progress')[0].style.width = `${list[8].progressSlider}%`
+      document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+      document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+      document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 8) {
+      document.getElementsByClassName('eight-progress')[0].style.width = `${list[7].progressSlider}%`
+      document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+      document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 7) {
+      document.getElementsByClassName('seven-progress')[0].style.width = `${list[6].progressSlider}%`
+      document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 6) {
+      document.getElementsByClassName('six-progress')[0].style.width = `${list[5].progressSlider}%`
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 5) {
+      document.getElementsByClassName('five-progress')[0].style.width = `${list[4].progressSlider}%`
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 4) {
+      document.getElementsByClassName('four-progress')[0].style.width = `${list[3].progressSlider}%`
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 3) {
+      document.getElementsByClassName('three-progress')[0].style.width = `${list[2].progressSlider}%`
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    } else if (list.length >= 2) {
+      document.getElementsByClassName('two-progress')[0].style.width = `${list[1].progressSlider}%`
+    }
+  }, [list])
   return (
     <div className='trading-top'>
 
@@ -198,7 +200,7 @@ function Trading({ wallet, lang }) {
           {lang['earn-deri-for-trading-perpetual']}
         </div> */}
         <div className='trading-top-list'>
-          {/* <div className='list'>
+          <div className='list'>
             <div className='list-title'>
               {lang['top-ten-users']}
             </div>
@@ -208,10 +210,10 @@ function Trading({ wallet, lang }) {
                 <span className='address'>{lang['user-addr']}</span>
                 <span className='feespaid'>{lang['fees-paid']}</span>
                 <span className='avgcoeff'>{lang['avg-coeff']}</span>
-                <span className='score'>{lang['score']}</span> */}
+                <span className='score'>{lang['score']}</span>
                 {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
-              {/* </div> */}
-              {/* <div className='list-info'>
+              </div>
+              <div className='list-info'>
                 {list.map((item, index) => {
                   return (
                     <div className='list-info-box' key={index}>
@@ -232,11 +234,11 @@ function Trading({ wallet, lang }) {
                       </div>
                       <div className='score'>
                         <DeriNumberFormat value={item.score} decimalScale={2} thousandSeparator={true} />
-                      </div> */}
+                      </div>
                       {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                         $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
                       </div> */}
-                      {/* <div className='progress'>
+                      <div className='progress'>
                         <div className={item.progress}></div>
                       </div>
                     </div>
@@ -244,24 +246,24 @@ function Trading({ wallet, lang }) {
                 })}
               </div>
             </div>
-          </div> */}
+          </div>
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
               <div className='your-rewards-info'>
-                <div className='your-bnb'>
+                {/* <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'>$ {yourBNB ? <DeriNumberFormat decimalScale={2} value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div>
+                </div> */}
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
                   <span className='span'>$ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "--"} </span>
                 </div>
               </div>
-            </div> */}
-            {/* <div className='your-score-fee-coeff'>
+            </div>
+            <div className='your-score-fee-coeff'>
               <div className='your-score'>
                 <div className='your-score-title'>
                   {lang['your-scored']}
@@ -286,8 +288,8 @@ function Trading({ wallet, lang }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div> */}
-            <div className='deri-total'>
+            </div>
+            {/* <div className='deri-total'>
               <div className='deri-title'>
                 {lang['transaction-sharing-pool']}
               </div>
@@ -295,11 +297,11 @@ function Trading({ wallet, lang }) {
                 <img src={deriLogo}></img>
                 <span>$ 1,000,000</span>
               </div>
-            </div>
+            </div> */}
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
-                
+
               </div>
               <div className='button-link'>
                 <TipWrapper block={false} tip={lang['staking-hover']}>
@@ -321,14 +323,14 @@ function Trading({ wallet, lang }) {
               <div className='des'>
                 Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
                   <span className='des-tip' tip={lang['the-quater-points']}>
-                  this quater's points
-                  </span> 
+                    this quater's points
+                  </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>
                   <span className='des-tip' tip={lang['boosting-factor']}>
                     boosting factors
-                  </span> 
+                  </span>
                 </TipWrapper>
                .
                 {/* <br></br> */}
@@ -336,20 +338,14 @@ function Trading({ wallet, lang }) {
               </div>
             </div>
             <div className='total-your-contrib'>
-              <div className='total-contrib'>
-                <div className='total-your-contrib-title'>
-
-                </div>
-                <div className='total-your-contrib-num'></div>
-              </div>
-              {/* <div className='your-contrib'>
+              <div className='your-contrib'>
                 <div className='total-contrib-value'>
                   <div className='total-your-contrib-title'>
                     <span>{lang['total-contrib-value']}</span>
                   </div>
                   <div className='total-your-contrib-num'>
                     <span>
-                      {totalContrib ? <DeriNumberFormat value={totalContrib} decimalScale={2} thousandSeparator={true} /> : '--'}
+                      {totalContrib ? <DeriNumberFormat value={totalContrib} decimalScale={4} thousandSeparator={true} /> : '--'}
                     </span>
                   </div>
                 </div>
@@ -359,11 +355,11 @@ function Trading({ wallet, lang }) {
                   </div>
                   <div className='total-your-contrib-num'>
                     <span>
-                      {userContrib ? <DeriNumberFormat value={userContrib} decimalScale={2} thousandSeparator={true} /> : '--'}
+                      {userContrib ? <DeriNumberFormat value={userContrib} decimalScale={4} thousandSeparator={true} /> : '--'}
                     </span>
                   </div>
                 </div>
-              </div> */}
+              </div>
             </div>
           </div>
         </div>
@@ -371,18 +367,18 @@ function Trading({ wallet, lang }) {
       <div className='mobile-list'>
         <div className='trading-top-list'>
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
               </div>
               <div className='your-rewards-info'>
-                <div className='your-bnb'>
+                {/* <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'> $ {yourBNB ? <DeriNumberFormat value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div>
+                </div> */}
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
-                  <span className='span'> $ {yourDERI ? <DeriNumberFormat value={yourDERI} thousandSeparator={true} /> : "--"} </span>
+                  <span className='span'> $ {yourDERI ? <DeriNumberFormat value={yourDERI} thousandSeparator={true} decimalScale={2} /> : "--"} </span>
                 </div>
               </div>
             </div>
@@ -392,7 +388,7 @@ function Trading({ wallet, lang }) {
                   {lang['your-scored']}
                 </div>
                 <div className='your-score-num'>
-                  {yourScored ? <DeriNumberFormat value={yourScored} thousandSeparator={true} /> : "--"}
+                  {yourScored ? <DeriNumberFormat decimalScale={2} value={yourScored} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-fee'>
@@ -400,7 +396,7 @@ function Trading({ wallet, lang }) {
                   {lang['your-fees-paid']}
                 </div>
                 <div className='your-fee-num'>
-                  $  {yourFee ? <DeriNumberFormat value={yourFee} thousandSeparator={true} /> : "--"}
+                  $  {yourFee ? <DeriNumberFormat decimalScale={4} value={yourFee} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-coeff'>
@@ -408,11 +404,41 @@ function Trading({ wallet, lang }) {
                   {lang['your-coeff']}
                 </div>
                 <div className='your-coeff-num'>
-                  {yourCoeff ? <DeriNumberFormat value={yourCoeff} thousandSeparator={true} /> : "--"}
+                  {yourCoeff ? <DeriNumberFormat decimalScale={2} value={yourCoeff} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
 
-            </div> */}
+            </div>
+            <div className='total-your-contrib'>
+              <div className='total-contrib'>
+                <div className='total-your-contrib-title'>
+
+                </div>
+                <div className='total-your-contrib-num'></div>
+              </div>
+              <div className='your-contrib'>
+                <div className='total-contrib-value'>
+                  <div className='total-your-contrib-title'>
+                    <span>{lang['total-contrib-value']}</span>
+                  </div>
+                  <div className='total-your-contrib-num'>
+                    <span>
+                      {totalContrib ? <DeriNumberFormat value={totalContrib} decimalScale={4} thousandSeparator={true} /> : '--'}
+                    </span>
+                  </div>
+                </div>
+                <div className='your-contrib-value'>
+                  <div className='total-your-contrib-title'>
+                    <span>{lang['your-contrib-value']}</span>
+                  </div>
+                  <div className='total-your-contrib-num'>
+                    <span>
+                      {userContrib ? <DeriNumberFormat value={userContrib} decimalScale={4} thousandSeparator={true} /> : '--'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
@@ -437,14 +463,14 @@ function Trading({ wallet, lang }) {
               <div className='des'>
                 Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
                   <span className='des-tip' tip={lang['the-quater-points']}>
-                  this quater's points
-                  </span> 
+                    this quater's points
+                  </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>
                   <span className='des-tip' tip={lang['boosting-factor']}>
                     boosting factors
-                  </span> 
+                  </span>
                 </TipWrapper>
                .
                 {/* <br></br> */}
@@ -519,7 +545,7 @@ function Trading({ wallet, lang }) {
               </div>
             </div>
 
-            {/* <div className='list'>
+            <div className='list'>
               <div className='list-title'>
                 {lang['top-ten-users']}
               </div>
@@ -527,8 +553,9 @@ function Trading({ wallet, lang }) {
                 <div className='list-box-title'>
                   <span className='no'>{lang['no']}</span>
                   <span className='address'>{lang['user-addr']}</span>
+                  <span className='feespaid'>{lang['fees-paid']}</span>
                   <span className='score'>{lang['score']}</span>
-                  <span className='rewardBNB'>{lang['reward-BNB']}</span>
+                  {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
                 <div className='list-info'>
                   {list.map((item, index) => {
@@ -543,29 +570,32 @@ function Trading({ wallet, lang }) {
                         <div className='address'>
                           {item.userAddr}
                         </div>
+                        <div className='feespaid'>
+                          $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
+                        </div>
                         <div className='score'>
-                          {item.score}
+                          <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
                         </div>
-                        <div className='rewardBNB top-three'>
+                        {/* <div className='rewardBNB top-three'>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                        </div>
+                        </div> */}
 
                       </div>
                     )
                   })}
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
 
       </div>
       <div className='activity-rules'>
-        <a target='_blank' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-b64818015077'>{lang['detailed-rules']}</a>
+        <a target='_blank' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-1cedc8f98e95'>{lang['detailed-rules']}</a>
       </div>
     </div>
   )
 }
 
-export default inject('wallet')(observer(Trading))
+export default inject('wallet', 'loading')(observer(Trading))
 

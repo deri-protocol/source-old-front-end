@@ -2,7 +2,7 @@ import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAd
 
 const range = (n) => (new Array(n)).fill(0).map((i,index) => index)
 
-const keyPrefix = () => (DeriEnv.get() === 'prod' ? 'TE' : 'TE1');
+const keyPrefix = () => (DeriEnv.get() === 'prod' ? 'TE3' : 'TE2');
 
 export const getStakingTop10Users = async () => {
   return catchApiError(

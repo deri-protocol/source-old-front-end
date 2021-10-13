@@ -14,9 +14,9 @@ export default function Index({lang}){
       <div className='count-down-box' style={{display : timeover ? 'none' : 'block'}}>
         <CountDown lang={lang} onEnd={() => setTimeover(true)} lastTimestamp={eventEndTimestamp.unix()}/>
       </div>
-      {/* <div className='staking'>
+      <div className='staking'>
         <Staking lang={lang} />
-      </div> */}
+      </div>
       <div>
         <TotalPoints lang={lang} />
       </div>
