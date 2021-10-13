@@ -321,10 +321,10 @@ function Trading({ wallet, lang, loading }) {
                 </TipWrapper>
               </div>
               <div className='des'>
-                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
-                  <span className='des-tip' tip={lang['the-quater-points']}>
-                    this quater's points
-                  </span>
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
+                  <span className='des-tip' tip={lang['the-quarter-points']}>
+                  this quarter's points
+                  </span> 
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>
@@ -461,10 +461,10 @@ function Trading({ wallet, lang, loading }) {
                 </TipWrapper>
               </div>
               <div className='des'>
-                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quater, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
                   <span className='des-tip' tip={lang['the-quater-points']}>
-                    this quater's points
-                  </span>
+                  this quarter's points
+                  </span> 
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
                 <TipWrapper block={false} tip={lang['boosting-factor']}>

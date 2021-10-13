@@ -100,7 +100,10 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
     <div className="liquidity-box">
 			{version === 'v2_lite_open' 
 				? <div className="odd title">{lang['my-liqudity-providing']}</div> 
-				: <div className="odd title">{lang['provide']} { bToken } {lang['earn-deri']}</div>}
+				: <div className="odd title">{lang['provide']} 
+					{isLpPool ? <a href={/DERI-USDT/.test(bToken) ? 'https://app.sushi.com/add/0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9/0xdAC17F958D2ee523a2206206994597C13D831ec7' : 'https://pancakeswap.finance/add/0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56'} target='_blank' rel='noreferrer'>
+					{ bToken }</a> : ` ${bToken} `}
+					 {lang['earn-deri']}</div>}
 				<div className="odd text">
 						<div className="text-title">{lang['pool-total-liquidity']}</div>
 						<div className="text-num"><DeriNumberFormat allowZero={true} value={ liquidity.total} suffix={` ${ bToken}`  } thousandSeparator={true}/></div>
