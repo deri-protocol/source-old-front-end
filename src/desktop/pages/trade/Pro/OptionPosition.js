@@ -25,7 +25,7 @@ const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Position({ wallet, trading, version, lang, type }) {
+function Position({ wallet, trading, version, lang, type,loading }) {
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [closingIndex, setClosingIndex] = useState(null);
@@ -87,6 +87,16 @@ function Position({ wallet, trading, version, lang, type }) {
         alert(lang['close-position-failed'])
       }
     }
+  }
+
+  const onSelect = (symbolId) => {
+    const selectedConfig = trading.configs.find(config => config.pool === trading.config.pool && symbolId === config.symbolId )
+    if(selectedConfig){
+      loading.loading();
+      trading.pause();
+      trading.setConfig(selectedConfig)
+      trading.onSymbolChange(selectedConfig,() => loading.loaded(),type.isOption);
+    } 
   }
 
   useEffect(() => {
@@ -154,7 +164,7 @@ function Position({ wallet, trading, version, lang, type }) {
       {positions.map((pos, index) => {
         return (
           <div className='p-box tbody' key={index}>
-            <div className='position-symbol'>{pos.symbol}</div>
+            <div className='position-symbol' onClick={() => onSelect(pos.symbolId)}>{pos.symbol}</div>
             <div className='position'>
               <DeriNumberFormat value={pos.volume} allowZero={true} />
               <span className='close-position'>
@@ -345,4 +355,4 @@ function LiqPrice({ wallet, trading, lang }) {
   )
 }
 
-export default inject('wallet', 'trading', 'version', 'type')(observer(Position))
+export default inject('wallet', 'trading', 'version', 'type','loading')(observer(Position))
