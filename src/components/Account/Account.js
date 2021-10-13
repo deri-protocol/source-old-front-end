@@ -31,7 +31,8 @@ function Account({wallet,lang}){
     //如果用户选择的网络正确
     if(wallet.isConnected()){
       if(wallet.isSupportChain(isOptions)) {
-        setBtnText(<span>{detail.formatBalance} {detail.symbol} <span className='address'>{formatAddress(detail.account)}</span></span>)
+        //{detail.formatBalance} {detail.symbol}
+        setBtnText(<span> <span className='address'>{formatAddress(detail.account)}</span></span>)
       } else {
         setBtnText(<span className='no-supported'>{lang['unsupported-chain-id']}{detail.chainId}!</span>)
       }

@@ -94,6 +94,12 @@ export default function Menu({ closeMenu, lang, locale }) {
               </li>
             </ul>
           </li>
+          <li className='event'>
+            <span className='y-event' >
+              Trade to Earn
+            </span>
+              <Link className='' to='/trade-to-earn'>$1 Million in DERI</Link>
+          </li>
         </ul>
       </div>
       <Footer lang={lang} />

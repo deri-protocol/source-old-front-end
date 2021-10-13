@@ -114,7 +114,7 @@ function Menu({ lang, locale }) {
 
             </ul>
           </li>
-          {/* <li className='event'>
+          <li className='event'>
             <span className='y-event' >
               Trade to Earn
             </span>
@@ -124,7 +124,7 @@ function Menu({ lang, locale }) {
               :
               <Link className='' to='/trade-to-earn'>$ 1 Million in DERI</Link>
             }
-          </li> */}
+          </li>
         </ul>
       </div>
       <Version />

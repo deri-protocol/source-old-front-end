@@ -10,8 +10,6 @@ import { fundingRateCache } from '../../shared/api/api_globals';
 import { normalizeOptionSymbol } from '../../shared/config/token';
 import { wrappedOracleFactory } from '../../shared/factory/oracle';
 import {
-  getOraclePricesForOption,
-  getPriceFromRest,
   getOracleVolatilitiesForOption,
 } from '../../shared/utils/oracle';
 import { queryTradePMM } from '../calculation/PMM2';
@@ -25,7 +23,7 @@ import {
   getMarginHeldBySymbol,
 } from '../calculation/trade';
 import { everlastingOptionFactory } from '../factory/pool';
-import { volatilitiesCache } from '../utils';
+import { volatilitiesCache, volatilityCache } from '../utils';
 import { getIndexInfo } from '../../shared/config/token';
 
 //
@@ -137,7 +135,7 @@ export const getPositionInfo = async (
             poolAddress,
             symbols.map((s) => s.symbol)
           ),
-          getPriceFromRest(`VOL-${normalizeOptionSymbol(symbolName)}`, 'option'),
+          volatilityCache.get(`VOL-${normalizeOptionSymbol(symbolName)}`),
         ]);
       }
       const state = await optionPool.viewer.getTraderStates(

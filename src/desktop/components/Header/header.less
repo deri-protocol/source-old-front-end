@@ -53,28 +53,24 @@
             // float: left;
             padding-left: 0px;
             margin: 0;
-            width: 750px;
+            width: 800px;
             display: flex;
             justify-content: space-evenly;
           }
-          .event:hover a{
-            color: #D4E05C;
-          }
           .event {
-            color: #D4E05C;
+            color: black;
             position: relative;
             .y-event {
               position: absolute;
+              display: inline-block;
+              background-color:  #D4E05C;
               font-size: 12px;
+              height: 16px;
+              border-radius: 8px;
+              padding: 0 5px;
               right: 0px;
-              top: -18px;
-            }
-
-            a {
-              color: #D4E05C;
-            }
-            a:hover{
-              color: #D4E05C;
+              top: 13px;
+              line-height: 16px;
             }
           }
 
@@ -103,7 +99,7 @@
               border-radius: 8px;
               position: absolute;
               top: 15px;
-              right: -25px;
+              right: 0px;
               line-height: 16px;
               width: 35px;
               text-align-last: center;
@@ -172,7 +168,7 @@
         .version {
           cursor: pointer;
           line-height: 80px;
-          margin-left: 20px;
+          // margin-left: 20px;
           height: 80px;
           display: flex;
           align-items: center;
@@ -187,6 +183,7 @@
     }
   }
 }
+
 
 .team .team-item,
 .options .option-item,
