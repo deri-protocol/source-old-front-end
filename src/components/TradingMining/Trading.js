@@ -561,7 +561,7 @@ function Trading({ wallet, lang }) {
 
       </div>
       <div className='activity-rules'>
-        <a target='_blank' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-b64818015077'>{lang['detailed-rules']}</a>
+        <a target='_blank' rel='noreferrer' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-1cedc8f98e95'>{lang['detailed-rules']}</a>
       </div>
     </div>
   )
