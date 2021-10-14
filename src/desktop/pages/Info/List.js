@@ -42,7 +42,7 @@ function List({loading}){
 
 
   return(
-    <div className='info' style={{'width': `calc(100vw - ${window.screen.width * 0.25}px)`}}>
+    <div className='info'>
       <div className='title'>Deri Overview</div>
       <div className='chart-box'>
         <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>

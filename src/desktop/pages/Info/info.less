@@ -5,7 +5,9 @@
   flex-direction: column;
   justify-content: flex-start;
   min-height: calc(100vh - 80px);
+  width : calc(100vw - 100px);
   margin: auto;
+
 
   .title {
     color: #D4E05C;
@@ -137,5 +139,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (min-width: 1600px){
+  .info .body .info {
+    width : calc(100vw - 400px)
   }
 }
