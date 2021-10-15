@@ -597,6 +597,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           volume={trading.volumeDisplay}
           direction={direction}
           leverage={trading.amount.leverage}
+          afterLeverage={trading.amount.afterLeverage}
           afterTrade={afterTrade}
           position={trading.position}
           trading={trading}
@@ -606,6 +607,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           lang={lang}
           type={type}
           markPriceAfter={markPriceAfter}
+          liquidationPrice={liquidationPrice}
         />
       </div>
       {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
@@ -615,7 +617,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter }) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter ,afterLeverage,liquidationPrice}) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);
@@ -705,6 +707,8 @@ function Operator({ hasConnectWallet, wallet, spec, volume, available,
       direction={direction}
       lang={lang}
       markPriceAfter={markPriceAfter}
+      afterLeverage={afterLeverage}
+      liquidationPrice={liquidationPrice}
       trading={trading}
     />
     <button className='short-submit' onClick={() => setConfirmIsOpen(true)}>{lang['trade']}</button>

@@ -6,7 +6,7 @@ import type from '../../../model/Type'
 import {bg} from '../../../lib/web3js/indexV2'
 
 
-export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, transFee, afterTrade, lang ,markPriceAfter,trading}) {
+export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage,afterLeverage, transFee, afterTrade, lang ,markPriceAfter,trading,liquidationPrice}) {
   const [pending, setPending] = useState(false);
 
 
@@ -60,8 +60,8 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               </div>
               {type.isFuture && <>
                 <div className='text'>
-                  <div className='text-title'>{lang['trade-price-estimated']}</div>
-                  <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
+                  <div className='text-title'>{spec.symbol} {lang['trade-price-estimated']}</div>
+                  <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text'/></div>
                 </div>
               </>} 
               {type.isOption && <>
@@ -72,16 +72,27 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               </>}
               {type.isFuture && <>
                 <div className='text'>
-                  <div className='text-title'>{lang['leverage-after-execution']}</div>
+                  <div className='text-title'>{lang['cur-pos-leverage']}</div>
                   <div className='text-num'>{leverage}X</div>
                 </div>
+                <div className='text'>
+                  <div className='text-title'>{lang['leverage-after-execution']}</div>
+                  <div className='text-num'>{afterLeverage}X</div>
+                </div>
               </>}
+              {type.isFuture && <div className='text'>
+                <div className='text-title'>{lang['liquidation-price']}</div>
+                <div className='text-num'>
+                  <NumberFormat value={liquidationPrice} decimalScale={2}  displayType='text' />
+                </div>
+              </div>}
               <div className='text'>
                 <div className='text-title'>{lang['transaction-fee']}</div>
                 <div className='text-num'>
                   <NumberFormat value={transFee} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} displayType='text' />
                 </div>
               </div>
+
             </div>
             <div className='modal-footer'>
               <div className='long-btn' v-if='confirm'>

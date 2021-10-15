@@ -68,6 +68,7 @@
   "position-after-execution" : "Position after execution",
   "trade-price-estimated" : "Trade Price (estimated)",
   "leverage-after-execution" : "Leverage after execution",
+  "cur-pos-leverage" : "# of Leverage",
   "cancel" : "CANCEL",
   "ok" : "OK",
   "vol":"VOL",
