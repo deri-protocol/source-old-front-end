@@ -21,6 +21,8 @@ const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHis
 const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/DipHistoryTwo'))
 const Download = LoadableComponent(() => import('../../pages/Download/Download'))
 
+const InfoList = LoadableComponent(() => import('../../../desktop/pages/Info/List'))
+const InfoDetail = LoadableComponent(() => import('../../../desktop/pages/Info/Detail'))
 const TradingMining = LoadableComponent(() => import('../../pages/Marketing/TradingMining/Index'))
 
 @withRouter
@@ -52,6 +54,8 @@ class Body extends React.Component {
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
           <Route exact path='/trade-to-earn' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/info' component={() => <InfoList/>}/>
+          <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
           <Route component={() => <Lite lang={dict['lite']}/>} />
         </Switch>
       </div>
