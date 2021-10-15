@@ -4,12 +4,15 @@ import axios from "axios";
 import dateFormat from 'dateformat'
 import { convertToInternationalCurrencySystem } from "../../../utils/utils";
 
-export default function AreaSeries({title,url,seriesType}){
+export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
   const chartRef = useRef(null);
+  const seriesChartRef = useRef(null);
   const series = useRef(null)
   const [curValue, setCurValue] = useState('')
   const [curDate, setCurDate] = useState('')
+  const [curCycle, setCurCycle] = useState(defaultCycle)
   const lastDataRef = useRef()
+
 
   const initChart = () => {
     const rect = document.querySelector('.info-chart').getBoundingClientRect()
@@ -33,8 +36,7 @@ export default function AreaSeries({title,url,seriesType}){
         borderVisible : false,
         mode: 0,
         scaleMargins: {
-          top: 0.3,
-          // bottom: 0.01
+          top: 0.35
         },
       },
 
@@ -65,6 +67,7 @@ export default function AreaSeries({title,url,seriesType}){
         fontSize: 12
       },
     });
+    seriesChartRef.current = chart
     return chart;
   }
 
@@ -120,28 +123,7 @@ export default function AreaSeries({title,url,seriesType}){
     return areaSeries;
   }
 
-  const addHistogramSeries = async (chart) => {
-    const histogramSeries = chart.addHistogramSeries({
-      color: '#00659F',
-      priceLineVisible : false,
-      lastValueVisible: false,
-      priceFormat: {
-        type: "volume",
-        priceFormatter: price => '$ ' + price
-      },
-      scaleMargins: {
-        top: 0.2,
-        bottom: 0
-      }
-    })
-    histogramSeries.priceScale().applyOptions({
-      scaleMargins: {
-        top: 0.1,
-        bottom: 0,
-      },
-    });  
-  
-
+  const loadHistogramData = async (url,histogramSeries) => {
     const res = await axios.get(url)
     if(res.status === 200 && Array.isArray(res.data.data)){
       const data = res.data.data.sort((item1,item2) => {
@@ -153,15 +135,38 @@ export default function AreaSeries({title,url,seriesType}){
           return 0
         }
       }).map(d => ({time : dateFormat(new Date(d.timestamp * 1000),'yyyy-mm-dd'),value : Number(d.value)}))
-      
+      const last = res.data.last_24h ? res.data.last_24h : res.data[data.length -1].value
       histogramSeries.setData(data)
-      const last = res.data.last_24h ? res.data.last_24h : data[data.length -1].value
       setCurValue(last)
       lastDataRef.current = last
+      seriesChartRef.current && seriesChartRef.current.timeScale().fitContent();
     }
+  }
+
+  const addHistogramSeries = async (chart) => {
+    const histogramSeries = chart.addHistogramSeries({
+      color: '#00659F',
+      priceLineVisible : false,
+      lastValueVisible: false,
+      priceFormat: {
+        type: "volume",
+        priceFormatter: price => '$ ' + price
+      }
+    })
+    histogramSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.25,
+        bottom: 0,
+      },
+    });    
+    loadHistogramData(url,histogramSeries)
     series.current = histogramSeries
-    chart.timeScale().fitContent();
     return histogramSeries;
+  }
+
+  const cycleSelect = cycle => {
+    setCurCycle(cycle)
+    loadHistogramData(`${url}?cycle=${cycle}`,series.current)
   }
 
   useEffect(() => {
@@ -190,7 +195,10 @@ export default function AreaSeries({title,url,seriesType}){
         <div className='title-label'>{title}</div>
         <div className='title-value'>{curValue ? `$${convertToInternationalCurrencySystem(curValue)}` : ''} </div>
         <div className='title-date'>{curDate} </div>
-        </div>
+      </div>
+      {cycle && <div className='cycle-c'>
+        {cycle.map(item => <div className={`cycle-item ${item === curCycle && 'selected'}`}  onClick={() => cycleSelect(item)}>{item}</div>)}
+      </div>}
       <div className='series' ref={chartRef}></div>
     </div>
   )
