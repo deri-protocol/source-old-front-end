@@ -665,6 +665,11 @@
               "symbolId": "7",
               "symbol": "ETHUSD-2000-P",
               "unit": "ETH"
+            },
+            {
+              "symbolId": "8",
+              "symbol": "BTCUSD-70000-C",
+              "unit": "BTC"
             }
           ],
           "initialBlock": "10736176",

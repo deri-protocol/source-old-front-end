@@ -274,7 +274,7 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
     //console.log('cost', costTotal.toString())
     const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
 
-    return positions.filter((p) => !p.volume.eq(0)).map((p, index) => {
+    return positions.map((p, index) => {
       const symbol = symbols[index]
       const symbolId = symbolIdList[index]
       const price = symbolPrices[index]
@@ -306,6 +306,7 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
       );
       return {
         symbol: symbol.symbol,
+        symbolId: index.toString(),
         price: symbolPrices[index],
         volume: bg(p.volume).times(multiplier).toString(),
         averageEntryPrice: calculateEntryPrice(p.volume, cost, multiplier).toString(),
@@ -324,7 +325,7 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
         ).toString(),
         fundingFee: fundingFee.toString()
       };
-    })
+    }).filter((p) => p.volume !== '0')
   } catch(err) {
     console.log(`${err}`)
   }

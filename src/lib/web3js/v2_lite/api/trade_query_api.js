@@ -16,7 +16,6 @@ import {
 import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
 import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import { getIndexInfo } from '../../shared/config/token';
-import { volatilitiesCache } from '../../option/utils';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
@@ -380,7 +379,7 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
       //   minMaintenanceMarginRatio,
       // });
 
-      return positions.filter((p) => !p.volume.eq(0)).map((p, index) => {
+      return positions.map((p, index) => {
       const symbolId = symbolList[index]
       const symbol = symbols[index]
       const price = symbolPrices[index]
@@ -425,6 +424,7 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
 
         return {
           symbol: symbol.symbol,
+          symbolId: symbol.symbolId,
           price,
           volume: bg(volume).times(symbols[index].multiplier).toString(),
           averageEntryPrice: calculateEntryPrice(
@@ -447,7 +447,7 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
             minMaintenanceMarginRatio
           ).toString(),
         };
-      })
+      }).filter((p) => p.volume !== '0')
   }, args, 'getPositionInfos', [])
 }
 

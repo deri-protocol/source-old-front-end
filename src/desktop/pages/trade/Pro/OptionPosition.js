@@ -189,9 +189,7 @@ function Position({ wallet, trading, version, lang, type, loading }) {
             </div>
             <div className='ave-entry-price'><DeriNumberFormat value={pos.averageEntryPrice} decimalScale={4} /></div>
             <div className={pos.direction}>{lang[pos.direction.toLowerCase()] || pos.direction}</div>
-
-            {type.isOption &&<div className='margin'><DeriNumberFormat value={pos.marginHeldBySymbol} decimalScale={2} /></div>}
-            {type.isFuture &&<div className='margin'><DeriNumberFormat value={pos.marginHeld} decimalScale={2} /></div>}
+            <div className='margin'><DeriNumberFormat value={pos.marginHeldBySymbol} decimalScale={2} /></div>
             <div className='pnl'>
               <span className='pnl-list unrealized-pnl'>
                 <DeriNumberFormat value={pos.unrealizedPnl} decimalScale={6} />

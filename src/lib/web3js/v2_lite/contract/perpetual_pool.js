@@ -141,6 +141,7 @@ export class PerpetualPoolLite extends ContractBase {
       const res = await this._call('getSymbol', [symbolId]);
       return {
         symbol: res.symbol,
+        symbolId: res.symbolId,
         oracleAddress: res.oracleAddress,
         multiplier: deriToNatural(res.multiplier),
         feeRatio: deriToNatural(res.feeRatio),
