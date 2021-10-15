@@ -131,7 +131,7 @@ function Position({ wallet, trading, version, lang, type, loading }) {
           {lang['dynamic-effective-balance']} : &nbsp;
           <span>
             <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
-            {(version.isV1 || version.isV2Lite || type.isOption) ? <span>
+            {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen) ? <span>
               <span
                 className='open-add'
                 id='openAddMargin'
