@@ -434,7 +434,7 @@ export default class Trading {
     let available = bg(dynBalance).minus(totalMarginHeld).toFixed(2)
     const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
     const totalVolume = this.userSelectedDirection === 'short' ? (-this.volumeDisplay + (+position.volume)) : ((+this.volumeDisplay) +  (+position.volume))    
-    const totalContractValue = totalVolume * price * contract.multiplier
+    const totalContractValue = (totalVolume / contract.multiplier) * price * contract.multiplier
     const leverage = Math.abs(totalContractValue / (+dynBalance)).toFixed(1);
     available = (+available) < 0 ? 0 : available
     return {
