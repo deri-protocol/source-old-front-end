@@ -166,7 +166,8 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
 
   const cycleSelect = cycle => {
     setCurCycle(cycle)
-    loadHistogramData(`${url}?cycle=${cycle}`,series.current)
+    url = /\?/.test(url) ? `${url}&cycle=${cycle}` : `${url}?cycle=${cycle}`
+    loadHistogramData(url,series.current)
   }
 
   useEffect(() => {

@@ -68,11 +68,10 @@
   "position-after-execution" : "Position after execution",
   "trade-price-estimated" : "Trade Price (estimated)",
   "leverage-after-execution" : "Leverage after execution",
-  "cur-pos-leverage" : "# of Leverage",
+  "cur-pos-leverage" : "# of Leverages",
   "cancel" : "CANCEL",
   "ok" : "OK",
   "vol":"VOL",
-
   "deposit" : "DEPOSIT",
   "balance-in-contract-uppercase" : "BALANCE IN CONTRACT",
   "wallet-balance" : "Wallet Balance",

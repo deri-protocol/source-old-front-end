@@ -37,7 +37,7 @@ export default function Detail(){
     <div className='title'><Link to='/info'>Deri Overview</Link> &gt; {`${network} - ${catalog.toUpperCase()} - ${formatAddress(add)} (${bToken})`}</div>
       <div className='chart-box'>
         <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history?pool=${add}`} seriesType='area'/> </div>
-        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history?pool=${add}`} seriesType='histogram'/> </div>
+        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history?pool=${add}`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
       </div>
       <div className='table-by-network'>
         <Table title='LIQUIDITY' headers={LIQUIDITY_HEADER} columns={LIQUIDITY_COLUMNS} columnRenders={columnFormat} url={getLiquidityDataUrl} pagination={true}/>

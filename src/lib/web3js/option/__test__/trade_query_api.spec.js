@@ -5,7 +5,7 @@ import {
   OPTION_POOL_ADDRESS,
   TIMEOUT,
 } from '../../shared/__test__/setup';
-import { bg } from '../../shared';
+import { bg, DeriEnv } from '../../shared';
 import {
   getEstimatedFee,
   getEstimatedLiquidityUsed,
@@ -173,12 +173,11 @@ describe('trade query api', () => {
   it(
     'getEstimateTimePrice',
     async () => {
-      const res = await getEstimatedTimePrice(
-        CHAIN_ID,
-        OPTION_POOL_ADDRESS,
-        '2',
-        '0'
-      );
+      //const res = await getEstimatedTimePrice( CHAIN_ID, OPTION_POOL_ADDRESS, '2', '0');
+      DeriEnv.set('prod')
+      const res = await getEstimatedTimePrice('56', '0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4', '1', '8');
+      DeriEnv.set('dev')
+      expect(res).toEqual('0.1')
       expect(bg(res).toNumber()).toBeGreaterThanOrEqual(MIN_NUMBER);
       expect(bg(res).toNumber()).toBeLessThanOrEqual(1000);
     },

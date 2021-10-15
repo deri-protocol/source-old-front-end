@@ -46,7 +46,7 @@ function List({loading}){
       <div className='title'>Deri Overview</div>
       <div className='chart-box'>
         <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>
-        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram' cycle={['Y','M','W']} defaultCycle='M'/> </div>
+        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
       </div>
       <div className='table-by-network'>
         {Object.keys(allPoolData).map(chain => <Table title={chain} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} onRowClick={d => onRowClick(d)} dataSet={allPoolData[chain]}/>)}
