@@ -68,6 +68,7 @@
   "position-after-execution" : "交易后仓位",
   "trade-price-estimated" : "交易价格 (估算)",
   "leverage-after-execution" : "交易后持仓杠杆",
+  "cur-pos-leverage" : "# 合约杠杆",
   "cancel" : "取消",
   "ok" : "确认",
   "vol":"波动率",

@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import Position from "./Position";
-import OptionPosition from "./OptionPosition";
+import OptionPosition from "./PositionList";
 import History from "./History";
 import classNames from "classnames";
 
@@ -38,8 +37,6 @@ function Reference({lang,type}) {
         </div>
       </div>
       <div className='pos-his-info '>
-        {/* {type.isFuture && <Position lang={lang} />}  */}
-        {/* {type.isOption && <OptionPosition lang={lang} />}  */}
         <OptionPosition lang={lang} />
         <History lang={lang}  />
       </div>

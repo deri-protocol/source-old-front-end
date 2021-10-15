@@ -264,12 +264,9 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
       return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
     }, bg(0))
     //
-    const unrealizedPnl = symbols.reduce((accum, s, index) => {
-      return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost))
-    }, bg(0))
-    const unrealizedPnlList = symbols.map((s, index) => {
-      return [s.symbol, bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost).toString()]
-    })
+    // const unrealizedPnlList = symbols.map((s, index) => {
+    //   return [s.symbol, bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost).toString()]
+    // })
 
     //console.log('cost', costTotal.toString())
     const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
@@ -282,6 +279,7 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
       const { multiplier, fundingRateCoefficient, tradersNetVolume, cumulativeFundingRate } = symbol
       const { volume, cost, lastCumulativeFundingRate } = p
       const marginHeldBySymbol = bg(volume).abs().times(multiplier).times(symbolPrices[index]).times(minInitialMarginRatio)
+      const unrealizedPnl = bg(symbolPrices[index]).times(symbol.multiplier).times(p.volume).minus(p.cost)
       const totalCost = positions.reduce((accum, a) => {
         return accum.plus(bg(a.cost))
       }, bg(0))
@@ -313,7 +311,7 @@ export const getPositionInfos = async (chainId, poolAddress, accountAddress) => 
         margin: margin.toString(),
         marginHeld: marginHeld.toString(),
         marginHeldBySymbol: marginHeldBySymbol.toString(),
-        unrealizedPnlList,
+        //unrealizedPnlList,
         unrealizedPnl: unrealizedPnl.toString(),
         liquidationPrice: calculateLiquidationPrice(
           volume,

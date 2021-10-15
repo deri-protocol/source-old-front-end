@@ -25,7 +25,7 @@ const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
-function Position({ wallet, trading, version, lang, type, loading }) {
+function PositionList({ wallet, trading, version, lang, type, loading }) {
   const [direction, setDirection] = useState('LONG');
   const [closing, setClosing] = useState(false);
   const [closingIndex, setClosingIndex] = useState(null);
@@ -340,7 +340,7 @@ function LiqPrice({ wallet, trading, lang }) {
 
   useEffect(() => {
     if (wallet.isConnected() && trading.positions) {
-      if (trading.positions.length) {
+      if (trading.positions.length && trading.positions.length > 0 ) {
         if (trading.positions[0].liquidationPrice) {
           let elem = trading.positions[0].liquidationPrice.map((item, index) => {
             let ele = liqText(item, index)
@@ -361,4 +361,4 @@ function LiqPrice({ wallet, trading, lang }) {
   )
 }
 
-export default inject('wallet', 'trading', 'version', 'type', 'loading')(observer(Position))
+export default inject('wallet', 'trading', 'version', 'type', 'loading')(observer(PositionList))

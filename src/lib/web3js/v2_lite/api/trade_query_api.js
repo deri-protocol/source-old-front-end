@@ -226,15 +226,6 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         minMaintenanceMarginRatio,
       });
 
-        console.log(
-          '-',
-          volume.toString(),
-          margin.toString(),
-          totalCost.toString(),
-          dynamicCost.toString(),
-          multiplier.toString(),
-          minMaintenanceMarginRatio.toString()
-        );
       return {
         symbol:symbols[symbolIndex].symbol,
         price,
@@ -346,38 +337,19 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
         );
       }, bg(0));
 
-      const unrealizedPnl = symbols.reduce((acc, s, index) => {
-        return acc.plus(
-          bg(symbolPrices[index])
-            .times(s.multiplier)
-            .times(positions[index].volume)
-            .minus(positions[index].cost)
-        );
-      }, bg(0));
-      const unrealizedPnlList = symbols.map((s, index) => {
-        return [
-          s.symbol,
-          bg(symbolPrices[index])
-            .times(s.multiplier)
-            .times(positions[index].volume)
-            .minus(positions[index].cost)
-            .toString(),
-        ];
-      }, bg(0));
+      // const unrealizedPnlList = symbols.map((s, index) => {
+      //   return [
+      //     s.symbol,
+      //     bg(symbolPrices[index])
+      //       .times(s.multiplier)
+      //       .times(positions[index].volume)
+      //       .minus(positions[index].cost)
+      //       .toString(),
+      //   ];
+      // }, bg(0));
       const totalCost = positions.reduce((accum, p) => {
         return accum.plus(bg(p.cost));
       }, bg(0));
-
-
-      // liquidatePriceCache.set(poolAddress, {
-      //   volume,
-      //   margin,
-      //   totalCost,
-      //   dynamicCost,
-      //   price,
-      //   multiplier,
-      //   minMaintenanceMarginRatio,
-      // });
 
       return positions.map((p, index) => {
       const symbolId = symbolList[index]
@@ -392,6 +364,8 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
         cumulativeFundingRate,
       } = symbol;
       priceCache.set(poolAddress, symbolId, price);
+
+      const unrealizedPnl = bg(symbolPrices[index]).times(symbol.multiplier).times(p.volume).minus(p.cost)
 
       const dynamicCost = symbols.reduce((accum, s, idx) => {
         if (idx !== index) {
@@ -436,7 +410,7 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
           marginHeld: marginHeld.toString(),
           marginHeldBySymbol: marginHeldBySymbol.toString(),
           unrealizedPnl: unrealizedPnl.toString(),
-          unrealizedPnlList,
+          //unrealizedPnlList,
           fundingFee: fundingFee.toString(),
           liquidationPrice: calculateLiquidationPrice(
             volume,
