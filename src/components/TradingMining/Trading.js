@@ -416,6 +416,7 @@ function Trading({ wallet, lang, loading }) {
                   </TipWrapper>
                 </div>
                 <div className='your-fee-num'>
+                $  {yourFee ? <DeriNumberFormat value={yourFee} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
               <div className='your-coeff'>
