@@ -7,6 +7,7 @@ import {
   getLiquidityUsed,
   getEstimatedLiquidityUsed,
   getPositionInfo,
+  getPositionInfos,
 } from '../api/trade_query_api';
 import {
   CHAIN_ID,
@@ -44,8 +45,7 @@ describe('trade_query_api', () => {
   );
   it('getPositionInfo', async () => {
     DeriEnv.set('prod')
-    //const res = await getPositionInfo(CHAIN_ID, POOL_V2L_ADDRESS, ACCOUNT_ADDRESS, '0')
-    const res = await getPositionInfo('56', '0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0', ACCOUNT_ADDRESS, '0')
+    const res = await getPositionInfo(CHAIN_ID, POOL_V2L_ADDRESS, ACCOUNT_ADDRESS, '0')
     DeriEnv.set('dev')
     expect(res).toHaveProperty('averageEntryPrice');
     expect(res).toHaveProperty('fundingFee');
@@ -62,6 +62,12 @@ describe('trade_query_api', () => {
     expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
     expect(Array.isArray(res.unrealizedPnlList)).toBe(true)
     expect(res).toEqual({})
+  }, TIMEOUT);
+  it('getPositionInfos', async () => {
+    DeriEnv.set('prod')
+    const res = await getPositionInfos(CHAIN_ID, POOL_V2L_ADDRESS, ACCOUNT_ADDRESS, '0')
+    DeriEnv.set('dev')
+    expect(res).toEqual([])
   }, TIMEOUT);
   it(
     'getWalletBalance',

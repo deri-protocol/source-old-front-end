@@ -4,13 +4,13 @@ import {
   getFundingRateOption,
   getLiquidityUsedOption,
   getPositionInfoOption,
+  getPositionInfosPosition,
   getSpecificationOption,
   getWalletBalanceOption,
   getEstimatedFeeOption,
   getEstimatedMarginOption,
   getEstimatedLiquidityUsedOption,
   isUnlockedOption,
-  getPositionInfosPosition,
 } from '../option/api';
 import { getPoolVersion, isDeriUnlocked, LITE_VERSIONS } from '../shared';
 import {
@@ -29,6 +29,7 @@ import {
 
 import {
   getPositionInfoV2,
+  getPositionInfosV2,
   isUnlockedV2,
   getEstimatedMarginV2,
   getEstimatedFeeV2,
@@ -44,6 +45,7 @@ import {
 
 import {
   getPositionInfoV2l,
+  getPositionInfosV2l,
   isUnlockedV2l,
   getEstimatedMarginV2l,
   getEstimatedFeeV2l,
@@ -96,8 +98,16 @@ export const getPositionInfo = async (
 
 export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
   const version = getPoolVersion(poolAddress);
-  if (version === 'option') {
+  if (LITE_VERSIONS.includes(version)) {
+    return getPositionInfosV2l(chainId, poolAddress, accountAddress)
+  } else if (version === 'option') {
     return getPositionInfosPosition(chainId, poolAddress, accountAddress)
+  } else if (version === 'v1') {
+    return [
+      await getPositionInfo2(chainId, poolAddress, accountAddress),
+    ].filter((p) => p.volume !== '0');
+  } else if (version === 'v2') {
+    return getPositionInfosV2(chainId, poolAddress, accountAddress)
   } else {
     // return empty array for v1, v2, v2_lite
     return []

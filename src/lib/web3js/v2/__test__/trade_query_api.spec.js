@@ -19,6 +19,7 @@ import {
   getWalletBalance,
   getSpecification,
   getPositionInfo,
+  getPositionInfos,
   isUnlocked,
   getEstimatedMargin,
   getFundingRate,
@@ -97,11 +98,15 @@ describe('Trade query api', () => {
     expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
     expect(Array.isArray(res.unrealizedPnlList)).toBe(true)
 
-    //expect(res.liquidationPrice).toEqual('');
+    expect(res).toEqual({});
 
     const input2 = ['97', POOL_V2_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '500', '0']
     expect(await getEstimatedLiquidatePrice(...input2)).toEqual('')
   }, TIMEOUT)
+  it('getPositionInfos()', async () => {
+    const res = await getPositionInfos('97', POOL_V2_ADDRESS, ACCOUNT_ADDRESS)
+    expect(res).toEqual([])
+  }, TIMEOUT);
   it('isUnlocked()', async() => {
     const input = ['97', POOL_V2_ADDRESS, '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF', '0', true]
     const output = true

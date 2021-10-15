@@ -172,7 +172,7 @@ export default class Trading {
         this.contractInfo.load(wallet,config,isOption),
         this.loadFundingRate(wallet,config,isOption),
         this.historyInfo.load(wallet,config,isOption),
-        isOption && this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions)),
+        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions)),
       ]).then(results => {
         if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
@@ -186,7 +186,7 @@ export default class Trading {
         finishedCallback && finishedCallback()
         this.oracle.load(getFormatSymbol(config.symbol))
         this.positionInfo.start()
-        isOption && this.positionInfo.startAll();
+        this.positionInfo.startAll();
       })
     } else {
       finishedCallback && finishedCallback()

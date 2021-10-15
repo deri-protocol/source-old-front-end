@@ -89,7 +89,7 @@ function SubMenu({symbol,trading,onSelect,index,version,type}){
 function SymbolDisplay({version,spec,type}){
   if(type.isOption){
     return (
-        `${(spec && spec.symbol) || 'BTCUSD-60000-C'}`
+        `${(spec && spec.symbol) || 'BTCUSD-70000-C'}`
       )
   }else{
     return (

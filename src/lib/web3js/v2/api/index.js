@@ -15,6 +15,7 @@ export {
 export {
   getSpecification as getSpecificationV2,
   getPositionInfo as getPositionInfoV2,
+  getPositionInfos as getPositionInfosV2,
   isUnlocked as isUnlockedV2,
   getWalletBalance as getWalletBalanceV2,
   getEstimatedFee as getEstimatedFeeV2,

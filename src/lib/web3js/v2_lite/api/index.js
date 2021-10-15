@@ -13,6 +13,7 @@ export {
 export {
   getSpecification as getSpecificationV2l,
   getPositionInfo as getPositionInfoV2l,
+  getPositionInfos as getPositionInfosV2l,
   isUnlocked as isUnlockedV2l,
   getWalletBalance as getWalletBalanceV2l,
   getEstimatedFee as getEstimatedFeeV2l,

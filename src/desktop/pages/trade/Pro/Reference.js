@@ -38,8 +38,9 @@ function Reference({lang,type}) {
         </div>
       </div>
       <div className='pos-his-info '>
-        {type.isFuture && <Position lang={lang} />} 
-        {type.isOption && <OptionPosition lang={lang} />} 
+        {/* {type.isFuture && <Position lang={lang} />}  */}
+        {/* {type.isOption && <OptionPosition lang={lang} />}  */}
+        <OptionPosition lang={lang} />
         <History lang={lang}  />
       </div>
     </div>

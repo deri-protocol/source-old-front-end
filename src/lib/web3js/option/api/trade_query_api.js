@@ -3,15 +3,11 @@ import {
   max,
   bTokenFactory,
   catchApiError,
-  deriToNatural,
   getPoolConfig,
 } from '../../shared';
 import { fundingRateCache } from '../../shared/api/api_globals';
 import { normalizeOptionSymbol } from '../../shared/config/token';
 import { wrappedOracleFactory } from '../../shared/factory/oracle';
-import {
-  getOracleVolatilitiesForOption,
-} from '../../shared/utils/oracle';
 import { queryTradePMM } from '../calculation/PMM2';
 import {
   dynamicInitialMarginRatio,
@@ -213,10 +209,6 @@ export const getPositionInfos = async (
       //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
       const symbols = optionPool.activeSymbols
       const [symbolVolatilities, volPrices] = await Promise.all([
-        // getOraclePricesForOption(
-        //   chainId,
-        //   symbols.map((s) => s.symbol)
-        // ),
         volatilitiesCache.get(
           symbols.map((s) => s.symbol)
         ),
