@@ -61,7 +61,7 @@ describe('trade_query_api', () => {
     expect(bg(res.volume).toNumber()).toBeLessThanOrEqual(10000);
     expect(bg(res.margin).toNumber()).toBeGreaterThanOrEqual(0);
     expect(Array.isArray(res.unrealizedPnlList)).toBe(true)
-    //expect(res).toEqual({})
+    expect(res).toEqual({})
   }, TIMEOUT);
   it(
     'getWalletBalance',

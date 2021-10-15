@@ -23,7 +23,7 @@ import {
   getMarginHeldBySymbol,
 } from '../calculation/trade';
 import { everlastingOptionFactory } from '../factory/pool';
-import { volatilitiesCache, volatilityCache } from '../utils';
+import { volatilitiesCache, volatilitiesCache2, volatilityCache } from '../utils';
 import { getIndexInfo } from '../../shared/config/token';
 
 //
@@ -43,7 +43,6 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
 
       const symbols = optionPool.activeSymbols
       const symbolVolatilities = await volatilitiesCache.get(
-        poolAddress,
         symbols.map((s) => s.symbol)
       );
       const state = await optionPool.viewer.getPoolStates(
@@ -132,7 +131,6 @@ export const getPositionInfo = async (
       if (symbols && symbols.length > 0) {
         [symbolVolatilities, volPrice] = await Promise.all([
           volatilitiesCache.get(
-            poolAddress,
             symbols.map((s) => s.symbol)
           ),
           volatilityCache.get(`VOL-${normalizeOptionSymbol(symbolName)}`),
@@ -220,10 +218,9 @@ export const getPositionInfos = async (
         //   symbols.map((s) => s.symbol)
         // ),
         volatilitiesCache.get(
-          poolAddress,
           symbols.map((s) => s.symbol)
         ),
-        getOracleVolatilitiesForOption(symbols.map((s) => s.symbol)),
+        volatilitiesCache2(symbols.map((s) => `VOL-${normalizeOptionSymbol(s.symbol)}`)),
       ]);
       const state = await optionPool.viewer.getTraderStates(
         poolAddress,
@@ -272,7 +269,7 @@ export const getPositionInfos = async (
             unrealizedPnl: positionState[vIndex].pnl,
             premiumFundingAccrued: positionState[vIndex].fundingAccrued,
             isCall: s.isCall,
-            volatility: deriToNatural(volPrices[vIndex]).times(100).toString(),
+            volatility: bg(volPrices[vIndex]).times(100).toString(),
             liquidationPrice: liquidationPrices,
           };
         });
@@ -334,7 +331,7 @@ const _getFundingRate = async (chainId, poolAddress, symbolId) => {
   //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress);
   //const poolViewer = everlastingOptionViewerFactory(chainId, optionPool.viewerAddress)
   const symbols = optionPool.activeSymbols;
-  const symbolVolatilities = await volatilitiesCache.get( poolAddress, symbols.map((s) => s.symbol))
+  const symbolVolatilities = await volatilitiesCache.get(symbols.map((s) => s.symbol))
   const state = await optionPool.viewer.getPoolStates(
     poolAddress,
     [],
@@ -658,7 +655,6 @@ export const getEstimatedTimePrice = (
       const optionPool = everlastingOptionFactory(chainId, poolAddress);
       await optionPool._updateConfig();
       const symbolVolatilities = await volatilitiesCache.get(
-        poolAddress,
         optionPool.activeSymbols.map((s) => s.symbol)
       );
       const state = await optionPool.viewer.getPoolStates(

@@ -88,14 +88,18 @@ export const getPriceInfo = async (symbol, type='futures') => {
   let retry = 3;
   let res, priceInfo;
   while (retry > 0) {
-    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
-    if (res.ok) {
-      priceInfo = await res.json();
-      if (priceInfo.status.toString() === '200' && priceInfo.data) {
-        return priceInfo.data
+    try {
+      res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+      if (res.ok) {
+        priceInfo = await res.json();
+        if (priceInfo.status.toString() === '200' && priceInfo.data) {
+          return priceInfo.data
+        }
       }
+    } catch(err) {
+      //console.log(err.toString())
+      retry -= 1;
     }
-    retry -= 1;
   }
   if (retry === 0) {
     throw new Error(`fetch oracle info exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);

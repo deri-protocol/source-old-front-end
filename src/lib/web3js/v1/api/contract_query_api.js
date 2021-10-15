@@ -141,7 +141,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
   if (price === '') {
     return {
       price,
-      volume: volume.toString(),
+      volume: bg(volume).times(multiplier).toString(),
       averageEntryPrice: calculateEntryPrice(
         volume,
         cost,
@@ -161,7 +161,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
   } else {
     return {
       price,
-      volume: volume.toString(),
+      volume: bg(volume).times(multiplier).toString(),
       averageEntryPrice: calculateEntryPrice(
         volume,
         cost,
@@ -382,6 +382,7 @@ export const getFundingRate = async (chainId, poolAddress) => {
       fundingRatePerBlock,
       liquidity,
       tradersNetVolume,
+      multiplier,
     } = res;
     const volume = poolInfo.volume24h;
     // fundingRate = processFundingRate(chainId, fundingRate);
@@ -391,7 +392,7 @@ export const getFundingRate = async (chainId, poolAddress) => {
       fundingRatePerBlock: bg(fundingRatePerBlock).toExponential(10),
       liquidity: liquidity.toString(),
       volume: deriToNatural(volume).toString(),
-      tradersNetVolume: tradersNetVolume.toString(),
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString(),
     };
   }
 };

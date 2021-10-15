@@ -227,7 +227,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       });
       return {
         price,
-        volume: volume.toString(),
+        volume: bg(volume).times(symbols[symbolIndex].multiplier).toString(),
         averageEntryPrice: calculateEntryPrice(
           volume,
           cost,
@@ -435,13 +435,13 @@ export const getFundingRate = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, symbolId) => {
     const res = await _getFundingRate(chainId, poolAddress, symbolId)
-    const {fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume} = res
+    const {fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume, multiplier} = res
     return {
       fundingRate0: fundingRate.times(100).toString(),
       fundingRatePerBlock: fundingRatePerBlock.toString(),
       liquidity: liquidity.toString(),
       volume: '-',
-      tradersNetVolume: tradersNetVolume.toString()
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString()
     }
   }, args, 'getFundingRate', {
     fundingRate0: '',

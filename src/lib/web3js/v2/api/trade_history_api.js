@@ -1,4 +1,4 @@
-import { deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
+import { bg, deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
 import {
   getPoolConfig2,
   getPoolSymbolIdList,
@@ -38,7 +38,7 @@ const processTradeEvent = async (
     symbol: symbol && symbol.symbol,
     price: price.toString(),
     notional: notional.toString(),
-    volume: volume.toString(),
+    volume: bg(volume).times(multiplier[parseInt(symbolId)]).toString(),
     transactionFee: transactionFee.toString(),
     transactionHash: txHash.toString(),
     time,
@@ -112,23 +112,75 @@ export const getTradeHistory = async (
         tradeHistory = res.data.tradeHistory;
       }
     }
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
+    const symbolIdList = getPoolSymbolIdList(poolAddress)
+    //console.log(symbolIdList)
+
+    let promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+    //console.log(symbols)
+
     if (tradeHistory.length > 0) {
       tradeHistory = tradeHistory
-        .filter((i) => i)
+        .filter((i) => !(i.direction === 'LIQUIDATION' && i.symbolId === '0'))
         .map((i) => {
-          return {
-            direction: i.direction.trim(),
-            //baseToken: i.baseToken.trim(),
-            symbolId: i.symbolId,
-            symbol: i.symbol,
-            price: deriToNatural(i.price).toString(),
-            notional: deriToNatural(i.notional).toString(),
-            volume: deriToNatural(i.volume).toString(),
-            transactionFee: deriToNatural(i.transactionFee).toString(),
-            transactionHash: i.transactionHash,
-            time: i.time.toString(),
-          };
-        });
+          const index = parseInt(i.symbolId)
+          if (i.direction !== 'LIQUIDATION') {
+            return {
+              direction: i.direction.trim(),
+              //baseToken: i.baseToken.trim(),
+              symbolId: i.symbolId,
+              symbol: i.symbol,
+              price: deriToNatural(i.price).toString(),
+              notional: deriToNatural(i.notional).toString(),
+              volume: deriToNatural(i.volume).times(symbols[index].multiplier).toString(),
+              transactionFee: deriToNatural(i.transactionFee).toString(),
+              transactionHash: i.transactionHash,
+              time: i.time.toString(),
+            };
+          } else {
+            if (i.volume !== '' && i.volume.indexOf(',') > -1 && !i.price.startsWith('NaN')) {
+              const ids = i.volume.split(',').reduce((acc, v, index) => {
+                if (v !== '0') {
+                  return acc.concat([index]);
+                } else {
+                  return acc
+                }
+              }, []);
+            const prices = i.price.split(',').map((s)=> deriToNatural(s))
+            const volumes= i.volume.split(',').map((v)=> deriToNatural(v))
+            const res = ids.map((id) => {
+              return {
+                direction: i.direction.trim(),
+                symbolId: id.toString(),
+                symbol: symbols[id].symbol,
+                volume: volumes[id].times(symbols[id].multiplier).abs().toString(),
+                price: prices[id].toString(),
+                notional: volumes[id].abs().times(prices[id]).times(symbols[id].multiplier).toString(),
+                transactionFee: '0',
+                transactionHash: i.transactionHash,
+                time: i.time.toString(),
+              };
+            })
+            return res
+            } else {
+              return {
+                direction: i.direction.trim(),
+                symbolId: '',
+                symbol: '',
+                volume: '',
+                price: '',
+                notional: '',
+                transactionFee: '0',
+                transactionHash: i.transactionHash,
+                time: i.time.toString(),
+              }
+            }
+          }
+        }).flat();
     }
       //console.log('tradeHistory1',tradeHistory)
     if (tradeFromBlock !== 0) {

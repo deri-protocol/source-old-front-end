@@ -186,7 +186,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
     });
   return {
       price: price,
-      volume: volume.toString(),
+      volume: bg(volume).times(multiplier).toString(),
       averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
       margin: margin.toString(),
       marginHeld: marginHeld.toString(),
@@ -399,13 +399,13 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
 export const getFundingRate = async (chainId, poolAddress, symbolId) => {
   try {
     const res = await _getFundingRate(chainId, poolAddress, symbolId)
-    const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res
+    const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume, multiplier } = res
     return {
       fundingRate0: fundingRate.times(100).toString(),
       fundingRatePerBlock: fundingRatePerBlock.toString(),
       liquidity: liquidity.toString(),
       volume: '-',
-      tradersNetVolume: tradersNetVolume.toString()
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString()
     };
   } catch(err) {
     console.log(`${err}`)

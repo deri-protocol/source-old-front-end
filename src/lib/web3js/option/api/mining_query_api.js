@@ -29,7 +29,7 @@ const _getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
   ]);
 
   const symbols = optionPool.activeSymbols
-  const symbolVolatilities = await volatilitiesCache.get(poolAddress, symbols.map((s) => s.symbol))
+  const symbolVolatilities = await volatilitiesCache.get(symbols.map((s) => s.symbol))
   const state = await optionPool.viewer.getPoolStates(poolAddress, [], symbolVolatilities)
   const { poolState } = state;
   const { initialMarginRatio, liquidity, totalDynamicEquity } = poolState;

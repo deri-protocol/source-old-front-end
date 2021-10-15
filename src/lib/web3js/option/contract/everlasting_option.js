@@ -59,7 +59,6 @@ export class EverlastingOption extends ContractBase {
         activeSymbolIds.reduce((acc, i) => acc.concat([this.getSymbol(i)]), [])
       );
       const symbolVolatilities = await volatilitiesCache.get(
-        this.contractAddress,
         activeSymbols.map((s) => s.symbol)
       );
       //console.log(symbolVolatilities)

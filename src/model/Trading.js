@@ -354,7 +354,7 @@ export default class Trading {
       const increment = slideIncrementMargin - position.marginHeld
       let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
       let volume =  increment / (price * this.contract.multiplier * MarginRatio);
-      if(type.isOption){
+      // if(type.isOption){
         volume = +volume * +this.contract.multiplier
         let index = this.contract.multiplier.indexOf('.')
         let num = this.contract.multiplier.slice(index);
@@ -364,9 +364,9 @@ export default class Trading {
           value = value.substring(0,value.indexOf(".") + length)
         }
         this.setVolume(value)
-      }else{
-        this.setVolume(volume.toFixed(0))
-      }
+      // }else{
+      //   this.setVolume(volume.toFixed(0))
+      // }
     }
   }
 
@@ -399,7 +399,8 @@ export default class Trading {
     const position = this.position
     const contract = this.contract;
     let initVolume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
-    let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    // let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    let optionVolume = (+initVolume / +this.contract.multiplier);
     const volume = optionVolume
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
     const price = position.price || this.index
