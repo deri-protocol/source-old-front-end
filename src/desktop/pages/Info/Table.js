@@ -52,11 +52,11 @@ function Table({title,dataSet,url,headers,columns,columnRenders = {},pagination,
       <div className='t-title'>{title}</div>
       <div className='tbody'>
         <div className='theader'>
-          {headers.map(header => <div className='col'>{header}</div>)}
+          {headers.map((header,index) => <div className='col' key={index}>{header}</div>)}
         </div>
-        {data.length > 0 ? data.map(d => (
-          <div className='row' onClick={() => onRowClick && onRowClick(d)} style={{cursor : onRowClick ? 'pointer' : 'normal'}}>
-            {columns.map(col => <div className='col'>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
+        {data.length > 0 ? data.map((d,index) => (
+          <div className='row' key={index} onClick={() => onRowClick && onRowClick(d)} style={{cursor : onRowClick ? 'pointer' : 'normal'}}>
+            {columns.map((col,index) => <div className='col' key={index}>{columnRenders[col] ? columnRenders[col].call(null,d) :d[col]}</div>)}
           </div>))
           :
           <div className='row'><div className='col no-data'>No Data</div></div>

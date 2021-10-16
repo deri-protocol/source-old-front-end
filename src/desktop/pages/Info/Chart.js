@@ -29,14 +29,15 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
         borderVisible :  false
       },
       width: rect.width,
-      height: rect.height,
+      height: 200,
       priceScale: {
         position: 'none',
         borderColor: '#fff',
         borderVisible : false,
         mode: 0,
         scaleMargins: {
-          top: 0.35
+          top: 0.35,
+          // bottom : 0
         },
       },
 
@@ -198,7 +199,7 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
         <div className='title-date'>{curDate} </div>
       </div>
       {cycle && <div className='cycle-c'>
-        {cycle.map(item => <div className={`cycle-item ${item === curCycle && 'selected'}`}  onClick={() => cycleSelect(item)}>{item}</div>)}
+        {cycle.map((item,index) => <div className={`cycle-item ${item === curCycle && 'selected'}`} key={index} onClick={() => cycleSelect(item)}>{item}</div>)}
       </div>}
       <div className='series' ref={chartRef}></div>
     </div>
