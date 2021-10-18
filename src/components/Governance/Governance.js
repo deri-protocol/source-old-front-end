@@ -24,9 +24,9 @@ function Governance({ wallet = {}, lang }){
           <div className='title'>
             {lang['dip-list-title']}
           </div>
-          <div className='link'>
+          {/* <div className='link'>
             <Link to='/diphistorytwo'> {lang['dip-two']} </Link>
-          </div>
+          </div> */}
           <div >
             <Link to='/diphistory'> {lang['dip-one']} </Link>
           </div>

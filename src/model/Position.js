@@ -50,8 +50,7 @@ export default class Position {
      this.callbackALL = callback
     }
     if(wallet && wallet.isConnected() && wallet.isSupportChain(type.isOption) && spec && spec.pool){
-      // let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
-      let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,"0x1a0b5F2EAde71626D051C29Ef425d9c49dc87Aea",spec.symbolId)
+      let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
       let positions = [] 
       if(res.length) {
         positions = res.map(item => {
