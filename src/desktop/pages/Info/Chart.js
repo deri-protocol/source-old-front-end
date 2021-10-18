@@ -3,6 +3,7 @@ import { createChart, CrosshairMode } from "lightweight-charts";
 import axios from "axios";
 import dateFormat from 'dateformat'
 import { convertToInternationalCurrencySystem } from "../../../utils/utils";
+import AreaChart from "./AreaChart";
 
 export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
   const chartRef = useRef(null);
@@ -171,25 +172,25 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
     loadHistogramData(url,series.current)
   }
 
-  useEffect(() => {
-    const chart = initChart();
-    if(seriesType === 'area'){
-      addAreaSeries(chart)
-    }
-    if(seriesType === 'histogram'){
-      addHistogramSeries(chart)
-    }
-    chart.subscribeCrosshairMove(crosshairMove);
-    return () => {
-      if(chart){
-        chart.unsubscribeCrosshairMove(crosshairMove)
-        if(series.current){
-          chart.removeSeries(series.current);
-        }
-        chart.remove();
-      }
-    }
-  }, [url,seriesType])
+  // useEffect(() => {
+  //   const chart = initChart();
+  //   if(seriesType === 'area'){
+  //     addAreaSeries(chart)
+  //   }
+  //   if(seriesType === 'histogram'){
+  //     addHistogramSeries(chart)
+  //   }
+  //   chart.subscribeCrosshairMove(crosshairMove);
+  //   return () => {
+  //     if(chart){
+  //       chart.unsubscribeCrosshairMove(crosshairMove)
+  //       if(series.current){
+  //         chart.removeSeries(series.current);
+  //       }
+  //       chart.remove();
+  //     }
+  //   }
+  // }, [url,seriesType])
 
   return(
     <div className='info-chart'>
@@ -201,7 +202,10 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
       {cycle && <div className='cycle-c'>
         {cycle.map((item,index) => <div className={`cycle-item ${item === curCycle && 'selected'}`} key={index} onClick={() => cycleSelect(item)}>{item}</div>)}
       </div>}
-      <div className='series' ref={chartRef}></div>
+      {/* <div className='series' ref={chartRef}></div> */}
+      <div className='series'>
+        <AreaChart url={url}/>
+      </div>
     </div>
   )
 }
