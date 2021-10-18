@@ -6,18 +6,22 @@ import { priceCache, getIntrinsicPrice, PerpetualPoolParametersCache, isUnlocked
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
+import WithdrawMagin from './Dialog/WithdrawMargin'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { inject, observer } from 'mobx-react';
 import { BalanceList } from './Dialog/BalanceList';
 import SymbolSelector from './SymbolSelector';
 import { bg } from "../../lib/web3js/indexV2";
 import TipWrapper from '../TipWrapper/TipWrapper';
-import { convertToInternationalCurrencySystem } from '../../utils/utils';
+import removeMarginIcon from '../../assets/img/remove_margin.png'
+import addMarginIcon from '../../assets/img/add_margin.png'
+import { convertToInternationalCurrencySystem, eqInNumber } from '../../utils/utils';
 
 
 
 const ConfirmDialog = withModal(TradeConfirm)
 const DepositDialog = withModal(DepositMargin)
+const WithDrawDialog = withModal(WithdrawMagin)
 const BalanceListDialog = withModal(BalanceList)
 
 
@@ -33,17 +37,45 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [markPriceClass, setMarkPriceClass] = useState('rise');
   const [optionInputHolder, setOptionInputHolder] = useState('0.000')
+  const [balance, setBalance] = useState('');
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
   const [isOptionInput, setIsOptionInput] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
+  const [addModalIsOpen, setAddModalIsOpen] = useState(false);
+  const [removeModalIsOpen, setRemoveModalIsOpen] = useState(false);
+  const [balanceListModalIsOpen, setBalanceListModalIsOpen] = useState(false);
+  const [availableBalance, setAvailableBalance] = useState('');
   const indexPriceRef = useRef();
   const markPriceRef = useRef();
   const directionClazz = classNames('checked-long', 'check-long-short', ' long-short', { 'checked-short': direction === 'short' })
   const volumeClazz = classNames('contrant-input', { 'inputFamliy': trading.volume !== '' })
 
 
+  const onCloseDeposit = () => setAddModalIsOpen(false)
+  const onCloseWithdraw = () => setRemoveModalIsOpen(false);
+  const onCloseBalanceList = () => setBalanceListModalIsOpen(false);
+  const afterWithdraw = () => {
+    refreshBalance();
+  }
+  const afterDepositAndWithdraw = () => {
+    refreshBalance();
+  }
 
+  const refreshBalance = () => {
+    loadBalance();
+    trading.refresh();
+  }
+  const loadBalance = async () => {
+    if (wallet.isConnected() && trading.config) {
+      const balance = await getWalletBalance(wallet.detail.chainId, trading.config.pool, wallet.detail.account, trading.config.bTokenId).catch(e => console.log(e))
+      if (balance) {
+        setBalance(balance)
+      }
+    }
+  }
+
+  const afterDeposit = afterWithdraw
   //是否有链接钱包
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
 
@@ -233,6 +265,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
 
   useEffect(() => {
+    loadBalance();
+    return () => { };
+  }, [wallet.detail.account, trading.config, trading.amount.dynBalance])
+
+  useEffect(() => {
     if (indexPriceRef.current > trading.index) {
       setIndexPriceClass('fall')
     } else {
@@ -250,6 +287,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       document.querySelector('head title').innerText = 'deri'
     };
   }, [trading.index, trading.config]);
+
+  useEffect(() => {
+    if (trading.position) {
+      const { position } = trading
+      setAvailableBalance(bg(position.margin).plus(position.unrealizedPnl).minus(position.marginHeld).toString())
+    }
+    return () => { };
+  }, [trading.position.volume, trading.position.margin, trading.position.unrealizedPnl]);
 
   useEffect(() => {
     if (type.isOption) {
@@ -487,8 +532,36 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                     {lang['dynamic-effective-balance']}
                   </span>
                 </TipWrapper>}
+
                 <span className={`balance-contract-num ${version.current}`}>
+                  {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
+                    ?
+                    <span
+                      className='open-add'
+                      id='openAddMargin'
+                      onClick={() => setRemoveModalIsOpen(true)}
+                    >
+                      <img src={removeMarginIcon} alt='add margin' />
+                    </span>
+                    : <span
+                      className='open-add'
+                      id='openAddMargin'
+                      onClick={() => setBalanceListModalIsOpen(true)}
+                    >
+                      <img src={removeMarginIcon} alt='add margin' />
+                    </span>}
+
                   <DeriNumberFormat value={trading.amount.dynBalance} allowZero={true} decimalScale={2} />
+                  {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
+                    ?
+                    <span className='open-remove'
+                      onClick={() => setAddModalIsOpen(true)}>
+                      <img src={addMarginIcon} alt='add margin' />
+                    </span>
+                    : <span className='open-remove'
+                      onClick={() => setBalanceListModalIsOpen(true)}>
+                      <img src={addMarginIcon} alt='add margin' />
+                    </span>}
                 </span>
               </div>
               {(version.isV1) && <div className='box-margin'>
@@ -609,6 +682,39 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           markPriceAfter={markPriceAfter}
           liquidationPrice={liquidationPrice}
         />
+        <DepositDialog
+          wallet={wallet}
+          modalIsOpen={addModalIsOpen}
+          onClose={onCloseDeposit}
+          spec={trading.config}
+          afterDeposit={afterDeposit}
+          balance={balance}
+          className='trading-dialog'
+          lang={lang}
+        />
+        <WithDrawDialog
+          wallet={wallet}
+          modalIsOpen={removeModalIsOpen}
+          onClose={onCloseWithdraw}
+          spec={trading.config}
+          afterWithdraw={afterWithdraw}
+          availableBalance={availableBalance}
+          position={trading.position}
+          className='trading-dialog'
+          lang={lang}
+        />
+
+        <BalanceListDialog
+          wallet={wallet}
+          modalIsOpen={balanceListModalIsOpen}
+          onClose={onCloseBalanceList}
+          spec={trading.config}
+          afterDepositAndWithdraw={afterDepositAndWithdraw}
+          position={trading.position}
+          overlay={{ background: '#1b1c22', top: 80 }}
+          className='balance-list-dialog'
+          lang={lang}
+        />
       </div>
       {/* <Loading modalIsOpen={loaded} overlay={{background : 'none'}}/> */}
     </div>
@@ -617,7 +723,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
 
 function Operator({ hasConnectWallet, wallet, spec, volume, available,
-  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter ,afterLeverage,liquidationPrice}) {
+  baseToken, leverage, indexPrice, position, transFee, afterTrade, direction, trading, version, lang, type, markPriceAfter, afterLeverage, liquidationPrice }) {
   const [isApprove, setIsApprove] = useState(true);
   const [emptyVolume, setEmptyVolume] = useState(true);
   const [confirmIsOpen, setConfirmIsOpen] = useState(false);

@@ -9,8 +9,8 @@ import WithdrawMagin from '../../../../components/Trade/Dialog/WithdrawMargin';
 import { eqInNumber } from '../../../../utils/utils';
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
-import removeMarginIcon from '../../../../assets/img/remove-margin.svg'
-import addMarginIcon from '../../../../assets/img/add-margin.svg'
+import removeMarginIcon from '../../../../assets/img/remove_margin.png'
+import addMarginIcon from '../../../../assets/img/add_margin.png'
 import marginDetailIcon from '../../../../assets/img/margin-detail.png'
 import { BalanceList } from '../../../../components/Trade/Dialog/BalanceList';
 import { bg } from '../../../../lib/web3js/indexV2';
@@ -130,20 +130,36 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
         <div className='dyn-eff-bal'>
           {lang['dynamic-effective-balance']} : &nbsp;
           <span>
-            <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
-            {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen) ? <span>
+            {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
+              ?
               <span
                 className='open-add'
                 id='openAddMargin'
-                onClick={() => setAddModalIsOpen(true)}
+                onClick={() => setRemoveModalIsOpen(true)} 
               >
                 <img src={removeMarginIcon} alt='add margin' />
               </span>
+              : <span
+                className='open-add'
+                id='openAddMargin'
+                onClick={() => setBalanceListModalIsOpen(true)}
+              >
+                <img src={removeMarginIcon} alt='add margin' />
+              </span>}
+
+            <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
+
+            {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
+              ?
               <span className='open-remove'
-                onClick={() => setRemoveModalIsOpen(true)}>
+                onClick={() => setAddModalIsOpen(true)}>
                 <img src={addMarginIcon} alt='add margin' />
               </span>
-            </span> : (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)}
+              : <span className='open-remove'
+                onClick={() => setBalanceListModalIsOpen(true)}>
+                <img src={addMarginIcon} alt='add margin' />
+              </span>}
+            {/* {  (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)} */}
           </span>
         </div>
         {type.isOption && <> <div className='liquidation-price'>
@@ -196,8 +212,8 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
               </span>
             </div>
             {type.isOption && <div><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>}
-            {type.isFuture && <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>} 
-            <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>
+            {type.isFuture && <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>}
+            {type.isFuture && <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>} 
           </div>
         )
       })}
@@ -340,7 +356,7 @@ function LiqPrice({ wallet, trading, lang }) {
 
   useEffect(() => {
     if (wallet.isConnected() && trading.positions) {
-      if (trading.positions.length && trading.positions.length > 0 ) {
+      if (trading.positions.length && trading.positions.length > 0) {
         if (trading.positions[0].liquidationPrice && trading.positions[0].liquidationPrice.length) {
           let elem = trading.positions[0].liquidationPrice.map((item, index) => {
             let ele = liqText(item, index)
