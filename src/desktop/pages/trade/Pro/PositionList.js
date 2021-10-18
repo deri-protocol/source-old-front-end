@@ -197,7 +197,7 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
             </div>
             {type.isOption && <div><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>}
             {type.isFuture && <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>} 
-            <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>
+            {type.isFuture && <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>}
           </div>
         )
       })}
