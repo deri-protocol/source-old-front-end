@@ -87,6 +87,9 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <Link to='/trade-to-earn'>{lang['signin']}</Link>
               </li>
               <li>
+                <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>
+              </li>
+              <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>
               </li>
               <li>
