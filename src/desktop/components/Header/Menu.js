@@ -97,6 +97,9 @@ function Menu({ lang, locale }) {
                 <a rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
               </li>
               <li>
+                <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>
+              </li>
+              <li>
                 {isProduction
                   ?
                   <a className='signin-item' href={`https://${host}/#/trade-to-earn`}>{lang['signin']}</a>
