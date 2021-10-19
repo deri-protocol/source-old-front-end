@@ -3,7 +3,8 @@ import { createChart, CrosshairMode } from "lightweight-charts";
 import axios from "axios";
 import dateFormat from 'dateformat'
 import { convertToInternationalCurrencySystem } from "../../../utils/utils";
-import AreaChart from "./AreaChart";
+import AreaChart from "./AreaChart.tsx";
+import RechartArea from "./RechartArea";
 
 export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
   const chartRef = useRef(null);
@@ -172,6 +173,11 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
     loadHistogramData(url,series.current)
   }
 
+  const setTitle = data => {
+    setCurValue(data.value);
+    setCurDate(dateFormat(new Date(data.time * 1000),'yyyy-mm-dd'))
+  }
+
   // useEffect(() => {
   //   const chart = initChart();
   //   if(seriesType === 'area'){
@@ -204,7 +210,7 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
       </div>}
       {/* <div className='series' ref={chartRef}></div> */}
       <div className='series'>
-        <AreaChart url={url}/>
+        <RechartArea url={url} callback={setTitle}/>
       </div>
     </div>
   )

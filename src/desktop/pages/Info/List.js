@@ -7,6 +7,9 @@ import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import { useHistory } from 'react-router-dom'
 import Chart from './Chart'
 import { inject, observer } from 'mobx-react'
+import RechartArea from './RechartArea'
+import RechartBar from './RechartBar'
+// import AreaChart from './AreaChart';
 const HEADERS = ['ZONE','POOL','BASE TOKEN','POOL ADDRESS','LIQUIDITY','TRADE VOLUME']
 const COLUMNS = ['zone','catalog','bToken','address','liquidity','notional']
 
@@ -45,8 +48,8 @@ function List({loading}){
     <div className='info'>
       <div className='title'>Deri Overview</div>
       <div className='chart-box'>
-        <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>
-        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
+        <div className='chart'><RechartArea title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>
+        <div className='chart'><RechartBar title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
       </div>
       <div className='table-by-network'>
         {Object.keys(allPoolData).map((chain,index) => <Table title={chain} key={index} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} onRowClick={d => onRowClick(d)} dataSet={allPoolData[chain]}/>)}
