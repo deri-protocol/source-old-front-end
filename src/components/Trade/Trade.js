@@ -535,33 +535,47 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
                 <span className={`balance-contract-num ${version.current}`}>
                   {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
-                    ?
-                    <span
-                      className='open-add'
-                      id='openAddMargin'
-                      onClick={() => setRemoveModalIsOpen(true)}
-                    >
-                      <img src={removeMarginIcon} alt='add margin' />
-                    </span>
-                    : <span
-                      className='open-add'
-                      id='openAddMargin'
-                      onClick={() => setBalanceListModalIsOpen(true)}
-                    >
-                      <img src={removeMarginIcon} alt='add margin' />
-                    </span>}
+                    ? <TipWrapper block={false}>
+                      <span
+                        className='open-add'
+                        id='openAddMargin'
+                        onClick={() => setRemoveModalIsOpen(true)}
+                        tip={lang['remove-margin']}
+                      >
+                        <img src={removeMarginIcon} alt='add margin' />
+                      </span>
+                    </TipWrapper>
+                    : <TipWrapper block={false}>
+                      <span
+                        className='open-add'
+                        id='openAddMargin'
+                        tip={lang['remove-margin']}
+                        onClick={() => setBalanceListModalIsOpen(true)}
+                      >
+                        <img src={removeMarginIcon} alt='add margin' />
+                      </span>
+                    </TipWrapper>
+                  }
 
                   <DeriNumberFormat value={trading.amount.dynBalance} allowZero={true} decimalScale={2} />
                   {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
-                    ?
-                    <span className='open-remove'
-                      onClick={() => setAddModalIsOpen(true)}>
-                      <img src={addMarginIcon} alt='add margin' />
-                    </span>
-                    : <span className='open-remove'
-                      onClick={() => setBalanceListModalIsOpen(true)}>
-                      <img src={addMarginIcon} alt='add margin' />
-                    </span>}
+                    ? <TipWrapper block={false}>
+                      <span className='open-remove'
+                        onClick={() => setAddModalIsOpen(true)}
+                        tip={lang['add-margin']}
+                      >
+                        <img src={addMarginIcon} alt='add margin' />
+                      </span>
+                    </TipWrapper>
+
+                    : <TipWrapper block={false}>
+                      <span className='open-remove'
+                        onClick={() => setBalanceListModalIsOpen(true)}
+                        tip={lang['add-margin']}
+                      >
+                        <img src={addMarginIcon} alt='add margin' />
+                      </span>
+                    </TipWrapper>}
                 </span>
               </div>
               {(version.isV1) && <div className='box-margin'>

@@ -15,6 +15,7 @@
   "option-input-min-quantity":"最小交易量为",
   "index-price" : "指数价格",
   "min-trade-volume":"最小交易量",
+  "notional-of-total-net-position":"总净仓位价值 =",
 
   "funding-rate-annual" : "日资金费率",
   "funding-rate" : "日资金费",

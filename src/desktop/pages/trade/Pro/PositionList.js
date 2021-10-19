@@ -131,34 +131,48 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
           {lang['dynamic-effective-balance']} : &nbsp;
           <span>
             {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
-              ?
-              <span
-                className='open-add'
-                id='openAddMargin'
-                onClick={() => setRemoveModalIsOpen(true)} 
-              >
-                <img src={removeMarginIcon} alt='add margin' />
-              </span>
-              : <span
-                className='open-add'
-                id='openAddMargin'
-                onClick={() => setBalanceListModalIsOpen(true)}
-              >
-                <img src={removeMarginIcon} alt='add margin' />
-              </span>}
+              ? <TipWrapper block={false}>
+                <span
+                  className='open-add'
+                  id='openAddMargin'
+                  onClick={() => setRemoveModalIsOpen(true)}
+                  tip={lang['remove-margin']}
+                >
+                  <img src={removeMarginIcon} alt='add margin' />
+                </span>
+              </TipWrapper>
+              : <TipWrapper block={false}>
+                <span
+                  className='open-add'
+                  id='openAddMargin'
+                  tip={lang['remove-margin']}
+                  onClick={() => setBalanceListModalIsOpen(true)}
+                >
+                  <img src={removeMarginIcon} alt='add margin' />
+                </span>
+              </TipWrapper>
+            }
 
             <DeriNumberFormat allowZero={true} value={balanceContract} decimalScale={2} />
 
             {(version.isV1 || version.isV2Lite || type.isOption || version.isOpen)
-              ?
-              <span className='open-remove'
-                onClick={() => setAddModalIsOpen(true)}>
-                <img src={addMarginIcon} alt='add margin' />
-              </span>
-              : <span className='open-remove'
-                onClick={() => setBalanceListModalIsOpen(true)}>
-                <img src={addMarginIcon} alt='add margin' />
-              </span>}
+              ? <TipWrapper block={false}>
+                <span className='open-remove'
+                  onClick={() => setAddModalIsOpen(true)}
+                  tip={lang['add-margin']}
+                >
+                  <img src={addMarginIcon} alt='add margin' />
+                </span>
+              </TipWrapper>
+
+              : <TipWrapper block={false}>
+                <span className='open-remove'
+                  onClick={() => setBalanceListModalIsOpen(true)}
+                  tip={lang['add-margin']}
+                  >
+                  <img src={addMarginIcon} alt='add margin' />
+                </span>
+              </TipWrapper>}
             {/* {  (<span className='balance-list-btn' onClick={() => setBalanceListModalIsOpen(true)}><img src={marginDetailIcon} alt='Remove margin' /> {lang['detail']}</span>)} */}
           </span>
         </div>
@@ -213,7 +227,7 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
             </div>
             {type.isOption && <div><DeriNumberFormat value={(-(pos.premiumFundingAccrued))} decimalScale={8} /></div>}
             {type.isFuture && <div><DeriNumberFormat value={(-(pos.fundingFee))} decimalScale={8} /></div>}
-            {type.isFuture && <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>} 
+            {type.isFuture && <div><DeriNumberFormat value={pos.liquidationPrice} decimalScale={4} /></div>}
           </div>
         )
       })}

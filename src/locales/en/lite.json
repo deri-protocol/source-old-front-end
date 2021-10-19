@@ -15,6 +15,7 @@
   "option-input-min-quantity":"Min trading volume is",
   "index-price" : "Index Price",
   "min-trade-volume":"Min Trade Volume",
+  "notional-of-total-net-position":"Notional of Total Net Position =",
 
   "funding-rate-annual" : "Funding Rate Daily",
   "funding-rate" : "Funding Fee Daily",
