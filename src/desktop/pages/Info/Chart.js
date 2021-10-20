@@ -3,8 +3,7 @@ import { createChart, CrosshairMode } from "lightweight-charts";
 import axios from "axios";
 import dateFormat from 'dateformat'
 import { convertToInternationalCurrencySystem } from "../../../utils/utils";
-import AreaChart from "./AreaChart.tsx";
-import RechartArea from "./RechartArea";
+import RechartArea from "./AreaChart";
 
 export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
   const chartRef = useRef(null);
@@ -178,25 +177,25 @@ export default function AreaSeries({title,url,seriesType,cycle,defaultCycle}){
     setCurDate(dateFormat(new Date(data.time * 1000),'yyyy-mm-dd'))
   }
 
-  // useEffect(() => {
-  //   const chart = initChart();
-  //   if(seriesType === 'area'){
-  //     addAreaSeries(chart)
-  //   }
-  //   if(seriesType === 'histogram'){
-  //     addHistogramSeries(chart)
-  //   }
-  //   chart.subscribeCrosshairMove(crosshairMove);
-  //   return () => {
-  //     if(chart){
-  //       chart.unsubscribeCrosshairMove(crosshairMove)
-  //       if(series.current){
-  //         chart.removeSeries(series.current);
-  //       }
-  //       chart.remove();
-  //     }
-  //   }
-  // }, [url,seriesType])
+  useEffect(() => {
+    const chart = initChart();
+    if(seriesType === 'area'){
+      addAreaSeries(chart)
+    }
+    if(seriesType === 'histogram'){
+      addHistogramSeries(chart)
+    }
+    chart.subscribeCrosshairMove(crosshairMove);
+    return () => {
+      if(chart){
+        chart.unsubscribeCrosshairMove(crosshairMove)
+        if(series.current){
+          chart.removeSeries(series.current);
+        }
+        chart.remove();
+      }
+    }
+  }, [url,seriesType])
 
   return(
     <div className='info-chart'>

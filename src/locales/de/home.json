@@ -41,5 +41,7 @@
   "position-liquidators":"Position Liquidatoren",
   "position-liquidators-roles":"Positionen, die ihre Liquidationsgrenze überschreiten, werden von Positionsliquidatoren liquidiert, die die verbleibende Marge der Position als Belohnung teilen.",
   "investors":"INVESTOREN",
-  "partners":"PARTNER"
+  "partners":"PARTNER",
+  "total-volume" : "VOLLE LAUTSTÄRKE",
+  "total-transactions" : "GESAMTTRANSAKTIONEN"
 }

@@ -28,6 +28,7 @@ import LotusCapital from './img/LotusCapital.png'
 import Arbitragers from './img/Arbitragers.png'
 import MatrixRain from './MatrixRain'
 import "./zh-home.less"
+import StatsBox from './StatsBox'
 export default function Content({lang}) {
   return (
     <div>
@@ -46,23 +47,9 @@ export default function Content({lang}) {
           </div> */}
         </div>
       </div>
-      {/* <div className='index_part2 px1200'>
-        <div className='index_part2-center'>
-          
-          <div className='index_part2-R'>
-            <div> <span>{lang['we-are-on']} </span>   
-              <a target="_blank"  rel='noreferrer' href="https://app.sushi.com/swap?inputCurrency=outputCurrency=0xA487bF43cF3b10dffc97A9A744cbB7036965d3b9" className="Body-link">{lang['sushi']}</a>
-              <span> {lang['and']} </span> 
-              <a target="_blank"  rel='noreferrer' href="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0xe60eaf5a997dfae83739e035b005a33afdcc6df5" className="Body-link">{lang['pancake']}</a> 
-            </div>
-            <div> <span> {lang['read-our']} </span> 
-              <a href="https://docs.deri.finance/whitepaper" className="Body-link">{lang['whitepaper']}</a>
-              <span> {lang['and-peckshield']} </span> 
-              <a href="https://docs.deri.finance/code-audits" className="Body-link">{lang['audit-report']}</a> 
-            </div>
-          </div>
-        </div>
-      </div> */}
+      <div className='index_part2 px1200'>
+        <StatsBox lang={lang}/>
+      </div>
       <div className='index_part3 px1200 big_square'>
         <div className='top_pater'>
           <div className='bottom_square'></div>

@@ -41,5 +41,7 @@
   "position-liquidators":"仓位清算人",
   "position-liquidators-roles":"仓位清算人对到达清算线的仓位进行清算，仓位剩余的保证金作为奖励分配给清算人。",
   "investors":"投资人",
-  "partners":"合作伙伴"
+  "partners":"合作伙伴",
+  "total-volume" : "总交易量",
+  "total-transactions" : "总交易笔数"
 }
