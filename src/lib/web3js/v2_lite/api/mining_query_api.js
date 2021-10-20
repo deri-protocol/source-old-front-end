@@ -1,8 +1,7 @@
-import { getPoolConfig } from '../../shared/config';
 import { catchApiError, bg, deriToNatural, getNetworkName } from '../../shared/utils';
 import { databaseFactory } from '../../shared/factory';
 import { calculateMaxRemovableShares, calculateShareValue } from '../../v1/calculation';
-import { lTokenLiteFactory, pTokenLiteFactory, perpetualPoolLiteFactory } from '../factory';
+import { perpetualPoolLiteFactory } from '../factory';
 
 
 const _getLiquidityInfo = async(chainId, poolAddress, accountAddress) => {

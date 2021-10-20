@@ -12,6 +12,8 @@
   "apy" : "APY",
   "deri-apy" : "DERI-APY",
   "sushi-apy" : "SUSHI-APY",
+  "cake-lp-hover":"Add liquidity for DERI-BUSD pair on Pancakeswap",
+  "sushi-lp-hover":"Add liquidity for DERI-USDT pair on Sushiswap",
   "cake-apy" : "CAKE-APY",
   "address" : "Address",
   "staking" : "STAKING",
