@@ -40,15 +40,15 @@ function Token({ wallet = {}, lang,loading }) {
         }
     }
     const getDeriInfo = async () => {
-        let path = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=deri-protocol&order=market_cap_desc&per_page=100&page=1&sparkline=false'
+        let path = 'https://infoapi.deri.finance/stats_for_token'
         let resp = await fetch(path);
         let res = await resp.json();
         if (res) {
             let obj = {}
-            obj.price = res[0].current_price
-            obj.market_cap = res[0].market_cap
-            obj.circulating_supply = parseInt(res[0].circulating_supply)
-            obj.total_supply = parseInt(res[0].total_supply)
+            obj.price = res.data.price
+            obj.market_cap = res.data.market_cap
+            obj.circulating_supply = parseInt(res.data.circulating_supply)
+            obj.total_supply = parseInt(res.data.total_supply)
             setDeriInfo(obj)
         }
 

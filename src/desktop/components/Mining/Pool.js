@@ -9,9 +9,12 @@ import List from './List';
 import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
 import { combineSymbolfromPoolConfig, groupByNetwork, mapPoolInfo } from '../../../utils/utils';
 import config from './../../../config.json'
+import blackList from './../../../blackList.json'
 
 const env = DeriEnv.get();
 const { chainInfo } = config[env]
+const openBlackList = blackList['openPoolList']
+
 
 function Pool({ lang, loading, wallet }) {
   const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools] = useMiningPool(true, wallet);
@@ -36,6 +39,7 @@ function Pool({ lang, loading, wallet }) {
     if(current === 'opens' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
+      openPools = openPools.filter(p =>  !openBlackList.includes(p.pool))
       openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);
