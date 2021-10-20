@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import config from '../../config.json'
-import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock ,getPoolLiquidity,getPoolInfoApy,getLpPoolInfoApy} from '../../lib/web3js/indexV2';
+import { DeriEnv, getUserInfoAllForAirDrop, connectWallet, mintAirdrop, isUnlocked, unlock, getPoolLiquidity, getPoolInfoApy, getLpPoolInfoApy } from '../../lib/web3js/indexV2';
 import DeriNumberFormat from '../../utils/DeriNumberFormat';
 import { inject, observer } from 'mobx-react';
 import Button from '../Button/Button.js';
-import { eqInNumber, addParam } from '../../utils/utils.js';
+import { eqInNumber, addParam,isSushiLP,isCakeLP } from '../../utils/utils.js';
 import classNames from 'classnames';
 import TipWrapper from '../TipWrapper/TipWrapper.js';
 import { version } from '@babel/core';
@@ -21,7 +21,7 @@ function PoolBox({ wallet, group = {}, lang }) {
     'full': list.length === 5
   })
 
- 
+
 
   return (
     <div className={poolClass} >
@@ -86,21 +86,23 @@ function Card({ wallet, pool, card, index, list, lang }) {
   }
 
   const loadCardInfo = async (config) => {
-    const apyInfo = await getPoolInfoApy(config.chainId,config.pool,config.bTokenId)
-    const liq = await getPoolLiquidity(config.chainId,config.pool,config.bTokenId)
+    const apyInfo = await getPoolInfoApy(config.chainId, config.pool, config.bTokenId)
+    const liq = await getPoolLiquidity(config.chainId, config.pool, config.bTokenId)
     const detail = {
-      liquidity : liq.liquidity,
-      apy :  ((+apyInfo.apy) * 100).toFixed(2),
-      multiplier : apyInfo.multiplier
+      liquidity: liq.liquidity,
+      apy: ((+apyInfo.apy) * 100).toFixed(2),
+      multiplier: apyInfo.multiplier,
     }
-    if(config.isLp){
-      const lapy = await getLpPoolInfoApy(config.chainId,config.pool);
-      const lpApy = ((+lapy.apy2) * 100).toFixed(2); 
+    if (config.isLp) {
+      const lapy = await getLpPoolInfoApy(config.chainId, config.pool);
+      const lpApy = ((+lapy.apy2) * 100).toFixed(2);
       detail['lpApy'] = lpApy
+      detail['isCakeLP'] = isCakeLP(pool.address)
+      detail['isSushiLP'] = isSushiLP(pool.address)
     }
     setDetail(detail)
   }
-  
+
 
   useEffect(() => {
     if (pool && pool.airdrop) {
@@ -127,15 +129,16 @@ function Card({ wallet, pool, card, index, list, lang }) {
         </button>
       )
     }
-    if(pool && pool.airdrop){
-      setDetail( {
-        liquidity : card.liquidity,
-        airdrop : pool.airdrop
+    if (pool && pool.airdrop) {
+      setDetail({
+        liquidity: card.liquidity,
+        airdrop: pool.airdrop,
+        
       })
     } else {
       loadCardInfo(card)
     }
-  }, [wallet.detail.account, connected,card]);
+  }, [wallet.detail.account, connected, card]);
   return (
     <>
       <div className="info">
@@ -146,12 +149,26 @@ function Card({ wallet, pool, card, index, list, lang }) {
               </span>
             </>}
             {pool.version === 'v2_lite_open' && <>
-            <span className='bg-logo' >
-              <img onError={onImgError} src={`https://raw.githubusercontent.com/deri-finance/deri-open-zone/main/img/${card.bTokenSymbol}.png`} />
-            </span>
+              <span className='bg-logo' >
+                <img onError={onImgError} src={`https://raw.githubusercontent.com/deri-finance/deri-open-zone/main/img/${card.bTokenSymbol}.png`} />
+              </span>
             </>}
 
-            <span className="base-token">{card.bTokenSymbol}</span>
+            {isCakeLP(pool.address) &&
+              <TipWrapper>
+                <span tip={lang['cake-lp-hover']} className="base-token lp-token">
+                  {card.bTokenSymbol}
+                </span>
+              </TipWrapper>
+            }
+            {isSushiLP(pool.address) &&
+              <TipWrapper>
+                <span tip={lang['sushi-lp-hover']} className="base-token lp-token">
+                  {card.bTokenSymbol}
+                </span>
+              </TipWrapper>
+            }
+            {!card.isLp && <span className="base-token">{card.bTokenSymbol}</span>}
           </div>
           <div className="pool-detail">
             <div className='liq'>
@@ -174,12 +191,12 @@ function Card({ wallet, pool, card, index, list, lang }) {
                     <DeriNumberFormat value={detail.apy} suffix='%' displayType='text' allowZero={true} decimalScale={2} />
                   </span>
                 </TipWrapper>
-                  {detail.lpApy && detail.lpApy > 0 && <>
-                    <span>+</span>
-                    <TipWrapper block={false}>
-                      <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={card.label}><DeriNumberFormat value={detail.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
-                    </TipWrapper>
-                  </>}
+                {detail.lpApy && detail.lpApy > 0 && <>
+                  <span>+</span>
+                  <TipWrapper block={false}>
+                    <span className={detail.lpApy ? 'sushi-apy-underline' : ''} tip={card.label}><DeriNumberFormat value={detail.lpApy} displayType='text' suffix='%' decimalScale={2} /></span>
+                  </TipWrapper>
+                </>}
               </>}
             </div>
           </div>

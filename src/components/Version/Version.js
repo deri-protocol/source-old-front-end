@@ -6,8 +6,8 @@ import { addParam, hasParam, getParam } from '../../utils/utils';
 import './version.less'
 
 function Version({wallet,version}){
-  const isLite = useRouteMatch('/lite')
-  const isPro = useRouteMatch('/pro')
+  const isLite = useRouteMatch('/futures/lite')
+  const isPro = useRouteMatch('/futures/pro')
   const [enabled, setEnabled] = useState(false)
 
 
@@ -45,7 +45,7 @@ function Version({wallet,version}){
     }
     setEnabled(isShow)
     return () => {}
-  }, [window.location.href,wallet.detail.chainId])
+  }, [version.current,wallet.detail.chainId,window.location.href])
 
   return (
     enabled ? 

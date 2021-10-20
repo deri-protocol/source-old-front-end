@@ -1,6 +1,40 @@
 import { hexToNumber } from './convert';
 import { web3Factory } from '../factory/web3'
 
+const intRe = /^\d+$/
+// adopt from derijs next
+export const deleteIndexedKey = (obj) => {
+  if (typeof obj === 'object' && obj !== null &&  Object.keys(obj).length > 0) {
+    const keys = Object.keys(obj);
+    const intKeyCount = keys.reduce(
+      (acc, k) => (intRe.test(k) ? acc + 1 : acc),
+      0
+    );
+    //console.log(keys);
+    // is leaf array
+    if (intKeyCount * 2 === keys.length) {
+      let newObj = {};
+      Object.keys(obj).forEach((k) => {
+        if (!intRe.test(k)) {
+          newObj[k] = obj[k];
+        }
+      });
+      return newObj;
+    } else if (intKeyCount === keys.length) {
+      // is array container
+      let res = [];
+      for (let i = 0; i < keys.length; i++) {
+        if (Array.isArray(obj[i])) {
+          res.push(deleteIndexedKey(obj[i]));
+        } else {
+          res.push(obj[i]);
+        }
+      }
+      return res;
+    }
+  }
+  return obj;
+};
 
   // get block number when last updated
   export const getLastUpdatedBlockNumber = async(chainId, contractAddress, position = 0) => {

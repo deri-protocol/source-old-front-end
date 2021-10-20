@@ -12,6 +12,8 @@
   "apy" : "年化收益率",
   "deri-apy" : "DERI-年化收益率",
   "sushi-apy" : "SUSHI-年化收益率",
+  "cake-lp-hover":"在 Pancakeswap 上为 DERI-BUSD 交易对增加流动性",
+  "sushi-lp-hover":"在 Sushiswap 上为 DERI-USDT 交易对增加流动性",
   "cake-apy" : "CAKE-年化收益率",
   "address" : "地址",
   "staking" : "质押",

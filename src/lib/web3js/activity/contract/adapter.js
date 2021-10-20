@@ -1,4 +1,4 @@
-import { processMethod } from "../utils"
+// import { processMethod, processTxMethod } from "../utils"
 
 export const PTokenAirdropNULSAdapter = (klass) => {
   //klass = processMethod(klass, 'totalAirdropCount')

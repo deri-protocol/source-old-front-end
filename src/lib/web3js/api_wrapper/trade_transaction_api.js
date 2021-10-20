@@ -22,6 +22,8 @@ import {
   withdrawMarginV2l,
 } from '../v2_lite/api';
 
+import { api as apiV2lDpmm } from '../v2_lite_dpmm/api'
+
 export const unlock = async (
   chainId,
   poolAddress,
@@ -33,6 +35,8 @@ export const unlock = async (
     return unlockV2l(chainId, poolAddress, accountAddress);
   } else if (version === 'option') {
     return unlockOption(chainId, poolAddress, accountAddress);
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.unlock(chainId, poolAddress, accountAddress);
   }
   if (accountAddress === undefined) {
     return unlockDeri(chainId, poolAddress);
@@ -55,6 +59,8 @@ export const depositMargin = async (
     return depositMarginV2l(chainId, poolAddress, accountAddress, amount);
   } else if (version === 'option') {
     return depositMarginOption(chainId, poolAddress, accountAddress, amount);
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.depositMargin(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
     return depositMargin2(chainId, poolAddress, accountAddress, amount);
@@ -93,6 +99,13 @@ export const withdrawMargin = async (
       accountAddress,
       amount,
       isMaximum
+    );
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.withdrawMargin(
+      chainId,
+      poolAddress,
+      accountAddress,
+      amount
     );
   }
   if (bTokenId === undefined) {
@@ -133,6 +146,14 @@ export const tradeWithMargin = async (
       newVolume,
       symbolId
     );
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.tradeWithMargin(
+      chainId,
+      poolAddress,
+      accountAddress,
+      newVolume,
+      symbolId
+    )
   }
   if (symbolId === undefined) {
     return tradeWithMargin2(chainId, poolAddress, accountAddress, newVolume);
@@ -158,6 +179,8 @@ export const closePosition = async (
     return closePositionV2l(chainId, poolAddress, accountAddress, symbolId);
   } else if (version === 'option') {
     return closePositionOption(chainId, poolAddress, accountAddress, symbolId);
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.closePosition(chainId, poolAddress, accountAddress, symbolId);
   }
   if (symbolId === undefined) {
     return closePosition2(chainId, poolAddress, accountAddress);

@@ -93,6 +93,7 @@ export default class Trading {
       maintenanceMarginRatioTip : computed,
       TransactionFeeTip : computed,
       multiplierTip : computed,
+      TotalNetPositionTip:computed,
       direction : computed,
       volumeDisplay : computed,
       isNegative : computed,
@@ -172,7 +173,7 @@ export default class Trading {
         this.contractInfo.load(wallet,config,isOption),
         this.loadFundingRate(wallet,config,isOption),
         this.historyInfo.load(wallet,config,isOption),
-        isOption && this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions)),
+        this.positionInfo.loadAll(wallet,config,positions => this.setPositions(positions)),
       ]).then(results => {
         if(results.length === 5){
           results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
@@ -186,7 +187,7 @@ export default class Trading {
         finishedCallback && finishedCallback()
         this.oracle.load(getFormatSymbol(config.symbol))
         this.positionInfo.start()
-        isOption && this.positionInfo.startAll();
+        this.positionInfo.startAll();
       })
     } else {
       finishedCallback && finishedCallback()
@@ -221,9 +222,7 @@ export default class Trading {
     }
     return defaultConfig;    
   }
-
  
-
   //存起来
   store(config){
     storeConfig(version.current,config)
@@ -243,7 +242,7 @@ export default class Trading {
 
   async refresh(){
     this.pause()
-    this.positionInfo.load(this.wallet,this.config, async (position)  => {       
+    this.positionInfo.load(this.wallet,this.config, position  => {       
       this.setPosition(position);
       this.syncFundingRate();
     });
@@ -254,6 +253,8 @@ export default class Trading {
     if(history){
       this.setHistory(history)
     }
+    this.positionInfo.start();
+    this.positionInfo.startAll();
     this.setVolume('')
     this.resume();
   }
@@ -354,7 +355,7 @@ export default class Trading {
       const increment = slideIncrementMargin - position.marginHeld
       let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
       let volume =  increment / (price * this.contract.multiplier * MarginRatio);
-      if(type.isOption){
+      // if(type.isOption){
         volume = +volume * +this.contract.multiplier
         let index = this.contract.multiplier.indexOf('.')
         let num = this.contract.multiplier.slice(index);
@@ -364,10 +365,9 @@ export default class Trading {
           value = value.substring(0,value.indexOf(".") + length)
         }
         this.setVolume(value)
-      }else{
-        this.setVolume(volume.toFixed(0))
-      }
-      
+      // }else{
+      //   this.setVolume(volume.toFixed(0))
+      // }
     }
   }
 
@@ -388,7 +388,6 @@ export default class Trading {
     this.optionsConfigs = {}
   }
 
-
   get volumeDisplay(){
     if((type.isFuture && Math.abs(this.volume) === 0 && isNaN(this.volume) )|| this.volume === '' || this.volume === '-' || this.volume === 'e') {
       return '';
@@ -397,12 +396,12 @@ export default class Trading {
     }
   }
   
-
   get amount(){
     const position = this.position
     const contract = this.contract;
     let initVolume = this.volume === '' || isNaN(this.volume) ? 0 : Math.abs(this.volume)
-    let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    // let optionVolume = type.isOption ? (+initVolume / +this.contract.multiplier):initVolume;
+    let optionVolume = (+initVolume / +this.contract.multiplier);
     const volume = optionVolume
     let {margin, marginHeldBySymbol:currentSymbolMarginHeld ,marginHeld,unrealizedPnl} = position
     const price = position.price || this.index
@@ -436,8 +435,10 @@ export default class Trading {
     let available = bg(dynBalance).minus(totalMarginHeld).toFixed(2)
     const exchanged = bg(volume).multipliedBy(contract.multiplier).toFixed(4)
     const totalVolume = this.userSelectedDirection === 'short' ? (-this.volumeDisplay + (+position.volume)) : ((+this.volumeDisplay) +  (+position.volume))    
-    const totalContractValue = totalVolume * price * contract.multiplier
-    const leverage = Math.abs(totalContractValue / (+dynBalance)).toFixed(1);
+    const totalContractValue = (+totalVolume) * price 
+    const curContractValue = (+this.volumeDisplay) * price
+    const leverage = Math.abs(curContractValue / (+dynBalance)).toFixed(1);
+    const afterLeverage = Math.abs((+totalContractValue) / (+dynBalance)).toFixed(1); 
     available = (+available) < 0 ? 0 : available
     return {
       volume : this.volume,
@@ -446,10 +447,9 @@ export default class Trading {
       available : available,
       exchanged : exchanged,
       currentSymbolMarginHeld : currentSymbolMarginHeld,
-      leverage : leverage
+      leverage : leverage,
+      afterLeverage : afterLeverage
     }
-    
-    
   }
 
   get direction(){    
@@ -561,6 +561,12 @@ export default class Trading {
     if(this.contract && (this.contract.feeRatioITM && this.contract.feeRatioOTM)){
         return `${Intl.get('lite','transaction-fee-tip-in-the-money')} ${this.contract.underlier} ${Intl.get('lite','price')}  * ${bg(this.contract.feeRatioITM).times(bg(100)).toString()} %` +
         `\n ${Intl.get('lite','transaction-fee-tip-out-of-money')} * ${bg(this.contract.feeRatioOTM).times(bg(100)).toString()} %`
+    }
+    return ''
+  }
+  get TotalNetPositionTip(){
+    if(this.contract && this.fundingRate.tradersNetVolume && this.config){
+        return `${Intl.get('lite','notional-of-total-net-position')} ${this.fundingRate.tradersNetVolume} ${this.config.unit}`
     }
     return ''
   }

@@ -19,7 +19,12 @@ const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
+const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/DipHistoryTwo'))
 const Download = LoadableComponent(() => import('../../pages/Download/Download'))
+
+const InfoList = LoadableComponent(() => import('../../../desktop/pages/Info/List'))
+const InfoDetail = LoadableComponent(() => import('../../../desktop/pages/Info/Detail'))
+const TradingMining = LoadableComponent(() => import('../../pages/Marketing/TradingMining/Index'))
 
 @withRouter
 @withLanguage
@@ -42,6 +47,7 @@ class Body extends React.Component {
           <Route exact path='/faucet' component={() => <Faucet lang={dict['faucet']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
@@ -49,6 +55,9 @@ class Body extends React.Component {
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
+          <Route exact path='/trade-to-earn' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/info' component={() => <InfoList/>}/>
+          <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
           <Route component={() => <Lite lang={dict['lite']}/>} />
         </Switch>
       </div>

@@ -8,3 +8,10 @@ export {
   unlockBToken,
   airdropPToken as airdropPTokenLite,
 } from './ptoken_airdrop';
+
+export {
+  getStakingTop10Users,
+  getUserStakingInfo,
+  getUserStakingReward,
+  getUserStakingContribution,
+} from './deri_staking';

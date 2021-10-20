@@ -1,0 +1,717 @@
+.trading-mining {
+  font-family: ArialMT, sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+
+  .title {
+    font-family: Tachyon, sans-serif;
+    color: #D4E05C;
+    font-size: 34px;
+    letter-spacing: 2px;
+    text-align: center;
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+
+  .count-down-box {
+    width: 1200px;
+    margin-top: 20px;
+    margin: auto;
+  }
+
+  .staking {
+    width: 1200px;
+    margin: 45px auto 0;
+
+    .rewards-bnb-deri {
+      display: flex;
+      justify-content: space-around;
+
+      .bnb-total,
+      .deri-total {
+        width: 520px;
+        height: 210px;
+        background-color: #0D0E0F;
+        border-radius: 20px;
+
+        .bnb-title,
+        .deri-title {
+          font-size: 18px;
+          color: #D4E05C;
+          padding-left: 20px;
+          padding-top: 10px;
+          font-family: Tachyon;
+        }
+
+        .bnb-num,
+        .deri-num {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          width: 518px;
+          margin: 0 auto;
+          height: 170px;
+          margin-top: 6px;
+          background-color: #202124;
+          border-radius: 20px;
+          font-size: 54px;
+          font-weight: bold;
+
+          img {
+            width: 80px;
+            height: 80px;
+          }
+        }
+      }
+    }
+
+  }
+
+  .trading {
+    width: 1400px;
+    margin-top: 30px;
+
+    .bnb-total,
+    .deri-total {
+      width: 520px;
+      height: 210px;
+      background-color: #0D0E0F;
+      border-radius: 20px;
+
+      .bnb-title,
+      .deri-title {
+        font-size: 18px;
+        color: #D4E05C;
+        padding-left: 20px;
+        padding-top: 10px;
+        font-family: Tachyon;
+      }
+
+      .bnb-num,
+      .deri-num {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 518px;
+        margin: 0 auto;
+        height: 170px;
+        margin-top: 6px;
+        background-color: #202124;
+        border-radius: 20px;
+        font-size: 54px;
+        font-weight: bold;
+
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+    }
+
+    .trading-top {
+      .trading-title {
+        font-size: 20px;
+        color: #CCCCCC;
+      }
+
+      .trading-top-list {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+
+        .list {
+          width: 780px;
+          height: 935px;
+          background-color: #0D0E0F;
+          border-radius: 20px;
+
+          .no {
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            text-align: center;
+            white-space: nowrap;
+            // line-height: 35px;
+          }
+
+          .address {
+            width: 100px;
+            text-align: center;
+            white-space: nowrap;
+          }
+          .score-hover{
+            display: inline-block;
+            border-bottom: 1px dashed #fff;
+            width: 92px;
+            cursor: pointer;
+          }
+
+          .feespaid,
+          .avgcoeff {
+            width: 100px;
+            text-align: center;
+            white-space: nowrap;
+          }
+          .avgcoeff{
+            width: 140px;
+          }
+
+          .score {
+            display: inline-block;
+            width: 120px;
+            text-align: center;
+            white-space: nowrap;
+          }
+
+          .rewardBNB {
+            width: 126px;
+            text-align: center;
+            white-space: nowrap;
+          }
+
+          .list-title {
+            padding-left: 20px;
+            padding-top: 14px;
+            color: #D4E05C;
+            font-family: Tachyon;
+          }
+
+          .list-box {
+            width: 778px;
+            margin: 0 auto;
+            background-color: #202124;
+            height: 887px;
+            margin-top: 10px;
+            border-radius: 20px;
+
+            .list-box-title {
+              display: flex;
+              justify-content: space-between;
+              padding-left: 30px;
+              padding-right: 30px;
+              padding-top: 30px;
+              font-size: 20px;
+              font-weight: 300;
+
+            }
+            
+
+            .list-info {
+              margin-left: 30px;
+              // padding-right: 20px;
+              margin-top: -20px;
+
+
+              .top-three {
+                color: #D4E05C;
+                font-size: 25px;
+                font-weight: bold;
+              }
+
+              .list-info-box {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 45px;
+                height: 35px;
+                padding-right: 30px;
+                position: relative;
+                // box-sizing: border-box;
+                .no{
+                  line-height: 34px;
+                } 
+              }
+              
+              .progress {
+                width: 445px;
+                height: 10px;
+                position: absolute;
+                left: 255px;
+                top: 75px;
+
+                .progress-box {
+                  width: 0%;
+                  height: 10px;
+                  border-radius: 5px;
+                  background-color: #246CAD;
+                }
+
+                .one-progress {
+                  width: 100%;
+                }
+              }
+            }
+          }
+        }
+
+        .your-rewards {
+          width: 560px;
+
+          // width: 1400px;
+          // display: flex;
+          // justify-content: space-between;
+          .your-estimated-rewards {
+            height: 244px;
+            background-color: #0D0E0F;
+            border-radius: 20px;
+
+            .your-rewards-title {
+              font-size: 18px;
+              color: #D4E05C;
+              padding-left: 20px;
+              padding-top: 20px;
+              font-family: Tachyon;
+            }
+
+            .your-rewards-info {
+              display: flex;
+              justify-content: normal;
+              align-items: center;
+              height: 188px;
+
+              img {
+                width: 31px;
+                height: 31px;
+              }
+
+              .your-bnb,
+              .your-deri {
+                display: flex;
+                justify-content: normal;
+                align-items: center;
+                font-size: 40px;
+                width: 150px;
+                color: #CCCCCC;
+                font-weight: 400;
+                white-space: nowrap;
+                margin-left: 20px;
+
+                .span {
+                  margin-left: 15px;
+                }
+              }
+
+              .your-deri {
+                // margin-left: 100px;
+              }
+            }
+          }
+
+          .your-score-fee-coeff {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 188px;
+            background-color: #202124;
+            border-radius: 20px;
+            border: 1px solid #0D0E0F;
+            margin-top: 20px;
+            font-size: 20px;
+            box-sizing: border-box;
+
+            .your-score-num,
+            .your-fee-num,
+            .your-coeff-num {
+              font-size: 34px;
+              font-weight: 400;
+              color: #CCCCCC;
+              margin-top: 20px;
+              text-align: center;
+              white-space: nowrap
+            }
+            .your-score-title,.your-coeff-title,.your-fee-title{
+              display: inline-block;
+              border-bottom: 1px dashed #fff;
+              cursor: pointer;
+            }
+          }
+
+          .raise-score {
+            width: 560px;
+            // width: 835px;
+            height: 252px;
+            // height: 207px;
+            border-radius: 20px;
+            margin-top: 20px;
+            border: 1px dashed #CCCCCC;
+            padding: 20px;
+            box-sizing: border-box;
+            // margin-left: 40px;
+
+            .raise-score-title {
+              font-size: 18px;
+              color: #D4E05C;
+              padding-top: 0px;
+              font-family: Tachyon;
+            }
+
+            .button-link {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+
+              a {
+                background: #202124;
+                box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+                border-radius: 10px;
+                color: #ccc;
+                // margin-left: 40px;
+                width: 160px;
+                height: 45px;
+                display: inline-block;
+                text-align: center;
+                line-height: 45px;
+                font-weight: 400;
+                margin-top: 20px;
+              }
+              // span{
+              //   margin-left: 40px;
+              // }
+              // span:nth-child(1) {
+              //   margin-left: 0px;
+              // }
+            }
+
+            .des {
+              margin-top: 30px;
+              font-size: 14px;
+              line-height: 25px;
+              .des-tip{
+                display: inline-block;
+                border-bottom: 1px dashed #fff;
+              }
+            }
+
+          }
+
+          .your-contrib {
+            height: 188px;
+            background-color: #202124;
+            border-radius: 20px;
+            border: 1px solid #0D0E0F;
+            margin-top: 20px;
+            font-size: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #CCCCCC;
+            padding: 20px 40px;
+            align-items: center;
+            display: flex;
+            justify-content: unset;
+            .your-contrib-value{
+              margin-left: 100px;
+            }
+            .total-your-contrib-num {
+              margin-top: 30px;
+              font-size: 40px;
+              font-weight: 400;
+              display: flex;
+              justify-content: space-between;
+            }
+          }
+        }
+      }
+    }
+
+    .activity-rules {
+      margin-top: 30px;
+      a {
+        color: #ffffff;
+        text-decoration-line: revert;
+      }
+    }
+  }
+
+  .total-points {
+    width: 1400px;
+    margin-top: 30px;
+
+    .total-points-title {
+      color: #CCCCCC;
+    }
+
+    .dial {
+      margin-top: 30px;
+      height: 208px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .first,
+      .second,
+      .third,
+      .fourth,
+      .total-score {
+        width: 260px;
+        height: 208px;
+        background-color: #0D0E0F;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+
+        .dial-title {
+          font-size: 15px;
+          color: #D4E05C;
+          font-family: Tachyon;
+          text-align: center;
+          margin-top: 10px;
+          letter-spacing: 2px;
+        }
+
+        .dial-time {
+          font-size: 13px;
+          color: #CCCCCC;
+          text-align: center;
+          margin-top: 10px;
+          padding: 0 10px 0 10px;
+        }
+
+        .dial-box {
+          position: relative;
+          width: 230px;
+          height: 233px;
+          margin: 0 auto;
+          margin-top: 17px;
+
+          .one-dial-box {
+            width: 230px;
+            height: 222px;
+            position: absolute;
+            border: 2px solid #246CAD;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+
+            .points {
+              position: absolute;
+              font-size: 14px;
+              width: 96px;
+              left: 75px;
+              top: 82px;
+              z-index: 55;
+            }
+
+            // .fourth-points {
+            //   left: 75px;
+            //   top: 82px;
+            // }
+
+            .two-dial-box {
+              width: 170px;
+              height: 165px;
+              border: 10px solid #246CAD;
+              border-radius: 50%;
+              position: relative;
+
+              li {
+                list-style: none;
+
+              }
+
+              .cover {
+                width: 170px;
+                height: 165px;
+                background-color: #0D0E0F;
+                border-radius: 50%;
+                // left: 50%;
+                // top: 50%;
+                /* 进行定位 */
+              }
+
+              .s-one,
+              .s-two,
+              .s-three,
+              .s-four {
+                width: 71px;
+                height: 3px;
+                background-color: #246CAD;
+                margin-left: -1px;
+                left: 5%;
+                // top: 30px;
+                top: 50%;
+                transform-origin: bottom;
+                z-index: 1;
+              }
+
+              .s-four {
+                width: 65px;
+              }
+
+              .s-one {
+                animation: rotate-one 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 77px -5px;
+              }
+
+              .s-two {
+                animation: rotate-two 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 80px  1px;
+              }
+
+              .s-three {
+                animation: rotate-three 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 80px 1px;
+              }
+
+              .s-four {
+                animation: rotate-four 0.5s ease-in-out 0s 1 alternate forwards;
+                transform-origin: 78px 1px;
+              }
+
+              @keyframes rotate-one {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(16.36deg);
+                }
+              }
+
+              @keyframes rotate-two {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(49.08deg);
+                }
+              }
+
+              @keyframes rotate-three {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(98.16deg);
+                }
+              }
+
+              @keyframes rotate-four {
+                0% {
+                  transform: rotate(0deg);
+                }
+
+                100% {
+                  transform: rotate(180deg);
+                }
+              }
+
+              .dotted {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                border: 3px solid #246CAD;
+                left: 50%;
+                top: 50%;
+                margin-left: -10px;
+                margin-top: -10px;
+                z-index: 1;
+              }
+
+              .line {
+                width: 220px;
+                height: 2px;
+                background-color: #246CAD;
+                margin-left: -1px;
+                left: -13%;
+                top: 50%;
+                position: absolute;
+              }
+
+              .line:nth-child(2) {
+                transform: rotate(16.36deg);
+              }
+
+              .line:nth-child(3) {
+                transform: rotate(32.72deg);
+              }
+
+              .line:nth-child(4) {
+                transform: rotate(49.08deg);
+              }
+
+              .line:nth-child(5) {
+                transform: rotate(65.44deg);
+              }
+
+              .line:nth-child(6) {
+                transform: rotate(81.8deg);
+              }
+
+              .line:nth-child(7) {
+                transform: rotate(98.16deg);
+              }
+
+              .line:nth-child(8) {
+                transform: rotate(114.52deg);
+              }
+
+              .line:nth-child(9) {
+                transform: rotate(130.88deg);
+              }
+
+              .line:nth-child(10) {
+                transform: rotate(147.24deg);
+              }
+
+              .line:nth-child(11) {
+                transform: rotate(163.6deg);
+              }
+
+              .line:nth-child(12) {
+                transform: rotate(180deg);
+              }
+
+            }
+
+            .two-dial-box>div {
+              position: absolute;
+            }
+          }
+        }
+
+      }
+    }
+
+    .arr-img {
+      width: 47px;
+      height: 40px;
+    }
+
+    .add-img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .total-score {
+      .total-score-title {
+        font-size: 18px;
+        color: #D4E05C;
+        font-family: Tachyon;
+        margin-top: 10px;
+        margin-left: 20px;
+      }
+
+      .total-score-box {
+        height: 156px;
+        width: 256.66px;
+        margin: 0 auto;
+        border-radius: 20px;
+        text-align: center;
+        line-height: 156px;
+        background-color: #202124;
+        font-size: 45px;
+        margin-top: 18px;
+        font-weight: 400;
+      }
+    }
+  }
+
+
+}
+
+.mobile-list {
+  display: none;
+}

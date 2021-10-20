@@ -91,17 +91,19 @@ const getTradeHistoryOnline = async (
   const { bTokenSymbol, pricer:pricerAddress } = getPoolConfig(poolAddress, undefined, undefined, 'option')
   const optionPool = everlastingOptionFactory(chainId, poolAddress);
   const pricer = optionPricerFactory(chainId, pricerAddress)
-  const [toBlock] = await Promise.all([
+  const [toBlock, ] = await Promise.all([
     getBlockInfo(chainId, 'latest'),
     optionPool._updateConfig(),
   ]);
   fromBlock = parseInt(fromBlock);
 
+
   let promises= []
-  for (let i = 0; i < optionPool.activeSymbolIds.length; i++) {
-    promises.push(optionPool.getSymbol(optionPool.activeSymbolIds[i]));
+  for (let i=0; i<optionPool.activeSymbolIds.length; i++) {
+    promises.push(optionPool.getSymbol(optionPool.activeSymbolIds[i].toString()))
   }
   let symbols = await Promise.all(promises)
+  //let symbols = optionPool.activeSymbols
   const multiplier = symbols.map((i) => i.multiplier.toString());
 
   const filters =  { account: accountAddress }
@@ -159,10 +161,10 @@ export const getTradeHistory = async (
     const symbols = optionPool.activeSymbols
     if (tradeHistory.length > 0) {
       tradeHistory = tradeHistory
-        //.filter((i) => i)
+        .filter((i) => !(i.direction === 'LIQUIDATION' && i.symbolId === '0'))
         .map((i) => {
           const index = symbols.findIndex((s) => s.symbolId === i.symbolId)
-          if (index > -1) {
+          if (index > -1 && i.direction !== 'LIQUIDATION') {
             return {
               direction: i.direction.trim(),
               baseToken: i.baseToken.trim(),
@@ -177,11 +179,66 @@ export const getTradeHistory = async (
               transactionHash: i.transactionHash,
               time: i.time.toString(),
             };
+          }  else if (i.direction === 'LIQUIDATION') {
+            if (
+              i.volume !== '' &&
+              i.volume.indexOf(',') > -1 &&
+              !i.price.startsWith('NaN')
+            ) {
+              const ids = i.volume.split(',').reduce((acc, v, index) => {
+                if (v !== '0') {
+                  return acc.concat([index]);
+                } else {
+                  return acc;
+                }
+              }, []);
+              const prices = i.price.split(',').map((s) => deriToNatural(s));
+              const volumes = i.volume.split(',').map((v) => deriToNatural(v));
+              const res = ids.map((id) => {
+                return {
+                  direction: i.direction.trim(),
+                  baseToken: i.baseToken.trim(),
+                  symbolId: id.toString(),
+                  symbol: symbols[id].symbol,
+                  volume: volumes[id]
+                    .times(symbols[id].multiplier)
+                    .abs()
+                    .toString(),
+                  price: prices[id].toString(),
+                  indexPrice: '',
+                  notional: '',
+                  contractValue: volumes[id]
+                    .abs()
+                    .times(prices[id])
+                    .times(symbols[id].multiplier)
+                    .toString(),
+                  transactionFee: '0',
+                  transactionHash: i.transactionHash,
+                  time: i.time.toString(),
+                };
+              });
+              return res;
+            } else {
+              return {
+                direction: i.direction.trim(),
+                baseToken: i.baseToken.trim(),
+                symbolId: '',
+                symbol: '',
+                volume: '',
+                price: '',
+                indexPrice: '',
+                notional: '',
+                contractValue: '',
+                transactionFee: '0',
+                transactionHash: i.transactionHash,
+                time: i.time.toString(),
+              };
+            }
           } else {
             // i.symbolId is not in activeSymbols
             return null
           }
-        });
+        }).flat();
     }
     tradeHistory = tradeHistory.filter((tr) => tr !== null)
     // fetch tradeHistory on the block with fromBlock from rest api

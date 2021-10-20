@@ -56,7 +56,7 @@ function History({wallet ,trading,lang,type}){
           <div className='time-price-volume'>
             <div className='history-price'>
               <div className='history-title'> {type.isOption ? lang['volume-notional-price'] : lang['volume-price']}</div>
-              <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={2} displayType='text'/></div>
+              <div className='history-text'>{ his.volume } @ <DeriNumberFormat value={ his.price } decimalScale={4} displayType='text'/></div>
             </div>
           <div className='notional'>
               <div className='history-title'> {type.isOption?lang['contract-value']: lang['notional']}</div>
@@ -71,7 +71,7 @@ function History({wallet ,trading,lang,type}){
         </div>
         )
       })}
-      {history.length==0?<div className='no-data'>{lang['no-data']}</div>:''}
+      {+history.length === 0 ? <div className='no-data'>{lang['no-data']}</div> : ''}
     </div>
   )
 }

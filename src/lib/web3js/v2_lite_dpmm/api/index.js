@@ -1,0 +1,55 @@
+import {
+  getPoolInfoApy,
+  getPoolLiquidity,
+} from '../../shared/api/database_api';
+import {
+  getEstimatedFee,
+  getEstimatedFundingRate,
+  getEstimatedMargin,
+  getFundingRate,
+  getLiquidityInfo,
+  getLiquidityUsed,
+  getPositionInfo,
+  getSpecification,
+  getWalletBalance,
+  isUnlocked,
+} from './query_api';
+import { getTradeHistory } from './trade_history_api';
+import {
+  addLiquidity,
+  closePosition,
+  depositMargin,
+  removeLiquidity,
+  tradeWithMargin,
+  unlock,
+  withdrawMargin,
+} from './transaction_api';
+
+export const api = {
+  // mining
+  getLiquidityInfo,
+  getPoolLiquidity,
+  getPoolInfoApy,
+  addLiquidity,
+  removeLiquidity,
+  // trading
+  getSpecification,
+  getPositionInfo,
+  getPositionInfos: () => [],
+  getWalletBalance,
+  isUnlocked,
+  getEstimatedFee,
+  getEstimatedMargin,
+  getFundingRate,
+  getEstimatedFundingRate,
+  getLiquidityUsed,
+  getEstimatedFundingRate,
+  getFundingRateCache: () => {},
+  unlock,
+  depositMargin,
+  withdrawMargin,
+  tradeWithMargin,
+  closePosition,
+  // tradeHistory
+  getTradeHistory,
+};

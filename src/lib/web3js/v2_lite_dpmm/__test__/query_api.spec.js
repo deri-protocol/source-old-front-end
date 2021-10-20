@@ -1,0 +1,124 @@
+import {
+  getLiquidityInfo,
+  getSpecification,
+  getPositionInfo,
+  getPositionInfos,
+  getWalletBalance,
+  isUnlocked,
+  getFundingRate,
+  getEstimatedFee,
+  getEstimatedMargin,
+  getLiquidityUsed,
+  getEstimatedLiquidityUsed,
+  getEstimatedFundingRate,
+} from '../api/query_api';
+const TIMEOUT = 20000;
+
+describe('query api', () => {
+  const chainId = '97';
+  const pool = '0x43701b4bf0430DeCFA41210327fE67Bf4651604C';
+  const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
+  it(
+    'getLiquidityInfo',
+    async () => {
+      const res = await getLiquidityInfo(chainId, pool, account);
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getSpecification',
+    async () => {
+      const res = await getSpecification(chainId, pool, '1');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getPositionInfo',
+    async () => {
+      const res = await getPositionInfo(chainId, pool, account, '0');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getPositionInfos',
+    async () => {
+      const res = await getPositionInfos(chainId, pool, account);
+      expect(res).toEqual([]);
+    },
+    TIMEOUT
+  );
+  it(
+    'getWalletBalance',
+    async () => {
+      const res = await getWalletBalance(chainId, pool, account);
+      expect(res).toEqual('49800');
+    },
+    TIMEOUT
+  );
+  it(
+    'isUnlocked',
+    async () => {
+      const res = await isUnlocked(chainId, pool, account);
+      expect(res).toEqual(true);
+    },
+    TIMEOUT
+  );
+  it(
+    'getFundingRate',
+    async () => {
+      const res = await getFundingRate(chainId, pool, '0');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedFundingRate',
+    async () => {
+      const res = await getEstimatedFundingRate(chainId, pool, '10', '0');
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedMargin',
+    async () => {
+      const res = await getEstimatedMargin(
+        chainId,
+        pool,
+        account,
+        '7',
+        '7.1',
+        '1'
+      );
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedFee',
+    async () => {
+      const res = await getEstimatedFee(chainId, pool, '7', '0');
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getLiquidityUsed',
+    async () => {
+      const res = await getLiquidityUsed(chainId, pool, '0');
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedLiquidityUsed',
+    async () => {
+      const res = await getEstimatedLiquidityUsed(chainId, pool, '1000', '0');
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+});

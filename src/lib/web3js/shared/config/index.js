@@ -1,4 +1,5 @@
 export { DeriEnv } from './env'
+export { SECONDS_IN_A_DAY } from './constant'
 export { VERSIONS, LITE_VERSIONS, LITE_AND_OPTION_VERSIONS } from './version';
 export {
   getChainIds,
@@ -52,5 +53,7 @@ export {
   mapToBToken,
   normalizeOptionSymbol,
   getNormalizedOptionSymbols,
+  getIndexInfo,
+  normalizeSymbolUnit,
 } from './token';
 export { getBrokerConfigList, getBrokerConfig } from './broker';

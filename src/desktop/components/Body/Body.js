@@ -26,9 +26,12 @@ const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
+const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/DipHistoryTwo'))
 
 const InfoList = LoadableComponent(() => import('../../pages/Info/List'))
 const InfoDetail = LoadableComponent(() => import('../../pages/Info/Detail'))
+
+const TradingMining = LoadableComponent(() => import('../../pages/Marketing/TradingMining/Index'))
 
 @withRouter
 @withLanguage
@@ -50,6 +53,7 @@ class Body extends React.Component {
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
           <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
@@ -64,6 +68,7 @@ class Body extends React.Component {
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
           <Route exact path='/info' component={() => <InfoList/>}/>
           <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
+          <Route exact path='/trade-to-earn' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
         </Switch>
       </div>
     )

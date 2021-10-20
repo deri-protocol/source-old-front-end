@@ -9,7 +9,7 @@ import {
 import { bg, min, max } from '../../shared/utils'
 import { getOraclePrice } from '../../shared/utils/oracle'
 import { getIndexInfo } from '../../shared/config/token';
-import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import {
   calculateEntryPrice,
   calculateLiquidationPrice,
@@ -173,9 +173,20 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
       latestBlockNumber,
       volume,
     );
+
+    // set liquidatePrice cache
+    liquidatePriceCache.set(poolAddress, {
+      volume,
+      margin,
+      totalCost,
+      dynamicCost,
+      price,
+      multiplier,
+      minMaintenanceMarginRatio,
+    });
   return {
       price: price,
-      volume: volume.toString(),
+      volume: bg(volume).times(multiplier).toString(),
       averageEntryPrice: calculateEntryPrice(volume, cost, multiplier).toString(),
       margin: margin.toString(),
       marginHeld: marginHeld.toString(),
@@ -205,6 +216,120 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
   };
 }
 
+export const getPositionInfos = async (chainId, poolAddress, accountAddress) => {
+  try {
+    const symbolConfigList = getPoolSymbolList(poolAddress)
+    const bTokenIdList = getPoolBTokenIdList(poolAddress)
+    const symbolIdList = symbolConfigList.map((i) => i.symbolId)
+    const symbolList = symbolConfigList.map((i) => i.symbol)
+    //console.log('bTokenList', bTokenList)
+    const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
+    const {pToken: pTokenAddress } = getPoolConfig2(poolAddress, null, '0')
+    const pToken = pTokenFactory(chainId, pTokenAddress);
+    const [parameterInfo, lastUpdatedBlockNumber, latestBlockNumber, margins, positions] = await Promise.all([
+      //perpetualPool.getSymbol(symbolId),
+      perpetualPool.getParameters(),
+      perpetualPool.getLastUpdatedBlockNumber(),
+      perpetualPool.getLatestBlockNumber(),
+      //pToken.getPosition(accountAddress, symbolId),
+      pToken.getMargins(accountAddress),
+      pToken.getPositions(accountAddress),
+      //getOraclePrice(chainId, symbolList[parseInt(symbolId)])
+    ])
+    const {
+      minInitialMarginRatio,
+      minMaintenanceMarginRatio,
+    } = parameterInfo
+    let promises = []
+    for (let i=0; i<bTokenIdList.length; i++) {
+      promises.push(perpetualPool.getBToken(bTokenIdList[i]))
+    }
+    const bTokens = await Promise.all(promises)
+    promises = []
+    for (let i=0; i<symbolIdList.length; i++) {
+      promises.push(perpetualPool.getSymbol(symbolIdList[i]))
+    }
+    const symbols = await Promise.all(promises)
+    promises = []
+    for (let i=0; i<symbolList.length; i++) {
+      promises.push(getOraclePrice(chainId, symbolList[i]))
+    }
+    const symbolPrices = await Promise.all(promises)
+
+    const margin = bTokens.reduce((accum, a, index) => {
+      return accum.plus(bg(a.price).times(a.discount).times(margins[index]))
+    }, bg(0))
+
+    const marginHeld = symbols.reduce((accum, s, index) => {
+      return accum.plus(bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).times(minInitialMarginRatio).abs())
+    }, bg(0))
+    //
+    // const unrealizedPnlList = symbols.map((s, index) => {
+    //   return [s.symbol, bg(symbolPrices[index]).times(s.multiplier).times(positions[index].volume).minus(positions[index].cost).toString()]
+    // })
+
+    //console.log('cost', costTotal.toString())
+    const liquidity = bTokens.reduce((accum, i) => accum.plus(bg(i.liquidity).times(i.price).times(i.discount).plus(i.pnl)), bg(0))
+
+    return positions.map((p, index) => {
+      const symbol = symbols[index]
+      const symbolId = symbolIdList[index]
+      const price = symbolPrices[index]
+      priceCache.set(poolAddress, symbolId, price)
+      const { multiplier, fundingRateCoefficient, tradersNetVolume, cumulativeFundingRate } = symbol
+      const { volume, cost, lastCumulativeFundingRate } = p
+      const marginHeldBySymbol = bg(volume).abs().times(multiplier).times(symbolPrices[index]).times(minInitialMarginRatio)
+      const unrealizedPnl = bg(symbolPrices[index]).times(symbol.multiplier).times(p.volume).minus(p.cost)
+      const totalCost = positions.reduce((accum, a) => {
+        return accum.plus(bg(a.cost))
+      }, bg(0))
+      const dynamicCost = symbols.reduce((accum, s, idx) => {
+        if (idx !== index) {
+          return accum.plus(bg(positions[idx].volume).times(symbolPrices[idx]).times(s.multiplier))
+        } else {
+          return accum
+        }
+      }, bg(0))
+      const fundingFee = calculateFundingFee(
+        tradersNetVolume,
+        price,
+        multiplier,
+        fundingRateCoefficient,
+        liquidity,
+        cumulativeFundingRate,
+        lastCumulativeFundingRate,
+        lastUpdatedBlockNumber,
+        latestBlockNumber,
+        volume,
+      );
+      return {
+        symbol: symbol.symbol,
+        symbolId: index.toString(),
+        price: symbolPrices[index],
+        volume: bg(p.volume).times(multiplier).toString(),
+        averageEntryPrice: calculateEntryPrice(p.volume, cost, multiplier).toString(),
+        margin: margin.toString(),
+        marginHeld: marginHeld.toString(),
+        marginHeldBySymbol: marginHeldBySymbol.toString(),
+        //unrealizedPnlList,
+        unrealizedPnl: unrealizedPnl.toString(),
+        liquidationPrice: calculateLiquidationPrice(
+          volume,
+          margin,
+          totalCost,
+          dynamicCost,
+          multiplier,
+          minMaintenanceMarginRatio
+        ).toString(),
+        fundingFee: fundingFee.toString()
+      };
+    }).filter((p) => p.volume !== '0')
+  } catch(err) {
+    console.log(`${err}`)
+  }
+  return []
+}
+
 export const getWalletBalance = async (
   chainId,
   poolAddress,
@@ -220,6 +345,39 @@ export const getWalletBalance = async (
   }
   return '';
 }
+
+export const getEstimatedLiquidatePrice = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  newVolume,
+  symbolId,
+) => {
+  try {
+    let {
+      volume,
+      margin,
+      totalCost,
+      dynamicCost,
+      price,
+      multiplier,
+      minMaintenanceMarginRatio,
+    } = liquidatePriceCache.get(poolAddress);
+    totalCost = bg(totalCost).plus(bg(newVolume).times(price).times(multiplier))
+    //console.log(totalCost.toString())
+    return calculateLiquidationPrice(
+      bg(volume).plus(newVolume),
+      margin,
+      totalCost,
+      dynamicCost,
+      multiplier,
+      minMaintenanceMarginRatio
+    ).toString();
+  } catch (err) {
+    console.log(`${err}`);
+  }
+  return '';
+};
 
 export const isUnlocked = async (chainId, poolAddress, accountAddress, bTokenId) => {
   try {
@@ -355,13 +513,13 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
 export const getFundingRate = async (chainId, poolAddress, symbolId) => {
   try {
     const res = await _getFundingRate(chainId, poolAddress, symbolId)
-    const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume } = res
+    const { fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume, multiplier } = res
     return {
       fundingRate0: fundingRate.times(100).toString(),
       fundingRatePerBlock: fundingRatePerBlock.toString(),
       liquidity: liquidity.toString(),
       volume: '-',
-      tradersNetVolume: tradersNetVolume.toString()
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString()
     };
   } catch(err) {
     console.log(`${err}`)
@@ -512,13 +670,22 @@ export const getPoolBTokensBySymbolId = async(chainId, poolAddress, accountAddre
       promises.push(perpetualPool.getSymbol(symbolIdList[i]))
     }
     const symbols = await Promise.all(promises)
+
+    promises = []
+    const symbolList = symbols.map((s) => s.symbol)
+    for (let i=0; i< symbols.length; i++) {
+      promises.push(getOraclePrice(chainId, symbolList[i]))
+    }
+    const symbolPrices = await Promise.all(promises)
+    //console.log(symbolPrices)
+
     const marginHeld = symbols.reduce((accum, a, index) => {
-      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).abs().times(minInitialMarginRatio))
+      return accum.plus(bg(symbolPrices[index]).times(a.multiplier).times(positions[index].volume).abs().times(minInitialMarginRatio))
     }, bg(0))
     //console.log('marginHeld', marginHeld.toString())
 
     const pnl = symbols.reduce((accum, a, index) => {
-      return accum.plus(bg(a.price).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
+      return accum.plus(bg(symbolPrices[index]).times(a.multiplier).times(positions[index].volume).minus(positions[index].cost))
     }, bg(0))
     //console.log('pnl', pnl.toString())
 

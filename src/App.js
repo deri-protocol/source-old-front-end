@@ -7,7 +7,7 @@ import { useRouteMatch } from 'react-router-dom';
 import type from './model/Type'
 const DesktopApp = LoadableComponent(() => import('./desktop/index'))
 const MobileApp = LoadableComponent(() => import('./mobile/index'))
-const getIsDesktop = () => window.innerWidth > 768;
+const getIsDesktop = () => window.screen.width > 1024;
 function Mask({loading}){
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
@@ -21,7 +21,7 @@ function Mask({loading}){
 const MaskWrapper = inject('loading')(observer(Mask))
 
 function App({intl,loading}) {
-  const [isDesktop, setIsDesktop] = useState(isBrowser)
+  const [isDesktop, setIsDesktop] = useState(getIsDesktop())
   const isOptionsLite = useRouteMatch('/options/lite') ? true : false
   const isOptionsPro = useRouteMatch('/options/pro') ? true : false
   const isOption = isOptionsLite || isOptionsPro
@@ -30,12 +30,12 @@ function App({intl,loading}) {
 
   // useEffect(() => {
   //   const onResize = () => {
-  //     setIsDesktop(getIsDesktop());
+  //     if(getIsDesktop() !== isDesktop){
+  //       window.location.reload()
+  //     }
   //   }
   //   window.addEventListener("resize", onResize);
-  //   return () => {
-  //       window.removeEventListener("resize", onResize);
-  //   }
+  //   return () => window.removeEventListener("resize", onResize)
   // },[]);
   if(isBrowser){
     return <><MaskWrapper/><DesktopApp locale={intl.locale}></DesktopApp></>

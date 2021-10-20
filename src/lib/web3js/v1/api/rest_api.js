@@ -2,9 +2,9 @@
 import { getPoolV1Config } from '../../shared/config';
 import { bg, deriToNatural, getHttpBase, fetchJson } from '../../shared/utils';
 import {
-  getLiquidateHistoryOnline,
   getTradeHistoryOnline,
 } from './trade_history_api';
+import { perpetualPoolFactory } from '../factory';
 
 /**
  * Get specification from REST API, please refer {@link getSpecification}
@@ -271,6 +271,7 @@ export const getTradeHistory2 = async (
   accountAddress
 ) => {
   let tradeFromBlock, liquidateFromBlock, tradeHistory;
+  const { bTokenSymbol } = getPoolV1Config(chainId, poolAddress);
   const res = await fetchJson(
     `${getHttpBase()}/trade_history/${chainId}/${poolAddress}/${accountAddress}`
   );
@@ -279,13 +280,18 @@ export const getTradeHistory2 = async (
     liquidateFromBlock = parseInt(res.data.liquidateHistoryBlock);
     tradeHistory = res.data.tradeHistory;
   }
+
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
+  const {
+    multiplier,
+  } = await perpetualPool.getParameters();
   tradeHistory = tradeHistory.filter((i) => i).map((i) => {
     return {
       direction: i.direction.trim(),
-      baseToken: i.baseToken.trim(),
+      baseToken: bTokenSymbol,
       price: deriToNatural(i.price).toString(),
       notional: deriToNatural(i.notional).toString(),
-      volume: deriToNatural(i.volume).toString(),
+      volume: deriToNatural(i.volume).times(multiplier).toString(),
       transactionFee: deriToNatural(i.transactionFee).toString(),
       transactionHash: i.transactionHash,
       time: i.time.toString(),
@@ -293,43 +299,29 @@ export const getTradeHistory2 = async (
   });
   if (tradeFromBlock !== 0 && liquidateFromBlock !== 0) {
     // console.log(tradeFromBlock, liquidateFromBlock)
-    const [tradeHistoryOnline, liquidateHistoryOnline] = await Promise.all([
+    const [tradeHistoryOnline ] = await Promise.all([
       getTradeHistoryOnline(
         chainId,
         poolAddress,
         accountAddress,
         tradeFromBlock + 1
-      ),
-      getLiquidateHistoryOnline(
-        chainId,
-        poolAddress,
-        accountAddress,
-        liquidateFromBlock + 1
-      ),
+      )
     ]);
-    const result = tradeHistoryOnline
-      .concat(liquidateHistoryOnline)
-      .concat(tradeHistory);
+    const result = tradeHistoryOnline.concat(tradeHistory);
     return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
   } else {
     const { initialBlock } = getPoolV1Config(chainId, poolAddress);
     tradeFromBlock = parseInt(initialBlock);
     liquidateFromBlock = parseInt(initialBlock);
-    const [tradeHistoryOnline, liquidateHistoryOnline] = await Promise.all([
+    const [tradeHistoryOnline] = await Promise.all([
       getTradeHistoryOnline(
         chainId,
         poolAddress,
         accountAddress,
         tradeFromBlock + 1
       ),
-      getLiquidateHistoryOnline(
-        chainId,
-        poolAddress,
-        accountAddress,
-        liquidateFromBlock + 1
-      ),
     ]);
-    const result = tradeHistoryOnline.concat(liquidateHistoryOnline);
+    const result = tradeHistoryOnline
     return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
   }
 };

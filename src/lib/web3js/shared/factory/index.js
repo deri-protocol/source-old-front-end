@@ -4,6 +4,7 @@ export {
   databaseFactory,
   databaseWormholeFactory,
   databaseAirdropFactory,
+  databaseActivityFactory,
 } from './database';
 export {
   bTokenFactory,

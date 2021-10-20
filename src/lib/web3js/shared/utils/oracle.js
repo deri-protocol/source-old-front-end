@@ -2,14 +2,15 @@ import { getOracleConfig } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
 import { oracleFactory, symbolOracleOffChainFactory, wrappedOracleFactory } from '../factory/oracle';
-import { deriToNatural, toWei } from './convert';
+import { deriToNatural } from './convert';
 import {
-  getVolatilitySymbols,
   mapToSymbolInternal,
   mapToBTokenInternal,
   normalizeOptionSymbol,
 } from '../config/token';
 import { PRESERVED_SYMBOLS } from '../config/version';
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const getPriceInfoForV1 = async(symbol) => {
   const env = DeriEnv.get();
@@ -88,42 +89,77 @@ export const getPriceInfo = async (symbol, type='futures') => {
   let retry = 3;
   let res, priceInfo;
   while (retry > 0) {
-    res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
-    if (res.ok) {
-      priceInfo = await res.json();
-      if (priceInfo.status.toString() === '200' && priceInfo.data) {
-        return priceInfo.data
+    try {
+      res = await fetch(url, { mode: 'cors', cache: 'no-cache' });
+      if (res.ok) {
+        priceInfo = await res.json();
+        if (priceInfo.status.toString() === '200' && priceInfo.data) {
+          return priceInfo.data
+        }
       }
+    } catch(err) {
+      //console.log(err.toString())
+      retry -= 1;
     }
-    retry -= 1;
   }
   if (retry === 0) {
     throw new Error(`fetch oracle info exceed max retry(3): ${symbol} => ${JSON.stringify(priceInfo)}`);
   }
 };
 
-// cache
-export const getOraclePriceFromCache = (function () {
-  let cache = {};
-  return {
-    async get(chainId, symbol = '_', version = 'v2') {
-      const key = `${chainId}_${symbol}_${version}`
-      if (
-        Object.keys(cache).includes(key) &&
-        Math.floor(Date.now() / 1000) - cache[key].timestamp < 5
-      ) {
-        return cache[key].data;
-      } else {
-        const data = await getOraclePrice(chainId, symbol, version);
-        cache[key] = {
-          data,
-          timestamp: Math.floor(Date.now() / 1000),
-        };
-        return cache[key].data;
+export const getOracleInfosFromRest = async (symbolList, type = 'future') => {
+  let url = getOracleUrl(null, type);
+  let retry = 3;
+  let res, priceInfo;
+  while (retry > 0) {
+    try {
+      res = await fetch(url, {
+        mode: "cors",
+        cache: "no-cache",
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(symbolList),
+      });
+      if (res.ok) {
+        priceInfo = await res.json();
+        if (priceInfo.status.toString() === "200" && priceInfo.data) {
+          return priceInfo.data;
+        }
       }
-    },
-  };
-})();
+    } catch (err) {}
+    retry -= 1;
+  }
+  if (retry === 0) {
+    throw new Error(`getOracleInfosFromRest exceed max retry(3): ${symbolList}`);
+  }
+};
+
+// cache
+// export const getOraclePriceFromCache = (function () {
+//   console.log('-- getOraclePriceFromCache will remove in next version ' )
+//   let cache = {};
+//   return {
+//     async get(chainId, symbol = '_', version = 'v2') {
+//       const key = `${chainId}_${symbol}_${version}`
+//       if (
+//         Object.keys(cache).includes(key) &&
+//         Math.floor(Date.now() / 1000) - cache[key].timestamp < 5
+//       ) {
+//         return cache[key].data;
+//       } else {
+//         const data = await getOraclePrice(chainId, symbol, version);
+//         cache[key] = {
+//           data,
+//           timestamp: Math.floor(Date.now() / 1000),
+//         };
+//         return cache[key].data;
+//       }
+//     },
+//   };
+// })();
 
 export const getPriceInfos = async (symbolList) => {
   let url = getOracleUrl();
@@ -152,6 +188,59 @@ export const getPriceInfos = async (symbolList) => {
     throw new Error(`fetch oracle infos exceed max retry(3): ${symbolList} ${JSON.stringify(priceInfo)}`);
   }
 };
+
+export const oraclePricesCache = (function(){
+  const cache = {}
+  const pending = {}
+  return {
+    async get(symbols=[]) {
+      const key = symbols.join('_')
+      if (
+        !Object.keys(cache).includes(key) ||
+        Math.floor(Date.now() / 1000) - cache[key].timestamp > 3
+      ) {
+        const timestamp = Math.floor(Date.now() / 1000);
+        // pending is exit
+        if (Object.keys(pending).includes(key)) {
+          let retry = 10;
+          while (retry > 0) {
+            await delay(390);
+            if (!Object.keys(pending).includes(key)) {
+              //console.log('hit pending with cache');
+              return cache[key].data;
+            }
+          }
+          if (retry === 0) {
+            //console.log('hit pending expired');
+            const data = await getPriceInfos(symbols);
+            cache[key] = {
+              data,
+              timestamp,
+            };
+            return cache[key].data;
+          }
+        } else {
+          pending[key] = true;
+          try {
+            //console.log('hit new');
+            const data = await getPriceInfos(symbols);
+            cache[key] = {
+              data,
+              timestamp,
+            };
+            return cache[key].data;
+          } catch (err) {
+          } finally {
+            delete pending[key];
+          }
+        }
+      } else {
+        //console.log('hit cache');
+        return cache[key].data;
+      }
+    }
+  }
+})()
 
 export const RestOracle = (symbol) => {
   return {
@@ -216,53 +305,49 @@ export const getOraclePriceFromCache2 = (function () {
   };
 })();
 
-export const getOraclePriceForOption = async (chainId, symbol) => {
-  return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
-};
+// export const getOraclePriceForOption = async (chainId, symbol) => {
+//   return await getOraclePrice(chainId, normalizeOptionSymbol(symbol), 'option');
+// };
 
 // for viewer use
-export const getOraclePricesForOption = async (chainId, symbols) => {
-  const oracleSymbols = symbols
-    .map((i) => normalizeOptionSymbol(i))
-    .filter((value, index, self) => self.indexOf(value) === index);
-  const oracleSymbolPrices = await Promise.all(
-    oracleSymbols.reduce(
-      (acc, i) => acc.concat([getOraclePrice(chainId, i, 'option')]),
-      []
-    )
-  );
-  return symbols.map((s) => {
-    return toWei(oracleSymbolPrices[oracleSymbols.indexOf(normalizeOptionSymbol(s))]);
-  });
-};
+// export const getOraclePricesForOption = async (chainId, symbols) => {
+//   const oracleSymbols = symbols
+//     .map((i) => normalizeOptionSymbol(i))
+//     .filter((value, index, self) => self.indexOf(value) === index);
+//   const oracleSymbolPrices = await Promise.all(
+//     oracleSymbols.reduce(
+//       (acc, i) => acc.concat([getOraclePrice(chainId, i, 'option')]),
+//       []
+//     )
+//   );
+//   return symbols.map((s) => {
+//     return toWei(oracleSymbolPrices[oracleSymbols.indexOf(normalizeOptionSymbol(s))]);
+//   });
+// };
 
-// for tx use
-export const getOracleVolatilityForOption = async (symbols) => {
-  const volSymbols = getVolatilitySymbols(symbols)
-  //volSymbols.map((s) => `VOL-${s.toUpperCase()}`)
+// // for tx use
+// export const getOracleVolatilityForOption = async (symbols) => {
+//   const volSymbols = getVolatilitySymbols(symbols)
+//   //volSymbols.map((s) => `VOL-${s.toUpperCase()}`)
 
-  const volatilities = await Promise.all(
-    volSymbols.reduce((acc, i) => acc.concat([getPriceInfo(i, 'option')]), [])
-  );
-  //return volatilities;
-  return symbols.map((s) => {
-    return volatilities[volSymbols.indexOf(`VOL-${normalizeOptionSymbol(s)}`)];
-  });
-};
+//   const volatilities = await Promise.all(
+//     volSymbols.reduce((acc, i) => acc.concat([getPriceInfo(i, 'option')]), [])
+//   );
+//   //return volatilities;
+//   return symbols.map((s) => {
+//     return volatilities[volSymbols.indexOf(`VOL-${normalizeOptionSymbol(s)}`)];
+//   });
+// };
 
 // for viewer use
 export const getOracleVolatilitiesForOption = async (symbols) => {
   const oracleSymbols = symbols
     .map((i) => normalizeOptionSymbol(i))
     .filter((value, index, self) => self.indexOf(value) === index);
-  const oracleSymbolVolatilities = await Promise.all(
-    oracleSymbols.reduce(
-      (acc, i) => acc.concat([getPriceInfo(`VOL-${i}`, 'option')]),
-      []
-    )
-  );
+  const res = await getOracleInfosFromRest(oracleSymbols.map((os) => `VOL-${os}`), 'option')
+  const volatilities = oracleSymbols.map((s) => res[`VOL-${s}`])
   return symbols.map((s) => {
-    return oracleSymbolVolatilities[oracleSymbols.indexOf(normalizeOptionSymbol(s))].volatility;
+    return volatilities[oracleSymbols.indexOf(normalizeOptionSymbol(s))];
   });
 };
 

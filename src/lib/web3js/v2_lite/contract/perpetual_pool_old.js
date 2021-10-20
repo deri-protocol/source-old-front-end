@@ -35,7 +35,7 @@ export class PerpetualPoolLiteOld extends ContractBase {
     // update symbolIds
     if (
       !this.activeSymbolIds ||
-      this.activeSymbolIds.toString !== symbolIds.toString()
+      this.activeSymbolIds.toString() !== symbolIds.toString()
     ) {
       this.activeSymbolIds = symbolIds;
       this.symbols = await Promise.all(

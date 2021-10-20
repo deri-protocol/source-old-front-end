@@ -46,8 +46,8 @@ export const calculateLiquidationPrice = (
   multiplier,
   minMaintenanceMarginRatio
 ) => {
-  const tmp = cost.minus(margin);
-  let res = volume.gt(0)
+  const tmp = bg(cost).minus(margin);
+  let res = bg(volume).gt(0)
     ? tmp.div(bg(1).minus(minMaintenanceMarginRatio)).minus(dynamicCost).div(volume).div(multiplier)
     : tmp.div(bg(1).plus(minMaintenanceMarginRatio)).minus(dynamicCost).div(volume).div(multiplier);
   res = max(res, bg(0));

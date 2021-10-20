@@ -131,6 +131,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
         },
         width: '1198',
         height: 478,
+        timezone: Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC',
         timeScale: {
           rightOffset : 3,
           timeVisible : true,

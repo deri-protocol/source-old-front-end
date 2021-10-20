@@ -39,7 +39,7 @@ const expandPoolConfigV2 = (config) => {
     .flat();
 };
 
-const expandPoolConfigV2Lite = (config) => {
+const expandPoolConfigV2Lite = (config, version='v2_lite') => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -60,7 +60,7 @@ const expandPoolConfigV2Lite = (config) => {
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
           unit: symbol.unit,
-          version: 'v2_lite',
+          version,
           isOption: false,
         });
       }
@@ -152,7 +152,6 @@ const expandPoolConfigV2LiteOpen = (config) => {
 
 export const getConfig = (version='v2', env='dev') => {
   let config = getJsonConfig(version, env);
-
   if (version === 'v2_lite_open') {
     //if (Date.now()/1000 - openConfigListCache.updatedAt() < 15) {
       //console.log('hit openConfigListCache')
@@ -160,7 +159,6 @@ export const getConfig = (version='v2', env='dev') => {
     //}
   }
 
-  //console.log('>',config)
   const pools = config.pools;
   if (pools && Array.isArray(pools)) {
     for (let i = 0; i < pools.length; i++) {
@@ -168,7 +166,8 @@ export const getConfig = (version='v2', env='dev') => {
       poolValidator[version](pools[i])
     }
   }
-  validateObjectKeyExist(['oracle'], config, 'oracle');
+
+  //validateObjectKeyExist(['oracle'], config, 'oracle');
   //validateObjectKeyExist(['brokerManager'], configs[env], 'brokerManager')
   return config;
 };
@@ -177,8 +176,8 @@ export const getPoolConfigList = (version='v2', env = 'dev') => {
   const config = getConfig(version, env)
   if (version === 'v2') {
     return expandPoolConfigV2(config)
-  } else if (version === 'v2_lite') {
-    return expandPoolConfigV2Lite(config)
+  } else if (version === 'v2_lite' || version === 'v2_lite_dpmm') {
+    return expandPoolConfigV2Lite(config, version)
   } else if (version === 'v2_lite_open') {
     return expandPoolConfigV2LiteOpen(config)
   } else if (version === 'option') {

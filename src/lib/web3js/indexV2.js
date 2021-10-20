@@ -6,6 +6,7 @@ export {
   getPreminingConfigList as getPreminingContractConfig,
   getLpConfigList,
   getPreminingConfigList,
+  getDeriConfig,
 } from './shared/config';
 export * from './shared/utils';
 export * from './shared/api';

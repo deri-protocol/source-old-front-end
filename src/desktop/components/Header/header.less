@@ -53,9 +53,25 @@
             // float: left;
             padding-left: 0px;
             margin: 0;
-            width: 700px;
+            width: 800px;
             display: flex;
             justify-content: space-evenly;
+          }
+          .event {
+            color: black;
+            position: relative;
+            .y-event {
+              position: absolute;
+              display: inline-block;
+              background-color:  #D4E05C;
+              font-size: 12px;
+              height: 16px;
+              border-radius: 8px;
+              padding: 0 5px;
+              right: 0px;
+              top: 13px;
+              line-height: 16px;
+            }
           }
 
           li {
@@ -69,7 +85,8 @@
             color: #ffffff;
             font-family: ArialMT, sans-serif;
             position: relative;
-            margin-left: 30px;
+            margin-left: 0px;
+
             a {
               color: #cccccc;
             }
@@ -82,7 +99,7 @@
               border-radius: 8px;
               position: absolute;
               top: 15px;
-              right: -25px;
+              right: 0px;
               line-height: 16px;
               width: 35px;
               text-align-last: center;
@@ -151,7 +168,7 @@
         .version {
           cursor: pointer;
           line-height: 80px;
-          margin-left: 20px;
+          // margin-left: 20px;
           height: 80px;
           display: flex;
           align-items: center;
@@ -167,18 +184,22 @@
   }
 }
 
+
 .team .team-item,
 .options .option-item,
 .deritoken .token-item,
 .retired .retired-item,
 .signin .signin-item,
 .nuls .signin-item,
+.trade-to-earn .signin-item,
 .futures .trade-item,
 .futures .trade-item,
 .mining .mining-item,
 .bridge .bridge-item,
+.governance .governance-item,
 .broker .broker-item,
 .faucet .faucet-item,
+.info .info-item,
 .brokerbind .brokerbind-item {
   color: #fff !important;
   display: inline-block;
@@ -192,6 +213,8 @@
 .retired .retired-item,
 .broker .broker-item,
 .brokerbind .brokerbind-item,
+.trade-to-earn .signin-item,
+.info .info-item,
 .nuls .signin-item,
 .faucet .faucet-item,
 .signin .signin-item {

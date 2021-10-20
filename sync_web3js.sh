@@ -1,4 +1,5 @@
 #!/bin/bash
+# mkdir -p ~/work/website2/deri.js 
 cd ~/work/website2/deri.js
 
 read -r -p  "Please input the branch of sync for deri.js [master]" branch

@@ -447,10 +447,20 @@
               border-radius: 6px;
               display: flex;
               justify-content: center;
-              position: relative;
+              // position: relative;
               align-items: center;
               height: 65px;
-
+              .bg-input{
+                width: 229px !important;
+                height: 56px;
+                background: rgba(212, 224, 92, 0.05);
+                display: flex;
+                // align-items: baseline;
+                justify-content: center;
+                border-radius: 3px;
+                // flex: 1;
+                // padding-right: 5px;
+              }
               .title-volume {
                 position: absolute;
                 top: 6px;
@@ -460,21 +470,24 @@
                 display: none;
               }
               .option-unit{
-                position: absolute;
-                right: 7px;
-                top: 30px;
+                // position: absolute;
+                // right: 7px;
+                // top: 30px;
                 font-size: 16px;
+                margin-top: 24px;
                 color: @text;
                 // display: none;
               }
               .contrant-input {
-                 box-sizing: border-box;
-                width: 229px;
+                // max-width: 200px;
+                width: 100%;
                 height: 56px;
-                background: rgba(212, 224, 92, 0.05);
+                // background: rgba(212, 224, 92, 0.05);
+                background: bottom;
+                box-sizing: border-box;
                 border: 0;
                 padding-top: 10px;
-                padding-right: 10px;
+                // padding-right: 10px;
                 padding-left: 20px;
                 color: #D4E05C;
                 border-radius: 3px;
@@ -488,7 +501,7 @@
               .contrant-input:focus {
                 font-size: 30px;
                 text-align: right;
-                padding-right: 15px;
+                // padding-right: 15px;
                 // font-family: 'LED Calculator';
               }
 
@@ -499,7 +512,7 @@
               .inputFamliy {
                 font-size: 30px;
                 text-align: right;
-                padding-right: 15px;
+                // padding-right: 15px;
                 font-family: 'LED Calculator';
               }
 
@@ -511,7 +524,7 @@
               .contrant-input{
                 text-align: right;
                 font-size: 30px !important;
-                padding-right: 30px  !important;
+                // padding-right: 30px  !important;
                 font-family: 'LED Calculator';
               }
 
@@ -565,6 +578,13 @@
                   font-size: 15px;
                   color: @text;
                   font-weight: bold;
+                  .open-add,.open-remove{
+                    padding: 5px;
+                    cursor: pointer;
+                  }
+                  .open-remove{
+                    padding-right: 0px;
+                  }
                 }
                 .balance-contract-num.v1{
                   display: flex;
@@ -629,7 +649,7 @@
           font-size: 14px;
           color: @red;
           text-align: center;
-          margin-bottom: 10px;
+          margin-bottom: 4px;
         }
 
         .submit-btn {
@@ -1255,7 +1275,7 @@
 
         .contract-box-info {
           width: 471px;
-          height: 422px;
+          // height: 422px;
           padding : 0 10px;
           display: flex;
           flex-direction: column;
@@ -1337,7 +1357,7 @@
         }
 
         .modal-footer {
-          margin-top: 42px;
+          margin-top: 20px;
           padding: 0;
           border: 0;
           justify-content: center;

@@ -34,7 +34,7 @@ export const web3Factory = (function () {
       } else {
         if (pending[chainId]) {
           // wait for init
-          let retry = 10
+          let retry = 8
           while (retry > 0) {
             await delay(500)
             if (Object.keys(web3InstanceMap).includes(chainId)) {
@@ -60,9 +60,9 @@ export const web3Factory = (function () {
             web3InstanceMap[chainId] = new Web3(
               new Web3.providers.HttpProvider(providerUrl)
             );
-            delete pending[chainId]
           } catch(err) {
             console.log(err.toString())
+          } finally {
             delete pending[chainId]
           }
           return web3InstanceMap[chainId];

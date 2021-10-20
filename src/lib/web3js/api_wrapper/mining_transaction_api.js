@@ -5,6 +5,8 @@ import { addLiquidityV2, removeLiquidityV2 } from '../v2/api';
 import { addLiquidityV2l, removeLiquidityV2l } from '../v2_lite/api';
 import { addLiquidityOption, removeLiquidityOption } from '../option/api';
 
+import { api as apiV2lDpmm } from '../v2_lite_dpmm/api'
+
 export const addLiquidity = async (
   chainId,
   poolAddress,
@@ -17,6 +19,8 @@ export const addLiquidity = async (
     return addLiquidityV2l(chainId, poolAddress, accountAddress, amount)
   } else if (version === 'option') {
     return addLiquidityOption(chainId, poolAddress, accountAddress, amount);
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.addLiquidity(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
     return addLiquidity2(chainId, poolAddress, accountAddress, amount);
@@ -44,6 +48,8 @@ export const removeLiquidity = async (
     return removeLiquidityV2l(chainId, poolAddress, accountAddress, amount, isMaximum)
   } else if (version === 'option') {
     return removeLiquidityOption(chainId, poolAddress, accountAddress, amount, isMaximum)
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.removeLiquidity(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
     return removeLiquidity2(chainId, poolAddress, accountAddress, amount);

@@ -15,6 +15,7 @@ export {
 export {
   getSpecification as getSpecificationV2,
   getPositionInfo as getPositionInfoV2,
+  getPositionInfos as getPositionInfosV2,
   isUnlocked as isUnlockedV2,
   getWalletBalance as getWalletBalanceV2,
   getEstimatedFee as getEstimatedFeeV2,
@@ -26,6 +27,7 @@ export {
   getFundingRateCache as getFundingRateCacheV2,
   getPoolBTokensBySymbolId,
   getFundingFee as getFundingFeeV2,
+  getEstimatedLiquidatePrice as getEstimatedLiquidatePriceV2,
 } from './trade_query_api';
 
 export {

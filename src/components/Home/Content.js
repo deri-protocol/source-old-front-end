@@ -18,7 +18,9 @@ import BIXIN from './img/BIXIN.png'
 import BlackRange from './img/BlackRange.png'
 import CDF from './img/CDF.png'
 import dForce from './img/dForce.png'
+import WOO from './img/WOO.png'
 import FBG from './img/FBG.png'
+import QCP from './img/QCP.png'
 import GSR from './img/GSR.png'
 import Kryptos from './img/Kryptos.png'
 import LD from './img/LD.png'
@@ -180,6 +182,10 @@ export default function Content({lang}) {
             <img src={GSR} alt=''/>
           </div>
           <div className='pic'>
+            <img src={WOO} alt=''/>
+          </div>
+          <div className='pic'>
+            <img src={QCP} alt=''/>
           </div>
         </div>
       </div>

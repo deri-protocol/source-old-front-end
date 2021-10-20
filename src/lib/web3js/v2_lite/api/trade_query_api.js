@@ -1,5 +1,5 @@
 import {
-  calculateEntryPrice ,
+  calculateEntryPrice,
   calculateFundingRate,
   calculateLiquidationPrice,
   processFundingRate,
@@ -7,15 +7,15 @@ import {
 } from '../../v2/calculation';
 import { getPoolConfig } from "../../shared/config"
 import { bTokenFactory } from "../../shared/factory"
-import {  perpetualPoolLiteFactory, pTokenLiteFactory } from "../factory.js"
+import { perpetualPoolLiteFactory, pTokenLiteFactory } from "../factory.js"
 import {
   bg,
   catchApiError,
   getLatestBlockNumber,
 } from '../../shared/utils';
-import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
-import { fundingRateCache, priceCache } from '../../shared/api/api_globals';
+import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import { getIndexInfo } from '../../shared/config/token';
+import { getSymbolPrices } from '../utils';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
@@ -88,9 +88,9 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       }
       const symbols = await Promise.all(promises);
 
-      const symbol = symbols[symbolIndex].symbol
-      const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
-      const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
+      //const symbol = symbols[symbolIndex].symbol
+      //const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
+      //const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
       const [
         symbolInfo,
         liquidity,
@@ -98,7 +98,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         latestBlockNumber,
         positionInfo,
         margin,
-        latestPrice,
+        //latestPrice,
       ] = await Promise.all([
         //const [ parameterInfo, symbolInfo, liquidity, symbolIds, latestBlockNumber, positionInfo, margin, latestPrice] = await Promise.all([
         perpetualPool.getSymbol(symbolId),
@@ -107,7 +107,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         getLatestBlockNumber(chainId),
         pToken.getPosition(accountAddress, symbolId),
         pToken.getMargin(accountAddress),
-        getOraclePriceFromCache2.get(chainId, symbol,oracleAddress),
+        //getOraclePriceFromCache2.get(chainId, symbol,oracleAddress),
       ]);
       //console.log(latestBlockNumber, lastUpdatedBlockNumber)
       const { volume, cost, lastCumulativeFundingRate } = positionInfo;
@@ -128,18 +128,22 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       // }
       //const symbols = await Promise.all(promises);
 
-      const symbolList = symbols.map((s) => s.symbol);
-
-      promises = [];
-      for (let i = 0; i < symbolIds.length; i++) {
-        const isOffchain = perpetualPool.offChainOracleSymbolIds.indexOf(symbolIds[i]) > -1
-        const address = isOffchain ? '' : symbols[i].oracleAddress
-        const _symbol = symbolList[i]
-        promises.push(
-          getOraclePriceFromCache2.get(chainId, _symbol, address),
-        );
-      }
-      const symbolPrices = await Promise.all(promises);
+      const symbolPrices = await getSymbolPrices(
+        chainId,
+        symbols,
+        perpetualPool.offChainOracleSymbolIds,
+        perpetualPool.offChainOracleSymbols
+      );
+      // promises = [];
+      // for (let i = 0; i < symbolIds.length; i++) {
+      //   const isOffchain = perpetualPool.offChainOracleSymbolIds.indexOf(symbolIds[i]) > -1
+      //   const address = isOffchain ? '' : symbols[i].oracleAddress
+      //   const _symbol = symbolList[i]
+      //   promises.push(
+      //     getOraclePriceFromCache2.get(chainId, _symbol, address),
+      //   );
+      // }
+      // const symbolPrices = await Promise.all(promises);
       let price;
       if (symbolIndex === '-1') {
         price = '0';
@@ -192,7 +196,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         return accum.plus(bg(p.cost));
       }, bg(0));
       const dynamicCost = symbols.reduce((accum, s, index) => {
-        if (index !== parseInt(symbolId)) {
+        if (index !== symbolIndex) {
           return accum.plus(
             bg(positions[index].volume)
               .times(symbolPrices[index])
@@ -205,7 +209,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
 
       const fundingFee = calculateFundingFee(
         tradersNetVolume,
-        latestPrice,
+        price,
         multiplier,
         fundingRateCoefficient,
         liquidity,
@@ -216,9 +220,20 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         volume
       );
 
-      return {
+      liquidatePriceCache.set(poolAddress, {
+        volume,
+        margin,
+        totalCost,
+        dynamicCost,
         price,
-        volume: volume.toString(),
+        multiplier,
+        minMaintenanceMarginRatio,
+      });
+
+      return {
+        symbol:symbols[symbolIndex].symbol,
+        price,
+        volume: bg(volume).times(symbols[symbolIndex].multiplier).toString(),
         averageEntryPrice: calculateEntryPrice(
           volume,
           cost,
@@ -243,6 +258,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       throw new Error(`-- getPostionInfo: invalid symbolId(${symbolId})`)
     }
   }, args, 'getPositionInfo', {
+      symbol: '',
       price: '',
       volume: '',
       averageEntryPrice: '',
@@ -254,6 +270,160 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
       fundingFee: '',
       liquidationPrice: '',
   })
+}
+
+export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
+  const args = [chainId, poolAddress, accountAddress]
+  return catchApiError(async(chainId, poolAddress, accountAddress) => {
+    const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
+    await perpetualPool.init()
+    const pToken = perpetualPool.pToken
+    const parameterInfo = perpetualPool.parameters 
+    const symbolIds = perpetualPool.activeSymbolIds
+    //const symbolIndex = symbolIds.indexOf(symbolId)
+
+      let promises = [];
+      for (let i = 0; i < symbolIds.length; i++) {
+        promises.push(perpetualPool.getSymbol(symbolIds[i]));
+      }
+      const symbols = await Promise.all(promises);
+
+      promises = [];
+      for (let i = 0; i < symbolIds.length; i++) {
+        promises.push(pToken.getPosition(accountAddress, symbolIds[i]));
+      }
+      const positions = await Promise.all(promises);
+
+      // const symbol = symbols[symbolIndex].symbol
+      // const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
+      // const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
+      const [
+        liquidity,
+        lastUpdatedBlockNumber,
+        latestBlockNumber,
+        margin,
+      ] = await Promise.all([
+        //const [ parameterInfo, symbolInfo, liquidity, symbolIds, latestBlockNumber, positionInfo, margin, latestPrice] = await Promise.all([
+        //perpetualPool.getSymbol(symbolId),
+        perpetualPool.getLiquidity(),
+        perpetualPool.getLastUpdateBlock(),
+        getLatestBlockNumber(chainId),
+        //pToken.getPosition(accountAddress, symbolId),
+        pToken.getMargin(accountAddress),
+        //getOraclePriceFromCache2.get(chainId, symbol,oracleAddress),
+      ]);
+      //console.log(latestBlockNumber, lastUpdatedBlockNumber)
+      const {
+        minInitialMarginRatio,
+        minMaintenanceMarginRatio,
+      } = parameterInfo;
+
+      const symbolList = symbols.map((s) => s.symbol);
+
+      const symbolPrices = await getSymbolPrices(
+        chainId,
+        symbols,
+        perpetualPool.offChainOracleSymbolIds,
+        perpetualPool.offChainOracleSymbols
+      );
+
+      // promises = [];
+      // for (let i = 0; i < symbolIds.length; i++) {
+      //   const isOffchain = perpetualPool.offChainOracleSymbolIds.indexOf(symbolIds[i]) > -1
+      //   const address = isOffchain ? '' : symbols[i].oracleAddress
+      //   const _symbol = symbolList[i]
+      //   promises.push(
+      //     getOraclePriceFromCache2.get(chainId, _symbol, address)
+      //   );
+      // }
+      // const symbolPrices = await Promise.all(promises);
+
+      const marginHeld = symbols.reduce((acc, s, index) => {
+        return acc.plus(
+          bg(symbolPrices[index])
+            .times(s.multiplier)
+            .times(positions[index].volume)
+            .times(minInitialMarginRatio)
+            .abs()
+        );
+      }, bg(0));
+
+      const totalCost = positions.reduce((accum, p) => {
+        return accum.plus(bg(p.cost));
+      }, bg(0));
+
+      return positions.map((p, index) => {
+      const symbolId = symbolList[index]
+      const symbol = symbols[index]
+      const price = symbolPrices[index]
+
+      const { volume, cost, lastCumulativeFundingRate } = p
+      const {
+        multiplier,
+        fundingRateCoefficient,
+        tradersNetVolume,
+        cumulativeFundingRate,
+      } = symbol;
+      priceCache.set(poolAddress, symbolId, price);
+
+      const unrealizedPnl = bg(symbolPrices[index]).times(symbol.multiplier).times(p.volume).minus(p.cost)
+
+      const dynamicCost = symbols.reduce((accum, s, idx) => {
+        if (idx !== index) {
+          return accum.plus(
+            bg(positions[idx].volume)
+              .times(symbolPrices[idx])
+              .times(s.multiplier)
+          );
+        } else {
+          return accum;
+        }
+      }, bg(0));
+      const fundingFee = calculateFundingFee(
+        tradersNetVolume,
+        price,
+        multiplier,
+        fundingRateCoefficient,
+        liquidity,
+        cumulativeFundingRate,
+        lastCumulativeFundingRate,
+        lastUpdatedBlockNumber,
+        latestBlockNumber,
+        volume
+      );
+      const marginHeldBySymbol = bg(volume)
+        .abs()
+        .times(multiplier)
+        .times(price)
+        .times(minInitialMarginRatio);
+
+        return {
+          symbol: symbol.symbol,
+          symbolId: symbol.symbolId,
+          price,
+          volume: bg(volume).times(symbols[index].multiplier).toString(),
+          averageEntryPrice: calculateEntryPrice(
+            volume,
+            cost,
+            multiplier
+          ).toString(),
+          margin: margin.toString(),
+          marginHeld: marginHeld.toString(),
+          marginHeldBySymbol: marginHeldBySymbol.toString(),
+          unrealizedPnl: unrealizedPnl.toString(),
+          //unrealizedPnlList,
+          fundingFee: fundingFee.toString(),
+          liquidationPrice: calculateLiquidationPrice(
+            volume,
+            margin,
+            totalCost,
+            dynamicCost,
+            multiplier,
+            minMaintenanceMarginRatio
+          ).toString(),
+        };
+      }).filter((p) => p.volume !== '0')
+  }, args, 'getPositionInfos', [])
 }
 
 export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
@@ -289,16 +459,22 @@ const _getFundingRate = async(chainId, poolAddress, symbolId) => {
 
   if (symbolIndex > -1) {
     const symbolInfo = symbols[symbolIndex];
-    const symbol = symbols[symbolIndex].symbol;
-    const isOffchainOracleSymbol =
-      perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1;
-    const oracleAddress = isOffchainOracleSymbol
-      ? ''
-      : symbols[symbolIndex].oracleAddress;
-    const [liquidity, price] = await Promise.all([
+    // const symbol = symbols[symbolIndex].symbol;
+    // const isOffchainOracleSymbol =
+    //   perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1;
+    // const oracleAddress = isOffchainOracleSymbol
+    //   ? ''
+    //   : symbols[symbolIndex].oracleAddress;
+    const [liquidity, prices] = await Promise.all([
       perpetualPool.getLiquidity(),
-       getOraclePriceFromCache2.get(chainId, symbol, oracleAddress),
+      getSymbolPrices(
+        chainId,
+        symbols,
+        perpetualPool.offChainOracleSymbolIds,
+        perpetualPool.offChainOracleSymbols
+      ),
     ]);
+    const price = prices[symbolIndex]
     priceCache.set(poolAddress, symbolId, price);
     const {
       multiplier,
@@ -360,16 +536,22 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
       promises.push(perpetualPool.getSymbol(symbolIds[i]));
     }
     const symbols = await Promise.all(promises);
-    const symbol = symbols[symbolIndex]
+    //const symbol = symbols[symbolIndex]
     let price = priceCache.get(poolAddress, symbolId)
     //console.log('symbol',symbol)
 
     if (!price) {
-      const symbolName = symbol.symbol;
-      const isOffchainOracleSymbol =
-        perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1;
-      const oracleAddress = isOffchainOracleSymbol ? '' : symbol.oracleAddress;
-      price = await getOraclePriceFromCache2.get(chainId, symbolName, oracleAddress, 'v2_lite')
+      // const symbolName = symbol.symbol;
+      // const isOffchainOracleSymbol =
+      //   perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1;
+      // const oracleAddress = isOffchainOracleSymbol ? '' : symbol.oracleAddress;
+      const prices = await getSymbolPrices(
+        chainId,
+        symbols,
+        perpetualPool.offChainOracleSymbolIds,
+        perpetualPool.offChainOracleSymbols
+      );
+      price = prices[symbolIndex]
       priceCache.set(poolAddress, symbolId, price)
     }
     let cache = fundingRateCache.get(chainId, poolAddress, symbolId)
@@ -391,7 +573,7 @@ export const getEstimatedMargin = async(
 ) => {
   const args = [chainId, poolAddress, accountAddress, volume, leverage, symbolId]
   return catchApiError(async(chainId, poolAddress, accountAddress, volume, leverage, symbolId) => {
-    const { symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite');
+    //const { symbol } = getPoolConfig(poolAddress, '0', symbolId, 'v2_lite');
     //console.log('symbol',symbol)
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     await perpetualPool.init()
@@ -403,11 +585,17 @@ export const getEstimatedMargin = async(
     }
     const symbols = await Promise.all(promises);
     if (symbolIndex > -1) {
-      const symbol = symbols[symbolIndex].symbol
-      const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
-      const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
+      // const symbol = symbols[symbolIndex].symbol
+      // const isOffchainOracleSymbol = perpetualPool.offChainOracleSymbolIds.indexOf(symbolId) > -1
+      //const oracleAddress = isOffchainOracleSymbol ? '' : symbols[symbolIndex].oracleAddress
 
-      const price =  await getOraclePriceFromCache2.get(chainId, symbol, oracleAddress, 'v2_lite')
+      const prices = await getSymbolPrices(
+        chainId,
+        symbols,
+        perpetualPool.offChainOracleSymbolIds,
+        perpetualPool.offChainOracleSymbols
+      );
+      const price = prices[symbolIndex]
       priceCache.set(poolAddress, symbolId, price)
       const { multiplier } = symbols[symbolIndex]
       return bg(volume).abs().times(price).times(multiplier).div(bg(leverage)).toString()
@@ -426,13 +614,13 @@ export const getFundingRate = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, symbolId) => {
     const res = await _getFundingRate(chainId, poolAddress, symbolId)
-    const {fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume} = res
+    const {fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume, multiplier} = res
     return {
       fundingRate0: fundingRate.times(100).toString(),
       fundingRatePerBlock: fundingRatePerBlock.toString(),
       liquidity: liquidity.toString(),
       volume: '-',
-      tradersNetVolume: tradersNetVolume.toString()
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString()
     }
   }, args, 'getFundingRate', {
     fundingRate0: '',

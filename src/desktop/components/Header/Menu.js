@@ -25,7 +25,7 @@ function Menu({ lang, locale }) {
           <li>
             {isProduction
               ?
-              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#mining`}  className='mining-item'>{lang.mining}</a>
+              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#mining`} className='mining-item'>{lang.mining}</a>
               :
               <Link className='mining-item' to='/mining'>{lang.mining}</Link>}
           </li>
@@ -47,7 +47,7 @@ function Menu({ lang, locale }) {
           <li>
             {isProduction
               ?
-              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`}  className='token-item'>{lang['deri-token']}</a>
+              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#deritoken`} className='token-item'>{lang['deri-token']}</a>
               :
               <Link className='token-item' to='/deritoken'>{lang['deri-token']}</Link>}
           </li>
@@ -99,17 +99,20 @@ function Menu({ lang, locale }) {
                 <a rel='noreferrer' className='governance-item' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang.governance}</a>
               </li>
               <li>
+                <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>
+              </li>
+              <li>
                 {isProduction
                   ?
-                  <a className='signin-item' href={`https://${host}/#/nuls`}>{lang['signin']}</a>
+                  <a className='signin-item' href={`https://${host}/#/trade-to-earn`}>{lang['signin']}</a>
                   :
-                  <Link className='signin-item' to='/nuls'>{lang['signin']}</Link>
+                  <Link className='signin-item' to='/trade-to-earn'>{lang['signin']}</Link>
                 }
               </li>
               <li>
                 {isProduction
                   ?
-                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`}  className='retired-item'>{lang['retired-pools']}</a>
+                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} className='retired-item'>{lang['retired-pools']}</a>
                   :
                   <Link className='retired-item' to='/retired'>{lang['retired-pools']}</Link>}
               </li>
@@ -123,6 +126,17 @@ function Menu({ lang, locale }) {
               
 
             </ul>
+          </li>
+          <li className='event'>
+            <span className='y-event' >
+              Trade to Earn
+            </span>
+            {isProduction
+              ?
+              <a className='' href={`https://${host}/#/trade-to-earn`}>$ 1 Million in DERI</a>
+              :
+              <Link className='' to='/trade-to-earn'>$ 1 Million in DERI</Link>
+            }
           </li>
         </ul>
       </div>

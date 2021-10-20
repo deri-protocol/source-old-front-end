@@ -1,8 +1,12 @@
 //import { isUnlocked } from '../api/contractQueryApi';
-import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V1_ADDRESS, OPTION_POOL_ADDRESS } from '../shared/__test__/setup';
+import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V1_ADDRESS, OPTION_POOL_ADDRESS, CHAIN_ID, POOL_V2_ADDRESS, POOL_V2L_ADDRESS } from '../shared/__test__/setup';
 import { bg } from '../shared/utils';
 import { getLiquidityInfo, isUnlocked } from '../indexV2';
-import { getContractAddressConfig, getPoolConfigList } from '../api_wrapper';
+<<<<<<< HEAD
+import { getContractAddressConfig, getPoolConfigList, getSpecification } from '../api_wrapper';
+=======
+import { getContractAddressConfig, getPoolConfigList, getPositionInfos } from '../api_wrapper';
+>>>>>>> dev
 import { DeriEnv } from '../shared';
 
 describe('api', () => {
@@ -54,4 +58,25 @@ describe('api', () => {
     //expect(res.length).toEqual(7)
     expect(res).toEqual({})
   })
+  it('getSpecification testnet', async() => {
+    DeriEnv.set('testnet')
+
+    const res = await getSpecification('97', '0x43701b4bf0430DeCFA41210327fE67Bf4651604C', '0')
+    DeriEnv.set('dev')
+    //expect(res.length).toEqual(7)
+    expect(res).toEqual({})
+  }, TIMEOUT)
+  it('getLiquidityInfo testnet', async() => {
+    DeriEnv.set('testnet')
+
+    const res = await getLiquidityInfo('97', '0x43701b4bf0430DeCFA41210327fE67Bf4651604C', ACCOUNT_ADDRESS)
+    DeriEnv.set('dev')
+    //expect(res.length).toEqual(7)
+    expect(res).toEqual({})
+  }, TIMEOUT)
+  
+  it('getPositionInfos', async() => {
+    const res = await getPositionInfos(CHAIN_ID, POOL_V1_ADDRESS, ACCOUNT_ADDRESS)
+    expect(res).toEqual([])
+  }, TIMEOUT)
 });

@@ -5,6 +5,7 @@ import {
   toChecksumAddress,
   hexToNumber,
   hexToNumberString,
+  bg,
 } from '../../shared/utils';
 import { getPoolV1Config } from '../../shared/config';
 
@@ -40,7 +41,7 @@ const processTradeEvent = async (
     baseToken: bTokenSymbol,
     price: price.toString(),
     notional: notional.toString(),
-    volume: volume.toString(),
+    volume: bg(volume).times(multiplier).toString(),
     transactionFee: transactionFee.toString(),
     transactionHash: txHash.toString(),
     time,
@@ -71,7 +72,7 @@ const processLiquidateEvent = async (
     baseToken: bTokenSymbol,
     price: price.toString(),
     notional: national.toString(),
-    volume: volume.toString(),
+    volume: bg(volume).times(multiplier).toString(),
     transactionFee: '0',
     transactionHash: txHash.toString(),
     time: timestamp,
@@ -173,6 +174,11 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
   //const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const [res] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const count = hexToNumber(res);
+
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
+  const {
+    multiplier,
+  } = await perpetualPool.getParameters();
   try {
     if (count && count >= 0) {
       let keyArray = [];
@@ -201,7 +207,7 @@ const getTradeHistoryOffline = async (chainId, poolAddress, accountAddress) => {
           baseToken: hexToString(resp[indexBase + 1]).trim(),
           price: deriToNatural(resp[indexBase + 2]).toString(),
           notional: deriToNatural(resp[indexBase + 3]).toString(),
-          volume: deriToNatural(resp[indexBase + 4]).toString(),
+          volume: bg(deriToNatural(resp[indexBase + 4])).times(multiplier).toString(),
           transactionFee: deriToNatural(resp[indexBase + 5]).toString(),
           transactionHash: resp[indexBase + 6],
           time: hexToNumberString(resp[indexBase + 7]).toString(),
@@ -318,6 +324,11 @@ const getLiquidateHistoryOffline = async (
   //const [res, fromBlock] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const [res] = await db.getValues([`${keyMeta}.count`, keyBlock]);
   const count = hexToNumber(res);
+
+  const perpetualPool = perpetualPoolFactory(chainId, poolAddress);
+  const {
+    multiplier,
+  } = await perpetualPool.getParameters();
   try {
     if (count && count >= 0) {
       let keyArray = [];
@@ -344,7 +355,7 @@ const getLiquidateHistoryOffline = async (
           baseToken: hexToString(resp[indexBase + 1]).trim(),
           price: deriToNatural(resp[indexBase + 2]).toString(),
           notional: deriToNatural(resp[indexBase + 3]).toString(),
-          volume: deriToNatural(resp[indexBase + 4]).toString(),
+          volume: bg(deriToNatural(resp[indexBase + 4])).times(multiplier).toString(),
           transactionFee: deriToNatural(resp[indexBase + 5]).toString(),
           transactionHash: resp[indexBase + 6],
           time: hexToNumberString(resp[indexBase + 7]).toString(),

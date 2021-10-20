@@ -42,14 +42,14 @@ function List({loading}){
 
 
   return(
-    <div className='info' style={{'width': `calc(100vw - ${window.screen.width * 0.25}px)`}}>
+    <div className='info'>
       <div className='title'>Deri Overview</div>
       <div className='chart-box'>
         <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history`} seriesType='area'/> </div>
-        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram'/> </div>
+        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
       </div>
       <div className='table-by-network'>
-        {Object.keys(allPoolData).map(chain => <Table title={chain} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} onRowClick={d => onRowClick(d)} dataSet={allPoolData[chain]}/>)}
+        {Object.keys(allPoolData).map((chain,index) => <Table title={chain} key={index} headers={HEADERS} columns={COLUMNS} columnRenders={columnFormat} onRowClick={d => onRowClick(d)} dataSet={allPoolData[chain]}/>)}
       </div>
     </div>
   )
