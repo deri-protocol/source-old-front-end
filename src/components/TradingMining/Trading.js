@@ -386,7 +386,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ2Contrib ? <DeriNumberFormat value={stageList.userQ2Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-score'>
-                    {stageList.userQ3Contrib  && stageList.Q3Contrib !== '0'? <DeriNumberFormat value={stageList.userQ3Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-score'>
                     {stageList.userQ4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
@@ -395,13 +395,31 @@ function Trading({ wallet, lang, loading }) {
                 <div className='your-point-box'>
                   <div className='your-point'>Your Points</div>
                   <div className='your-point'>
-                    {stageList.userQ1Point ? <DeriNumberFormat value={stageList.userQ1Point} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ1Point ? 
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? ` = (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000`:''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ1Point} decimalScale={2} thousandSeparator={true} />
+                        </span>
+
+                      </TipWrapper>
+                    : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ2Point ? <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ2Point ? 
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? ` = (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000`:''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
+                        </span>
+
+                      </TipWrapper>
+                       : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ3Point && stageList.Q3Contrib !== '0'? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-point'>
                     {stageList.userQ4Point && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} /> : "--"}
@@ -468,7 +486,7 @@ function Trading({ wallet, lang, loading }) {
               </div>
             </div>
             <div className='total-your-contrib'>
-            <div className='your-contrib'>
+              <div className='your-contrib'>
                 <div className='stage'>
                   <div className='stage-title'></div>
                   <div className='stage-title'>1st</div>
@@ -500,7 +518,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ2Contrib ? <DeriNumberFormat value={stageList.userQ2Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-score'>
-                    {stageList.userQ3Contrib  && stageList.Q3Contrib !== '0'? <DeriNumberFormat value={stageList.userQ3Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-score'>
                     {stageList.userQ4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
@@ -509,13 +527,31 @@ function Trading({ wallet, lang, loading }) {
                 <div className='your-point-box'>
                   <div className='your-point'>Your Points</div>
                   <div className='your-point'>
-                    {stageList.userQ1Point ? <DeriNumberFormat value={stageList.userQ1Point} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ1Point ? 
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? `= (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000`:''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ1Point} decimalScale={2} thousandSeparator={true} />
+                        </span>
+
+                      </TipWrapper>
+                    : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ2Point ? <DeriNumberFormat value={stageList.userQ2Point} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ2Point ? 
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? `= (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000`:''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
+                        </span>
+
+                      </TipWrapper>
+                       : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ3Point && stageList.Q3Contrib !== '0'? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='your-point'>
                     {stageList.userQ4Point && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Point} decimalScale={0} thousandSeparator={true} /> : "--"}
