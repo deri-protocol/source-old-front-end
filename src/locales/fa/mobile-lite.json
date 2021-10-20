@@ -1,12 +1,12 @@
 {
-  "balance-in-contract" : "Balance in Contract",
-  "dynamic-balance" : "Dyn. Bal",
-  "available-balance" : "Avail. Bal",
-  "dynamic-effective-balance" : "Dyn. Eff. Bal",
-  "transaction-fee" : "Fee",
+  "balance-in-contract" : "Solde dans le contrat",
+  "dynamic-balance" : "Solde dynamique",
+  "available-balance" : "Solde disponible",
+  "dynamic-effective-balance" : "Solde dynamique effectif",
+  "transaction-fee" : "Frais",
   "my-position" : "POSITION",
-  "index" : "Index",
-  "funding" : "Funding(D)",
-  "base-token" : "B Token",
-  "wallet-balance" : "Wal. Bal"
+  "index" : "Indice",
+  "funding" : "Financement (D)",
+  "base-token" : "Code B Token",
+  "wallet-balance" : "Solde du porte-monnaie"
 }

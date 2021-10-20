@@ -1,6 +1,7 @@
 import React from 'react'
 import './header.less'
 import './zh-header.less'
+import './fa-header.less'
 import Menu  from './Menu';
 import Account from '../../../components/Account/Account';
 import LanguageSelector  from '../../../components/LanguageSelector/LanguageSelector';
