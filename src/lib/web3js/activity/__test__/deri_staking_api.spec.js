@@ -16,6 +16,9 @@ describe('deri staking', () => {
     expect(await getUserStakingReward(account)).toEqual({})
   }, TIMEOUT)
   it('getUserStakingContribution', async() => {
-    expect(await getUserStakingContribution(account)).toEqual({})
+    DeriEnv.set('prod')
+    //expect(await getUserStakingContribution(account)).toEqual({})
+    expect(await getUserStakingContribution('0xFefC938c543751babc46cc1D662B982bd1636721')).toEqual({})
+    DeriEnv.set('dev')
   }, TIMEOUT)
 })

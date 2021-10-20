@@ -391,22 +391,36 @@
             border: 1px solid #0D0E0F;
             margin-top: 20px;
             font-size: 20px;
-            padding: 20px;
             box-sizing: border-box;
             color: #CCCCCC;
-            padding: 20px 40px;
-            align-items: center;
-            display: flex;
-            justify-content: unset;
-            .your-contrib-value{
-              margin-left: 100px;
-            }
-            .total-your-contrib-num {
-              margin-top: 30px;
-              font-size: 40px;
-              font-weight: 400;
+            .total-score-box,
+            .your-score-box,
+            .your-point-box,
+            .stage
+            {
               display: flex;
               justify-content: space-between;
+              align-items: center;
+              font-size: 16px;
+              height: 50px;
+              padding-right: 10px;
+              border-bottom: 1px solid #0D0E0F;
+              .stage-title,.total-score,.your-score,.your-point{
+                width: 80px;
+                text-align: center;
+              }
+              
+
+            }
+            .total-score-box,
+            .your-score-box,
+            .your-point-box{
+              height: 40px;
+              padding-left: 10px;
+
+            }
+            .your-point-box{
+              border-bottom: 0px;
             }
           }
         }
@@ -533,8 +547,43 @@
                 transform-origin: bottom;
                 z-index: 1;
               }
-
+              .end-one,
+              .end-two,
+              .end-three,
+              .end-four{
+                width: 71px;
+                height: 3px;
+                background-color: #246CAD;
+                margin-left: -1px;
+                z-index: 1;
+                transform-origin: bottom;
+              }
+              .end-one{
+                left: 5%;
+                top: 50%;
+                transform: rotate(16.36deg);
+                transform-origin: 77px -5px;
+              }
+              .end-two{
+                left: 5%;
+                top: 50%;
+                transform: rotate(49.08deg);
+                transform-origin: 80px  1px;
+              }
+              .end-three{
+                left: 5%;
+                top: 50%;
+                transform: rotate(98.16deg);
+                transform-origin: 80px 1px;
+              }
+              .end-four{
+                left: 5%;
+                top: 50%;
+                transform: rotate(180deg);
+                transform-origin: 78px 1px;
+              }
               .s-four {
+
                 width: 65px;
               }
 
