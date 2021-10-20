@@ -2,7 +2,6 @@ import { bg, deriToNatural, getBlockInfo, getPastEvents, getHttpBase, fetchJson 
 import {
   getPoolConfig,
   getPoolConfig2,
-  getPoolSymbolIdList,
 } from '../../shared/config';
 import { perpetualPoolLiteFactory, pTokenLiteFactory } from '../factory';
 import { calculateTxFee } from '../../v2/calculation/position';

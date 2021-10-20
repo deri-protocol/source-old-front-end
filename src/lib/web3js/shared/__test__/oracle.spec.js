@@ -1,6 +1,6 @@
 import { bg, toWei } from '../utils'
 import { oracleFactory } from '../factory'
-import { getOraclePriceForOption, getPriceFromRest, getOraclePricesForOption, getOracleVolatilitiesForOption } from '../utils/oracle'
+import { getOraclePriceForOption, getPriceFromRest, getOraclePricesForOption, getOracleVolatilitiesForOption, getOracleVolatilityForOption, oraclePricesCache } from '../utils/oracle'
 import { CHAIN_ID, TIMEOUT } from './setup'
 import { DeriEnv } from '../config/env'
 
@@ -83,7 +83,7 @@ describe("oracle", () => {
   }, TIMEOUT)
   test('getOracleVolatilitiesForOption()', async() => {
     const input  = ['BTCUSD-30000-C', 'BTCUSD-40000-C', 'ETHUSD-3000-C', 'BTCUSD-50000-P']
-    const res = await getOracleVolatilitiesForOption(input);
+    const res = (await getOracleVolatilitiesForOption(input)).map((s) => s.volatility);
     expect(res.length).toEqual(4);
     expect(bg(res[2]).toNumber()).toBeGreaterThanOrEqual(0);
     expect(bg(res[2]).toNumber()).toBeLessThanOrEqual(parseInt(toWei('1.5')));
@@ -109,5 +109,20 @@ describe("oracle", () => {
     const price = await oracle.getPrice()
     DeriEnv.set('dev')
     expect(bg(price).toNumber()).toBeGreaterThanOrEqual(100)
+  }, TIMEOUT)
+  test('getOracleVolatilitiesForOption', async() => {
+    const res = (await getOracleVolatilitiesForOption(['BTCUSD-50000-P', 'ETHUSD-4000-C', 'BTCUSD-60000-C'])).map((s) => s.volatility)
+    expect(res).toEqual([])
+  }, TIMEOUT)
+  test('getOracleVolatilityForOption', async() => {
+    const res = await getOracleVolatilityForOption(['BTCUSD-50000-P', 'ETHUSD-4000-C', 'BTCUSD-60000-C'])
+    expect(res).toEqual([])
+  }, TIMEOUT)
+  test('oraclePricesCache', async() => {
+    let res
+    res = await oraclePricesCache.get(['AXSUSDT', 'MBOXUSDT', 'IGAME'])
+    res = await oraclePricesCache.get(['AXSUSDT', 'MBOXUSDT', 'IGAME'])
+    res = await oraclePricesCache.get(['AXSUSDT', 'MBOXUSDT', 'IGAME'])
+    expect(res).toEqual([])
   }, TIMEOUT)
 })
