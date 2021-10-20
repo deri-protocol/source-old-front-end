@@ -39,7 +39,7 @@ function Pool({ lang, loading, wallet }) {
     if(current === 'opens' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
-      openPools = openPools.filter(p => p.pool !== openBlackList[0] && p.pool !== openBlackList[1])
+      openPools = openPools.filter(p =>  !openBlackList.includes(p.pool))
       openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);
