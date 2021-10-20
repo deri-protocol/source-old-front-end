@@ -6,7 +6,7 @@ import {
 import {
   getPoolLiquidity as getPoolLiquidity1,
   getPoolInfoApy as getPoolInfoApy1,
-} from '../shared/api';
+} from '../shared/api/database_api';
 import { getLiquidityInfo2 } from '../v1/api';
 import {
   getLiquidityInfoV2,

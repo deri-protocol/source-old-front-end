@@ -87,11 +87,12 @@ export default function useMiningPool(isNew,wallet,retired){
           pools.push(airDrop)
         }
         let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
-        let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite'  ) && !p.retired)
+        let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite' || p.version === 'v2_lite_dpmm'  ) && !p.retired)
         let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
         const legacy = pools.filter(p => p.retired && !p.premining)
         const preminings = pools.filter(p =>  p.retired && p.premining) 
         let openPools = pools.filter(p => p.isOpen)
+        
         //新版本按照网络来分组
         if(isNew){
           v1Pools = groupByNetwork(v1Pools);

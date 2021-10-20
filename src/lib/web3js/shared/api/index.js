@@ -4,8 +4,6 @@ export {
   // getUserInfo,
   // getUserInfoHarvest,
   // getUserInfoTotal,
-  getPoolLiquidity,
-  getPoolInfoApy,
   getUserInfoAll,
   getPoolLiquidityAll,
   getPoolInfoApyAll,

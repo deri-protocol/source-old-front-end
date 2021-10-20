@@ -2,7 +2,7 @@ import { getJsonConfig } from './config';
 import { DeriEnv } from './env';
 import { getPoolV1ConfigList } from './pool_v1';
 import { LITE_AND_OPTION_VERSIONS, VERSIONS } from './version';
-import { validateObjectKeyExist } from '../utils';
+// import { validateObjectKeyExist } from '../utils';
 import { poolProcessor, poolValidator } from './config_processor';
 import { openConfigListCache } from '../../v2_lite_open/api/query_api';
 
@@ -172,16 +172,25 @@ export const getConfig = (version='v2', env='dev') => {
   return config;
 };
 
-export const getPoolConfigList = (version='v2', env = 'dev') => {
-  const config = getConfig(version, env)
+export const getPoolConfigList = (version = 'v2', env = 'dev') => {
+  let config
+  if (env === 'testnet' && version === 'v2_lite' ) {
+    config = getConfig('v2_lite_dpmm', env);
+  } else {
+    config = getConfig(version, env);
+  }
   if (version === 'v2') {
-    return expandPoolConfigV2(config)
-  } else if (version === 'v2_lite' || version === 'v2_lite_dpmm') {
-    return expandPoolConfigV2Lite(config, version)
+    return expandPoolConfigV2(config);
+  } else if (version === 'v2_lite') {
+    if (env === 'testnet') {
+      return expandPoolConfigV2Lite(config, 'v2_lite_dpmm');
+    } else {
+      return expandPoolConfigV2Lite(config, version);
+    }
   } else if (version === 'v2_lite_open') {
-    return expandPoolConfigV2LiteOpen(config)
+    return expandPoolConfigV2LiteOpen(config);
   } else if (version === 'option') {
-    return expandPoolConfigOption(config)
+    return expandPoolConfigOption(config);
   }
 };
 

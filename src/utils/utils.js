@@ -228,7 +228,7 @@ export function groupByNetwork(pools){
 export function combineSymbolfromPoolConfig(configs){
   return configs.reduce((total,config) => {
     const pos = total.findIndex(item => item.chainId === config.chainId && (item.pool === config.pool) && config.version === item.version)
-    if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open')  
+    if((config.version === 'v2' || config.version === 'v2_lite' || config.version === 'option' || config.version === 'v2_lite_open' || config.version === 'v2_lite_dpmm')  
         && pos > -1) {
       if(total[pos].symbol.indexOf(config.symbol) === -1){
         total[pos].symbol += `,${config.symbol}` 

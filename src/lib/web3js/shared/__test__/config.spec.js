@@ -276,4 +276,10 @@ describe('config', () => {
     ).toEqual('0xBfc56891E0c9bFC65c5da29e998F16EAb32ea449');
     DeriEnv.set('dev')
    })
+  test('getPoolConfigList(v2_lite, testnet)', () => {
+    DeriEnv.set('testnet')
+    const res = getPoolConfigList('v2_lite', 'testnet')
+    DeriEnv.set('dev')
+    expect(res).toEqual([])
+  })
 });

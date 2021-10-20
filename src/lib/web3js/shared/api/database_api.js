@@ -116,16 +116,19 @@ export const getPoolLiquidity = async (chainId, poolAddress) => {
     const res = await db
       .getValues([`${chainId}.${poolAddress}.liquidity`])
       .catch((err) => console.log('getPoolLiquidity', err));
-    const { symbol } = getPoolV1Config(chainId, poolAddress)
+    //const { symbol } = getPoolV1Config(chainId, poolAddress)
     if (res) {
       const [liquidity] = res;
       return {
         liquidity: deriToNatural(liquidity).toString(),
-        symbol,
+        //symbol,
       };
     }
   } catch (err) {
     console.log(err);
+  }
+  return {
+    liquidity: ''
   }
 };
 
