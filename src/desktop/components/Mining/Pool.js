@@ -13,6 +13,8 @@ import blackList from './../../../blackList.json'
 
 const env = DeriEnv.get();
 const { chainInfo } = config[env]
+const openBlackList = blackList['openPoolList']
+
 
 function Pool({ lang, loading, wallet }) {
   const [loaded, pools, v1Pools, v2Pools, optionPools, legacyPools, preminingPools] = useMiningPool(true, wallet);
@@ -21,7 +23,6 @@ function Pool({ lang, loading, wallet }) {
   const [curStyle, setCurStyle] = useState('card')
   // const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area', curTab)
-  const openBlackList = blackList['openPoolList']
   // const styleSelectClass = classNames('style-select', curStyle)
   // const switchClass = classNames('switch-btn', { checked: switchChecked })
 
@@ -39,7 +40,6 @@ function Pool({ lang, loading, wallet }) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
       openPools = openPools.filter(p => p.pool !== openBlackList[0] && p.pool !== openBlackList[1])
-      console.log(openPools)
       openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);

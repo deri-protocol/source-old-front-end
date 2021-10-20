@@ -8,10 +8,13 @@ import { inject, observer } from 'mobx-react';
 import PoolPlacehold from '../../../components/Mining/Pool/PoolPlacehold';
 import {DeriEnv,openConfigListCache, getContractAddressConfig } from '../../../lib/web3js/indexV2';
 import config from './../../../config.json'
+import blackList from './../../../blackList.json'
 import { combineSymbolfromPoolConfig, mapPoolInfo, groupByNetwork } from '../../../utils/utils';
 
 const env = DeriEnv.get();
 const { chainInfo } = config[env]
+const openBlackList = blackList['openPoolList']
+
 
 function Pool({lang,loading}){
   const [loaded,pools,v1Pools,v2Pools,optionPools] = useMiningPool(true);
@@ -31,6 +34,7 @@ function Pool({lang,loading}){
     if(current === 'open' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
+      openPools = openPools.filter(p => p.pool !== openBlackList[0] && p.pool !== openBlackList[1])
       openPools = openPools.map(config =>  mapPoolInfo(config,null,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);
