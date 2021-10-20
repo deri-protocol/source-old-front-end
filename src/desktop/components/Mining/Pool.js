@@ -9,6 +9,7 @@ import List from './List';
 import { openConfigListCache,getContractAddressConfig ,DeriEnv} from '../../../lib/web3js/indexV2';
 import { combineSymbolfromPoolConfig, groupByNetwork, mapPoolInfo } from '../../../utils/utils';
 import config from './../../../config.json'
+import blackList from './../../../blackList.json'
 
 const env = DeriEnv.get();
 const { chainInfo } = config[env]
@@ -20,6 +21,7 @@ function Pool({ lang, loading, wallet }) {
   const [curStyle, setCurStyle] = useState('card')
   // const [switchChecked, setSwitchChecked] = useState(false)
   const tabCLassName = classNames('filter-area', curTab)
+  const openBlackList = blackList['openPoolList']
   // const styleSelectClass = classNames('style-select', curStyle)
   // const switchClass = classNames('switch-btn', { checked: switchChecked })
 
@@ -36,6 +38,8 @@ function Pool({ lang, loading, wallet }) {
     if(current === 'opens' && openPools.length === 0) {
       loading.loading()
       let openPools = combineSymbolfromPoolConfig(await getOpenPools());
+      openPools = openPools.filter(p => p.pool !== openBlackList[0] && p.pool !== openBlackList[1])
+      console.log(openPools)
       openPools = openPools.map(config =>  mapPoolInfo(config,wallet,chainInfo))
       Promise.all(openPools).then(pools => {
         openPools = groupByNetwork(pools);
