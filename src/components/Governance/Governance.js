@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import classNames from 'classnames';
 import { Link } from 'react-router-dom'
+import DipTwo from './DipTwo'
 function Governance({ wallet = {}, lang }){
   const [curTab, setCurTab] = useState(true) 
   
@@ -16,7 +17,7 @@ function Governance({ wallet = {}, lang }){
       </div>
       {curTab && <>
         <div className='now-vote'>
-          {lang['no-proposals-found']}
+          <DipTwo lang={lang} />
         </div>
       </>}
       {!curTab && <>
