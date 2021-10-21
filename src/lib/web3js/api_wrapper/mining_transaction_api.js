@@ -1,5 +1,5 @@
 //import {addLiquidity2, removeLiquidity2 } from '../v1/api/contract_transaction_api_v2';
-import { getPoolVersion, LITE_VERSIONS } from '../shared'
+import { getPoolVersionId, LITE_VERSIONS } from '../shared'
 import { addLiquidity2, removeLiquidity2 } from '../v1/api';
 import { addLiquidityV2, removeLiquidityV2 } from '../v2/api';
 import { addLiquidityV2l, removeLiquidityV2l } from '../v2_lite/api';
@@ -14,12 +14,12 @@ export const addLiquidity = async (
   amount,
   bTokenId,
 ) => {
-  const version = getPoolVersion(poolAddress)
-  if (LITE_VERSIONS.includes(version)) {
+  const versionId = getPoolVersionId(poolAddress)
+  if (LITE_VERSIONS.includes(versionId)) {
     return addLiquidityV2l(chainId, poolAddress, accountAddress, amount)
-  } else if (version === 'option') {
+  } else if (versionId === 'option') {
     return addLiquidityOption(chainId, poolAddress, accountAddress, amount);
-  } else if (version === 'v2_lite_dpmm') {
+  } else if (versionId === 'v2_lite_dpmm') {
     return apiV2lDpmm.addLiquidity(chainId, poolAddress, accountAddress, amount);
   }
   if (bTokenId === undefined) {
@@ -43,7 +43,7 @@ export const removeLiquidity = async (
   bTokenId,
   isMaximum,
 ) => {
-  const version = getPoolVersion(poolAddress)
+  const version = getPoolVersionId(poolAddress)
   if (LITE_VERSIONS.includes(version)) {
     return removeLiquidityV2l(chainId, poolAddress, accountAddress, amount, isMaximum)
   } else if (version === 'option') {

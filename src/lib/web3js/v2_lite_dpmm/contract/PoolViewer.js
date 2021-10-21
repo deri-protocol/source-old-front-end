@@ -4,6 +4,7 @@ import { contractFactory } from '../../shared/utils/index.js';
 import { getIndexInfo, SECONDS_IN_A_DAY } from '../../shared/config';
 import { getOraclePriceFromCache2 } from '../../shared/utils/oracle';
 import { calculateLiquidationPrice } from '../../v2/calculation';
+import { calculateDpmmPrice } from '../calc';
 import { perpetualPoolLiteDpmmFactory} from './factory';
 
 export class PoolViewer {
@@ -182,7 +183,7 @@ export class PoolViewer {
       return {
         price: price,
         volume: bg(position.volume).times(symbol.multiplier).toString(),
-        averageEntryPrice: bg(position).eq(0)
+        averageEntryPrice: bg(position.volume).eq(0)
           ? '0'
           : bg(position.cost)
               .div(position.volume)
@@ -269,7 +270,7 @@ export class PoolViewer {
       return {
         price: symbol.indexPrice,
         volume: bg(position.volume).times(symbol.multiplier).toString(),
-        averageEntryPrice: bg(position).eq(0)
+        averageEntryPrice: bg(position.volume).eq(0)
           ? '0'
           : bg(position.cost)
               .div(position.volume)
@@ -352,7 +353,7 @@ export class PoolViewer {
     }
     const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
     const symbol = { ...pool.symbols[symbolIndex] };
-    symbol.dpmmPrice = PoolViewer.calculateDpmmPrice(
+    symbol.dpmmPrice = calculateDpmmPrice(
       symbol.indexPrice,
       symbol.K,
       bg(symbol.tradersNetVolume).plus(newVolume).toString(),
@@ -368,7 +369,7 @@ export class PoolViewer {
     };
   }
 
-  async getLiquidityUsed(symbolId) {
+  async getLiquidityUsed() {
     await this.init();
     const pool = this.pool;
     if (!pool.isSymbolsUpdated()) {
@@ -430,32 +431,6 @@ export class PoolViewer {
   // =================
   // static method
   // =================
-  static calculateK(indexPrice, liquidity, alpha) {
-    return bg(indexPrice).times(alpha).div(liquidity);
-  }
-  static calculateDpmmPrice(indexPrice, K, tradersNetVolume, multiplier) {
-    return bg(indexPrice).times(
-      bg(1).plus(bg(K).times(tradersNetVolume).times(multiplier))
-    );
-  }
-  static calculateDpmmCost(
-    indexPrice,
-    K,
-    tradersNetVolume,
-    multiplier,
-    tradeVolume
-  ) {
-    return bg(indexPrice).times(
-      bg(multiplier)
-        .times(tradersNetVolume)
-        .plus(bg(multiplier).times(tradeVolume))
-        .pow(2)
-        .minus(bg(multiplier).times(tradersNetVolume).pow(2))
-        .times(K)
-        .div(2)
-        .plus(bg(tradeVolume).times(multiplier))
-    );
-  }
 }
 
 export const poolViewerFactory = contractFactory(PoolViewer);

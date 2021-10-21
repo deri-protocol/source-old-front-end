@@ -166,7 +166,6 @@ export const poolProcessor = {
   v2: processPoolV2,
   v2_lite: processPoolV2Lite,
   v2_lite_open: processConfigV2LiteOpen,
-  v2_lite_dpmm: processPoolV2Lite,
   option: processPoolOption,
 };
 
@@ -174,6 +173,5 @@ export const poolValidator = {
   v2: validatePoolV2,
   v2_lite: validatePoolV2Lite,
   v2_lite_open: validateConfigV2LiteOpen,
-  v2_lite_dpmm: validatePoolV2Lite,
   option: validatePoolOption,
 };

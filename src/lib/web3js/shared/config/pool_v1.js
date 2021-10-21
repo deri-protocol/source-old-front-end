@@ -17,7 +17,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '56',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
       {
@@ -32,7 +34,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'COIN',
         unit: 'COIN',
         chainId: '56',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
       {
@@ -47,7 +51,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'iMEME',
         unit: 'iMEME',
         chainId: '56',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
       {
@@ -62,7 +68,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '1',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
       {
@@ -77,7 +85,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '1',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
       {
@@ -92,7 +102,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '128',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
         retired: true,
       },
     ];
@@ -108,7 +120,9 @@ export const getPoolV1ConfigList = (env = 'dev') => {
         symbol: 'BTCUSD',
         unit: 'BTC',
         chainId: '97',
+        type: 'perpetual',
         version: 'v1',
+        versionId: 'v1',
       },
     ];
   } else if (env === 'testnet') {

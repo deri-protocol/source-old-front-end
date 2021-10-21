@@ -122,7 +122,9 @@ export class PerpetualPoolLite extends ContractBase {
         unit: normalizeSymbolUnit(s.symbol),
       })),
       initialBlock:extraInfo.block_number,
+      type: 'perpetual',
       version:extraInfo.version,
+      versionId: 'v2_lite',
       chainId: this.chainId,
     }
   }

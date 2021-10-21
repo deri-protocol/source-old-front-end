@@ -12,7 +12,7 @@ import { normalizeSymbolUnit, SECONDS_IN_A_DAY } from "../../shared/config";
 import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
 import { getPriceInfos } from "../utils.js";
 import { lTokenLiteFactory, pTokenLiteFactory } from "./factory.js";
-import { PoolViewer } from "./PoolViewer.js";
+import { calculateK, calculateDpmmPrice } from "../calc";
 
 
 // klass = addInstanceMethods(klass, [])
@@ -210,12 +210,12 @@ const getSymbols = (klass) => {
     )
     symbols.forEach((s, index) => {
       s.indexPrice = indexPrices[index]
-      s.K = PoolViewer.calculateK(
+      s.K = calculateK(
         this.poolLiquidity,
         s.indexPrice,
         s.alpha
       ).toString();
-      s.dpmmPrice = PoolViewer.calculateDpmmPrice(
+      s.dpmmPrice = calculateDpmmPrice(
         s.indexPrice,
         s.K,
         s.tradersNetVolume,

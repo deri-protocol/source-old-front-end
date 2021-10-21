@@ -92,6 +92,7 @@ export default class Trading {
       initialMarginRatioTip : computed,
       maintenanceMarginRatioTip : computed,
       TransactionFeeTip : computed,
+      dpmmFundingRateTip :computed,
       multiplierTip : computed,
       TotalNetPositionTip:computed,
       direction : computed,
@@ -528,6 +529,18 @@ export default class Trading {
       } else {
         return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.premiumFundingPerSecond}` +
       `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.premiumFundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
+      }
+    }
+    return ''
+  }
+  get dpmmFundingRateTip(){
+    if(this.fundingRate && this.fundingRate.fundingPerSecond && this.config){
+      if(Intl.locale === 'zh'){
+        return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.fundingPerSecond}` +
+      `\n ${Intl.get('lite','per-second')} ${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingPerSecond} ${this.config.bTokenSymbol} `        
+      } else {
+        return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.fundingPerSecond}` +
+      `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
       }
     }
     return ''

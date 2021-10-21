@@ -42,7 +42,9 @@
             }
           ],
           "initialBlock": "7884650",
+          "type": "perpetual",
           "version": "v2",
+          "versionId": "v2",
           "chainId": "56"
         },
         {
@@ -80,7 +82,9 @@
             }
           ],
           "initialBlock": "16247773",
+          "type": "perpetual",
           "version": "v2",
+          "versionId": "v2",
           "chainId": "137"
         }
       ],
@@ -159,7 +163,9 @@
             }
           ],
           "initialBlock": "9516935",
+          "type": "perpetual",
           "version": "v2",
+          "versionId": "v2",
           "chainId": "97"
         },
         {
@@ -187,7 +193,9 @@
             }
           ],
           "initialBlock": "14917984",
+          "type": "perpetual",
           "version": "v2",
+          "versionId": "v2",
           "chainId": "80001"
         }
       ],
@@ -252,7 +260,9 @@
             }
           ],
           "initialBlock": "12633837",
+          "type": "perpetual",
           "version": "v2",
+          "versionId": "v2",
           "chainId": "97"
         }
       ],
@@ -318,7 +328,9 @@
             }
           ],
           "initialBlock": "9514401",
+          "type": "perpetual",
           "version": "v2_lite",
+          "versionId": "v2_lite",
           "chainId": "56"
         },
         {
@@ -360,7 +372,9 @@
             }
           ],
           "initialBlock": "9514895",
+          "type": "perpetual",
           "version": "v2_lite",
+          "versionId": "v2_lite",
           "chainId": "56"
         },
         {
@@ -402,7 +416,9 @@
             }
           ],
           "initialBlock": "17129838",
+          "type": "perpetual",
           "version": "v2_lite",
+          "versionId": "v2_lite",
           "chainId": "137"
         },
         {
@@ -444,7 +460,9 @@
             }
           ],
           "initialBlock": "17131129",
+          "type": "perpetual",
           "version": "v2_lite",
+          "versionId": "v2_lite",
           "chainId": "137"
         }
       ],
@@ -553,7 +571,9 @@
             }
           ],
           "initialBlock": "12238607",
+          "type": "perpetual",
           "version": "v2_lite",
+          "versionId": "v2_lite",
           "chainId": "97"
         }
       ],
@@ -594,12 +614,54 @@
     },
     "testnet": {
       "pools": [
+        {
+          "pool": "0x43701b4bf0430DeCFA41210327fE67Bf4651604C",
+          "pToken": "0x166a9cB3ad589f2F03c57d7819C16DdEcB58Fb3d",
+          "lToken": "0x0D413A61F6247e06B60a9c58c13Bd39020164300",
+          "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
+          "bTokenSymbol": "TBUSD",
+          "symbols": [
+            {
+              "symbolId": "0",
+              "symbol": "BTCUSD",
+              "unit": "BTC"
+            },
+            {
+              "symbolId": "1",
+              "symbol": "ETHUSD",
+              "unit": "ETH"
+            }
+          ],
+          "initialBlock": "12635442",
+          "type": "perpetual",
+          "version": "v2_lite",
+          "versionId": "v2_lite_dpmm",
+          "chainId": "97"
+        }
       ],
       "poolViewer": [
+        {
+          "chainId": "97",
+          "address": "0x0000000000000000000000000000000000000000"
+        }
       ],
       "brokerManager": [
+        {
+          "chainId": "97",
+          "address": "0x0000000000000000000000000000000000000000"
+        }
       ],
       "oracle": [
+        {
+          "chainId": "97",
+          "symbol": "BTCUSD",
+          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
+        },
+        {
+          "chainId": "97",
+          "symbol": "ETHUSD",
+          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
+        }
       ]
     }
   },
@@ -690,77 +752,6 @@
       ]
     }
   },
-  "v2_lite_dpmm": {
-    "prod": {
-      "pools": [
-      ],
-      "poolViewer": [
-      ],
-      "brokerManager": [],
-      "oracle": [
-      ]
-    },
-    "dev": {
-      "pools": [
-      ],
-      "poolViewer": [
-      ],
-      "brokerManager": [
-      ],
-      "oracle": [
-      ]
-    },
-    "testnet": {
-      "pools": [
-        {
-          "pool": "0x43701b4bf0430DeCFA41210327fE67Bf4651604C",
-          "pToken": "0x166a9cB3ad589f2F03c57d7819C16DdEcB58Fb3d",
-          "lToken": "0x0D413A61F6247e06B60a9c58c13Bd39020164300",
-          "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
-          "bTokenSymbol": "TBUSD",
-          "symbols": [
-            {
-              "symbolId": "0",
-              "symbol": "BTCUSD",
-              "unit": "BTC"
-            },
-            {
-              "symbolId": "1",
-              "symbol": "ETHUSD",
-              "unit": "ETH"
-            }
-          ],
-          "initialBlock": "12635442",
-          "version": "v2_lite_dpmm",
-          "chainId": "97"
-        }
-      ],
-      "poolViewer": [
-        {
-          "chainId": "97",
-          "address": "0x0000000000000000000000000000000000000000"
-        }
-      ],
-      "brokerManager": [
-        {
-          "chainId": "97",
-          "address": "0x0000000000000000000000000000000000000000"
-        }
-      ],
-      "oracle": [
-        {
-          "chainId": "97",
-          "symbol": "BTCUSD",
-          "address": "0xCc88240D8CC260f19D2A0D3B1207e9B2757195fb"
-        },
-        {
-          "chainId": "97",
-          "symbol": "ETHUSD",
-          "address": "0x6542EF23ab10372ac7490BEe522521383865ad49"
-        }
-      ]
-    }
-  },
   "option": {
     "prod": {
       "pools": [
@@ -819,7 +810,9 @@
             }
           ],
           "initialBlock": "10736176",
+          "type": "option",
           "version": "option",
+          "versionId": "option",
           "chainId": "56"
         }
       ],
@@ -874,7 +867,9 @@
             }
           ],
           "initialBlock": "12205325",
+          "type": "option",
           "version": "option",
+          "versionId": "option",
           "chainId": "97"
         },
         {
@@ -907,7 +902,9 @@
             }
           ],
           "initialBlock": "18948137",
+          "type": "option",
           "version": "option",
+          "versionId": "option",
           "chainId": "80001"
         }
       ],
@@ -976,7 +973,9 @@
             }
           ],
           "initialBlock": "12635838",
+          "type": "option",
           "version": "option",
+          "versionId": "option",
           "chainId": "97"
         }
       ],

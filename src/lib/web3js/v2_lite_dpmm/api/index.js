@@ -5,6 +5,7 @@ import {
 import {
   getEstimatedFee,
   getEstimatedFundingRate,
+  getEstimatedLiquidityUsed,
   getEstimatedMargin,
   getFundingRate,
   getLiquidityInfo,
@@ -43,7 +44,7 @@ export const api = {
   getFundingRate,
   getEstimatedFundingRate,
   getLiquidityUsed,
-  getEstimatedFundingRate,
+  getEstimatedLiquidityUsed,
   getFundingRateCache: () => {},
   unlock,
   depositMargin,

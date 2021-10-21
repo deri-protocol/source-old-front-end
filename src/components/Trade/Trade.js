@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import classNames from "classnames";
 import Slider from '../Slider/Slider';
 import Button from '../Button/Button';
-import { priceCache, getIntrinsicPrice, PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, getEstimatedTimePrice, getEstimatedLiquidatePrice } from '../../lib/web3js/indexV2'
+import { DeriEnv, priceCache, getIntrinsicPrice, PerpetualPoolParametersCache, isUnlocked, unlock, getFundingRate, getWalletBalance, getSpecification, getEstimatedFee, getLiquidityUsed, hasWallet, getEstimatedLiquidityUsed, getEstimatedFundingRate, getEstimatedTimePrice, getEstimatedLiquidatePrice } from '../../lib/web3js/indexV2'
 import withModal from '../hoc/withModal';
 import TradeConfirm from './Dialog/TradeConfirm';
 import DepositMargin from './Dialog/DepositMargin'
@@ -16,7 +16,7 @@ import TipWrapper from '../TipWrapper/TipWrapper';
 import removeMarginIcon from '../../assets/img/remove_margin.png'
 import addMarginIcon from '../../assets/img/add_margin.png'
 import { convertToInternationalCurrencySystem, eqInNumber } from '../../utils/utils';
-
+const env = DeriEnv.get();
 
 
 const ConfirmDialog = withModal(TradeConfirm)
@@ -104,7 +104,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setDirection('long')
     } else {
       setDirection('short')
-    } 
+    }
   }
 
 
@@ -404,10 +404,22 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
-              {type.isFuture && <>
+              {(type.isFuture && env !== 'testnet') && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.fundingRateTip}>
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                </TipWrapper>
+              </>}
+              {env === 'testnet' && type.isFuture && !version.isV2Lite && <>
+                <span>{lang['funding-rate-annual']} : &nbsp;</span>
+                <TipWrapper block={false} tip={trading.fundingRateTip}>
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                </TipWrapper>
+              </>}
+              {(type.isFuture && version.isV2Lite && env === 'testnet') && <>
+                <span>{lang['funding-rate']} : &nbsp;</span>
+                <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
+                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4}  /></span>
                 </TipWrapper>
               </>}
             </div>
@@ -437,10 +449,22 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
-              {type.isFuture && <>
+              {(type.isFuture && env !== 'testnet') && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <TipWrapper block={false}>
+                <TipWrapper block={false} tip={trading.fundingRateTip}>
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                </TipWrapper>
+              </>}
+              {env === 'testnet' && type.isFuture && !version.isV2Lite && <>
+                <span>{lang['funding-rate-annual']} : &nbsp;</span>
+                <TipWrapper block={false} tip={trading.fundingRateTip}>
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
+                </TipWrapper>
+              </>}
+              {(type.isFuture && version.isV2Lite && env === 'testnet') && <>
+                <span>{lang['funding-rate']} : &nbsp;</span>
+                <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
+                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
             </div>

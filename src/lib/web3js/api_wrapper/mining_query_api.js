@@ -1,6 +1,6 @@
 //import { getLiquidityInfo2 } from '../v1/api/rest_api';
 import {
-  getPoolVersion,
+  getPoolVersionId,
   LITE_VERSIONS,
 } from '../shared/config';
 import {
@@ -28,12 +28,12 @@ export const getLiquidityInfo = async (
   accountAddress,
   bTokenId,
 ) => {
-  const version = getPoolVersion(poolAddress)
-  if (LITE_VERSIONS.includes(version)) {
+  const versionId = getPoolVersionId(poolAddress)
+  if (LITE_VERSIONS.includes(versionId)) {
     return getLiquidityInfoV2l(chainId, poolAddress, accountAddress)
-  } else if (version === 'option') {
+  } else if (versionId === 'option') {
     return getLiquidityInfoOption(chainId, poolAddress, accountAddress)
-  } else if (version === 'v2_lite_dpmm') {
+  } else if (versionId === 'v2_lite_dpmm') {
     return apiV2lDpmm.getLiquidityInfo(chainId, poolAddress, accountAddress)
   }
   if (bTokenId === undefined) {

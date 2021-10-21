@@ -29,7 +29,9 @@ const expandPoolConfigV2 = (config) => {
             symbol: symbol.symbol,
             symbolId: symbol.symbolId,
             unit: symbol.unit,
+            type: 'perpetual',
             version: 'v2',
+            versionId: pool.versionId,
             isOption: false,
           });
         }
@@ -39,7 +41,7 @@ const expandPoolConfigV2 = (config) => {
     .flat();
 };
 
-const expandPoolConfigV2Lite = (config, version='v2_lite') => {
+const expandPoolConfigV2Lite = (config) => {
   const pools = config.pools;
   //console.log(pools)
   return pools
@@ -60,7 +62,9 @@ const expandPoolConfigV2Lite = (config, version='v2_lite') => {
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
           unit: symbol.unit,
-          version,
+          type: 'perpetual',
+          version: 'v2_lite',
+          versionId: pool.versionId,
           isOption: false,
         });
       }
@@ -92,7 +96,9 @@ const expandPoolConfigOption = (config) => {
           offchainSymbols: pool.offchainSymbols,
           volatilitySymbols: pool.volatilitySymbols,
           unit: symbol.unit,
+          type: 'option',
           version: 'option',
+          versionId: pool.versionId,
           isOption: true,
         });
       }
@@ -123,7 +129,9 @@ const expandPoolConfigV2LiteOpen = (config) => {
             offchainSymbolIds: pool.offchainSymbolIds,
             offchainSymbols: pool.offchainSymbols,
             unit: symbol.unit,
+            type: 'perpetual',
             version: 'v2_lite_open',
+            versionId: pool.versionId,
             isOpen: true,
           });
         }
@@ -141,7 +149,9 @@ const expandPoolConfigV2LiteOpen = (config) => {
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
           unit: '',
+          type: 'perpetual',
           version: 'v2_lite_open',
+          versionId: pool.versionId,
           isOpen: true,
         });
       }
@@ -173,20 +183,12 @@ export const getConfig = (version='v2', env='dev') => {
 };
 
 export const getPoolConfigList = (version = 'v2', env = 'dev') => {
-  let config
-  if (env === 'testnet' && version === 'v2_lite' ) {
-    config = getConfig('v2_lite_dpmm', env);
-  } else {
-    config = getConfig(version, env);
-  }
+  let config;
+  config = getConfig(version, env);
   if (version === 'v2') {
     return expandPoolConfigV2(config);
   } else if (version === 'v2_lite') {
-    if (env === 'testnet') {
-      return expandPoolConfigV2Lite(config, 'v2_lite_dpmm');
-    } else {
-      return expandPoolConfigV2Lite(config, version);
-    }
+    return expandPoolConfigV2Lite(config, version);
   } else if (version === 'v2_lite_open') {
     return expandPoolConfigV2LiteOpen(config);
   } else if (version === 'option') {
@@ -240,8 +242,21 @@ export const getPoolVersion = (poolAddress) => {
   }
 }
 
+export const getPoolVersionId = (poolAddress) => {
+  let pools = VERSIONS.reduce((acc, version) => {
+    return acc.concat(getConfig(version, DeriEnv.get())['pools'])
+  }, [])
+  // add v1 config
+  pools = pools.concat(getPoolV1ConfigList(DeriEnv.get()))
+  const index = pools.findIndex((v) => v.pool === poolAddress)
+  if (index >= 0) {
+    return pools[index].versionId
+  }
+}
+
 export const _getPoolConfig = (poolAddress) => {
   const version = getPoolVersion(poolAddress);
+  // console.log('version', version)
   const config = getConfig(version, DeriEnv.get());
   const pools = config.pools;
   let pool = pools.find((p) => p.pool === poolAddress);
@@ -266,12 +281,14 @@ export const getPoolConfig2 = (poolAddress, bTokenId, symbolId) => {
     unit: '',
   };
   let bToken, symbol;
-  if (bTokenId !== undefined || bTokenId !== null) {
-    bToken = pool.bTokens.find((b) => b.bTokenId === bTokenId) || defaultBToken;
+  if (pool.bTokens && (bTokenId !== undefined || bTokenId !== null)) {
+    bToken = pool.bTokens.find((b) => b.bTokenId === bTokenId)
   }
-  if (symbolId !== undefined || symbolId !== null) {
+  if (pool.symbols && (symbolId !== undefined || symbolId !== null)) {
     symbol = pool.symbols.find((b) => b.symbolId === symbolId) || defaultSymbol;
   }
+  bToken = bToken || defaultBToken;
+  symbol = symbol || defaultSymbol
   return {
     pool: pool.pool,
     pToken: pool.pToken,

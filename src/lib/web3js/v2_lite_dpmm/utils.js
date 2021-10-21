@@ -31,7 +31,7 @@ export const getOracleServerUrl = (chainId, symbol, type = "futures") => {
 export const getPriceInfos = async (chainId, symbolList) => {
   let url = getOracleServerUrl(chainId);
   let retry = 3;
-  console.log('url', url)
+  //console.log('url', url)
   let res, priceInfo;
   while (retry > 0) {
     res = await fetch(url, {

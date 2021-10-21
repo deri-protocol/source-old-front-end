@@ -1,3 +1,4 @@
+import { checkAddress, DeriEnv } from '../../shared';
 import {
   getLiquidityInfo,
   getSpecification,
@@ -37,7 +38,10 @@ describe('query api', () => {
   it(
     'getPositionInfo',
     async () => {
-      const res = await getPositionInfo(chainId, pool, account, '0');
+      DeriEnv.set('testnet')
+      const res = await getPositionInfo('97', pool, '0xFefC938c543751babc46cc1D662B982bd1636721', '1');
+      //const res = await getPositionInfo(chainId, pool, account, '0');
+      DeriEnv.set('dev')
       expect(res).toEqual({});
     },
     TIMEOUT

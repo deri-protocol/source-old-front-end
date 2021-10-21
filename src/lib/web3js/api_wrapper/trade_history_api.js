@@ -1,4 +1,4 @@
-import { getPoolVersion, LITE_VERSIONS } from '../shared';
+import { getPoolVersionId, LITE_VERSIONS } from '../shared';
 import { getTradeHistoryOption } from '../option/api';
 import { getTradeHistory2 } from '../v1/api';
 import { getTradeHistoryV2 } from '../v2/api';
@@ -12,7 +12,7 @@ export const getTradeHistory = async (
   accountAddress,
   symbolId
 ) => {
-  const version = getPoolVersion(poolAddress)
+  const version = getPoolVersionId(poolAddress)
   if (LITE_VERSIONS.includes(version)) {
     return getTradeHistoryV2l(chainId, poolAddress, accountAddress, symbolId);
   } else if (version === 'option') {

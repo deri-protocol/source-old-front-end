@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Chart from "./Chart";
 import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
-import { bg } from '../../../../lib/web3js/indexV2'
+import { bg, DeriEnv } from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
 import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
+const env = DeriEnv.get();
 
 function TradingView({ version, trading, lang, type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -11,7 +12,6 @@ function TradingView({ version, trading, lang, type }) {
   const [markPrice, setMarkPrice] = useState();
   const indexPriceRef = useRef()
   const markPriceRef = useRef();
-
   useEffect(() => {
     if (indexPriceRef.current) {
       indexPriceRef.current > trading.index ? setIndexPriceClass('fall') : setIndexPriceClass('rise');
@@ -46,14 +46,26 @@ function TradingView({ version, trading, lang, type }) {
             <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
           </div>
           <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
-            <div className='trade-dashboard-value'>
-              <TipWrapper block={false}>
-                <span className='funding-per' tip={trading.fundingRateTip || ''}>
-                  <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
-                </span>
-              </TipWrapper>
-            </div>
+            {((env === 'testnet' && !version.isV2Lite) || env !== 'testnet') && <>
+              <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
+              <div className='trade-dashboard-value'>
+                <TipWrapper block={false}>
+                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}>
+                    <DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} suffix='%' />
+                  </span>
+                </TipWrapper>
+              </div>
+            </>}
+            {env === 'testnet' && version.isV2Lite && <>
+              <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
+              <div className='trade-dashboard-value'>
+                <TipWrapper block={false}>
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}>
+                    <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4}  />
+                  </span>
+                </TipWrapper>
+              </div>
+            </>}
           </div>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['total-net-position']}</div>

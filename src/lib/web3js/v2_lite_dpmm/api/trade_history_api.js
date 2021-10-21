@@ -8,7 +8,6 @@ import {
 } from '../../shared/utils';
 import {
   getPoolConfig,
-  getPoolConfig2,
   getPoolSymbolIdList,
 } from '../../shared/config';
 import { calculateTxFee } from '../../v2/calculation/position';
@@ -30,10 +29,10 @@ const processTradeEvent = async (
   const symbolId = info.symbolId;
   const symbol = symbols.find((s) => s.symbolId == info.symbolId);
   const price = bg(info.tradeCost).div(info.tradeVolume).div(symbol.multiplier);
-  const transactionFee = bg(tradeVolume).times(price).times(symbol.feeRatio)
   const notional = tradeVolume
     .abs()
-    .times(price)
+    .times(price).times(symbol.multiplier)
+  const transactionFee = bg(notional).times(symbol.feeRatio)
   const volume = tradeVolume.abs();
 
   const res = {
@@ -63,10 +62,10 @@ const getTradeHistoryOnline = async (
     poolAddress,
     undefined,
     undefined,
-    'v2_lite_dpmm'
+    'v2_lite'
   );
 
-  console.log('bTokenSymbol', bTokenSymbol)
+  //console.log('bTokenSymbol', bTokenSymbol)
   const perpetualPool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
   await perpetualPool.init()
   const toBlock = await getBlockInfo(chainId, 'latest');
@@ -150,7 +149,7 @@ export const getTradeHistory = async (
     }
     //console.log('tradeHistory1',tradeHistory)
     if (tradeFromBlock !== 0) {
-      // console.log(tradeFromBlock, liquidateFromBlock)
+      console.log(tradeFromBlock)
       const [tradeHistoryOnline] = await Promise.all([
         getTradeHistoryOnline(
           chainId,
@@ -160,12 +159,10 @@ export const getTradeHistory = async (
           tradeFromBlock + 1
         ),
       ]);
-      console.log('tradeFromBlock', tradeFromBlock)
-      console.log('tradeHistoryOnline', tradeHistoryOnline)
       const result = tradeHistoryOnline.concat(tradeHistory);
       return result.sort((a, b) => parseInt(b.time) - parseInt(a.time));
     } else {
-      const { initialBlock } = getPoolConfig2(poolAddress);
+      const { initialBlock } = getPoolConfig(poolAddress);
       tradeFromBlock = parseInt(initialBlock);
       const [tradeHistoryOnline] = await Promise.all([
         getTradeHistoryOnline(

@@ -3,7 +3,8 @@ import NumberFormat from 'react-number-format'
 import { inject, observer } from 'mobx-react';
 import TipWrapper from '../TipWrapper/TipWrapper';
 import version from '../../model/Version';
-
+import {DeriEnv} from '../../lib/web3js/indexV2'
+const env = DeriEnv.get();
 
 function ContractInfo({ wallet, trading, lang, type }) {
 
@@ -39,12 +40,12 @@ function ContractInfo({ wallet, trading, lang, type }) {
               {trading.contract.multiplier} {trading.config ? trading.config.unit : ''}
             </div>
           </div>
-          <div className="info">
+          {env !== 'testnet' && version.isV2Lite  &&<div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
               {trading.contract.fundingRateCoefficient}
             </div>
-          </div>
+          </div>}
           <div className="info">
             <div className="title">{lang['min-initial-margin-ratio']}</div>
             <div className="text">
