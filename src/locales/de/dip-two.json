@@ -6,6 +6,8 @@
   "governance-options-two-describe":"80% of the transaction fee will be put into a DAO fund, which is to regularly buy DERI from the secondary market to be burned (i.e. recycled to be mined again).",
   "governance-options-three":"Keep the status quo. 20% of the transaction fee will be put into a DAO fund, which is to regularly buy DERI from the secondary market to be burned (i.e. recycled to be mined again).",
   "vote":"VOTE",
+  "pending":"PENDING",
+  "connet-wallet":"Connet Wallet",
   "voting-ended":"Voting ended",
   "your-vote":"Your vote",
   "your-voting-power":"Your voting power",
