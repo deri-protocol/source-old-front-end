@@ -41,5 +41,7 @@
   "position-liquidators":"Position Liquidators",
   "position-liquidators-roles":"Positions touching their liquidation lines are liquidated by Position Liquidators, who share the positions' remaining margin as reward.",
   "investors":"INVESTORS",
-  "partners":"PARTNERS"
+  "partners":"PARTNERS",
+  "total-volume" : "TOTAL VOLUME",
+  "total-transactions" : "TOTAL TRANSACTIONS"
 }

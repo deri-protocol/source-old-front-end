@@ -2,10 +2,11 @@
 source ~/.bashrc
 build_dir=$PWD/build
 repo=/tmp/build/deri-finance.github.io
-if [ ! -d $build_dir ]; then
+# if [ ! -d $build_dir ]; then
   echo PUBLIC_URL=/ > .env.production
+  echo REACT_APP_INFO_HTTP_URL=https://infoapi.deri.finance >> .env.production
   yarn build --nomaps
-fi
+# fi
 # rm -rf $repo
 
 if [ ! -d $repo ]; then
