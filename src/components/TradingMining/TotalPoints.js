@@ -1,12 +1,18 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import arr from './img/arr.svg'
 import add from './img/add.svg'
 export default function TotalPoints({ lang }) {
+  const [endOne,setEndOne] = useState(false)
+  const [endTwo,setEndTwo] = useState(false)
+  const [endThree,setEndThree] = useState(false)
+  const [endFour,setEndFour] = useState(false)
+
 
   useEffect(() => {
     let timestamp = new Date()
     if (timestamp.getTime() >= 1634724000000) {
+      setEndOne(true)
       document.getElementsByClassName('frist-one-dial')[0].style.border = '2px solid #CCC'
       document.getElementsByClassName('frist-two-dial')[0].style.border = '10px solid #CCC'
       document.getElementsByClassName('frist-dotted')[0].style.border = '3px solid #CCC'
@@ -17,6 +23,7 @@ export default function TotalPoints({ lang }) {
       }
     }
     if (timestamp.getTime() >= 1635328800000) {
+      setEndTwo(true)
       document.getElementsByClassName('second-one-dial')[0].style.border = '2px solid #CCC'
       document.getElementsByClassName('second-two-dial')[0].style.border = '10px solid #CCC'
       document.getElementsByClassName('second-dotted')[0].style.border = '3px solid #CCC'
@@ -27,6 +34,7 @@ export default function TotalPoints({ lang }) {
       }
     }
     if (timestamp.getTime() >= 1635933600000) {
+      setEndThree(true)
       document.getElementsByClassName('third-one-dial')[0].style.border = '2px solid #CCC'
       document.getElementsByClassName('third-two-dial')[0].style.border = '10px solid #CCC'
       document.getElementsByClassName('third-dotted')[0].style.border = '3px solid #CCC'
@@ -37,6 +45,7 @@ export default function TotalPoints({ lang }) {
       }
     }
     if (timestamp.getTime() >= 1636538400000) {
+      setEndFour(true)
       document.getElementsByClassName('fourth-one-dial')[0].style.border = '2px solid #CCC'
       document.getElementsByClassName('fourth-two-dial')[0].style.border = '10px solid #CCC'
       document.getElementsByClassName('fourth-dotted')[0].style.border = '3px solid #CCC'
@@ -76,7 +85,7 @@ export default function TotalPoints({ lang }) {
                   <li className='line frist-line'></li>
                   <li className='line frist-line'></li>
                   <div class="cover"></div>
-                  <div className='s-one'></div>
+                  <div className={endOne ? 'end-one' :'s-one' }></div>
                   <div class="dotted frist-dotted"></div>
                 </div>
                 <div className='points first-points'>
@@ -109,7 +118,7 @@ export default function TotalPoints({ lang }) {
                   <li className='line second-line'></li>
                   <li className='line second-line'></li>
                   <div class="cover"></div>
-                  <div className='s-two'></div>
+                  <div className={endTwo ? 'end-two' :'s-two' } ></div>
                   <div class="dotted second-dotted"></div>
                 </div>
                 <div className='points second-points'>
@@ -142,7 +151,7 @@ export default function TotalPoints({ lang }) {
                   <li className='line third-line'></li>
                   <li className='line third-line'></li>
                   <div class="cover"></div>
-                  <div className='s-three'></div>
+                  <div className= {endThree ? 'end-three' :'s-three' }></div>
                   <div class="dotted third-dotted"></div>
                 </div>
                 <div className='points third-points'>
@@ -174,7 +183,7 @@ export default function TotalPoints({ lang }) {
                   <li className='line fourth-line'></li>
                   <li className='line fourth-line'></li>
                   <div class="cover"></div>
-                  <div className='s-four'></div>
+                  <div className={endFour ? 'end-four' :'s-four' }></div>
                   <div class="dotted fourth-dotted"></div>
                 </div>
                 <div className='points fourth-points'>
