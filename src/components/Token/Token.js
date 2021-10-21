@@ -101,7 +101,7 @@ function Token({ wallet = {}, lang,loading }) {
         //计数器
         interval = window.setInterval(() => {
             getDeriInfo()
-        }, 1000);
+        }, 300000);
         return () => {
             interval && clearInterval(interval);
         };
