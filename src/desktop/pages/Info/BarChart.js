@@ -61,7 +61,7 @@ export default function RechartBar({url,title}){
             <stop offset="95%" stopColor="#00659f" stopOpacity={0}/>
           </linearGradient>
         </defs>
-      <XAxis dataKey="time"  axisLine={false} tickLine={false} tick={{fill: '#fff',fontSize : '14'}}  padding={{right : 10}}  tickFormatter={tickFormatter} interval={3}/>
+      <XAxis dataKey="time"  axisLine={false} tickLine={false} tick={{fill: '#fff',fontSize : '14'}}  padding={{left : 12,right : 12}}  tickFormatter={tickFormatter} interval={3}/>
       <YAxis dataKey='value' hide padding={{top : 65}} />
       <Tooltip position={{x : 0,y : 0}}  cursor={{ y : barPosData.y - 10,height : barPosData.height + 10,stroke: '#fff', fill : '#00659f', strokeWidth: 0,fillOpacity : 0.5}} content={<CustomTooltip title={title} lastItem={lastItem}/>}/>
       <Bar type="monotone" dataKey="value" fill="#00659f" fillOpacity={0.9} onMouseOver={(data) => {
