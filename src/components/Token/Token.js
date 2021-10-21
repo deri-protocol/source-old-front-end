@@ -151,7 +151,7 @@ function Token({ wallet = {}, lang,loading }) {
                         </span>
                     </div>
                 </a>
-                <a target='_blank' href='https://www.mexc.com/zh-CN/exchange/DERI_USDT'>
+                <a target='_blank' href='https://www.mexc.com/exchange/DERI_USDT'>
                     <div className='sushi-buy'>
                         <div>
                             <img src={mexc} />
