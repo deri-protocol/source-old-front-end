@@ -184,6 +184,11 @@ export const getUserStakingContribution = async (accountAddress) => {
         `${keyPrefix()}.${accountAddress}.Q4.cont`,
       ];
       const res = await db.getValues(key);
+      const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
+      const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
+      const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
+      const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
+
       return {
         userAddr: accountAddress,
         totalContrib: deriToNatural(
@@ -192,6 +197,18 @@ export const getUserStakingContribution = async (accountAddress) => {
         userContrib: deriToNatural(
           bg(res[4]).plus(res[5]).plus(res[6]).plus(res[7])
         ).toString(),
+        Q1Contrib: deriToNatural(res[0]).toString(),
+        Q2Contrib: deriToNatural(res[1]).toString(),
+        Q3Contrib: deriToNatural(res[2]).toString(),
+        Q4Contrib: deriToNatural(res[3]).toString(),
+        userQ1Contrib: deriToNatural(res[4]).toString(),
+        userQ2Contrib: deriToNatural(res[5]).toString(),
+        userQ3Contrib: deriToNatural(res[6]).toString(),
+        userQ4Contrib: deriToNatural(res[7]).toString(),
+        userQ1Point: scoreQ1.toString(),
+        userQ2Point: scoreQ2.toString(),
+        userQ3Point: scoreQ3.toString(),
+        userQ4Point: scoreQ4.toString(),
       };
     },
     args,

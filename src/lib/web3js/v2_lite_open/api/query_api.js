@@ -1,6 +1,5 @@
 import { catchApiError } from "../../shared/utils/api"
 import { DeriEnv } from "../../shared/config/env"
-import { getOracleConfigList } from "../../shared/config/oracle"
 import { getJsonConfig } from "../../shared/config/config"
 import { normalizeChainId, toChecksumAddress, validateObjectKeyExist } from "../../shared/utils"
 import { poolProcessor, poolValidator } from "../../shared/config/config_processor"
@@ -195,7 +194,6 @@ export const openConfigListCache = (() => {
   };
   return {
     async update() {
-      let res
       const oldData = cache.data
       try {
         if (Date.now()/1000 - cache.timestamp >= 10) {

@@ -98,40 +98,51 @@
     }
   }
 
-  .index_part2 {
-    line-height: 3.32512vh;
-    font-size: 2.46305vh;
-    z-index: 1;
-    position: relative;
-    top: -60vh;
-    padding: 0 2.66667vw;
+  // .index_part2 {
+  //   line-height: 3.32512vh;
+  //   font-size: 2.46305vh;
+  //   z-index: 1;
+  //   position: relative;
+  //   top: -60vh;
+  //   padding: 0 2.66667vw;
 
+  //   .index_part2-center {
+  //     height: 100%;
+  //     font-weight: 300;
+
+  //   }
+  // }
+
+  .index_part2 {
+    // margin-top: 0.1rem;
     .index_part2-center {
       height: 100%;
       font-weight: 300;
-
-      .index_part2-L,
-      .index_part2-R {
-        font-weight: 300;
+      flex-wrap: wrap;
+      padding: 0.1rem;
+      display: flex;
+      .stats-box {
+        width: 45rem;
+        height: 1.76rem;
+        background-color: #0d0e0f;
         font-family: Arial MT, sans-serif;
-        line-height: 30px;
-        font-size: 0.2rem;
-
-        .key {
-          color: #fff;
-          line-height: 30px;
-          font-size: 0.2rem;
-          font-family: Arial, sans-serif;
-          font-weight: 500;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(13, 14, 15, 0.8);
+        border-radius: 10px;
+        box-shadow: 6px 6px 8px rgb(31 31 31 / 70%);
+        margin-top: 0.1rem;
+        .data {
+          color: #d4e05c;
+          font-size: 0.32rem;
+          font-family: led calculator;
         }
-      }
-
-      .index_part2-R {
-        margin-top: 5.41872vh;
-
-        a {
-          color: #fff;
-          text-decoration: underline;
+        .label {
+          font-size: 0.2rem;
+          margin-top: 0.04rem;
         }
       }
     }

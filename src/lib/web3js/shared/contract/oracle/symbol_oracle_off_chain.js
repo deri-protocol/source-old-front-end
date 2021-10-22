@@ -1,6 +1,6 @@
 import { ContractBase } from "../contract_base";
 import { symbolOracleOffChainAbi } from '../abis';
-import { bg, deriToNatural } from '../../utils';
+import { deriToNatural } from '../../utils';
 
 export class SymbolOracleOffChain extends ContractBase {
   constructor(chainId, address) {

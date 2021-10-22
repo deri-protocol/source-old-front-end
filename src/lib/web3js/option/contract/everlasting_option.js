@@ -9,9 +9,7 @@ import {
   isEqualSet,
 } from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
-import {
-  getOracleVolatilityForOption,
-} from '../../shared/utils/oracle';
+import { getOracleVolatilitiesForOption } from '../../shared/utils/oracle';
 import {
   everlastingOptionViewerFactory,
   pTokenOptionFactory,
@@ -58,9 +56,9 @@ export class EverlastingOption extends ContractBase {
       const activeSymbols = await Promise.all(
         activeSymbolIds.reduce((acc, i) => acc.concat([this.getSymbol(i)]), [])
       );
-      const symbolVolatilities = await volatilitiesCache.get(
+      const symbolVolatilities = (await volatilitiesCache.get(
         activeSymbols.map((s) => s.symbol)
-      );
+      )).map((v) => v.volatility);
       //console.log(symbolVolatilities)
       const state = await this.viewer.getPoolStates(
         this.contractAddress,
@@ -171,7 +169,7 @@ export class EverlastingOption extends ContractBase {
     await this._updateConfig();
     let volatilities = [];
     if (this.volatilitySymbols.length > 0) {
-      const volatilityInfos = await getOracleVolatilityForOption(
+      const volatilityInfos = await getOracleVolatilitiesForOption(
         this.activeSymbols.map((s) => s.symbol)
       );
       volatilities = Object.values(volatilityInfos).reduce((acc, p, index) => {

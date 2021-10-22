@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom'
 import { formatAddress } from '../../../utils/utils'
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import moment from 'moment'
-import Chart from './Chart'
+import AreaChart from './AreaChart'
+import BarChart from './BarChart'
 import { Link } from 'react-router-dom'
 
 const LIQUIDITY_HEADER = ['ACTION','ACCOUNT','LIQUIDITY','AMOUNT','TIMESTAMP (UTC)']
@@ -36,8 +37,8 @@ export default function Detail(){
     <div className='info'>
     <div className='title'><Link to='/info'>Deri Overview</Link> &gt; {`${network} - ${catalog.toUpperCase()} - ${formatAddress(add)} (${bToken})`}</div>
       <div className='chart-box'>
-        <div className='chart'><Chart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history?pool=${add}`} seriesType='area'/> </div>
-        <div className='chart'><Chart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history?pool=${add}`} seriesType='histogram' cycle={['W','M']} defaultCycle='M'/> </div>
+        <div className='chart'><AreaChart title='TVL' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_liquidity_history?pool=${add}`}/> </div>
+        <div className='chart'><BarChart title='Volume 24H' url = {`${process.env.REACT_APP_INFO_HTTP_URL}/get_trade_history?pool=${add}`} /> </div>
       </div>
       <div className='table-by-network'>
         <Table title='LIQUIDITY' headers={LIQUIDITY_HEADER} columns={LIQUIDITY_COLUMNS} columnRenders={columnFormat} url={getLiquidityDataUrl} pagination={true}/>
