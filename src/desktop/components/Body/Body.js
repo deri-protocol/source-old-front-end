@@ -59,7 +59,9 @@ class Body extends React.Component {
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
           <Route exact path='/addsymbol/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <AddSymbol lang={dict['permission']}/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/futures/lite/v1' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/futures/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
+          <Route exact path='/futures/pro/v1' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/addpool' component={() => <AddPool lang={dict['permission']}/>}/>
           <Route exact path='/options/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>

@@ -49,6 +49,7 @@ class Body extends React.Component {
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/futures/lite/v1' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
