@@ -3,13 +3,14 @@
   padding: 0;
 }
 
-.Diptwo {
+.governance {
   color: #cccccc;
   font-family: Arial MT, sans-serif;
   font-size: 20px;
   font-weight: 300;
   padding: 0 10px 0 10px;
   .dip_two_box {
+    padding-left: 10px;
     .H2 {
       font-family: Tachyon, sans-serif;
       font-weight: 300;
@@ -17,7 +18,21 @@
       font-size: 32px;
       letter-spacing: 2px;
     }
+    .rules-describe{
+      display: inline-block;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
 
+    ul{
+      list-style: none;
+      li:before{
+        content:"\02022";
+        color:#ffffff;
+        margin-right: 5px;
+        margin-top: 5px;
+      }
+    }
     .DIP1 {
       display: flex;
       width: 100%;
@@ -40,6 +55,7 @@
         justify-content: space-between;
         height: 38px;
         font-size: 0.16rem;
+        margin-top: 10px;
         .rad {
           width: 0.4rem;
         }
@@ -53,20 +69,21 @@
             width: 31%;
             height: 20px;
             display: inline-block;
-            background: linear-gradient(90deg, #09D3AF 0%, #09B8C2 18%, #0965FF 100%);
+            background: #246cad;
           }
+
           .pre_bsc {
             width: 69%;
             height: 20px;
             display: inline-block;
-            background: linear-gradient(90deg, #09D3AF 0%, #09B8C2 18%, #0965FF 100%);
+            background: #246cad;
           }
   
           .pre_heco {
             width: 0;
             height: 20px;
             display: inline-block;
-            background: linear-gradient(90deg, #09D3AF 0%, #09B8C2 18%, #0965FF 100%);
+            background: #246cad;
           }
         }
       }

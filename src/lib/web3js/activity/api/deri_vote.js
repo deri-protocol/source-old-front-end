@@ -12,9 +12,9 @@ export const getVotingResult = async() => {
     async () => {
       const db = databaseDeriVoteFactory();
       const keys = [
-        `${keyPrefix()}.OP1.vote`,
-        `${keyPrefix()}.OP2.vote`,
-        `${keyPrefix()}.OP3.vote`,
+        `${keyPrefix()}.OP1.count`,
+        `${keyPrefix()}.OP2.count`,
+        `${keyPrefix()}.OP3.count`,
       ];
       const res = await db.getValues(keys);
       return res.map((v) => fromWei(hexToNumberString(v)));
@@ -30,7 +30,7 @@ export const getUserVotingPower = async(accountAddress) => {
     accountAddress = toChecksumAddress(accountAddress)
     const db = databaseDeriVoteFactory()
     const keys = [
-      `${keyPrefix()}.${accountAddress}.vote`,
+      `${keyPrefix()}.${accountAddress}.count`,
     ]
     const res = await db.getValues(keys)
     return res.map((v) => fromWei(hexToNumberString(v)))[0]
@@ -38,22 +38,29 @@ export const getUserVotingPower = async(accountAddress) => {
 }
 
 
-export const getUserVotingResult = async(chainId, accountAddress) => {
-  const args = [chainId, accountAddress]
-  return catchApiError(async() => {
-    chainId = chainId.toString()
-    accountAddress = toChecksumAddress(accountAddress)
-    const config = getDeriVoteConfig(chainId)
-    const deriVote = deriVoteFactory(chainId, config.address)
-    const voteId = await deriVote.votingId()
-    if (voteId !== votingId) {
-      throw new Error(
-        `Deri Vote: votingId is not match (${votingId} !== ${voteId}) `
-      );
-    }
-    return await deriVote.votingOptions(votingId, accountAddress)
-  }, args, 'getVoteResult', '')
-}
+export const getUserVotingResult = async (accountAddress) => {
+  const args = [accountAddress];
+  return catchApiError(
+    async () => {
+      accountAddress = toChecksumAddress(accountAddress);
+      const db = databaseDeriVoteFactory();
+      const keys = [
+        `${keyPrefix()}.${accountAddress}.count`,
+        `${keyPrefix()}.${accountAddress}.option`,
+        `${keyPrefix()}.${accountAddress}.timestamp`,
+      ];
+      const res = await db.getValues(keys);
+      return {
+        votingPower: fromWei(hexToNumberString(res[0])),
+        option: hexToNumberString(res[1]),
+        timestamp: hexToNumberString(res[2]),
+      };
+    },
+    args,
+    'getVoteResult',
+    ''
+  );
+};
 
 export const vote = async(chainId, accountAddress, votingOption) => {
   const args = [chainId, accountAddress, votingOption]

@@ -23,7 +23,7 @@ function Governance({ wallet = {}, lang }){
       {!curTab && <>
         <div className='closed'>
           <div className='title'>
-            {lang['dip-list-title']}
+            {/* {lang['dip-list-title']} */}
           </div>
           {/* <div className='link'>
             <Link to='/diphistorytwo'> {lang['dip-two']} </Link>

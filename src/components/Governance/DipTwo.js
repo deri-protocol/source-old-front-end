@@ -1,90 +1,132 @@
 import React, { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import Button from '../Button/Button';
-import {getUserVotingPower,getVotingResult,vote,getUserVotingResult} from '../../lib/web3js/indexV2.js'
-function DipTwo({ wallet = {}, lang }) {
+import DeriNumberFormat from '../../utils/DeriNumberFormat'
+import { getUserVotingPower, getVotingResult, vote, getUserVotingResult } from '../../lib/web3js/indexV2.js'
+function DipTwo({ wallet = {}, lang, loading }) {
   const [optionOne, setOptionOne] = useState(false)
   const [optionTwo, setOptionTwo] = useState(false)
   const [optionThree, setOptionThree] = useState(false)
   const [checkedOption, setCheckedOption] = useState('')
   const [userVote, setUserVote] = useState('')
   const [userPower, setUserPower] = useState('')
-  const [acountVote, setAcountVote] = useState('')
+  const [countVote, setCountVote] = useState([])
+  const [sumVote, setSumVote] = useState('')
+  const [timestamp, setTimestamp] = useState('')
   const connect = () => {
     wallet.connect()
   }
-  const [elemButton, setElemButton] = useState(<Button click={connect} className='vote' btnText={lang['connet-wallet']} ></Button>)
+  const [elemButton, setElemButton] = useState(<Button click={connect} lang={lang} className='vote' btnText={lang['connet-wallet']} ></Button>)
   const radioChange = (e) => {
     let { value } = e.target
     setCheckedOption(value)
   }
   const voteBtn = async () => {
-    if(!checkedOption){
+    if (!checkedOption) {
       alert(lang['please-choose-your-vote-first'])
       return
     }
-    let res = await vote(wallet.detail.chainId,wallet.detail.account,checkedOption)
-    if(res.success){
+    let res = await isOk()
+    if (res) {
       getUserVote()
       getUserPower()
       getVoting()
     }
   }
 
-  const getUserVote = async ()=>{
-    let res = await getUserVotingResult(wallet.detail.chainId,wallet.detail.account)
-    if(res){
-      if(res === '1'){
-        setOptionOne(true)
-      }else if(res === '2'){
-        setOptionTwo(true)
-      }else if(res === '3'){
-        setOptionThree(true)
+  const isOk = async ()=>{
+    let res = await vote(wallet.detail.chainId, wallet.detail.account, checkedOption)
+    if(res.success){
+      let bool = true
+      while (bool) {
+        let data = await getUserVotingResult(wallet.detail.account)
+        if(data.timestamp){
+          data.timestamp > timestamp ? bool = false : bool = true
+        }else{
+          data.timestamp ? bool = false : bool = true
+        }
       }
-      if(res !== '0'){
-        setUserVote(res)
-      }
+      return true;
     }
   }
 
-  const getUserPower = async ()=>{
+
+  const getUserVote = async () => {
+    let res = await getUserVotingResult(wallet.detail.account)
+    if (res) {
+      if (res.option === '1') {
+        setOptionOne(true)
+        setUserVote("I")
+      } else if (res.option === '2') {
+        setOptionTwo(true)
+        setUserVote("II")
+      } else if (res.option === '3') {
+        setOptionThree(true)
+        setUserVote("III")
+      }
+      setTimestamp(res.timestamp)
+    }
+  }
+
+  const getUserPower = async () => {
     let res = await getUserVotingPower(wallet.detail.account)
-    if(res){
+    if (res) {
       setUserPower(res)
     }
-  } 
+  }
 
-  const getVoting = async ()=>{
+  const getVoting = async () => {
     let res = await getVotingResult()
-    if(res){
-      setAcountVote(res)
+    loading.loaded()
+    if (res) {
+      let num = +res[0] + (+res[1]) + (+res[2])
+      setCountVote(res)
+      setSumVote(num)
+    } else {
+      alert(res.error)
     }
   }
 
-  useEffect(()=>{
-    getVoting()
-  },[])
+  useEffect(() => {
+    loading.loading()
+    let interval = null;
+    interval = window.setInterval(()=>{
+      getVoting()
+    },1000)
+  }, [])
 
-  useEffect(()=>{
-    if(wallet.isConnected()){
-      getUserPower()
-      getUserVote()
+  useEffect(() => {
+    document.getElementsByClassName('pre_eth')[0].style.width = `${(+countVote[0] / sumVote) * 100}%`
+    document.getElementsByClassName('pre_bsc')[0].style.width = `${(+countVote[1] / sumVote) * 100}%`
+    document.getElementsByClassName('pre_heco')[0].style.width = `${(+countVote[2] / sumVote) * 100}%`
+  }, [countVote, sumVote])
+
+  useEffect(() => {
+    let interval = null;
+    if (wallet.isConnected()) {
+      interval = window.setInterval(()=>{
+        getUserPower()
+        getUserVote()
+      },1000)
     }
-  },[wallet,wallet.detail.account])
+  }, [wallet, wallet.detail.account])
 
   useEffect(() => {
     let elem;
     if (wallet.isConnected()) {
       elem = <Button className='vote' lang={lang} btnText={lang['vote']} click={voteBtn}></Button>
     } else {
-      elem = <Button click={connect} className='vote' btnText={lang['connet-wallet']} ></Button>
+      elem = <Button click={connect} className='vote' lang={lang} btnText={lang['connet-wallet']} ></Button>
     }
     setElemButton(elem)
-  }, [wallet.detail.account,checkedOption])
+  }, [wallet.detail.account, checkedOption])
   return (
     <div className='dip_two_box'>
       <div className='H2 DIP1'>
         {lang['governance-title']}
+      </div>
+      <div className='flex'>
+        {lang['governance-describe']}
         <br />
         <br />
       </div>
@@ -116,7 +158,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_eth'>
               <div className="pre_eth">
               </div>
-              <span> DERI</span>
+              <span className='num-deri'> {countVote[0] ? <DeriNumberFormat value={countVote[0]} decimalScale={0} thousandSeparator={true} /> : '0'}   DERI</span>
             </div>
           </div>
           <div className='fle'>
@@ -133,7 +175,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_bsc'>
               <div className="pre_bsc">
               </div>
-              <span> DERI</span>
+              <span className='num-deri'> {countVote[1] ? <DeriNumberFormat value={countVote[1]} decimalScale={0} thousandSeparator={true} /> : '0'}   DERI</span>
             </div>
           </div>
           <div className='fle'>
@@ -150,7 +192,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_heco'>
               <div className="pre_heco">
               </div>
-              <span> DERI</span>
+              <span className='num-deri'> {countVote[2] ? <DeriNumberFormat value={countVote[2]} decimalScale={0} thousandSeparator={true} /> : '0'}   DERI</span>
             </div>
           </div>
         </div>
@@ -161,9 +203,9 @@ function DipTwo({ wallet = {}, lang }) {
         <div>
           {lang['your-vote']} : {userVote}
         </div>
-        <br/>
+        <br />
         <div>
-          {lang['your-voting-power']} : {userPower}
+          {lang['your-voting-power']} : {userPower ? <DeriNumberFormat value={userPower} decimalScale={0} thousandSeparator={true} /> : '0'}
         </div>
         <br />
         <div>
@@ -171,10 +213,28 @@ function DipTwo({ wallet = {}, lang }) {
           <br /><br />
           1.{lang['vote-rules-one']}
           <br />
+          <ul>
+            <li className='rules-describe'>{lang['vote-rules-one-describe-one']}</li>
+            <li className='rules-describe'>{lang['vote-rules-one-describe-two']}</li>
+            <li className='rules-describe'>{lang['vote-rules-one-describe-three']}</li>
+            <li className='rules-describe'>{lang['vote-rules-one-describe-four']}</li>
+          </ul>
+          {/* <span className='rules-describe'>
+            {lang['vote-rules-one-describe-one']}
+          </span>
           <br />
-          {lang['vote-rules-one-describe']}
+          <span className='rules-describe'>
+            {lang['vote-rules-one-describe-two']}
+          </span>
           <br />
-          {lang['vote-rules-one-describe-two']}
+          <span className='rules-describe'>
+            {lang['vote-rules-one-describe-three']}
+          </span>
+          <br />
+          <span className='rules-describe'>
+            {lang['vote-rules-one-describe-four']}
+          </span> */}
+
           <br /><br />
           2. {lang['vote-rules-two']}
           <br /><br />
@@ -186,4 +246,4 @@ function DipTwo({ wallet = {}, lang }) {
     </div>
   )
 }
-export default inject('wallet')(observer(DipTwo))
+export default inject('wallet', 'loading')(observer(DipTwo))
