@@ -3,6 +3,7 @@ import LiteTrade from "../../../components/Trade/LiteTrade";
 import './lite.less'
 import './zh-lite.less'
 import './de-lite.less'
+import './fa-lite.less'
 import AreaPicker from "../../../components/AreaPicker/AreaPicker";
 import { useRouteMatch } from 'react-router-dom';
 import type from '../../../model/Type';

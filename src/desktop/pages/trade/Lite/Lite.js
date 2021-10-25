@@ -4,9 +4,9 @@ import Tab from '../Tab/Tab';
 import './lite.less'
 import './zh-lite.less'
 import './de-lite.less'
+import './fa-lite.less'
 import version from '../../../../model/Version'
 import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
-
 
 export default function Lite({lang}){
   const location = useLocation();
