@@ -41,7 +41,10 @@ export const databaseActivityFactory = (() => {
 export const databaseDeriVoteFactory = (() => {
   const databaseInstanceMap = {};
   return () => {
-    const address = DeriEnv.get() === 'prod' ? '0x0000000000000000000000000000000000000000' : '0x7C1267188379f57d92e640E519151229E1eA5565'
+    const address =
+      DeriEnv.get() === 'prod'
+        ? '0x9Ced1529C238bD36B3A05cECF979a30c0C40b286'
+        : '0x7C1267188379f57d92e640E519151229E1eA5565';
     const key = address;
     if (Object.keys(databaseInstanceMap).includes(key)) {
       return databaseInstanceMap[key];

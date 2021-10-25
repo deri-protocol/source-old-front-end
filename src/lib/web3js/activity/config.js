@@ -52,7 +52,7 @@ export const getDeriVoteConfig = (chainId, env) => {
     dev: [
       {
         chainId: '97',
-        address: '0x7784457ee5F22758cAA9901F829176dc969b20bf',
+        address: '0x37f3432B2166c6dB487c844C481Cba47ac98AD00',
       },
     ],
   };
