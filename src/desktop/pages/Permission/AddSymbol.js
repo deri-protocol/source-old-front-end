@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react';
 import { inject, observer } from 'mobx-react';
 import StepWizard from "react-step-wizard";
-import { useParams,useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import classNames from 'classnames';
 import Button from '../../../components/Button/Button';
-import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames,getPoolAcitveSymbolIds,createOracle } from '../../../lib/web3js/indexV2'
+import { bg, addSymbol, getPoolOpenOracleList, DeriEnv, getPoolAllSymbolNames, getPoolAcitveSymbolIds, createOracle } from '../../../lib/web3js/indexV2'
 import useQuery from '../../../hooks/useQuery'
 import down from './img/down.svg';
 import up from './img/up.svg';
@@ -14,7 +14,7 @@ import symbolArrowIcon from '../../../assets/img/symbol-arrow.svg'
 import TipWrapper from '../../../components/TipWrapper/TipWrapper';
 import './addsymbol.less'
 
-function AddSymbol({ wallet = {}, lang,loading }) {
+function AddSymbol({ wallet = {}, lang, loading }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
@@ -48,13 +48,13 @@ function AddSymbol({ wallet = {}, lang,loading }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const getPoolALLSymbolId = async () => {
     let res = await getPoolAcitveSymbolIds(wallet.detail.chainId, address)
-    res =  res.map(item => {
+    res = res.map(item => {
       return item = +item
     })
-    res = res.sort(function(a,b){ return  b - a})
+    res = res.sort(function (a, b) { return b - a })
     let id = 0
-    if(res.length){
-     id = +res[0]+1
+    if (res.length) {
+      id = +res[0] + 1
     }
     setSymbolId(id)
   }
@@ -93,7 +93,7 @@ function AddSymbol({ wallet = {}, lang,loading }) {
         <StepWizard
           initialStep={1}
         >
-          <Step1 lang={lang} wallet={wallet} props={props} loading={loading}  OnChange={StepChange} />
+          <Step1 lang={lang} wallet={wallet} props={props} loading={loading} OnChange={StepChange} />
           <Step2 lang={lang} wallet={wallet} props={props} parameters={parameters} />
         </StepWizard>
       </div>
@@ -101,7 +101,7 @@ function AddSymbol({ wallet = {}, lang,loading }) {
   )
 }
 
-function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
+function Step1({ goToStep, lang, wallet, props, loading, OnChange }) {
   const [multiplier, setMultiplier] = useState('0.0001')
   const [fundingRateCoefficient, setFundingRateCoefficient] = useState('0.000004')
   const [transactionFeeRatio, setTransactionFeeRatio] = useState('0.1')
@@ -138,7 +138,7 @@ function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
   const hasConnectWallet = () => wallet && wallet.detail && wallet.detail.account
   const connect = () => {
     wallet.connect()
-  } 
+  }
   const [btnText, setBtnText] = useState(
     <button OnClick={connect}>
       {lang['connect-wallet']}
@@ -161,7 +161,7 @@ function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
   }
 
   const nextStep = () => {
-    if(!oracleConfig.symbol){
+    if (!oracleConfig.symbol) {
       alert(lang['please-enter-a-correct-address'])
       return;
     }
@@ -195,39 +195,42 @@ function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
   const oracleList = async () => {
     let res = await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
     loading.loaded()
-    res.sort(function(a,b){
-      return (+a.blockNumber - (+b.blockNumber))
-    })
-    setMultiplier(multiplierList[res[0].symbol])
-    setOracleConfig(res[0])
-    setOracleConfigs(res)
+    if (res.length) {
+      res.sort(function (a, b) {
+        return (+a.blockNumber - (+b.blockNumber))
+      })
+      setMultiplier(multiplierList[res[0].symbol])
+      setOracleConfig(res[0])
+      setOracleConfigs(res)
+    }
+
   }
 
   const setDefault = () => {
     setIsDefault(!isDefault)
-    if(isDefault){
+    if (isDefault) {
       setOracleConfig({})
-    }else{
+    } else {
       setOracleConfig(oracleConfigs[0])
     }
   }
 
   const generateOracle = async () => {
-    if(!chainLinkAddress){
+    if (!chainLinkAddress) {
       alert(lang['please-enter-a-correct-address'])
       return;
     }
 
-    let res = await createOracle(wallet.detail.chainId,wallet.detail.account,chainLinkAddress)
-    if(res.success){
-      let oracle =  await getPoolOpenOracleList(wallet.detail.chainId,wallet.detail.account)
+    let res = await createOracle(wallet.detail.chainId, wallet.detail.account, chainLinkAddress)
+    if (res.success) {
+      let oracle = await getPoolOpenOracleList(wallet.detail.chainId, wallet.detail.account)
       setOracleConfig(oracle[0])
       setOracleConfigs(oracle)
-    }else{
+    } else {
       alert(lang['fail'])
     }
   }
-  
+
 
   useEffect(() => {
     if (hasConnectWallet()) {
@@ -308,7 +311,7 @@ function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
                 <Button className='btn' click={generateOracle} btnText={lang['generate']} lang={lang}></Button>
               </div>
               <div className='optional-oracle-address'>
-              <input
+                <input
                   type='text'
                   value={oracleConfig.address}
                 />
@@ -378,9 +381,9 @@ function Step1({ goToStep, lang, wallet, props,loading, OnChange }) {
                   </div>
                   <div>
                     <div className='text'>
-                        <span className='hover-title-fee'>
-                          {lang['transaction-fee-ratio']}
-                        </span>
+                      <span className='hover-title-fee'>
+                        {lang['transaction-fee-ratio']}
+                      </span>
                     </div>
                     <div className='input-value'>
                       <input
@@ -493,4 +496,4 @@ function SymbolDisplay({ spec }) {
 
 }
 
-export default inject('wallet','loading')(observer(AddSymbol))
+export default inject('wallet', 'loading')(observer(AddSymbol))
