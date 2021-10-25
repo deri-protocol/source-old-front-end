@@ -4,6 +4,7 @@ import Tab from '../Tab/Tab';
 import './lite.less'
 import './zh-lite.less'
 import './de-lite.less'
+import './fa-lite.less'
 
 export default function Lite({lang}){
   return (
