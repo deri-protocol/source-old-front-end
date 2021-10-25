@@ -27,20 +27,32 @@ export const getPTokenAirdropConfig = (chainId, env) => {
   throw new Error(`-- getPTokenAirdropConfig(), invalid env(${env}) or chainId(${chainId})`)
 };
 
-export const getDeriStakingConfig = (chainId, env) => {
+export const getDeriVoteConfig = (chainId, env) => {
   chainId = chainId.toString()
   env = env || DeriEnv.get();
   const config = {
     prod: [
       {
+        chainId: '1',
+        address: '0xb2b6907AdDa5a13673849CBD448f31be9C4A7424',
+      },
+      {
         chainId: '56',
-        address: '0x0000000000000000000000000000000000000000',
+        address: '0x27c116474D4E08df0A13935AF508E8922271F891',
+      },
+      {
+        chainId: '128',
+        address: '0x3752D67bfBe945a89787c7F6758A47C2D52988d4',
+      },
+      {
+        chainId: '137',
+        address: '0x6d05Fd927b5d184A8f848DA7D57C7228AEf80b85',
       },
     ],
     dev: [
       {
         chainId: '97',
-        address: '0x3F374d96c4Fa3B19e0702B4A85B8f823AE922ae6',
+        address: '0x7784457ee5F22758cAA9901F829176dc969b20bf',
       },
     ],
   };
@@ -51,5 +63,5 @@ export const getDeriStakingConfig = (chainId, env) => {
       return res
     }
   } 
-  throw new Error(`-- getPTokenAirdropConfig(), invalid env(${env}) or chainId(${chainId})`)
+  throw new Error(`-- getDeriVoteConfig(), invalid env(${env}) or chainId(${chainId})`)
 };

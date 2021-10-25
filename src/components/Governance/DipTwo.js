@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { inject, observer } from 'mobx-react'
 import Button from '../Button/Button';
+import {getUserVotingPower,getVotingResult,vote,getUserVotingResult} from '../../lib/web3js/indexV2.js'
 function DipTwo({ wallet = {}, lang }) {
   const [optionOne, setOptionOne] = useState(false)
   const [optionTwo, setOptionTwo] = useState(false)
   const [optionThree, setOptionThree] = useState(false)
   const [checkedOption, setCheckedOption] = useState('')
+  const [userVote, setUserVote] = useState('')
+  const [userPower, setUserPower] = useState('')
+  const [acountVote, setAcountVote] = useState('')
   const connect = () => {
     wallet.connect()
   }
@@ -14,21 +18,69 @@ function DipTwo({ wallet = {}, lang }) {
     let { value } = e.target
     setCheckedOption(value)
   }
-  const vote = async () => {
+  const voteBtn = async () => {
     if(!checkedOption){
-      alert('aaa')
+      alert(lang['please-choose-your-vote-first'])
       return
     }
+    let res = await vote(wallet.detail.chainId,wallet.detail.account,checkedOption)
+    if(res.success){
+      getUserVote()
+      getUserPower()
+      getVoting()
+    }
   }
+
+  const getUserVote = async ()=>{
+    let res = await getUserVotingResult(wallet.detail.chainId,wallet.detail.account)
+    if(res){
+      if(res === '1'){
+        setOptionOne(true)
+      }else if(res === '2'){
+        setOptionTwo(true)
+      }else if(res === '3'){
+        setOptionThree(true)
+      }
+      if(res !== '0'){
+        setUserVote(res)
+      }
+    }
+  }
+
+  const getUserPower = async ()=>{
+    let res = await getUserVotingPower(wallet.detail.account)
+    if(res){
+      setUserPower(res)
+    }
+  } 
+
+  const getVoting = async ()=>{
+    let res = await getVotingResult()
+    if(res){
+      setAcountVote(res)
+    }
+  }
+
+  useEffect(()=>{
+    getVoting()
+  },[])
+
+  useEffect(()=>{
+    if(wallet.isConnected()){
+      getUserPower()
+      getUserVote()
+    }
+  },[wallet,wallet.detail.account])
+
   useEffect(() => {
     let elem;
     if (wallet.isConnected()) {
-      elem = <Button className='vote' lang={lang} btnText={lang['vote']} click={vote}></Button>
+      elem = <Button className='vote' lang={lang} btnText={lang['vote']} click={voteBtn}></Button>
     } else {
       elem = <Button click={connect} className='vote' btnText={lang['connet-wallet']} ></Button>
     }
     setElemButton(elem)
-  }, [wallet.detail.account])
+  }, [wallet.detail.account,checkedOption])
   return (
     <div className='dip_two_box'>
       <div className='H2 DIP1'>
@@ -55,7 +107,7 @@ function DipTwo({ wallet = {}, lang }) {
               <input
                 type="radio"
                 name='option'
-                value='0'
+                value='1'
                 id='I'
                 onChange={event => radioChange(event)}
                 defaultChecked={optionOne}
@@ -64,7 +116,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_eth'>
               <div className="pre_eth">
               </div>
-              <span>158,544 DERI</span>
+              <span> DERI</span>
             </div>
           </div>
           <div className='fle'>
@@ -72,7 +124,7 @@ function DipTwo({ wallet = {}, lang }) {
               <input
                 type="radio"
                 name='option'
-                value='0'
+                value='2'
                 id='II'
                 onChange={event => radioChange(event)}
                 defaultChecked={optionTwo}
@@ -81,7 +133,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_bsc'>
               <div className="pre_bsc">
               </div>
-              <span>334,253 DERI</span>
+              <span> DERI</span>
             </div>
           </div>
           <div className='fle'>
@@ -89,7 +141,7 @@ function DipTwo({ wallet = {}, lang }) {
               <input
                 type="radio"
                 name='option'
-                value='0'
+                value='3'
                 id='III'
                 onChange={event => radioChange(event)}
                 defaultChecked={optionThree}
@@ -98,7 +150,7 @@ function DipTwo({ wallet = {}, lang }) {
             <div className='prele_heco'>
               <div className="pre_heco">
               </div>
-              <span>0 DERI</span>
+              <span> DERI</span>
             </div>
           </div>
         </div>
@@ -107,7 +159,11 @@ function DipTwo({ wallet = {}, lang }) {
         </div>
         <br />
         <div>
-          {lang['your-voting-power']}
+          {lang['your-vote']} : {userVote}
+        </div>
+        <br/>
+        <div>
+          {lang['your-voting-power']} : {userPower}
         </div>
         <br />
         <div>
