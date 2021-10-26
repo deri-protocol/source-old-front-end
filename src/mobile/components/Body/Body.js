@@ -46,11 +46,12 @@ class Body extends React.Component {
           <Route exact path='/nuls' component={() => <Nuls lang={dict['nuls']} />}></Route>
           <Route exact path='/faucet' component={() => <Faucet lang={dict['faucet']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
-          <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/governance' component={() => <Governance lang={Object.assign(dict['governance'],dict['dip-two'])}/>}></Route>
           <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/futures/lite/v1' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>

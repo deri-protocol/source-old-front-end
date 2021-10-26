@@ -140,7 +140,7 @@ function Menu({ lang, locale }) {
           </li>
         </ul>
       </div>
-      <Version />
+      {/* <Version /> */}
     </div>
   )
 }

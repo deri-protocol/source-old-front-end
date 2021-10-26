@@ -71,6 +71,22 @@
     width: 1400px;
     margin-top: 30px;
 
+    .twitter-box {
+      width: 1100px;
+      height: 620px;
+      background-image: url('../../../../components/TradingMining/img/share.png');
+      position: absolute;
+      visibility: hidden;
+      .twitter-box-rewards{
+        position: absolute;
+        font-size: 36px;
+        font-weight: 400;
+        color: #FFFFFF;
+        top: 350px;
+        left: 670px;
+      }
+    }
+
     .bnb-total,
     .deri-total {
       width: 520px;
@@ -125,7 +141,7 @@
           background-color: #0D0E0F;
           border-radius: 20px;
 
-          .no {
+          .no { 
             color: #fff;
             width: 35px;
             height: 35px;
@@ -139,7 +155,8 @@
             text-align: center;
             white-space: nowrap;
           }
-          .score-hover{
+
+          .score-hover {
             display: inline-block;
             border-bottom: 1px dashed #fff;
             width: 92px;
@@ -152,7 +169,8 @@
             text-align: center;
             white-space: nowrap;
           }
-          .avgcoeff{
+
+          .avgcoeff {
             width: 140px;
           }
 
@@ -194,7 +212,7 @@
               font-weight: 300;
 
             }
-            
+
 
             .list-info {
               margin-left: 30px;
@@ -216,12 +234,13 @@
                 height: 35px;
                 padding-right: 30px;
                 position: relative;
+
                 // box-sizing: border-box;
-                .no{
+                .no {
                   line-height: 34px;
-                } 
+                }
               }
-              
+
               .progress {
                 width: 445px;
                 height: 10px;
@@ -261,13 +280,20 @@
               padding-left: 20px;
               padding-top: 20px;
               font-family: Tachyon;
+              display: flex;
+              justify-content: space-around;
             }
 
             .your-rewards-info {
+              width: 558px;
+              margin: 0 auto;
               display: flex;
+              margin-top: 10px;
               justify-content: normal;
               align-items: center;
-              height: 188px;
+              height: 190px;
+              background-color: #202124;
+              border-radius: 20px;
 
               img {
                 width: 31px;
@@ -319,7 +345,10 @@
               text-align: center;
               white-space: nowrap
             }
-            .your-score-title,.your-coeff-title,.your-fee-title{
+
+            .your-score-title,
+            .your-coeff-title,
+            .your-fee-title {
               display: inline-block;
               border-bottom: 1px dashed #fff;
               cursor: pointer;
@@ -364,6 +393,7 @@
                 font-weight: 400;
                 margin-top: 20px;
               }
+
               // span{
               //   margin-left: 40px;
               // }
@@ -376,7 +406,8 @@
               margin-top: 30px;
               font-size: 14px;
               line-height: 25px;
-              .des-tip{
+
+              .des-tip {
                 display: inline-block;
                 border-bottom: 1px dashed #fff;
               }
@@ -393,11 +424,11 @@
             font-size: 20px;
             box-sizing: border-box;
             color: #CCCCCC;
+
             .total-score-box,
             .your-score-box,
             .your-point-box,
-            .stage
-            {
+            .stage {
               display: flex;
               justify-content: space-between;
               align-items: center;
@@ -405,23 +436,30 @@
               height: 50px;
               padding-right: 10px;
               border-bottom: 1px solid #0D0E0F;
-              .stage-title,.total-score,.your-score,.your-point{
+
+              .stage-title,
+              .total-score,
+              .your-score,
+              .your-point {
                 width: 80px;
                 text-align: center;
               }
-              
+
 
             }
+
             .total-score-box,
             .your-score-box,
-            .your-point-box{
+            .your-point-box {
               height: 40px;
               padding-left: 10px;
 
             }
-            .your-point-box{
+
+            .your-point-box {
               border-bottom: 0px;
-              .point-hover{
+
+              .point-hover {
                 display: inline-block;
                 cursor: pointer;
                 border-bottom: 1px dashed #FFF;
@@ -434,6 +472,7 @@
 
     .activity-rules {
       margin-top: 30px;
+
       a {
         color: #ffffff;
         text-decoration-line: revert;
@@ -552,10 +591,11 @@
                 transform-origin: bottom;
                 z-index: 1;
               }
+
               .end-one,
               .end-two,
               .end-three,
-              .end-four{
+              .end-four {
                 width: 71px;
                 height: 3px;
                 background-color: #246CAD;
@@ -563,30 +603,35 @@
                 z-index: 1;
                 transform-origin: bottom;
               }
-              .end-one{
+
+              .end-one {
                 left: 5%;
                 top: 50%;
                 transform: rotate(16.36deg);
                 transform-origin: 77px -5px;
               }
-              .end-two{
+
+              .end-two {
                 left: 5%;
                 top: 50%;
                 transform: rotate(49.08deg);
-                transform-origin: 80px  1px;
+                transform-origin: 80px 1px;
               }
-              .end-three{
+
+              .end-three {
                 left: 5%;
                 top: 50%;
                 transform: rotate(98.16deg);
                 transform-origin: 80px 1px;
               }
-              .end-four{
+
+              .end-four {
                 left: 5%;
                 top: 50%;
                 transform: rotate(180deg);
                 transform-origin: 78px 1px;
               }
+
               .s-four {
 
                 width: 65px;
@@ -599,7 +644,7 @@
 
               .s-two {
                 animation: rotate-two 0.5s ease-in-out 0s 1 alternate forwards;
-                transform-origin: 80px  1px;
+                transform-origin: 80px 1px;
               }
 
               .s-three {

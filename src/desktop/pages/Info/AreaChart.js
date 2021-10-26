@@ -50,7 +50,7 @@ export default function RechartArea({url,title}){
           <stop offset="95%" stopColor="#00659f" stopOpacity={0}/>
         </linearGradient>
       </defs>
-    <XAxis dataKey="time"  axisLine={false} tickLine={false} tick={{fill: '#fff',fontSize : '14'}} padding={{left : 12,right : 10}} allowDataOverflow={false} tickFormatter={tickFormatter} interval={3}/>
+    <XAxis dataKey="time"  axisLine={false} tickLine={false} tick={{fill: '#fff',fontSize : '14'}} padding={{left : 12,right : 12}} allowDataOverflow={false} tickFormatter={tickFormatter} interval={3}/>
     <YAxis dataKey='value' hide padding={{top : 65}}/>
     <Tooltip position={{x : 0,y : 0}} cursor={false} content={<CustomTooltip title={title} lastItem={lastItem}/>}  />
     <Area type="monotone" dataKey="value" stroke="#00659f" fillOpacity={0.5} strokeWidth={2} fill="url(#colorArea)" />

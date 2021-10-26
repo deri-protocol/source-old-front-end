@@ -6,23 +6,30 @@ import LiteTrade from '../../../../components/Trade/LiteTrade'
 import Tab from '../Tab/Tab'
 import '../Lite/lite.less'
 import '../Lite/zh-lite.less'
+import '../Lite/fa-lite.less'
 import './pro.less'
 import './zh-pro.less'
 import './de-pro.less'
 import AreaPicker from '../../../../components/AreaPicker/AreaPicker'
 import { useRouteMatch } from 'react-router-dom';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 
 
 
-function Pro({wallet,lang,type}){
+function Pro({wallet,lang,type,version}){
+  const location = useLocation();
+  const isV1Router = location.pathname.split('/')[3]
+  if(isV1Router){
+    version.setCurrent('v1')
+  }else{
+    version.setCurrent('v2')
+  }
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1903px';
     return () => { 
       document.querySelector('.desktop').style.minWidth = '';
     };
   }, [wallet.detail.account]);
-
-
 
   return (
     <div className='trade-container'>
@@ -42,4 +49,4 @@ function Pro({wallet,lang,type}){
   </div>
   )
 }
-export  default inject('wallet','type')(observer(Pro))
+export  default inject('wallet','type','version')(observer(Pro))
