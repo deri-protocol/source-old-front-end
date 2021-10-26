@@ -257,6 +257,11 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
+                <a href="https://twitter.com/intent/tweet?text=trade-to-earn&url=https://alphatest.deri.finance/#/trade-to-earn" class="twitter-share-button">Tweet</a>
+                {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
+                 data-show-count="false">
+                  Tweet
+                </a> */}
               </div>
               <div className='your-rewards-info'>
                 {/* <div className='your-bnb'>
@@ -436,6 +441,9 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">
+                  Tweet
+                </a>
               </div>
               <div className='your-rewards-info'>
                 {/* <div className='your-bnb'>
