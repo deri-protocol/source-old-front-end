@@ -105,6 +105,15 @@ function Trading({ wallet, lang, loading }) {
     }
   }
 
+  const updateTwitterMeta = () => {
+    var meta = document.head.querySelector('meta[name="twitter:image"]')
+    meta.setAttribute('content','https://mcdex.io/homepage/assets/static/twitter_20210515.jpg')
+  }
+
+  // const twit = (e) => {
+  //   e.prev
+  // }
+
   useEffect(() => {
     loading.loading();
     let interval = null;
@@ -112,6 +121,7 @@ function Trading({ wallet, lang, loading }) {
       getList()
     }, 30000)
     getList()
+    updateTwitterMeta();
     return () => {
       interval && clearInterval(interval);
     };
@@ -257,7 +267,7 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
-                <a href="https://twitter.com/intent/tweet?text=trade-to-earn&url=https://alphatest.deri.finance/#/trade-to-earn" class="twitter-share-button">Tweet</a>
+                <a href="https://twitter.com/intent/tweet?text=trade-to-earn&url=https%3A%2F%2Fshare.deri.finance%2F%3Ftitle%3Dtrade-to-earn%26description%3Dtrade-to-earn-share%26image%3Dhttps%3A%2F%2Fmcdex.io%2Fhomepage%2Fassets%2Fstatic%2Ftwitter_20210515.jpg"  class="twitter-share-button">Tweet</a>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
                  data-show-count="false">
                   Tweet
