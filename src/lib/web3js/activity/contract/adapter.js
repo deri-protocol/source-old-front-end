@@ -5,3 +5,7 @@ export const PTokenAirdropNULSAdapter = (klass) => {
 
   return klass
 }
+
+export const deriVoteAdapter= (klass) => {
+    return klass
+}

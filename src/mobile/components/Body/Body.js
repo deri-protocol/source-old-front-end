@@ -44,7 +44,7 @@ class Body extends React.Component {
           <Route exact path='/signin' component={() => <Signin lang={dict['signin']} />}></Route>
           <Route exact path='/nuls' component={() => <Nuls lang={dict['nuls']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
-          <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/governance' component={() => <Governance lang={Object.assign(dict['governance'],dict['dip-two'])}/>}></Route>
           <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
           <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>

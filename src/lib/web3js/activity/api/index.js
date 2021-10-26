@@ -15,3 +15,10 @@ export {
   getUserStakingReward,
   getUserStakingContribution,
 } from './deri_staking';
+
+export {
+  getVotingResult,
+  getUserVotingPower,
+  getUserVotingResult,
+  vote,
+} from './deri_vote'
