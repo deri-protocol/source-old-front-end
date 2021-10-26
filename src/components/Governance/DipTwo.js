@@ -34,15 +34,15 @@ function DipTwo({ wallet = {}, lang, loading }) {
     }
   }
 
-  const isOk = async ()=>{
+  const isOk = async () => {
     let res = await vote(wallet.detail.chainId, wallet.detail.account, checkedOption)
-    if(res.success){
+    if (res.success) {
       let bool = true
       while (bool) {
         let data = await getUserVotingResult(wallet.detail.account)
-        if(data.timestamp){
+        if (data.timestamp) {
           data.timestamp > timestamp ? bool = false : bool = true
-        }else{
+        } else {
           data.timestamp ? bool = false : bool = true
         }
       }
@@ -90,9 +90,9 @@ function DipTwo({ wallet = {}, lang, loading }) {
   useEffect(() => {
     loading.loading()
     let interval = null;
-    interval = window.setInterval(()=>{
+    interval = window.setInterval(() => {
       getVoting()
-    },1000)
+    }, 1000)
   }, [])
 
   useEffect(() => {
@@ -104,10 +104,10 @@ function DipTwo({ wallet = {}, lang, loading }) {
   useEffect(() => {
     let interval = null;
     if (wallet.isConnected()) {
-      interval = window.setInterval(()=>{
+      interval = window.setInterval(() => {
         getUserPower()
         getUserVote()
-      },1000)
+      }, 1000)
     }
   }, [wallet, wallet.detail.account])
 
@@ -125,9 +125,16 @@ function DipTwo({ wallet = {}, lang, loading }) {
       <div className='H2 DIP1'>
         {lang['governance-title']}
       </div>
-      <div className='flex'>
-        {lang['governance-describe']}
-        <br />
+      <div className='title-describe'>
+        <div>
+          {lang['governance-describe']}
+        </div>
+        <div>
+          {lang['governance-describe-two']}
+        </div>
+        <div>
+          {lang['governance-describe-three']} <a className='doc-a' rel='noreferrer' target="_blank" herf="https://docs.deri.finance/mining-faq#what-do-i-harvest-for-liquidity-mining">{lang['governance-describe-three-a']}</a>  {lang['governance-describe-three-one']}
+        </div>
         <br />
       </div>
       <div className='flex'>
