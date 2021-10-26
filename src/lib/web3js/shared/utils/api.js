@@ -24,8 +24,8 @@ export const catchApiError = async (func, args, methodName, defaultValue) => {
     const res = await func(...args)
     return res
   } catch (err) {
-    console.log(`${methodName}: `, err.toString())
-    //console.log(`${methodName}: `, err)
+    //console.log(`${methodName}: `, err.toString())
+    console.log(`${methodName}: `, err)
   }
   return defaultValue
 }

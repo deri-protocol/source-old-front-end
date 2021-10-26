@@ -41,9 +41,11 @@ export const checkTokenId = (tokenId) => {
 }
 
 export const checkSymbolId = (symbolId, symbolIds) => {
-  const index = symbolIds.indexOf(symbolId)
-  if (index > -1) {
-    return index
+  if (symbolId != null) {
+    const index = symbolIds.indexOf(symbolId.toString())
+    if (index > -1) {
+      return index
+    }
   }
   throw new Error(`invalid symbolId '${symbolId}' for symbolIds(${symbolIds.join(',')}) `);
 };

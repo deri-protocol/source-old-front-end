@@ -22,7 +22,6 @@ function TradingView({ version, trading, lang, type }) {
   }, [trading.index]);
 
   useEffect(() => {
-    if (type.isOption && trading.index && trading.position.strikePrice && trading.position.timePrice) {
       let mark = trading.position.markPrice
       if (markPriceRef.current > mark) {
         setMarkPriceClass('fall trade-dashboard-value')
@@ -31,7 +30,6 @@ function TradingView({ version, trading, lang, type }) {
       }
       markPriceRef.current = mark
       setMarkPrice(mark)
-    }
   }, [trading.index, trading.position])
 
   return (
@@ -41,16 +39,17 @@ function TradingView({ version, trading, lang, type }) {
           {type.isOption ? `${trading.config ? trading.config.symbol : ''}` : (version.isV1 || version.isV2Lite || version.isOpen) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
         {type.isFuture && <>
+          {env === 'testnet' && <>
+          <div className='trade-dashboard-item latest-price'>
+            <div className='trade-dashboard-title'>{lang['mark-price']}</div>
+            <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
+          </div>
+          </>}
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['index-price']}</div>
             <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
           </div>
-          {env === 'testnet' && <>
-          <div className='trade-dashboard-item latest-price'>
-            <div className='trade-dashboard-title'>{lang['mark-price']}</div>
-            <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
-          </div>
-          </>}
+          
           <div className='trade-dashboard-item latest-price'>
             {(env !== 'testnet') && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>

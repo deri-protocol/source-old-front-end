@@ -65,15 +65,15 @@ export const calculateMaxRemovableLiquidity = (
   } else {
     return max(
       min(
-        bToken.liquidity.minus(
-          minPoolMarginRatio
+        bg(bToken.liquidity).minus(
+          bg(minPoolMarginRatio)
             .times(cost)
             .plus(pnl)
             .minus(restLiquidity)
             .div(bToken.price)
             .div(bToken.discount)
         ).times('0.98'),
-        userLiquidity
+        bg(userLiquidity)
       ),
       bg(0)
     );

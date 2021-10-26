@@ -250,9 +250,9 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     if (!stopCalculate && trading.volumeDisplay !== '') {
       trading.pause();
       calcFundingRateAfter();
-      if (type.isOption) {
-        calcMarkPriceAfter();
-      }
+      // if (type.isOption) {
+      calcMarkPriceAfter();
+      // }
       calcLiquidityUsed();
       loadTransactionFee();
       calcLiqPriceAfter();
@@ -297,16 +297,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.position.volume, trading.position.margin, trading.position.unrealizedPnl]);
 
   useEffect(() => {
-    if (type.isOption) {
-      let mark = trading.position.markPrice
-      if (markPriceRef.current > mark) {
-        setMarkPriceClass('fall')
-      } else {
-        setMarkPriceClass('rise')
-      }
-      markPriceRef.current = mark
-      setMarkPrice(mark)
+    let mark = trading.position.markPrice
+    if (markPriceRef.current > mark) {
+      setMarkPriceClass('fall')
+    } else {
+      setMarkPriceClass('rise')
     }
+    markPriceRef.current = mark
+    setMarkPrice(mark)
   }, [trading.index, trading.position])
 
   useEffect(() => {
@@ -383,6 +381,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='check-baseToken'>
           <SymbolSelector setSpec={setSpec} spec={trading.config} isOption={type.isOption} />
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
+            {type.isFuture && env === 'testnet' && <>
+              <div className='mark-price'>
+                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+              </div>
+            </>}
             {type.isFuture && <>
               <div className='index-prcie'>
                 {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
@@ -396,11 +399,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
               </div>
             </>}
-            {type.isFuture && env === 'testnet' && <>
-              <div className='mark-price'>
-                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={4} /></span>
-              </div>
-            </>}
+
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
@@ -424,6 +423,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
+            {type.isFuture && env === 'testnet' && <>
+              <div className='index-prcie'>
+                {lang['mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+              </div>
+            </>}
             {type.isFuture && <>
               <div className='index-prcie'>
                 {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
@@ -441,11 +445,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               </div>
 
             </>}
-            {type.isFuture && env === 'testnet' && <>
-              <div className='index-prcie'>
-                {lang['mark-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
-              </div>
-            </>}
+
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
@@ -637,17 +637,23 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
             {type.isFuture && <>
+              {env === 'testnet' && <>
+                <div className='text-info'>
+                <div className='title-enter pool'>{lang['mark-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={markPrice} decimalScale={4} />
+                </div>
+              </div>
+              <div className='text-info'>
+                <div className='title-enter pool'>{lang['trade-price']}</div>
+                <div className='text-enter poolL'>
+                  <DeriNumberFormat value={markPriceAfter} decimalScale={4} />
+                </div>
+              </div>
+              </>}
               {env !== 'testnet' && <>
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['trade-price']}</div>
-                  <div className='text-enter poolL'>
-                    <DeriNumberFormat value={trading.index} decimalScale={4} />
-                  </div>
-                </div>
-              </>}
-              {env === 'testnet' && <>
-                <div className='text-info'>
-                  <div className='title-enter pool'>{lang['mark-price']}</div>
                   <div className='text-enter poolL'>
                     <DeriNumberFormat value={trading.index} decimalScale={4} />
                   </div>
@@ -657,21 +663,24 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${spec.bTokenSymbol}`} />
+                  <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
                 </div>
               </div>
-              <div className='text-info'>
-                <div className='title-enter'>{lang['liquidity-used']}</div>
-                <div className='text-enter'>
-                  <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2} /> -> <DeriNumberFormat value={liqUsedPair.afterLiqUsed} decimalScale={2} suffix='%' />
+              {env !== 'testnet' && <>
+                <div className='text-info'>
+                  <div className='title-enter'>{lang['liquidity-used']}</div>
+                  <div className='text-enter'>
+                    <DeriNumberFormat value={liqUsedPair.curLiqUsed} suffix='%' decimalScale={2} /> -> <DeriNumberFormat value={liqUsedPair.afterLiqUsed} decimalScale={2} suffix='%' />
+                  </div>
                 </div>
-              </div>
-              <div className='text-info'>
-                <div className='title-enter'>{lang['funding-rate-impact']}</div>
-                <div className='text-enter'>
-                  <DeriNumberFormat value={trading.fundingRate.fundingRate0} suffix='%' decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} suffix='%' />
+                <div className='text-info'>
+                  <div className='title-enter'>{lang['funding-rate-impact']}</div>
+                  <div className='text-enter'>
+                    <DeriNumberFormat value={trading.fundingRate.fundingRate0} suffix='%' decimalScale={4} /> -> <DeriNumberFormat value={fundingRateAfter} decimalScale={4} suffix='%' />
+                  </div>
                 </div>
-              </div>
+              </>}
+
             </>}
             {type.isOption && <>
               <div className='text-info'>

@@ -1,7 +1,9 @@
-import { checkApiInput, checkApiInputWithoutAccount, checkTokenId } from '../../shared/utils/derijsnext';
+import { checkApiInput, checkApiInputWithoutAccount, checkSymbolId, checkTokenId } from '../../shared/utils/derijsnext';
 import { catchApiError } from '../../shared/utils/api';
+import { bg } from '../../shared/utils';
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory';
 import { poolViewerFactory } from '../contract/PoolViewer';
+import { calculateDpmmCost } from '../calc';
 
 export const getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
@@ -234,3 +236,40 @@ export const getEstimatedLiquidityUsed = async(chainId, poolAddress, newVolume, 
     ''
   );
 }
+
+export const getEstimatedTimePrice = async (
+  chainId,
+  poolAddress,
+  newNetVolume,
+  symbolId
+) => {
+  return catchApiError(
+    async () => {
+      [chainId, poolAddress ] = checkApiInputWithoutAccount(
+        chainId,
+        poolAddress,
+      );
+      symbolId = checkTokenId(symbolId);
+      const api = poolViewerFactory(chainId, poolAddress);
+      await api.init();
+      const pool = api.pool;
+      const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
+      if (!pool.isSymbolsUpdated()) {
+        await pool.getSymbols();
+      }
+      const symbol = pool.symbols[symbolIndex];
+      console.log('dpmmPrice', symbol.dpmmPrice.toString(), symbol.indexPrice)
+      const cost = calculateDpmmCost(
+        symbol.indexPrice,
+        symbol.K,
+        symbol.tradersNetVolume,
+        symbol.multiplier,
+        newNetVolume
+      );
+      return bg(cost).div(symbol.multiplier).div(newNetVolume).toString();
+    },
+    [],
+    'getEstimatedTimePrice',
+    ''
+  );
+};

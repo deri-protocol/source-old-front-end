@@ -4,12 +4,13 @@ import {
   getFundingRateOption,
   getLiquidityUsedOption,
   getPositionInfoOption,
-  getPositionInfosPosition,
+  getPositionInfosOption,
   getSpecificationOption,
   getWalletBalanceOption,
   getEstimatedFeeOption,
   getEstimatedMarginOption,
   getEstimatedLiquidityUsedOption,
+  getEstimatedTimePriceOption,
   isUnlockedOption,
 } from '../option/api';
 import { getPoolVersionId, isDeriUnlocked, LITE_VERSIONS } from '../shared';
@@ -41,6 +42,7 @@ import {
   getLiquidityUsedV2,
   getFundingRateCacheV2,
   getEstimatedLiquidatePriceV2,
+  getPoolBTokensBySymbolId as getPoolBTokensBySymbolIdV2
 } from '../v2/api';
 
 import {
@@ -59,6 +61,7 @@ import {
 } from '../v2_lite/api';
 
 import { api as apiV2lDpmm } from '../v2_lite_dpmm/api'
+import { api as apiV2Dpmm } from '../v2_dpmm/api'
 
 export const getSpecification = async (chainId, poolAddress, symbolId) => {
   const version = getPoolVersionId(poolAddress)
@@ -68,6 +71,8 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
     return getSpecificationOption(chainId, poolAddress, symbolId);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getSpecification(chainId, poolAddress, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getSpecification(chainId, poolAddress, symbolId);
   }
   if (symbolId === undefined) {
     return getSpecification2(chainId, poolAddress);
@@ -94,6 +99,8 @@ export const getPositionInfo = async (
     );
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getPositionInfo(chainId, poolAddress, accountAddress, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getPositionInfo(chainId, poolAddress, accountAddress, symbolId);
   }
   if (symbolId === undefined) {
     return getPositionInfo2(chainId, poolAddress, accountAddress);
@@ -107,9 +114,11 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
   if (LITE_VERSIONS.includes(version)) {
     return getPositionInfosV2l(chainId, poolAddress, accountAddress)
   } else if (version === 'option') {
-    return getPositionInfosPosition(chainId, poolAddress, accountAddress)
+    return getPositionInfosOption(chainId, poolAddress, accountAddress)
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getPositionInfos(chainId, poolAddress, accountAddress);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getPositionInfos(chainId, poolAddress, accountAddress);
   } else if (version === 'v1') {
     return [
       await getPositionInfo2(chainId, poolAddress, accountAddress),
@@ -134,6 +143,8 @@ export const getWalletBalance = async (
     return getWalletBalanceOption(chainId, poolAddress, accountAddress);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getWalletBalance(chainId, poolAddress, accountAddress);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getWalletBalance(chainId, poolAddress, accountAddress, bTokenId);
   }
   if (bTokenId === undefined) {
     return getWalletBalance2(chainId, poolAddress, accountAddress);
@@ -155,6 +166,8 @@ export const isUnlocked = async (
     return isUnlockedOption(chainId, poolAddress, accountAddress);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.isUnlocked(chainId, poolAddress, accountAddress);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.isUnlocked(chainId, poolAddress, accountAddress, bTokenId);
   }
   if (accountAddress === undefined) {
     return isDeriUnlocked(chainId, poolAddress);
@@ -200,6 +213,8 @@ export const getEstimatedFee = async (
     return getEstimatedFeeOption(chainId, poolAddress, volume, symbolId);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getEstimatedFee(chainId, poolAddress, volume, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getEstimatedFee(chainId, poolAddress, volume, symbolId);
   }
   if (symbolId === undefined) {
     return getEstimatedFee2(chainId, poolAddress, volume);
@@ -244,6 +259,15 @@ export const getEstimatedMargin = async (
       leverage,
       symbolId
     );
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getEstimatedMargin(
+      chainId,
+      poolAddress,
+      accountAddress,
+      volume,
+      leverage,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return getEstimatedMargin2(
@@ -273,6 +297,12 @@ export const getFundingRate = async (chainId, poolAddress, symbolId) => {
     return getFundingRateOption(chainId, poolAddress, symbolId);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getFundingRate(chainId, poolAddress, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getFundingRate(
+      chainId,
+      poolAddress,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return getFundingRate2(chainId, poolAddress);
@@ -304,6 +334,13 @@ export const getEstimatedFundingRate = async (
     );
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getEstimatedFundingRate(chainId, poolAddress, newNetVolume, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getEstimatedFundingRate(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return getEstimatedFundingRate2(chainId, poolAddress, newNetVolume);
@@ -324,7 +361,13 @@ export const getLiquidityUsed = async (chainId, poolAddress, symbolId) => {
   } else if (version === 'option') {
     return getLiquidityUsedOption(chainId, poolAddress, symbolId);
   } else if (version === 'v2_lite_dpmm') {
-    return apiV2lDpmm.getLiquidityInfo(chainId, poolAddress, symbolId);
+    return apiV2lDpmm.getLiquidityUsed(chainId, poolAddress, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getLiquidityUsed(
+      chainId,
+      poolAddress,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return getLiquidityUsed2(chainId, poolAddress);
@@ -356,6 +399,13 @@ export const getEstimatedLiquidityUsed = async (
     );
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getEstimatedLiquidityUsed(chainId, poolAddress, newNetVolume, symbolId);
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getEstimatedLiquidityUsed(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
   }
   if (symbolId === undefined) {
     return getEstimatedLiquidityUsed2(chainId, poolAddress, newNetVolume);
@@ -380,5 +430,59 @@ export const getFundingRateCache = async (chainId, poolAddress, symbolId) => {
     return getFundingRateCache2(chainId, poolAddress);
   } else {
     return getFundingRateCacheV2(chainId, poolAddress, symbolId);
+  }
+};
+
+export const getPoolBTokensBySymbolId = async (chainId, poolAddress, accountAddress) => {
+  const versionId = getPoolVersionId(poolAddress)
+  if (['v2', 'v2_dpmm'].includes(versionId)) {
+    if (versionId === 'v2') {
+      return await getPoolBTokensBySymbolIdV2(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
+    } else {
+      return await apiV2Dpmm.getPoolBTokensBySymbolId(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
+    }
+  } else {
+    return []
+  }
+}
+
+export const getEstimatedTimePrice = async (
+  chainId,
+  poolAddress,
+  newNetVolume,
+  symbolId
+  ) => {
+  const version = getPoolVersionId(poolAddress)
+  if (version === 'option') {
+    return getEstimatedTimePriceOption(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
+  } else if (version === 'v2_lite_dpmm') {
+    return apiV2lDpmm.getEstimatedTimePrice(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getEstimatedTimePrice(
+      chainId,
+      poolAddress,
+      newNetVolume,
+      symbolId
+    );
+  } else {
+    return '';
   }
 };

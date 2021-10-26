@@ -10,7 +10,6 @@ import {
   getPoolConfig,
   getPoolSymbolIdList,
 } from '../../shared/config';
-import { calculateTxFee } from '../../v2/calculation/position';
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory';
 
 const processTradeEvent = async (

@@ -1,7 +1,7 @@
 import {
   getPoolInfoApy,
   getPoolLiquidity,
-} from '../../shared/api/database_api';
+} from '../../v2/api/mining_query_api';
 import {
   getEstimatedFee,
   getEstimatedFundingRate,
@@ -15,6 +15,8 @@ import {
   getSpecification,
   getWalletBalance,
   isUnlocked,
+  getPoolBTokensBySymbolId,
+  getFundingFee,
   getEstimatedTimePrice,
 } from './query_api';
 import { getTradeHistory } from './trade_history_api';
@@ -56,4 +58,7 @@ export const api = {
   closePosition,
   // tradeHistory
   getTradeHistory,
+  // extra for v2
+  getPoolBTokensBySymbolId,
+  getFundingFee,
 };

@@ -1,7 +1,7 @@
 import { getOracleConfig } from '../config/oracle';
 import { normalizeChainId } from './validate';
 import { DeriEnv } from '../config/env';
-import { oracleFactory, symbolOracleOffChainFactory, wrappedOracleFactory } from '../factory/oracle';
+import { oracleFactory, wrappedOracleFactory } from '../factory/oracle';
 import { deriToNatural } from './convert';
 import {
   mapToSymbolInternal,
@@ -9,6 +9,8 @@ import {
   normalizeOptionSymbol,
 } from '../config/token';
 import { PRESERVED_SYMBOLS } from '../config/version';
+import { offChainOracleFactory } from '../contract/factory';
+
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -354,12 +356,12 @@ export const getOracleVolatilitiesForOption = async (symbols) => {
 // check symbol is used offchain oracle
 export const checkOffChainOracleSymbol = async (chainId, oracleAddress, symbol) => {
   try {
-    await symbolOracleOffChainFactory(chainId, oracleAddress).signer()
+    await offChainOracleFactory(chainId, oracleAddress).signer()
     return symbol
   } catch (err) {
   }
   try {
-    await symbolOracleOffChainFactory(chainId, oracleAddress).signatory()
+    await offChainOracleFactory(chainId, oracleAddress).signatory()
     return symbol
   } catch (err) {
   }

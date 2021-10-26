@@ -6,6 +6,7 @@ import { getOraclePriceFromCache2 } from '../../shared/utils/oracle';
 import { calculateLiquidationPrice } from '../../v2/calculation';
 import { calculateDpmmPrice } from '../calc';
 import { perpetualPoolLiteDpmmFactory} from './factory';
+import { liquidatePriceCache } from '../../shared/api/api_globals';
 
 export class PoolViewer {
   constructor(chainId, poolAddress) {
@@ -180,8 +181,22 @@ export class PoolViewer {
         .toString();
 
       //console.log(position.volume, margin, totalCost.toString(), dynamicCost.toString(), symbol.multiplier, maintenanceMarginRatio)
+
+      // set liquidatePrice cache
+      liquidatePriceCache.set(this.poolAddress, {
+        volume: position.volume,
+        margin,
+        totalCost,
+        dynamicCost,
+        price,
+        multiplier: symbol.multiplier,
+        minMaintenanceMarginRatio: maintenanceMarginRatio,
+      });
+
       return {
+        symbol: symbol.symbol,
         price: price,
+        markPrice: symbol.dpmmPrice.toString(),
         volume: bg(position.volume).times(symbol.multiplier).toString(),
         averageEntryPrice: bg(position.volume).eq(0)
           ? '0'
@@ -202,7 +217,7 @@ export class PoolViewer {
           dynamicCost,
           symbol.multiplier,
           maintenanceMarginRatio
-        ),
+        ).toString(),
       };
     }
   }
@@ -268,6 +283,8 @@ export class PoolViewer {
         .times(position.volume)
         .toString();
       return {
+        symbol: symbol.symbol,
+        symbolId: symbol.symbolId,
         price: symbol.indexPrice,
         volume: bg(position.volume).times(symbol.multiplier).toString(),
         averageEntryPrice: bg(position.volume).eq(0)
@@ -288,7 +305,7 @@ export class PoolViewer {
           dynamicCost,
           symbol.multiplier,
           maintenanceMarginRatio
-        ),
+        ).toString(),
       };
     }).filter((p) => p.volume !== '0');
   }
@@ -334,7 +351,7 @@ export class PoolViewer {
     const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
     const symbol = pool.symbols[symbolIndex];
 
-    const liquidity = pool.stateValues.liquidity;
+    const liquidity = pool.state.liquidity;
     return {
       funding0: symbol.funding,
       fundingPerSecond: symbol.fundingPerSecond,
@@ -388,7 +405,7 @@ export class PoolViewer {
           ),
         bg(0)
       )
-      .div(pool.stateValues.liquidity)
+      .div(pool.state.liquidity)
       .toString();
   }
 
@@ -402,7 +419,7 @@ export class PoolViewer {
 
     const { poolMarginRatio } = pool.parameters;
     const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
-    //console.log(pool.symbols, poolMarginRatio, pool.stateValues)
+    //console.log(pool.symbols, poolMarginRatio, pool.state)
     return pool.symbols
       .reduce(
         (acc, s, index) =>
@@ -424,7 +441,7 @@ export class PoolViewer {
               ),
         bg(0)
       )
-      .div(pool.stateValues.liquidity)
+      .div(pool.state.liquidity)
       .toString();
   }
 

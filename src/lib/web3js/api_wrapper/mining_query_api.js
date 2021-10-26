@@ -21,6 +21,7 @@ import {
 } from '../option/api';
 
 import { api as apiV2lDpmm } from '../v2_lite_dpmm/api'
+import { api as apiV2Dpmm } from '../v2_dpmm/api'
 
 export const getLiquidityInfo = async (
   chainId,
@@ -35,6 +36,8 @@ export const getLiquidityInfo = async (
     return getLiquidityInfoOption(chainId, poolAddress, accountAddress)
   } else if (versionId === 'v2_lite_dpmm') {
     return apiV2lDpmm.getLiquidityInfo(chainId, poolAddress, accountAddress)
+  } else if (versionId === 'v2_dpmm') {
+    return apiV2Dpmm.getLiquidityInfo(chainId, poolAddress, accountAddress, bTokenId)
   }
   if (bTokenId === undefined) {
     return getLiquidityInfo2(chainId, poolAddress, accountAddress)

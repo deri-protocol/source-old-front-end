@@ -12,12 +12,13 @@ import {
   getLiquidityUsed,
   getEstimatedLiquidityUsed,
   getEstimatedFundingRate,
+  getEstimatedTimePrice,
 } from '../api/query_api';
 const TIMEOUT = 20000;
 
 describe('query api', () => {
   const chainId = '97';
-  const pool = '0x43701b4bf0430DeCFA41210327fE67Bf4651604C';
+  const pool = '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3';
   const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
   it(
     'getLiquidityInfo',
@@ -121,6 +122,14 @@ describe('query api', () => {
     'getEstimatedLiquidityUsed',
     async () => {
       const res = await getEstimatedLiquidityUsed(chainId, pool, '1000', '0');
+      expect(res).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedTimePrice',
+    async () => {
+      const res = await getEstimatedTimePrice(chainId, pool, '1', '1');
       expect(res).toEqual('');
     },
     TIMEOUT

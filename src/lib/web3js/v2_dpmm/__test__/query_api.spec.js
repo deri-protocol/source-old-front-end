@@ -1,0 +1,150 @@
+import {
+  getEstimatedFee,
+  getEstimatedFundingRate,
+  getEstimatedLiquidityUsed,
+  getEstimatedMargin,
+  getFundingRate,
+  getLiquidityInfo,
+  getLiquidityUsed,
+  getPositionInfo,
+  getPositionInfos,
+  getSpecification,
+  getWalletBalance,
+  getPoolBTokensBySymbolId,
+  isUnlocked,
+  getFundingFee,
+  getEstimatedTimePrice,
+} from '../api/query_api';
+
+const TIMEOUT = 30000;
+const chainId = '97';
+const pool = '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1';
+const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
+
+describe('query api', () => {
+  it(
+    'getLiquidityInfo',
+    async () => {
+      const res = await getLiquidityInfo(chainId, pool, account, '0');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getSpecification',
+    async () => {
+      const res = await getSpecification(chainId, pool, '0');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getPositionInfo',
+    async () => {
+      const res = await getPositionInfo(chainId, pool, account, '0');
+      expect(res).toEqual({});
+    },
+    TIMEOUT
+  );
+  it(
+    'getPositionInfos',
+    async () => {
+      const res = await getPositionInfos(chainId, pool, account);
+      expect(res).toEqual([]);
+    },
+    TIMEOUT
+  );
+  it(
+    'getWalletBalance',
+    async () => {
+      const res = await getWalletBalance(chainId, pool, account, '0');
+      expect(res).toEqual('99200');
+      expect(await getWalletBalance(chainId, pool, account, '1')).toEqual('0');
+    },
+    TIMEOUT
+  );
+  it(
+    'isUnlocked',
+    async () => {
+      expect(await isUnlocked(chainId, pool, account, '0')).toEqual(true);
+      expect(await isUnlocked(chainId, pool, account, '1')).toEqual(false);
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedMargin',
+    async () => {
+      expect(
+        await getEstimatedMargin(chainId, pool, account, '3', '1.5', '0')
+      ).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedFee',
+    async () => {
+      expect(await getEstimatedFee(chainId, pool, account, '3', '1')).toEqual(
+        ''
+      );
+    },
+    TIMEOUT
+  );
+  it(
+    'getFundingRate',
+    async () => {
+      expect(await getFundingRate(chainId, pool, '0')).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedFundingRate',
+    async () => {
+      expect(await getEstimatedFundingRate(chainId, pool, '-100', '0')).toEqual(
+        ''
+      );
+    },
+    TIMEOUT
+  );
+  it(
+    'getLiquidityUsed',
+    async () => {
+      expect(await getLiquidityUsed(chainId, pool)).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedLiquidityUsed',
+    async () => {
+      expect(
+        await getEstimatedLiquidityUsed(chainId, pool, '20200', '0')
+      ).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getPoolBTokensBySymbolId',
+    async () => {
+      expect(
+        await getPoolBTokensBySymbolId(chainId, pool, account, '0')
+      ).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getFundingFee',
+    async () => {
+      expect(
+        await getFundingFee(chainId, pool, account, '0')
+      ).toEqual('');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedTimePrice',
+    async () => {
+      expect(await getEstimatedTimePrice(chainId, pool, '10', '0')).toEqual('');
+    },
+    TIMEOUT
+  );
+
+});

@@ -2,7 +2,7 @@
 import { TIMEOUT, ACCOUNT_ADDRESS, POOL_V1_ADDRESS, OPTION_POOL_ADDRESS, CHAIN_ID, POOL_V2_ADDRESS, POOL_V2L_ADDRESS } from '../shared/__test__/setup';
 import { bg } from '../shared/utils';
 import { getLiquidityInfo, isUnlocked } from '../indexV2';
-import { getContractAddressConfig, getPoolConfigList, getPositionInfos, getSpecification, getPositionInfo } from '../api_wrapper';
+import { getContractAddressConfig, getPoolConfigList, getPositionInfos, getSpecification, getPositionInfo, getLiquidityUsed, getEstimatedTimePrice, getEstimatedLiquidatePrice } from '../api_wrapper';
 import { DeriEnv } from '../shared';
 
 describe('api', () => {
@@ -57,7 +57,7 @@ describe('api', () => {
   it('getSpecification testnet', async() => {
     DeriEnv.set('testnet')
 
-    const res = await getSpecification('97', '0x43701b4bf0430DeCFA41210327fE67Bf4651604C', '0')
+    const res = await getSpecification('97', '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3', '0')
     DeriEnv.set('dev')
     //expect(res.length).toEqual(7)
     expect(res).toEqual({})
@@ -65,7 +65,7 @@ describe('api', () => {
   it('getLiquidityInfo testnet', async() => {
     DeriEnv.set('testnet')
 
-    const res = await getLiquidityInfo('97', '0x43701b4bf0430DeCFA41210327fE67Bf4651604C', ACCOUNT_ADDRESS)
+    const res = await getLiquidityInfo('97', '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3', ACCOUNT_ADDRESS)
     DeriEnv.set('dev')
     //expect(res.length).toEqual(7)
     expect(res).toEqual({})
@@ -74,7 +74,7 @@ describe('api', () => {
     DeriEnv.set('testnet');
     const res = await getPositionInfo(
       '97',
-      '0x43701b4bf0430DeCFA41210327fE67Bf4651604C',
+      '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3',
       '0xFefC938c543751babc46cc1D662B982bd1636721',
       '1'
     );
@@ -82,16 +82,80 @@ describe('api', () => {
     expect(res).toEqual({});
   });
   
-  it('getPositionInfos', async() => {
+  it('getPositionInfos v2', async() => {
     const res = await getPositionInfos(CHAIN_ID, POOL_V1_ADDRESS, ACCOUNT_ADDRESS)
     expect(res).toEqual([])
   }, TIMEOUT)
-  // it('getContractAddressConfig v2_lite testnet', async() => {
-  //   DeriEnv.set('testnet')
-  //   const res = getContractAddressConfig('testnet', 'v2_lite')
-  //   DeriEnv.set('dev')
-  //   expect(res).toEqual([])
-  // })
+  it('getPositionInfos v2dpmm', async() => {
+    DeriEnv.set('testnet');
+    const res = await getPositionInfos(CHAIN_ID, '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1', ACCOUNT_ADDRESS)
+    expect(res).toEqual([])
+    DeriEnv.set('dev');
+  }, TIMEOUT)
+  it('getPositionInfos v2l dpmm', async() => {
+    DeriEnv.set('testnet');
+    const res = await getPositionInfos(CHAIN_ID, '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3', ACCOUNT_ADDRESS)
+    expect(res).toEqual([])
+    DeriEnv.set('dev');
+  }, TIMEOUT)
+  it('getLiquidityInfo v2dpmm', async() => {
+    DeriEnv.set('testnet');
+    const res = await getLiquidityInfo(CHAIN_ID, '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1', ACCOUNT_ADDRESS, '0')
+    expect(res).toEqual({})
+    DeriEnv.set('dev');
+  }, TIMEOUT)
+  it('getLiquidityInfo v2l dpmm', async() => {
+    DeriEnv.set('testnet');
+    const res = await getLiquidityInfo(CHAIN_ID, '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3', ACCOUNT_ADDRESS)
+    expect(res).toEqual({})
+    DeriEnv.set('dev');
+  }, TIMEOUT)
+  it('getContractAddressConfig testnet', async() => {
+    DeriEnv.set('testnet')
+    const res = getContractAddressConfig('testnet')
+    DeriEnv.set('dev')
+    expect(res).toEqual([])
+  })
+  it(
+    'getEstimatedTimePrice',
+    async () => {
+    DeriEnv.set('testnet');
+    expect(
+      await getEstimatedTimePrice(
+        CHAIN_ID,
+        '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3',
+        '-10',
+        '1'
+      )
+    ).toEqual('');
+    //expect(await getEstimatedTimePrice(CHAIN_ID, '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1', '10', '0')).toEqual('');
+    DeriEnv.set('dev');
+    },
+    TIMEOUT
+  );
+  it(
+    'getEstimatedLiquidatePrice',
+    async () => {
+    DeriEnv.set('testnet');
+    await getPositionInfo(
+      CHAIN_ID,
+      '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1',
+      ACCOUNT_ADDRESS,
+      '0'
+    );
+    expect(
+      await getEstimatedLiquidatePrice(
+        CHAIN_ID,
+        '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1',
+        ACCOUNT_ADDRESS,
+        '-10',
+        '0'
+      )
+    ).toEqual('');
+    DeriEnv.set('dev');
+    },
+    TIMEOUT
+  );
   // it('getContractAddressConfig v2 prod', async() => {
   //   DeriEnv.set('prod')
   //   const res = getContractAddressConfig('prod', 'v2')

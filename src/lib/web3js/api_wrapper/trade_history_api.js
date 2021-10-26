@@ -5,6 +5,7 @@ import { getTradeHistoryV2 } from '../v2/api';
 import { getTradeHistoryV2l } from '../v2_lite/api';
 
 import { api as apiV2lDpmm } from '../v2_lite_dpmm/api'
+import { api as apiV2Dpmm } from '../v2_dpmm/api'
 
 export const getTradeHistory = async (
   chainId,
@@ -19,6 +20,8 @@ export const getTradeHistory = async (
     return getTradeHistoryOption(chainId, poolAddress, accountAddress, symbolId);
   } else if (version === 'v2_lite_dpmm') {
     return apiV2lDpmm.getTradeHistory(chainId, poolAddress, accountAddress, symbolId)
+  } else if (version === 'v2_dpmm') {
+    return apiV2Dpmm.getTradeHistory(chainId, poolAddress, accountAddress, symbolId)
   }
   if (symbolId === undefined) {
     return getTradeHistory2(chainId, poolAddress, accountAddress);

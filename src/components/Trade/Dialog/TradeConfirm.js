@@ -3,16 +3,16 @@ import Button from "../../Button/Button";
 import NumberFormat from 'react-number-format';
 import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
-import {bg} from '../../../lib/web3js/indexV2'
+import { bg, DeriEnv } from '../../../lib/web3js/indexV2'
+const env = DeriEnv.get()
 
-
-export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage,afterLeverage, transFee, afterTrade, lang ,markPriceAfter,trading,liquidationPrice}) {
+export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, afterLeverage, transFee, afterTrade, lang, markPriceAfter, trading, liquidationPrice }) {
   const [pending, setPending] = useState(false);
 
   const trade = async () => {
     setPending(true)
     // volume = type.isOption ? bg(volume).div(bg(trading.contract.multiplier)).toString() : volume
-    volume =  bg(volume).div(bg(trading.contract.multiplier)).toString()
+    volume = bg(volume).div(bg(trading.contract.multiplier)).toString()
     volume = direction === 'long' ? volume : -(+volume)
     const res = await tradeWithMargin(wallet.detail.chainId, spec.pool, wallet.detail.account, volume, spec.symbolId)
     if (res.success) {
@@ -31,7 +31,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
     }
   }
 
-  const afterTradePosition = direction === 'long' ? bg(volume).plus(bg(position)).toString() : bg(position).minus(bg(volume)).toString() 
+  const afterTradePosition = direction === 'long' ? bg(volume).plus(bg(position)).toString() : bg(position).minus(bg(volume)).toString()
 
   return (
     <div className='modal-dialog'>
@@ -58,11 +58,20 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
                 <div className='text-num'><span className={direction}>{lang[direction.toLowerCase()]}</span></div>
               </div>
               {type.isFuture && <>
-                <div className='text'>
-                  <div className='text-title'>{spec.symbol} {lang['trade-price-estimated']}</div>
-                  <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text'/></div>
-                </div>
-              </>} 
+                {env !== "testnet" && <>
+                  <div className='text'>
+                    <div className='text-title'>{spec.symbol} {lang['trade-price-estimated']}</div>
+                    <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
+                  </div>
+                </>}
+                {env === "testnet" && <>
+                  <div className='text'>
+                    <div className='text-title'>{spec.symbol} {lang['trade-price']}</div>
+                    <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>
+                  </div>
+                </>}
+
+              </>}
               {type.isOption && <>
                 <div className='text'>
                   <div className='text-title'>{lang['trade-price']}</div>
@@ -82,7 +91,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               {type.isFuture && <div className='text'>
                 <div className='text-title'>{lang['liquidation-price']}</div>
                 <div className='text-num'>
-                  <NumberFormat value={liquidationPrice} decimalScale={2}  displayType='text' />
+                  <NumberFormat value={liquidationPrice} decimalScale={2} displayType='text' />
                 </div>
               </div>}
               <div className='text'>
