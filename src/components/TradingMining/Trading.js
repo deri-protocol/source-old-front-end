@@ -13,7 +13,6 @@ import { formatAddress } from '../../utils/utils';
 import TipWrapper from '../TipWrapper/TipWrapper'
 import html2canvas from 'html2canvas'
 import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
-import { set } from 'mobx';
 
 function Trading({ wallet, lang, loading }) {
   const [yourBNB, setYourBNB] = useState('')
@@ -24,7 +23,7 @@ function Trading({ wallet, lang, loading }) {
   const [userContrib, setUserContrib] = useState('')
   const [totalContrib, setTotalContrib] = useState('')
   const [stageList, setStageList] = useState({})
-  const [twitterUrl,setTwitterUrl] = useState('')
+  const [twitterUrl,setTwitterUrl] = useState('https://mcdex.io/homepage/assets/static/twitter_20210515.jpg')
   const [list, setList] = useState([])
   const numToEn = (num) => {
     let en;
@@ -64,6 +63,7 @@ function Trading({ wallet, lang, loading }) {
     }
     return en
   }
+  const str = 'Total Rewards $1,000,000 in DERI'
 
   const getUserStaking = async () => {
     let res = await getUserStakingInfo(wallet.detail.account)
@@ -149,6 +149,9 @@ function Trading({ wallet, lang, loading }) {
         let img = dataURLtoBlob(url)
         // let file = blobToFile(img)
         console.log('img',img)
+        let fd = new FormData();
+        fd.append('file',img)
+
         // console.log('file',file)
       })
     }
@@ -298,7 +301,7 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
-                <a href={`https://twitter.com/intent/tweet?text=trade-to-earn&url=${twitterUrl}&target`} class="twitter-share-button">Tweet</a>
+                <a target='_blank' rel='noreferrer' href={`https://share.deri.finance/?title=${lang['title']}&description=${str}&image=${twitterUrl}&target=https://app.deri.finance/#/trade-to-earn`} class="twitter-share-button">Tweet</a>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
                  data-show-count="false">
                   Tweet
