@@ -12,7 +12,6 @@ import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { formatAddress } from '../../utils/utils';
 import TipWrapper from '../TipWrapper/TipWrapper'
 import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
-import { set } from 'mobx';
 
 function Trading({ wallet, lang, loading }) {
   const [yourBNB, setYourBNB] = useState('')
