@@ -396,8 +396,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
               </div>
             </>}
+            {type.isFuture && env === 'testnet' && <>
+              <div className='mark-price'>
+                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={4} /></span>
+              </div>
+            </>}
             <div className='funding-rate'>
-
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.optionFundingRateTip}>
@@ -410,18 +414,13 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
-              {env === 'testnet' && type.isFuture && !version.isV2Lite && <>
-                <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <TipWrapper block={false} tip={trading.fundingRateTip}>
-                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
-                </TipWrapper>
-              </>}
-              {(type.isFuture && version.isV2Lite && env === 'testnet') && <>
+              {(type.isFuture && env === 'testnet') && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
-                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4}  /></span>
+                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
+
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
@@ -442,6 +441,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
               </div>
 
             </>}
+            {type.isFuture && env === 'testnet' && <>
+              <div className='index-prcie'>
+                {lang['mark-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+              </div>
+            </>}
             <div className='funding-rate'>
               {type.isOption && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
@@ -455,13 +459,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
-              {env === 'testnet' && type.isFuture && !version.isV2Lite && <>
-                <span>{lang['funding-rate-annual']} : &nbsp;</span>
-                <TipWrapper block={false} tip={trading.fundingRateTip}>
-                  <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
-                </TipWrapper>
-              </>}
-              {(type.isFuture && version.isV2Lite && env === 'testnet') && <>
+              {(type.isFuture && env === 'testnet') && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
                   <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
@@ -639,12 +637,23 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
             {type.isFuture && <>
-              <div className='text-info'>
-                <div className='title-enter pool'>{lang['trade-price']}</div>
-                <div className='text-enter poolL'>
-                  <DeriNumberFormat value={trading.index} decimalScale={4} />
+              {env !== 'testnet' && <>
+                <div className='text-info'>
+                  <div className='title-enter pool'>{lang['trade-price']}</div>
+                  <div className='text-enter poolL'>
+                    <DeriNumberFormat value={trading.index} decimalScale={4} />
+                  </div>
                 </div>
-              </div>
+              </>}
+              {env === 'testnet' && <>
+                <div className='text-info'>
+                  <div className='title-enter pool'>{lang['mark-price']}</div>
+                  <div className='text-enter poolL'>
+                    <DeriNumberFormat value={trading.index} decimalScale={4} />
+                  </div>
+                </div>
+              </>}
+
               <div className='text-info'>
                 <div className='title-enter pool'>{lang['pool-liquidity']}</div>
                 <div className='text-enter poolL'>

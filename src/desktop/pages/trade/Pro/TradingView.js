@@ -45,8 +45,14 @@ function TradingView({ version, trading, lang, type }) {
             <div className='trade-dashboard-title'>{lang['index-price']}</div>
             <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
           </div>
+          {env === 'testnet' && <>
           <div className='trade-dashboard-item latest-price'>
-            {((env === 'testnet' && !version.isV2Lite) || env !== 'testnet') && <>
+            <div className='trade-dashboard-title'>{lang['mark-price']}</div>
+            <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
+          </div>
+          </>}
+          <div className='trade-dashboard-item latest-price'>
+            {(env !== 'testnet') && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
@@ -56,12 +62,12 @@ function TradingView({ version, trading, lang, type }) {
                 </TipWrapper>
               </div>
             </>}
-            {env === 'testnet' && version.isV2Lite && <>
+            {env === 'testnet' && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
                   <span className='funding-per' tip={trading.fundingRateTip || ''}>
-                    <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4}  />
+                    <DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4}  />
                   </span>
                 </TipWrapper>
               </div>
