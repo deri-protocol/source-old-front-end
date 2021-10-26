@@ -29,7 +29,7 @@ function Header({intl}){
           <img src={logo} alt="" onClick={goIndex}/>
         </div>
         <div className='nav-right'>
-          <Version/>
+          {/* <Version/> */}
           {/* <a href='https://app.deri.finance/#lite'><div className='trade'>{header['trade']}</div></a>  */}
           <LanguageSelector/>
         </div>

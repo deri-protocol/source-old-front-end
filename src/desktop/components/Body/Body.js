@@ -25,6 +25,7 @@ const Broker = LoadableComponent(() => import('../../pages/Broker/Broker'))
 const BrokerBind = LoadableComponent(() => import('../../pages/Broker/BrokerBind'))
 const Governance = LoadableComponent(() => import('../../pages/Governance/Governance'))
 const DipHistory = LoadableComponent(() => import('../../pages/Governance/DipHistory'))
+const DipTwo = LoadableComponent(() => import('../../pages/Governance/DipTwo'))
 const DipHistoryTwo = LoadableComponent(() => import('../../pages/Governance/DipHistoryTwo'))
 
 const InfoList = LoadableComponent(() => import('../../pages/Info/List'))
@@ -50,16 +51,19 @@ class Body extends React.Component {
           <Route exact path='/nuls' component={() => <Nuls lang={dict['nuls']} />}></Route>
           {/* <Route exact path='/brokerbind' component={() => <BrokerBind lang={dict['broker']} />}></Route> */}
           <Route exact path='/index' component={() => <Home lang={dict['home']}/>}></Route>
-          <Route exact path='/governance' component={() => <Governance lang={dict['governance']}/>}></Route>
+          <Route exact path='/governance' component={() => <Governance lang={Object.assign(dict['governance'],dict['dip-two'])}/>}></Route>
           <Route exact path='/diphistorytwo' component={() => <DipHistoryTwo lang={dict['dip-history-two']}/>}></Route>
-          <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history']}/>}></Route>
+          <Route exact path='/diphistory' component={() => <DipHistory lang={dict['dip-history'] }/>}></Route>
+          <Route exact path='/diptwo' component={() => <DipTwo lang={dict['dip-two']}/>}></Route>
           <Route exact path='/' render={() => <IndexRoute/>}/>
           <Route exact path='/mining' component={() => <Pool lang={dict['mining']}/>}/>
           <Route exact path='/retired' component={() => <LegacyPool lang={dict['mining']}/>}/>
           <Route exact path='/mining/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <Mining lang={dict['mining']}/>}/>
           <Route exact path='/addsymbol/:version/:chainId/:type/:symbol/:baseToken/:address' component={() => <AddSymbol lang={dict['permission']}/>}/>
           <Route exact path='/futures/lite' component={() => <Lite lang={dict['lite']}/>}/>
+          <Route exact path='/futures/lite/v1' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/futures/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
+          <Route exact path='/futures/pro/v1' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
           <Route exact path='/options/lite' component={() => <Lite lang={dict['lite']}/>}/>
           <Route exact path='/addpool' component={() => <AddPool lang={dict['permission']}/>}/>
           <Route exact path='/options/pro' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>}/>
