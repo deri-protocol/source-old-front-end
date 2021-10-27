@@ -2,7 +2,7 @@ import {
   getRestServerConfig,
   DeriEnv,
 } from '../config'
-// import fetch from 'node-fetch'
+//import fetch from 'node-fetch'
 
 // get REST HTTP Base url
 export const getHttpBase = () => {

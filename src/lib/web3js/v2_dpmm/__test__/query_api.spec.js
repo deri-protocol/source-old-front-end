@@ -83,7 +83,7 @@ describe('query api', () => {
   it(
     'getEstimatedFee',
     async () => {
-      expect(await getEstimatedFee(chainId, pool, account, '3', '1')).toEqual(
+      expect(await getEstimatedFee(chainId, pool, '3', '1')).toEqual(
         ''
       );
     },

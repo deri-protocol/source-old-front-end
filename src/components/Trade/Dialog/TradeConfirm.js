@@ -47,8 +47,8 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
           <div className='contract-box-info'>
             <div className='top'>
               <div className='text'>
-                <div className='text-title'># {lang['of-contracts']}</div>
-                <div className='text-num'>{direction === 'long' ? volume : `-${volume}`}</div>
+                <div className='text-title'>{lang['of-contracts']}</div>
+                <div className='text-num'>{direction === 'long' ? volume : `-${volume}`} {trading.config.unit}</div>
               </div>
               <div className='text'>
                 <div className='text-title'>{lang['position-after-execution']}</div>
@@ -61,13 +61,13 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               {type.isFuture && <>
                 {(env !== "testnet" || version.isOpen) && <>
                   <div className='text'>
-                    <div className='text-title'>{spec.symbol} {lang['trade-price-estimated']}</div>
+                    <div className='text-title'> {lang['trade-price-estimated']}</div>
                     <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
                   </div>
                 </>}
                 {env === "testnet" && !version.isOpen  && <>
                   <div className='text'>
-                    <div className='text-title'>{spec.symbol} {lang['trade-price']}</div>
+                    <div className='text-title'>{lang['confirm-trade-price']}</div>
                     <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>
                   </div>
                 </>}

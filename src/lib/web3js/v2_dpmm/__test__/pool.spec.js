@@ -1,3 +1,5 @@
+import { getPastEvents } from "../../shared"
+import { perpetualPoolAbi } from "../contract/abi/perpetualPoolAbi"
 import { perpetualPoolDpmmFactory} from "../contract/factory"
 
 describe('test', () => {
@@ -85,4 +87,31 @@ describe('test', () => {
     // expect((await pool.getTraderMarginStatus(account))).toEqual([])
 
   }, 30000)
+
+  it(
+    "format trade event",
+    async () => {
+      const pool = perpetualPoolDpmmFactory(
+        "97",
+        "0x1018d827B8392afFcD72A7c8A5eED390cB0599B1"
+      );
+      await pool.init();
+      const events = await getPastEvents(
+        "97",
+        pool.contract,
+        "Trade",
+        {},
+        13584390,
+        13584390
+      );
+      let res
+      if (events.length > 0) {
+        res = await pool.formatTradeEvent(events[0]);
+      } else {
+        res = {};
+      }
+      expect(res).toEqual({ hello: "test" });
+    },
+   30000 
+  );
 })

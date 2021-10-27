@@ -41,6 +41,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const [balance, setBalance] = useState('');
   const [slideFreeze, setSlideFreeze] = useState(true);
   const [inputing, setInputing] = useState(false);
+  const [rate, setRate] = useState('')
   const [isOptionInput, setIsOptionInput] = useState(false);
   const [stopCalculate, setStopCalculate] = useState(false)
   const [addModalIsOpen, setAddModalIsOpen] = useState(false);
@@ -368,6 +369,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     return () => { };
   }, [trading.volume, inputing]);
 
+  useEffect(() => {
+    if (trading.fundingRate.funding0 && trading.position.markPrice) {
+      let num = bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice)).times(bg(100)).toString()
+      setRate(num)
+    }
+  }, [trading.fundingRate, trading.position])
 
   useEffect(() => {
     trading.setUserSelectedDirection(direction)
@@ -419,6 +426,9 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
                   <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
                 </TipWrapper>
+                <TipWrapper block={false} tip={trading.rateTip}>
+                  &nbsp;  <span className='funding-per' tip={trading.rateTip || ''}>(<DeriNumberFormat value={rate} decimalScale={4} suffix='%' />)</span>
+                </TipWrapper>
               </>}
 
             </div>
@@ -467,6 +477,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 </TipWrapper>
               </>}
             </div>
+            {(type.isFuture && env === 'testnet' && !version.isOpen) && <>
+              <div className='rate'>
+                <TipWrapper block={false} tip={trading.rateTip}>
+                  <span className='funding-per' tip={trading.rateTip || ''}>(<DeriNumberFormat value={rate} decimalScale={4} suffix='%' />)</span>
+                </TipWrapper>
+              </div>
+            </>}
+
           </div>
         </div>
         <div className={directionClazz}>
@@ -640,17 +658,17 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             {type.isFuture && <>
               {env === 'testnet' && !version.isOpen && <>
                 <div className='text-info'>
-                <div className='title-enter pool'>{lang['mark-price']}</div>
-                <div className='text-enter poolL'>
-                  <DeriNumberFormat value={markPrice} decimalScale={4} />
+                  <div className='title-enter pool'>{lang['mark-price']}</div>
+                  <div className='text-enter poolL'>
+                    <DeriNumberFormat value={markPrice} decimalScale={4} />
+                  </div>
                 </div>
-              </div>
-              <div className='text-info'>
-                <div className='title-enter pool'>{lang['trade-price']}</div>
-                <div className='text-enter poolL'>
-                  <DeriNumberFormat value={markPriceAfter} decimalScale={4} />
+                <div className='text-info'>
+                  <div className='title-enter pool'>{lang['trade-price']}</div>
+                  <div className='text-enter poolL'>
+                    <DeriNumberFormat value={markPriceAfter} decimalScale={4} />
+                  </div>
                 </div>
-              </div>
               </>}
               {(env !== 'testnet' || version.isOpen) && <>
                 <div className='text-info'>

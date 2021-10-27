@@ -93,6 +93,7 @@ export default class Trading {
       maintenanceMarginRatioTip : computed,
       TransactionFeeTip : computed,
       dpmmFundingRateTip :computed,
+      rateTip:computed,
       multiplierTip : computed,
       TotalNetPositionTip:computed,
       direction : computed,
@@ -542,6 +543,13 @@ export default class Trading {
         return `${Intl.get('lite','funding-rate-per-second')} = ${this.fundingRate.fundingPerSecond}` +
       `\n${Intl.get('lite','1-long-contract-pays-1-short-contract')} ${this.fundingRate.fundingPerSecond} ${this.config.bTokenSymbol} ${Intl.get('lite','per-second')}`        
       }
+    }
+    return ''
+  }
+
+  get rateTip(){
+    if(this.fundingRate && this.fundingRate.funding0 && this.position.markPrice){
+      return `${Intl.get('lite','rate-hover-one')} ${bg(this.fundingRate.funding0).div(bg(this.position.markPrice) ).times(bg(100)).toString()}% ${Intl.get('lite','rate-hover-two')}`
     }
     return ''
   }

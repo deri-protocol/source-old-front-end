@@ -31,17 +31,18 @@ export class PoolApi {
       await this.pool.getSymbols();
     }
     const pool = this.pool;
-    const [lTokenAsset] = await Promise.all([
+    const [lTokenAsset, bTokens] = await Promise.all([
       pool.lToken.getAsset(accountAddress, bTokenId),
+      pool.getBTokens(),
     ]);
     const { minPoolMarginRatio } = pool.parameters;
     const bTokenIndex = pool.bTokenIds.indexOf(bTokenId.toString());
-    const { liquidity: poolLiquidity } = pool.bTokens[bTokenIndex];
+    const { liquidity: poolLiquidity } = bTokens[bTokenIndex];
     const { liquidity, pnl, lastCumulativePnl } = lTokenAsset;
     const cost = pool.symbols.reduce((acc, s) => acc.plus(s.notional), bg(0));
     const totalPnl = pool.symbols.reduce((acc, s) => acc.plus(s.pnl), bg(0));
 
-    const restLiquidity = pool.bTokens.reduce((accum, b, index) => {
+    const restLiquidity = bTokens.reduce((accum, b, index) => {
       if (index === parseInt(bTokenId)) {
         return accum.plus(b.pnl);
       } else {
@@ -51,7 +52,7 @@ export class PoolApi {
       }
     }, bg(0));
     const maxRemovableShares = calculateMaxRemovableLiquidity(
-      pool.bTokens[bTokenIndex],
+      bTokens[bTokenIndex],
       liquidity,
       cost,
       totalPnl,
@@ -60,7 +61,7 @@ export class PoolApi {
     ).toString();
     const approximatePnl = bg(pnl)
       .plus(
-        bg(pool.bTokens[bTokenIndex].cumulativePnl)
+        bg(bTokens[bTokenIndex].cumulativePnl)
           .minus(lastCumulativePnl)
           .times(liquidity)
       )

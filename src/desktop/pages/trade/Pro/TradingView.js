@@ -11,6 +11,7 @@ function TradingView({ version, trading, lang, type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
   const [markPriceClass, setMarkPriceClass] = useState('rise');
   const [markPrice, setMarkPrice] = useState();
+  const [rate,setRate] = useState('')
   const indexPriceRef = useRef()
   const markPriceRef = useRef();
   useEffect(() => {
@@ -32,6 +33,13 @@ function TradingView({ version, trading, lang, type }) {
       markPriceRef.current = mark
       setMarkPrice(mark)
   }, [trading.index, trading.position])
+
+  useEffect(()=>{
+    if(trading.fundingRate.funding0 && trading.position.markPrice){
+      let num =  bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice) ).times(bg(100)).toString()
+      setRate(num)
+    }
+  },[trading.fundingRate,trading.position])
 
   return (
     <div id="trading-view">
@@ -68,6 +76,11 @@ function TradingView({ version, trading, lang, type }) {
                 <TipWrapper block={false}>
                   <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}>
                     <DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4}  />
+                  </span>
+                </TipWrapper>
+                <TipWrapper block={false}>
+                &nbsp;  <span className='funding-per' tip={trading.rateTip || ''}>
+                    (<DeriNumberFormat value={rate} decimalScale={4} suffix='%'  />)
                   </span>
                 </TipWrapper>
               </div>
