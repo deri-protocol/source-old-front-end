@@ -3,6 +3,7 @@ import Button from "../../Button/Button";
 import NumberFormat from 'react-number-format';
 import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
+import version from '../../../model/Version'
 import { bg, DeriEnv } from '../../../lib/web3js/indexV2'
 const env = DeriEnv.get()
 
@@ -58,13 +59,13 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
                 <div className='text-num'><span className={direction}>{lang[direction.toLowerCase()]}</span></div>
               </div>
               {type.isFuture && <>
-                {env !== "testnet" && <>
+                {(env !== "testnet" || version.isOpen) && <>
                   <div className='text'>
                     <div className='text-title'>{spec.symbol} {lang['trade-price-estimated']}</div>
                     <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
                   </div>
                 </>}
-                {env === "testnet" && <>
+                {env === "testnet" && !version.isOpen  && <>
                   <div className='text'>
                     <div className='text-title'>{spec.symbol} {lang['trade-price']}</div>
                     <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>

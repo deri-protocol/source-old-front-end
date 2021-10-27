@@ -40,7 +40,7 @@ function ContractInfo({ wallet, trading, lang, type }) {
               {trading.contract.multiplier} {trading.config ? trading.config.unit : ''}
             </div>
           </div>
-          {env !== 'testnet' && <div className="info">
+          {(env !== 'testnet' || version.isOpen) && <div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
               {trading.contract.fundingRateCoefficient}

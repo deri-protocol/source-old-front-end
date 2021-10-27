@@ -5,6 +5,7 @@ export const openPoolChainIds = () => {
   const configs = {
     prod: ['56'],
     dev: ['97'],
+    testnet: ['97'],
   }
   const env = DeriEnv.get()
   if (Array.isArray(configs[env])) {
@@ -25,6 +26,13 @@ export const getPoolV2LiteManagerConfig = (chainId) => {
       },
     ],
     dev: [
+      {
+        chainId: "97",
+        address: "0x7A55ed377361802fad1Ae3d944cDbAA3c7694757",
+        initialBlock: "11034400",
+      },
+    ],
+    testnet: [
       {
         chainId: "97",
         address: "0x7A55ed377361802fad1Ae3d944cDbAA3c7694757",
