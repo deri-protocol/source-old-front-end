@@ -11,8 +11,8 @@ import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
 import { formatAddress } from '../../utils/utils';
 import TipWrapper from '../TipWrapper/TipWrapper'
+import html2canvas from 'html2canvas'
 import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
-import { set } from 'mobx';
 
 function Trading({ wallet, lang, loading }) {
   const [yourBNB, setYourBNB] = useState('')
@@ -23,6 +23,7 @@ function Trading({ wallet, lang, loading }) {
   const [userContrib, setUserContrib] = useState('')
   const [totalContrib, setTotalContrib] = useState('')
   const [stageList, setStageList] = useState({})
+  const [twitterUrl,setTwitterUrl] = useState('https://mcdex.io/homepage/assets/static/twitter_20210515.jpg')
   const [list, setList] = useState([])
   const numToEn = (num) => {
     let en;
@@ -62,6 +63,7 @@ function Trading({ wallet, lang, loading }) {
     }
     return en
   }
+  const str = 'Total Rewards $1,000,000 in DERI'
 
   const getUserStaking = async () => {
     let res = await getUserStakingInfo(wallet.detail.account)
@@ -126,6 +128,44 @@ function Trading({ wallet, lang, loading }) {
       interval && clearInterval(interval);
     };
   }, [])
+
+  const dataURLtoBlob = (dataurl) => {
+    let arr = dataurl.split(','),
+      fileType = arr[0].match(/:(.*?);/)[1],
+      bstr = window.atob(arr[1]),
+      l = bstr.length,
+      u8Arr = new Uint8Array(l);
+    while (l--) {
+      u8Arr[l] = bstr.charCodeAt(l);
+    }
+    return new Blob([u8Arr], {
+      type: fileType
+    });
+  }
+  const blobToFile = (newBlob) => {
+    newBlob.lastModifiedDate = new Date();
+    newBlob.name = 'img';
+    return newBlob;
+  }
+
+  useEffect(() => {
+    if (yourDERI) {
+      let twitter = document.getElementsByClassName('twitter-box')[0]
+      html2canvas(twitter, {
+        allowTaint: false,
+        useCORS: true,
+      }).then(canvas => {
+        let url = canvas.toDataURL("image/png")
+        let img = dataURLtoBlob(url)
+        // let file = blobToFile(img)
+        console.log('img',img)
+        let fd = new FormData();
+        fd.append('file',img)
+
+        // console.log('file',file)
+      })
+    }
+  }, [yourDERI])
 
   useEffect(() => {
     let interval = null;
@@ -206,7 +246,11 @@ function Trading({ wallet, lang, loading }) {
   }, [list])
   return (
     <div className='trading-top'>
-
+      <div className='twitter-box'>
+        <div className='twitter-box-rewards'>
+          $ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "0"}
+        </div>
+      </div>
       <div className='desktop-list'>
         {/* <div className='trading-title'>
           {lang['earn-deri-for-trading-perpetual']}
@@ -267,7 +311,7 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
-                <a href="https://twitter.com/intent/tweet?text=trade-to-earn&url=https%3A%2F%2Fshare.deri.finance%2F%3Ftitle%3Dtrade-to-earn%26description%3Dtrade-to-earn-share%26image%3Dhttps%3A%2F%2Fmcdex.io%2Fhomepage%2Fassets%2Fstatic%2Ftwitter_20210515.jpg"  class="twitter-share-button">Tweet</a>
+                <a target='_blank' rel='noreferrer' href={`https://share.deri.finance/?title=${lang['title']}&description=${str}&image=${twitterUrl}&target=https://app.deri.finance/#/trade-to-earn`} class="twitter-share-button">Tweet</a>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
                  data-show-count="false">
                   Tweet
@@ -410,28 +454,28 @@ function Trading({ wallet, lang, loading }) {
                 <div className='your-point-box'>
                   <div className='your-point'>Your Points</div>
                   <div className='your-point'>
-                    {stageList.userQ1Point ? 
+                    {stageList.userQ1Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000`:''
+                          stageList.userQ1Point ? ` = (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ1Point} decimalScale={2} thousandSeparator={true} />
                         </span>
 
                       </TipWrapper>
-                    : "--"}
+                      : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ2Point ? 
+                    {stageList.userQ2Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000`:''
+                          stageList.userQ1Point ? ` = (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
                         </span>
 
                       </TipWrapper>
-                       : "--"}
+                      : "--"}
                   </div>
                   <div className='your-point'>
                     {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} /> : "--"}
@@ -545,28 +589,28 @@ function Trading({ wallet, lang, loading }) {
                 <div className='your-point-box'>
                   <div className='your-point'>Your Points</div>
                   <div className='your-point'>
-                    {stageList.userQ1Point ? 
+                    {stageList.userQ1Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? `= (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000`:''
+                          stageList.userQ1Point ? `= (${stageList.userQ1Contrib} / ${stageList.Q1Contrib}) * 10,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ1Point} decimalScale={2} thousandSeparator={true} />
                         </span>
 
                       </TipWrapper>
-                    : "--"}
+                      : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ2Point ? 
+                    {stageList.userQ2Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? `= (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000`:''
+                          stageList.userQ1Point ? `= (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
                         </span>
 
                       </TipWrapper>
-                       : "--"}
+                      : "--"}
                   </div>
                   <div className='your-point'>
                     {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} /> : "--"}

@@ -10,12 +10,12 @@
   "funding-rate-delta":"Financement quotidien Delta",
   "funding-rate-premium":"Financement quotidien Premium",
   "position-info" : "INFORMATIONS DE LA POSITION",
-  "option-mark-price" : "Option Mark Price",
+  "option-mark-price" : "Prix de référence de contrat d'option",
   "open" : "O",
   "high" : "H",
   "low" : "L",
   "closed" : "C",
-  "price" : "Price",
-  "index" : "Index",
+  "price" : "Prix",
+  "index" : "Indice",
   "option" : "Option"
 }

@@ -133,7 +133,7 @@ function DipTwo({ wallet = {}, lang, loading }) {
           {lang['governance-describe-two']}
         </div>
         <div>
-          {lang['governance-describe-three']} <a className='doc-a' rel='noreferrer' target="_blank" herf="https://docs.deri.finance/mining-faq#what-do-i-harvest-for-liquidity-mining">{lang['governance-describe-three-a']}</a>  {lang['governance-describe-three-one']}
+          {lang['governance-describe-three']} <a className='doc-a' rel='noreferrer' target="_blank" href="https://docs.deri.finance/mining-faq#what-do-i-harvest-for-liquidity-mining">{lang['governance-describe-three-a']}</a>  {lang['governance-describe-three-one']}
         </div>
         <br />
       </div>
