@@ -1,4 +1,5 @@
 import { bg, catchTxApiError, checkAddress, checkApiInput, checkChainId } from "../../shared"
+import { checkAmount } from "../../shared/utils/derijsnext";
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory.js'
 
 // mining
@@ -7,6 +8,7 @@ export const addLiquidity = async(...args) => {
       chainId = checkChainId(chainId);
       poolAddress = checkAddress(poolAddress);
       accountAddress = checkAddress(accountAddress);
+      amount = checkAmount(amount)
       const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
       await pool.init();
       return await pool.addLiquidity(accountAddress, amount)
@@ -21,6 +23,7 @@ export const removeLiquidity = async (...args) => {
         poolAddress,
         accountAddress
       );
+      amount = checkAmount(amount)
       const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
       await pool.init();
       return await pool.removeLiquidity(accountAddress, amount);
@@ -50,6 +53,7 @@ export const depositMargin = async (...args) => {
       poolAddress,
       accountAddress
     );
+    amount = checkAmount(amount)
     const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
     await pool.init();
     return await pool.addMargin(accountAddress, amount);
@@ -63,6 +67,7 @@ export const withdrawMargin = async (...args) => {
       poolAddress,
       accountAddress
     );
+    amount = checkAmount(amount)
     const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
     await pool.init();
     return await pool.removeMargin(accountAddress, amount);
@@ -76,6 +81,7 @@ export const tradeWithMargin = async(...args) => {
       poolAddress,
       accountAddress
     );
+    newVolume = checkAmount(newVolume)
     const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
     await pool.init();
     return await pool.trade(accountAddress, symbolId, newVolume);

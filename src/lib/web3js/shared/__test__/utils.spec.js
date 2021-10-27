@@ -33,6 +33,7 @@ describe('utils', () => {
     const input = "1"
     const output = "1000000000000000000"
     expect(toWei(input)).toEqual(output)
+    expect(toWei(-1)).toEqual('-1000000000000000000')
   })
   test('fromWei()', () => {
     const input = "1120000000000000000"

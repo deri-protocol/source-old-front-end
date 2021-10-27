@@ -40,6 +40,14 @@ export const checkTokenId = (tokenId) => {
   throw new Error(`invalid tokenId '${tokenId}'`)
 }
 
+export const checkAmount = (amount) => {
+  amount = amount != null ? amount.toString() : amount
+  if (/^-?\d+$/.test(amount)) {
+    return amount
+  }
+  throw new Error(`invalid amount '${amount}'`)
+}
+
 export const checkSymbolId = (symbolId, symbolIds) => {
   if (symbolId != null) {
     const index = symbolIds.indexOf(symbolId.toString())

@@ -4,7 +4,7 @@ import {
 } from '../../shared';
 import { ERC20Factory } from '../../shared/contract/factory';
 import { catchTxApiError } from '../../shared/utils/api';
-import { checkSymbolId, checkTokenId } from '../../shared/utils/derijsnext';
+import { checkAmount, checkSymbolId, checkTokenId } from '../../shared/utils/derijsnext';
 import { perpetualPoolDpmmFactory } from '../contract/factory.js';
 
 // mining
@@ -16,6 +16,7 @@ export const addLiquidity = async (chainId, poolAddress, accountAddress, amount,
         poolAddress,
         accountAddress
       );
+      amount = checkAmount(amount)
       bTokenId = checkTokenId(bTokenId)
       const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
       await pool.init();
@@ -33,6 +34,7 @@ export const removeLiquidity = async (chainId, poolAddress, accountAddress, amou
         poolAddress,
         accountAddress
       );
+      amount = checkAmount(amount)
       bTokenId = checkTokenId(bTokenId)
       const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
       await pool.init();
@@ -68,6 +70,7 @@ export const depositMargin = async (chainId, poolAddress, accountAddress, amount
         poolAddress,
         accountAddress
       );
+      amount = checkAmount(amount)
       bTokenId = checkTokenId(bTokenId)
       const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
       await pool.init();
@@ -85,6 +88,7 @@ export const withdrawMargin = async (chainId, poolAddress, accountAddress, amoun
         poolAddress,
         accountAddress
       );
+      amount = checkAmount(amount)
       bTokenId = checkTokenId(bTokenId)
       const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
       await pool.init();
@@ -102,6 +106,7 @@ export const tradeWithMargin = async (chainId, poolAddress, accountAddress, newV
         poolAddress,
         accountAddress
       );
+      newVolume = checkAmount(newVolume)
       symbolId = checkTokenId(symbolId)
       const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
       await pool.init();

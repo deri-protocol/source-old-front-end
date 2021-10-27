@@ -361,14 +361,14 @@ export class PoolApi {
       await pool.getSymbols();
     }
     const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
-    const {funding, fundingPerSecond, tradersNetVolume } = pool.symbols[symbolIndex]
+    const {funding, fundingPerSecond, tradersNetVolume, multiplier } = pool.symbols[symbolIndex]
     const liquidity = pool.state.liquidity
     return {
       funding0: funding,
       fundingPerSecond,
       liquidity: liquidity,
       volume: '-',
-      tradersNetVolume,
+      tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString(),
     }
   }
 

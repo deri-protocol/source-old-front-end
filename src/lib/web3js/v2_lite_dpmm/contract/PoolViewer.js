@@ -357,7 +357,9 @@ export class PoolViewer {
       fundingPerSecond: symbol.fundingPerSecond,
       liquidity: liquidity,
       volume: '-',
-      tradersNetVolume: symbol.tradersNetVolume,
+      tradersNetVolume: bg(symbol.tradersNetVolume)
+        .times(symbol.multiplier)
+        .toString(),
     };
   }
 

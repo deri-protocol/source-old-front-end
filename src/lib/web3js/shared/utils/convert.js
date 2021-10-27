@@ -37,9 +37,9 @@ export const min = (value1, value2) => {
   return value2;
 };
 
-export const fromWei = (value, unit='ether') => Web3.utils.fromWei(value, unit)
+export const fromWei = (value) => bg(value, -18).toString()
 
-export const toWei = (value, unit='ether') => Web3.utils.toWei(value, unit)
+export const toWei = (value) => bg(value, 18).toFixed(0).toString()
 
 export const toNatural = (value, num = 0) => BigNumber(value).toFixed(num).toString();
 
