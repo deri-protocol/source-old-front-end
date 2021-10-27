@@ -21,8 +21,6 @@ function Pro({wallet,lang,type,version}){
   const isV1Router = location.pathname.split('/')[3]
   if(isV1Router){
     version.setCurrent('v1')
-  }else{
-    version.setCurrent('v2')
   }
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1903px';
