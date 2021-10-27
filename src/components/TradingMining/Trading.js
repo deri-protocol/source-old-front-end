@@ -148,7 +148,7 @@ function Trading({ wallet, lang, loading }) {
     return newBlob;
   }
 
-  useEffect(() => {
+  const twitterShare = ()=>{
     if (yourDERI) {
       let twitter = document.getElementsByClassName('twitter-box')[0]
       html2canvas(twitter, {
@@ -161,11 +161,21 @@ function Trading({ wallet, lang, loading }) {
         console.log('img',img)
         let fd = new FormData();
         fd.append('file',img)
-
+        //https://share.deri.finance/add_image
+        fetch('https://share.deri.finance/add_image',{
+          method:'post',
+          body:fd
+        }).then((res)=>{
+          return res.json()
+        }).then((data)=>{
+          console.log(data)
+        }).catch((error)=>{
+          console.log(error)
+        })
         // console.log('file',file)
       })
     }
-  }, [yourDERI])
+  }
 
   useEffect(() => {
     let interval = null;
@@ -311,7 +321,7 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
-                <a target='_blank' rel='noreferrer' href={`https://share.deri.finance/?title=${lang['title']}&description=${str}&image=${twitterUrl}&target=https://app.deri.finance/#/trade-to-earn`} class="twitter-share-button">Tweet</a>
+                <a target='_blank' rel='noreferrer' onClick={twitterShare} href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://share.deri.finance/?title=Trade%20to%20Earn&description=Total%20Rewards%20$1,000,000%20in%20DERI&image=${twitterUrl}&target=${encodeURIComponent('https://app.deri.finance/#/trade-to-earn')}`)}`} class="twitter-share-button">Tweet</a>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
                  data-show-count="false">
                   Tweet
