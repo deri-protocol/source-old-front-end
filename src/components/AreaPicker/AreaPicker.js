@@ -27,7 +27,7 @@ function AreaPicker({lang,version,wallet,type}){
     }
     wallet.supportOpen ? setStyles({width : `${100 / 3}%` }) : setStyles({width : `${100 /2 }%`})
     return () => {}
-  }, [wallet.detail,version])
+  }, [wallet.detail,version.current])
   return (
     ((version.isV2 || version.isV2Lite || version.isOpen) && wallet.supportInnovation  &&!type.isOption) ? <div className='area-picker'>
       <div className={clazz}>

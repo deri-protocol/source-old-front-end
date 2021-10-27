@@ -56,8 +56,8 @@ function TradingView({ version, trading, lang, type }) {
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
-                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}>
-                    <DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} suffix='%' />
+                  <span className='funding-per' tip={trading.fundingRateTip || ''}>
+                    <DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' />
                   </span>
                 </TipWrapper>
               </div>
@@ -66,7 +66,7 @@ function TradingView({ version, trading, lang, type }) {
               <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
-                  <span className='funding-per' tip={trading.fundingRateTip || ''}>
+                  <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}>
                     <DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4}  />
                   </span>
                 </TipWrapper>

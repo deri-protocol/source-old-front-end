@@ -247,7 +247,7 @@ export default class Trading {
       this.setPosition(position);
       this.syncFundingRate();
     });
-    type.isOption && this.positionInfo.loadAll(this.wallet,this.config,positions => this.setPositions(positions))
+    this.positionInfo.loadAll(this.wallet,this.config,positions => this.setPositions(positions))
     this.syncFundingRate();
     this.wallet.loadWalletBalance(this.wallet.detail.chainId,this.wallet.detail.account)
     const history = await this.historyInfo.load(this.wallet,this.config)

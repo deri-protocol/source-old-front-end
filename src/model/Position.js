@@ -66,7 +66,7 @@ export default class Position {
       }
       return positions;
     }
-   }
+   } 
 
    startAll(){
     this.paused = false;
