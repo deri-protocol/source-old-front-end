@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
+import {isBrowser} from 'react-device-detect'
+import axios from 'axios'
 import Button from '../Button/Button';
 import one from './img/one.svg'
 import two from './img/two.svg'
 import three from './img/three.svg'
 import add from './img/add.svg'
+import twitterImg from './img/twitter.svg'
+import twitterBgImg from './img/share.png'
 import bnbLogo from './img/bnb.svg'
 import deriLogo from './img/deri.svg'
 import DeriNumberFormat from '../../utils/DeriNumberFormat'
@@ -23,7 +27,6 @@ function Trading({ wallet, lang, loading }) {
   const [userContrib, setUserContrib] = useState('')
   const [totalContrib, setTotalContrib] = useState('')
   const [stageList, setStageList] = useState({})
-  const [twitterUrl,setTwitterUrl] = useState('https://mcdex.io/homepage/assets/static/twitter_20210515.jpg')
   const [list, setList] = useState([])
   const numToEn = (num) => {
     let en;
@@ -63,7 +66,6 @@ function Trading({ wallet, lang, loading }) {
     }
     return en
   }
-  const str = 'Total Rewards $1,000,000 in DERI'
 
   const getUserStaking = async () => {
     let res = await getUserStakingInfo(wallet.detail.account)
@@ -107,6 +109,12 @@ function Trading({ wallet, lang, loading }) {
     }
   }
 
+
+
+  // const twit = (e) => {
+  //   e.prev
+  // }
+
   useEffect(() => {
     loading.loading();
     let interval = null;
@@ -119,26 +127,22 @@ function Trading({ wallet, lang, loading }) {
     };
   }, [])
 
-  const dataURLtoBlob = (dataurl) => {
-    let arr = dataurl.split(','),
-      fileType = arr[0].match(/:(.*?);/)[1],
-      bstr = window.atob(arr[1]),
-      l = bstr.length,
-      u8Arr = new Uint8Array(l);
-    while (l--) {
-      u8Arr[l] = bstr.charCodeAt(l);
-    }
-    return new Blob([u8Arr], {
-      type: fileType
-    });
+  const dataURLtoBlob = (dataurl,filename = 'file') => {
+    let arr = dataurl.split(',')
+  let mime = arr[0].match(/:(.*?);/)[1]
+  let suffix = mime.split('/')[1]
+  let bstr = atob(arr[1])
+  let n = bstr.length
+  let u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
   }
-  const blobToFile = (newBlob) => {
-    newBlob.lastModifiedDate = new Date();
-    newBlob.name = 'img';
-    return newBlob;
+  return new File([u8arr], `${filename}.${suffix}`, {
+    type: mime
+  })
   }
 
-  useEffect(() => {
+  const twitterShare = async () => {
     if (yourDERI) {
       let twitter = document.getElementsByClassName('twitter-box')[0]
       html2canvas(twitter, {
@@ -147,15 +151,21 @@ function Trading({ wallet, lang, loading }) {
       }).then(canvas => {
         let url = canvas.toDataURL("image/png")
         let img = dataURLtoBlob(url)
-        // let file = blobToFile(img)
-        console.log('img',img)
         let fd = new FormData();
-        fd.append('file',img)
+        fd.append('image', img)
+        let AxiosUrl = 'https://share.deri.finance/add_image?type=image'
+        axios.post(AxiosUrl,fd).then(res=>{
+          let shareImg = res.data.data.url
+          if(isBrowser){
+            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://share.deri.finance/?title=Trade%20to%20Earn&description=Total%20Rewards%20$1,000,000%20in%20DERI&image=${shareImg}&target=${encodeURIComponent('https://app.deri.finance/#/trade-to-earn')}`)}`)
+          }else{
+            window.location.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://share.deri.finance/?title=Trade%20to%20Earn&description=Total%20Rewards%20$1,000,000%20in%20DERI&image=${shareImg}&target=${encodeURIComponent('https://app.deri.finance/#/trade-to-earn')}`)}`
+          }
+        })
 
-        // console.log('file',file)
       })
     }
-  }, [yourDERI])
+  }
 
   useEffect(() => {
     let interval = null;
@@ -237,6 +247,7 @@ function Trading({ wallet, lang, loading }) {
   return (
     <div className='trading-top'>
       <div className='twitter-box'>
+        <img src={twitterBgImg}></img>
         <div className='twitter-box-rewards'>
           $ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "0"}
         </div>
@@ -300,8 +311,11 @@ function Trading({ wallet, lang, loading }) {
           <div className='your-rewards'>
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
-                {lang['your-rstimated-rewards']}
-                <a target='_blank' rel='noreferrer' href={`https://share.deri.finance/?title=${lang['title']}&description=${str}&image=${twitterUrl}&target=https://app.deri.finance/#/trade-to-earn`} class="twitter-share-button">Tweet</a>
+                <span className='your-rewards-title-text'>{lang['your-rstimated-rewards']}</span> 
+                <div className='share-twitter' onClick={twitterShare}>
+                  <span><img src={twitterImg} /></span> 
+                  <button>SHARE</button>
+                </div>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
                  data-show-count="false">
                   Tweet
@@ -485,9 +499,10 @@ function Trading({ wallet, lang, loading }) {
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">
-                  Tweet
-                </a>
+                <div className='share-twitter' onClick={twitterShare}>
+                  <span><img src={twitterImg} /></span> 
+                  <button>SHARE</button>
+                </div>
               </div>
               <div className='your-rewards-info'>
                 {/* <div className='your-bnb'>
