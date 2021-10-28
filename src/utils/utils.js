@@ -142,7 +142,23 @@ export function getFormatSymbol(symbol){
       symbol = symbol.split('-')[0]
     }
   }
+  // if(type.isOption){
+  //   return `${symbol}_V2_${curChain}`
+  // } else {}
   return version.isV2 || version.isV2Lite || type.isOption || version.current === 'v2_lite_open' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
+}
+
+export function getTradingviewSymbol(symbol,spec){
+  const curChain = restoreChain();
+  const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
+  if(type.isFuture){
+    return {
+      indexPrice : version.isV1 ? symbol : `${symbol}_${version.current}_${chain}`,
+      markPrice : `MARKPRICE_${symbol}_${chain}_FUTURE_${version.zone}_${spec.bTokenSymbol}`
+    }
+  } else {
+    return `${symbol}_V2_${chain}`
+  }
 }
 
 export function equalIgnoreCase(str1,str2){
