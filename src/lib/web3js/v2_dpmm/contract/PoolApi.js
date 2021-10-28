@@ -357,6 +357,7 @@ export class PoolApi {
   }
 
   async getFundingRate(symbolId) {
+    await this.init()
     const pool = this.pool
     if (!pool.isSymbolsUpdated()) {
       await pool.getSymbols();
@@ -389,7 +390,7 @@ export class PoolApi {
     ).toString();
     symbol.fundingPerSecond = bg(symbol.dpmmPrice)
       .minus(symbol.indexPrice)
-      .times(symbol.multiplier)
+      //.times(symbol.multiplier)
       .div(pool.fundingPeriod)
       .toString();
     return {

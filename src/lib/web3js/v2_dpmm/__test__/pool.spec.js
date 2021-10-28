@@ -1,17 +1,16 @@
 import { getPastEvents } from "../../shared"
-import { perpetualPoolAbi } from "../contract/abi/perpetualPoolAbi"
 import { perpetualPoolDpmmFactory} from "../contract/factory"
 
 describe('test', () => {
   const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF'
   it('pool init', async() => {
-    const pool = perpetualPoolDpmmFactory('97', '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1', '13435471')
+    const pool = perpetualPoolDpmmFactory('97', '0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0', '13589866')
     await pool.init()
     expect(pool.addresses).toEqual({
-      lTokenAddress: '0x43f443A2Cb9b379972cCC0233625BC1500ba5136',
-      pTokenAddress: '0xc8652144420632b7C5715d12cC8EA3143C035C5c',
+      lTokenAddress: '0xA74F3068f8c44a7B587A01bdc367c4A20cF54aB0',
+      pTokenAddress: '0x739A38C7Ce6FEdf1B880859CC31E27A76f08aD52',
       protocolFeeCollector: '0x3B6FCA4E50BF6233224eE8C5a1a99bae72748b68',
-      routerAddress: '0x2492a9CB0f013684601D5B8317cAb66295584EF8',
+      routerAddress: '0xe9202E1313B654F9F6a21c6dbBF6E0C833fa2763',
     });
     expect(pool.parameters).toEqual({
       decimals0: '18',
@@ -22,7 +21,7 @@ describe('test', () => {
       maxLiquidationReward: '1000',
       minLiquidationReward: '0',
       minPoolMarginRatio: '1',
-      protocolFeeCollectRatio: '0.2',
+      protocolFeeCollectRatio: '0.8',
     });
     expect(pool.bTokenIds).toEqual(['0', '1'])
     expect(pool.bTokenSymbols).toEqual(['TBUSD', 'TWETH'])
@@ -53,11 +52,11 @@ describe('test', () => {
         },
       ],
       chainId: '97',
-      initialBlock: '13435471',
-      lToken: '0x43f443A2Cb9b379972cCC0233625BC1500ba5136',
-      pToken: '0xc8652144420632b7C5715d12cC8EA3143C035C5c',
-      pool: '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1',
-      router: '0x2492a9CB0f013684601D5B8317cAb66295584EF8',
+      initialBlock: '13589866',
+      lToken: '0xA74F3068f8c44a7B587A01bdc367c4A20cF54aB0',
+      pToken: '0x739A38C7Ce6FEdf1B880859CC31E27A76f08aD52',
+      pool: '0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0',
+      router: '0xe9202E1313B654F9F6a21c6dbBF6E0C833fa2763',
       symbols: [
         {
           symbol: 'BTCUSD',
@@ -93,7 +92,7 @@ describe('test', () => {
     async () => {
       const pool = perpetualPoolDpmmFactory(
         "97",
-        "0x1018d827B8392afFcD72A7c8A5eED390cB0599B1"
+        "0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0"
       );
       await pool.init();
       const events = await getPastEvents(
@@ -101,8 +100,8 @@ describe('test', () => {
         pool.contract,
         "Trade",
         {},
-        13584390,
-        13584390
+        13611004,
+        13611004,
       );
       let res
       if (events.length > 0) {

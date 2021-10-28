@@ -18,10 +18,6 @@ export class OffChainOracleFactory extends ContractBase {
   //    const res = await this._call('controller', [])
   //    return deleteIndexedKey(res)
   //  }
-  //  async getOfficialOracle(symbol) {
-  //    const res = await this._call('getOfficialOracle', [symbol])
-  //    return deleteIndexedKey(res)
-  //  }
   async getOracle(symbol) {
     const res = await this._call('getOracle', [symbol])
     return deleteIndexedKey(res)

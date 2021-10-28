@@ -298,7 +298,7 @@ const getSymbols = (klass) => {
         .minus(s.tradersNetCost);
       const ratePerSecond = bg(s.dpmmPrice)
         .minus(s.indexPrice)
-        .times(s.multiplier)
+        //.times(s.multiplier)
         .div(this.fundingPeriod)
         .toString();
       const diff = bg(Math.floor(Date.now() / 1000)).minus(

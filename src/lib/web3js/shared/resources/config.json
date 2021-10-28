@@ -231,10 +231,10 @@
     "testnet": {
       "pools": [
         {
-          "lToken": "0x43f443A2Cb9b379972cCC0233625BC1500ba5136",
-          "pToken": "0xc8652144420632b7C5715d12cC8EA3143C035C5c",
-          "pool": "0x1018d827B8392afFcD72A7c8A5eED390cB0599B1",
-          "router": "0x2492a9CB0f013684601D5B8317cAb66295584EF8",
+          "lToken": "0xA74F3068f8c44a7B587A01bdc367c4A20cF54aB0",
+          "pToken": "0x739A38C7Ce6FEdf1B880859CC31E27A76f08aD52",
+          "pool": "0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0",
+          "router": "0xe9202E1313B654F9F6a21c6dbBF6E0C833fa2763",
           "bTokens": [
             {
               "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
@@ -248,7 +248,7 @@
             }
           ],
           "chainId": "97",
-          "initialBlock": "13435471",
+          "initialBlock": "13589866",
           "symbols": [
             {
               "symbol": "BTCUSD",
@@ -615,9 +615,9 @@
     "testnet": {
       "pools": [
         {
-          "pool": "0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3",
-          "pToken": "0xbd891B0B41d4Bf11d8fD3e2c27C212C32B5E2CA1",
-          "lToken": "0xb6745b257b46775309983dAbe6ee69aE8061536a",
+          "pool": "0x792ec4De2B607baEF7DAAE9d238d73Ffb4819972",
+          "pToken": "0xA6309EE8378Be048B6985746655EaE2b878dad26",
+          "lToken": "0xfd3bfb84Db09733dB47F6bBfdE167e602dEC2Fb7",
           "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
           "bTokenSymbol": "TBUSD",
           "symbols": [
@@ -632,7 +632,7 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "13559325",
+          "initialBlock": "13590247",
           "type": "perpetual",
           "version": "v2_lite",
           "versionId": "v2_lite_dpmm",
@@ -944,9 +944,9 @@
     "testnet": {
       "pools": [
         {
-          "pool": "0x60f7A6772BeC6ce126Cc959FD472b713b2221C0E",
-          "pToken": "0xc847E3f51C23B0994F47B277Ff4A9A77774f0DF2",
-          "lToken": "0xee8f6C849e862793C23b186eb741fd12eCD8c4DD",
+          "pool": "0xd2D625bfe66FC99dE2351Ac3B4Cc53C6f61563A8",
+          "pToken": "0x4F0cF7C13404b4DBE0dF93A81282aBbaB9FC4F9b",
+          "lToken": "0x5A522faF2A92D2E17Ec9f6672c0d3E15c620CBfc",
           "bToken": "0xaa2B8115c094445e96C2CD951c17a30F41867323",
           "pricer": "0xFC78Fb1c56d9b6B55c265696349B91843Ba71dAD",
           "bTokenSymbol": "TBUSD",
@@ -972,7 +972,7 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "13560757",
+          "initialBlock": "13590397",
           "type": "option",
           "version": "option",
           "versionId": "option",

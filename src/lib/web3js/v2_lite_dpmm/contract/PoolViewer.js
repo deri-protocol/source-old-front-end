@@ -380,7 +380,7 @@ export class PoolViewer {
     ).toString();
     symbol.fundingPerSecond = bg(symbol.dpmmPrice)
       .minus(symbol.indexPrice)
-      .times(symbol.multiplier)
+      //.times(symbol.multiplier)
       .div(pool.fundingPeriod)
       .toString();
     return {

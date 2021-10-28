@@ -22,7 +22,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "lp",
                 "type": "address"
             },
             {
@@ -47,7 +47,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "trader",
                 "type": "address"
             },
             {
@@ -110,7 +110,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "trader",
                 "type": "address"
             },
             {
@@ -179,7 +179,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "lp",
                 "type": "address"
             },
             {
@@ -204,7 +204,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "trader",
                 "type": "address"
             },
             {
@@ -223,7 +223,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "account",
+                "name": "trader",
                 "type": "address"
             },
             {
@@ -231,6 +231,12 @@ export const perpetualPoolLiteAbi = [
                 "internalType": "uint256",
                 "name": "symbolId",
                 "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "indexPrice",
+                "type": "int256"
             },
             {
                 "indexed": false,
@@ -247,19 +253,7 @@ export const perpetualPoolLiteAbi = [
             {
                 "indexed": false,
                 "internalType": "int256",
-                "name": "liquidity",
-                "type": "int256"
-            },
-            {
-                "indexed": false,
-                "internalType": "int256",
-                "name": "tradersNetVolume",
-                "type": "int256"
-            },
-            {
-                "indexed": false,
-                "internalType": "int256",
-                "name": "indexPrice",
+                "name": "tradeFee",
                 "type": "int256"
             }
         ],
@@ -423,16 +417,11 @@ export const perpetualPoolLiteAbi = [
             },
             {
                 "internalType": "uint256",
-                "name": "lastBlockNumber",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "lastBlockTimestamp",
+                "name": "lastTimestamp",
                 "type": "uint256"
             }
         ],
-        "name": "executeMigrationSwitchToTimestamp",
+        "name": "executeMigrationWithTimestamp",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -621,6 +610,56 @@ export const perpetualPoolLiteAbi = [
                 "internalType": "address",
                 "name": "account",
                 "type": "address"
+            },
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "symbolId",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "timestamp",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "price",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint8",
+                        "name": "v",
+                        "type": "uint8"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "r",
+                        "type": "bytes32"
+                    },
+                    {
+                        "internalType": "bytes32",
+                        "name": "s",
+                        "type": "bytes32"
+                    }
+                ],
+                "internalType": "struct IPerpetualPoolLite.SignedPrice[]",
+                "name": "prices",
+                "type": "tuple[]"
+            }
+        ],
+        "name": "liquidate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "pTokenId",
+                "type": "uint256"
             },
             {
                 "components": [

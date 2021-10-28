@@ -178,6 +178,12 @@ export const perpetualPoolAbi = [
             {
                 "indexed": false,
                 "internalType": "int256",
+                "name": "indexPrice",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
                 "name": "tradeVolume",
                 "type": "int256"
             },
@@ -185,6 +191,12 @@ export const perpetualPoolAbi = [
                 "indexed": false,
                 "internalType": "int256",
                 "name": "tradeCost",
+                "type": "int256"
+            },
+            {
+                "indexed": false,
+                "internalType": "int256",
+                "name": "tradeFee",
                 "type": "int256"
             }
         ],

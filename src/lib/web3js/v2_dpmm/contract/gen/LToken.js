@@ -70,10 +70,10 @@ export class LToken extends ContractBase {
   //    const res = await this._call('totalMinted', [])
   //    return deleteIndexedKey(res)
   //  }
-   async totalSupply() {
-     const res = await this._call('totalSupply', [])
-     return deleteIndexedKey(res)
-   }
+  async totalSupply() {
+    const res = await this._call('totalSupply', [])
+    return deleteIndexedKey(res)
+  }
 
   // tx
   //  async approve(accountAddress, operator, tokenId) {

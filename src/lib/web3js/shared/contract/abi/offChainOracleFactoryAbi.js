@@ -29,6 +29,12 @@ export const offChainOracleFactoryAbi = [
         "inputs": [
             {
                 "indexed": false,
+                "internalType": "address",
+                "name": "oracle",
+                "type": "address"
+            },
+            {
+                "indexed": false,
                 "internalType": "string",
                 "name": "symbol",
                 "type": "string"
@@ -44,12 +50,6 @@ export const offChainOracleFactoryAbi = [
                 "internalType": "uint256",
                 "name": "delayAllowance",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "address",
-                "name": "oracle",
-                "type": "address"
             }
         ],
         "name": "CreateOracle",
@@ -102,25 +102,6 @@ export const offChainOracleFactoryAbi = [
             }
         ],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "string",
-                "name": "symbol",
-                "type": "string"
-            }
-        ],
-        "name": "getOfficialOracle",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {

@@ -22,10 +22,10 @@ export class PerpetualPoolLite extends ContractBase {
     const res = await this._call('getAddresses', [])
     return deleteIndexedKey(res)
   }
-   async getFundingPeriod() {
-     const res = await this._call('getFundingPeriod', [])
-     return deleteIndexedKey(res)
-   }
+  async getFundingPeriod() {
+    const res = await this._call('getFundingPeriod', [])
+    return deleteIndexedKey(res)
+  }
   async getParameters() {
     const res = await this._call('getParameters', [])
     return deleteIndexedKey(res)
@@ -69,11 +69,14 @@ export class PerpetualPoolLite extends ContractBase {
   //  async executeMigration(accountAddress, source) {
   //    return await this._transact('executeMigration', [source], accountAddress)
   //  }
-  //  async executeMigrationSwitchToTimestamp(accountAddress, source, lastBlockNumber, lastBlockTimestamp) {
-  //    return await this._transact('executeMigrationSwitchToTimestamp', [source, lastBlockNumber, lastBlockTimestamp], accountAddress)
+  //  async executeMigrationWithTimestamp(accountAddress, source, lastTimestamp) {
+  //    return await this._transact('executeMigrationWithTimestamp', [source, lastTimestamp], accountAddress)
   //  }
   //  async liquidate(accountAddress, account, prices) {
   //    return await this._transact('liquidate', [account, prices], accountAddress)
+  //  }
+  //  async liquidate(accountAddress, pTokenId, prices) {
+  //    return await this._transact('liquidate', [pTokenId, prices], accountAddress)
   //  }
   //  async prepareMigration(accountAddress, target, graceDays) {
   //    return await this._transact('prepareMigration', [target, graceDays], accountAddress)
