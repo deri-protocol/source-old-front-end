@@ -93,6 +93,7 @@ export default class Trading {
       maintenanceMarginRatioTip : computed,
       TransactionFeeTip : computed,
       dpmmFundingRateTip :computed,
+      fundingCoefficientTip :computed,
       rateTip:computed,
       multiplierTip : computed,
       TotalNetPositionTip:computed,
@@ -550,6 +551,15 @@ export default class Trading {
   get rateTip(){
     if(this.fundingRate && this.fundingRate.funding0 && this.position.markPrice){
       return `${Intl.get('lite','rate-hover-one')} ${bg(this.fundingRate.funding0).div(bg(this.position.markPrice) ).times(bg(100)).toString()}% ${Intl.get('lite','rate-hover-two')}`
+    }
+    return ''
+  }
+
+  get fundingCoefficientTip(){
+    if(this.contract && this.contract.fundingRateCoefficient && this.config.unit){
+      return `${Intl.get('lite','funding-coefficient-hove-one')} ${this.config.unit} ${Intl.get('lite','funding-coefficient-hove-two')} ${this.contract.fundingRateCoefficient}
+      ${Intl.get('lite','funding-coefficient-hove-three')} ${bg(this.contract.fundingRateCoefficient).times(bg(86400)).toString()} ${Intl.get('lite','per-day')}
+      `
     }
     return ''
   }

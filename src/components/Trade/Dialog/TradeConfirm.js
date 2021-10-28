@@ -5,7 +5,6 @@ import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
 import version from '../../../model/Version'
 import { bg, DeriEnv } from '../../../lib/web3js/indexV2'
-const env = DeriEnv.get()
 
 export default function TradeConfirm({ wallet, spec, onClose, direction, volume, position = 0, indexPrice, leverage, afterLeverage, transFee, afterTrade, lang, markPriceAfter, trading, liquidationPrice }) {
   const [pending, setPending] = useState(false);
@@ -59,13 +58,13 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
                 <div className='text-num'><span className={direction}>{lang[direction.toLowerCase()]}</span></div>
               </div>
               {type.isFuture && <>
-                {(env !== "testnet" || version.isOpen) && <>
+                {version.isOpen && <>
                   <div className='text'>
                     <div className='text-title'> {lang['trade-price-estimated']}</div>
                     <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
                   </div>
                 </>}
-                {env === "testnet" && !version.isOpen  && <>
+                { !version.isOpen  && <>
                   <div className='text'>
                     <div className='text-title'>{lang['confirm-trade-price']}</div>
                     <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>

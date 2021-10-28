@@ -77,6 +77,7 @@ export class PoolApi {
 
   async getSpecification(symbolId) {
     await this.init();
+    const pool = this.pool
     const {
       minPoolMarginRatio,
       initialMarginRatio,
@@ -86,19 +87,19 @@ export class PoolApi {
       maxLiquidationReward,
       maintenanceMarginRatio,
       minBToken0Ratio,
-    } = this.pool.parameters;
-    const symbolIndex = checkSymbolId(symbolId, this.pool.activeSymbolIds);
-    const symbolInfo = this.pool.symbols[symbolIndex];
+    } = pool.parameters;
+    const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
+    const symbolInfo = pool.symbols[symbolIndex];
 
     const { symbol, multiplier, feeRatio } = symbolInfo;
 
     return {
       symbol,
-      bTokenSymbol: this.pool.bTokenSymbols,
-      bTokenMultiplier: this.pool.bTokens.map((b) => b.discount),
+      bTokenSymbol: pool.bTokenSymbols,
+      bTokenMultiplier: pool.bTokens.map((b) => b.discount),
       multiplier,
       feeRatio,
-      fundingRateCoefficient: '',
+      fundingRateCoefficient: bg(1).div(pool.fundingPeriod).toString(),
       minPoolMarginRatio,
       minInitialMarginRatio: initialMarginRatio,
       minMaintenanceMarginRatio: maintenanceMarginRatio,

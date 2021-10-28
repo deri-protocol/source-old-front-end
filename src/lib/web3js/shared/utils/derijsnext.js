@@ -42,7 +42,7 @@ export const checkTokenId = (tokenId) => {
 
 export const checkAmount = (amount) => {
   amount = amount != null ? amount.toString() : amount
-  if (/^-?\d+$/.test(amount)) {
+  if (/^-?[\d\.]+$/.test(amount)) {
     return amount
   }
   throw new Error(`invalid amount '${amount}'`)

@@ -5,7 +5,6 @@ import { bg, DeriEnv } from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
 import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
 import Version from '../../../../model/Version';
-const env = DeriEnv.get();
 
 function TradingView({ version, trading, lang, type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -48,7 +47,7 @@ function TradingView({ version, trading, lang, type }) {
           {type.isOption ? `${trading.config ? trading.config.symbol : ''}` : (version.isV1 || version.isV2Lite || version.isOpen) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
         {type.isFuture && <>
-          {env === 'testnet' && !version.isOpen && <>
+          {!version.isOpen && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['mark-price']}</div>
             <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
@@ -60,7 +59,7 @@ function TradingView({ version, trading, lang, type }) {
           </div>
           
           <div className='trade-dashboard-item latest-price'>
-            {(env !== 'testnet' || version.isOpen) && <>
+            { version.isOpen && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
@@ -70,7 +69,7 @@ function TradingView({ version, trading, lang, type }) {
                 </TipWrapper>
               </div>
             </>}
-            {env === 'testnet' && !version.isOpen && <>
+            { !version.isOpen && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>

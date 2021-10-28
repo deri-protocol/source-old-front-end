@@ -4,9 +4,14 @@ import { inject, observer } from 'mobx-react';
 import TipWrapper from '../TipWrapper/TipWrapper';
 import version from '../../model/Version';
 import {DeriEnv} from '../../lib/web3js/indexV2'
-const env = DeriEnv.get();
 
 function ContractInfo({ wallet, trading, lang, type }) {
+
+  const toNonExponential = (num)=>{
+    num = +(num.toFixed(11))
+    var m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+    return m[0];
+  }
 
   return (
     <div className="contract-box">
@@ -40,12 +45,24 @@ function ContractInfo({ wallet, trading, lang, type }) {
               {trading.contract.multiplier} {trading.config ? trading.config.unit : ''}
             </div>
           </div>
-          {(env !== 'testnet' || version.isOpen) && <div className="info">
+          { version.isOpen && 
+          <div className="info">
             <div className="title">{lang['funding-rate-coefficient']}</div>
             <div className="text">
               {trading.contract.fundingRateCoefficient}
             </div>
-          </div>}
+          </div>
+          }
+          {!version.isOpen && 
+            <div className="info">
+            <div className="title">{lang['funding-rate-coefficient']}</div>
+            <div className="text">
+              <TipWrapper block={false} >
+                <span tip={trading.fundingCoefficientTip} className='margin-per'>{trading.contract.fundingRateCoefficient ? toNonExponential(+trading.contract.fundingRateCoefficient) :'' }</span> 
+              </TipWrapper>
+            </div>
+          </div>
+          }
           <div className="info">
             <div className="title">{lang['min-initial-margin-ratio']}</div>
             <div className="text">

@@ -79,7 +79,7 @@ export class PoolViewer {
       bTokenSymbol: pool.bTokenSymbol,
       multiplier,
       feeRatio,
-      fundingRateCoefficient: '',
+      fundingRateCoefficient: bg(1).div(pool.fundingPeriod).toString(),
       minPoolMarginRatio: parameterInfo.poolMarginRatio,
       minInitialMarginRatio: parameterInfo.initialMarginRatio,
       minMaintenanceMarginRatio: parameterInfo.maintenanceMarginRatio,
