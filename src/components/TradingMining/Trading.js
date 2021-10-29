@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
-import {isBrowser} from 'react-device-detect'
+import { isBrowser } from 'react-device-detect'
 import axios from 'axios'
 import Button from '../Button/Button';
 import one from './img/one.svg'
@@ -127,19 +127,19 @@ function Trading({ wallet, lang, loading }) {
     };
   }, [])
 
-  const dataURLtoBlob = (dataurl,filename = 'file') => {
+  const dataURLtoBlob = (dataurl, filename = 'file') => {
     let arr = dataurl.split(',')
-  let mime = arr[0].match(/:(.*?);/)[1]
-  let suffix = mime.split('/')[1]
-  let bstr = atob(arr[1])
-  let n = bstr.length
-  let u8arr = new Uint8Array(n)
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n)
-  }
-  return new File([u8arr], `${filename}.${suffix}`, {
-    type: mime
-  })
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let suffix = mime.split('/')[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new File([u8arr], `${filename}.${suffix}`, {
+      type: mime
+    })
   }
 
   const twitterShare = async () => {
@@ -154,11 +154,11 @@ function Trading({ wallet, lang, loading }) {
         let fd = new FormData();
         fd.append('image', img)
         let AxiosUrl = 'https://share.deri.finance/add_image?type=image'
-        axios.post(AxiosUrl,fd).then(res=>{
+        axios.post(AxiosUrl, fd).then(res => {
           let shareImg = res.data.data.url
-          if(isBrowser){
+          if (isBrowser) {
             window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://share.deri.finance/?title=Trade%20to%20Earn&description=Total%20Rewards%20$1,000,000%20in%20DERI&image=${shareImg}&target=${encodeURIComponent('https://app.deri.finance/#/trade-to-earn')}`)}`)
-          }else{
+          } else {
             window.location.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://share.deri.finance/?title=Trade%20to%20Earn&description=Total%20Rewards%20$1,000,000%20in%20DERI&image=${shareImg}&target=${encodeURIComponent('https://app.deri.finance/#/trade-to-earn')}`)}`
           }
         })
@@ -311,9 +311,9 @@ function Trading({ wallet, lang, loading }) {
           <div className='your-rewards'>
             <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
-                <span className='your-rewards-title-text'>{lang['your-rstimated-rewards']}</span> 
+                <span className='your-rewards-title-text'>{lang['your-rstimated-rewards']}</span>
                 <div className='share-twitter' onClick={twitterShare}>
-                  <span><img src={twitterImg} /></span> 
+                  <span><img src={twitterImg} /></span>
                   <button>SHARE</button>
                 </div>
                 {/* <a href="https://twitter.com/intent/tweet" rel="noreferrer"  class="twitter-share-button" target='_blank'
@@ -482,10 +482,28 @@ function Trading({ wallet, lang, loading }) {
                       : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ?
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? ` = (${stageList.userQ3Contrib} / ${stageList.Q1Contrib}) * 30,000` : ''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} />
+                        </span>
+                      </TipWrapper>
+                      : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ4Point && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ4Point && stageList.Q4Contrib !== '0' ?
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q1Contrib}) * 50,000` : ''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} />
+
+                        </span>
+
+                      </TipWrapper>
+                      : "--"}
                   </div>
                 </div>
               </div>
@@ -500,7 +518,7 @@ function Trading({ wallet, lang, loading }) {
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
                 <div className='share-twitter' onClick={twitterShare}>
-                  <span><img src={twitterImg} /></span> 
+                  <span><img src={twitterImg} /></span>
                   <button>SHARE</button>
                 </div>
               </div>
@@ -618,10 +636,31 @@ function Trading({ wallet, lang, loading }) {
                       : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ3Point && stageList.Q3Contrib !== '0' ?
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? `= (${stageList.userQ3Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} />
+                        </span>
+
+
+                      </TipWrapper>
+
+                      : "--"}
                   </div>
                   <div className='your-point'>
-                    {stageList.userQ4Point && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.userQ4Point} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.userQ4Point && stageList.Q4Contrib !== '0' ?
+                      <TipWrapper block={false} >
+                        <span className='point-hover' tip={
+                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q1Contrib}) * 50,000` : ''
+                        }>
+                          <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} />
+
+                        </span>
+
+                      </TipWrapper>
+                      : "--"}
                   </div>
                 </div>
               </div>
