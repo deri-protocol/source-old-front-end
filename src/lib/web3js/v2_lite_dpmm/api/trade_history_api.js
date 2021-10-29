@@ -8,7 +8,6 @@ import {
 } from '../../shared/utils';
 import {
   getPoolConfig,
-  getPoolSymbolIdList,
 } from '../../shared/config';
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory';
 

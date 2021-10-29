@@ -74,7 +74,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
               </>}
               {type.isOption && <>
                 <div className='text'>
-                  <div className='text-title'>{lang['trade-price']}</div>
+                  <div className='text-title'>{lang['confirm-trade-price']}</div>
                   <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>
                 </div>
               </>}
