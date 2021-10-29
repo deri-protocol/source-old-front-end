@@ -16,7 +16,10 @@
   "index-price" : "Indice de prix",
   "min-trade-volume":"Min Trade Volume",
   "notional-of-total-net-position":"Théorie sur La position nette totale =",
-
+  "funding-coefficient-hove-one":"The funding fee of 1",
+  "funding-coefficient-hove-two":"of contract (paid by long/receivded by short) \n = (mark price - index price) * ",
+  "funding-coefficient-hove-three":"per second, \n or (mark price - index price) * ",
+  
   "funding-rate-annual" : "Funding Rate Daily",
   "funding-rate" : "Funding Fee Daily",
   "funding-rate-d":"Taux de financement Delta",

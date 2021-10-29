@@ -16,6 +16,9 @@
   "index-price" : "指数价格",
   "min-trade-volume":"最小交易量",
   "notional-of-total-net-position":"总净仓位价值 =",
+  "funding-coefficient-hove-one":"The funding fee of 1",
+  "funding-coefficient-hove-two":"of contract (paid by long/receivded by short) \n = (mark price - index price) * ",
+  "funding-coefficient-hove-three":"per second, \n or (mark price - index price) * ",
 
   "funding-rate-annual" : "日资金费率",
   "funding-rate" : "日资金费",
@@ -57,7 +60,7 @@
   "pool-liquidity" : "流动性池",
   "liquidity-used" : "流动性使用率",
   "eo-mark-price":"期权价格",
-  "mark-price":"期权价格",
+  "mark-price":"标记价格",
   "trade-price":"交易价格（预估）",
   "confirm-trade-price":"Average Trade Price (estimated)",
   "funding-rate-impact" : "资金费率的影响",

@@ -17,8 +17,8 @@
   "min-trade-volume":"Min Trade Volume",
   "notional-of-total-net-position":"Notional of Total Net Position =",
   "funding-coefficient-hove-one":"The funding fee of 1",
-  "funding-coefficient-hove-two":"of contract (paid by long/receivded by short) = (mark price - index price) * ",
-  "funding-coefficient-hove-three":"per second, or (mark price - index price) * ",
+  "funding-coefficient-hove-two":"of contract (paid by long/receivded by short) \n = (mark price - index price) * ",
+  "funding-coefficient-hove-three":"per second, \n or (mark price - index price) * ",
 
   "funding-rate-annual" : "Funding Rate Daily",
   "funding-rate" : "Funding Fee Daily",

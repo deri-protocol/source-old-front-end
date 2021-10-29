@@ -10,22 +10,8 @@ import {
 } from '../../shared/utils';
 import {
   getPoolConfig,
-  getPoolSymbolIdList,
 } from '../../shared/config';
-import { perpetualPoolDpmmFactory, perpetualPoolLiteDpmmFactory } from '../contract/factory';
-
-// const res = {
-//   direction,
-//   baseToken: bTokenSymbol,
-//   symbolId,
-//   symbol: symbol && symbol.symbol,
-//   price: price.toString(),
-//   notional: notional.toString(),
-//   volume: bg(volume).times(symbol.multiplier).toString(),
-//   transactionFee: transactionFee.toString(),
-//   transactionHash: txHash.toString(),
-//   time,
-// };
+import { perpetualPoolDpmmFactory, } from '../contract/factory';
 
 const getTradeHistoryOnline = async (
   chainId,
@@ -55,19 +41,25 @@ const getTradeHistoryOnline = async (
   //console.log("events length:", events.length);
   for (let i = 0; i < events.length; i++) {
     const item = events[i];
-    const res = await perpetualPool.formatTradeEvent(item)
-    result.unshift({
-      baseToken: '',
-      direction: res.direction,
-      volume: res.volume,
-      price: res.price,
-      notional: res.notional,
-      symbol: res.symbol,
-      symbolId: res.symbolId,
-      time: res.time,
-      transactionFee: res.transactionFee,
-      transactionHash: res.transactionHash,
-    });
+    const res = await perpetualPool.formatTradeEvent(item);
+    if (res) {
+      const symbolIndex = perpetualPool.activeSymbolIds.indexOf(res.symbolId);
+      result.unshift({
+        baseToken: '',
+        direction: res.direction,
+        volume: bg(res.volume)
+          .times(perpetualPool.symbols[symbolIndex].multiplier)
+          .toString(),
+        price: res.price,
+        indexPrice: res.indexPrice,
+        notional: res.notional,
+        symbol: res.symbol,
+        symbolId: res.symbolId,
+        time: res.time,
+        transactionFee: res.transactionFee,
+        transactionHash: res.transactionHash,
+      });
+    }
   }
   return result;
 };

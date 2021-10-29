@@ -84,3 +84,33 @@ export const deleteIndexedKey = (obj) => {
     }
     return events;
   }
+
+  export const getPastEventsUseAbi = async(chainId, contractAddress, contractAbi, eventName, filter = {}, fromBlock = 0, to = 0) => {
+    const web3 = await web3Factory.get(chainId)
+    const contract = new web3.eth.Contract(contractAbi, contractAddress);
+    let events = [];
+    let amount
+    if (['56', '97', '127', '80001'].includes(chainId)) {
+      amount = 999
+    } else {
+      amount = 4999
+    }
+    if ((fromBlock + amount) > to) {
+      amount = to - fromBlock
+    }
+    while (fromBlock <= to) {
+      let es = await contract.getPastEvents(eventName, {
+        filter: filter,
+        fromBlock: fromBlock,
+        toBlock: fromBlock + amount,
+      });
+      for (let e of es) {
+        events.push(e);
+      }
+      fromBlock += amount + 1;
+      if ((fromBlock + amount) > to) {
+        amount = to - fromBlock
+      }
+    }
+    return events;
+  }

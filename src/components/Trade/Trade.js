@@ -414,7 +414,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
-              {(type.isFuture && version.isOpen) && <>
+              {(type.isFuture && (version.isOpen || version.isV1)) && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.fundingRateTip}>
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
@@ -463,7 +463,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.optionFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.premiumFunding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
-              {(type.isFuture && version.isOpen) && <>
+              {(type.isFuture && (version.isOpen || version.isV1)) && <>
                 <span>{lang['funding-rate-annual']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.fundingRateTip}>
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
@@ -669,7 +669,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   </div>
                 </div>
               </>}
-              {version.isOpen && <>
+              {(version.isOpen || version.isV1) && <>
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['trade-price']}</div>
                   <div className='text-enter poolL'>
@@ -684,7 +684,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
                 </div>
               </div>
-              { version.isOpen && <>
+              { (version.isOpen || version.isV1) && <>
                 <div className='text-info'>
                   <div className='title-enter'>{lang['liquidity-used']}</div>
                   <div className='text-enter'>

@@ -2,7 +2,7 @@ import { checkApiInput, checkApiInputWithoutAccount, checkSymbolId, checkTokenId
 import { catchApiError } from '../../shared/utils/api';
 import { bg } from '../../shared/utils';
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory';
-import { poolViewerFactory } from '../contract/PoolViewer';
+import { poolApiFactory } from '../contract/PoolApi';
 import { calculateDpmmCost } from '../calc';
 
 export const getLiquidityInfo = async (chainId, poolAddress, accountAddress) => {
@@ -14,7 +14,7 @@ export const getLiquidityInfo = async (chainId, poolAddress, accountAddress) => 
         poolAddress,
         accountAddress
       );
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getLiquidityInfo(accountAddress);
     },
     args,
@@ -35,7 +35,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
     async (chainId, poolAddress, symbolId) => {
       [chainId, poolAddress] = checkApiInputWithoutAccount(chainId, poolAddress);
       symbolId = checkTokenId(symbolId)
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getSpecification(symbolId);
     },
     args,
@@ -68,7 +68,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
         accountAddress
       );
       symbolId = checkTokenId(symbolId)
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getPositionInfo(accountAddress, symbolId);
     },
     args,
@@ -97,7 +97,7 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
         poolAddress,
         accountAddress
       );
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getPositionInfos(accountAddress);
     },
     args,
@@ -148,7 +148,7 @@ export const getEstimatedMargin = async(chainId, poolAddress, accountAddress, vo
         accountAddress,
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getEstimatedMargin(accountAddress, volume, leverage, symbolId);
   }, args, 'getEstimatedMargin', '')
 }
@@ -161,7 +161,7 @@ export const getEstimatedFee = async(chainId, poolAddress, volume, symbolId) => 
         poolAddress
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getEstimatedFee(volume, symbolId);
   }, args, 'getEstimatedFee', '')
 }
@@ -175,7 +175,7 @@ export const getFundingRate = async(chainId, poolAddress, symbolId) => {
         poolAddress
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getFundingRate(symbolId);
     },
     args,
@@ -192,7 +192,7 @@ export const getEstimatedFundingRate = async(chainId, poolAddress, newVolume, sy
         poolAddress
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getEstimatedFundingRate(newVolume, symbolId);
     },
     args,
@@ -210,7 +210,7 @@ export const getLiquidityUsed = async(chainId, poolAddress, symbolId) => {
         poolAddress
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getLiquidityUsed(symbolId);
     },
     args,
@@ -228,7 +228,7 @@ export const getEstimatedLiquidityUsed = async(chainId, poolAddress, newVolume, 
         poolAddress
       );
       symbolId = checkTokenId(symbolId);
-      const viewer = poolViewerFactory(chainId, poolAddress);
+      const viewer = poolApiFactory(chainId, poolAddress);
       return await viewer.getEstimatedLiquidityUsed(newVolume, symbolId);
     },
     args,
@@ -250,7 +250,7 @@ export const getEstimatedTimePrice = async (
         poolAddress,
       );
       symbolId = checkTokenId(symbolId);
-      const api = poolViewerFactory(chainId, poolAddress);
+      const api = poolApiFactory(chainId, poolAddress);
       await api.init();
       const pool = api.pool;
       const symbolIndex = checkSymbolId(symbolId, pool.activeSymbolIds);
@@ -258,7 +258,7 @@ export const getEstimatedTimePrice = async (
         await pool.getSymbols();
       }
       const symbol = pool.symbols[symbolIndex];
-      console.log('dpmmPrice', symbol.dpmmPrice.toString(), symbol.indexPrice)
+      //console.log('dpmmPrice', symbol.dpmmPrice.toString(), symbol.indexPrice)
       const cost = calculateDpmmCost(
         symbol.indexPrice,
         symbol.K,

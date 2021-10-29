@@ -18,7 +18,7 @@ const TIMEOUT = 20000;
 
 describe('query api', () => {
   const chainId = '97';
-  const pool = '0x370Bcc60B98e3000ec6349C173D5A6aca9b1a1d3';
+  const pool = '0x792ec4De2B607baEF7DAAE9d238d73Ffb4819972';
   const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
   it(
     'getLiquidityInfo',
@@ -40,8 +40,8 @@ describe('query api', () => {
     'getPositionInfo',
     async () => {
       DeriEnv.set('testnet')
-      const res = await getPositionInfo('97', pool, '0xFefC938c543751babc46cc1D662B982bd1636721', '1');
-      //const res = await getPositionInfo(chainId, pool, account, '0');
+      //const res = await getPositionInfo('97', pool, '0xFefC938c543751babc46cc1D662B982bd1636721', '1');
+      const res = await getPositionInfo(chainId, pool, account, '0');
       DeriEnv.set('dev')
       expect(res).toEqual({});
     },
