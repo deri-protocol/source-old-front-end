@@ -91,9 +91,10 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
-      widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
-      widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
-      widgetRef.current.chart().createStudy('Moving Average', false, true, [99],null, {'Plot.color': 'rgba(234, 61, 247, 0.7)'});    
+      widgetRef.current.chart().createStudy('Overlay', true, false, [symbol],null,{priceScale : 'as-series','color': '#aaa'})
+      // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
+      // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
+      // widgetRef.current.chart().createStudy('Moving Average', false, true, [99],null, {'Plot.color': 'rgba(234, 61, 247, 0.7)'});    
     })
   }
 
