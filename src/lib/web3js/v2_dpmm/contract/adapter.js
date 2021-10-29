@@ -477,56 +477,46 @@ const formatTradeEvent = (klass) => {
   klass.prototype['formatTradeEvent'] = async function (event) {
     const info = event.returnValues;
     const tradeVolume = deriToNatural(info.tradeVolume);
-    const timeStamp = await getBlockInfo(this.chainId, event.blockNumber);
-
-    const direction = bg(tradeVolume).gt(0) ? 'LONG' : 'SHORT';
-    const trader = info.trader;
+    const block = await getBlockInfo(this.chainId, event.blockNumber);
     const symbolId = info.symbolId;
-    const time = timeStamp.timestamp * 1000;
-    const volume = bg(tradeVolume).abs().toString();
-    const txHash = event.transactionHash;
+    const index = this.activeSymbolIds.indexOf(symbolId);
+    const symbol = this.symbols[index];
+    const tradeFee = info.tradeFee;
 
-    let res = {
+    const direction =
+      tradeFee !== '-1'
+        ? bg(tradeVolume).gt(0)
+          ? 'LONG'
+          : 'SHORT'
+        : 'LIQUIDATION';
+    const price = bg(info.tradeCost)
+      .div(info.tradeVolume)
+      .div(symbol.multiplier)
+      .toString();
+    const notional = bg(tradeVolume)
+      .abs()
+      .times(price)
+      .times(symbol.multiplier)
+      .toString();
+
+    const res = {
+      symbolId: info.symbolId,
+      symbol: symbol.symbol,
+      trader: info.trader,
       direction,
-      trader,
-      symbolId,
-      // indexPrice: naturalToDeri(
-      //   bg(info.tradeCost).div(info.tradeVolume)
-      // ).toString(),
-      volume: volume.toString(),
-      transactionHash: txHash.toString(),
-      time,
+      volume: bg(tradeVolume).abs().toString(),
+      price: price,
+      indexPrice: deriToNatural(info.indexPrice).toString(),
+      notional: notional,
+      transactionFee:
+        tradeFee === '-1' ? '0' : deriToNatural(tradeFee).toString(),
+      transactionHash: event.transactionHash,
+      time: block.timestamp * 1000,
       extra: {},
     };
-    const index = this.activeSymbolIds.indexOf(symbolId);
-    if (index === -1) {
-      res.price = '';
-      res.symbol = '';
-      res.notional = '';
-      //res.indexPrice = "";
-      res.transactionFee = '';
-    } else {
-      const price = bg(info.tradeCost)
-        .div(info.tradeVolume)
-        .div(this.symbols[index].multiplier)
-        .toString();
-      const notional = bg(tradeVolume)
-        .abs()
-        .times(price)
-        .times(this.symbols[index].multiplier)
-        .toString();
-      const transactionFee = bg(notional)
-        .times(this.symbols[index].feeRatio)
-        .toString();
-      res.price = price;
-      res.symbol = this.symbols[index].symbol;
-      res.notional = notional;
-      res.transactionFee = transactionFee;
-    }
-    console.log(JSON.stringify(res));
     return res;
   };
-  return klass
+  return klass;
 };
 
 

@@ -4,7 +4,6 @@ import DeriNumberFormat from '../../../../utils/DeriNumberFormat';
 import { bg, DeriEnv } from '../../../../lib/web3js/indexV2'
 import { inject, observer } from 'mobx-react';
 import TipWrapper from '../../../../components/TipWrapper/TipWrapper';
-import Version from '../../../../model/Version';
 
 function TradingView({ version, trading, lang, type }) {
   const [indexPriceClass, setIndexPriceClass] = useState('rise');
@@ -59,7 +58,7 @@ function TradingView({ version, trading, lang, type }) {
           </div>
           
           <div className='trade-dashboard-item latest-price'>
-            { (version.isOpen || version.isV1) && <>
+            {(version.isOpen || version.isV1) && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>
@@ -69,7 +68,7 @@ function TradingView({ version, trading, lang, type }) {
                 </TipWrapper>
               </div>
             </>}
-            { !version.isOpen && <>
+            {!version.isOpen && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>

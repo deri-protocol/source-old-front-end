@@ -7,6 +7,9 @@ import {
   getPoolConfig,
   getPoolViewerConfig,
   isEqualSet,
+  getBlockInfo,
+  deriToNatural,
+  bg,
 } from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
 import { getOracleVolatilitiesForOption } from '../../shared/utils/oracle';
@@ -76,6 +79,13 @@ export class EverlastingOption extends ContractBase {
       this.volatilitySymbols = getVolatilitySymbols(
         this.activeSymbols.map((s) => s.symbol)
       );
+
+      this.symbols = await Promise.all(
+        this.activeSymbolIds.reduce(
+          (acc, symbolId) => [...acc, this.getSymbol(symbolId)],
+          []
+        )
+      );
     }
   }
 
@@ -133,20 +143,6 @@ export class EverlastingOption extends ContractBase {
       'tradersNetCost',
       'cumulativeFundingRate',
     ]);
-    // return {
-    //   symbolId: res[0],
-    //   symbol: res[1],
-    //   oracleAddress: res[2],
-    //   volatilityAddress: res[3],
-    //   isCall: res[4],
-    //   strikePrice: fromWei(res[5]),
-    //   multiplier: fromWei(res[6]),
-    //   feeRatio: fromWei(res[7]),
-    //   alpha: fromWei(res[8]),
-    //   tradersNetVolume: fromWei(res[9]),
-    //   tradersNetCost: fromWei(res[10]),
-    //   cumulativeFundingRate: fromWei(res[11]),
-    // };
   }
   async updateSymbols() {
     if (!this.pToken) {
@@ -226,5 +222,61 @@ export class EverlastingOption extends ContractBase {
       [symbolId, naturalToDeri(tradeVolume), prices],
       accountAddress
     );
+  }
+
+  // trade history
+  async formatTradeEvent(event) {
+    const info = event.returnValues;
+    const tradeVolume = deriToNatural(info.tradeVolume).toString();
+    const block = await getBlockInfo(this.chainId, event.blockNumber);
+    const symbolId = info.symbolId;
+    const indexPrice = deriToNatural(info.indexPrice).toString();
+    const index = this.activeSymbolIds.indexOf(symbolId);
+    if (index > -1) {
+      const symbol = this.symbols[index];
+      const tradeFee = info.tradeFee;
+
+      const direction =
+        tradeFee !== "-1"
+          ? bg(tradeVolume).gt(0)
+            ? "LONG"
+            : "SHORT"
+          : "LIQUIDATION";
+      const price = bg(info.tradeCost)
+        .div(info.tradeVolume)
+        .div(symbol.multiplier)
+        .toString();
+      const notional = bg(tradeVolume)
+        .abs()
+        .times(indexPrice)
+        .times(symbol.multiplier)
+        .toString();
+      const contractValue = bg(tradeVolume)
+        .abs()
+        .times(price)
+        .times(symbol.multiplier)
+        .toString();
+
+      const res = {
+        symbolId: info.symbolId,
+        symbol: symbol.symbol,
+        trader: info.trader,
+        direction,
+        volume: bg(tradeVolume).abs().toString(),
+        price,
+        indexPrice,
+        notional,
+        contractValue,
+        transactionFee:
+          tradeFee === "-1" ? "0" : deriToNatural(tradeFee).toString(),
+        transactionHash: event.transactionHash,
+        time: block.timestamp * 1000,
+        extra: {},
+      };
+      //console.log(JSON.stringify(res));
+      return res;
+    } else {
+      return null;
+    }
   }
 }

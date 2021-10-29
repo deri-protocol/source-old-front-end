@@ -105,6 +105,7 @@ describe('test', () => {
       );
       let res
       if (events.length > 0) {
+        console.log(events[0])
         res = await pool.formatTradeEvent(events[0]);
       } else {
         res = {};

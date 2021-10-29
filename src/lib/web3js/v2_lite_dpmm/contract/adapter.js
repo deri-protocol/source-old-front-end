@@ -7,6 +7,8 @@ import {
   getLastTimestamp,
   bg,
   processResult,
+  deriToNatural,
+  getBlockInfo,
 } from "../../shared/utils/index.js";
 import { normalizeSymbolUnit, SECONDS_IN_A_DAY } from "../../shared/config";
 import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
@@ -396,6 +398,56 @@ const getTraderMarginStatus = (klass) => {
   return klass
 }
 
+const formatTradeEvent = (klass) => {
+  klass.prototype['formatTradeEvent'] = async function (event) {
+    const info = event.returnValues;
+    const tradeVolume = deriToNatural(info.tradeVolume);
+    const block = await getBlockInfo(this.chainId, event.blockNumber);
+    const symbolId = info.symbolId;
+    const index = this.activeSymbolIds.indexOf(symbolId);
+    if (index > -1) {
+      const symbol = this.symbols[index];
+      const tradeFee = info.tradeFee;
+
+      const direction =
+        tradeFee !== '-1'
+          ? bg(tradeVolume).gt(0)
+            ? 'LONG'
+            : 'SHORT'
+          : 'LIQUIDATION';
+      const price = bg(info.tradeCost)
+        .div(info.tradeVolume)
+        .div(symbol.multiplier)
+        .toString();
+      const notional = bg(tradeVolume)
+        .abs()
+        .times(price)
+        .times(symbol.multiplier)
+        .toString();
+
+      const res = {
+        symbolId: info.symbolId,
+        symbol: symbol.symbol,
+        trader: info.trader,
+        direction,
+        volume: bg(tradeVolume).abs().toString(),
+        price: price,
+        indexPrice: deriToNatural(info.indexPrice).toString(),
+        notional: notional,
+        transactionFee:
+          tradeFee === '-1' ? '0' : deriToNatural(tradeFee).toString(),
+        transactionHash: event.transactionHash,
+        time: block.timestamp * 1000,
+        extra: {},
+      };
+      return res;
+    } else {
+      return null;
+    }
+  };
+  return klass
+};
+
 const _getSymbolPrices = (klass) => {
   klass.prototype["_getSymbolPrices"] = async function () {
     await this.init()
@@ -440,6 +492,7 @@ export const perpetualPoolLiteAdapter = (klass) => {
     isSymbolsUpdated,
     isPositionsUpdated,
     getTraderLiquidity,
+    formatTradeEvent,
     _getSymbolPrices,
   ]);
 

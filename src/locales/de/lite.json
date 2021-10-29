@@ -16,7 +16,10 @@
   "index-price": "Indexpreis",
   "min-trade-volume": "Min Handelsvolumen",
   "notional-of-total-net-position":"Nominalwert der Gesamtnettoposition =",
-
+  "funding-coefficient-hove-one":"The funding fee of 1",
+  "funding-coefficient-hove-two":"of contract (paid by long/receivded by short) \n = (mark price - index price) * ",
+  "funding-coefficient-hove-three":"per second, \n or (mark price - index price) * ",
+  
   "funding-rate-annual": "Finanzierungsrate Täglich",
   "funding-rate": "Finanzierungsgebühr Täglich",
   "funding-rate-d": "Anf. Delta Finanzierung",

@@ -219,6 +219,7 @@ export const getFilteredPoolConfigList = (poolAddress, bTokenId, symbolId, versi
 
 export const getPoolConfig = (poolAddress, bTokenId, symbolId) => {
   const version = getPoolVersion(poolAddress)
+  //console.log('version', version, poolAddress)
   // check the bToken in v2_lite
   if (LITE_AND_OPTION_VERSIONS.includes(version)) {
     bTokenId = undefined
@@ -233,6 +234,7 @@ export const getPoolVersion = (poolAddress) => {
   let pools = VERSIONS.reduce((acc, version) => {
     return acc.concat(getConfig(version, DeriEnv.get())['pools'])
   }, [])
+  //console.log(pools)
   // add v1 config
   pools = pools.concat(getPoolV1ConfigList(DeriEnv.get()))
   const index = pools.findIndex((v) => v.pool === poolAddress)
