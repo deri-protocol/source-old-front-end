@@ -59,7 +59,7 @@ function TradingView({ version, trading, lang, type }) {
           </div>
           
           <div className='trade-dashboard-item latest-price'>
-            { version.isOpen && <>
+            { (version.isOpen || version.isV1) && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate-annual']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>

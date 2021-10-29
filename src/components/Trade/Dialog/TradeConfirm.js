@@ -58,7 +58,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
                 <div className='text-num'><span className={direction}>{lang[direction.toLowerCase()]}</span></div>
               </div>
               {type.isFuture && <>
-                {version.isOpen && <>
+                {(version.isOpen || version.isV1) && <>
                   <div className='text'>
                     <div className='text-title'> {lang['trade-price-estimated']}</div>
                     <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
