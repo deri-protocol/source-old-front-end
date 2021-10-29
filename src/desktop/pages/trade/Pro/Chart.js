@@ -6,7 +6,7 @@ import LightChart from './LightChart';
 import { stripSymbol } from '../../../../utils/utils';
 import TVChart from './TVChart';
 
-function Chart({symbol,lang}){
+function Chart({symbol,lang,trading}){
   const [loading, setLoading] = useState(true);
   const [actived, setActived] = useState('one');
   const [chartType, setChartType] = useState('')
@@ -82,7 +82,7 @@ function Chart({symbol,lang}){
           </div>
       </div>
       <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
-        <TVChart symbol={symbol} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
+        <TVChart symbol={symbol} config={trading.config} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} preload={chartType === 'mark-price'}/>

@@ -4,7 +4,7 @@ import Position from "./Position";
 import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
-import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol } from "../utils/utils";
+import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol, getMarkpriceSymbol } from "../utils/utils";
 import { getFundingRate, priceCache } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
@@ -188,7 +188,7 @@ export default class Trading {
         } 
       }).finally(e => {
         finishedCallback && finishedCallback()
-        this.oracle.load(getFormatSymbol(config.symbol))
+        this.oracle.load(getFormatSymbol(config.symbol,config,true))
         this.positionInfo.start()
         this.positionInfo.startAll();
       })
@@ -307,6 +307,11 @@ export default class Trading {
   }
 
   setConfig(config){
+    //just for v2 and lite version in futrue
+    if(type.isFuture && (version.isV2 || version.isV2Lite)){
+      config.markpriceSymbol = `${config.symbol}-MARKPRICE`
+      config.markpriceSymbolFormat = getMarkpriceSymbol(config)
+    }
     this.config = config
   }
 

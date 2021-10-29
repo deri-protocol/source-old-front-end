@@ -10,7 +10,8 @@ class Version {
       setCurrent : action,
       isV1 : computed,
       isV2 : computed,
-      isV2Lite : computed
+      isV2Lite : computed,
+      zone : computed
     })
   }
 
@@ -41,6 +42,16 @@ class Version {
 
   get isOpen(){
     return this.current === 'v2_lite_open'
+  }
+
+  get zone(){
+    if(this.isV2){
+      return 'MAIN'
+    } else if(this.isV2Lite) {
+      return 'INNO'
+    } else {
+      return 'OPEN'
+    }
   }
 }
 export default new Version()

@@ -12,6 +12,7 @@ import {
   getUserInfoAll,
   getLiquidityInfo
 } from '../lib/web3js/indexV2'
+import Type from '../model/Type';
 const versionKey = 'deri-current-version'
 
 
@@ -133,33 +134,56 @@ export function getParam(param,urlString = window.location.href){
   return url.searchParams.get(param);
 }
 
-export function getFormatSymbol(symbol){
+export function getFormatSymbol(symbol,config,indexPrice){
   const curChain = restoreChain();
+  const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
   if(type.isOption){
     if(symbol.indexOf('-MARKPRICE') !== -1) {
       symbol = symbol.substr(0,symbol.indexOf('-MARKPRICE'))
     } else {
       symbol = symbol.split('-')[0]
     }
+    return  `${symbol}_V2_${chain}`
+  } else {
+    if(version.isV1){
+      return symbol
+    } else {
+      if(symbol.indexOf('MARKPRICE') !== -1) {
+        return symbol;
+      } else {
+        return `${symbol}_V2_${chain}`
+      }
+    }
   }
-  // if(type.isOption){
-  //   return `${symbol}_V2_${curChain}`
-  // } else {}
-  return version.isV2 || version.isV2Lite || type.isOption || version.current === 'v2_lite_open' ? `${symbol}_V2_${curChain ? curChain.code.toUpperCase() : 'BSC'}` : symbol
 }
 
-export function getTradingviewSymbol(symbol,spec){
+
+//
+// export function formatSymbolInputParam(symbol,spec){
+//   const curChain = restoreChain();
+//   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
+//   const baseToken = Array.isArray(spec.bTokenSymbol) ? spec.bTokenSymbol[0] : spec.bTokenSymbol
+//   if(type.isFuture){
+//     return {
+//       indexPrice : version.isV1 ? symbol : `${symbol}_V2_${chain}`,
+//       markPrice : `MARKPRICE_${symbol}_${chain}_FUTURE_${version.zone}_${baseToken}`
+//     }
+//   } else {
+//     return {
+//       indexPrice : `${symbol}_V2_${chain}`,
+//       markPrice : `MARKPRICE_${symbol}_V2_${chain}`
+//     }
+//   }
+// }
+
+export function getMarkpriceSymbol(config){
   const curChain = restoreChain();
   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
-  if(type.isFuture){
-    return {
-      indexPrice : version.isV1 ? symbol : `${symbol}_${version.current}_${chain}`,
-      markPrice : `MARKPRICE_${symbol}_${chain}_FUTURE_${version.zone}_${spec.bTokenSymbol}`
-    }
-  } else {
-    return `${symbol}_V2_${chain}`
-  }
+  const baseToken = Array.isArray(config.bTokenSymbol) ? config.bTokenSymbol[0] : config.bTokenSymbol
+  return `MARKPRICE_${config.symbol}_${chain}_${Type.current.toUpperCase()}_${version.zone}_${baseToken}`
 }
+
+
 
 export function equalIgnoreCase(str1,str2){
   return str1 && str1.toUpperCase() === str2 && str2.toUpperCase()

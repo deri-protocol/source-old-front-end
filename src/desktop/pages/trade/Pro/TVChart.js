@@ -1,30 +1,31 @@
 import React,{useRef,useEffect} from 'react'
 import { widget} from '../../../../lib/charting_library'
-import { getFormatSymbol, intervalRange, } from '../../../../utils/utils';
+import { getFormatSymbol, intervalRange, formatSymbolInputParam, } from '../../../../utils/utils';
 import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import chartConfig from './chart-config.json'
 import webSocket from '../../../../model/WebSocket';
+import Type from '../../../../model/Type';
+import Version from '../../../../model/Version';
 
 const supported_resolutions = ["1","5","15","30","60","240","1D","5D","1W","1M"];
 const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 
-function TVChart({interval,symbol,showLoad,intl,preload}){
+function TVChart({interval,showLoad,intl,preload,config}){
   const widgetRef = useRef(null);
   const lastDataRef = useRef(null);
   const datafeedRef = useRef({
     onReady: (callback) => {
       setTimeout(() => callback({supported_resolutions: supported_resolutions}),0);
     },
-    getBars: (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) => getBars(symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest),
+    getBars: (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) => getBars(symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config),
     resolveSymbol: (symbolName,onSymbolResolvedCallback) => resolveSymbol(symbolName,onSymbolResolvedCallback),
     subscribeBars : (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => subscribeBars(symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback),
     unsubscribeBars : subscriberUID => unsubscribeBars(subscriberUID)
   });
 
- 
 
-  const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest) => {
+  const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
     const res = await axios.get(GET_KLINE_URL,{
       params : {
         symbol : getFormatSymbol(symbolInfo.name),
@@ -33,14 +34,14 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
         to : to 
       }
     });
-    if(res && res.status === 200 && Array.isArray(res.data.data)){
+    if(res && res.status === 200 && Array.isArray(res.data.data) && res.data.data.length > 0){
       const klineData = res.data.data
       showLoad(false)
       onHistoryCallback(klineData)
       lastDataRef.current = klineData[klineData.length -1]
     } else {
       onHistoryCallback([],{noData: true})
-    }
+    } 
   }
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
@@ -53,8 +54,8 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
   }
 
   const unsubscribeBars = subscriptUID => {
-    if(symbol){
-      webSocket.unsubscribe('un_get_kline',{symbol : getFormatSymbol(symbol),time_type : intervalRange[interval]})
+    if(config && config.symbol){
+      webSocket.unsubscribe('un_get_kline',{symbol : getFormatSymbol(config.symbol),time_type : intervalRange[interval]})
     }
   }
 
@@ -64,7 +65,6 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
       pricescale: 100,
       ticker: symbol,
       minmov: 1,
-      type: "crypto",
       has_intraday: true,
       intraday_multipliers: ["1","2","5","15","30","60","240","1D","7D","1W","1M"],
       has_weekly_and_monthly: true,
@@ -73,7 +73,7 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
       has_daily: true,
       timezone : 'UTC',
       session: "24x7",
-      exchange: "Deri",
+      // exchange: "Deri",
       supported_resolutions : supported_resolutions
     }),0)
   }
@@ -81,7 +81,7 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
     const widgetOptions = {
-			symbol: symbol,
+			symbol: config.markpriceSymbolFormat || config.symbol,
       datafeed: datafeedRef.current,
       interval: interval,
       locale: intl.locale,
@@ -91,7 +91,9 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
-      widgetRef.current.chart().createStudy('Overlay', true, false, [symbol],null,{priceScale : 'as-series','color': '#aaa'})
+      if(Type.isFuture && !Version.isOpen && !Version.isV1){
+        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol],null,{priceScale : 'as-series','color': '#aaa'})
+      }
       // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
       // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
       // widgetRef.current.chart().createStudy('Moving Average', false, true, [99],null, {'Plot.color': 'rgba(234, 61, 247, 0.7)'});    
@@ -100,7 +102,7 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
 
 
   useEffect(() => {
-    if(symbol && interval && preload){
+    if(config && config.symbol && interval && preload){
       initialize();
     }
     return () => {
@@ -109,7 +111,7 @@ function TVChart({interval,symbol,showLoad,intl,preload}){
       }
       unsubscribeBars();
     }
-  }, [symbol,interval,preload])
+  }, [interval,preload,config])
 
   return(
     <div id='tv-container'></div>
