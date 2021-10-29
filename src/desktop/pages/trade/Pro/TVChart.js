@@ -10,6 +10,7 @@ import Version from '../../../../model/Version';
 
 const supported_resolutions = ["1","5","15","30","60","240","1D","5D","1W","1M"];
 const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
+let spec 
 
 function TVChart({interval,showLoad,intl,preload,config}){
   const widgetRef = useRef(null);
@@ -28,7 +29,7 @@ function TVChart({interval,showLoad,intl,preload,config}){
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
     const res = await axios.get(GET_KLINE_URL,{
       params : {
-        symbol : getFormatSymbol(symbolInfo.name),
+        symbol : symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}USD`) :symbolInfo.config.markpriceSymbolFormat,
         time_type: intervalRange[resolution],
         from : from ,
         to : to 
@@ -58,22 +59,27 @@ function TVChart({interval,showLoad,intl,preload,config}){
       webSocket.unsubscribe('un_get_kline',{symbol : getFormatSymbol(config.symbol),time_type : intervalRange[interval]})
     }
   }
+  
+  function getSymbol(){
+    console.log(spec)
+  }
 
   const resolveSymbol = (symbol,onSymbolResolvedCallback) => {
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
+      ticker : symbol,
+      full_name: symbol,
       pricescale: 100,
-      ticker: symbol,
+      config : spec,
+      type : 'index',
       minmov: 1,
       has_intraday: true,
       intraday_multipliers: ["1","2","5","15","30","60","240","1D","7D","1W","1M"],
       has_weekly_and_monthly: true,
       has_no_volume: true,
-      pro_name: symbol,
       has_daily: true,
       timezone : 'UTC',
       session: "24x7",
-      // exchange: "Deri",
       supported_resolutions : supported_resolutions
     }),0)
   }
@@ -81,7 +87,7 @@ function TVChart({interval,showLoad,intl,preload,config}){
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
     const widgetOptions = {
-			symbol: config.markpriceSymbolFormat || config.symbol,
+      symbol: config.symbol,
       datafeed: datafeedRef.current,
       interval: interval,
       locale: intl.locale,
@@ -92,7 +98,7 @@ function TVChart({interval,showLoad,intl,preload,config}){
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
       if(Type.isFuture && !Version.isOpen && !Version.isV1){
-        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol],null,{priceScale : 'as-series','color': '#aaa'})
+        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol.substr(0,3)],null,{priceScale : 'as-series','color': '#aaa'})
       }
       // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
       // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
@@ -103,6 +109,7 @@ function TVChart({interval,showLoad,intl,preload,config}){
 
   useEffect(() => {
     if(config && config.symbol && interval && preload){
+      spec = config
       initialize();
     }
     return () => {
