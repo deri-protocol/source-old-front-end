@@ -98,7 +98,8 @@ function TVChart({interval,showLoad,intl,preload,config}){
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
       if(Type.isFuture && !Version.isOpen && !Version.isV1){
-        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol.substr(0,3)],null,{priceScale : 'as-series','color': '#aaa'})
+        const pos = config.symbol.indexOf('USD');
+        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol.substr(0,pos)],null,{priceScale : 'as-series','color': '#aaa'})
       }
       // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
       // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
