@@ -56,7 +56,7 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
     const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat || symbolInfo.name
     webSocket.subscribe('get_kline_update',{symbol : getFormatSymbol(symbol),time_type : intervalRange[resolution]},data => {
       if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
-        subscribes[subscribeUID] = symbol
+        subscribes[subscribeUID] = data.symbol
         onRealtimeCallback(data)
         lastDataRef.current = data
       }
