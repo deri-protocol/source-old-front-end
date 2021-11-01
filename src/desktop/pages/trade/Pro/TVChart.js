@@ -67,11 +67,11 @@ function TVChart({interval,showLoad,intl,preload,config}){
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
       ticker : symbol,
-      full_name: symbol,
+      // full_name: symbol,
       pricescale: 100,
       config : spec,
       type : 'index',
-      minmov: 1,
+      minmov: 100,
       has_intraday: true,
       intraday_multipliers: ["1","2","5","15","30","60","240","1D","7D","1W","1M"],
       has_weekly_and_monthly: true,
@@ -85,13 +85,14 @@ function TVChart({interval,showLoad,intl,preload,config}){
 
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
+    chartConfig.overrides = Type.isFuture ? {"scalesProperties.showSymbolLabels" :  true,...chartConfig.overrides} : chartConfig.overrides
     const widgetOptions = {
       symbol: config.symbol,
       datafeed: datafeedRef.current,
       interval: interval,
       locale: intl.locale,
       timezone : timezone,
-      ...chartConfig
+      ...chartConfig,
     }
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
