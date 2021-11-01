@@ -46,7 +46,7 @@ function TradingView({ version, trading, lang, type }) {
           {type.isOption ? `${trading.config ? trading.config.symbol : ''}` : (version.isV1 || version.isV2Lite || version.isOpen) ? `${trading.config ? trading.config.symbol : 'BTCUSD'} / ${trading.config ? trading.config.bTokenSymbol : ''}  (10X)` : `${trading.config ? trading.config.symbol : 'BTCUSD'} (10X)`}
         </div>
         {type.isFuture && <>
-          {!version.isOpen && <>
+          {!version.isOpen && !version.isV1 && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['mark-price']}</div>
             <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
@@ -68,7 +68,7 @@ function TradingView({ version, trading, lang, type }) {
                 </TipWrapper>
               </div>
             </>}
-            {!version.isOpen && <>
+            {!version.isOpen && !version.isV1 && <>
               <div className='trade-dashboard-title'><span >{lang['funding-rate']}</span>  </div>
               <div className='trade-dashboard-value'>
                 <TipWrapper block={false}>

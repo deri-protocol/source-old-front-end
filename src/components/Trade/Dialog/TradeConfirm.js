@@ -63,7 +63,7 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
                     <div className='text-num'><NumberFormat value={indexPrice} decimalScale={2} displayType='text' /></div>
                   </div>
                 </>}
-                { !version.isOpen  && <>
+                { !version.isOpen && !version.isV1  && <>
                   <div className='text'>
                     <div className='text-title'>{lang['confirm-trade-price']}</div>
                     <div className='text-num'><NumberFormat value={markPriceAfter} decimalScale={2} displayType='text' /></div>

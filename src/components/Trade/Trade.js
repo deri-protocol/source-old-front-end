@@ -388,7 +388,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='check-baseToken'>
           <SymbolSelector setSpec={setSpec} spec={trading.config} isOption={type.isOption} />
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
-            {type.isFuture && !version.isOpen && <>
+            {type.isFuture && !version.isOpen && !version.isV1 && <>
               <div className='mark-price'>
                 {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
               </div>
@@ -420,7 +420,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
-              {(type.isFuture && !version.isOpen) && <>
+              {(type.isFuture && !version.isOpen && !version.isV1) && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
                   <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
@@ -433,7 +433,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
-            {type.isFuture  && !version.isOpen && <>
+            {type.isFuture  && !version.isOpen && !version.isV1 && <>
               <div className='index-prcie'>
                 {lang['mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
               </div>
@@ -469,14 +469,14 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <span className='funding-per' tip={trading.fundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.fundingRate0} decimalScale={4} suffix='%' /></span>
                 </TipWrapper>
               </>}
-              {(type.isFuture && !version.isOpen) && <>
+              {(type.isFuture && !version.isOpen && !version.isV1) && <>
                 <span>{lang['funding-rate']} : &nbsp;</span>
                 <TipWrapper block={false} tip={trading.dpmmFundingRateTip}>
                   <span className='funding-per' tip={trading.dpmmFundingRateTip || ''}><DeriNumberFormat value={trading.fundingRate.funding0} decimalScale={4} /></span>
                 </TipWrapper>
               </>}
             </div>
-            {(type.isFuture  && !version.isOpen) && <>
+            {(type.isFuture  && !version.isOpen && !version.isV1) && <>
               <div className='rate'>
                 <TipWrapper block={false} tip={trading.rateTip}>
                   <span className='funding-per' tip={trading.rateTip || ''}>(<DeriNumberFormat value={rate} decimalScale={4} suffix='%' />)</span>
@@ -655,7 +655,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         <div className='enterInfo'>
           {!!trading.volumeDisplay && <>
             {type.isFuture && <>
-              {!version.isOpen && <>
+              {!version.isOpen && !version.isV1 && <>
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['mark-price']}</div>
                   <div className='text-enter poolL'>
