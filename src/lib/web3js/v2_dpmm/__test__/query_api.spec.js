@@ -18,7 +18,7 @@ import {
 
 const TIMEOUT = 30000;
 const chainId = '97';
-const pool = '0x1018d827B8392afFcD72A7c8A5eED390cB0599B1';
+const pool = '0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0';
 const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
 
 describe('query api', () => {

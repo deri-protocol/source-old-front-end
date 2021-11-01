@@ -371,7 +371,6 @@ export const getEstimatedTimePrice = async (
         await pool.getSymbols();
       }
       const symbol = pool.symbols[symbolIndex];
-      console.log('dpmmPrice', symbol.dpmmPrice.toString())
       const cost = calculateDpmmCost(
         symbol.indexPrice,
         symbol.K,

@@ -103,14 +103,12 @@ export class PoolApi{
           : pool.symbols[symbolIndex].oracleAddress;
       const [
         symbols,
-        positions,
         lastTimestamp,
         margin,
         fundingPeriod,
         price,
       ] = await Promise.all([
         pool.getSymbols(),
-        pool.getPositions(accountAddress),
         pool.getLastTimestamp(),
         pool.pToken.getMargin(accountAddress),
         pool.getFundingPeriod(),
@@ -120,6 +118,8 @@ export class PoolApi{
           oracleAddress
         ),
       ]);
+
+      const positions = await pool.getPositions(accountAddress)
 
       const symbol = symbols[symbolIndex];
       const position = positions[symbolIndex];
@@ -218,17 +218,18 @@ export class PoolApi{
     const { initialMarginRatio, maintenanceMarginRatio } = pool.parameters;
     const [
       symbols,
-      positions,
       lastTimestamp,
       margin,
       fundingPeriod,
     ] = await Promise.all([
       pool.getSymbols(),
-      pool.getPositions(accountAddress),
+      //pool.getPositions(accountAddress),
       pool.getLastTimestamp(),
       pool.pToken.getMargin(accountAddress),
       pool.getFundingPeriod(),
     ]);
+    const positions = await pool.getPositions(accountAddress)
+
     const totalCost = positions.reduce((acc, p) => acc.plus(p.cost), bg(0));
 
     return positions.map((p, index) => {
@@ -343,8 +344,10 @@ export class PoolApi{
 
     const liquidity = pool.state.liquidity;
     return {
-      funding0: symbol.funding,
-      fundingPerSecond: symbol.fundingPerSecond,
+      funding0: bg(symbol.funding).div(symbol.multiplier).toString(),
+      fundingPerSecond: bg(symbol.fundingPerSecond)
+        .div(symbol.multiplier)
+        .toString(),
       liquidity: liquidity,
       volume: '-',
       tradersNetVolume: bg(symbol.tradersNetVolume)

@@ -73,7 +73,8 @@ describe('test', () => {
       version: 'v2',
       versionId: 'v2_dpmm',
     });
-    expect((await pool.getBTokens()).length).toEqual(2)
+    //expect((await pool.getBTokens()).length).toEqual(2)
+    expect((await pool.getBTokens())).toEqual([])
     expect((await pool.getSymbols())[1].symbol).toEqual('ETHUSD')
     expect(pool.fundingPeriod).toEqual('259200')
     expect((await pool.getSymbols('0')).length).toEqual(1)

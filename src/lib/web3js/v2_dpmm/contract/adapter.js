@@ -7,7 +7,7 @@ import { normalizeSymbolUnit, SECONDS_IN_A_DAY } from "../../shared/config";
 //   processResult,
 // } from "../../shared/utils/contract.js";
 //import { range } from '../../shared/utils/lang.js'
-import { ERC20Factory, offChainOracleFactory } from "../../shared/contract/factory.js";
+import { bTokenOracle1Factory, ERC20Factory, offChainOracleFactory } from "../../shared/contract/factory.js";
 import { lTokenFactory, perpetualPoolRouterDpmmFactory, pTokenFactory } from "./factory.js";
 
 
@@ -104,7 +104,11 @@ const init = (klass) => {
           if (i === 0) {
             this.bTokens[i].price = "1";
           } else {
-            this.bTokens[i].price = await offChainOracleFactory(
+            // this.bTokens[i].price = await offChainOracleFactory(
+            //   this.chainId,
+            //   this.bTokens[i].oracleAddress
+            // ).getPrice();
+            this.bTokens[i].price = await bTokenOracle1Factory(
               this.chainId,
               this.bTokens[i].oracleAddress
             ).getPrice();
@@ -298,7 +302,7 @@ const getSymbols = (klass) => {
         .minus(s.tradersNetCost);
       const ratePerSecond = bg(s.dpmmPrice)
         .minus(s.indexPrice)
-        //.times(s.multiplier)
+        .times(s.multiplier)
         .div(this.fundingPeriod)
         .toString();
       const diff = bg(Math.floor(Date.now() / 1000)).minus(

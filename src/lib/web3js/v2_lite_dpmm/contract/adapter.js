@@ -226,8 +226,8 @@ const getSymbols = (klass) => {
         s.tradersNetVolume,
         s.multiplier
       ).toString();
-      //s.fundingPerSecond = bg(s.dpmmPrice).minus(s.indexPrice).times(s.multiplier).div(this.fundingPeriod).toString()
-      s.fundingPerSecond = bg(s.dpmmPrice).minus(s.indexPrice).div(this.fundingPeriod).toString()
+      s.fundingPerSecond = bg(s.dpmmPrice).minus(s.indexPrice).times(s.multiplier).div(this.fundingPeriod).toString()
+      //s.fundingPerSecond = bg(s.dpmmPrice).minus(s.indexPrice).div(this.fundingPeriod).toString()
       s.funding = bg(s.fundingPerSecond).times(SECONDS_IN_A_DAY).toString()
     });
 

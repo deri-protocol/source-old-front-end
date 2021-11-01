@@ -27,9 +27,9 @@ export class PoolApi {
 
   // API
   async getLiquidityInfo(accountAddress, bTokenId) {
-    if (!this.pool.isSymbolsUpdated()) {
+    //if (!this.pool.isSymbolsUpdated()) {
       await this.pool.getSymbols();
-    }
+    //}
     const pool = this.pool;
     const [lTokenAsset, bTokens] = await Promise.all([
       pool.lToken.getAsset(accountAddress, bTokenId),
@@ -122,14 +122,12 @@ export class PoolApi {
     const [
       bTokens,
       symbols,
-      positions,
       lastTimestamp,
       margins,
       price,
     ] = await Promise.all([
       pool.getBTokens(),
       pool.getSymbols(),
-      pool.getPositions(accountAddress),
       pool.getLastTimestamp(),
       pool.pToken.getMargins(accountAddress),
       getOraclePriceFromCache2.get(
@@ -138,6 +136,7 @@ export class PoolApi {
         oracleAddress
       ),
     ]);
+    const positions = await pool.getPositions(accountAddress)
 
     const symbol = symbols[symbolIndex];
     const position = positions[symbolIndex];
@@ -239,16 +238,17 @@ export class PoolApi {
     const [
       bTokens,
       symbols,
-      positions,
       lastTimestamp,
       margins,
     ] = await Promise.all([
       pool.getBTokens(),
       pool.getSymbols(),
-      pool.getPositions(accountAddress),
+      //pool.getPositions(accountAddress),
       pool.getLastTimestamp(),
       pool.pToken.getMargins(accountAddress),
     ]);
+    const positions = await pool.getPositions(accountAddress)
+
     const totalCost = positions.reduce((acc, p) => acc.plus(p.cost), bg(0));
 
     return positions
@@ -367,12 +367,12 @@ export class PoolApi {
     const {funding, fundingPerSecond, tradersNetVolume, multiplier } = pool.symbols[symbolIndex]
     const liquidity = pool.state.liquidity
     return {
-      funding0: funding,
-      fundingPerSecond,
+      funding0: bg(funding).div(multiplier).toString(),
+      fundingPerSecond: bg(fundingPerSecond).div(multiplier).toString(),
       liquidity: liquidity,
       volume: '-',
       tradersNetVolume: bg(tradersNetVolume).times(multiplier).toString(),
-    }
+    };
   }
 
 

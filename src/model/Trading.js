@@ -362,7 +362,8 @@ export default class Trading {
       const price = position.price || this.index
       const increment = slideIncrementMargin - position.marginHeld
       let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
-      let volume =  increment / (price * this.contract.multiplier * MarginRatio);
+      // let volume =  increment / (price * this.contract.multiplier * MarginRatio);
+      let volume = bg(increment).div(bg(bg(price).times(bg(this.contract.multiplier).times(bg(MarginRatio))))).toString()
       // if(type.isOption){
         volume = +volume * +this.contract.multiplier
         let index = this.contract.multiplier.indexOf('.')
