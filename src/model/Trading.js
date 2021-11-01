@@ -369,7 +369,7 @@ export default class Trading {
         let num = this.contract.multiplier.slice(index);
         let length = num.length 
         let value = volume.toString()
-        if(value.indexOf(".") !== '-1'){
+        if(value.indexOf(".") !== -1){
           value = value.substring(0,value.indexOf(".") + length)
         }
         this.setVolume(value)
