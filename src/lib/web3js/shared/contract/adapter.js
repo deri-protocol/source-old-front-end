@@ -26,7 +26,10 @@ const unlock = (klass) => {
 };
 
 const getPrice = (klass) => {
-  klass.prototype['getPrice'] = async function() {
+  klass.prototype['getPrice'] = async function () {
+    if (this.contractAddress === '0xE1cC9FCF36f60479F21ACcB3E23Cb2B608679f4d') {
+      return '1';
+    }
     const [
       isQuoteToken0,
       qDecimals,
@@ -47,24 +50,24 @@ const getPrice = (klass) => {
       this.timestampLast2(),
     ]);
 
-    const pancakePair = new PancakePair(this.chainId, pair)
-    let reserveQ, reserveB, timestamp
+    const pancakePair = new PancakePair(this.chainId, pair);
+    let reserveQ, reserveB, timestamp;
     if (isQuoteToken0) {
       const res = await pancakePair.getReserves();
-      reserveQ = res._reserve0
-      reserveB = res._reserve1
-      timestamp = res._blockTimestampLast
+      reserveQ = res._reserve0;
+      reserveB = res._reserve1;
+      timestamp = res._blockTimestampLast;
     } else {
       const res = await pancakePair.getReserves();
-      reserveB = res._reserve0
-      reserveQ = res._reserve1
-      timestamp = res._blockTimestampLast
+      reserveB = res._reserve0;
+      reserveQ = res._reserve1;
+      timestamp = res._blockTimestampLast;
     }
     const [price0CumulativeLast, price1CumulativeLast] = await Promise.all([
       pancakePair.price0CumulativeLast(),
       pancakePair.price1CumulativeLast(),
-    ])
-    let tmpPairState = {}
+    ]);
+    let tmpPairState = {};
 
     if (timestamp !== timestampLast2) {
       tmpPairState.priceCumulativeLast1 = priceCumulativeLast2;
@@ -82,21 +85,21 @@ const getPrice = (klass) => {
       };
     }
 
-    let price
-    const diff = bg(qDecimals).minus(bDecimals)
+    let price;
+    const diff = bg(qDecimals).minus(bDecimals);
     if (tmpPairState.timestampLast1 !== '0') {
       //console.log('not equal')
       price = bg(tmpPairState.priceCumulativeLast2)
         .minus(tmpPairState.priceCumulativeLast1)
-        .div(
-          bg(tmpPairState.timestampLast2).minus(tmpPairState.timestampLast1)
-        ).times(bg(10).pow(diff)).div(bg(2).pow(112));
+        .div(bg(tmpPairState.timestampLast2).minus(tmpPairState.timestampLast1))
+        .times(bg(10).pow(diff))
+        .div(bg(2).pow(112));
     } else {
       //console.log('equal')
-      price = bg(reserveB).times(bg(10).pow(diff)).div(reserveQ).toString()
+      price = bg(reserveB).times(bg(10).pow(diff)).div(reserveQ).toString();
     }
-    return price
-  }
+    return price;
+  };
   return klass
 }
 
