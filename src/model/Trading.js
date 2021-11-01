@@ -562,8 +562,14 @@ export default class Trading {
 
   get fundingCoefficientTip(){
     if(this.contract && this.contract.fundingRateCoefficient && this.config.unit){
+     if(Intl.locale === 'zh'){
+      return `1${this.config.unit} ${Intl.get('lite','funding-coefficient-hove-one')} ${Intl.get('lite','funding-coefficient-hove-two')}${this.contract.fundingRateCoefficient} ${Intl.get('lite','funding-coefficient-hove-three')} ${bg(this.contract.fundingRateCoefficient).times(bg(86400)).toString()} ${Intl.get('lite','per-day')}
+      `
+     }else{
       return `${Intl.get('lite','funding-coefficient-hove-one')} ${this.config.unit} ${Intl.get('lite','funding-coefficient-hove-two')} ${this.contract.fundingRateCoefficient} ${Intl.get('lite','funding-coefficient-hove-three')} ${bg(this.contract.fundingRateCoefficient).times(bg(86400)).toString()} ${Intl.get('lite','per-day')}
       `
+     }
+      
     }
     return ''
   }
