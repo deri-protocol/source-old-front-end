@@ -32,6 +32,9 @@
     "mainSeriesProperties.haStyle.wickColor": "#737375",
     "mainSeriesProperties.haStyle.barColorsOnPrevClose": false
   },      
+  "studies_overrides": {
+    "Overlay.lineStyle.color" : "#569bda"
+  },
   "toolbar_bg": "#212327",
   "session": "24x7"
 }

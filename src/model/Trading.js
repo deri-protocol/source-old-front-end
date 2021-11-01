@@ -309,7 +309,7 @@ export default class Trading {
   setConfig(config){
     //just for v2 and lite version in futrue
     if(type.isFuture && (version.isV2 || version.isV2Lite)){
-      config.markpriceSymbol = `${config.symbol}-MARKPRICE`
+      // config.markpriceSymbol = `${config.symbol}-MARKPRICE`
       config.markpriceSymbolFormat = getMarkpriceSymbol(config)
     }
     this.config = config
