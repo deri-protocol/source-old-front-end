@@ -74,7 +74,7 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
       name: symbol,
       ticker : symbol,
       // full_name: symbol,
-      description : type.isFuture && !Version.isOpen ? `${symbol}-MARK` : symbol,
+      description : type.isFuture && !Version.isOpen && !Version.isV1 ? `${symbol}-MARK` : symbol,
       pricescale: 100,
       config : spec,
       type : 'index',
