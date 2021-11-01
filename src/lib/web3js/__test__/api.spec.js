@@ -43,8 +43,9 @@ describe('api', () => {
     DeriEnv.set('prod')
     const res = getPoolConfigList()
     DeriEnv.set('dev')
-    expect(res.length).toEqual(7)
-    //expect(res).toEqual({})
+    //expect(res.length).toEqual(7)
+    console.log(JSON.stringify(res, null, 2))
+    expect(res).toEqual({})
   })
   it('getPoolConfigList testnet', () => {
     DeriEnv.set('testnet')

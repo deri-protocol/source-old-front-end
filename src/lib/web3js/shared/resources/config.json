@@ -3,10 +3,10 @@
     "prod": {
       "pools": [
         {
-          "pool": "0x19c2655A0e1639B189FB0CF06e02DC0254419D92",
+          "pool": "0x4B439ABCBc736837D0F7f7A9C5619bF8fa650e15",
           "pToken": "0x2AA5865BF556ab3f6Cd9405e565099f70234dF05",
           "lToken": "0x6f8F1C2781b555B63F1A1BE85BF99aEe27d87cB2",
-          "router": "0xC9C234243f48Fa05A993c29B4F5f93048f5b07E4",
+          "router": "0x5b2BBCF596feBdC3a701601c7dBa3bDfC45210c6",
           "bTokens": [
             {
               "bTokenId": "0",
@@ -41,17 +41,17 @@
               "unit": "BNB"
             }
           ],
-          "initialBlock": "7884650",
+          "initialBlock": "12181000",
           "type": "perpetual",
           "version": "v2",
-          "versionId": "v2",
+          "versionId": "v2_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0x43b4dfb998b4D17705EEBfFCc0380c6b98699252",
+          "pool": "0x6be39f5C04C837aE3c55bF19D10EC370c52Dc0ac",
           "pToken": "0x0757bC621A32b1134eCf2843955B0bBc8CA13BA1",
           "lToken": "0xADeA18DA0aF0Ab14900A5634EdDf5A83513cdcE0",
-          "router": "0x7e412350a64bd454C800d1273CEA59c78D708EAB",
+          "router": "0x8B0340a77f807D0857Ef4C3fB0014A8cE3591E93",
           "bTokens": [
             {
               "bTokenId": "0",
@@ -81,10 +81,10 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "16247773",
+          "initialBlock": "20726570",
           "type": "perpetual",
           "version": "v2",
-          "versionId": "v2",
+          "versionId": "v2_dpmm",
           "chainId": "137"
         }
       ],
@@ -290,7 +290,7 @@
     "prod": {
       "pools": [
         {
-          "pool": "0x3465A2a1D7523DAF811B1abE63bD9aE36D2753e0",
+          "pool": "0xbC259DCA83b7EdD81b28BcCd1fee87d7b881785a",
           "pToken": "0x6c4907a76628574C14C6292DEA5B4A5cD81D9Ee0",
           "lToken": "0x992974FF499979cDd295214f8883D83a93855fA7",
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
@@ -327,14 +327,14 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "9514401",
+          "initialBlock": "12182029",
           "type": "perpetual",
           "version": "v2_lite",
-          "versionId": "v2_lite",
+          "versionId": "v2_lite_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819",
+          "pool": "0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41",
           "pToken": "0xef4c81c76ED66d9B02e0d5de2eD352f840Eb497C",
           "lToken": "0xC246d0aD04a9029A82862BE2fbd16ab1445b1602",
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
@@ -371,14 +371,14 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "9514895",
+          "initialBlock": "12182152",
           "type": "perpetual",
           "version": "v2_lite",
-          "versionId": "v2_lite",
+          "versionId": "v2_lite_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0xb144cCe7992f792a7C41C2a341878B28b8A11984",
+          "pool": "0x9C0033D74618BC081Aca8b5E4bf64574a8C5960E",
           "pToken": "0xDC3ED843f0c411Eea1B84C0277CDFC5B71E22059",
           "lToken": "0x35C8b3bb6CE67d9bf6b14a5FfC121A79d6247d07",
           "bToken": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
@@ -415,14 +415,14 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "17129838",
+          "initialBlock": "20727026",
           "type": "perpetual",
           "version": "v2_lite",
-          "versionId": "v2_lite",
+          "versionId": "v2_lite_dpmm",
           "chainId": "137"
         },
         {
-          "pool": "0xa4eDe2C4CB210CD07DaFbCe56dA8d36b7d688cd0",
+          "pool": "0x29e9dC4634bd9a8930FF07f4Fa2E1479CDF5d17F",
           "pToken": "0x074f37Be1c9818b192aCdB3B268baA52d052ea28",
           "lToken": "0x7B0a54d667F2665438DDf66349C30d75Dc4c590A",
           "bToken": "0x3D1D2aFd191b165D140e3E8329E634665fFB0E5e",
@@ -459,10 +459,10 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "17131129",
+          "initialBlock": "20727196",
           "type": "perpetual",
           "version": "v2_lite",
-          "versionId": "v2_lite",
+          "versionId": "v2_lite_dpmm",
           "chainId": "137"
         }
       ],
@@ -756,7 +756,7 @@
     "prod": {
       "pools": [
         {
-          "pool": "0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4",
+          "pool": "0x6fEfdd54E0aA425F9B0E647d5BA6bF6d6f3F8Ab8",
           "pToken": "0x30629665488645d998dC8cA1f54E79037CFbd73a",
           "lToken": "0x05ED78E8D9A5fd09D0cbCBD90abB71017dC74Cef",
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
@@ -809,7 +809,7 @@
               "unit": "BTC"
             }
           ],
-          "initialBlock": "10736176",
+          "initialBlock": "12179657",
           "type": "option",
           "version": "option",
           "versionId": "option",

@@ -17,7 +17,8 @@ function Governance({ wallet = {}, lang }){
       </div>
       {curTab && <>
         <div className='now-vote'>
-          <DipTwo lang={lang} />
+          {/* <DipTwo lang={lang} /> */}
+          {lang['no-proposals-found']}
         </div>
       </>}
       {!curTab && <>
@@ -28,9 +29,13 @@ function Governance({ wallet = {}, lang }){
           {/* <div className='link'>
             <Link to='/diphistorytwo'> {lang['dip-two']} </Link>
           </div> */}
+          <div>
+            <Link to='/diptwo'> {lang['dip-two']} </Link>
+          </div>
           <div >
             <Link to='/diphistory'> {lang['dip-one']} </Link>
           </div>
+          
           
         </div>
       </>}
