@@ -28,10 +28,12 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
 
 
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
-    const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
+    // const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
+    const pos = symbolInfo.name.indexOf('-INDEX');
+    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat
     const res = await axios.get(GET_KLINE_URL,{
       params : {
-        symbol : symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}${suffix}`) :symbolInfo.config.markpriceSymbolFormat,
+        symbol : getFormatSymbol(symbol),
         time_type: intervalRange[resolution],
         from : from ,
         to : to 
@@ -48,9 +50,11 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
   }
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
-    const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
-    const symbol = symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}${suffix}`) : symbolInfo.config.markpriceSymbolFormat
-    webSocket.subscribe('get_kline_update',{symbol : symbol,time_type : intervalRange[resolution]},data => {
+    // const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
+    // const symbol = symbolInfo.name.indexOf(suffix) === -1 ? getFormatSymbol(`${symbolInfo.name}${suffix}`) : symbolInfo.config.markpriceSymbolFormat
+    const pos = symbolInfo.name.indexOf('-INDEX');
+    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat
+    webSocket.subscribe('get_kline_update',{symbol : getFormatSymbol(symbol),time_type : intervalRange[resolution]},data => {
       if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
         subscribes[subscribeUID] = symbol
         onRealtimeCallback(data)
@@ -70,10 +74,11 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
       name: symbol,
       ticker : symbol,
       // full_name: symbol,
+      description : `${symbol}-MARK`,
       pricescale: 100,
       config : spec,
       type : 'index',
-      minmov: 100,
+      minmov: 1,
       has_intraday: true,
       intraday_multipliers: ["1","2","5","15","30","60","240","1D","7D","1W","1M"],
       has_weekly_and_monthly: true,
@@ -87,9 +92,9 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
 
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
-    chartConfig.overrides = type.isFuture 
-      ? {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  true} 
-      : {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  false}
+    // chartConfig.overrides = type.isFuture 
+    //   ? {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  true} 
+    //   : {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  false}
     const widgetOptions = {
       symbol: config.symbol,
       datafeed: datafeedRef.current,
@@ -102,8 +107,9 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
       if(Type.isFuture && !Version.isOpen && !Version.isV1){
-        const pos = config.symbol.indexOf('USD');
-        widgetRef.current.chart().createStudy('Overlay', true, false, [config.symbol.substr(0,pos)],null,{priceScale : 'as-series','color': '#aaa'})
+        // const suffix = config.version === 'v2' ? 'USD' : /^i/i.test(config.symbol) ? '' : 'USDT'
+        // const pos = suffix ? config.symbol.indexOf(suffix) : config.symbol.length
+        widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : 'as-series','color': '#aaa'})
       }
       // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
       // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
