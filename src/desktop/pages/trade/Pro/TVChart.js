@@ -13,7 +13,7 @@ const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 let spec 
 const subscribes = {}
 
-function TVChart({interval,showLoad,intl,preload,config}){
+function TVChart({interval,showLoad,intl,preload,config,type}){
   const widgetRef = useRef(null);
   const lastDataRef = useRef(null);
   const datafeedRef = useRef({
@@ -85,7 +85,9 @@ function TVChart({interval,showLoad,intl,preload,config}){
 
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
-    chartConfig.overrides = Type.isFuture ? {"scalesProperties.showSymbolLabels" :  true,...chartConfig.overrides} : chartConfig.overrides
+    chartConfig.overrides = type.isFuture 
+      ? {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  true} 
+      : {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  false}
     const widgetOptions = {
       symbol: config.symbol,
       datafeed: datafeedRef.current,
@@ -119,7 +121,7 @@ function TVChart({interval,showLoad,intl,preload,config}){
       }
       unsubscribeBars();
     }
-  }, [interval,preload,config])
+  }, [interval,preload,config,type.current])
 
   return(
     <div id='tv-container'></div>
@@ -127,4 +129,4 @@ function TVChart({interval,showLoad,intl,preload,config}){
 
 }
 
-export default inject('intl')(observer(TVChart))
+export default inject('intl','type')(observer(TVChart))
