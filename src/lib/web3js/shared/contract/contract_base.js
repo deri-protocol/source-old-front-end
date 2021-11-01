@@ -81,7 +81,7 @@ export class ContractBase {
         } else if (receipt === null) {
           setTimeout(() => _transactionReceipt(resolve, reject), 500);
         } else if (receipt.status === false) {
-          receipt.errorMessage = 'Transaction failed';
+          //receipt.errorMessage = 'Transaction failed';
           reject(receipt);
         } else {
           resolve(receipt);
