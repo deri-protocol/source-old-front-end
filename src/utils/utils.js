@@ -134,7 +134,7 @@ export function getParam(param,urlString = window.location.href){
   return url.searchParams.get(param);
 }
 
-export function getFormatSymbol(symbol,config,indexPrice){
+export function getFormatSymbol(symbol){
   const curChain = restoreChain();
   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
   if(type.isOption){

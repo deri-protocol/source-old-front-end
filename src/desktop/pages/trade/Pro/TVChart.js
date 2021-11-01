@@ -11,6 +11,7 @@ import Version from '../../../../model/Version';
 const supported_resolutions = ["1","5","15","30","60","240","1D","5D","1W","1M"];
 const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 let spec 
+const subscribes = {}
 
 function TVChart({interval,showLoad,intl,preload,config}){
   const widgetRef = useRef(null);
@@ -46,8 +47,10 @@ function TVChart({interval,showLoad,intl,preload,config}){
   }
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
-    webSocket.subscribe('get_kline_update',{symbol : getFormatSymbol(symbolInfo.name),time_type : intervalRange[resolution]},data => {
+    const symbol = symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}USD`) : symbolInfo.config.markpriceSymbolFormat
+    webSocket.subscribe('get_kline_update',{symbol : symbol,time_type : intervalRange[resolution]},data => {
       if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
+        subscribes[subscribeUID] = symbol
         onRealtimeCallback(data)
         lastDataRef.current = data
       }
@@ -55,15 +58,11 @@ function TVChart({interval,showLoad,intl,preload,config}){
   }
 
   const unsubscribeBars = subscriptUID => {
-    if(config && config.symbol){
-      webSocket.unsubscribe('un_get_kline',{symbol : getFormatSymbol(config.symbol),time_type : intervalRange[interval]})
+    if(subscribes[subscriptUID]){
+      webSocket.unsubscribe('un_get_kline',{symbol : subscribes[subscriptUID],time_type : intervalRange[interval]})
     }
   }
   
-  function getSymbol(){
-    console.log(spec)
-  }
-
   const resolveSymbol = (symbol,onSymbolResolvedCallback) => {
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,

@@ -73,6 +73,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
           title : symbol,
           visible: true,
           borderColor: 'rgba(197, 203, 206, 1)',
+          formatter: price => '$' + price.toFixed(2),
         }
       })
       const seriesChart = lineChartRef.current = chart.addLineSeries({
