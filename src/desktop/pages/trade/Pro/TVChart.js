@@ -28,9 +28,10 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
 
 
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
+    const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
     const res = await axios.get(GET_KLINE_URL,{
       params : {
-        symbol : symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}USD`) :symbolInfo.config.markpriceSymbolFormat,
+        symbol : symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}${suffix}`) :symbolInfo.config.markpriceSymbolFormat,
         time_type: intervalRange[resolution],
         from : from ,
         to : to 
@@ -47,7 +48,8 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
   }
 
   const subscribeBars = (symbolInfo,resolution,onRealtimeCallback,subscribeUID,onResetCacheNeededCallback) => {
-    const symbol = symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}USD`) : symbolInfo.config.markpriceSymbolFormat
+    const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
+    const symbol = symbolInfo.name.length ===3 ? getFormatSymbol(`${symbolInfo.name}${suffix}`) : symbolInfo.config.markpriceSymbolFormat
     webSocket.subscribe('get_kline_update',{symbol : symbol,time_type : intervalRange[resolution]},data => {
       if (data && lastDataRef.current && data.time >= lastDataRef.current.time ) {
         subscribes[subscribeUID] = symbol
