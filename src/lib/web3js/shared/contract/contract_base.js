@@ -40,7 +40,7 @@ export class ContractBase {
         } else if (err.toString().includes("Returned values aren't valid,")) {
           console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
         } else {
-          //console.log('error:', err.toString())
+          console.log('error:', err)
         }
       }
     }

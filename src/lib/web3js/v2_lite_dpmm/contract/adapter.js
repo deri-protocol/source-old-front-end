@@ -148,10 +148,10 @@ const init = (klass) => {
         this.offChainOracleSymbolNames = this.offChainOracleSymbolNames.filter(
           (s) => s && s !== ''
         );
-        console.log(
-          `${this.contractAddress} offchain`,
-          this.offChainOracleSymbolNames
-        );
+        // console.log(
+        //   `${this.contractAddress} offchain`,
+        //   this.offChainOracleSymbolNames
+        // );
       }
     }
   };
@@ -453,11 +453,11 @@ const _getSymbolPrices = (klass) => {
     await this.init()
     let prices = []
     if (this.offChainOracleSymbolIds.length > 0) {
-        const priceInfos = await getPriceInfos(this.chainId, this.offChainOracleSymbols);
+        const priceInfos = await getPriceInfos(this.chainId, this.offChainOracleSymbolNames);
         prices = Object.values(priceInfos).reduce((acc, p, index) => {
         acc.push([
             this.offChainOracleSymbolIds[
-            this.offChainOracleSymbols.indexOf(Object.keys(priceInfos)[index])
+            this.offChainOracleSymbolNames.indexOf(Object.keys(priceInfos)[index])
             ],
             p.timestamp,
             p.price,

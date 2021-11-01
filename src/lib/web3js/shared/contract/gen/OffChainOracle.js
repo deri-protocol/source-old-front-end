@@ -27,13 +27,23 @@ export class OffChainOracle extends ContractBase {
   //    return deleteIndexedKey(res)
   //  }
   async signer() {
-    const res = await this._call('signer', [])
+    await this._init()
+    //const res = await this._call('signer', [])
+    const res = await this.contract.methods.signer().call()
+    return deleteIndexedKey(res)
+  }
+  // for old offchain oracle
+  async signatory() {
+    await this._init()
+    //const res = await this._call('signatory',[])
+    const res = await this.contract.methods.signatory().call()
     return deleteIndexedKey(res)
   }
   async symbol() {
     const res = await this._call('symbol', [])
     return deleteIndexedKey(res)
   }
+
   //  async timestamp() {
   //    const res = await this._call('timestamp', [])
   //    return deleteIndexedKey(res)
