@@ -192,6 +192,8 @@ export default class Trading {
         this.positionInfo.start()
         this.positionInfo.startAll();
       })
+    } else {
+      finishedCallback && finishedCallback()
     }
   }
 
