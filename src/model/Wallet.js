@@ -8,10 +8,13 @@ import version from './Version'
 class Wallet {
   
   detail = {}
+  defaultNw = {}
   
   constructor(){
     makeAutoObservable(this,{
       detail : observable,
+      defaultNw : observable,
+      setDefaultNw : action,
       setDetail : action,
       supportV2 : computed,
       supportV1 : computed,
@@ -109,6 +112,10 @@ class Wallet {
 
   setDetail(detail){
     this.detail = detail;
+  }
+
+  setDefaultNw(network){
+    this.defaultNw = network
   }
 
   refresh(){

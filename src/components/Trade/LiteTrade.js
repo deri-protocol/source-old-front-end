@@ -12,15 +12,11 @@ function LiteTrade({wallet,trading,isPro,lang,loading,version,type}){
   const tradeClassName = classNames('trade-position',curTab)
 
   useEffect(() => {
-    if(wallet.detail.account){
-      loading.loading()
-      trading.init(wallet,() => {
-        loading.loaded();
-      })
-    }
-    return () => {
-      trading.clean()
-    } ;
+    loading.loading()
+    trading.init(wallet,() => {
+      loading.loaded();
+    })
+    return () => { trading.clean()} ;
   }, [wallet.detail.account,version.current])
 
   return (

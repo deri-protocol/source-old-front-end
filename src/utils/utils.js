@@ -157,6 +157,16 @@ export function getFormatSymbol(symbol){
   }
 }
 
+export function getDefaultNw(env){
+  return getNetworkList(env).find(network => network.isDefault) || {}
+}
+
+export function getNetworkList(env){
+  const chainInfo = config[env]['chainInfo']
+  const ids = Object.keys(chainInfo);
+  return ids.map(id => Object.assign(chainInfo[id],{id}))
+}
+
 
 //
 // export function formatSymbolInputParam(symbol,spec){

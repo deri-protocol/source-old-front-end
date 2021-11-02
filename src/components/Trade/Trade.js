@@ -298,7 +298,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.position.volume, trading.position.margin, trading.position.unrealizedPnl]);
 
   useEffect(() => {
-    let mark = trading.position.markPrice
+    let mark = trading.markPrice
     if (markPriceRef.current > mark) {
       setMarkPriceClass('fall')
     } else {
@@ -306,7 +306,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     }
     markPriceRef.current = mark
     setMarkPrice(mark)
-  }, [trading.index, trading.position])
+  }, [trading.index, trading.position,trading.markPrice])
 
   useEffect(() => {
     if (trading.config) {
@@ -369,11 +369,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.volume, inputing]);
 
   useEffect(() => {
-    if (trading.fundingRate.funding0 && trading.position.markPrice) {
-      let num = bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice)).times(bg(100)).toString()
+    if (trading.fundingRate.funding0 && trading.markPrice) {
+      let num = bg(trading.fundingRate.funding0).div(bg(trading.markPrice)).times(bg(100)).toString()
       setRate(num)
     }
-  }, [trading.fundingRate, trading.position])
+  }, [trading.fundingRate, trading.markPrice])
 
   useEffect(() => {
     trading.setUserSelectedDirection(direction)

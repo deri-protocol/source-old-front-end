@@ -89,6 +89,7 @@
         "supportInnovation" : true,
         "supportOptions":true,
         "supportOpen" : true,
+        "isDefault" : true,
         "metamask" : {
           "chainName": "BSC-Testnet",
           "nativeCurrency": {

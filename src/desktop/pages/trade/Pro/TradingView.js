@@ -22,7 +22,7 @@ function TradingView({ version, trading, lang, type }) {
   }, [trading.index]);
 
   useEffect(() => {
-      let mark = trading.position.markPrice
+      let mark = trading.markPrice
       if (markPriceRef.current > mark) {
         setMarkPriceClass('fall trade-dashboard-value')
       } else {
@@ -30,14 +30,15 @@ function TradingView({ version, trading, lang, type }) {
       }
       markPriceRef.current = mark
       setMarkPrice(mark)
-  }, [trading.index, trading.position])
+  }, [trading.index, trading.markPrice])
 
   useEffect(()=>{
-    if(trading.fundingRate.funding0 && trading.position.markPrice){
-      let num =  bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice) ).times(bg(100)).toString()
+    const markPrice = trading.markPrice 
+    if(trading.fundingRate.funding0 && markPrice){
+      let num =  bg(trading.fundingRate.funding0).div(bg(markPrice) ).times(bg(100)).toString()
       setRate(num)
     }
-  },[trading.fundingRate,trading.position])
+  },[trading.fundingRate,trading.markPrice])
 
   return (
     <div id="trading-view">

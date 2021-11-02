@@ -4,8 +4,8 @@ import Position from "./Position";
 import Contract from "./Contract";
 import History from './History'
 import Config from "./Config";
-import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol, getMarkpriceSymbol } from "../utils/utils";
-import { getFundingRate, priceCache } from "../lib/web3js/indexV2";
+import { eqInNumber, storeConfig, getConfigFromStore, restoreChain, getFormatSymbol, getMarkpriceSymbol, getDefaultNw } from "../utils/utils";
+import { getFundingRate, priceCache, DeriEnv } from "../lib/web3js/indexV2";
 import { bg } from "../lib/web3js/indexV2";
 import Intl from "./Intl";
 import version from './Version'
@@ -48,6 +48,7 @@ export default class Trading {
   configs = []
   config = null;
   index = ''
+  markPrice = ''
   volume = ''
   paused = false
   slideIncrementMargin = 0
@@ -63,6 +64,7 @@ export default class Trading {
   constructor() {
     makeObservable(this, {
       index: observable,
+      markPrice : observable,
       volume: observable,
       slideIncrementMargin: observable,
       fundingRate: observable,
@@ -77,6 +79,7 @@ export default class Trading {
       setOptionConfigs: action,
       setConfig: action,
       setIndex: action,
+      setMarkPrice : action,
       setContract: action,
       setPosition: action,
       setPositions: action,
@@ -103,7 +106,8 @@ export default class Trading {
       isPositive: computed
     })
     this.configInfo = new Config();
-    this.oracle = new Oracle();
+    this.indexOracle = new Oracle();
+    this.markOracle = new Oracle();
     this.positionInfo = new Position()
     this.contractInfo = new Contract();
     this.historyInfo = new History()
@@ -129,9 +133,9 @@ export default class Trading {
       //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
     } else if (!wallet.isConnected() || !wallet.supportWeb3()) {
       //没有钱包插件
+      this.setConfigs(all.filter(c => eqInNumber(getDefaultNw(DeriEnv.get()).id, c.chainId)))
       version.setCurrent('v2')
-      const all = await this.configInfo.load(version, isOption);
-      const defaultConfig = all.find(c => c.symbol === 'BTCUSD')
+      const defaultConfig = all.length > 0 ? all[0] : null
       this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet, this.config, true, finishedCallback, isOption)
@@ -163,13 +167,16 @@ export default class Trading {
   async loadByConfig(wallet, config, symbolChanged, finishedCallback, isOption) {
     //切换指数
     if (symbolChanged && config) {
-      this.oracle.addListener('trading', data => {
+      this.indexOracle.addListener('indexPrice', data => {
         this.setIndex(data.close)
       })
+      this.markOracle.addListener('markPrice',data => {
+        this.setMarkPrice(data.close)
+      })
     }
-    if (wallet && wallet.isConnected && config) {
+    if (config) {
       Promise.all([
-        this.positionInfo.load(wallet, config, (position) => {
+        this.positionInfo.load(wallet, config, position => {
           this.setPosition(position)
           this.syncFundingRate(wallet, config, isOption)
         }),
@@ -179,16 +186,16 @@ export default class Trading {
         this.positionInfo.loadAll(wallet, config, positions => this.setPositions(positions)),
       ]).then(results => {
         if (results.length === 5) {
-          results[0] && this.setIndex(results[0].price) && this.setPosition(results[0]);
+          results[0] && this.setIndex(results[0].price) && this.setMarkPrice(results[0].markPrice) && this.setPosition(results[0]);
           results[1] && this.setContract(results[1]);
           results[2] && this.setFundingRate(results[2]);
           results[3] && this.setHistory(results[3]);
           results[4] && this.setPositions(results[4]);
-          // this.refreshCache();
         }
       }).finally(e => {
         finishedCallback && finishedCallback()
-        this.oracle.load(getFormatSymbol(config.symbol, config, true))
+        this.indexOracle.load(getFormatSymbol(config.symbol))
+        this.markOracle.load(getFormatSymbol(config.markpriceSymbolFormat))
         this.positionInfo.start()
         this.positionInfo.startAll();
       })
@@ -267,7 +274,8 @@ export default class Trading {
    */
   pause() {
     this.setPaused(true)
-    this.oracle.pause();
+    this.indexOracle.pause();
+    this.markOracle.pause();
     this.positionInfo.pause();
   }
 
@@ -276,7 +284,8 @@ export default class Trading {
    */
   resume() {
     this.setPaused(false)
-    this.oracle.resume();
+    this.indexOracle.resume();
+    this.markOracle.resume();
     this.positionInfo.resume();
   }
 
@@ -311,12 +320,18 @@ export default class Trading {
     if (type.isFuture && (version.isV2 || version.isV2Lite)) {
       // config.markpriceSymbol = `${config.symbol}-MARKPRICE`
       config.markpriceSymbolFormat = getMarkpriceSymbol(config)
+    } else if (type.isOption){
+      config.markpriceSymbolFormat = `${config.symbol}-MARKPRICE`
     }
     this.config = config
   }
 
   setIndex(index) {
     this.index = index;
+  }
+
+  setMarkPrice(markPrice){
+    this.markPrice = markPrice;
   }
 
   setPosition(position) {
@@ -381,7 +396,8 @@ export default class Trading {
   }
 
   clean() {
-    this.oracle.clean();
+    this.indexOracle.clean();
+    this.markOracle.clean();
     this.positionInfo.clean();
     this.version = null;
     this.configs = []
@@ -495,7 +511,7 @@ export default class Trading {
   //资金费率
   async loadFundingRate(wallet, config, isOption) {
     if (config) {
-      const chainId = wallet && wallet.isConnected() && wallet.isSupportChain(isOption) ? wallet.detail.chainId : config.chainId
+      const chainId = wallet && wallet.isConnected() && wallet.isSupportChain(isOption) ? wallet.detail.chainId : getDefaultNw(DeriEnv.get()).id
       if (config) {
         const res = await getFundingRate(chainId, config.pool, config.symbolId).catch(e => console.error('getFundingRate was error,maybe network is wrong'))
         return res;

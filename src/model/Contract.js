@@ -1,8 +1,9 @@
-import { getSpecification } from "../lib/web3js/indexV2";
+import { getSpecification, DeriEnv } from "../lib/web3js/indexV2";
 import { makeObservable, observable, action, computed } from "mobx";
 import Intl from "./Intl";
 import version from "./Version";
 import type from "./Type";
+import { getDefaultNw } from "../utils/utils";
 
 export default class Contract {
   info = {
@@ -30,8 +31,9 @@ export default class Contract {
   // }
 
   async load(wallet,config){
-    if(wallet && wallet.supportChain && config && config.pool !== this.info.pool){
-      const spec = await getSpecification(wallet.detail.chainId,config.pool,config.symbolId);
+    if(config){
+      const chainId = wallet && wallet.isConnected() ? wallet.detail.chainId : getDefaultNw(DeriEnv.get()).id
+      const spec = await getSpecification(chainId,config.pool,config.symbolId);
       spec.bTokenSymbol = this.bTokenSymbolDisplay(spec)
       if(type.isOption){
         spec.underlier = this.getUnderlierStrike(spec).underlier

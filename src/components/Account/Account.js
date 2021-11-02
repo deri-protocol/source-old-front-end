@@ -1,16 +1,16 @@
 import React,{useState,useEffect} from 'react';
-import { formatAddress } from '../../utils/utils';
+import { formatAddress, getNetworkList, getDefaultNw } from '../../utils/utils';
 import './account.less'
 import { observer, inject } from 'mobx-react';
 import { useRouteMatch } from 'react-router-dom';
 import arrowIcon from '../../assets/img/symbol-arrow.svg'
 import useConfig from '../../hooks/useConfig';
+import { DeriEnv } from '../../lib/web3js/shared';
 
 
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
   const [networkList, setNetworkList] = useState([])
-  const [network, setNetwork] = useState({})
   const isIndex = useRouteMatch('/index')
   const isRoot = useRouteMatch({path: '/',exact : true})
   const isMining = useRouteMatch({path: '/mining',exact : true});
@@ -64,14 +64,11 @@ function Account({wallet,lang}){
 
 
   useEffect(() => {
-    if(config){
-      const ids = Object.keys(config);
-      const networkList = ids.map(id => Object.assign(config[id],{id}))
-      setNetwork(networkList.find(network => network.isDefault) || {})
-      setNetworkList(networkList)
-    }
-    return () => {}
-  }, [config])
+    const networkList = getNetworkList(DeriEnv.get());
+    const defaultNw = getDefaultNw(DeriEnv.get());
+    wallet.setDefaultNw(defaultNw)
+    setNetworkList(networkList)
+  }, [])
 
   
 
@@ -79,12 +76,12 @@ function Account({wallet,lang}){
   return !notConnectWalletPage && (
     <div className="connect">
       <div className="network-text-logo">
-        <i className={wallet.isConnected() ? wallet.detail.symbol : network.symbol}></i>
-        <span className="logo-text">{wallet.isConnected() ? wallet.detail.name || lang['select-network'] : network.name}</span>
+        <i className={wallet.isConnected() ? wallet.detail.symbol : wallet.defaultNw.symbol}></i>
+        <span className="logo-text">{wallet.isConnected() ? wallet.detail.name || lang['select-network'] : wallet.defaultNw.name}</span>
         <span className='arrow'><img src={arrowIcon} alt='selector' /></span>
         <div className='network-list'>
             {networkList.map((network,index) => (
-            <div key={index} className={`network-item ${network.code === wallet.detail.code ? 'selected' : ''}`} onClick={() => wallet.switchNetwork(network)}>
+            <div key={index} className={`network-item ${wallet.detail.code && network.code === wallet.detail.code ? 'selected' : network.isDefault ? 'selected' : ''}`} onClick={() => wallet.switchNetwork(network)}>
               <span className={`logo ${network.symbol}`}></span><span>{network.name}</span>
             </div>)
           )}
