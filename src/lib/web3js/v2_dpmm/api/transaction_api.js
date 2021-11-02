@@ -1,6 +1,8 @@
 import {
   bg,
   checkApiInput,
+  deriToNatural,
+  MAX_INT256,
 } from '../../shared';
 import { ERC20Factory } from '../../shared/contract/factory';
 import { catchTxApiError } from '../../shared/utils/api';
@@ -8,40 +10,50 @@ import { checkAmount, checkSymbolId, checkTokenId } from '../../shared/utils/der
 import { perpetualPoolDpmmFactory } from '../contract/factory.js';
 
 // mining
-export const addLiquidity = async (chainId, poolAddress, accountAddress, amount, bTokenId) => {
-  return catchTxApiError(
-    async () => {
-      [chainId, poolAddress, accountAddress] = checkApiInput(
-        chainId,
-        poolAddress,
-        accountAddress
-      );
-      amount = checkAmount(amount)
-      bTokenId = checkTokenId(bTokenId)
-      const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
-      await pool.init();
-      return await pool.router.addLiquidity(accountAddress, bTokenId, amount);
-    },
-    []
-  );
+export const addLiquidity = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  amount,
+  bTokenId,
+) => {
+  return catchTxApiError(async () => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
+    amount = checkAmount(amount);
+    bTokenId = checkTokenId(bTokenId);
+    const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
+    await pool.init();
+    return await pool.router.addLiquidity(accountAddress, bTokenId, amount);
+  }, []);
 };
 
-export const removeLiquidity = async (chainId, poolAddress, accountAddress, amount, bTokenId) => {
-  return catchTxApiError(
-    async () => {
-      [chainId, poolAddress, accountAddress] = checkApiInput(
-        chainId,
-        poolAddress,
-        accountAddress
-      );
-      amount = checkAmount(amount)
-      bTokenId = checkTokenId(bTokenId)
-      const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
-      await pool.init();
-      return await pool.router.removeLiquidity(accountAddress, bTokenId, amount);
-    },
-    []
-  );
+export const removeLiquidity = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  amount,
+  bTokenId,
+  isMaximum = false
+) => {
+  return catchTxApiError(async () => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
+    amount = checkAmount(amount);
+    bTokenId = checkTokenId(bTokenId);
+    const pool = perpetualPoolDpmmFactory(chainId, poolAddress);
+    await pool.init();
+    if (isMaximum) {
+      amount = deriToNatural(MAX_INT256).toString()
+    }
+    return await pool.router.removeLiquidity(accountAddress, bTokenId, amount);
+  }, []);
 };
 
 //trading

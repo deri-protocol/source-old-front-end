@@ -59,10 +59,11 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 						apy : ((+apyPool.apy) * 100).toFixed(2),
 						pnl : (+info.pnl).toFixed(2),
 						shares : shares.toString(),
-						formatShares : bg(shares).plus(info.pnl).toFixed(2),
-						totalShares : bg(shares).plus(info.pnl).toString(),
+						formatShares : shares.toFixed(2),
+						totalShares : bg(shares).toString(),
 						percent : info.poolLiquidity > 0 ? shares.dividedBy(info.poolLiquidity).multipliedBy(100).toFixed(2) : 0,
 						unit : baseToken,
+						pnlToken:info.bToken0Symbol,
 						sharesTitle : lang['my-Liquidity'],
 						multiplier : `${apyPool.multiplier}x`
 					})
@@ -135,7 +136,7 @@ function Liquidity({wallet,version,chainId,baseToken,address,type,baseTokenId,sy
 				</div>
 				{version === 'v2' && <div className="odd text claim-network">
 					<div className='text-title'>{lang['mining-pnl']}</div>
-					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ bToken }  /></div>
+					<div className="text-num">≈ &nbsp;<DeriNumberFormat allowZero={true} prefix=' ' value={ liquidity.pnl } decimalScale={2} suffix ={' '+ liquidity.pnlToken }  /></div>
 				</div>}
 				{(version === 'v1' || version === 'v2_lite' || version === 'v2_lite_open' || version === 'option') && <div className="odd claim-network">
 					<div className="text-title money"> ≈ <DeriNumberFormat allowZero={true}   value={liquidity.values} suffix ={' '+ bToken } decimalScale={4}/></div>						

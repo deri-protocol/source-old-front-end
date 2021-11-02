@@ -1,4 +1,4 @@
-import { bg, catchTxApiError, checkAddress, checkApiInput, checkChainId } from "../../shared"
+import { bg, catchTxApiError, checkAddress, checkApiInput, checkChainId, deriToNatural, MAX_INT256 } from "../../shared"
 import { checkAmount } from "../../shared/utils/derijsnext";
 import { perpetualPoolLiteDpmmFactory } from '../contract/factory.js'
 
@@ -15,21 +15,27 @@ export const addLiquidity = async(...args) => {
   }, args )
 }
 
-export const removeLiquidity = async (...args) => {
-  return catchTxApiError(
-    async (chainId, poolAddress, accountAddress, amount) => {
-      [chainId, poolAddress, accountAddress] = checkApiInput(
-        chainId,
-        poolAddress,
-        accountAddress
-      );
-      amount = checkAmount(amount)
-      const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
-      await pool.init();
-      return await pool.removeLiquidity(accountAddress, amount);
-    },
-    args
-  );
+export const removeLiquidity = async (
+  chainId,
+  poolAddress,
+  accountAddress,
+  amount,
+  isMaximum = false
+) => {
+  return catchTxApiError(async () => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
+    amount = checkAmount(amount);
+    const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
+    await pool.init();
+    if (isMaximum) {
+      amount = deriToNatural(MAX_INT256).toString()
+    }
+    return await pool.removeLiquidity(accountAddress, amount);
+  }, []);
 };
 
 //trading

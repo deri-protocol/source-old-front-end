@@ -16,7 +16,7 @@ import {
   getEstimatedTimePrice,
 } from '../api/query_api';
 
-const TIMEOUT = 30000;
+const TIMEOUT = 50000;
 const chainId = '97';
 const pool = '0x520b3df50C0E08B3A3cEbd6f7a47A133E5F574C0';
 const account = '0xFFe85D82409c5b9D734066C134b0c2CCDd68C4dF';
@@ -25,7 +25,13 @@ describe('query api', () => {
   it(
     'getLiquidityInfo',
     async () => {
-      const res = await getLiquidityInfo(chainId, pool, account, '0');
+      //const res = await getLiquidityInfo(chainId, pool, account, '0');
+      const res = await getLiquidityInfo(
+        '56',
+        '0x4B439ABCBc736837D0F7f7A9C5619bF8fa650e15',
+        '0x3645509F2c495d0b5F971472217c164985f67646',
+        '1'
+      );
       expect(res).toEqual({});
     },
     TIMEOUT

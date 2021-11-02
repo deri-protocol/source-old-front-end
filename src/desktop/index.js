@@ -10,7 +10,7 @@ export default function Desktop({ locale }) {
   const curRouterClass = location.pathname.split('/')[1]
   const isV1Router = location.pathname.split('/')[3]
   let v1Class = ''
-  if(isV1Router){
+  if(isV1Router === 'v1'){
     v1Class = 'futures-hide'
   }else{
     v1Class = ''

@@ -19,8 +19,12 @@ import { useLocation } from 'react-router-dom/cjs/react-router-dom.min'
 function Pro({wallet,lang,type,version}){
   const location = useLocation();
   const isV1Router = location.pathname.split('/')[3]
-  if(isV1Router){
+  if(isV1Router === 'v1'){
     version.setCurrent('v1')
+  } else {
+    if(version.isV1){
+      version.setCurrent('v2')
+    }
   }
   useEffect(() => {
     document.querySelector('.desktop').style.minWidth = '1903px';

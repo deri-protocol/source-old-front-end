@@ -10,6 +10,7 @@ import {
   getBlockInfo,
   deriToNatural,
   bg,
+  MAX_INT256,
 } from '../../shared';
 import { getVolatilitySymbols } from '../../shared/config/token';
 import { getOracleVolatilitiesForOption } from '../../shared/utils/oracle';
@@ -192,11 +193,17 @@ export class EverlastingOption extends ContractBase {
       accountAddress
     );
   }
-  async removeLiquidity(accountAddress, lShares) {
+  async removeLiquidity(accountAddress, lShares, isMaximum) {
     const prices = await this._getVolSymbolPrices();
+    let amount
+    if (isMaximum) {
+      amount = MAX_INT256;
+    } else {
+      amount = naturalToDeri(lShares);
+    }
     return await this._transact(
       'removeLiquidity',
-      [naturalToDeri(lShares), prices],
+      [amount, prices],
       accountAddress
     );
   }

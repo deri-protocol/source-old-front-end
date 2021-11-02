@@ -27,20 +27,18 @@ export class PoolApi {
 
   // API
   async getLiquidityInfo(accountAddress, bTokenId) {
-    //if (!this.pool.isSymbolsUpdated()) {
-      await this.pool.getSymbols();
-    //}
     const pool = this.pool;
-    const [lTokenAsset, bTokens] = await Promise.all([
+    const [lTokenAsset, bTokens, symbols] = await Promise.all([
       pool.lToken.getAsset(accountAddress, bTokenId),
       pool.getBTokens(),
+      pool.getSymbols(),
     ]);
     const { minPoolMarginRatio } = pool.parameters;
     const bTokenIndex = pool.bTokenIds.indexOf(bTokenId.toString());
     const { liquidity: poolLiquidity } = bTokens[bTokenIndex];
     const { liquidity, pnl, lastCumulativePnl } = lTokenAsset;
-    const cost = pool.symbols.reduce((acc, s) => acc.plus(s.notional), bg(0));
-    const totalPnl = pool.symbols.reduce((acc, s) => acc.plus(s.pnl), bg(0));
+    const cost = symbols.reduce((acc, s) => acc.plus(s.notional), bg(0));
+    const totalPnl = symbols.reduce((acc, s) => acc.plus(s.pnl), bg(0));
 
     const restLiquidity = bTokens.reduce((accum, b, index) => {
       if (index === parseInt(bTokenId)) {
@@ -72,6 +70,7 @@ export class PoolApi {
       shares: liquidity,
       maxRemovableShares,
       pnl: approximatePnl,
+      bToken0Symbol: pool.bTokenSymbols[0],
     };
   }
 
