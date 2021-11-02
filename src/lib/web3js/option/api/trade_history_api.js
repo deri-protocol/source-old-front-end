@@ -230,9 +230,7 @@ export const getTradeHistory = async (
               baseToken: i.baseToken.trim(),
               symbolId: i.symbolId,
               symbol: i.symbol,
-              price: deriToNatural(i.price)
-                .div(symbols[index].multiplier)
-                .toString(),
+              price: deriToNatural(i.price).toString(),
               indexPrice: deriToNatural(i.indexPrice).toString(),
               notional: deriToNatural(i.notional).toString(),
               contractValue: deriToNatural(i.contractValue).toString(),
