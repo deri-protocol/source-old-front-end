@@ -10,6 +10,7 @@ import useConfig from '../../hooks/useConfig';
 function Account({wallet,lang}){
   const [btnText,setBtnText] = useState(lang['connect-wallet'])
   const [networkList, setNetworkList] = useState([])
+  const [network, setNetwork] = useState({})
   const isIndex = useRouteMatch('/index')
   const isRoot = useRouteMatch({path: '/',exact : true})
   const isMining = useRouteMatch({path: '/mining',exact : true});
@@ -66,6 +67,7 @@ function Account({wallet,lang}){
     if(config){
       const ids = Object.keys(config);
       const networkList = ids.map(id => Object.assign(config[id],{id}))
+      setNetwork(networkList.find(network => network.isDefault) || {})
       setNetworkList(networkList)
     }
     return () => {}
@@ -77,8 +79,8 @@ function Account({wallet,lang}){
   return !notConnectWalletPage && (
     <div className="connect">
       <div className="network-text-logo">
-        <i className={wallet.detail.symbol}></i>
-        <span className="logo-text">{wallet.detail.name|| lang['select-network']}</span>
+        <i className={wallet.isConnected() ? wallet.detail.symbol : network.symbol}></i>
+        <span className="logo-text">{wallet.isConnected() ? wallet.detail.name || lang['select-network'] : network.name}</span>
         <span className='arrow'><img src={arrowIcon} alt='selector' /></span>
         <div className='network-list'>
             {networkList.map((network,index) => (

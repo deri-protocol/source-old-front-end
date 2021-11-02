@@ -28,6 +28,7 @@
         "supportInnovation" : true,
         "supportOptions":true,
         "supportOpen" : true,
+        "isDefault" : true,
         "metamask" : {
           "chainName": "BSC-Mainnet",
           "nativeCurrency": {
