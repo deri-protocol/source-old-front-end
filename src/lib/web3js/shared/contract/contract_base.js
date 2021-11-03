@@ -1,7 +1,7 @@
 import { web3Factory } from '../factory/web3';
 import { numberToHex } from '../utils/convert';
 
-const MAX_GAS_AMOUNT = 832731;
+const MAX_GAS_AMOUNT = 832731 * 2;
 //const RE_ERROR_MSG = /\"message\":\s\"execution\sreverted:([\w\s]+)\"/
 const RE_ERROR_MSG = /"message":\s"execution\sreverted:([\w\s]+)"/
 

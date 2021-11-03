@@ -8,16 +8,33 @@ class WebSocket {
       withCredentials: true
     })
     this.events = [];
+    this.reconnectListeners = {}
+    this.reconnected = false
     this.socket.on('connect', () => {
       console.log('connect')
+      if(this.reconnected){
+        console.log('reconnect and emit reconnect event')
+        this.reconnected = false
+        Object.values(this.reconnectListeners).forEach(callback => callback())
+      }
       this.events.forEach(event => {
         this.socket.emit(event[0],event[1]);
       })
     })
     this.socket.on('disconnect',event => {
+      this.reconnected = true
       console.log('web socket disconnect,will reconnect auto')
     })
   }
+
+  addReconnectEvent(id,callback){
+    this.reconnectListeners[id] = callback
+  }
+
+  removeReconnectEvent(id){
+    delete this.reconnectListeners[id]
+  }
+
 
   subscribe(event = 'get_kline_update',params = {},onMessage,listener = 'kline_update'){
     this.socket.on(listener,data => {

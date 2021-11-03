@@ -257,19 +257,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
     } else {
       throw new Error(`-- getPostionInfo: invalid symbolId(${symbolId})`)
     }
-  }, args, 'getPositionInfo', {
-      symbol: '',
-      price: '',
-      volume: '',
-      averageEntryPrice: '',
-      margin: '',
-      marginHeld: '',
-      marginHeldBySymbol: '',
-      unrealizedPnl: '',
-      unrealizedPnlList: [],
-      fundingFee: '',
-      liquidationPrice: '',
-  })
+  }, args, 'getPositionInfo', {})
 }
 
 export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {

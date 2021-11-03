@@ -20,7 +20,6 @@ export const removeLiquidity = async (
   poolAddress,
   accountAddress,
   amount,
-  isMaximum = false
 ) => {
   return catchTxApiError(async () => {
     [chainId, poolAddress, accountAddress] = checkApiInput(
@@ -31,9 +30,6 @@ export const removeLiquidity = async (
     amount = checkAmount(amount);
     const pool = perpetualPoolLiteDpmmFactory(chainId, poolAddress);
     await pool.init();
-    if (isMaximum) {
-      amount = deriToNatural(MAX_INT256).toString()
-    }
     return await pool.removeLiquidity(accountAddress, amount);
   }, []);
 };

@@ -1,5 +1,5 @@
-import { getPositionInfo ,bg,getPositionInfos} from "../lib/web3js/indexV2"
-import { eqInNumber } from '../utils/utils';
+import { getPositionInfo ,bg,getPositionInfos, DeriEnv} from "../lib/web3js/indexV2"
+import { eqInNumber, getDefaultNw } from '../utils/utils';
 import type from "./Type";
 
 export default class Position {
@@ -32,8 +32,10 @@ export default class Position {
      if(callback){
       this.callback = callback
      }
-     if(wallet && wallet.isConnected() && wallet.isSupportChain(type.isOption) && spec && spec.pool){
-      const position = await getPositionInfo(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
+     if(spec && spec.pool){
+      const chainId = wallet && wallet.detail ? wallet.detail.chainId : getDefaultNw(DeriEnv.get()).id
+      const account = wallet && wallet.detail ? wallet.detail.account : null;
+      const position = await getPositionInfo(chainId,spec.pool,account,spec.symbolId)
       if(position){
         if(this.callback){
           this.callback(position)
@@ -47,10 +49,12 @@ export default class Position {
     this.wallet= wallet; 
     this.spec = spec
     if(callback){
-     this.callbackALL = callback
+      this.callbackALL = callback
     }
-    if(wallet && wallet.isConnected() && wallet.isSupportChain(type.isOption) && spec && spec.pool){
-      let res  = await getPositionInfos(wallet.detail.chainId,spec.pool,wallet.detail.account,spec.symbolId)
+    if(spec && spec.pool){
+      const chainId = wallet && wallet.detail ? wallet.detail.chainId : getDefaultNw(DeriEnv.get()).id
+      const account = wallet && wallet.detail ? wallet.detail.account : null;
+      let res  = await getPositionInfos(chainId,spec.pool,account,spec.symbolId)
       let positions = [] 
       if(res.length) {
         positions = res.map(item => {

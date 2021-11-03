@@ -206,14 +206,7 @@ export const getPositionInfo = async (chainId, poolAddress, accountAddress, symb
   } catch(err) {
     console.log(`${err}`)
   }
-  return {
-    volume: '',
-    averageEntryPrice: '',
-    margin: '',
-    marginHeld: '',
-    unrealizedPnl: '',
-    liquidationPrice: '',
-  };
+  return {};
 }
 
 export const getPositionInfos = async (chainId, poolAddress, accountAddress) => {

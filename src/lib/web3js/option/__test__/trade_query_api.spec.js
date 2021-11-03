@@ -16,6 +16,7 @@ import {
   getPositionInfo,
   getPositionInfos,
   getSpecification,
+  getVolatility,
 } from '../api/trade_query_api';
 
 describe('trade query api', () => {
@@ -175,11 +176,21 @@ describe('trade query api', () => {
     async () => {
       //const res = await getEstimatedTimePrice( CHAIN_ID, OPTION_POOL_ADDRESS, '2', '0');
       DeriEnv.set('prod')
-      const res = await getEstimatedTimePrice('56', '0xD5147D3d43BB741D8f78B2578Ba8bB141A834de4', '1', '8');
+      const res = await getEstimatedTimePrice('56', '0x6fEfdd54E0aA425F9B0E647d5BA6bF6d6f3F8Ab8', '1', '8');
       DeriEnv.set('dev')
       expect(res).toEqual('0.1')
       expect(bg(res).toNumber()).toBeGreaterThanOrEqual(MIN_NUMBER);
       expect(bg(res).toNumber()).toBeLessThanOrEqual(1000);
+    },
+    TIMEOUT
+  );
+  it(
+    'getVolatility',
+    async () => {
+      DeriEnv.set('prod')
+      const res = await getVolatility('56', '0x6fEfdd54E0aA425F9B0E647d5BA6bF6d6f3F8Ab8', '1');
+      DeriEnv.set('dev')
+      expect(res).toEqual({})
     },
     TIMEOUT
   );

@@ -71,6 +71,7 @@ export class PoolApi {
       maxRemovableShares,
       pnl: approximatePnl,
       bToken0Symbol: pool.bTokenSymbols[0],
+      swappedPnl: !!bTokens[bTokenIndex].price ? bg(approximatePnl).div(bTokens[bTokenIndex].price).toString() : '',
     };
   }
 

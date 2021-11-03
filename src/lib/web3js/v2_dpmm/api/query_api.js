@@ -82,7 +82,7 @@ export const getPositionInfo = async (
         poolAddress,
         accountAddress
       );
-      symbolId = checkTokenId(symbolId)
+      symbolId = checkTokenId(symbolId);
       const api = poolApiFactory(chainId, poolAddress);
       await api.init();
       return await api.getPositionInfo(accountAddress, symbolId);

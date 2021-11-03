@@ -150,11 +150,11 @@ class Wallet {
   }
 
   get supportInnovation(){
-    return this.detail.supportInnovation
+    return this.detail.supportInnovation || !this.isConnected()
   }
 
   get supportOpen(){
-    return this.detail.supportOpen
+    return this.detail.supportOpen || !this.isConnected()
   }
 
 

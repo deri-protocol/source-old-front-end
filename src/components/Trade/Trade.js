@@ -403,7 +403,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={4} /></span>
               </div>
               <div className='index-prcie'>
-                {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
+                {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.volatility} decimalScale={2} suffix='%' /></span>
               </div>
             </>}
 
@@ -451,7 +451,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
               </div>
               <div className='index-prcie'>
-                {lang['vol']}: <DeriNumberFormat value={trading.position.volatility} decimalScale={2} />
+                {lang['vol']}: <DeriNumberFormat value={trading.volatility} decimalScale={2} />
               </div>
 
             </>}
@@ -498,25 +498,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 <DeriNumberFormat value={trading.position.volume} allowZero={true} />
               </span>
             </div>
-            {/* {type.isFuture && <>
-              <div className='contrant'>
-                <input
-                  type='number'
-                  onFocus={onFocus}
-                  onBlur={onBlur}
-                  onKeyPress={onKeyPress}
-                  disabled={!trading.index || Math.abs(trading.position.margin) === 0}
-                  onChange={event => volumeChange(event)}
-                  value={trading.volumeDisplay}
-                  className={volumeClazz}
-                  placeholder={lang['contract-volume']}
-                />
-                <div className='title-volume' >
-                  {lang['contract-volume']}
-                </div>
-              </div>
-            </>} */}
-            {/* {type.isOption && <> */}
             <div className='contrant option-input'>
               <div className='bg-input'>
                 <div>
@@ -546,8 +527,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config && trading.config.unit}
               </div>
             </>}
-            {/* </>} */}
-            {/* {(!!trading.volumeDisplay && type.isFuture) && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix='= ' suffix={` ${spec.unit}`} /></div>} */}
           </div>
           <div className='right-info'>
             <div className={`contrant-info ${version.current}`}>

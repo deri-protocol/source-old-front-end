@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react';
-import { formatAddress, getNetworkList, getDefaultNw } from '../../utils/utils';
+import { formatAddress, getNetworkList, getDefaultNw, storeChain } from '../../utils/utils';
 import './account.less'
 import { observer, inject } from 'mobx-react';
 import { useRouteMatch } from 'react-router-dom';
@@ -67,8 +67,11 @@ function Account({wallet,lang}){
     const networkList = getNetworkList(DeriEnv.get());
     const defaultNw = getDefaultNw(DeriEnv.get());
     wallet.setDefaultNw(defaultNw)
+    if(!wallet.isConnected()){
+      storeChain(defaultNw)
+    }
     setNetworkList(networkList)
-  }, [])
+  }, [wallet])
 
   
 

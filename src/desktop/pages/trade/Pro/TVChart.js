@@ -92,9 +92,6 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
 
   const initialize = () => {
     const timezone = Intl ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Etc/UTC'
-    // chartConfig.overrides = type.isFuture 
-    //   ? {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  true} 
-    //   : {...chartConfig.overrides,"scalesProperties.showSymbolLabels" :  false}
     const widgetOptions = {
       symbol: config.symbol,
       datafeed: datafeedRef.current,
@@ -107,27 +104,30 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
     widgetRef.current.onChartReady(() => {
       showLoad && showLoad(false)
       if(Type.isFuture && !Version.isOpen && !Version.isV1){
-        // const suffix = config.version === 'v2' ? 'USD' : /^i/i.test(config.symbol) ? '' : 'USDT'
-        // const pos = suffix ? config.symbol.indexOf(suffix) : config.symbol.length
         widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : 'as-series','color': '#aaa'})
       }
-      // widgetRef.current.activeChart().createStudy('Moving Average', false, true, [7],null, {'Plot.color': 'rgba(241, 156, 56, 0.7)'});    
-      // widgetRef.current.chart().createStudy('Moving Average', false, true, [25],null, {'Plot.color': 'rgba(116, 252, 253, 0.7)'});    
-      // widgetRef.current.chart().createStudy('Moving Average', false, true, [99],null, {'Plot.color': 'rgba(234, 61, 247, 0.7)'});    
     })
   }
+
 
 
   useEffect(() => {
     if(config && config.symbol && interval && preload){
       spec = config
       initialize();
+      webSocket.addReconnectEvent(config.symbol,() => {
+        //如果当前数据不是最新，重新加载
+        if(lastDataRef.current.time < new Date().getTime()) {
+          initialize();
+        }
+      })
     }
     return () => {
       if(widgetRef.current){
         widgetRef.current.remove();
       }
       unsubscribeBars();
+      config && webSocket.removeReconnectEvent(config.symbol)
     }
   }, [interval,preload,config,type.current])
 
