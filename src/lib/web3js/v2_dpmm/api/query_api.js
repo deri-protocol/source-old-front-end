@@ -82,14 +82,27 @@ export const getPositionInfo = async (
         poolAddress,
         accountAddress
       );
-      symbolId = checkTokenId(symbolId)
+      symbolId = checkTokenId(symbolId);
       const api = poolApiFactory(chainId, poolAddress);
       await api.init();
       return await api.getPositionInfo(accountAddress, symbolId);
     },
     [],
     'getPositionInfo',
-    {}
+    {
+      symbol: '',
+      price: '',
+      markPrice: '',
+      volume: '',
+      averageEntryPrice: '',
+      margin: '',
+      marginHeld: '',
+      marginHeldBySymbol: '',
+      unrealizedPnl: '',
+      unrealizedPnlList: [],
+      fundingFee: '',
+      liquidationPrice: '',
+    }
   );
 };
 

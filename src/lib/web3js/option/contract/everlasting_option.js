@@ -193,14 +193,9 @@ export class EverlastingOption extends ContractBase {
       accountAddress
     );
   }
-  async removeLiquidity(accountAddress, lShares, isMaximum) {
+  async removeLiquidity(accountAddress, lShares) {
     const prices = await this._getVolSymbolPrices();
-    let amount
-    if (isMaximum) {
-      amount = MAX_INT256;
-    } else {
-      amount = naturalToDeri(lShares);
-    }
+    let amount = naturalToDeri(lShares);
     return await this._transact(
       'removeLiquidity',
       [amount, prices],
