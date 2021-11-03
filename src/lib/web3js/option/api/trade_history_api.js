@@ -137,7 +137,7 @@ const getTradeHistoryOnline = async (
     );
 
     //events  = events.filter((i) => i.returnValues.symbolId === symbolId)
-    console.log('online events length:', events.length);
+    //console.log('online events length:', events.length);
     for (let i = 0; i < events.length; i++) {
       const item = events[i];
       let res;
@@ -224,7 +224,7 @@ export const getTradeHistory = async (
         .filter((i) => !(i.direction === 'LIQUIDATION' && i.symbolId === '0'))
         .map((i) => {
           const index = symbols.findIndex((s) => s.symbolId === i.symbolId);
-          if (index > -1 && i.direction !== 'LIQUIDATION') {
+          if (index > -1) {
             return {
               direction: i.direction.trim(),
               baseToken: i.baseToken.trim(),

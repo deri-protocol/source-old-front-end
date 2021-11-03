@@ -100,6 +100,19 @@ export const getTradeHistory = async (
               transactionHash: i.transactionHash,
               time: i.time.toString(),
             };
+          } else if (i.direction === 'LIQUIDATION') {
+            return {
+              direction: i.direction.trim(),
+              baseToken: i.baseToken ? i.baseToken.trim() : '',
+              symbolId: i.symbolId ? i.symbolId : '',
+              symbol: i.symbol ? i.symbol : '',
+              price: i.price ? deriToNatural(i.price).toString() : '',
+              notional: i.notional ? deriToNatural(i.notional).toString() : '',
+              volume: i.volume ? deriToNatural(i.volume).times(perpetualPool.symbols[symbolIndex].multiplier).toString() : '',
+              transactionFee: deriToNatural(i.transactionFee).toString(),
+              transactionHash: i.transactionHash,
+              time: i.time.toString(),
+            }
           } else {
             return null
           }
