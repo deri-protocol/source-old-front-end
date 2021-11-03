@@ -177,21 +177,7 @@ export const getPositionInfo = async (
     },
     args,
     'getPositionInfo',
-    {
-      price: '',
-      strikePrice: '',
-      timePrice: '',
-      volume: '',
-      averageEntryPrice: '',
-      margin: '',
-      marginHeld: '',
-      marginHeldBySymbol: '',
-      unrealizedPnl: '',
-      unrealizedPnlList: [],
-      premiumFundingAccrued: '',
-      liquidationPrice: '',
-      volatility: '',
-    }
+    {}
   );
 };
 
@@ -690,6 +676,31 @@ export const getEstimatedTimePrice = (
     },
     args,
     'getEstimatedMarkPrice',
+    ''
+  );
+};
+
+// getVolatility
+export const getVolatility = async (
+  chainId,
+  poolAddress,
+  symbolId
+) => {
+  const args = [chainId, poolAddress, symbolId];
+  return catchApiError(
+    async (chainId, poolAddress, symbolId) => {
+      const optionPool = everlastingOptionFactory(chainId, poolAddress);
+      await optionPool._updateConfig();
+      const symbols = optionPool.activeSymbols
+      const symbolVolatilities = await volatilitiesCache.get(
+        symbols.map((s) => s.symbol)
+      );
+      const symbolIndex = symbols.findIndex((s) => s.symbolId === symbolId);
+      const volPrice = fromWei(symbolVolatilities[symbolIndex].volatility)
+      return bg(volPrice).times(100).toString()
+    },
+    args,
+    'getVolatility',
     ''
   );
 };

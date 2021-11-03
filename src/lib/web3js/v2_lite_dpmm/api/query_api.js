@@ -73,18 +73,7 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
     },
     args,
     'getPositionInfo',
-    {
-      price: '',
-      volume: '',
-      averageEntryPrice: '',
-      margin: '',
-      marginHeld: '',
-      marginHeldBySymbol: '',
-      unrealizedPnl: '',
-      unrealizedPnlList: [],
-      fundingFee: '',
-      liquidationPrice: '',
-    }
+    {}
   );
 }
 

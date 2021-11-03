@@ -89,20 +89,7 @@ export const getPositionInfo = async (
     },
     [],
     'getPositionInfo',
-    {
-      symbol: '',
-      price: '',
-      markPrice: '',
-      volume: '',
-      averageEntryPrice: '',
-      margin: '',
-      marginHeld: '',
-      marginHeldBySymbol: '',
-      unrealizedPnl: '',
-      unrealizedPnlList: [],
-      fundingFee: '',
-      liquidationPrice: '',
-    }
+    {}
   );
 };
 

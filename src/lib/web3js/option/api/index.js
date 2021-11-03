@@ -22,6 +22,7 @@ export {
   getFundingRateCache as getFundingRateCacheOption,
   getPositionInfos as getPositionInfosOption,
   getEstimatedTimePrice as getEstimatedTimePriceOption,
+  getVolatility,
 } from './trade_query_api'
 
 export {
