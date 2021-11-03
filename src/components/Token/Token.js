@@ -102,6 +102,7 @@ function Token({ wallet = {}, lang,loading }) {
         interval = window.setInterval(() => {
             getDeriInfo()
         }, 300000);
+        getDeriInfo()
         return () => {
             interval && clearInterval(interval);
         };
@@ -167,7 +168,7 @@ function Token({ wallet = {}, lang,loading }) {
                 <div className='line-of-box'>
                     <div className='box'>
                         <div className='num'>
-                            $ {deriInfo ? <DeriNumberFormat value={deriInfo.price} displayType='text' thousandSeparator={true} decimalScale='4' /> : '--'}
+                            $ {deriInfo ? <DeriNumberFormat value={deriInfo.price} displayType='text' thousandSeparator={true} decimalScale={4} /> : '--'}
                         </div>
                         <div className='text'>
                             {lang['price']}
@@ -175,7 +176,7 @@ function Token({ wallet = {}, lang,loading }) {
                     </div>
                     <div className='box'>
                         <div className='num'>
-                            $ {deriInfo ? <DeriNumberFormat value={deriInfo.market_cap} displayType='text' thousandSeparator={true} decimalScale='0' /> : '--'}
+                            $ {deriInfo ? <DeriNumberFormat value={deriInfo.market_cap} displayType='text' thousandSeparator={true} decimalScale={0} /> : '--'}
                         </div>
                         <div className='text'>
                             {lang['market-cap']}
@@ -185,7 +186,7 @@ function Token({ wallet = {}, lang,loading }) {
                 <div className='line-of-box'>
                     <div className='box'>
                         <div className='num'>
-                            {deriInfo ? <DeriNumberFormat value={deriInfo.circulating_supply} displayType='text' thousandSeparator={true} decimalScale='0' /> : '--'}
+                            {deriInfo ? <DeriNumberFormat value={deriInfo.circulating_supply} displayType='text' thousandSeparator={true} decimalScale={0} /> : '--'}
                         </div>
                         <div className='text'>
                             {lang['circulating-supply']}
@@ -193,7 +194,7 @@ function Token({ wallet = {}, lang,loading }) {
                     </div>
                     <div className='box'>
                         <div className='num'>
-                            {deriInfo ? <DeriNumberFormat value={deriInfo.total_supply} displayType='text' thousandSeparator={true} decimalScale='0' /> : '--'}
+                            {deriInfo ? <DeriNumberFormat value={deriInfo.total_supply} displayType='text' thousandSeparator={true} decimalScale={0} /> : '--'}
                         </div>
                         <div className='text'>
                             {lang['total-supply']}

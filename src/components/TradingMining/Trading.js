@@ -473,7 +473,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ2Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
+                          stageList.userQ1Point ? ` = (${stageList.userQ2Contrib} / ${stageList.Q2Contrib}) * 20,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
                         </span>
@@ -485,7 +485,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ3Point && stageList.Q3Contrib !== '0' ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ3Contrib} / ${stageList.Q1Contrib}) * 30,000` : ''
+                          stageList.userQ1Point ? ` = (${stageList.userQ3Contrib} / ${stageList.Q3Contrib}) * 30,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ3Point} decimalScale={2} thousandSeparator={true} />
                         </span>
@@ -496,7 +496,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ4Point && stageList.Q4Contrib !== '0' ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q1Contrib}) * 50,000` : ''
+                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q4Contrib}) * 50,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} />
 
@@ -627,7 +627,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ2Point ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? `= (${stageList.userQ2Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
+                          stageList.userQ1Point ? `= (${stageList.userQ2Contrib} / ${stageList.Q3Contrib}) * 20,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ2Point} decimalScale={2} thousandSeparator={true} />
                         </span>
@@ -639,7 +639,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ3Point && stageList.Q3Contrib !== '0' ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? `= (${stageList.userQ3Contrib} / ${stageList.Q1Contrib}) * 20,000` : ''
+                          stageList.userQ1Point ? `= (${stageList.userQ3Contrib} / ${stageList.Q3Contrib}) * 20,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ3Point} decimalScale={0} thousandSeparator={true} />
                         </span>
@@ -653,7 +653,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.userQ4Point && stageList.Q4Contrib !== '0' ?
                       <TipWrapper block={false} >
                         <span className='point-hover' tip={
-                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q1Contrib}) * 50,000` : ''
+                          stageList.userQ1Point ? ` = (${stageList.userQ4Contrib} / ${stageList.Q4Contrib}) * 50,000` : ''
                         }>
                           <DeriNumberFormat value={stageList.userQ4Point} decimalScale={2} thousandSeparator={true} />
 
