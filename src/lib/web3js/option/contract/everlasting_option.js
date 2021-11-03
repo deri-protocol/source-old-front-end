@@ -9,6 +9,7 @@ import {
   isEqualSet,
   getBlockInfo,
   deriToNatural,
+  normalizeOptionSymbol,
   bg,
   MAX_INT256,
 } from '../../shared';
@@ -76,6 +77,7 @@ export class EverlastingOption extends ContractBase {
       this.activeSymbols = symbolState.filter((s) =>
         this.activeSymbolIds.includes(s.symbolId)
       );
+      this.activeSymbolNames = this.activeSymbols.map((s) => s.symbol)
       // for tx use
       this.volatilitySymbols = getVolatilitySymbols(
         this.activeSymbols.map((s) => s.symbol)
@@ -165,19 +167,24 @@ export class EverlastingOption extends ContractBase {
   async _getVolSymbolPrices() {
     await this._updateConfig();
     let volatilities = [];
+    let oracleSymbols = []
     if (this.volatilitySymbols.length > 0) {
       const volatilityInfos = await getOracleVolatilitiesForOption(
         this.activeSymbols.map((s) => s.symbol)
       );
       volatilities = Object.values(volatilityInfos).reduce((acc, p, index) => {
-        acc.push([
-          this.activeSymbolIds[index],
-          p.timestamp,
-          p.volatility,
-          parseInt(p.v).toString(),
-          p.r,
-          p.s,
-        ]);
+        const oracleSymbol = normalizeOptionSymbol(this.activeSymbolNames[index])
+        if (!oracleSymbols.includes(oracleSymbol)) {
+          oracleSymbols.push(oracleSymbol)
+          acc.push([
+            this.activeSymbolIds[index],
+            p.timestamp,
+            p.volatility,
+            parseInt(p.v).toString(),
+            p.r,
+            p.s,
+          ]);
+        }
         return acc;
       }, []);
     }

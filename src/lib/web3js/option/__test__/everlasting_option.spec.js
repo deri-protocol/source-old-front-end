@@ -79,6 +79,7 @@ describe('EverlastingOption', () => {
   );
   it('_getVolSymbolPrices', async() => {
     const res = await everlastingOption._getVolSymbolPrices()
+    expect(res).toEqual([])
     expect(res.length).toEqual(4)
     expect(bg(res[0][2]).toNumber()).toBeGreaterThan(1)
   }, TIMEOUT)
