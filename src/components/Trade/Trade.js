@@ -209,28 +209,32 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   const onBlur = event => {
     const target = event.target;
     // if(type.isOption){
-    let index = trading.contract.multiplier.indexOf('.')
-    let num = trading.contract.multiplier.slice(index);
-    let length = num.length
     let value = target.value
-    if (target.value.indexOf(".") !== -1) {
-      value = target.value.substring(0, target.value.indexOf(".") + length)
-      value = value === '0' ? '' : value
-      if (+value === 0) {
+    let multiplier = trading.contract.multiplier
+    if (multiplier <= 1) {
+      let index = multiplier.indexOf('.')
+      let num = multiplier.slice(index);
+      let length = num.length
+      if (target.value.indexOf(".") !== -1) {
+        value = target.value.substring(0, target.value.indexOf(".") + length)
+        value = value === '0' ? '' : value
+        trading.setVolume(value)
+      }
+    } else {
+      let length = multiplier.length -1
+      let num = value.slice(-length);
+      value = value.slice(0,-length)
+      num = num.replace(/\d/gi,'0')
+      value = value + num
+      trading.setVolume(value)
+      
+    }
+    if (value !== '') {
+      if (value < multiplier) {
         setIsOptionInput(true)
       } else {
         setIsOptionInput(false)
       }
-      trading.setVolume(value)
-    }else{
-      if(value !== ''){
-        if(value < trading.contract.multiplier){
-          setIsOptionInput(true)
-         } else{
-          setIsOptionInput(false)
-         }
-      }
-     
     }
     if (target.value === '') {
       target.setAttribute('class', 'contrant-input')
@@ -310,7 +314,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     return () => {
       document.querySelector('head title').innerText = 'deri'
     };
-  }, [trading.index,trading.position,trading.markPrice,trading.config,trading.priceDecimals])
+  }, [trading.index, trading.position, trading.markPrice, trading.config, trading.priceDecimals])
 
   useEffect(() => {
     if (trading.config) {
@@ -331,10 +335,10 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   useEffect(() => {
     let holder = '0.000'
-    if(trading.contract.multiplier <= 1){
+    if (trading.contract.multiplier <= 1) {
       let multiplier = trading.contract.multiplier
-      holder = multiplier.replace(/1/gi,'0')
-    }else{
+      holder = multiplier.replace(/1/gi, '0')
+    } else {
       holder = trading.contract.multiplier
     }
     setOptionInputHolder(holder)
@@ -389,7 +393,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
             {type.isFuture && !version.isOpen && !version.isV1 && <>
               <div className='mark-price'>
-                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals } /></span>
+                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals} /></span>
               </div>
             </>}
             {type.isFuture && <>
@@ -432,7 +436,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             </div>
           </div>
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
-            {type.isFuture  && !version.isOpen && !version.isV1 && <>
+            {type.isFuture && !version.isOpen && !version.isV1 && <>
               <div className='index-prcie'>
                 {lang['mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals} /></span>
               </div>
@@ -475,7 +479,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 </TipWrapper>
               </>}
             </div>
-            {(type.isFuture  && !version.isOpen && !version.isV1) && <>
+            {(type.isFuture && !version.isOpen && !version.isV1) && <>
               <div className='rate'>
                 <TipWrapper block={false} tip={trading.rateTip}>
                   <span className='funding-per' tip={trading.rateTip || ''}>(<DeriNumberFormat value={rate} decimalScale={4} suffix='%' />)</span>
@@ -494,7 +498,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
             <div className='current-position'>
               <span>{lang['current-position']}</span>
               <span className='position-text'>
-                <DeriNumberFormat value={trading.position.volume} allowZero={true} />
+                <DeriNumberFormat value={trading.position.volume} allowZero={true} thousandSeparator={true} />
               </span>
             </div>
             <div className='contrant option-input'>
@@ -662,7 +666,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                   <DeriNumberFormat value={trading.fundingRate.liquidity} decimalScale={2} suffix={` ${trading.config.bTokenSymbol}`} />
                 </div>
               </div>
-              { (version.isOpen || version.isV1) && <>
+              {(version.isOpen || version.isV1) && <>
                 <div className='text-info'>
                   <div className='title-enter'>{lang['liquidity-used']}</div>
                   <div className='text-enter'>

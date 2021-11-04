@@ -201,7 +201,7 @@ function PositionList({ wallet, trading, version, lang, type, loading }) {
           <div className='p-box tbody' key={index}>
             <div className='position-symbol' onClick={() => onSelect(pos.symbolId)}>{pos.symbol}</div>
             <div className='position'>
-              <DeriNumberFormat value={pos.volume} allowZero={true} />
+              <DeriNumberFormat value={pos.volume} thousandSeparator={true} allowZero={true}  />
               <span className='close-position'>
                 {/* {closingIndex !== index &&<>
               tip={lang['close-is-position']}

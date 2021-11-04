@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Button from "../../Button/Button";
 import NumberFormat from 'react-number-format';
+import DeriNumberFormat from '../../../utils/DeriNumberFormat';
 import { tradeWithMargin } from "../../../lib/web3js/indexV2";
 import type from '../../../model/Type'
 import version from '../../../model/Version'
@@ -46,11 +47,11 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
             <div className='top'>
               <div className='text'>
                 <div className='text-title'>{lang['of-contracts']}</div>
-                <div className='text-num'>{direction === 'long' ? volume : `-${volume}`} {trading.config.unit}</div>
+                <div className='text-num'>{direction === 'long' ? <DeriNumberFormat value={volume} thousandSeparator={true} allowZero={true} /> : <DeriNumberFormat value={-volume} thousandSeparator={true} allowZero={true} />} {trading.config.unit}</div>
               </div>
               <div className='text'>
                 <div className='text-title'>{lang['position-after-execution']}</div>
-                <div className='text-num'>{afterTradePosition}</div>
+                <div className='text-num'><DeriNumberFormat value={afterTradePosition} thousandSeparator={true} allowZero={true} /> </div>
               </div>
               <div className='text'>
                 <div className='text-title'>{lang['direction']}</div>

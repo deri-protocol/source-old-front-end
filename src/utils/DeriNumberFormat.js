@@ -14,7 +14,7 @@ function DeriNumberFormat(props){
   useEffect(() => {
     const {allowZero,wallet,defaultValue = '--',...others} = props 
     if(isValidate()) {
-      setRenderablity(<NumberFormat {...others} displayType = 'text'  fixedDecimalScale={true} />)
+      setRenderablity(<NumberFormat {...others}  displayType = 'text'  fixedDecimalScale={true} />)
     } else {
       setRenderablity(<span className='loading-line'></span>)
     } 
@@ -31,4 +31,4 @@ function DeriNumberFormat(props){
   return renderablity;
 }
 
-export default inject('wallet')(observer(DeriNumberFormat))
+export default inject('wallet','trading')(observer(DeriNumberFormat))

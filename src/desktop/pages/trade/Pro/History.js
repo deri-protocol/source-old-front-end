@@ -40,7 +40,7 @@ function History({ wallet, trading, lang, type }) {
         <div>{lang['direction']}</div>
         <div>
           {type.isOption && lang['symbol-option']}
-          {type.isFuture && lang['symbol']} 
+          {type.isFuture && lang['symbol']}
         </div>
         <div>{lang['price']}</div>
         <div>{lang['volume']}  {type.isOption ? `( ${lang['notional']} )` : ''} </div>
@@ -64,7 +64,7 @@ function History({ wallet, trading, lang, type }) {
               <DeriNumberFormat value={his.price} decimalScale={6} />
             </div>
             <div>
-              {his.volume}
+              <DeriNumberFormat value={his.volume} thousandSeparator={true} allowZero={true} />
             </div>
             <div >
               <DeriNumberFormat value={his.notional} decimalScale={4} />
