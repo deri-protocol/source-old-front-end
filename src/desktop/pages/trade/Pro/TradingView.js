@@ -22,7 +22,7 @@ function TradingView({ version, trading, lang, type }) {
   }, [trading.index]);
 
   useEffect(() => {
-      let mark = trading.position.markPrice
+      let mark = trading.markPrice || (trading.position ? trading.position.markPrice : '')
       if (markPriceRef.current > mark) {
         setMarkPriceClass('fall trade-dashboard-value')
       } else {
@@ -30,14 +30,14 @@ function TradingView({ version, trading, lang, type }) {
       }
       markPriceRef.current = mark
       setMarkPrice(mark)
-  }, [trading.index, trading.position])
+  }, [trading.index, trading.markPrice,trading.position])
 
   useEffect(()=>{
-    if(trading.fundingRate.funding0 && trading.position.markPrice){
-      let num =  bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice) ).times(bg(100)).toString()
+    if(trading.fundingRate.funding0 && markPrice){
+      let num =  bg(trading.fundingRate.funding0).div(bg(markPrice) ).times(bg(100)).toString()
       setRate(num)
     }
-  },[trading.fundingRate,trading.position])
+  },[trading.fundingRate,markPrice])
 
   return (
     <div id="trading-view">
@@ -104,7 +104,7 @@ function TradingView({ version, trading, lang, type }) {
             <div className='trade-dashboard-title option-symbol'>{trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''}</div>
             <div className='trade-dashboard-value'>
               <span > <DeriNumberFormat value={trading.index} decimalScale={2} /> </span><span className='vol'> | </span>
-              {lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' />
+              {lang['vol']} : <DeriNumberFormat value={trading.volatility} decimalScale={2} suffix='%' />
             </div>
           </div>
           <div className='trade-dashboard-item latest-price'>

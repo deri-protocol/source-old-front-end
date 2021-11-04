@@ -135,6 +135,7 @@ export function getParam(param,urlString = window.location.href){
 }
 
 export function getFormatSymbol(symbol){
+  symbol = symbol.toUpperCase();
   const curChain = restoreChain();
   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
   if(type.isOption){
@@ -155,6 +156,16 @@ export function getFormatSymbol(symbol){
       }
     }
   }
+}
+
+export function getDefaultNw(env){
+  return getNetworkList(env).find(network => network.isDefault) || {}
+}
+
+export function getNetworkList(env){
+  const chainInfo = config[env]['chainInfo']
+  const ids = Object.keys(chainInfo);
+  return ids.map(id => Object.assign(chainInfo[id],{id}))
 }
 
 

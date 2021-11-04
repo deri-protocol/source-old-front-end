@@ -8,10 +8,13 @@ import version from './Version'
 class Wallet {
   
   detail = {}
+  defaultNw = {}
   
   constructor(){
     makeAutoObservable(this,{
       detail : observable,
+      defaultNw : observable,
+      setDefaultNw : action,
       setDetail : action,
       supportV2 : computed,
       supportV1 : computed,
@@ -111,6 +114,10 @@ class Wallet {
     this.detail = detail;
   }
 
+  setDefaultNw(network){
+    this.defaultNw = network
+  }
+
   refresh(){
     this.loadWalletBalance(this.detail.chainId,this.detail.account);
   }
@@ -143,11 +150,11 @@ class Wallet {
   }
 
   get supportInnovation(){
-    return this.detail.supportInnovation
+    return this.detail.supportInnovation || !this.isConnected()
   }
 
   get supportOpen(){
-    return this.detail.supportOpen
+    return this.detail.supportOpen || !this.isConnected()
   }
 
 

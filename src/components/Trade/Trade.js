@@ -281,17 +281,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setIndexPriceClass('rise')
     }
     indexPriceRef.current = trading.index
-    if (trading.index) {
-      const formatIndex = trading.index.toLocaleString(
-        undefined, { minimumFractionDigits: trading.priceDecimals }
-      )
-      const symbol = trading.config && trading.config.symbol.split('-')[0]
-      document.querySelector('head title').innerText = `$${formatIndex} ${symbol}.deri`
-    }
-    return () => {
-      document.querySelector('head title').innerText = 'deri'
-    };
-  }, [trading.index, trading.config,trading.priceDecimals]);
+  }, [trading.index, trading.config]);
 
   useEffect(() => {
     if (trading.position) {
@@ -302,7 +292,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.position.volume, trading.position.margin, trading.position.unrealizedPnl]);
 
   useEffect(() => {
-    let mark = trading.position.markPrice
+    let mark = trading.markPrice || (trading.position ? trading.position.markPrice : '')
     if (markPriceRef.current > mark) {
       setMarkPriceClass('fall')
     } else {
@@ -310,7 +300,17 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     }
     markPriceRef.current = mark
     setMarkPrice(mark)
-  }, [trading.index, trading.position])
+    if (mark) {
+      const formatMarkPrice = mark.toLocaleString(
+        undefined, { minimumFractionDigits: trading.priceDecimals }
+      )
+      const symbol = trading.config && trading.config.symbol.split('-')[0]
+      document.querySelector('head title').innerText = `$${formatMarkPrice} ${symbol}-MARK.deri`
+    }
+    return () => {
+      document.querySelector('head title').innerText = 'deri'
+    };
+  }, [trading.index,trading.position,trading.markPrice,trading.config,trading.priceDecimals])
 
   useEffect(() => {
     if (trading.config) {
@@ -368,11 +368,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.volume, inputing]);
 
   useEffect(() => {
-    if (trading.fundingRate.funding0 && trading.position.markPrice) {
-      let num = bg(trading.fundingRate.funding0).div(bg(trading.position.markPrice)).times(bg(100)).toString()
+    if (trading.fundingRate.funding0 && markPrice) {
+      let num = bg(trading.fundingRate.funding0).div(bg(markPrice)).times(bg(100)).toString()
       setRate(num)
     }
-  }, [trading.fundingRate, trading.position])
+  }, [trading.fundingRate, markPrice])
 
   useEffect(() => {
     trading.setUserSelectedDirection(direction)
@@ -402,7 +402,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {lang['eo-mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={4} /></span>
               </div>
               <div className='index-prcie'>
-                {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.position.volatility} decimalScale={2} suffix='%' /></span>
+                {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''} : <span className='option-vol'>&nbsp; <span> <DeriNumberFormat value={trading.index} decimalScale={2} /></span><span className='vol'> | </span>{lang['vol']} : <DeriNumberFormat value={trading.volatility} decimalScale={2} suffix='%' /></span>
               </div>
             </>}
 
@@ -450,7 +450,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config ? type.isOption ? trading.config.symbol.split('-')[0] : '' : ''}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
               </div>
               <div className='index-prcie'>
-                {lang['vol']}: <DeriNumberFormat value={trading.position.volatility} decimalScale={2} />
+                {lang['vol']}: <DeriNumberFormat value={trading.volatility} decimalScale={2} />
               </div>
 
             </>}
@@ -497,25 +497,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 <DeriNumberFormat value={trading.position.volume} allowZero={true} />
               </span>
             </div>
-            {/* {type.isFuture && <>
-              <div className='contrant'>
-                <input
-                  type='number'
-                  onFocus={onFocus}
-                  onBlur={onBlur}
-                  onKeyPress={onKeyPress}
-                  disabled={!trading.index || Math.abs(trading.position.margin) === 0}
-                  onChange={event => volumeChange(event)}
-                  value={trading.volumeDisplay}
-                  className={volumeClazz}
-                  placeholder={lang['contract-volume']}
-                />
-                <div className='title-volume' >
-                  {lang['contract-volume']}
-                </div>
-              </div>
-            </>} */}
-            {/* {type.isOption && <> */}
             <div className='contrant option-input'>
               <div className='bg-input'>
                 <div>
@@ -545,8 +526,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 {trading.config && trading.config.unit}
               </div>
             </>}
-            {/* </>} */}
-            {/* {(!!trading.volumeDisplay && type.isFuture) && <div className='btc'><DeriNumberFormat value={trading.amount.exchanged} allowNegative={false} decimalScale={4} prefix='= ' suffix={` ${spec.unit}`} /></div>} */}
           </div>
           <div className='right-info'>
             <div className={`contrant-info ${version.current}`}>
