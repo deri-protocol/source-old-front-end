@@ -641,13 +641,13 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['mark-price']}</div>
                   <div className='text-enter poolL'>
-                    <DeriNumberFormat value={markPrice} decimalScale={4} />
+                    <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals} />
                   </div>
                 </div>
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['trade-price']}</div>
                   <div className='text-enter poolL'>
-                    <DeriNumberFormat value={markPriceAfter} decimalScale={4} />
+                    <DeriNumberFormat value={markPriceAfter} decimalScale={trading.priceDecimals} />
                   </div>
                 </div>
               </>}
@@ -655,7 +655,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
                 <div className='text-info'>
                   <div className='title-enter pool'>{lang['trade-price']}</div>
                   <div className='text-enter poolL'>
-                    <DeriNumberFormat value={trading.index} decimalScale={4} />
+                    <DeriNumberFormat value={trading.index} decimalScale={trading.priceDecimals} />
                   </div>
                 </div>
               </>}
