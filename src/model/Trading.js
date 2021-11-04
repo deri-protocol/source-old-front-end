@@ -157,8 +157,8 @@ export default class Trading {
 
   async onChange(config, changed, finishedCallback, isOption) {
     if (config) {
-      this.clean();
       this.pause();
+      this.clean();
       this.setConfig(config)
       this.loadByConfig(this.wallet, config, changed, finishedCallback, isOption);
       if (changed) {
@@ -433,14 +433,17 @@ export default class Trading {
   }
 
   clean() {
+    this.pause();
     this.indexOracle.clean();
     this.markOracle.clean();
     this.positionInfo.clean();
     this.version = null;
     // this.configs = []
     this.config = null;
-    this.markPrice = null
-    this.index = null
+    // this.markPrice = null
+    this.setMarkPrice(null)
+    // this.index = null
+    this.setIndex(null)
     this.volume = ''
     this.fundingRate = {}
     this.position = {}
