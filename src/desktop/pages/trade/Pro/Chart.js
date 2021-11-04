@@ -82,7 +82,7 @@ function Chart({symbol,lang,trading}){
           </div>
       </div>
       <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
-        <TVChart symbol={symbol} config={trading.config} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
+        <TVChart trading={trading} symbol={symbol} config={trading.config} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
       </div>
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} preload={chartType === 'mark-price'}/>

@@ -222,6 +222,15 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
         setIsOptionInput(false)
       }
       trading.setVolume(value)
+    }else{
+      if(value !== ''){
+        if(value < trading.contract.multiplier){
+          setIsOptionInput(true)
+         } else{
+          setIsOptionInput(false)
+         }
+      }
+     
     }
     if (target.value === '') {
       target.setAttribute('class', 'contrant-input')
@@ -274,7 +283,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     indexPriceRef.current = trading.index
     if (trading.index) {
       const formatIndex = trading.index.toLocaleString(
-        undefined, { minimumFractionDigits: 2 }
+        undefined, { minimumFractionDigits: trading.priceDecimals }
       )
       const symbol = trading.config && trading.config.symbol.split('-')[0]
       document.querySelector('head title').innerText = `$${formatIndex} ${symbol}.deri`
@@ -282,7 +291,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     return () => {
       document.querySelector('head title').innerText = 'deri'
     };
-  }, [trading.index, trading.config]);
+  }, [trading.index, trading.config,trading.priceDecimals]);
 
   useEffect(() => {
     if (trading.position) {
@@ -322,7 +331,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   useEffect(() => {
     let holder = '0.000'
-    if(trading.contract.multiplier < 1){
+    if(trading.contract.multiplier <= 1){
       let multiplier = trading.contract.multiplier
       holder = multiplier.replace(/1/gi,'0')
     }else{
@@ -380,12 +389,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           <div className={type.isOption ? 'price-fundingRate pc options' : 'price-fundingRate pc'}>
             {type.isFuture && !version.isOpen && !version.isV1 && <>
               <div className='mark-price'>
-                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+                {lang['mark-price']} : <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals } /></span>
               </div>
             </>}
             {type.isFuture && <>
               <div className='index-prcie'>
-                {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+                {lang['index-price']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={trading.priceDecimals} /></span>
               </div>
             </>}
             {type.isOption && <>
@@ -425,12 +434,12 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
           <div className={type.isOption ? 'price-fundingRate mobile options' : 'price-fundingRate mobile'}>
             {type.isFuture  && !version.isOpen && !version.isV1 && <>
               <div className='index-prcie'>
-                {lang['mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={2} /></span>
+                {lang['mark-price']}: <span className={markPriceClass}>&nbsp; <DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals} /></span>
               </div>
             </>}
             {type.isFuture && <>
               <div className='index-prcie'>
-                {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={2} /></span>
+                {lang['index']}: <span className={indexPriceClass}>&nbsp; <DeriNumberFormat value={trading.index} decimalScale={trading.priceDecimals} /></span>
               </div>
             </>}
             {type.isOption && <>

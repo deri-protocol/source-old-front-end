@@ -49,12 +49,12 @@ function TradingView({ version, trading, lang, type }) {
           {!version.isOpen && !version.isV1 && <>
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['mark-price']}</div>
-            <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={2} /></div>
+            <div className={markPriceClass}><DeriNumberFormat value={markPrice} decimalScale={trading.priceDecimals} /></div>
           </div>
           </>}
           <div className='trade-dashboard-item latest-price'>
             <div className='trade-dashboard-title'>{lang['index-price']}</div>
-            <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={2} /></div>
+            <div className={indexPriceClass}><DeriNumberFormat value={trading.index} decimalScale={trading.priceDecimals} /></div>
           </div>
           
           <div className='trade-dashboard-item latest-price'>

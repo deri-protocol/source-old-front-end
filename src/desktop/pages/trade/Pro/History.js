@@ -61,7 +61,7 @@ function History({ wallet, trading, lang, type }) {
               {his.symbol || '--'}
             </div>
             <div>
-              <DeriNumberFormat value={his.price} decimalScale={4} />
+              <DeriNumberFormat value={his.price} decimalScale={6} />
             </div>
             <div>
               {his.volume}

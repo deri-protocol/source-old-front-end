@@ -325,6 +325,17 @@
               "symbolId": "5",
               "symbol": "AGLDUSDT",
               "unit": "AGLD"
+            },
+            {
+              "symbolId": "6",
+              "symbol": "SHIBUSDT",
+              "unit": "SHIB",
+              "decimals": "8"
+            },
+            {
+              "symbolId": "7",
+              "symbol": "SANDUSDT",
+              "unit": "SAND"
             }
           ],
           "initialBlock": "12182029",
@@ -369,6 +380,17 @@
               "symbolId": "5",
               "symbol": "AGLDUSDT",
               "unit": "AGLD"
+            },
+            {
+              "symbolId": "6",
+              "symbol": "SHIBUSDT",
+              "unit": "SHIB",
+              "decimals": "6"
+            },
+            {
+              "symbolId": "7",
+              "symbol": "SANDUSDT",
+              "unit": "SAND"
             }
           ],
           "initialBlock": "12182152",

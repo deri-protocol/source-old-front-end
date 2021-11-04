@@ -7,7 +7,7 @@ import {
 import {
   bTokenFactory,
 } from '../../shared/factory';
-import { getPoolV1Config } from '../../shared';
+import { getPoolV1Config, toChecksumAddress } from '../../shared';
 import { getPriceFromRest } from '../../shared/utils/oracle';
 import { getPoolInfoApy } from '../../shared/api/database_api';
 import {
@@ -124,65 +124,73 @@ export const getSpecification = async (
  * @returns {string} response.liquidationPrice
  */
 export const getPositionInfo = async (chainId, poolAddress, accountAddress) => {
-  const { pTokenAddress } = getPoolV1Config(chainId, poolAddress);
-  const pPool = perpetualPoolFactory(chainId, poolAddress);
-  //pPool.setAccount(accountAddress);
-  const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
-  //pToken.setAccount(accountAddress);
-  const {
-    multiplier,
-    minInitialMarginRatio,
-    minMaintenanceMarginRatio,
-  } = await pPool.getParameters();
-  const symbol = await pPool.symbol()
-  //console.log('getPositionInfo', chainId, poolAddress, accountAddress, price);
-  const { volume, margin, cost } = await pToken.getPositionInfo(accountAddress);
-  const price = await getPriceFromRest(symbol);
-  if (price === '') {
-    return {
-      price,
-      volume: bg(volume).times(multiplier).toString(),
-      averageEntryPrice: calculateEntryPrice(
-        volume,
-        cost,
-        multiplier
-      ).toString(),
-      margin: margin.toString(),
-      marginHeld: '',
-      unrealizedPnl: '',
-      liquidationPrice: calculateLiquidationPrice(
-        volume,
-        margin,
-        cost,
-        multiplier,
-        minMaintenanceMarginRatio
-      ).toString(),
-    };
-  } else {
-    return {
-      price,
-      volume: bg(volume).times(multiplier).toString(),
-      averageEntryPrice: calculateEntryPrice(
-        volume,
-        cost,
-        multiplier
-      ).toString(),
-      margin: margin.toString(),
-      marginHeld: calculateMarginHeld(
+  try {
+    poolAddress = toChecksumAddress(poolAddress)
+    accountAddress = toChecksumAddress(accountAddress)
+    const { pTokenAddress } = getPoolV1Config(chainId, poolAddress);
+    const pPool = perpetualPoolFactory(chainId, poolAddress);
+    //pPool.setAccount(accountAddress);
+    const pToken = pTokenFactory(chainId, pTokenAddress, poolAddress);
+    //pToken.setAccount(accountAddress);
+    const {
+      multiplier,
+      minInitialMarginRatio,
+      minMaintenanceMarginRatio,
+    } = await pPool.getParameters();
+    const symbol = await pPool.symbol();
+    //console.log('getPositionInfo', chainId, poolAddress, accountAddress, price);
+    const { volume, margin, cost } = await pToken.getPositionInfo(
+      accountAddress
+    );
+    const price = await getPriceFromRest(symbol);
+    if (price === '') {
+      return {
         price,
-        volume,
-        multiplier,
-        minInitialMarginRatio
-      ).toString(),
-      unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
-      liquidationPrice: calculateLiquidationPrice(
-        volume,
-        margin,
-        cost,
-        multiplier,
-        minMaintenanceMarginRatio
-      ).toString(),
-    };
+        volume: bg(volume).times(multiplier).toString(),
+        averageEntryPrice: calculateEntryPrice(
+          volume,
+          cost,
+          multiplier
+        ).toString(),
+        margin: margin.toString(),
+        marginHeld: '',
+        unrealizedPnl: '',
+        liquidationPrice: calculateLiquidationPrice(
+          volume,
+          margin,
+          cost,
+          multiplier,
+          minMaintenanceMarginRatio
+        ).toString(),
+      };
+    } else {
+      return {
+        price,
+        volume: bg(volume).times(multiplier).toString(),
+        averageEntryPrice: calculateEntryPrice(
+          volume,
+          cost,
+          multiplier
+        ).toString(),
+        margin: margin.toString(),
+        marginHeld: calculateMarginHeld(
+          price,
+          volume,
+          multiplier,
+          minInitialMarginRatio
+        ).toString(),
+        unrealizedPnl: calculatePnl(price, volume, multiplier, cost).toString(),
+        liquidationPrice: calculateLiquidationPrice(
+          volume,
+          margin,
+          cost,
+          multiplier,
+          minMaintenanceMarginRatio
+        ).toString(),
+      };
+    }
+  } catch (err) {
+    return {};
   }
 };
 

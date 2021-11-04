@@ -62,6 +62,7 @@ const expandPoolConfigV2Lite = (config) => {
           offchainSymbolIds: pool.offchainSymbolIds,
           offchainSymbols: pool.offchainSymbols,
           unit: symbol.unit,
+          decimals: symbol.decimals ? symbol.decimals : '2',
           type: 'perpetual',
           version: 'v2_lite',
           versionId: pool.versionId,

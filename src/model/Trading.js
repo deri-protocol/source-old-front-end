@@ -49,6 +49,7 @@ export default class Trading {
   config = null;
   index = ''
   volume = ''
+  priceDecimals = 2
   paused = false
   slideIncrementMargin = 0
   position = {}
@@ -70,12 +71,14 @@ export default class Trading {
       positions: observable,
       history: observable,
       contract: observable,
+      priceDecimals : observable,
       userSelectedDirection: observable,
       supportChain: observable,
       setWallet: action,
       setConfigs: action,
       setOptionConfigs: action,
       setConfig: action,
+      setPriceDecimals : action,
       setIndex: action,
       setContract: action,
       setPosition: action,
@@ -313,6 +316,15 @@ export default class Trading {
       config.markpriceSymbolFormat = getMarkpriceSymbol(config)
     }
     this.config = config
+    this.setPriceDecimals(config)
+  }
+
+  setPriceDecimals(config){
+    if(config && config.decimals){
+      this.priceDecimals = config.decimals
+     }else{
+       this.priceDecimals = 2
+     }
   }
 
   setIndex(index) {
@@ -404,6 +416,7 @@ export default class Trading {
       return Math.abs(this.volume)
     }
   }
+
 
   get amount() {
     const position = this.position

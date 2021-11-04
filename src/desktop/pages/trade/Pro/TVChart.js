@@ -13,7 +13,7 @@ const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 let spec 
 const subscribes = {}
 
-function TVChart({interval,showLoad,intl,preload,config,type}){
+function TVChart({trading,interval,showLoad,intl,preload,config,type}){
   const widgetRef = useRef(null);
   const lastDataRef = useRef(null);
   const datafeedRef = useRef({
@@ -75,7 +75,7 @@ function TVChart({interval,showLoad,intl,preload,config,type}){
       ticker : symbol,
       // full_name: symbol,
       description : type.isFuture && !Version.isOpen && !Version.isV1 ? `${symbol}-MARK` : symbol,
-      pricescale: 100,
+      pricescale: 1 * (10**trading.priceDecimals),
       config : spec,
       type : 'index',
       minmov: 1,
