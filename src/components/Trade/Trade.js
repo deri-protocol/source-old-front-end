@@ -221,11 +221,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       } else {
         setIsOptionInput(false)
       }
-      // }
-      // let reg = new RegExp(`([0-9]+\.[0-9]{${length}})[0-9]*`) 
-      // if(target.value.indexOf(".") === 0){
-      //   value = 0 + value
-      // }
       trading.setVolume(value)
     }
     if (target.value === '') {
@@ -327,16 +322,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
 
   useEffect(() => {
     let holder = '0.000'
-    if (trading.contract.multiplier === '0.0001') {
-      holder = '0.0000'
-    } else if (trading.contract.multiplier === '0.001') {
-      holder = '0.000'
-    } else if (trading.contract.multiplier === '0.01') {
-      holder = '0.00'
-    } else if (trading.contract.multiplier === '0.1') {
-      holder = '0.0'
-    } else if (trading.contract.multiplier === '1') {
-      holder = '0'
+    if(trading.contract.multiplier < 1){
+      let multiplier = trading.contract.multiplier
+      holder = multiplier.replace(/1/gi,'0')
+    }else{
+      holder = trading.contract.multiplier
     }
     setOptionInputHolder(holder)
   }, [trading.contract])
