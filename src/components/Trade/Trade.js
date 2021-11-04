@@ -272,16 +272,6 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
       setIndexPriceClass('rise')
     }
     indexPriceRef.current = trading.index
-    if (trading.index) {
-      const formatIndex = trading.index.toLocaleString(
-        undefined, { minimumFractionDigits: 2 }
-      )
-      const symbol = trading.config && trading.config.symbol.split('-')[0]
-      document.querySelector('head title').innerText = `$${formatIndex} ${symbol}.deri`
-    }
-    return () => {
-      document.querySelector('head title').innerText = 'deri'
-    };
   }, [trading.index, trading.config]);
 
   useEffect(() => {
@@ -293,7 +283,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.position.volume, trading.position.margin, trading.position.unrealizedPnl]);
 
   useEffect(() => {
-    let mark = trading.markPrice
+    let mark = trading.markPrice || (trading.position ? trading.position.markPrice : '')
     if (markPriceRef.current > mark) {
       setMarkPriceClass('fall')
     } else {
@@ -301,7 +291,17 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     }
     markPriceRef.current = mark
     setMarkPrice(mark)
-  }, [trading.index, trading.position,trading.markPrice])
+    if (mark) {
+      const formatMarkPrice = mark.toLocaleString(
+        undefined, { minimumFractionDigits: 2 }
+      )
+      const symbol = trading.config && trading.config.symbol.split('-')[0]
+      document.querySelector('head title').innerText = `$${formatMarkPrice} ${symbol}-MARK.deri`
+    }
+    return () => {
+      document.querySelector('head title').innerText = 'deri'
+    };
+  }, [trading.index,trading.position,trading.markPrice,trading.config])
 
   useEffect(() => {
     if (trading.config) {
@@ -359,11 +359,11 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
   }, [trading.volume, inputing]);
 
   useEffect(() => {
-    if (trading.fundingRate.funding0 && trading.markPrice) {
-      let num = bg(trading.fundingRate.funding0).div(bg(trading.markPrice)).times(bg(100)).toString()
+    if (trading.fundingRate.funding0 && markPrice) {
+      let num = bg(trading.fundingRate.funding0).div(bg(markPrice)).times(bg(100)).toString()
       setRate(num)
     }
-  }, [trading.fundingRate, trading.markPrice])
+  }, [trading.fundingRate, markPrice])
 
   useEffect(() => {
     trading.setUserSelectedDirection(direction)

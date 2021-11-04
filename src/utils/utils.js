@@ -135,6 +135,7 @@ export function getParam(param,urlString = window.location.href){
 }
 
 export function getFormatSymbol(symbol){
+  symbol = symbol.toUpperCase();
   const curChain = restoreChain();
   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
   if(type.isOption){

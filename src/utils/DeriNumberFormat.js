@@ -15,6 +15,8 @@ function DeriNumberFormat(props){
     const {allowZero,wallet,defaultValue = '--',...others} = props 
     if(isValidate()) {
       setRenderablity(<NumberFormat {...others} displayType = 'text'  fixedDecimalScale={true} />)
+    } else {
+      setRenderablity(<span className='loading-line'></span>)
     } 
     const timeout = window.setTimeout(() => {
       if(!isValidate() && wallet && !wallet.isConnected()){

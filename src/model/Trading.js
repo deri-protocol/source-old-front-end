@@ -154,6 +154,7 @@ export default class Trading {
 
   async onChange(config, changed, finishedCallback, isOption) {
     if (config) {
+      this.clean();
       this.pause();
       this.setConfig(config)
       this.loadByConfig(this.wallet, config, changed, finishedCallback, isOption);
@@ -351,26 +352,6 @@ export default class Trading {
     }
   }
 
-  wrappPosition(position){
-    if(Object.keys(position).length === 0){
-      return {
-        price: '',
-        strikePrice: '',
-        timePrice: '',
-        volume: '--',
-        averageEntryPrice: '',
-        margin: '--',
-        marginHeld: '--',
-        marginHeldBySymbol: '--',
-        unrealizedPnl: '',
-        unrealizedPnlList: [],
-        premiumFundingAccrued: '',
-        liquidationPrice: '',
-      }
-    }
-    return position
-  }
-
   setPositions(positions) {
     if (positions) {
       this.positions = positions
@@ -435,9 +416,10 @@ export default class Trading {
     this.markOracle.clean();
     this.positionInfo.clean();
     this.version = null;
-    this.configs = []
+    // this.configs = []
     this.config = null;
-    this.index = ''
+    this.markPrice = null
+    this.index = null
     this.volume = ''
     this.fundingRate = {}
     this.position = {}
@@ -445,7 +427,7 @@ export default class Trading {
     this.contract = {}
     this.history = []
     this.userSelectedDirection = 'long'
-    this.optionsConfigs = {}
+    // this.optionsConfigs = {}
   }
 
   get volumeDisplay() {
