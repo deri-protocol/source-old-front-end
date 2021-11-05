@@ -16,10 +16,15 @@ import {
 import { fundingRateCache, liquidatePriceCache, priceCache } from '../../shared/api/api_globals';
 import { getIndexInfo } from '../../shared/config/token';
 import { getSymbolPrices } from '../utils';
+import {
+  checkApiInput,
+  checkApiInputWithoutAccount,
+} from '../../shared/utils/derijsnext';
 
 export const getSpecification = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, symbolId) => {
+    [chainId, poolAddress] = checkApiInputWithoutAccount(chainId, poolAddress);
     //const { bTokenSymbol } = getPoolConfig(poolAddress, '0', '0', 'v2_lite');
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     await perpetualPool.init()
@@ -74,6 +79,11 @@ export const getSpecification = async(chainId, poolAddress, symbolId) => {
 export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbolId) => {
   const args = [chainId, poolAddress, accountAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, accountAddress, symbolId) => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     await perpetualPool.init()
     const pToken = perpetualPool.pToken
@@ -263,6 +273,11 @@ export const getPositionInfo = async(chainId, poolAddress, accountAddress, symbo
 export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
     const perpetualPool = perpetualPoolLiteFactory(chainId, poolAddress)
     await perpetualPool.init()
     const pToken = perpetualPool.pToken
@@ -417,6 +432,11 @@ export const getPositionInfos = async(chainId, poolAddress, accountAddress) => {
 export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
     const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const balance = await bTokenFactory(chainId, bTokenAddress).balanceOf(accountAddress)
     return balance.toString()
@@ -426,6 +446,11 @@ export const getWalletBalance = async(chainId, poolAddress, accountAddress) => {
 export const isUnlocked = async(chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress]
   return catchApiError(async(chainId, poolAddress, accountAddress) => {
+    [chainId, poolAddress, accountAddress] = checkApiInput(
+      chainId,
+      poolAddress,
+      accountAddress
+    );
     const { bToken:bTokenAddress } = getPoolConfig(poolAddress, '0', null, 'v2_lite')
     const bToken = bTokenFactory(chainId, bTokenAddress)
     return await bToken.isUnlocked(accountAddress, poolAddress)
@@ -601,6 +626,10 @@ export const getFundingRateCache = async(chainId, poolAddress, symbolId) => {
 export const getFundingRate = async(chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId]
   return catchApiError(async(chainId, poolAddress, symbolId) => {
+    [chainId, poolAddress ] = checkApiInput(
+      chainId,
+      poolAddress
+    );
     const res = await _getFundingRate(chainId, poolAddress, symbolId)
     const {fundingRate, fundingRatePerBlock, liquidity, tradersNetVolume, multiplier} = res
     return {
@@ -650,6 +679,11 @@ export const getLiquidityUsed = async (chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
+    [chainId, poolAddress ] = checkApiInputWithoutAccount(
+      chainId,
+      poolAddress,
+    );
+
       let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       if (!res) {
         res = await _getFundingRate(chainId, poolAddress, symbolId);

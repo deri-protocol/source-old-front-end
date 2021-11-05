@@ -23,6 +23,7 @@ describe('query api', () => {
   it(
     'getLiquidityInfo',
     async () => {
+      console.log(chainId, pool, account);
       const res = await getLiquidityInfo(chainId, pool, account);
       expect(res).toEqual({});
     },
