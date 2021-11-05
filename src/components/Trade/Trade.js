@@ -305,9 +305,7 @@ function Trade({ wallet = {}, trading, version, lang, type }) {
     markPriceRef.current = mark
     setMarkPrice(mark)
     if (mark) {
-      const formatMarkPrice = mark.toLocaleString(
-        undefined, { minimumFractionDigits: trading.priceDecimals }
-      )
+      const formatMarkPrice = (+mark).toFixed(trading.priceDecimals)
       const symbol = trading.config && trading.config.symbol.split('-')[0]
       document.querySelector('head title').innerText = `$${formatMarkPrice} ${symbol}-MARK.deri`
     }
