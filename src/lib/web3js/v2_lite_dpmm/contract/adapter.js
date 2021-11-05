@@ -11,7 +11,7 @@ import {
   getBlockInfo,
 } from "../../shared/utils/index.js";
 import { normalizeSymbolUnit, SECONDS_IN_A_DAY } from "../../shared/config";
-import {  getOraclePriceFromCache2 } from '../../shared/utils/oracle'
+import { getSymbolPrices } from '../../shared/utils/oracle'
 import { getPriceInfos } from "../utils.js";
 import { lTokenLiteFactory, pTokenLiteFactory } from "./factory.js";
 import { calculateK, calculateDpmmPrice, calculateDpmmCost } from "../calc";
@@ -206,12 +206,20 @@ const getSymbols = (klass) => {
       )
     );
 
-    const indexPrices = await Promise.all(
-      symbols.map((s) => {
-        const oracleAddress = this.offChainOracleSymbolIds.includes(s.symbolId) ? '' : s.oracleAddress
-        return getOraclePriceFromCache2.get(this.chainId, s.symbol, oracleAddress)
-      })
-    )
+    // const indexPrices = await Promise.all(
+    //   symbols.map((s) => {
+    //     const oracleAddress = this.offChainOracleSymbolIds.includes(s.symbolId) ? '' : s.oracleAddress
+    //     return getOraclePriceFromCache2.get(this.chainId, s.symbol, oracleAddress)
+    //   })
+    // )
+
+    const indexPrices = await getSymbolPrices(
+      this.chainId,
+      symbols,
+      this.offChainOracleSymbolIds,
+      this.offChainOracleSymbolNames
+    );
+    //console.log('indexPrices', indexPrices);
     symbols.forEach((s, index) => {
       s.indexPrice = indexPrices[index]
       s.K = calculateK(
