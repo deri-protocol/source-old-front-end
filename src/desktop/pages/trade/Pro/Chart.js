@@ -30,12 +30,13 @@ function Chart({symbol,lang,trading}){
     if(candle && candle.data){
       const {data} = candle
       const riseOrDown = data.close - data.open > 0 ? 'rise' : 'down'
+      const dicemal = (data.close >=1 || data.close === 0 ) ? 2 : String(data.close).split('').findIndex(i => !isNaN(i) && i > 0)
       data.open && data.close && data.high && data.low && setCandleDataDisplay(
         <>
-          <span>{lang['open']}</span><span className={riseOrDown}>{data.open.toFixed(2)}</span>
-          <span>{lang['high']}</span> <span className={riseOrDown}> {data.high.toFixed(2)}</span>
-          <span>{lang['low']}</span><span className={riseOrDown}>{data.low.toFixed(2)}</span>
-          <span>{lang['closed']}</span><span className={riseOrDown}>{data.close.toFixed(2)}</span>
+          <span>{lang['open']}</span><span className={riseOrDown}>{data.open.toFixed(dicemal)}</span>
+          <span>{lang['high']}</span> <span className={riseOrDown}> {data.high.toFixed(dicemal)}</span>
+          <span>{lang['low']}</span><span className={riseOrDown}>{data.low.toFixed(dicemal)}</span>
+          <span>{lang['closed']}</span><span className={riseOrDown}>{data.close.toFixed(dicemal)}</span>
         </>
       )
     }
