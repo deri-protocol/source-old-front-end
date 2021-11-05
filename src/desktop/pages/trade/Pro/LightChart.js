@@ -57,10 +57,10 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       } 
       displayCandleData({data : data[data.length-1]})
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        // if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
+        if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
           candlesChart.update(data)
-          // candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
-        // }
+          candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
+        } 
       })
     }
       
