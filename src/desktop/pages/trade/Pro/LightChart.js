@@ -38,12 +38,12 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       const data = await loadData(symbol)
       let minMove = 0.01;
       let decimal = 2
-      if(data.length > 0){
-        const sampleData = data[0].close
-        minMove = ((+sampleData) >= 1 || (+sampleData) === 0)  ?  0.01 : 1 / (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
-        decimal = String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)
+      // if(data.length > 0){
+      //   const sampleData = data[0].close
+      //   minMove = ((+sampleData) >= 1 || (+sampleData) === 0)  ?  0.01 : 1 / (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
+      //   decimal = String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)
 
-      }
+      // }
       const candlesChart = candlesChartRef.current = chart.addCandlestickSeries({
       priceScaleId : priceScaleId,
       upColor: "#4bffb5",
@@ -53,8 +53,8 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       wickDownColor: "#ff4976",
       wickUpColor: "#4bffb5",
       priceFormat: {        
-          precision: decimal,
-          minMove : minMove
+          // precision: decimal,
+          // minMove : minMove
           // formatter: price => '$' + price.toFixed(decimal),
       }
     });
