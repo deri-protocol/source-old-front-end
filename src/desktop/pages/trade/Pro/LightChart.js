@@ -35,9 +35,8 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
 
   const addCandleChart = async (chart,symbol,priceScaleId) => {
     if(symbol && chart){
-      const data = await loadData(symbol)
-      let minMove = 0.01;
-      let decimal = 2
+      // let minMove = 0.01;
+      // let decimal = 2
       // if(data.length > 0){
       //   const sampleData = data[0].close
       //   minMove = ((+sampleData) >= 1 || (+sampleData) === 0)  ?  0.01 : 1 / (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
@@ -58,7 +57,7 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
           // formatter: price => '$' + price.toFixed(decimal),
       }
     });
-
+    const data = await loadData(symbol)
     if(data && Array.isArray(data) && data.length > 0 ){
       candlesChart.setData(data)
       firstData.current = data[0]
