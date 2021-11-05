@@ -21,8 +21,14 @@ class Oracle {
   }
 
   load(symbol,timeType = 'min'){
+    if(symbol !== this.symbol){
+      this.unsubscribeBars(this.symbol)
+    }
+    this.setSymbol(symbol)
+    this.setTimeType(timeType);
+    this.already = true
     webSocket.subscribe('get_kline_update',{symbol,time_type : 'min'},data => {
-      if(!this.paused && equalIgnoreCase(symbol,data.symbol)) {
+      if(equalIgnoreCase(symbol,data.symbol)) {
         this.setIndex(data.close)
         for(const key of Object.keys(this.listeners)){
           if(typeof this.listeners[key] === 'function'){
@@ -31,12 +37,6 @@ class Oracle {
         }
       }
     })
-    if(symbol !== this.symbol){
-      this.unsubscribeBars(this.symbol)
-    }
-    this.setSymbol(symbol)
-    this.setTimeType(timeType);
-    this.already = true
   }
 
   addListener(id,listener){

@@ -177,7 +177,7 @@ export default class Trading {
       this.indexOracle.addListener('indexPrice', data => {
         this.setIndex(data.close)
       })
-      this.markOracle.addListener('markPrice', data => {
+      this.markOracle.addListener('markPrice',data => {
         this.setMarkPrice(data.close)
       })
     }
