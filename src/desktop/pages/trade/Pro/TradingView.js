@@ -89,7 +89,7 @@ function TradingView({ version, trading, lang, type }) {
             <div className='trade-dashboard-value'>
               <TipWrapper block={false}>
                 <span className='funding-per' tip={trading.TotalNetPositionTip || ''}>
-                  <DeriNumberFormat value={trading.fundingRate.tradersNetVolume} />
+                  <DeriNumberFormat value={trading.fundingRate.tradersNetVolume} thousandSeparator={true} />
                 </span>
               </TipWrapper>
             </div>

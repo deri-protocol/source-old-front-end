@@ -330,7 +330,7 @@
               "symbolId": "6",
               "symbol": "SHIBUSDT",
               "unit": "SHIB",
-              "decimals": "8"
+              "decimals": "6"
             },
             {
               "symbolId": "7",
