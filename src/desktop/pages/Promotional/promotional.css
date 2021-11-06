@@ -1,0 +1,45 @@
+.promotional {
+  width: 1225px;
+  min-height: 667px;
+}
+.promotional .check {
+  display: flex;
+  margin-left: -8px;
+  margin-top: 20px;
+}
+.promotional .check div {
+  border: 1px solid #aaa;
+  color: #aaa;
+  background-color: #202124;
+  padding: 6px;
+  font-size: 12px;
+  display: inline-block;
+  border-radius: 8px;
+  margin: 0 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.promotional .check .checked-now {
+  background-color: #21639d;
+  color: #ffffff;
+  padding: 8px;
+  border: 0px;
+}
+.promotional .now-prom {
+  margin-top: 70px;
+}
+.promotional .now-prom a {
+  color: #D4E05C;
+}
+.promotional .closed {
+  margin-top: 70px;
+}
+.promotional .closed a {
+  color: #D4E05C;
+}
+.promotional .closed div {
+  margin-top: 10px;
+}
+.promotional .closed .link {
+  margin-top: 30px;
+}
