@@ -21,6 +21,10 @@ import {
 import { everlastingOptionFactory } from '../factory/pool';
 import { volatilitiesCache } from '../utils';
 import { getIndexInfo } from '../../shared/config/token';
+import {
+  checkApiInput,
+  checkApiInputWithoutAccount,
+} from '../../shared/utils/derijsnext';
 
 //
 const SECONDS_IN_A_DAY = 86400;
@@ -29,6 +33,7 @@ export const getSpecification = async (chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
+      [chainId, poolAddress] = checkApiInputWithoutAccount(chainId, poolAddress)
       const { bTokenSymbol } = getPoolConfig(poolAddress, '0', '0', 'option');
       const optionPool = everlastingOptionFactory(chainId, poolAddress);
       await optionPool._updateConfig();
@@ -111,6 +116,11 @@ export const getPositionInfo = async (
   const args = [chainId, poolAddress, accountAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, accountAddress, symbolId) => {
+      [chainId, poolAddress, accountAddress] = checkApiInput(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
       const { symbol: symbolName} = getPoolConfig(
         poolAddress,
         undefined,
@@ -189,6 +199,11 @@ export const getPositionInfos = async (
   const args = [chainId, poolAddress, accountAddress];
   return catchApiError(
     async (chainId, poolAddress, accountAddress) => {
+      [chainId, poolAddress, accountAddress] = checkApiInput(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
       const optionPool = everlastingOptionFactory(chainId, poolAddress);
       await optionPool._updateConfig();
       //const pToken = pTokenOptionFactory(chainId, optionPool.pTokenAddress)
@@ -268,6 +283,11 @@ export const getWalletBalance = async (
   const args = [chainId, poolAddress, accountAddress];
   return catchApiError(
     async (chainId, poolAddress, accountAddress) => {
+      [chainId, poolAddress, accountAddress] = checkApiInput(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
       const { bToken: bTokenAddress } = getPoolConfig(
         poolAddress,
         '0',
@@ -289,6 +309,11 @@ export const isUnlocked = async (chainId, poolAddress, accountAddress) => {
   const args = [chainId, poolAddress, accountAddress];
   return catchApiError(
     async (chainId, poolAddress, accountAddress) => {
+      [chainId, poolAddress, accountAddress] = checkApiInput(
+        chainId,
+        poolAddress,
+        accountAddress
+      );
       const { bToken: bTokenAddress } = getPoolConfig(
         poolAddress,
         '0',
@@ -464,6 +489,10 @@ export const getFundingRate = async (chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
+      [chainId, poolAddress ] = checkApiInputWithoutAccount(
+        chainId,
+        poolAddress,
+      );
       const res = await _getFundingRate(chainId, poolAddress, symbolId);
       fundingRateCache.set(chainId, poolAddress, symbolId, res);
       const curSymbolIndex = res.symbolIds.indexOf(symbolId);
@@ -543,6 +572,10 @@ export const getLiquidityUsed = async (chainId, poolAddress, symbolId) => {
   const args = [chainId, poolAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
+      [chainId, poolAddress ] = checkApiInputWithoutAccount(
+        chainId,
+        poolAddress,
+      );
       let res = fundingRateCache.get(chainId, poolAddress, symbolId);
       if (!res) {
         res = await _getFundingRate(chainId, poolAddress, symbolId);
@@ -689,6 +722,10 @@ export const getVolatility = async (
   const args = [chainId, poolAddress, symbolId];
   return catchApiError(
     async (chainId, poolAddress, symbolId) => {
+      [chainId, poolAddress ] = checkApiInputWithoutAccount(
+        chainId,
+        poolAddress,
+      );
       const optionPool = everlastingOptionFactory(chainId, poolAddress);
       await optionPool._updateConfig();
       const symbols = optionPool.activeSymbols

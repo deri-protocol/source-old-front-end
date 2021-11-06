@@ -175,9 +175,11 @@ export default class Trading {
     //切换指数
     if (symbolChanged && config) {
       this.indexOracle.addListener('indexPrice', data => {
+        // console.log('index price ',data)
         this.setIndex(data.close)
       })
       this.markOracle.addListener('markPrice',data => {
+        // console.log('mark price ',data)
         this.setMarkPrice(data.close)
       })
     }
