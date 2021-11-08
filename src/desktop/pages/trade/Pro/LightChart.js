@@ -35,35 +35,43 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
 
   const addCandleChart = async (chart,symbol,priceScaleId) => {
     if(symbol && chart){
-       const candlesChart = candlesChartRef.current = chart.addCandlestickSeries({
-        priceScaleId : priceScaleId,
-        upColor: "#4bffb5",
-        downColor: "#ff4976",
-        borderDownColor: "#ff4976",
-        borderUpColor: "#4bffb5",
-        wickDownColor: "#ff4976",
-        wickUpColor: "#4bffb5",
-        priceFormat: {        
-            // precision: 4,
-            // minMove : '0.0001',
-            // formatter: price => '$' + price.toFixed(4),
-        }
-      });
-      const data = await loadData(symbol)
-      if(data && Array.isArray(data) && data.length > 0 ){
-        candlesChart.setData(data)
-        firstData.current = data[0]
-        candlesSeriesHistoryRef.current = data
-      } 
-      displayCandleData({data : data[data.length-1]})
-      webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        // if (!candlesSeriesHistoryRef.current.some(his => his.time === data.time)){
-          candlesChart.update(data)
-          // candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
-        // }
-      })
-    }
-      
+      // let minMove = 0.01;
+      // let decimal = 2
+      // if(data.length > 0){
+      //   const sampleData = data[0].close
+      //   minMove = ((+sampleData) >= 1 || (+sampleData) === 0)  ?  0.01 : 1 / (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
+      //   decimal = String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)
+
+      // }
+      const candlesChart = candlesChartRef.current = chart.addCandlestickSeries({
+      priceScaleId : priceScaleId,
+      upColor: "#4bffb5",
+      downColor: "#ff4976",
+      borderDownColor: "#ff4976",
+      borderUpColor: "#4bffb5",
+      wickDownColor: "#ff4976",
+      wickUpColor: "#4bffb5",
+      priceFormat: {        
+          // precision: decimal,
+          // minMove : minMove
+          // formatter: price => '$' + price.toFixed(decimal),
+      }
+    });
+    const data = await loadData(symbol)
+    if(data && Array.isArray(data) && data.length > 0 ){
+      candlesChart.setData(data)
+      firstData.current = data[0]
+      candlesSeriesHistoryRef.current = data
+    } 
+    displayCandleData({data : data[data.length-1]})
+    webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
+      const last = candlesSeriesHistoryRef.current[candlesSeriesHistoryRef.current.length - 1]
+      if (data.time > last.time){
+        candlesChart.update(data)
+        candlesSeriesHistoryRef.current = [...candlesSeriesHistoryRef.current,data]
+      }
+    })
+    }      
   }
 
   const addLineSeries = async (chart,symbol,priceScaleId) =>{
@@ -87,10 +95,12 @@ function LightChart({interval = '1',displayCandleData,mixedChart,lang,showLoad,p
       seriesChart.setData(seriesData)
       lineSeriesHistoryRef.current = seriesData
       webSocket.subscribe('get_kline_update',{symbol,time_type : intervalRange[interval]},data => {
-        // if(!lineSeriesHistoryRef.current.some(his => his.time === data.time )){
+        const last = lineSeriesHistoryRef.current[lineSeriesHistoryRef.current.length - 1];
+        if(data.time >= last.time){
           const lineSeriesData = {time : data.time,value : data.close}
           seriesChart.update(lineSeriesData)
-        // }
+          lineSeriesHistoryRef.current = [...lineSeriesHistoryRef.current,data]
+        }
       })
     }
   }
