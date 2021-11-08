@@ -384,7 +384,7 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='button-link'>
                 <TipWrapper block={false} tip={lang['staking-hover']}>
-                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
+                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT,SHIBUSDT,SANDUSDT/DERI/0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41?symbolId=0'>
                     {lang['staking']}
                   </a>
                 </TipWrapper>
@@ -671,7 +671,7 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='button-link'>
                 <TipWrapper block={false} tip={lang['staking-hover']}>
-                  <a tip={lang['staking-hover']} href='https://app.deri.finance/#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT/DERI/0x1a9b1B83C4592B9F315E933dF042F53D3e7E4819?symbolId=0'>
+                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT,SHIBUSDT,SANDUSDT/DERI/0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41?symbolId=0'>
                     {lang['staking']}
                   </a>
                 </TipWrapper>
