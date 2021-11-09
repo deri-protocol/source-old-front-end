@@ -280,7 +280,7 @@ function Trading({ wallet, lang, loading }) {
           {lang['earn-deri-for-trading-perpetual']}
         </div> */}
         <div className='trading-top-list'>
-          <div className='list'>
+          {/* <div className='list'>
             <div className='list-title'>
               <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
                 Top 10 Points
@@ -375,9 +375,9 @@ function Trading({ wallet, lang, loading }) {
               </div>
             </>}
 
-          </div>
+          </div> */}
           <div className='your-rewards'>
-            <div className='your-estimated-rewards'>
+            {/* <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 <span className='your-rewards-title-text'>{lang['your-rstimated-rewards']}</span>
                 <div className='share-twitter' onClick={twitterShare}>
@@ -422,7 +422,7 @@ function Trading({ wallet, lang, loading }) {
               <div className='your-coeff'>
                 <div className='your-coeff-title'>
                   <TipWrapper block={false} >
-                    <span tip={lang['boosting-factor']}>
+                    <span tip={lang['boosting-factor-two']}>
                       {lang['your-coeff']}
                     </span>
                   </TipWrapper>
@@ -431,7 +431,7 @@ function Trading({ wallet, lang, loading }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* <div className='deri-total'>
               <div className='deri-title'>
                 {lang['transaction-sharing-pool']}
@@ -469,8 +469,8 @@ function Trading({ wallet, lang, loading }) {
                   </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
-                <TipWrapper block={false} tip={lang['boosting-factor']}>
-                  <span className='des-tip' tip={lang['boosting-factor']}>
+                <TipWrapper block={false} tip={lang['boosting-factor-two']}>
+                  <span className='des-tip' tip={lang['boosting-factor-two']}>
                     boosting factors
                   </span>
                 </TipWrapper>
@@ -479,7 +479,7 @@ function Trading({ wallet, lang, loading }) {
                 {/* {lang['the-individual']} */}
               </div>
             </div>
-            <div className='total-your-contrib'>
+            {/* <div className='total-your-contrib'>
               <div className='your-contrib'>
                 <div className='stage'>
                   <div className='stage-title'></div>
@@ -566,7 +566,7 @@ function Trading({ wallet, lang, loading }) {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -618,7 +618,7 @@ function Trading({ wallet, lang, loading }) {
               <div className='your-coeff'>
                 <div className='your-coeff-title'>
                   <TipWrapper block={false} >
-                    <span tip={lang['boosting-factor']}>
+                    <span tip={lang['boosting-factor-two']}>
                       {lang['your-coeff']}
                     </span>
                   </TipWrapper>
@@ -744,8 +744,8 @@ function Trading({ wallet, lang, loading }) {
                   </span>
                 </TipWrapper>
                 &nbsp; per their transaction fees multiplied by the&nbsp;
-                <TipWrapper block={false} tip={lang['boosting-factor']}>
-                  <span className='des-tip' tip={lang['boosting-factor']}>
+                <TipWrapper block={false} tip={lang['boosting-factor-two']}>
+                  <span className='des-tip' tip={lang['boosting-factor-two']}>
                     boosting factors
                   </span>
                 </TipWrapper>
@@ -870,9 +870,9 @@ function Trading({ wallet, lang, loading }) {
         </div>
 
       </div>
-      {/* <div className='activity-rules'>
+      <div className='activity-rules'>
         <a target='_blank' rel='noreferrer' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-1cedc8f98e95'>{lang['detailed-rules']}</a>
-      </div> */}
+      </div>
     </div>
   )
 }

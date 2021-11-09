@@ -44,6 +44,7 @@
   "your-contrib-value":"Your Score ",
   "the-quarter-points":"1st Quarter: 10,000 points\n2nd Quarter: 20,000 points\n3rd Quarter: 30,000 points\n4th Quarter: 50,000 points\n",
   "boosting-factor":"Boosting Factor = 1+0.00003 * L\nL=Number of Liquidity Shares in the DERI-based Inno Zone pool",
+  "boosting-factor-two":"Boosting Factor = SQRT(1+0.00003 * L)\nL=Number of Liquidity Shares in the DERI-based Inno Zone pool",
   "the-first-time":"10 AM, Oct 13 - 10 AM, Oct 20 UTC",
   "the-second-time":"10 AM, Oct 20 - 10 AM, Oct 27 UTC",
   "the-third-time":"10 AM, Oct 27 - 10 AM, Nov 3 UTC",

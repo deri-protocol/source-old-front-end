@@ -2,6 +2,8 @@ echo  PUBLIC_URL=/ > .env.production
 echo REACT_APP_WSS_URL=wss://oracle4.deri.finance >> .env.production
 echo REACT_APP_HTTP_URL=https://oracle4.deri.finance >> .env.production
 echo REACT_APP_REST_SERVER_URL=https://alphaapi.deri.finance >> .env.production
+echo REACT_APP_INFO_HTTP_URL=https://infoapi.deri.finance >> .env.production
+
 source ~/.bashrc 
 yarn build --nomaps 
 repo=/tmp/build/alphatest

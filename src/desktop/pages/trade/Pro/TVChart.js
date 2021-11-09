@@ -13,7 +13,7 @@ const GET_KLINE_URL=`${process.env.REACT_APP_HTTP_URL}/get_kline`
 let spec 
 const subscribes = {}
 
-function TVChart({trading,interval,showLoad,intl,preload,config,type}){
+function TVChart({trading,interval,showLoad,intl,config,type}){
   const widgetRef = useRef(null);
   const lastDataRef = useRef(null);
   const datafeedRef = useRef({
@@ -30,7 +30,7 @@ function TVChart({trading,interval,showLoad,intl,preload,config,type}){
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
     // const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
     const pos = symbolInfo.name.indexOf('-INDEX');
-    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat || symbolInfo.name
+    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat
     const res = await axios.get(GET_KLINE_URL,{
       params : {
         symbol : getFormatSymbol(symbol),
@@ -68,12 +68,13 @@ function TVChart({trading,interval,showLoad,intl,preload,config,type}){
   }
   
   const resolveSymbol = (symbol,onSymbolResolvedCallback) => {
+    // const sampleData = trading.markPriceSampleForKline || 1 
+    // const priceScale  = ((+sampleData) >= 1 || (+sampleData) === 0)  ? 100 : 1 * (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
       ticker : symbol,
-      // full_name: symbol,
-      description : type.isFuture && !Version.isOpen && !Version.isV1 ? `${symbol}-MARK` : symbol,
-      pricescale: 1 * (10**trading.priceDecimals),
+      description : `${symbol}-MARK`,
+      pricescale: symbol.indexOf('-INDEX') > 0 ? 100 : 1 * (10 ** trading.priceDecimals),
       config : spec,
       type : 'index',
       minmov: 1,
@@ -100,22 +101,20 @@ function TVChart({trading,interval,showLoad,intl,preload,config,type}){
     }
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
-      showLoad && showLoad(false)
-      if(Type.isFuture && !Version.isOpen && !Version.isV1){
-        widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : 'as-series','color': '#aaa'})
-      }
+      const priceScale = Type.isFuture ? 'as-series' : 'new-left'
+      widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : priceScale,'color': '#aaa'})
     })
   }
 
 
 
   useEffect(() => {
-    if(config && config.symbol && interval && preload){
+    if(config && config.symbol && interval){
       spec = config
       initialize();
       webSocket.addReconnectEvent(config.symbol,() => {
         //如果当前数据不是最新，重新加载
-        if(lastDataRef.current.time < new Date().getTime()) {
+        if(lastDataRef.current && lastDataRef.current.time  && lastDataRef.current.time < new Date().getTime()) {
           initialize();
         }
       })
@@ -127,7 +126,7 @@ function TVChart({trading,interval,showLoad,intl,preload,config,type}){
       unsubscribeBars();
       config && webSocket.removeReconnectEvent(config.symbol)
     }
-  }, [interval,preload,config,type.current])
+  }, [interval,config,type.current])
 
   return(
     <div id='tv-container'></div>
