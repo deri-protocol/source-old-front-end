@@ -53,11 +53,11 @@ function Chart({symbol,lang,trading}){
 
   return(
     <div id='tradingview'>
-      {Type.isOption &&<div className={switchClass}>
+      {/* {Type.isOption &&<div className={switchClass}>
         <span className='mark-price-c' onClick={() => switchChart('mark-price')}>{lang['option-mark-price']}</span>
         <span className='index-price-c' onClick={() => switchChart('index-price')}>{stripSymbol(symbol) || lang['index']}</span>
         <span className='option-index-c' onClick={() => switchChart('option-index')}>{`${lang['option']} + ${stripSymbol(symbol) || lang['index']}`}</span>
-      </div>}
+      </div>} */}
       <div className={activedClass}>
           <span className='candle-data-area'>
             <span className='symbol-value' style={{display : chartType === 'mark-price'|| chartType === 'option-index' ? 'inline-block' : 'none'}}>
@@ -82,15 +82,15 @@ function Chart({symbol,lang,trading}){
               <span className='sr-only'></span>
           </div>
       </div>
-      <div style={{display : chartType === 'index-price' ? 'block' : 'none'}}>
-        <TVChart trading={trading} symbol={symbol} config={trading.config} interval={currentInterval} showLoad={isShow => setLoading(isShow)} preload={chartType === 'index-price'}/>
+      <div>
+        <TVChart trading={trading} symbol={symbol} config={trading.config} interval={currentInterval} showLoad={isShow => setLoading(isShow)}/>
       </div>
-      {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
+      {/* {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'mark-price' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} preload={chartType === 'mark-price'}/>
       </div>}
       {Type.isOption && <div id='lightweight-chart' style={{display : chartType === 'option-index' ? 'block' : 'none'}}>
         <LightChart symbol={symbol} interval={currentInterval} displayCandleData={displayCandleData} showLoad={isShow => setLoading(isShow)} lang={lang} mixedChart={true} preload={chartType === 'option-index'}/>
-      </div>}
+      </div>} */}
   </div>
   )
 }

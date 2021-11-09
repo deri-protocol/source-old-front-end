@@ -793,7 +793,8 @@
             {
               "symbolId": "1",
               "symbol": "BTCUSD-40000-P",
-              "unit": "BTC"
+              "unit": "BTC",
+              "decimals": "5"
             },
             {
               "symbolId": "2",
@@ -803,7 +804,8 @@
             {
               "symbolId": "3",
               "symbol": "ETHUSD-3000-P",
-              "unit": "ETH"
+              "unit": "ETH",
+              "decimals": "5"
             },
             {
               "symbolId": "4",
@@ -829,6 +831,11 @@
               "symbolId": "8",
               "symbol": "BTCUSD-70000-C",
               "unit": "BTC"
+            },
+            {
+              "symbolId": "9",
+              "symbol": "ETHUSD-5000-C",
+              "unit": "ETH"
             }
           ],
           "initialBlock": "12305540",

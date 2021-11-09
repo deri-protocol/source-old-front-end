@@ -191,7 +191,11 @@ export function getMarkpriceSymbol(config){
   const curChain = restoreChain();
   const chain = curChain ? curChain.code.toUpperCase() : 'BSC'
   const baseToken = Array.isArray(config.bTokenSymbol) ? config.bTokenSymbol[0] : config.bTokenSymbol
-  return `MARKPRICE_${config.symbol}_${chain}_${Type.current.toUpperCase()}_${version.zone}_${baseToken}`
+  if(config.isOption) {
+    return `${config.symbol}-MARKPRICE`
+  }  else {
+    return `MARKPRICE_${config.symbol}_${chain}_${Type.current.toUpperCase()}_${version.zone}_${baseToken}`
+  }
 }
 
 

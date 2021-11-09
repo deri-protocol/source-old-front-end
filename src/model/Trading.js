@@ -145,7 +145,6 @@ export default class Trading {
       this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet, this.config, true, finishedCallback, isOption)
-    this.setVolume('')
   }
 
   async onSymbolChange(spec, finishedCallback, isOption) {
@@ -157,15 +156,12 @@ export default class Trading {
 
   async onChange(config, changed, finishedCallback, isOption) {
     if (config) {
-      this.pause();
       this.clean();
       this.setConfig(config)
       this.loadByConfig(this.wallet, config, changed, finishedCallback, isOption);
       if (changed) {
         this.store(config)
       }
-      this.resume()
-      this.setVolume('')
     } else {
       finishedCallback && finishedCallback()
     }
@@ -175,11 +171,9 @@ export default class Trading {
     //切换指数
     if (symbolChanged && config) {
       this.indexOracle.addListener('indexPrice', data => {
-        // console.log('index price ',data)
         this.setIndex(data.close)
       })
       this.markOracle.addListener('markPrice',data => {
-        // console.log('mark price ',data)
         this.setMarkPrice(data.close)
       })
     }
@@ -192,15 +186,17 @@ export default class Trading {
         }),
         this.contractInfo.load(wallet, config, isOption),
         this.loadFundingRate(wallet, config, isOption),
-        this.historyInfo.load(wallet, config, isOption),
         this.positionInfo.loadAll(wallet, config, positions => this.setPositions(positions)),
       ]).then(results => {
-        if (results.length === 5) {
-          results[0] && this.setIndex(results[0].price) && this.setMarkPrice(results[0].markPrice) && this.setPosition(results[0]);
+        if (results.length === 4) {
+          if(results[0]) {
+            this.setIndex(results[0].price)
+            this.setMarkPrice(results[0].markPrice);
+            this.setPosition(results[0]);
+          }
           results[1] && this.setContract(results[1]);
           results[2] && this.setFundingRate(results[2]);
-          results[3] && this.setHistory(results[3]);
-          results[4] && this.setPositions(results[4]);
+          results[3] && this.setPositions(results[3]);
         }
       }).finally(e => {
         finishedCallback && finishedCallback()
@@ -208,10 +204,13 @@ export default class Trading {
         this.markOracle.load(getFormatSymbol(config.markpriceSymbolFormat || `${config.symbol}-MARKPRICE`))
         this.positionInfo.start()
         this.positionInfo.startAll();
+        this.resume();
       })
     } else {
       finishedCallback && finishedCallback()
     }
+    const histories = await this.historyInfo.load(wallet, config, isOption)
+    this.setHistory(histories);
   }
 
   refreshCache() {
@@ -339,6 +338,8 @@ export default class Trading {
     //just for v2 and lite version in futrue
     if (type.isFuture && (version.isV2 || version.isV2Lite)) {
       config.markpriceSymbolFormat = getMarkpriceSymbol(config)
+    } else if(type.isOption){
+      config.markpriceSymbolFormat = getMarkpriceSymbol(config)
     }
     this.config = config
     this.setPriceDecimals(config)
@@ -442,10 +443,10 @@ export default class Trading {
     this.version = null;
     // this.configs = []
     this.config = null;
-    // this.markPrice = null
-    this.setMarkPrice(null)
-    // this.index = null
-    this.setIndex(null)
+    this.markPrice = ''
+    // this.setMarkPrice(null)
+    this.index = ''
+    // this.setIndex(null)
     this.volume = ''
     this.fundingRate = {}
     this.position = {}
@@ -454,6 +455,7 @@ export default class Trading {
     this.history = []
     this.userSelectedDirection = 'long'
     // this.optionsConfigs = {}
+    // this.resume()
   }
 
   get volumeDisplay() {

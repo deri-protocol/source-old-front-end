@@ -23,7 +23,8 @@
     "mainSeriesProperties.candleStyle.wickDownColor": "#ff4976"
   },      
   "studies_overrides": {
-    "Overlay.lineStyle.color" : "#569bda"
+    "Overlay.lineStyle.color" : "#569bda",
+    "Overlay.showPriceLine" : true
   },
   "toolbar_bg": "#212327",
   "session": "24x7"

@@ -1,6 +1,7 @@
 .body {
   display: flex;
   margin: 40px auto;
+  min-height: calc(100vh - 80px);
 }
 .bridge .body{
   margin: 40px auto 60px auto;
