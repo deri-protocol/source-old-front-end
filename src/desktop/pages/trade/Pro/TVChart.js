@@ -30,7 +30,7 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
     // const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
     const pos = symbolInfo.name.indexOf('-INDEX');
-    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat
+    const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat || symbolInfo.name
     const res = await axios.get(GET_KLINE_URL,{
       params : {
         symbol : getFormatSymbol(symbol),
@@ -73,7 +73,7 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
       ticker : symbol,
-      description : `${symbol}-MARK`,
+      description : Version.isOpen ? symbol : `${symbol}-MARK`,
       pricescale: symbol.indexOf('-INDEX') > 0 ? 100 : 1 * (10 ** trading.priceDecimals),
       config : spec,
       type : 'index',
@@ -101,8 +101,10 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
     }
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
-      const priceScale = Type.isFuture ? 'as-series' : 'new-left'
-      widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : priceScale,'color': '#aaa'})
+      if(!Version.isOpen) {
+        const priceScale = Type.isFuture ? 'as-series' : 'new-left'
+        widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : priceScale,'color': '#aaa'})
+      }
     })
   }
 
