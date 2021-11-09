@@ -73,7 +73,7 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
       ticker : symbol,
-      description : Version.isOpen ? symbol : `${symbol}-MARK`,
+      description : (Type.isFuture && !Version.isOpen) || Type.isOption ? `${symbol}-MARK` : symbol  ,
       pricescale: symbol.indexOf('-INDEX') > 0 ? 100 : 1 * (10 ** trading.priceDecimals),
       config : spec,
       type : 'index',
@@ -101,7 +101,7 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
     }
     widgetRef.current  = new widget(widgetOptions);
     widgetRef.current.onChartReady(() => {
-      if(!Version.isOpen) {
+      if((Type.isFuture && !Version.isOpen) || Type.isOption) {
         const priceScale = Type.isFuture ? 'as-series' : 'new-left'
         widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : priceScale,'color': '#aaa'})
       }
