@@ -133,17 +133,17 @@ function Trading({ wallet, lang, loading }) {
   //   e.prev
   // }
 
-  useEffect(() => {
-    loading.loading();
-    let interval = null;
-    interval = window.setInterval(() => {
-      getList()
-    }, 30000)
-    getList()
-    return () => {
-      interval && clearInterval(interval);
-    };
-  }, [])
+  // useEffect(() => {
+  //   loading.loading();
+  //   let interval = null;
+  //   interval = window.setInterval(() => {
+  //     getList()
+  //   }, 30000)
+  //   getList()
+  //   return () => {
+  //     interval && clearInterval(interval);
+  //   };
+  // }, [])
 
   const dataURLtoBlob = (dataurl, filename = 'file') => {
     let arr = dataurl.split(',')
@@ -185,24 +185,24 @@ function Trading({ wallet, lang, loading }) {
     }
   }
 
-  useEffect(() => {
-    let interval = null;
-    interval = window.setInterval(() => {
-      if (wallet.isConnected()) {
-        getUserReward()
-        getUserStaking()
-        getUserContribution()
-      }
-    }, 30000)
-    if (wallet.isConnected()) {
-      getUserReward()
-      getUserStaking()
-      getUserContribution()
-    }
-    return () => {
-      interval && clearInterval(interval);
-    };
-  }, [wallet.detail.account])
+  // useEffect(() => {
+  //   let interval = null;
+  //   interval = window.setInterval(() => {
+  //     if (wallet.isConnected()) {
+  //       getUserReward()
+  //       getUserStaking()
+  //       getUserContribution()
+  //     }
+  //   }, 30000)
+  //   if (wallet.isConnected()) {
+  //     getUserReward()
+  //     getUserStaking()
+  //     getUserContribution()
+  //   }
+  //   return () => {
+  //     interval && clearInterval(interval);
+  //   };
+  // }, [wallet.detail.account])
 
   useEffect(() => {
     let arr;
@@ -812,7 +812,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['the-fourth']}
                     </div>
                     <div className='dial-box-info-time'>
-                    10 AM, Dec 24 - 10 AM, Dec 8 UTC 
+                    10 AM, Dec 1 - 10 AM, Dec 8 UTC 
                     </div>
                     <div className='dial-box-info-points'>
                       {lang['the-fourth-points']}
@@ -870,9 +870,9 @@ function Trading({ wallet, lang, loading }) {
         </div>
 
       </div>
-      <div className='activity-rules'>
+      {/* <div className='activity-rules'>
         <a target='_blank' rel='noreferrer' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-1cedc8f98e95'>{lang['detailed-rules']}</a>
-      </div>
+      </div> */}
     </div>
   )
 }

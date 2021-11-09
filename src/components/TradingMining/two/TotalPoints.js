@@ -166,7 +166,7 @@ export default function TotalPoints({ lang }) {
               {lang['the-fourth']}
             </div>
             <div className='dial-time'>
-            10 AM, Dec 24 - 10 AM, Dec 8 UTC 
+            10 AM, Dec 1 - 10 AM, Dec 8 UTC 
             </div>
             <div className='dial-box'>
               <div className='one-dial-box fourth-one-dial'>
