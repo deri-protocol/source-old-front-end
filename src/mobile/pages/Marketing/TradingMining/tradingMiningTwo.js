@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
 import Trading from "../../../../components/TradingMining/two/Trading";
 import Staking from "../../../../components/TradingMining/two/Staking";
-import TotalPoints from "../../../../components/TradingMining/two/TotalPoints";
 import CountDown from "../../../../components/Countdown/CountDown";
 import './index.less'
-import moment from 'moment';
 import './index-two.less'
 import epochTwo from '../../../../components/TradingMining/img/epochTwo.svg'
+import moment from 'moment';
 export default function Index({lang}){
   const eventEndTimestamp = moment.utc('2021-11-10 10:00:00')
   const [timeover, setTimeover] = useState(eventEndTimestamp.isBefore(moment.utc()) ? true : false)
@@ -20,7 +19,7 @@ export default function Index({lang}){
         <Staking lang={lang} />
       </div>
       <div>
-        <TotalPoints lang={lang} />
+        {/* <TotalPoints lang={lang} /> */}
       </div>
       <div className='trading'>
         <Trading lang={lang} /> 

@@ -7,18 +7,18 @@ const account = '0xa23b5c3da552ad5bf84648fec5c86540a0bf0db8'
 
 describe('deri staking', () => {
   it('getStakingTop10Users', async() => {
-    expect(await getStakingTop10Users()).toEqual([])
+    expect(await getStakingTop10Users('2')).toEqual([])
   }, TIMEOUT)
   it('getUserStakingInfo', async() => {
-    expect(await getUserStakingInfo(account)).toEqual({})
+    expect(await getUserStakingInfo(account, 2)).toEqual({})
   }, TIMEOUT)
   it('getUserStakingReward', async() => {
-    expect(await getUserStakingReward(account)).toEqual({})
+    expect(await getUserStakingReward(account, 2)).toEqual({})
   }, TIMEOUT)
   it('getUserStakingContribution', async() => {
     DeriEnv.set('prod')
     //expect(await getUserStakingContribution(account)).toEqual({})
-    expect(await getUserStakingContribution('0xFefC938c543751babc46cc1D662B982bd1636721')).toEqual({})
+    expect(await getUserStakingContribution('0xFefC938c543751babc46cc1D662B982bd1636721', '2')).toEqual({})
     DeriEnv.set('dev')
   }, TIMEOUT)
 })

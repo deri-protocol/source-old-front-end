@@ -5,7 +5,7 @@ import Index from '../Marketing/TradingMining/Index'
 import './promotional.less'
 import epochone from '../../../components/TradingMining/img/epochOne.svg'
 export default function Promotional({ lang }) {
-  const [curTab, setCurTab] = useState('upcoming') 
+  const [curTab, setCurTab] = useState('activeite') 
   const switchTab = async (current) => {
     setCurTab(current)
   }

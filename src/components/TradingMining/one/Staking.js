@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import bnbLogo from './img/bnb.svg'
-import deriLogo from './img/deri.svg'
+import bnbLogo from '../img/bnb.svg'
+import deriLogo from '../img/deri.svg'
 export default function Staking({ lang }) {
 
   return (
@@ -19,7 +19,7 @@ export default function Staking({ lang }) {
           {lang['transaction-sharing-pool']}
         </div>
         <div className='deri-num'>
-          <img src={deriLogo}></img>
+          <img src={deriLogo} alt=''></img>
           <span>$ 1,000,000</span>
         </div>
       </div>

@@ -33,6 +33,7 @@ const InfoList = LoadableComponent(() => import('../../pages/Info/List'))
 const InfoDetail = LoadableComponent(() => import('../../pages/Info/Detail'))
 
 const TradingMining = LoadableComponent(() => import('../../pages/Promotional/Promotional'))
+const TradingMiningFinshedOne = LoadableComponent(() => import('../../pages/Marketing/TradingMining/Index'))
 
 @withRouter
 @withLanguage
@@ -73,6 +74,7 @@ class Body extends React.Component {
           <Route exact path='/info' component={() => <InfoList/>}/>
           <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
           <Route exact path='/trade-to-earn' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/trading-to-earn-finshed-one' component={() => <TradingMiningFinshedOne lang={dict['trading-mining']}/>}/>
         </Switch>
       </div>
     )

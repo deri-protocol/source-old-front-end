@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import CountDown from "../../../../components/Countdown/CountDown";
-import Trading from "../../../../components/TradingMining/Trading";
-import Staking from "../../../../components/TradingMining/Staking";
-import TotalPoints from "../../../../components/TradingMining/TotalPoints";
+import Trading from "../../../../components/TradingMining/one/Trading";
+import Staking from "../../../../components/TradingMining/one/Staking";
+import TotalPoints from "../../../../components/TradingMining/one/TotalPoints";
 import './index.less'
+import epochOne from '../../../../components/TradingMining/img/epochOne.svg'
 import moment from 'moment';
 export default function Index({lang}){
   const eventEndTimestamp = moment.utc('2021-10-13 10:00:00');
   const [timeover, setTimeover] = useState(eventEndTimestamp.isBefore(moment.utc()) ? true : false)
   return (
     <div className='trading-mining'>
-      <div className='title'>{lang['title']}</div>
+      <div className='title'>{lang['title']} <img alt='' src={epochOne} /></div>
       <div className='count-down-box' style={{display : timeover ? 'none' : 'block'}}>
         <CountDown lang={lang} onEnd={() => setTimeover(true)} lastTimestamp={eventEndTimestamp.unix()}/>
       </div>

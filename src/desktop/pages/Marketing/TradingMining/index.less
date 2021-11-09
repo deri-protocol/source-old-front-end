@@ -2,7 +2,7 @@
   font-family: ArialMT, sans-serif;
   font-size: 18px;
   font-weight: 300;
-
+  width: 1400px;
   .title {
     font-family: Tachyon, sans-serif;
     color: #D4E05C;
@@ -11,6 +11,9 @@
     text-align: center;
     font-weight: 400;
     margin-bottom: 40px;
+    img{
+      width:100px
+    }
   }
 
   .count-down-box {
@@ -60,6 +63,26 @@
           img {
             width: 80px;
             height: 80px;
+          }
+        }
+        .bnb-num{
+          .bnb-deri-logo{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+          }
+          img{
+            width: 40px;
+            height: 50px;
+            margin-left: 5px;
+          }
+          .add-logo{
+            width: 14px;
+            height: 14px;
+          }
+          .blind-box{
+            width:121px;
+            height:122px;
           }
         }
       }
@@ -123,6 +146,7 @@
           width: 80px;
           height: 80px;
         }
+        
       }
     }
 
@@ -192,19 +216,20 @@
           }
 
           .list-title {
-            padding-left: 20px;
             padding-top: 14px;
+            padding-left: 20px;
             color: #D4E05C;
             font-family: Tachyon;
+            
           }
 
           .list-box {
             width: 778px;
-            margin: 0 auto;
+            // margin: 0 auto;
             background-color: #202124;
             height: 887px;
-            margin-top: 10px;
             border-radius: 20px;
+            margin: 10px auto 0;
 
             .list-box-title {
               display: flex;
@@ -259,7 +284,7 @@
                   background-color: #246CAD;
                 }
 
-                .one-progress {
+                .one-progress,.one-points-progress  {
                   width: 100%;
                 }
               }
@@ -343,15 +368,14 @@
                 color: #CCCCCC;
                 font-weight: 400;
                 white-space: nowrap;
-                margin-left: 20px;
-
+                margin-left: 40px;
                 .span {
                   margin-left: 15px;
                 }
               }
 
-              .your-deri {
-                // margin-left: 100px;
+              .your-bnb {
+                margin-right: 100px;
               }
             }
           }
@@ -442,6 +466,7 @@
 
               .des-tip {
                 display: inline-block;
+                cursor: pointer;
                 border-bottom: 1px dashed #fff;
               }
             }

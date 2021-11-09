@@ -3,20 +3,20 @@ import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
 import { isBrowser } from 'react-device-detect'
 import axios from 'axios'
-import Button from '../Button/Button';
-import one from './img/one.svg'
-import two from './img/two.svg'
-import three from './img/three.svg'
-import add from './img/add.svg'
-import twitterImg from './img/twitter.svg'
-import twitterBgImg from './img/share.png'
-import bnbLogo from './img/bnb.svg'
-import deriLogo from './img/deri.svg'
-import DeriNumberFormat from '../../utils/DeriNumberFormat'
-import { formatAddress } from '../../utils/utils';
-import TipWrapper from '../TipWrapper/TipWrapper'
+import Button from '../../Button/Button';
+import one from '../img/one.svg'
+import two from '../img/two.svg'
+import three from '../img/three.svg'
+import add from '../img/add.svg'
+import twitterImg from '../img/twitter.svg'
+import twitterBgImg from '../img/share.png'
+import bnbLogo from '../img/bnb.svg'
+import deriLogo from '../img/deri.svg'
+import DeriNumberFormat from '../../../utils/DeriNumberFormat'
+import { formatAddress } from '../../../utils/utils';
+import TipWrapper from '../../TipWrapper/TipWrapper'
 import html2canvas from 'html2canvas'
-import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../lib/web3js/indexV2'
+import { getStakingTop10Users, getUserStakingInfo, getUserStakingReward, getUserStakingContribution } from '../../../lib/web3js/indexV2'
 
 function Trading({ wallet, lang, loading }) {
   const [yourBNB, setYourBNB] = useState('')
@@ -92,7 +92,7 @@ function Trading({ wallet, lang, loading }) {
     let res = await getStakingTop10Users()
     loading.loaded()
     if (res) {
-      res = res.map((item, index) => {
+      res = res.top10.map((item, index) => {
         let obj = {}
         obj.no = item.no
         item.userAddr = formatAddress(item.userAddr)
@@ -102,7 +102,7 @@ function Trading({ wallet, lang, loading }) {
         obj.score = item.score
         obj.rewardBNB = item.rewardBNB
         obj.progress = `${numToEn(item.no)}-progress progress-box`
-        obj.progressSlider = (item.score / res[0].score) * 100
+        obj.progressSlider = (item.score / res.top10[0].score) * 100
         return obj
       })
       setList(res)
@@ -437,7 +437,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q4Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
                   </div>
                 </div>
                 <div className='your-score-box'>
@@ -591,7 +591,7 @@ function Trading({ wallet, lang, loading }) {
                     {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q4Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
+                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                 </div>
                 <div className='your-score-box'>

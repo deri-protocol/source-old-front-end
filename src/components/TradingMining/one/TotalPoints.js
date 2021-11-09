@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect,useState } from 'react'
-import arr from './img/arr.svg'
-import add from './img/add.svg'
+import arr from '../img/arr.svg'
+import add from '../img/add.svg'
 export default function TotalPoints({ lang }) {
   const [endOne,setEndOne] = useState(false)
   const [endTwo,setEndTwo] = useState(false)
