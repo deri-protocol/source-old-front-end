@@ -12,28 +12,16 @@ export default function Staking({ lang }) {
         Top 10 Leaderboard Reward
         </div>
         <div className='bnb-num'>
-          <div className='bnb-deri-logo'>
+          {/* <div className='bnb-deri-logo'>
             <img src={bnbLogo} alt=''></img>
             <img className='add-logo' src={add} alt=''></img>
             <img src={deriLogo} alt=''></img>
           </div>
-          <span>$ 500,000</span>
-          {/* <img className='blind-box' alt='' src={blindBox}/> */}
+          <span>$ 500,000</span> */}
+          <img className='blind-box' alt='' src={blindBox}/>
         </div>
       </div>
-      {/* <div className='blind-box'>
-        <div className='blind-box-lid'>
-          <img src={blindBox} alt='' />
-        </div>
-        <div className='blind-box-box'>
-          <div className='across'></div>
-          <div className='vertical'></div>
-          <div className='blind-title'>Top 10 Leaderboard Reward</div>
-          <div className='blind-num'>$ ???,???</div>
-        </div>
-        <div>
-        </div>
-      </div> */}
+      
       <div className='deri-total'>
         <div className='deri-title'>
           {lang['transaction-sharing-pool']}
