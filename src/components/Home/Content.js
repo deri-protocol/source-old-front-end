@@ -22,6 +22,7 @@ import WOO from './img/WOO.png'
 import FBG from './img/FBG.png'
 import QCP from './img/QCP.png'
 import GSR from './img/GSR.png'
+import binance from './img/binance.png'
 import Kryptos from './img/Kryptos.png'
 import LD from './img/LD.png'
 import LotusCapital from './img/LotusCapital.png'
@@ -174,6 +175,10 @@ export default function Content({lang}) {
           <div className='pic'>
             <img src={QCP} alt=''/>
           </div>
+          <div className='pic'>
+            <img src={binance} alt=''/>
+          </div>
+          
         </div>
       </div>
       <div className='index_part6 pics'>
