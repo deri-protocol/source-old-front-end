@@ -26,8 +26,7 @@
         margin: 0 auto;
         background-color: #0D0E0F;
         border-radius: 20px;
-        height: 754px;
-
+        height: 674px;
         .reward-claim-title {
           font-size: 0.18rem;
           color: #D4E05C;
@@ -40,22 +39,21 @@
           width: 99%;
           border-radius: 20px;
           margin: 0 auto;
-          height: 710px;
           margin-top: 10px;
           background-color: #202124;
-
+          height: 629px;
           .claim-left {
             width: 94%;
             padding-left: 20px;
             padding-top: 10px;
             box-sizing: border-box;
-            .claim-total-deri {
-              margin-top: 20px;
-              display: flex;
-              justify-content: space-between;
-            }
+            
           }
-
+          .hover{
+            display: inline-block;
+            border-bottom: 1px dashed #CCC;
+            cursor: pointer;
+          }
           .deri-text {
             font-size: 0.26rem;
           }
@@ -66,22 +64,23 @@
           }
 
           .claim-right {
-            width: 94%;
+            width: 100%;
             margin-top: 20px;
             box-sizing: border-box;
             padding-left: 20px;
-            .cur-epoch-claimable-deri{
+            .claim-total-deri {
+              width: 100%;
               margin-top: 20px;
+              .claimed-deri,.unclaimed-deri,.cur-epoch-claimable-deri{
+                margin-top: 20px;
+              }
             }
             .cur-epoch-claimable-deri-num {
-              font-size: 0.28rem;
+              font-size: 0.32rem;
               font-weight: 400;
               margin-top: 10px;
             }
 
-            .unclaimed-deri {
-              margin-right: 220px;
-            }
             .claim-button-box{
               text-align: center;
             }
@@ -160,7 +159,7 @@
         margin: 0 auto;
         display: flex;
         align-items: center;
-        margin-top: 165px;
+        margin-top: 45px;
         .finshed-round{
           width: 10px;
           height: 10px;

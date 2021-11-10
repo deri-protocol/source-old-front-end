@@ -27,11 +27,11 @@
   .claim {
     .trading-mining-claim {
       .reward-deri-claim {
-        width: 1400px;
-        height: 440px;
+        width: 1200px;
+        height: 486px;
         background-color: #0D0E0F;
         border-radius: 20px;
-
+        margin: 0 auto;
         .reward-claim-title {
           font-size: 18px;
           color: #D4E05C;
@@ -41,56 +41,39 @@
         }
 
         .claim-info-box {
-          width: 1398px;
-          height: 396px;
+          width: 1198px;
+          height: 442px;
           border-radius: 20px;
           margin: 0 auto;
           margin-top: 30px;
           background-color: #202124;
-
+          .deri-text{
+            font-size: 30px;
+          }
+          .hover{
+            display: inline-block;
+            border-bottom: 1px dashed #CCC;
+            cursor: pointer;
+          }
           .claim-left {
             margin-left: 108px;
             padding-top: 40px;
-            .claim-total-deri {
-              margin-right: 392px;
-              display: flex;
-              justify-content: space-between;
-            }
-            
-            .claimed-deri{
-              margin-right: 165px;
-            }
-
-          }
-
-          .deri-text {
-            font-size: 30px;
-          }
-
-          .deri-text-s {
-            font-size: 18px;
-            font-weight: 400;
           }
 
           .claim-right {
             margin-left: 108px;
-            .cur-epoch-deri{
+            margin-right: 108px;
+            .claim-total-deri {
+              margin-top: 40px;
               display: flex;
-              margin-right: 108px;
+              justify-content: space-between;
+              .claimed-deri,.unclaimed-deri{
+                margin-right: 150px;
+              }
             }
             .cur-epoch-claimed-deri{
               margin-right: 58px;
             }
-            .cur-epoch-claimable-deri{
-              margin-right: 120px;
-            }
-            .cur-epoch-claimable-deri-num {
-              font-size: 28px;
-              font-weight: 400;
-              margin-top: 29px;
-            }
-
-            
 
             .claim-button {
               width: 160px;
@@ -114,7 +97,8 @@
             margin-top: -20px;
             .claim-reward-num,
             .claimed-num,
-            .unclaimed-num {
+            .unclaimed-num ,
+            .cur-epoch-claimable-deri-num{
               margin-top: 29px;
               font-size: 40px;
               font-weight: 400;
@@ -164,13 +148,14 @@
       }
       .text-waring{
         text-align: center;
-        margin-top: 20px;
+        margin-top: 85px;
       }
       .finshed-epoch-one{
-        width: 1400px;
+        width: 1200px;
         display: flex;
         align-items: center;
-        margin-top: 165px;
+        margin: 0 auto;
+        margin-top: 45px;
         .finshed-round{
           width: 10px;
           height: 10px;
@@ -178,7 +163,7 @@
           background-color: #FFF;
         }
         .finshed-x{
-          width: 1480px;
+          width: 1180px;
           height: 1px;
           background-color: #FFF;
           position: relative;

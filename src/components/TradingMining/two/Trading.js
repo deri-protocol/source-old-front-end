@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { isBrowser } from 'react-device-detect'
 import axios from 'axios'
 import one from '../img/one.svg'
+import comingSoon from '../img/coming-soon.png'
 import two from '../img/two.svg'
 import three from '../img/three.svg'
 import add from '../img/add.svg'
@@ -69,7 +70,7 @@ function Trading({ wallet, lang, loading }) {
   }
 
   const getUserStaking = async () => {
-    let res = await getUserStakingInfo(wallet.detail.account,2)
+    let res = await getUserStakingInfo(wallet.detail.account, 2)
     setYourScored(res.score)
     setYourFee(res.feePaid)
     setYourCoeff(res.coef)
@@ -77,14 +78,14 @@ function Trading({ wallet, lang, loading }) {
   }
 
   const getUserContribution = async () => {
-    let res = await getUserStakingContribution(wallet.detail.account,2)
+    let res = await getUserStakingContribution(wallet.detail.account, 2)
     if (res) {
       setStageList(res)
     }
   }
 
   const getUserReward = async () => {
-    let res = await getUserStakingReward(wallet.detail.account,2)
+    let res = await getUserStakingReward(wallet.detail.account, 2)
     setYourBNB(res.rewardBNB)
     setYourDERI(res.rewardDERI)
   }
@@ -208,7 +209,7 @@ function Trading({ wallet, lang, loading }) {
     let arr;
     if (currentList) {
       arr = pointsList;
-    }else{
+    } else {
       arr = pnlList;
     }
     if (arr.length >= 10) {
@@ -266,7 +267,7 @@ function Trading({ wallet, lang, loading }) {
     } else if (arr.length >= 2) {
       document.getElementsByClassName('two-points-progress')[0].style.width = `${arr[1].progressSlider}%`
     }
-  }, [pointsList, currentList,pnlList])
+  }, [pointsList, currentList, pnlList])
   return (
     <div className='trading-top'>
       <div className='twitter-box'>
@@ -285,9 +286,9 @@ function Trading({ wallet, lang, loading }) {
               <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
                 Top 10 Points
                </div>
-              {/* <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
-                Top 10 P&L
-               </div> */}
+              <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
+                Top 10 PnL
+               </div>
             </div>
             {currentList && <>
               <div className='list-box'>
@@ -341,13 +342,13 @@ function Trading({ wallet, lang, loading }) {
             {!currentList && <>
               <div className='list-box'>
                 <div className='list-box-title'>
-                  <span className='no'>{lang['no']}</span>
+                  {/* <span className='no'>{lang['no']}</span>
                   <span className='address'>{lang['user-addr']}</span>
-                  <span className='feespaid'>P&L</span>
+                  <span className='feespaid'>P&L</span> */}
                   {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
-                <div className='list-info'>
-                  {pnlList.map((item, index) => {
+                <div className='list-info pnl-list-info'>
+                  {/* {pnlList.map((item, index) => {
                     return (
                       <div className='list-info-box' key={index}>
                         <div className='no'>
@@ -362,15 +363,16 @@ function Trading({ wallet, lang, loading }) {
                         <div className='feespaid'>
                           $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
                         </div>
-                        {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
+                        <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                        </div> */}
+                        </div>
                         <div className='progress pnl-progress'>
                           <div className={item.progress}></div>
                         </div>
                       </div>
                     )
-                  })}
+                  })} */}
+                  <img alt='' src={comingSoon} />
                 </div>
               </div>
             </>}
@@ -729,7 +731,7 @@ function Trading({ wallet, lang, loading }) {
                 </TipWrapper>
               </div>
               <div className='des'>
-                  Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quarter-points']}>
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quarter-points']}>
                   <span className='des-tip' tip={lang['the-quarter-points']}>
                     this quarter's points
                   </span>
@@ -761,7 +763,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['the-first']}
                     </div>
                     <div className='dial-box-info-time'>
-                    10 AM, Nov 10 - 10 AM, Nov 17 UTC 
+                      10 AM, Nov 10 - 10 AM, Nov 17 UTC
                     </div>
                     <div className='dial-box-info-points'>
                       {lang['the-first-points']}
@@ -775,7 +777,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['the-second']}
                     </div>
                     <div className='dial-box-info-time'>
-                    10 AM, Nov 17 - 10 AM, Nov 24 UTC 
+                      10 AM, Nov 17 - 10 AM, Nov 24 UTC
                     </div>
                     <div className='dial-box-info-points'>
                       {lang['the-second-points']}
@@ -789,7 +791,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['the-third']}
                     </div>
                     <div className='dial-box-info-time'>
-                    10 AM, Nov 24 - 10 AM, Dec 1 UTC 
+                      10 AM, Nov 24 - 10 AM, Dec 1 UTC
                     </div>
                     <div className='dial-box-info-points'>
                       {lang['the-third-points']}
@@ -803,7 +805,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['the-fourth']}
                     </div>
                     <div className='dial-box-info-time'>
-                    10 AM, Dec 1 - 10 AM, Dec 8 UTC 
+                      10 AM, Dec 1 - 10 AM, Dec 8 UTC
                     </div>
                     <div className='dial-box-info-points'>
                       {lang['the-fourth-points']}
@@ -815,47 +817,96 @@ function Trading({ wallet, lang, loading }) {
 
             <div className='list'>
               <div className='list-title'>
-                {lang['top-ten-users']}
+                <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
+                  Top 10 Points
+               </div>
+                <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
+                  Top 10 PnL
+               </div>
               </div>
-              <div className='list-box'>
-                <div className='list-box-title'>
-                  <span className='no'>{lang['no']}</span>
-                  <span className='address'>{lang['user-addr']}</span>
-                  <span className='feespaid'>{lang['fees-paid']}</span>
-                  <TipWrapper block={false} >
-                    <span className='score score-hover' tip=' estimated points based on the current weights'>
-                      {lang['score']}
-                    </span>
-                  </TipWrapper>
-                  {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
-                </div>
-                <div className='list-info'>
-                  {pointsList.map((item, index) => {
-                    return (
-                      <div className='list-info-box' key={index}>
-                        <div className='no'>
-                          {item.no === 1 && <img src={one}></img>}
-                          {item.no === 2 && <img src={two}></img>}
-                          {item.no === 3 && <img src={three}></img>}
-                          {item.no !== 1 && item.no !== 2 && item.no !== 3 && item.no}
-                        </div>
-                        <div className='address'>
-                          {item.userAddr}
-                        </div>
-                        <div className='feespaid'>
-                          $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
-                        </div>
-                        <div className='score'>
-                          <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
-                        </div>
-                        {/* <div className='rewardBNB top-three'>
+              {currentList && <>
+                <div className='list-box'>
+                  <div className='list-box-title'>
+                    <span className='no'>{lang['no']}</span>
+                    <span className='address'>{lang['user-addr']}</span>
+                    <span className='feespaid'>{lang['fees-paid']}</span>
+                    <TipWrapper block={false} >
+                      <span className='score score-hover' tip=' estimated points based on the current weights'>
+                        {lang['score']}
+                      </span>
+                    </TipWrapper>
+                    {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
+                  </div>
+                  <div className='list-info'>
+                    {pointsList.map((item, index) => {
+                      return (
+                        <div className='list-info-box' key={index}>
+                          <div className='no'>
+                            {item.no === 1 && <img src={one}></img>}
+                            {item.no === 2 && <img src={two}></img>}
+                            {item.no === 3 && <img src={three}></img>}
+                            {item.no !== 1 && item.no !== 2 && item.no !== 3 && item.no}
+                          </div>
+                          <div className='address'>
+                            {item.userAddr}
+                          </div>
+                          <div className='feespaid'>
+                            $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
+                          </div>
+                          <div className='score'>
+                            <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
+                          </div>
+                          {/* <div className='rewardBNB top-three'>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
                         </div> */}
-                      </div>
-                    )
-                  })}
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
+              </>}
+              {!currentList && <>
+                <div className='list-box'>
+                  <div className='list-box-title'>
+                    {/* <span className='no'>{lang['no']}</span>
+                    <span className='address'>{lang['user-addr']}</span>
+                    <span className='feespaid'>{lang['fees-paid']}</span>
+                    <TipWrapper block={false} >
+                      <span className='score score-hover' tip=' estimated points based on the current weights'>
+                        {lang['score']}
+                      </span>
+                    </TipWrapper> */}
+                    {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
+                  </div>
+                  <div className='list-info pnl-list-info'>
+                    {/* {pointsList.map((item, index) => {
+                      return (
+                        <div className='list-info-box' key={index}>
+                          <div className='no'>
+                            {item.no === 1 && <img src={one}></img>}
+                            {item.no === 2 && <img src={two}></img>}
+                            {item.no === 3 && <img src={three}></img>}
+                            {item.no !== 1 && item.no !== 2 && item.no !== 3 && item.no}
+                          </div>
+                          <div className='address'>
+                            {item.userAddr}
+                          </div>
+                          <div className='feespaid'>
+                            $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
+                          </div>
+                          <div className='score'>
+                            <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
+                          </div>
+                          <div className='rewardBNB top-three'>
+                          $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
+                        </div>
+                        </div>
+                      )
+                    })} */}
+                    <img alt='' src={comingSoon} />
+                  </div>
+                </div>
+              </>}
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
+import TipWrapper from '../../TipWrapper/TipWrapper'
 import { getUserStakingReward } from '../../../lib/web3js/indexV2'
 
 function Claim({ wallet, lang }) {
@@ -27,52 +28,35 @@ function Claim({ wallet, lang }) {
         <div className='claim-info-box'>
           <div className='claim-left'>
             <div className='claim-my-reward'>
-              <span className='claim-title'>My Reward</span>
+              <span className='claim-title'>My Rewards</span>
               <div className='claim-reward-num'>
                 $ {claimReward ? <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} /> : '--'}
-                <span className='yue'>≈</span>
+                <span className='yue'>＝</span>
                 {claimRewardDeri ? <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} /> : '--'} <span className='deri-text'>DERI</span>
               </div>
             </div>
+
+          </div>
+          <div className='claim-right'>
             <div className='claim-total-deri'>
               <div className='claimed-deri'>
                 <div className='claimed-title claim-title'>
                   Claimed DERI
                 </div>
                 <div className='claimed-num'>
-                  -- <span className='deri-text'>DERI</span>
+                  0
                 </div>
               </div>
               <div className='unclaimed-deri'>
                 <div className='unclaimed-title claim-title'>
-                  Unclaimed DERI
+                  <TipWrapper block={false}>
+                    <span className='hover' tip='Will be released on a daily basis at each 10:30 UTC, the maximum amount for each release is 10,000 DERI'>
+                      Locked DERI
+                  </span>
+                  </TipWrapper>
                 </div>
                 <div className='unclaimed-num'>
-                  -- <span className='deri-text'>DERI</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className='claim-right'>
-            <div className='claim-epoch-time'>
-              <span className='claim-title'>Current Epoch Remaining Time</span>
-              <div className='epoch-time-end-box'>
-                <div className='time-end-box'>
-
-                </div>
-              </div>
-              <div className='epoch-time-end-text'>
-                {epochTimeEnd}
-              </div>
-            </div>
-
-            <div className='cur-epoch-deri'>
-              <div className='cur-epoch-claimed-deri'>
-                <div className='claim-title'>
-                  My Harvest in Current Epoch
-                </div>
-                <div className='cur-epoch-claimable-deri-num'>
-                  -- <span className='deri-text-s'>DERI</span>
+                  {claimRewardDeri ? <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} /> : '--'}
                 </div>
               </div>
               <div className='cur-epoch-claimable-deri'>
@@ -80,9 +64,11 @@ function Claim({ wallet, lang }) {
                   Claimable DERI
                 </div>
                 <div className='cur-epoch-claimable-deri-num'>
-                  -- <span className='deri-text-s'>DERI</span>
+                  0
                 </div>
               </div>
+            </div>
+            <div className='cur-epoch-deri'>
               <div className='claim-button-box'>
                 <button className='claim-button'>CLAIM</button>
               </div>
@@ -90,7 +76,7 @@ function Claim({ wallet, lang }) {
 
           </div>
           <div className='text-waring'>
-            You may claim your rewards from 15.Nov.2021
+            You can claim your rewards from 10:30 AM, November 15th UTC
           </div>
         </div>
       </div>
