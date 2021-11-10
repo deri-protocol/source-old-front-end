@@ -130,18 +130,14 @@ export default class Trading {
     if (wallet.isConnected()) {
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId, c.chainId)))
-      let defaultConfig = this.getDefaultConfig(this.configs, wallet);
+      const defaultConfig = all.length > 0 ? all[0] : {} // this.getDefaultConfig(this.configs, wallet);
       //如果还是为空，则默认用所有config的第一条
-      if (!defaultConfig) {
-        defaultConfig = all.length > 0 ? all[0] : {}
-      }
       this.setConfig(defaultConfig);
       //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD
     } else if (!wallet.isConnected() || !wallet.supportWeb3()) {
       //没有钱包插件
       this.setConfigs(all.filter(c => eqInNumber(getDefaultNw(DeriEnv.get()).id, c.chainId)))
-      // version.setCurrent('v2')
-      const defaultConfig = all.length > 0 ? all[0] : null
+      const defaultConfig = all.length > 0 ? all[0] : {}
       this.setConfig(defaultConfig)
     }
     this.loadByConfig(this.wallet, this.config, true, finishedCallback, isOption)
@@ -408,9 +404,7 @@ export default class Trading {
       const price = position.price || this.index
       const increment = slideIncrementMargin - position.marginHeld
       let MarginRatio = type.isOption ? this.contract.initialMarginRatio : this.contract.minInitialMarginRatio;
-      // let volume =  increment / (price * this.contract.multiplier * MarginRatio);
       let volume = bg(increment).div(bg(bg(price).times(bg(this.contract.multiplier).times(bg(MarginRatio))))).toString()
-      // if(type.isOption){
       volume = +volume * +this.contract.multiplier
       let multiplier = this.contract.multiplier
       if (multiplier <= 1) {
@@ -441,12 +435,9 @@ export default class Trading {
     this.markOracle.clean();
     this.positionInfo.clean();
     this.version = null;
-    // this.configs = []
     this.config = null;
     this.markPrice = ''
-    // this.setMarkPrice(null)
     this.index = ''
-    // this.setIndex(null)
     this.volume = ''
     this.fundingRate = {}
     this.position = {}
@@ -454,8 +445,6 @@ export default class Trading {
     this.contract = {}
     this.history = []
     this.userSelectedDirection = 'long'
-    // this.optionsConfigs = {}
-    // this.resume()
   }
 
   get volumeDisplay() {
