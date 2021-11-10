@@ -14,7 +14,7 @@ export default function Promotional({ lang }) {
       <div className='check'>
       <div className={curTab === 'upcoming'  ? 'checked-now' : ''} onClick={() => switchTab('upcoming')}>upcoming</div>
         <div className={curTab === 'active' ? 'checked-now' : ''} onClick={() => switchTab('active')}>active</div>
-        <div className={curTab === 'finsihed' ? 'checked-now' : ''} onClick={() => switchTab('finsihed')}>finsihed</div>
+        <div className={curTab === 'finsihed' ? 'checked-now' : ''} onClick={() => switchTab('finsihed')}>finished</div>
       </div>
       {curTab === 'active' && <div className='now-prom'>
         <TradingMiningNow lang={lang} />
