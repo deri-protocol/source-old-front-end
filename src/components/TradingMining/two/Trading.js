@@ -133,17 +133,17 @@ function Trading({ wallet, lang, loading }) {
   //   e.prev
   // }
 
-  // useEffect(() => {
-  //   loading.loading();
-  //   let interval = null;
-  //   interval = window.setInterval(() => {
-  //     getList()
-  //   }, 30000)
-  //   getList()
-  //   return () => {
-  //     interval && clearInterval(interval);
-  //   };
-  // }, [])
+  useEffect(() => {
+    loading.loading();
+    let interval = null;
+    interval = window.setInterval(() => {
+      getList()
+    }, 30000)
+    getList()
+    return () => {
+      interval && clearInterval(interval);
+    };
+  }, [])
 
   const dataURLtoBlob = (dataurl, filename = 'file') => {
     let arr = dataurl.split(',')
@@ -185,24 +185,24 @@ function Trading({ wallet, lang, loading }) {
     }
   }
 
-  // useEffect(() => {
-  //   let interval = null;
-  //   interval = window.setInterval(() => {
-  //     if (wallet.isConnected()) {
-  //       getUserReward()
-  //       getUserStaking()
-  //       getUserContribution()
-  //     }
-  //   }, 30000)
-  //   if (wallet.isConnected()) {
-  //     getUserReward()
-  //     getUserStaking()
-  //     getUserContribution()
-  //   }
-  //   return () => {
-  //     interval && clearInterval(interval);
-  //   };
-  // }, [wallet.detail.account])
+  useEffect(() => {
+    let interval = null;
+    interval = window.setInterval(() => {
+      if (wallet.isConnected()) {
+        getUserReward()
+        getUserStaking()
+        getUserContribution()
+      }
+    }, 30000)
+    if (wallet.isConnected()) {
+      getUserReward()
+      getUserStaking()
+      getUserContribution()
+    }
+    return () => {
+      interval && clearInterval(interval);
+    };
+  }, [wallet.detail.account])
 
   useEffect(() => {
     let arr;
