@@ -7,7 +7,7 @@ function Claim({ wallet, lang }) {
   const [claimReward, setClaimReward] = useState('')
   const [claimRewardDeri, setClaimRewardDeri] = useState('')
   const [epochTimeEnd, setEpochTimeEnd] = useState('24h 00m 00s')
-  const price = 0.55493
+  const price = 0.5013347698
   const getReward = async () => {
     let res = await getUserStakingReward(wallet.detail.account)
     let deri = res.rewardDERI / price
