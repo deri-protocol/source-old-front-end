@@ -269,25 +269,25 @@ function Trading({ wallet, lang, loading }) {
   }, [pointsList, currentList,pnlList])
   return (
     <div className='trading-top'>
-      {/* <div className='twitter-box'>
+      <div className='twitter-box'>
         <img src={twitterBgImg}></img>
         <div className='twitter-box-rewards'>
           $ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "0"}
         </div>
-      </div> */}
+      </div>
       <div className='desktop-list'>
         {/* <div className='trading-title'>
           {lang['earn-deri-for-trading-perpetual']}
         </div> */}
         <div className='trading-top-list'>
-          {/* <div className='list'>
+          <div className='list'>
             <div className='list-title'>
               <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
                 Top 10 Points
                </div>
-              <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
+              {/* <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
                 Top 10 P&L
-               </div>
+               </div> */}
             </div>
             {currentList && <>
               <div className='list-box'>
@@ -301,7 +301,7 @@ function Trading({ wallet, lang, loading }) {
                       <span className='score-hover'>{lang['score']}</span>
                     </span>
                   </TipWrapper>
-                  <span className='rewardBNB'>{lang['reward-BNB']}</span>
+                  {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
                 <div className='list-info'>
                   {pointsList.map((item, index) => {
@@ -325,9 +325,9 @@ function Trading({ wallet, lang, loading }) {
                         <div className='score'>
                           <DeriNumberFormat value={item.score} decimalScale={2} thousandSeparator={true} />
                         </div>
-                        <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
+                        {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                        </div>
+                        </div> */}
                         <div className='progress'>
                           <div className={item.progress}></div>
                         </div>
@@ -344,7 +344,7 @@ function Trading({ wallet, lang, loading }) {
                   <span className='no'>{lang['no']}</span>
                   <span className='address'>{lang['user-addr']}</span>
                   <span className='feespaid'>P&L</span>
-                  <span className='rewardBNB'>{lang['reward-BNB']}</span>
+                  {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
                 <div className='list-info'>
                   {pnlList.map((item, index) => {
@@ -362,9 +362,9 @@ function Trading({ wallet, lang, loading }) {
                         <div className='feespaid'>
                           $ <DeriNumberFormat value={item.feesPaid} decimalScale={4} thousandSeparator={true} />
                         </div>
-                        <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
+                        {/* <div className={(item.no === 1 || item.no === 2 || item.no === 3) ? 'rewardBNB top-three' : "rewardBNB"}>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                        </div>
+                        </div> */}
                         <div className='progress pnl-progress'>
                           <div className={item.progress}></div>
                         </div>
@@ -375,9 +375,9 @@ function Trading({ wallet, lang, loading }) {
               </div>
             </>}
 
-          </div> */}
+          </div>
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 <span className='your-rewards-title-text'>{lang['your-rstimated-rewards']}</span>
                 <div className='share-twitter' onClick={twitterShare}>
@@ -386,10 +386,10 @@ function Trading({ wallet, lang, loading }) {
                 </div>
               </div>
               <div className='your-rewards-info'>
-                <div className='your-bnb'>
+                {/* <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'>$ {yourBNB ? <DeriNumberFormat decimalScale={2} value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div>
+                </div> */}
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
                   <span className='span'>$ {yourDERI ? <DeriNumberFormat decimalScale={2} value={yourDERI} thousandSeparator={true} /> : "--"} </span>
@@ -431,16 +431,7 @@ function Trading({ wallet, lang, loading }) {
                   {yourCoeff ? <DeriNumberFormat value={yourCoeff} decimalScale={4} thousandSeparator={true} /> : "--"}
                 </div>
               </div>
-            </div> */}
-            {/* <div className='deri-total'>
-              <div className='deri-title'>
-                {lang['transaction-sharing-pool']}
-              </div>
-              <div className='deri-num'>
-                <img src={deriLogo}></img>
-                <span>$ 1,000,000</span>
-              </div>
-            </div> */}
+            </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
@@ -479,7 +470,7 @@ function Trading({ wallet, lang, loading }) {
                 {/* {lang['the-individual']} */}
               </div>
             </div>
-            {/* <div className='total-your-contrib'>
+            <div className='total-your-contrib'>
               <div className='your-contrib'>
                 <div className='stage'>
                   <div className='stage-title'></div>
@@ -491,16 +482,16 @@ function Trading({ wallet, lang, loading }) {
                 <div className='total-score-box'>
                   <div className='total-score'>Total Score</div>
                   <div className='total-score'>
-                    {stageList.Q1Contrib && stageList.Q1Contrib !== '0' ? <DeriNumberFormat value={stageList.Q1Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q1Contrib && stageList.Q1Contrib !== '0' ? <DeriNumberFormat value={stageList.Q1Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q2Contrib && stageList.Q2Contrib !== '0' ? <DeriNumberFormat value={stageList.Q2Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q2Contrib && stageList.Q2Contrib !== '0' ? <DeriNumberFormat value={stageList.Q2Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                 </div>
                 <div className='your-score-box'>
@@ -566,14 +557,14 @@ function Trading({ wallet, lang, loading }) {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
       <div className='mobile-list'>
         <div className='trading-top-list'>
           <div className='your-rewards'>
-            {/* <div className='your-estimated-rewards'>
+            <div className='your-estimated-rewards'>
               <div className='your-rewards-title'>
                 {lang['your-rstimated-rewards']}
                 <div className='share-twitter' onClick={twitterShare}>
@@ -582,10 +573,10 @@ function Trading({ wallet, lang, loading }) {
                 </div>
               </div>
               <div className='your-rewards-info'>
-                <div className='your-bnb'>
+                {/* <div className='your-bnb'>
                   <img src={bnbLogo}></img>
                   <span className='span'> $ {yourBNB ? <DeriNumberFormat value={yourBNB} thousandSeparator={true} /> : "--"}</span>
-                </div>
+                </div> */}
                 <div className='your-deri'>
                   <img src={deriLogo}></img>
                   <span className='span'> $ {yourDERI ? <DeriNumberFormat value={yourDERI} thousandSeparator={true} decimalScale={2} /> : "--"} </span>
@@ -715,7 +706,7 @@ function Trading({ wallet, lang, loading }) {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
             <div className='raise-score'>
               <div className='raise-score-title'>
                 {lang['raise-score']}
@@ -738,8 +729,8 @@ function Trading({ wallet, lang, loading }) {
                 </TipWrapper>
               </div>
               <div className='des'>
-                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
-                  <span className='des-tip' tip={lang['the-quater-points']}>
+                  Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quarter-points']}>
+                  <span className='des-tip' tip={lang['the-quarter-points']}>
                     this quarter's points
                   </span>
                 </TipWrapper>
@@ -822,7 +813,7 @@ function Trading({ wallet, lang, loading }) {
               </div>
             </div>
 
-            {/* <div className='list'>
+            <div className='list'>
               <div className='list-title'>
                 {lang['top-ten-users']}
               </div>
@@ -836,7 +827,7 @@ function Trading({ wallet, lang, loading }) {
                       {lang['score']}
                     </span>
                   </TipWrapper>
-                  <span className='rewardBNB'>{lang['reward-BNB']}</span>
+                  {/* <span className='rewardBNB'>{lang['reward-BNB']}</span> */}
                 </div>
                 <div className='list-info'>
                   {pointsList.map((item, index) => {
@@ -857,22 +848,22 @@ function Trading({ wallet, lang, loading }) {
                         <div className='score'>
                           <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
                         </div>
-                        <div className='rewardBNB top-three'>
+                        {/* <div className='rewardBNB top-three'>
                           $ <DeriNumberFormat value={item.rewardBNB} thousandSeparator={true} />
-                        </div>
+                        </div> */}
                       </div>
                     )
                   })}
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
 
       </div>
-      {/* <div className='activity-rules'>
-        <a target='_blank' rel='noreferrer' href='https://deri-protocol.medium.com/trade-to-earn-with-deri-protocol-on-bsc-1cedc8f98e95'>{lang['detailed-rules']}</a>
-      </div> */}
+      <div className='activity-rules'>
+        <a target='_blank' rel='noreferrer' href='https://deri-protocol.medium.com/trade-to-earn-epoch-2-5cfed9718d6e'>{lang['detailed-rules']}</a>
+      </div>
     </div>
   )
 }

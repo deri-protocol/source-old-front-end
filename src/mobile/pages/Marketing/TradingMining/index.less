@@ -19,6 +19,165 @@
     width: 100%;
     margin: auto;
   }
+  .claim {
+    .trading-mining-claim {
+      .reward-deri-claim {
+        width: 95%;
+        margin: 0 auto;
+        background-color: #0D0E0F;
+        border-radius: 20px;
+        height: 677px;
+
+        .reward-claim-title {
+          font-size: 0.18rem;
+          color: #D4E05C;
+          padding-left: 20px;
+          padding-top: 10px;
+          font-family: Tachyon;
+        }
+
+        .claim-info-box {
+          width: 99%;
+          border-radius: 20px;
+          margin: 0 auto;
+          height: 633px;
+          margin-top: 10px;
+          background-color: #202124;
+
+          .claim-left {
+            width: 94%;
+            padding-left: 20px;
+            padding-top: 10px;
+            box-sizing: border-box;
+            .claim-total-deri {
+              margin-top: 20px;
+              display: flex;
+              justify-content: space-between;
+            }
+          }
+
+          .deri-text {
+            font-size: 0.26rem;
+          }
+
+          .deri-text-s {
+            font-size: 18px;
+            font-weight: 400;
+          }
+
+          .claim-right {
+            width: 94%;
+            margin-top: 20px;
+            box-sizing: border-box;
+            padding-left: 20px;
+            .cur-epoch-claimable-deri{
+              margin-top: 20px;
+            }
+            .cur-epoch-claimable-deri-num {
+              font-size: 0.28rem;
+              font-weight: 400;
+              margin-top: 10px;
+            }
+
+            .unclaimed-deri {
+              margin-right: 220px;
+            }
+            .claim-button-box{
+              text-align: center;
+            }
+            .claim-button {
+              width: 160px;
+              height: 45px;
+              background: #202124;
+              box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+              border-radius: 10px;
+              margin: 40px 0;
+              color: #fff;
+              font-family: Korolev, sans-serif;
+              font-size: 16px;
+              font-weight: 700;
+            }
+          }
+
+          .claim-left,
+          .claim-right {
+
+            .claim-reward-num,
+            .claimed-num,
+            .unclaimed-num {
+              margin-top: 10px;
+              font-size: 0.32rem;
+              font-weight: 400;
+
+              .yue {
+                color: #D4E05C;
+                font-size: 30px;
+                margin: 0 10px;
+                line-height: 52px;
+              }
+            }
+
+            .claim-epoch-time,
+            .cur-epoch-deri {
+              margin-top: 20px;
+              .epoch-time-end-box {
+                width: 99%;
+                height: 20px;
+                border-radius: 20px;
+                background-color: #CCCCCC;
+                margin-top: 38px;
+
+                .time-end-box {
+                  width: 100%;
+                  height: 20px;
+                  border-radius: 20px;
+                  background-color: #246CAD;
+                }
+              }
+
+              .epoch-time-end-text {
+                font-size: 14px;
+                text-align: right;
+                font-weight: 400;
+                color: #FFF;
+                margin-top: 10px;
+              }
+            }
+          }
+
+          .claim-title {
+            font-size: 0.18rem;
+            color: #CCC;
+          }
+        }
+      }
+      .finshed-epoch-one{
+        width: 95%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        margin-top: 165px;
+        .finshed-round{
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #FFF;
+        }
+        .finshed-x{
+          width: 95%;
+          height: 1px;
+          background-color: #FFF;
+          position: relative;
+          .text-finshed{
+            position: absolute;
+            background-color: #1b1c22;
+            top: -10px;
+            left: 30px;
+          }
+        }
+      }
+    }
+  }
 
   .staking {
     width: 95%;

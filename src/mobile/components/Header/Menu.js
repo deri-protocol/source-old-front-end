@@ -87,7 +87,6 @@ export default function Menu({ closeMenu, lang, locale }) {
               </li> */}
               <li>
                 <a rel='noreferrer' href={`https://governance.deri.finance/?locale=${locale}#governance`}>{lang['governance']}</a>
-                <Link to='/governance'>{lang['governance']}</Link>
               </li>
               <li>
                 <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>

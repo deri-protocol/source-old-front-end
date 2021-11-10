@@ -428,16 +428,16 @@ function Trading({ wallet, lang, loading }) {
                 <div className='total-score-box'>
                   <div className='total-score'>Total Score</div>
                   <div className='total-score'>
-                    {stageList.Q1Contrib ? <DeriNumberFormat value={stageList.Q1Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q1Contrib ? <DeriNumberFormat value={stageList.Q1Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q2Contrib ? <DeriNumberFormat value={stageList.Q2Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q2Contrib ? <DeriNumberFormat value={stageList.Q2Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q3Contrib && stageList.Q3Contrib !== '0' ? <DeriNumberFormat value={stageList.Q3Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                   <div className='total-score'>
-                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={2} thousandSeparator={true} /> : "--"}
+                    {stageList.Q4Contrib && stageList.Q4Contrib !== '0' ? <DeriNumberFormat value={stageList.Q4Contrib} decimalScale={0} thousandSeparator={true} /> : "--"}
                   </div>
                 </div>
                 <div className='your-score-box'>
@@ -687,8 +687,8 @@ function Trading({ wallet, lang, loading }) {
                 </TipWrapper>
               </div>
               <div className='des'>
-                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quater-points']}>
-                  <span className='des-tip' tip={lang['the-quater-points']}>
+                Mining rewards are calculated based on traders' total points of the 4 quarters. In each quarter, all the participating traders share&nbsp;<TipWrapper block={false} tip={lang['the-quarter-points']}>
+                  <span className='des-tip' tip={lang['the-quarter-points']}>
                     this quarter's points
                   </span>
                 </TipWrapper>

@@ -3,6 +3,7 @@
   font-size: 18px;
   font-weight: 300;
   width: 1400px;
+
   .title {
     font-family: Tachyon, sans-serif;
     color: #D4E05C;
@@ -11,8 +12,9 @@
     text-align: center;
     font-weight: 400;
     margin-bottom: 40px;
-    img{
-      width:100px
+
+    img {
+      width: 100px
     }
   }
 
@@ -20,6 +22,171 @@
     width: 1200px;
     margin-top: 20px;
     margin: auto;
+  }
+
+  .claim {
+    .trading-mining-claim {
+      .reward-deri-claim {
+        width: 1400px;
+        height: 395px;
+        background-color: #0D0E0F;
+        border-radius: 20px;
+
+        .reward-claim-title {
+          font-size: 18px;
+          color: #D4E05C;
+          padding-left: 20px;
+          padding-top: 10px;
+          font-family: Tachyon;
+        }
+
+        .claim-info-box {
+          width: 1398px;
+          height: 351px;
+          border-radius: 20px;
+          margin: 0 auto;
+          margin-top: 30px;
+          background-color: #202124;
+
+          .claim-left {
+            margin-left: 108px;
+            padding-top: 40px;
+            .claim-total-deri {
+              margin-right: 392px;
+              display: flex;
+              justify-content: space-between;
+            }
+            
+            .claimed-deri{
+              margin-right: 165px;
+            }
+
+          }
+
+          .deri-text {
+            font-size: 30px;
+          }
+
+          .deri-text-s {
+            font-size: 18px;
+            font-weight: 400;
+          }
+
+          .claim-right {
+            margin-left: 108px;
+            .cur-epoch-deri{
+              display: flex;
+              margin-right: 108px;
+            }
+            .cur-epoch-claimed-deri{
+              margin-right: 58px;
+            }
+            .cur-epoch-claimable-deri{
+              margin-right: 120px;
+            }
+            .cur-epoch-claimable-deri-num {
+              font-size: 28px;
+              font-weight: 400;
+              margin-top: 29px;
+            }
+
+            
+
+            .claim-button {
+              width: 160px;
+              height: 45px;
+              background: #202124;
+              box-shadow: 0 0 7px hsl(0deg 0% 67% / 80%);
+              border-radius: 10px;
+              margin: 40px 0;
+              color: #fff;
+              font-family: Korolev, sans-serif;
+              font-size: 16px;
+              font-weight: 700;
+            }
+          }
+
+          .claim-left,
+          .claim-right {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: -20px;
+            .claim-reward-num,
+            .claimed-num,
+            .unclaimed-num {
+              margin-top: 29px;
+              font-size: 40px;
+              font-weight: 400;
+
+              .yue {
+                color: #D4E05C;
+                font-size: 30px;
+                margin: 0 10px;
+                line-height: 52px;
+              }
+            }
+
+            .claim-epoch-time,
+            .cur-epoch-deri {
+              margin-top: 61px;
+
+              .epoch-time-end-box {
+                width: 441px;
+                height: 20px;
+                border-radius: 20px;
+                background-color: #CCCCCC;
+                margin-top: 38px;
+
+                .time-end-box {
+                  width: 100%;
+                  height: 20px;
+                  border-radius: 20px;
+                  background-color: #246CAD;
+                }
+              }
+
+              .epoch-time-end-text {
+                font-size: 14px;
+                text-align: right;
+                font-weight: 400;
+                color: #FFF;
+                margin-top: 10px;
+              }
+            }
+          }
+
+          .claim-title {
+            font-size: 18px;
+            color: #CCC;
+          }
+        }
+      }
+      .finshed-epoch-one{
+        width: 1400px;
+        display: flex;
+        align-items: center;
+        margin-top: 165px;
+        .finshed-round{
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #FFF;
+        }
+        .finshed-x{
+          width: 1480px;
+          height: 1px;
+          background-color: #FFF;
+          position: relative;
+          .text-finshed{
+            position: absolute;
+            background-color: #1b1c22;
+            top: -10px;
+            left: 30px;
+          }
+        }
+      }
+    }
   }
 
   .staking {
@@ -65,24 +232,28 @@
             height: 80px;
           }
         }
-        .bnb-num{
-          .bnb-deri-logo{
+
+        .bnb-num {
+          .bnb-deri-logo {
             display: flex;
             align-items: center;
             justify-content: space-around;
           }
-          img{
+
+          img {
             width: 40px;
             height: 50px;
             margin-left: 5px;
           }
-          .add-logo{
+
+          .add-logo {
             width: 14px;
             height: 14px;
           }
-          .blind-box{
-            width:121px;
-            height:122px;
+
+          .blind-box {
+            width: 121px;
+            height: 122px;
           }
         }
       }
@@ -102,7 +273,8 @@
       // visibility: hidden;
       // opacity: 0;
       z-index: -1;
-      .twitter-box-rewards{
+
+      .twitter-box-rewards {
         position: absolute;
         font-size: 36px;
         font-weight: 400;
@@ -146,7 +318,7 @@
           width: 80px;
           height: 80px;
         }
-        
+
       }
     }
 
@@ -169,7 +341,7 @@
           background-color: #0D0E0F;
           border-radius: 20px;
 
-          .no { 
+          .no {
             color: #fff;
             width: 35px;
             height: 35px;
@@ -220,7 +392,7 @@
             padding-left: 20px;
             color: #D4E05C;
             font-family: Tachyon;
-            
+
           }
 
           .list-box {
@@ -284,7 +456,8 @@
                   background-color: #246CAD;
                 }
 
-                .one-progress,.one-points-progress  {
+                .one-progress,
+                .one-points-progress {
                   width: 100%;
                 }
               }
@@ -310,10 +483,12 @@
               padding-top: 20px;
               font-family: Tachyon;
               display: flex;
-              .your-rewards-title-text{
+
+              .your-rewards-title-text {
                 margin-right: 120px;
               }
-              .share-twitter{
+
+              .share-twitter {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -323,18 +498,21 @@
                 margin-top: -5px;
                 height: 28px;
                 cursor: pointer;
-                button{
+
+                button {
                   background-color: #202124;
                   border-radius: 0;
                   color: #1DA1F2;
                   font-family: ArialMT, sans-serif;
                   font-size: 16px;
                 }
-                span{
+
+                span {
                   width: 27px;
                   text-align: center;
                   border-right: 1px solid #0D0E0F;
-                  img{
+
+                  img {
                     width: 20.42px;
                     height: 16.59px;
                   }
@@ -369,6 +547,7 @@
                 font-weight: 400;
                 white-space: nowrap;
                 margin-left: 40px;
+
                 .span {
                   margin-left: 15px;
                 }
