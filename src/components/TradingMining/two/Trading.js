@@ -286,9 +286,9 @@ function Trading({ wallet, lang, loading }) {
               <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
                 Top 10 Points
                </div>
-              {/* <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
+              <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
                 Top 10 PnL
-               </div> */}
+               </div>
             </div>
             {currentList && <>
               <div className='list-box'>
@@ -820,9 +820,9 @@ function Trading({ wallet, lang, loading }) {
                 <div onClick={() => { setCurrentList(true) }} className={currentList ? 'top-points cur-points' : "top-points"}>
                   Top 10 Points
                </div>
-                {/* <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
+                <div onClick={() => { setCurrentList(false) }} className={!currentList ? 'top-pnl cur-pnl' : "top-pnl"}>
                   Top 10 PnL
-               </div> */}
+               </div>
               </div>
               {currentList && <>
                 <div className='list-box'>
