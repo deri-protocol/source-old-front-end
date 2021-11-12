@@ -2,22 +2,61 @@ import React, { useState, useEffect } from 'react'
 import { inject, observer } from 'mobx-react';
 import DeriNumberFormat from '../../../utils/DeriNumberFormat'
 import TipWrapper from '../../TipWrapper/TipWrapper'
-import { getUserStakingReward } from '../../../lib/web3js/indexV2'
-
+import { getUserStakingReward, getUserStakingClaimInfo, claimMyStaking,bg } from '../../../lib/web3js/indexV2'
+import Button from '../../Button/Button'
 function Claim({ wallet, lang }) {
   const [claimReward, setClaimReward] = useState('')
   const [claimRewardDeri, setClaimRewardDeri] = useState('')
-  const [epochTimeEnd, setEpochTimeEnd] = useState('24h 00m 00s')
+  const [claimedDeri, setClaimedDeri] = useState('')
+  const [claimableDeri, setClaimableDeri] = useState('')
+  const [lockedDeri, setLockedDeri] = useState('')
   const price = 0.5054307301
   const getReward = async () => {
-    let res = await getUserStakingReward(wallet.detail.account)
+    let res = await getUserStakingReward(wallet.detail.account,1)
     let deri = res.rewardDERI / price
     setClaimReward(res.rewardDERI)
     setClaimRewardDeri(deri)
+  }     
+  const claim = async () => {
+    if(+claimableDeri === 0){
+      return;
+    }
 
+    let nowSixEnd = new Date(new Date().toLocaleDateString()).getTime() + 18.5 * 60 * 60 * 1000 
+    let nowSix = new Date(new Date().toLocaleDateString()).getTime() + 18 * 60 * 60 * 1000
+    let now = parseInt(Date.now())
+    if(now < nowSixEnd && now > nowSix){
+      alert('Claiming DERI is disabled during first 30 minutes of each epoch')
+      return;
+    }
+
+    let res = await claimMyStaking(wallet.detail.account,1)
+    if(res.success){
+      let claimed = bg(claimedDeri).plus(bg(claimableDeri)).toString()
+      setClaimedDeri(claimed)
+      setClaimableDeri(0)
+    }
+  }
+  useEffect(()=>{
+    if(+claimableDeri === 0){
+      document.getElementsByClassName('claim-button')[0].style.color = '#AAA'
+    }else{
+      document.getElementsByClassName('claim-button')[0].style.color = '#FFF'
+    }   
+  },[claimableDeri])
+  const getClaimInfo = async () => {
+    let res = await getUserStakingClaimInfo(wallet.detail.account,1)
+    if(res){
+      setClaimedDeri(res.claimed)
+      setClaimableDeri(res.claimable)
+      setLockedDeri(res.locked)
+    }
   }
   useEffect(() => {
-    getReward()
+    if (wallet.isConnected()) {
+      getReward()
+      getClaimInfo()
+    }
   }, [wallet.detail.account])
   return (
     <div className='trading-mining-claim'>
@@ -30,9 +69,9 @@ function Claim({ wallet, lang }) {
             <div className='claim-my-reward'>
               <span className='claim-title'>My Rewards</span>
               <div className='claim-reward-num'>
-                $ {claimReward ? <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} /> : '--'}
+                <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} />
                 <span className='yue'>＝</span>
-                {claimRewardDeri ? <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} /> : '--'} <span className='deri-text'>DERI</span>
+                <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} />  <span className='deri-text'>DERI</span>
               </div>
             </div>
 
@@ -44,7 +83,7 @@ function Claim({ wallet, lang }) {
                   Claimed DERI
                 </div>
                 <div className='claimed-num'>
-                  0
+                  <DeriNumberFormat value={claimedDeri} decimalScale={2} thousandSeparator={true} />
                 </div>
               </div>
               <div className='unclaimed-deri'>
@@ -56,7 +95,7 @@ function Claim({ wallet, lang }) {
                   </TipWrapper>
                 </div>
                 <div className='unclaimed-num'>
-                  {claimRewardDeri ? <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} /> : '--'}
+                  <DeriNumberFormat value={lockedDeri} decimalScale={2} thousandSeparator={true} /> 
                 </div>
               </div>
               <div className='cur-epoch-claimable-deri'>
@@ -64,13 +103,13 @@ function Claim({ wallet, lang }) {
                   Claimable DERI
                 </div>
                 <div className='cur-epoch-claimable-deri-num'>
-                  0
+                  <DeriNumberFormat value={claimableDeri} decimalScale={2} thousandSeparator={true} />
                 </div>
               </div>
             </div>
             <div className='cur-epoch-deri'>
               <div className='claim-button-box'>
-                <button className='claim-button'>CLAIM</button>
+                <Button className='claim-button' btnText='CLAIM' click={claim} lang={lang}></Button>
               </div>
             </div>
 

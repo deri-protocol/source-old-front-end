@@ -18,7 +18,7 @@ const trading = new Trading()
 if(process.env.NODE_ENV === 'production') {
   DeriEnv.set('prod')
 }
-DeriEnv.set('prod')
+DeriEnv.set('dev')
 ReactDOM.render(
   <React.StrictMode>
     <HashRouter>
