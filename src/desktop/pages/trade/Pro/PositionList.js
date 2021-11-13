@@ -373,7 +373,7 @@ function LiqPrice({ wallet, trading, lang }) {
   useEffect(() => {
     if (wallet.isConnected() && trading.positions) {
       if (trading.positions.length && trading.positions.length > 0) {
-        if (trading.positions[0].liquidationPrice && trading.positions[0].liquidationPrice.length) {
+        if (trading.positions[0].liquidationPrice && Array.isArray(trading.positions[0].liquidationPrice)) {
           let elem = trading.positions[0].liquidationPrice.map((item, index) => {
             let ele = liqText(item, index)
             return ele
