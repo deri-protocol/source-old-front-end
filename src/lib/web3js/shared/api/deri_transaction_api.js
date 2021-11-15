@@ -28,11 +28,11 @@ export const mintDToken = async (chainId, accountAddress) => {
   let res;
   const userInfo = await getUserInfoAll(accountAddress);
   const amount = naturalToDeri(userInfo.amount);
-  const { deadline } = userInfo;
-  const { nonce } = userInfo;
-  const { v } = userInfo;
-  const { r } = userInfo;
-  const { s } = userInfo;
+  const { deadline, nonce, v, r, s } = userInfo;
+  // const { nonce } = userInfo;
+  // const { v } = userInfo;
+  // const { r } = userInfo;
+  // const { s } = userInfo;
   if (userInfo.valid) {
     const miningVaultAddress = getMiningVaultConfig(chainId);
     if (miningVaultAddress) {
@@ -111,13 +111,21 @@ export const mintDeri = async (toChainId, accountAddress) => {
   // const userInfo = await getUserInfoAll(accountAddress);
   const userInfo = await databaseWormhole.signature(accountAddress);
   // console.log(userInfo)
-  const { amount } = userInfo;
-  const { fromChainId } = userInfo;
-  const { fromWormhole } = userInfo;
-  const fromNonce = userInfo.nonce;
-  const { v } = userInfo;
-  const { r } = userInfo;
-  const { s } = userInfo;
+  const {
+    amount,
+    fromChainId,
+    fromWormhole,
+    nonce: fromNonce,
+    v,
+    r,
+    s,
+  } = userInfo;
+  // const { fromChainId } = userInfo;
+  // const { fromWormhole } = userInfo;
+  // const fromNonce = userInfo.nonce;
+  // const { v } = userInfo;
+  // const { r } = userInfo;
+  // const { s } = userInfo;
   if (userInfo.valid) {
     const { wormholeAddress } = getDeriConfig(toChainId);
     if (wormholeAddress) {

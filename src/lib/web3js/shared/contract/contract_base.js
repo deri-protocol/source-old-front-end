@@ -25,7 +25,7 @@ export class ContractBase {
 
   async _call(method, args = []) {
     let res
-    let retry = 2
+    let retry = 3
     while (retry > 0) {
       try {
         await this._init()
@@ -34,14 +34,16 @@ export class ContractBase {
       } catch(err) {
         retry -= 1
         // remove web3 instance to re-init
-        this.web3 = null
-        if (err.toString().includes('Invalid JSON RPC response')) {
-          console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);
-        } else if (err.toString().includes("Returned values aren't valid,")) {
-          console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
-        } else {
-          //console.log('error:', err.toString())
+        if (retry === 1) {
+          this.web3 = null
         }
+        // if (err.toString().includes('Invalid JSON RPC response')) {
+        //   console.log(`Invalid JSON RPC response with chainId(${this.chainId})`);
+        // } else if (err.toString().includes("Returned values aren't valid,")) {
+        //   console.log(`Invalid contract address(${this.contractAddress}) and chainId(${this.chainId})`);
+        // } else {
+        //   //console.log('error:', err.toString())
+        // }
       }
     }
     if (retry === 0 && !res) {
