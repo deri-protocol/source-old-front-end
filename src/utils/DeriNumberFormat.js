@@ -22,7 +22,7 @@ function DeriNumberFormat(props){
       if(!isValidate() && wallet && !wallet.isConnected()){
         setRenderablity(defaultValue)
       }
-    },10000)
+    },30000)
     return () => {
       clearTimeout(timeout)
     };

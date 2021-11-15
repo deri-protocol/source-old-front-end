@@ -28,7 +28,6 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
 
 
   const getBars = async (symbolInfo,resolution,from,to,onHistoryCallback,onErrorCallback,firstDataRequest,config) => {
-    // const suffix = symbolInfo.config.version === 'v2' ? 'USD' : /^i/i.test(symbolInfo.name) ? '' : 'USDT'
     const pos = symbolInfo.name.indexOf('-INDEX');
     const symbol = pos > -1 ? symbolInfo.name.substring(0,pos) : symbolInfo.config.markpriceSymbolFormat || symbolInfo.name
     const res = await axios.get(GET_KLINE_URL,{
@@ -68,12 +67,14 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
   }
   
   const resolveSymbol = (symbol,onSymbolResolvedCallback) => {
-    // const sampleData = trading.markPriceSampleForKline || 1 
-    // const priceScale  = ((+sampleData) >= 1 || (+sampleData) === 0)  ? 100 : 1 * (10 ** (String(sampleData).split('').findIndex(i => !isNaN(i) && i > 0)))
+    let description = symbol;
+    if(Type.isFuture && !Version.isOpen){
+      description = `${symbol}-MARK`
+    }
     setTimeout(() => onSymbolResolvedCallback({
       name: symbol,
       ticker : symbol,
-      description : (Type.isFuture && !Version.isOpen) || Type.isOption ? `${symbol}-MARK` : symbol  ,
+      description : description,
       pricescale: symbol.indexOf('-INDEX') > 0 ? 100 : 1 * (10 ** trading.priceDecimals),
       config : spec,
       type : 'index',
@@ -103,7 +104,8 @@ function TVChart({trading,interval,showLoad,intl,config,type}){
     widgetRef.current.onChartReady(() => {
       if((Type.isFuture && !Version.isOpen) || Type.isOption) {
         const priceScale = Type.isFuture ? 'as-series' : 'new-left'
-        widgetRef.current.chart().createStudy('Overlay', true, false, [`${config.symbol}-INDEX`],null,{priceScale : priceScale,'color': '#aaa'})
+        const underline = Type.isFuture ? `${config.symbol}-INDEX` : `${config.symbol.split('-')[0]}-INDEX`
+        widgetRef.current.chart().createStudy('Overlay', true, false, [underline],null,{priceScale : priceScale,'color': '#aaa'})
       }
     })
   }

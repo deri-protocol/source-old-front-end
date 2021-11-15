@@ -141,8 +141,6 @@ export function getFormatSymbol(symbol){
   if(type.isOption){
     if(symbol.indexOf('-MARKPRICE') !== -1) {
       symbol = symbol.substr(0,symbol.indexOf('-MARKPRICE'))
-    } else {
-      symbol = symbol.split('-')[0]
     }
     return  `${symbol}_V2_${chain}`
   } else {
