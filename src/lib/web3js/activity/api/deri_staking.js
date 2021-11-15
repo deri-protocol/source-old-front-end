@@ -1,14 +1,34 @@
-import { catchApiError, bg, deriToNatural, databaseActivityFactory, toChecksumAddress, DeriEnv, max } from '../../shared';
+import {
+  catchApiError,
+  bg,
+  deriToNatural,
+  deriToString,
+  databaseActivityFactory,
+  toChecksumAddress,
+  DeriEnv,
+  max,
+  catchTxApiError,
+  miningVaultRouterFactory,
+} from '../../shared';
+import { databaseActivityClaimFactory } from '../../shared/factory/database';
+import { getStakingMiningVaultRouterConfig } from '../config';
 
-const range = (n) => (new Array(n)).fill(0).map((i,index) => index)
+const range = (n) => new Array(n).fill(0).map((i, index) => index);
 
 const keyPrefix = (epoch) => {
   if (!epoch || epoch.toString() === '1') {
-    return DeriEnv.get() === 'prod' ? 'TE' : 'TE2'
+    return DeriEnv.get() === 'prod' ? 'TE' : 'TE10';
   } else if (epoch.toString() === '2') {
-    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE7'
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE7';
   }
-}
+};
+const claimKeyPrefix = (epoch) => {
+  if (!epoch || epoch.toString() === '1') {
+    return DeriEnv.get() === 'prod' ? 'TE1' : 'TE11';
+  } else if (epoch.toString() === '2') {
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE9';
+  }
+};
 
 export const getStakingTop10Users = async (epoch) => {
   return catchApiError(
@@ -99,7 +119,7 @@ export const getUserStakingInfo = async (accountAddress, epoch) => {
   const args = [accountAddress];
   return catchApiError(
     async (accountAddress) => {
-      accountAddress = toChecksumAddress(accountAddress)
+      accountAddress = toChecksumAddress(accountAddress);
       const db = databaseActivityFactory();
       const key = [
         `${keyPrefix(epoch)}.Q1.cont`,
@@ -113,19 +133,27 @@ export const getUserStakingInfo = async (accountAddress, epoch) => {
         `${keyPrefix(epoch)}.${accountAddress}.fee`,
         `${keyPrefix(epoch)}.${accountAddress}.coef`,
       ];
-      const res = await db.getValues(key)
-      const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
-      const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
-      const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
-      const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
+      const res = await db.getValues(key);
+      const scoreQ1 = bg(res[0]).eq(0)
+        ? '0'
+        : bg(10000).times(bg(res[4]).div(res[0]));
+      const scoreQ2 = bg(res[1]).eq(0)
+        ? '0'
+        : bg(20000).times(bg(res[5]).div(res[1]));
+      const scoreQ3 = bg(res[2]).eq(0)
+        ? '0'
+        : bg(30000).times(bg(res[6]).div(res[2]));
+      const scoreQ4 = bg(res[3]).eq(0)
+        ? '0'
+        : bg(50000).times(bg(res[7]).div(res[3]));
 
-      const coef = deriToNatural(res[9])
+      const coef = deriToNatural(res[9]);
       return {
         userAddr: accountAddress,
         feePaid: deriToNatural(res[8]).toString(),
         coef: max(coef, bg(1)).toString(),
-        score: bg(scoreQ1).plus(scoreQ2).plus(scoreQ3).plus(scoreQ4).toString()
-      }
+        score: bg(scoreQ1).plus(scoreQ2).plus(scoreQ3).plus(scoreQ4).toString(),
+      };
     },
     args,
     'getUserStakingInfo',
@@ -237,7 +265,7 @@ export const getUserStakingReward = async (accountAddress, epoch) => {
     },
     args,
     'getUserStakingReward',
-    { userAddr: '', rewardDERI: '', specialRewardsA: '', specialRewardsA: '' }
+    { userAddr: '', rewardDERI: '', specialRewardsA: '', specialRewardsB: '' }
   );
 };
 
@@ -258,10 +286,18 @@ export const getUserStakingContribution = async (accountAddress, epoch) => {
         `${keyPrefix(epoch)}.${accountAddress}.Q4.cont`,
       ];
       const res = await db.getValues(key);
-      const scoreQ1 = bg(res[0]).eq(0) ? '0': bg(10000).times(bg(res[4]).div(res[0]))
-      const scoreQ2 = bg(res[1]).eq(0) ? '0': bg(20000).times(bg(res[5]).div(res[1]))
-      const scoreQ3 = bg(res[2]).eq(0) ? '0': bg(30000).times(bg(res[6]).div(res[2]))
-      const scoreQ4 = bg(res[3]).eq(0) ? '0': bg(50000).times(bg(res[7]).div(res[3]))
+      const scoreQ1 = bg(res[0]).eq(0)
+        ? '0'
+        : bg(10000).times(bg(res[4]).div(res[0]));
+      const scoreQ2 = bg(res[1]).eq(0)
+        ? '0'
+        : bg(20000).times(bg(res[5]).div(res[1]));
+      const scoreQ3 = bg(res[2]).eq(0)
+        ? '0'
+        : bg(30000).times(bg(res[6]).div(res[2]));
+      const scoreQ4 = bg(res[3]).eq(0)
+        ? '0'
+        : bg(50000).times(bg(res[7]).div(res[3]));
 
       return {
         userAddr: accountAddress,
@@ -289,4 +325,85 @@ export const getUserStakingContribution = async (accountAddress, epoch) => {
     'getUserStakingContribution',
     { userAddr: '', totalContrib: '', userContrib: '' }
   );
+};
+
+export const getUserStakingClaimInfo = async (accountAddress, epoch) => {
+  return catchApiError(
+    async () => {
+      accountAddress = toChecksumAddress(accountAddress);
+      const db = databaseActivityClaimFactory();
+      const key = [
+        `${claimKeyPrefix(epoch)}.${accountAddress}.claimed.amount`,
+        `${claimKeyPrefix(epoch)}.${accountAddress}.unclaimed.amount`,
+        `${claimKeyPrefix(epoch)}.${accountAddress}.claimable.amount`,
+      ];
+      // console.log('key',key)
+      const res = await db.getValues(key);
+      const claimable = deriToNatural(res[2]).toString()
+      return {
+        claimed: deriToNatural(res[0]).toString(),
+        // unclaimed: deriToNatural(res[1]).toString(),
+        locked: deriToNatural(res[1]).minus(claimable).toString(),
+        claimable,
+        // deriPrice: '0.56',
+        // bnbPrice: '640.7',
+      };
+    },
+    [],
+    'getUserStakingClaimInfo',
+    {
+      claimed: '',
+      unclaimed: '',
+      claimable: '',
+      deriPrice: '',
+      bnbPrice: '',
+    }
+  );
+};
+
+export const claimMyStaking = async (accountAddress, epoch) => {
+  return catchTxApiError(async () => {
+    const chainId = '56';
+    accountAddress = toChecksumAddress(accountAddress);
+    const db = databaseActivityClaimFactory();
+    const key = [
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.amount`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.deadline`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.nonce`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.v1`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.r1`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.s1`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.v2`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.r2`,
+      `${claimKeyPrefix(epoch)}.${accountAddress}.claim.s2`,
+    ];
+    //console.log('key', key);
+    const res = await db.getValues(key);
+    const [amount, deadline, nonce, v1, r1, s1, v2, r2, s2] = res;
+    //
+    const claimArgs = [
+      accountAddress,
+      amount,
+      deriToString(deadline),
+      deriToString(nonce),
+      deriToString(v1),
+      r1,
+      s1,
+      deriToString(v2),
+      r2,
+      s2,
+    ];
+
+    const miningVaultAddress = getStakingMiningVaultRouterConfig(chainId, 'prod')
+      .address;
+    //console.log('miningVaultAddress', miningVaultAddress);
+    if (miningVaultAddress) {
+      const miningVaultRouter = miningVaultRouterFactory(
+        chainId,
+        miningVaultAddress
+      );
+      //console.log(claimArgs)
+      return await miningVaultRouter.mint(...claimArgs);
+    }
+  }, []);
 };

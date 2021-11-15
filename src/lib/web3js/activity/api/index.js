@@ -14,6 +14,8 @@ export {
   getUserStakingInfo,
   getUserStakingReward,
   getUserStakingContribution,
+  getUserStakingClaimInfo,
+  claimMyStaking,
 } from './deri_staking';
 
 export {

@@ -38,6 +38,20 @@ export const databaseActivityFactory = (() => {
   };
 })();
 
+export const databaseActivityClaimFactory = (() => {
+  const databaseInstanceMap = {};
+  return () => {
+    const address = DeriEnv.get() === 'prod' ? '0xe40a75957034A003Da4b341FBb02a457Af2aa302' : '0x7C1267188379f57d92e640E519151229E1eA5565'
+    const key = address;
+    if (Object.keys(databaseInstanceMap).includes(key)) {
+      return databaseInstanceMap[key];
+    }
+    const database = new DatabaseContract(address);
+    databaseInstanceMap[key] = database;
+    return database;
+  };
+})();
+
 export const databaseDeriVoteFactory = (() => {
   const databaseInstanceMap = {};
   return () => {

@@ -13,8 +13,10 @@ import { getPoolV1Config } from '../config/pool_v1'
 export const getUserInfo = async (userAddress) => {
   const db = databaseFactory(true);
   userAddress = toChecksumAddress(userAddress);
-  const res = await db
-    .getValues([
+  let res,
+    retry = 2;
+  while (retry > 0) {
+    res = await db.getValues([
       `${userAddress}.claim.chainId`,
       `${userAddress}.claim.amount`,
       `${userAddress}.claim.deadline`,
@@ -23,8 +25,20 @@ export const getUserInfo = async (userAddress) => {
       `${userAddress}.claim.r`,
       `${userAddress}.claim.s`,
       `${userAddress}.claim.valid`,
-    ])
-    .catch((err) => console.log('getUserInfo', err));
+    ]);
+    if (
+      Math.floor(new Date().getTime() / 1000) < parseInt(deriToString(res[2]))
+    ) {
+      break;
+    } else {
+      retry -= 1;
+      db.web3 = null;
+      if (retry === 0) {
+        // deadline is outdated
+        res[7] = false;
+      }
+    }
+  }
   if (res) {
     const [chainId, amount, deadline, nonce, v, r, s, valid] = res;
     return {
