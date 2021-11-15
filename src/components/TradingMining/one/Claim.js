@@ -114,9 +114,6 @@ function Claim({ wallet, lang }) {
             </div>
 
           </div>
-          <div className='text-waring'>
-            You can claim your rewards from 10:30 AM, November 15th UTC
-          </div>
         </div>
       </div>
 
