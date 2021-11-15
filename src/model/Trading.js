@@ -196,7 +196,7 @@ export default class Trading {
         }
       }).finally(e => {
         finishedCallback && finishedCallback()
-        this.indexOracle.load(getFormatSymbol(config.symbol))
+        this.indexOracle.load(getFormatSymbol(config.symbol.split('-')[0]))
         this.markOracle.load(getFormatSymbol(config.markpriceSymbolFormat || `${config.symbol}-MARKPRICE`))
         this.positionInfo.start()
         this.positionInfo.startAll();
@@ -440,6 +440,7 @@ export default class Trading {
     this.index = ''
     this.volume = ''
     this.fundingRate = {}
+    this.volatility = ''
     this.position = {}
     this.positions = []
     this.contract = {}
