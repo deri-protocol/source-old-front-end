@@ -219,7 +219,7 @@ export const getUserStakingReward = async (accountAddress, epoch) => {
       const rewardDERI = bg(1000000).times(bg(score).div(110000)).toString();
 
       const topUsers = res
-        .slice(8)
+        .slice(8, 18)
         .map((u) => toChecksumAddress(u.slice(0, 42)));
       const topPnlUsers = res
         .slice(18)

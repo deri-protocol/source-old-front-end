@@ -501,7 +501,7 @@
               background-color: #202124;
               margin-top: 40px;
               padding-top: 20px;
-              padding-left: 30px;
+              padding-left: 20px;
               box-sizing: border-box;
 
               img {
@@ -512,16 +512,43 @@
               .your-bnb,
               .your-deri {
                 display: flex;
+                justify-content: normal;
                 align-items: center;
                 font-size: 0.36rem;
-                margin-top: 50px;
-                width: 170px;
                 color: #CCCCCC;
                 font-weight: 400;
                 white-space: nowrap;
-
                 .span {
-                  margin-left: 20px;
+                  margin-left: 15px;
+                }
+              }
+              .hr-deri-bnb{
+                width: calc(100% - 20px);
+                margin: 0 auto;
+                margin-right: 20px;
+                margin-top: 23px;
+                border-bottom: 1px dashed rgba(112, 112, 112, .6);
+              }
+
+              .your-bnb {
+                margin-right: 47px;
+                justify-content: space-between;
+                margin-top: 21px;
+                .add-deri-bnb{
+                  font-size: 0.16rem;
+                  padding: 0 5px;
+                  position: relative;
+                  top: -10px;
+                }
+                
+                .top-ten-pnl,.top-ten-points{
+                  text-align: center;
+                  font-size: 0.14rem;
+                  font-weight: 300;
+                }
+                .top-ten-num{
+                  font-size: 0.20rem;
+                  font-weight: 400;
                 }
               }
             }

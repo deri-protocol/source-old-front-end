@@ -74,18 +74,18 @@ export default function useMiningPool(isNew,wallet,retired){
         const airDrop = {
           network : 'BSC',
           bTokenSymbol : 'GIVEAWAY',
-          liquidity : '1740',
-          symbol : '--',
+          liquidity : '5000',
+          symbol : '--', 
           airdrop : true,
           chainId : 56,
           apy : '--',
           buttonText : 'CLAIM'
         }
         let timestamp = new Date()
-        //1634551200
-        if(timestamp.getTime() <= 1635674400000){
-          pools.push(airDrop)
-        }
+        //1637316000
+        // if(timestamp.getTime() <= 1637316000000){
+        //   pools.push(airDrop)
+        // }
         let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
         let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite' || p.version === 'v2_lite_dpmm'  ) && !p.retired)
         let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
