@@ -907,7 +907,7 @@ function Trading({ wallet, lang, loading }) {
                     <span className='rewardBNB'>Reward</span>
                   </div>
                   <div className='list-info pnl-list-info'>
-                    {pointsList.map((item, index) => {
+                    {pnlList.map((item, index) => {
                       return (
                         <div className='list-info-box' key={index}>
                           <div className='no'>
@@ -920,7 +920,7 @@ function Trading({ wallet, lang, loading }) {
                             {item.userAddr}
                           </div>
                           <div className='score'>
-                            <DeriNumberFormat decimalScale={2} value={item.score} thousandSeparator={true} />
+                            <DeriNumberFormat decimalScale={2} value={item.pnl} thousandSeparator={true} />
                           </div>
                           <div className='rewardBNB top-three'>
                             $ <DeriNumberFormat value={item.specialRewardsB} thousandSeparator={true} />
@@ -928,7 +928,6 @@ function Trading({ wallet, lang, loading }) {
                         </div>
                       )
                     })}
-                    <img alt='' src={comingSoon} />
                   </div>
                 </div>
               </>}
