@@ -73,7 +73,11 @@ function Claim({ wallet, lang }) {
               <div className='claim-reward-num'>
                 $ <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} />
                 <span className='yue'>＝</span>
-                <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} />  <span className='deri-text'>DERI</span>
+                <TipWrapper>
+                  <span className='hover' tip='the referenced Deri Price is $0.5054307301 as snapshoted on coinmarketcap.com at 10:00 UTC Nov.10th'>
+                    <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} />  <span className='deri-text'>DERI</span>
+                  </span>
+                </TipWrapper>
               </div>
             </div>
 
@@ -114,9 +118,6 @@ function Claim({ wallet, lang }) {
                 <Button className='claim-button' btnText='CLAIM' click={claim} lang={lang}></Button>
               </div>
             </div>
-          </div>
-          <div className='text-waring'>
-          the referenced Deri Price is $0.5054307301 as snapshoted on coinmarketcap.com at 10:00 UTC Nov.10th
           </div>
         </div>
       </div>
