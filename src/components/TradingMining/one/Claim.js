@@ -71,7 +71,7 @@ function Claim({ wallet, lang }) {
             <div className='claim-my-reward'>
               <span className='claim-title'>My Rewards</span>
               <div className='claim-reward-num'>
-                <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} />
+                $ <DeriNumberFormat value={claimReward} decimalScale={2} thousandSeparator={true} />
                 <span className='yue'>＝</span>
                 <DeriNumberFormat value={claimRewardDeri} decimalScale={2} thousandSeparator={true} />  <span className='deri-text'>DERI</span>
               </div>
