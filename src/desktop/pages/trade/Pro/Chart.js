@@ -8,9 +8,9 @@ import TVChart from './TVChart';
 
 function Chart({symbol,lang,trading}){
   const [loading, setLoading] = useState(true);
-  const [actived, setActived] = useState('one');
+  const [actived, setActived] = useState('sixty');
   const [chartType, setChartType] = useState('')
-  const [currentInterval, setCurrentInterval] = useState('1');
+  const [currentInterval, setCurrentInterval] = useState('60');
   const [candleDataDisplay, setCandleDataDisplay] = useState('')
 
   const activedClass = classNames('btn',actived)
