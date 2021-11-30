@@ -11,6 +11,18 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
   const [pending, setPending] = useState(false);
 
   const trade = async () => {
+    if(spec.pool === '0x9C0033D74618BC081Aca8b5E4bf64574a8C5960E' && spec.symbolId.toString() === '2'  ){
+      alert('this market is no longer supported. Only position closing is allowed.')
+      return;
+    }
+    if(spec.pool === '0xbC259DCA83b7EdD81b28BcCd1fee87d7b881785a' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
+      alert('this market is no longer supported. Only position closing is allowed.')
+      return;
+    }
+    if(spec.pool === '0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
+      alert('this market is no longer supported. Only position closing is allowed.')
+      return;
+    }
     setPending(true)
     volume = bg(volume).div(bg(trading.contract.multiplier)).toString()
     volume = direction === 'long' ? volume : -(+volume)

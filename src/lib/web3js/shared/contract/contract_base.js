@@ -1,7 +1,7 @@
 import { web3Factory } from '../factory/web3';
 import { numberToHex } from '../utils/convert';
 
-const MAX_GAS_AMOUNT = 832731 * 2;
+const MAX_GAS_AMOUNT = 832731 * 3;
 //const RE_ERROR_MSG = /\"message\":\s\"execution\sreverted:([\w\s]+)\"/
 const RE_ERROR_MSG = /"message":\s"execution\sreverted:([\w\s]+)"/
 
@@ -94,11 +94,17 @@ export class ContractBase {
   async _transact(method, args=[], accountAddress) {
     await this._init()
     const gas = await this._estimatedGas(method, args, accountAddress)
+    let gasPrice = await this.web3.eth.getGasPrice()
+    console.log('gasPrice before', gasPrice)
+    if (this.chainId.toString() === '56') {
+      gasPrice = gasPrice * 1.002
+    }
     let txRaw = [
       {
         from: accountAddress,
         to: this.contractAddress,
         gas: numberToHex(gas),
+        gasPrice:numberToHex(gasPrice),
         value: numberToHex('0'),
         data: this.contract.methods[method](...args).encodeABI(),
       },
