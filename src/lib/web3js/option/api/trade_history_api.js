@@ -123,7 +123,7 @@ const getTradeHistoryOnline = async (
   //let symbols = optionPool.activeSymbols
   const multiplier = symbols.map((i) => i.multiplier.toString());
 
-  const filters = { account: accountAddress };
+  const filters = { trader: accountAddress };
   let result = [];
 
   if (DeriEnv.get() === 'testnet') {
