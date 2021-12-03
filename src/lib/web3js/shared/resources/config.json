@@ -3,10 +3,10 @@
     "prod": {
       "pools": [
         {
-          "pool": "0x4B439ABCBc736837D0F7f7A9C5619bF8fa650e15",
+          "pool": "0x8Eab619E6A8f7E8891598cADe6546a1214385D42",
           "pToken": "0x2AA5865BF556ab3f6Cd9405e565099f70234dF05",
           "lToken": "0x6f8F1C2781b555B63F1A1BE85BF99aEe27d87cB2",
-          "router": "0x5b2BBCF596feBdC3a701601c7dBa3bDfC45210c6",
+          "router": "0x0BDf05c678b23f01a07a90f01f6e40760f196E5D",
           "bTokens": [
             {
               "bTokenId": "0",
@@ -41,17 +41,17 @@
               "unit": "BNB"
             }
           ],
-          "initialBlock": "12181000",
+          "initialBlock": "13049894",
           "type": "perpetual",
           "version": "v2",
           "versionId": "v2_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0x6be39f5C04C837aE3c55bF19D10EC370c52Dc0ac",
+          "pool": "0x64195d64655A97023d78a69195D3ee15B8E1Dd13",
           "pToken": "0x0757bC621A32b1134eCf2843955B0bBc8CA13BA1",
           "lToken": "0xADeA18DA0aF0Ab14900A5634EdDf5A83513cdcE0",
-          "router": "0x8B0340a77f807D0857Ef4C3fB0014A8cE3591E93",
+          "router": "0x3d514a7114fede780ac527350556099bccecac22",
           "bTokens": [
             {
               "bTokenId": "0",
@@ -81,7 +81,7 @@
               "unit": "ETH"
             }
           ],
-          "initialBlock": "20726570",
+          "initialBlock": "21937366",
           "type": "perpetual",
           "version": "v2",
           "versionId": "v2_dpmm",
@@ -290,7 +290,7 @@
     "prod": {
       "pools": [
         {
-          "pool": "0xbC259DCA83b7EdD81b28BcCd1fee87d7b881785a",
+          "pool": "0x574022307e60bE1f07da6Ec1cB8fE23d426e5831",
           "pToken": "0x6c4907a76628574C14C6292DEA5B4A5cD81D9Ee0",
           "lToken": "0x992974FF499979cDd295214f8883D83a93855fA7",
           "bToken": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
@@ -338,14 +338,14 @@
               "unit": "SAND"
             }
           ],
-          "initialBlock": "12182029",
+          "initialBlock": "13050183",
           "type": "perpetual",
           "version": "v2_lite",
           "versionId": "v2_lite_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41",
+          "pool": "0x26bE73Bdf8C113F3630e4B766cfE6F0670Aa09cF",
           "pToken": "0xef4c81c76ED66d9B02e0d5de2eD352f840Eb497C",
           "lToken": "0xC246d0aD04a9029A82862BE2fbd16ab1445b1602",
           "bToken": "0xe60eaf5A997DFAe83739e035b005A33AfdCc6df5",
@@ -393,14 +393,14 @@
               "unit": "SAND"
             }
           ],
-          "initialBlock": "12182152",
+          "initialBlock": "13050356",
           "type": "perpetual",
           "version": "v2_lite",
           "versionId": "v2_lite_dpmm",
           "chainId": "56"
         },
         {
-          "pool": "0x9C0033D74618BC081Aca8b5E4bf64574a8C5960E",
+          "pool": "0xA8769A4Fb0Ca82eb474448B1683DCA3c79798B69",
           "pToken": "0xDC3ED843f0c411Eea1B84C0277CDFC5B71E22059",
           "lToken": "0x35C8b3bb6CE67d9bf6b14a5FfC121A79d6247d07",
           "bToken": "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
@@ -437,14 +437,14 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "20727026",
+          "initialBlock": "21937580",
           "type": "perpetual",
           "version": "v2_lite",
           "versionId": "v2_lite_dpmm",
           "chainId": "137"
         },
         {
-          "pool": "0x29e9dC4634bd9a8930FF07f4Fa2E1479CDF5d17F",
+          "pool": "0xdDfCA16Cd80Ae3aeeb7C7ef743924Ac39A94cC9c",
           "pToken": "0x074f37Be1c9818b192aCdB3B268baA52d052ea28",
           "lToken": "0x7B0a54d667F2665438DDf66349C30d75Dc4c590A",
           "bToken": "0x3D1D2aFd191b165D140e3E8329E634665fFB0E5e",
@@ -481,7 +481,7 @@
               "unit": "AGLD"
             }
           ],
-          "initialBlock": "20727196",
+          "initialBlock": "21937673",
           "type": "perpetual",
           "version": "v2_lite",
           "versionId": "v2_lite_dpmm",
