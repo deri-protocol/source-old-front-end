@@ -26,7 +26,7 @@ const getTradeHistoryOnline = async (
   const toBlock = await getBlockInfo(chainId, 'latest');
   fromBlock = parseInt(fromBlock);
 
-  const filters = { account: accountAddress };
+  const filters = { trader: accountAddress };
   let events = await getPastEvents(
     chainId,
     perpetualPool.contract,
