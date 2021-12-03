@@ -11,15 +11,19 @@ export default function TradeConfirm({ wallet, spec, onClose, direction, volume,
   const [pending, setPending] = useState(false);
 
   const trade = async () => {
-    if(spec.pool === '0x9C0033D74618BC081Aca8b5E4bf64574a8C5960E' && spec.symbolId.toString() === '2'  ){
+    if(spec.pool === '0xdDfCA16Cd80Ae3aeeb7C7ef743924Ac39A94cC9c' && spec.symbolId.toString() === '2'  ){
       alert('this market is no longer supported. Only position closing is allowed.')
       return;
     }
-    if(spec.pool === '0xbC259DCA83b7EdD81b28BcCd1fee87d7b881785a' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
+    if(spec.pool === '0xA8769A4Fb0Ca82eb474448B1683DCA3c79798B69' && spec.symbolId.toString() === '2'  ){
       alert('this market is no longer supported. Only position closing is allowed.')
       return;
     }
-    if(spec.pool === '0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
+    if(spec.pool === '0x574022307e60bE1f07da6Ec1cB8fE23d426e5831' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
+      alert('this market is no longer supported. Only position closing is allowed.')
+      return;
+    }
+    if(spec.pool === '0x26bE73Bdf8C113F3630e4B766cfE6F0670Aa09cF' && (['1','2','3','7'].includes(spec.symbolId.toString())) ){
       alert('this market is no longer supported. Only position closing is allowed.')
       return;
     }
