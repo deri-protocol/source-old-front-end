@@ -1,18 +1,23 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link ,useRouteMatch} from 'react-router-dom'
 import TradingMiningNow from '../Marketing/TradingMining/tradingMiningTwo'
 import Index from '../Marketing/TradingMining/Index'
 import './promotional.less'
 import epochone from '../../../components/TradingMining/img/epochOne.svg'
 export default function Promotional({ lang }) {
-  const [curTab, setCurTab] = useState('active')
+  const active = useRouteMatch('/trade-to-earn/finished') ? 'finished' : 'active'
+  const [curTab, setCurTab] = useState(active)
   const switchTab = async (current) => {
     setCurTab(current)
   }
   return (
     <div className='promotional'>
       <div className='check'>
-        <div className={curTab === 'upcoming' ? 'checked-now' : ''} onClick={() => switchTab('upcoming')}>upcoming</div>
+        {/* <div className={curTab === 'upcoming' ? 'checked-now' : ''} onClick={() => switchTab('upcoming')}>upcoming</div>
+         */}
+         <div className={curTab === 'upcoming'  ? 'checked-now' : ''}>
+         <a  href='https://v3app.deri.finance/#/trade-to-earn'>upcoming</a> 
+        </div>
         <div className={curTab === 'active' ? 'checked-now' : ''} onClick={() => switchTab('active')}>active</div>
         <div className={curTab === 'finished' ? 'checked-now' : ''} onClick={() => switchTab('finished')}>finished</div>
       </div>

@@ -73,7 +73,9 @@ class Body extends React.Component {
           <Route path='/lite' component={() => <Pro lang={Object.assign(dict['lite'],dict['pro'])}/>} />
           <Route exact path='/info' component={() => <InfoList/>}/>
           <Route exact path='/info/:add/:catalog/:bToken/:network' component={() => <InfoDetail/>}/>
-          <Route exact path='/trade-to-earn' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/trade-to-earn/finished' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/trade-to-earn/active' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
+          <Route exact path='/trade-to-earn/' component={() => <TradingMining lang={dict['trading-mining']}/>}/>
           <Route exact path='/trading-to-earn-finshed-one' component={() => <TradingMiningFinshedOne lang={dict['trading-mining']}/>}/>
         </Switch>
       </div>
