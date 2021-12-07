@@ -20,6 +20,10 @@ const keyPrefix = (epoch) => {
     return DeriEnv.get() === 'prod' ? 'TE' : 'TE10';
   } else if (epoch.toString() === '2') {
     return DeriEnv.get() === 'prod' ? 'TE2' : 'TE7';
+  } else if (epoch.toString() === '3') {
+    return DeriEnv.get() === 'prod' ? 'TE3' : 'TE12';
+  } else if (epoch.toString() === '4') {
+    return DeriEnv.get() === 'prod' ? 'TE4' : 'TE14';
   }
 };
 const claimKeyPrefix = (epoch) => {
@@ -27,6 +31,10 @@ const claimKeyPrefix = (epoch) => {
     return DeriEnv.get() === 'prod' ? 'TE1' : 'TE11';
   } else if (epoch.toString() === '2') {
     return DeriEnv.get() === 'prod' ? 'TE2' : 'TE9';
+  } else if (epoch.toString() === '3') {
+    return DeriEnv.get() === 'prod' ? 'TE3' : 'TE12';
+  } else if (epoch.toString() === '4') {
+    return DeriEnv.get() === 'prod' ? 'TE4' : 'TE15';
   }
 };
 
@@ -361,6 +369,30 @@ export const getUserStakingClaimInfo = async (accountAddress, epoch) => {
   );
 };
 
+export const getStakingAddressCount = async (epoch) => {
+  return catchApiError(
+    async () => {
+      const db = databaseActivityFactory();
+      const key = [
+        `${keyPrefix(epoch)}.address.count`,
+      ];
+      // console.log('key',key)
+      const res = await db.getValues(key);
+      const addressCount = deriToString(res[0])
+      return {
+        epoch,
+        addressCount,
+      };
+    },
+    [],
+    'getStakingAddressCount',
+    {
+      epoch,
+      addressCount: '',
+    }
+  );
+};
+
 export const claimMyStaking = async (accountAddress, epoch) => {
   return catchTxApiError(async () => {
     const chainId = '56';
@@ -407,3 +439,4 @@ export const claimMyStaking = async (accountAddress, epoch) => {
     }
   }, []);
 };
+
