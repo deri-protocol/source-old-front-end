@@ -92,7 +92,7 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>
               </li>
               <li>
-                <Link to='/trade-to-earn'>{lang['signin']}</Link>
+              <a href='https://v3app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
               </li>
               <li>
                 <Link to='/retired'>{lang['retired-pools']}</Link>
@@ -100,15 +100,13 @@ export default function Menu({ closeMenu, lang, locale }) {
               {env === 'testnet' && <li>
                 <Link to='/faucet'>{lang['faucet']}</Link>
               </li> }
-              
-              
             </ul>
           </li>
           <li className='event'>
             <span className='y-event' >
               Trade to Earn
             </span>
-              <Link className='' to='/trade-to-earn'>$1 Million in DERI</Link>
+              <a href='https://v3app.deri.finance/#/trade-to-earn'>2 Million  DERI</a>
           </li>
         </ul>
       </div>

@@ -1,5 +1,4 @@
 import { useState, useEffect} from 'react'
-
 import useClaimInfo from "../../hooks/useClaimInfo";
 import useConfig from "../../hooks/useConfig";
 import { mintDToken } from "../../lib/web3js/indexV2";

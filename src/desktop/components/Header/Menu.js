@@ -104,7 +104,7 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a className='signin-item' href={`https://${host}/#/trade-to-earn`}>{lang['signin']}</a>
+                  <a className='signin-item' href='https://v3app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
                   :
                   <Link className='signin-item' to='/trade-to-earn'>{lang['signin']}</Link>
                 }
@@ -133,9 +133,9 @@ function Menu({ lang, locale }) {
             </span>
             {isProduction
               ?
-              <a className='' href={`https://${host}/#/trade-to-earn`}>$ 1 Million in DERI</a>
+              <a className='' href='https://v3app.deri.finance/#/trade-to-earn'>$ 1 Million in DERI</a>
               :
-              <Link className='' to='/trade-to-earn'>$ 1 Million in DERI</Link>
+              <Link className='' to='/trade-to-earn'> 2 Million DERI</Link>
             }
           </li>
         </ul>
