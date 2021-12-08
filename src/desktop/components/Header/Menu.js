@@ -133,7 +133,7 @@ function Menu({ lang, locale }) {
             </span>
             {isProduction
               ?
-              <a className='' href='https://v3app.deri.finance/#/trade-to-earn'>$ 1 Million in DERI</a>
+              <a className='' href='https://v3app.deri.finance/#/trade-to-earn'> 2 Million DERI</a>
               :
               <Link className='' to='/trade-to-earn'> 2 Million DERI</Link>
             }
