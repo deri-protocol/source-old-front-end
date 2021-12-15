@@ -66,21 +66,27 @@ export const getDeriVoteConfig = (chainId, env) => {
   throw new Error(`-- getDeriVoteConfig(): invalid env(${env}) or chainId(${chainId})`)
 };
 
-export const getStakingMiningVaultRouterConfig = (chainId='56', env) => {
+export const getStakingMiningVaultRouterConfig = (chainId='56', name='TE1') => {
   chainId = chainId.toString()
-  env = env || DeriEnv.get()
   const configs = [
     {
       chainId: '56',
       address: '0x224a441f7a4C6775009a1f506e725FE1D180950e',
       env: 'prod',
+      name: 'TE1'
+    },
+    {
+      chainId: '56',
+      address: '0x386aFE3CBC562598Ae13B991f2b2198A64064aD5',
+      env: 'prod',
+      name: 'TE2'
     }
   ]
-  const res = configs.find((c) => c.chainId === chainId && c.env === env)
+  const res = configs.find((c) => c.chainId === chainId && c.name === name)
   if (res) {
     return res
   } else {
-    throw new Error(`-- getStakingMiningVaultRouterConfig(): invalid env(${env}) or chainId(${chainId})`)
+    throw new Error(`-- getStakingMiningVaultRouterConfig(): invalid name(${name}) or chainId(${chainId})`)
   }
 }
 
