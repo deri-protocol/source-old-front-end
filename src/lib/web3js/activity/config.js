@@ -83,3 +83,23 @@ export const getStakingMiningVaultRouterConfig = (chainId='56', env) => {
     throw new Error(`-- getStakingMiningVaultRouterConfig(): invalid env(${env}) or chainId(${chainId})`)
   }
 }
+
+export const getStakingCurrencyVaultConfig = (chainId='56', name='TE2') => {
+  chainId = chainId.toString()
+  const configs = [
+    {
+      chainId: '56',
+      address: '0xff5090fa6a50D5AD526460cc880fAF5c94237a34',
+      env: 'prod',
+      name: 'TE2'
+    }
+  ]
+  const res = configs.find((c) => c.chainId === chainId && c.name === name)
+  if (res) {
+    return res
+  } else {
+    throw new Error(
+      `-- getStakingCurrencyVaultConfig(): invalid name(${name}) or chainId(${chainId})`
+    );
+  }
+}

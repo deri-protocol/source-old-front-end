@@ -11,7 +11,8 @@ import {
   miningVaultRouterFactory,
 } from '../../shared';
 import { databaseActivityClaimFactory } from '../../shared/factory/database';
-import { getStakingMiningVaultRouterConfig } from '../config';
+import { getStakingCurrencyVaultConfig, getStakingMiningVaultRouterConfig } from '../config';
+import { currencyVaultFactory } from '../contract/factory';
 
 const range = (n) => new Array(n).fill(0).map((i, index) => index);
 
@@ -19,9 +20,9 @@ const keyPrefix = (epoch) => {
   if (!epoch || epoch.toString() === '1') {
     return DeriEnv.get() === 'prod' ? 'TE' : 'TE10';
   } else if (epoch.toString() === '2') {
-    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE7';
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE13';
   } else if (epoch.toString() === '3') {
-    return DeriEnv.get() === 'prod' ? 'TE3' : 'TE12';
+    return DeriEnv.get() === 'prod' ? 'TE3_1' : 'TE15';
   } else if (epoch.toString() === '4') {
     return DeriEnv.get() === 'prod' ? 'TE4' : 'TE14';
   }
@@ -30,11 +31,11 @@ const claimKeyPrefix = (epoch) => {
   if (!epoch || epoch.toString() === '1') {
     return DeriEnv.get() === 'prod' ? 'TE1' : 'TE11';
   } else if (epoch.toString() === '2') {
-    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE9';
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE13';
   } else if (epoch.toString() === '3') {
-    return DeriEnv.get() === 'prod' ? 'TE3' : 'TE12';
+    return DeriEnv.get() === 'prod' ? 'TE3' : 'TE17';
   } else if (epoch.toString() === '4') {
-    return DeriEnv.get() === 'prod' ? 'TE4' : 'TE15';
+    return DeriEnv.get() === 'prod' ? 'TE4' : 'TE16';
   }
 };
 
@@ -344,6 +345,9 @@ export const getUserStakingClaimInfo = async (accountAddress, epoch) => {
         `${claimKeyPrefix(epoch)}.${accountAddress}.claimed.amount`,
         `${claimKeyPrefix(epoch)}.${accountAddress}.unclaimed.amount`,
         `${claimKeyPrefix(epoch)}.${accountAddress}.claimable.amount`,
+        `${claimKeyPrefix(epoch)}.${accountAddress}.regular.amount`,
+        `${claimKeyPrefix(epoch)}.${accountAddress}.toppoint.amount`,
+        `${claimKeyPrefix(epoch)}.${accountAddress}.toppnl.amount`,
       ];
       // console.log('key',key)
       const res = await db.getValues(key);
@@ -355,16 +359,20 @@ export const getUserStakingClaimInfo = async (accountAddress, epoch) => {
         claimable,
         // deriPrice: '0.56',
         // bnbPrice: '640.7',
+        regular: deriToNatural(res[3]).toString(),
+        toppoint: deriToNatural(res[4]).toString(),
+        toppnl: deriToNatural(res[5]).toString(),
       };
     },
     [],
     'getUserStakingClaimInfo',
     {
       claimed: '',
-      unclaimed: '',
+      locked: '',
       claimable: '',
-      deriPrice: '',
-      bnbPrice: '',
+      regular: '',
+      toppoint: '',
+      toppnl: '',
     }
   );
 };
@@ -392,6 +400,41 @@ export const getStakingAddressCount = async (epoch) => {
     }
   );
 };
+export const getUserStakingBnbClaimInfo = async (accountAddress, epoch) => {
+  return catchApiError(
+    async () => {
+      accountAddress = toChecksumAddress(accountAddress);
+      const db = databaseActivityClaimFactory();
+      const key = [
+        `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claimed.amount`,
+        `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.unclaimed.amount`,
+        `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claimable.amount`,
+        `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.toppoint.amount`,
+        `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.toppnl.amount`,
+      ];
+      // console.log('key',key)
+      const res = await db.getValues(key);
+      const claimable = deriToNatural(res[2]).toString();
+      return {
+        claimed: deriToNatural(res[0]).toString(),
+        // unclaimed: deriToNatural(res[1]).toString(),
+        locked: deriToNatural(res[1]).minus(claimable).toString(),
+        claimable,
+        toppoint: deriToNatural(res[3]).toString(),
+        toppnl: deriToNatural(res[4]).toString(),
+      };
+    },
+    [],
+    {
+      claimed: '',
+      locked: '',
+      claimable: '',
+      toppoint: '',
+      toppnl: '',
+    }
+  );
+};
+
 
 export const claimMyStaking = async (accountAddress, epoch) => {
   return catchTxApiError(async () => {
@@ -426,7 +469,7 @@ export const claimMyStaking = async (accountAddress, epoch) => {
       s2,
     ];
 
-    const miningVaultAddress = getStakingMiningVaultRouterConfig(chainId, 'prod')
+    const miningVaultAddress = getStakingMiningVaultRouterConfig(chainId, `TE${epoch}`)
       .address;
     //console.log('miningVaultAddress', miningVaultAddress);
     if (miningVaultAddress) {
@@ -440,3 +483,42 @@ export const claimMyStaking = async (accountAddress, epoch) => {
   }, []);
 };
 
+export const claimMyStakingBNB = async (accountAddress, epoch) => {
+  return catchTxApiError(async () => {
+    const chainId = '56';
+    accountAddress = toChecksumAddress(accountAddress);
+    const db = databaseActivityClaimFactory();
+    const key = [
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.amount`,
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.deadline`,
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.nonce`,
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.v`,
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.r`,
+      `${claimKeyPrefix(epoch)}.bnb.${accountAddress}.claim.s`,
+    ];
+    //console.log('key', key);
+    const res = await db.getValues(key);
+    const [amount, deadline, nonce, v, r, s] = res;
+    //
+    const claimArgs = [
+      accountAddress,
+      amount,
+      deriToString(deadline),
+      deriToString(nonce),
+      deriToString(v),
+      r,
+      s,
+    ];
+
+    const currencyVaultAddress = getStakingCurrencyVaultConfig(
+      chainId,
+      `TE${epoch}`
+    ).address;
+    //console.log('miningVaultAddress', miningVaultAddress);
+    if (currencyVaultAddress) {
+      const currencyVault = currencyVaultFactory(chainId, currencyVaultAddress);
+      //console.log(claimArgs)
+      return await currencyVault.claim(...claimArgs);
+    }
+  }, []);
+};

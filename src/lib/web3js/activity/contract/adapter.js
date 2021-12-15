@@ -9,3 +9,7 @@ export const PTokenAirdropNULSAdapter = (klass) => {
 export const deriVoteAdapter= (klass) => {
     return klass
 }
+
+export const currencyVaultAdapter = (klass) => {
+  return klass;
+};

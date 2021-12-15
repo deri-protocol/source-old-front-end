@@ -15,7 +15,9 @@ export {
   getUserStakingReward,
   getUserStakingContribution,
   getUserStakingClaimInfo,
+  getUserStakingBnbClaimInfo,
   claimMyStaking,
+  claimMyStakingBNB,
   getStakingAddressCount,
 } from './deri_staking';
 
