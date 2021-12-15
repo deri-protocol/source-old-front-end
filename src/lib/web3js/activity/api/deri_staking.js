@@ -502,6 +502,7 @@ export const claimMyStakingBNB = async (accountAddress, epoch) => {
     //
     const claimArgs = [
       accountAddress,
+      accountAddress,
       amount,
       deriToString(deadline),
       deriToString(nonce),
