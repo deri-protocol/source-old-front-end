@@ -20,7 +20,7 @@ const keyPrefix = (epoch) => {
   if (!epoch || epoch.toString() === '1') {
     return DeriEnv.get() === 'prod' ? 'TE' : 'TE10';
   } else if (epoch.toString() === '2') {
-    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE13';
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE14';
   } else if (epoch.toString() === '3') {
     return DeriEnv.get() === 'prod' ? 'TE3_1' : 'TE15';
   } else if (epoch.toString() === '4') {
@@ -31,7 +31,7 @@ const claimKeyPrefix = (epoch) => {
   if (!epoch || epoch.toString() === '1') {
     return DeriEnv.get() === 'prod' ? 'TE1' : 'TE11';
   } else if (epoch.toString() === '2') {
-    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE13';
+    return DeriEnv.get() === 'prod' ? 'TE2' : 'TE14';
   } else if (epoch.toString() === '3') {
     return DeriEnv.get() === 'prod' ? 'TE3' : 'TE17';
   } else if (epoch.toString() === '4') {
