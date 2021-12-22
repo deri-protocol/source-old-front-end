@@ -302,21 +302,6 @@
               "unit": "AXS"
             },
             {
-              "symbolId": "1",
-              "symbol": "MBOXUSDT",
-              "unit": "MBOX"
-            },
-            {
-              "symbolId": "2",
-              "symbol": "IBSCDEFI",
-              "unit": "iBSCDEFI"
-            },
-            {
-              "symbolId": "3",
-              "symbol": "IGAME",
-              "unit": "iGAME"
-            },
-            {
               "symbolId": "4",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
@@ -331,11 +316,6 @@
               "symbol": "SHIBUSDT",
               "unit": "SHIB",
               "decimals": "6"
-            },
-            {
-              "symbolId": "7",
-              "symbol": "SANDUSDT",
-              "unit": "SAND"
             }
           ],
           "initialBlock": "13050183",
@@ -357,21 +337,6 @@
               "unit": "AXS"
             },
             {
-              "symbolId": "1",
-              "symbol": "MBOXUSDT",
-              "unit": "MBOX"
-            },
-            {
-              "symbolId": "2",
-              "symbol": "IBSCDEFI",
-              "unit": "iBSCDEFI"
-            },
-            {
-              "symbolId": "3",
-              "symbol": "IGAME",
-              "unit": "iGAME"
-            },
-            {
               "symbolId": "4",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
@@ -386,11 +351,6 @@
               "symbol": "SHIBUSDT",
               "unit": "SHIB",
               "decimals": "6"
-            },
-            {
-              "symbolId": "7",
-              "symbol": "SANDUSDT",
-              "unit": "SAND"
             }
           ],
           "initialBlock": "13050356",
@@ -415,11 +375,6 @@
               "symbolId": "1",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
-            },
-            {
-              "symbolId": "2",
-              "symbol": "SANDUSDT",
-              "unit": "SAND"
             },
             {
               "symbolId": "3",
@@ -459,11 +414,6 @@
               "symbolId": "1",
               "symbol": "ALICEUSDT",
               "unit": "ALICE"
-            },
-            {
-              "symbolId": "2",
-              "symbol": "SANDUSDT",
-              "unit": "SAND"
             },
             {
               "symbolId": "3",
