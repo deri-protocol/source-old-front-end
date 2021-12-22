@@ -7,12 +7,14 @@ import Version from '../../../components/Version/Version'
 const env = DeriEnv.get();
 
 function Menu({ lang, locale }) {
-  const isLite = useRouteMatch('/futures/lite')
-  const isPro = useRouteMatch('/futures/lite')
+  const isFuturesLite = useRouteMatch('/futures/lite')
+  const isFuturesPro = useRouteMatch('/futures/pro')
+  const isOptionsPro = useRouteMatch('/options/pro')
+  const isOptionsLite = useRouteMatch('/options/pro')
   const isMining = useRouteMatch('/mining')
-  const isApp = isLite || isPro || isMining
   const isProduction = process.env.NODE_ENV === 'production'
-  const host = /^(app|alphatest|testnet)/.test(window.location.host) ? window.location.host : 'app.deri.finance'
+  const isV2 = isFuturesLite || isFuturesPro || isOptionsPro || isOptionsLite || isMining
+  const host = /^(app|alphatest|testnet)/.test(window.location.host) ? window.location.host : isV2 ? 'v2app.deri.finance' : 'app.deri.finance'
   return (
     <div className="nav-menu">
       <div className="logo">
@@ -23,15 +25,15 @@ function Menu({ lang, locale }) {
       <div className="mean">
         <ul>
           <li>
-            {isProduction
+            {!isV2
               ?
-              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#mining`} className='mining-item'>{lang.mining}</a>
+              <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/pool`} className='mining-item'>{lang.mining}</a>
               :
               <Link className='mining-item' to='/mining'>{lang.mining}</Link>}
           </li>
           <li>
-            {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/futures/pro`} className='trade-item'>{lang.trade}</a>
+            {!isV2
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/trade/futures`} className='trade-item'>{lang.trade}</a>
               : <Link className='trade-item' to='/futures/pro'>{lang.trade}</Link>
             }
           </li>
@@ -39,8 +41,8 @@ function Menu({ lang, locale }) {
             <span className='beta'>
               {lang['beta']}
             </span>
-            {isProduction
-              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/options/pro`} className='option-item'>{lang.options}</a>
+            {!isV2
+              ? <a rel='noreferrer' href={`https://${host}/?locale=${locale}#/trade/options`} className='option-item'>{lang.options}</a>
               : <Link className='option-item' to='/options/pro'>{lang.options}</Link>
             }
           </li>
@@ -104,7 +106,7 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a className='signin-item' href='https://v3app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
+                  <a className='signin-item' href='https://app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
                   :
                   <Link className='signin-item' to='/trade-to-earn'>{lang['signin']}</Link>
                 }
@@ -112,7 +114,7 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a rel='noreferrer' href={`https://${host}/?locale=${locale}#retired`} className='retired-item'>{lang['retired-pools']}</a>
+                  <a rel='noreferrer' href={`https://v2app.deri.finance/#/#retired`} className='retired-item'>{lang['retired-pools']}</a>
                   :
                   <Link className='retired-item' to='/retired'>{lang['retired-pools']}</Link>}
               </li>
@@ -133,7 +135,7 @@ function Menu({ lang, locale }) {
             </span>
             {isProduction
               ?
-              <a className='' href='https://v3app.deri.finance/#/trade-to-earn'> 2 Million DERI</a>
+              <a className='' href='https://app.deri.finance/#/trade-to-earn'> 2 Million DERI</a>
               :
               <Link className='' to='/trade-to-earn'> 2 Million DERI</Link>
             }

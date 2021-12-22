@@ -31,7 +31,7 @@ export default function Menu({ closeMenu, lang, locale }) {
       <div className="ul">
         <ul>
           <li className={isMining ? 'selected' : ''}>
-            <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#mining`}>{lang['mining']}</a>
+            <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/mining`}>{lang['mining']}</a>
           </li>
           <li className={isTrade ? 'selected' : ''}>
             <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/futures/lite`}> {lang['trade']} </a>
@@ -43,7 +43,7 @@ export default function Menu({ closeMenu, lang, locale }) {
             <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/options/lite`}> {lang['options']} </a>
           </li>
           <li className={isDeriToken ? 'selected' : ''}>
-            <Link to='/deritoken'>{lang['deri-token']}</Link>
+          <a rel='noreferrer' href={`https://app.deri.finance/?locale=${locale}#/token`}>{lang['deri-token']}</a>
           </li>
           <li className={isBridge ? 'selected' : ''}>
             <a rel='noreferrer' href={`https://bridge.deri.finance/?locale=${locale}#bridge`}>{lang['bridge']}</a>
@@ -92,10 +92,10 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <a rel='noreferrer' className='info-item' href={`https://info.deri.finance/?locale=${locale}#info`}>{lang.stats}</a>
               </li>
               <li>
-              <a href='https://v3app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
+              <a href='https://app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
               </li>
               <li>
-                <Link to='/retired'>{lang['retired-pools']}</Link>
+              <a href='https://v2app.deri.finance/#/trade-to-earn'>{lang['retired-pools']}</a>
               </li>
               {env === 'testnet' && <li>
                 <Link to='/faucet'>{lang['faucet']}</Link>
@@ -106,7 +106,7 @@ export default function Menu({ closeMenu, lang, locale }) {
             <span className='y-event' >
               Trade to Earn
             </span>
-              <a href='https://v3app.deri.finance/#/trade-to-earn'>2 Million  DERI</a>
+              <a href='https://app.deri.finance/#/trade-to-earn'>2 Million  DERI</a>
           </li>
         </ul>
       </div>

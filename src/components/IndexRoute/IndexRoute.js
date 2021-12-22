@@ -2,7 +2,7 @@ import { Redirect } from "react-router-dom";
 
 export default function IndexRoute(){
   const url = window.location.href;
-  if(/^https?:\/\/(app|alphatest|testnet)/.test(url)) {
+  if(/^https?:\/\/(app|alphatest|testnet|v2app)/.test(url)) {
     return  <Redirect to='/futures/pro'/> 
   } else if(/^https?:\/\/governance/.test(url)) {
     return  <Redirect to='/governance'/> 

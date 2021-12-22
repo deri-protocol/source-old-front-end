@@ -21,7 +21,7 @@ export default function Promotional({ lang }) {
         </div> */}
         {/* <div className={curTab === 'active' ? 'checked-now' : ''} onClick={() => switchTab('active')}>active</div> */}
         <div className={curTab === 'active' ? 'checked-now' : ''}>
-         <a  href='https://v3app.deri.finance/#/trade-to-earn'> active </a> 
+         <a  href='https://app.deri.finance/#/trade-to-earn'> active </a> 
          </div>
         <div className={curTab === 'finished' ? 'checked-now' : ''} onClick={() => switchTab('finished')}>finished</div>
       </div>

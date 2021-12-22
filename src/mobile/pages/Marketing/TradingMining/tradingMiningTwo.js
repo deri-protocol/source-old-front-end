@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Trading from "../../../../components/TradingMining/two/Trading";
 import Staking from "../../../../components/TradingMining/two/Staking";
 import CountDown from "../../../../components/Countdown/CountDown";
+import Claim from "../../../../components/TradingMining/two/Claim";
 import './index.less'
 import './index-two.less'
 import epochTwo from '../../../../components/TradingMining/img/epochTwo.svg'
@@ -14,6 +15,9 @@ export default function Index({lang}){
       <div className='title'>{lang['title']} <img src={epochTwo} alt='' /> </div>
       <div className='count-down-box' style={{display : timeover ? 'none' : 'block'}}>
         <CountDown lang={lang}  onEnd={() => setTimeover(true)} lastTimestamp={eventEndTimestamp.unix()}/>
+      </div>
+      <div className='claim'>
+        <Claim lang={lang}/>
       </div>
       <div className='staking'>
         <Staking lang={lang} />
