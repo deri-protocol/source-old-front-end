@@ -34,6 +34,7 @@ const expandPoolConfigV2 = (config) => {
             version: 'v2',
             versionId: pool.versionId,
             isOption: false,
+            retired: pool.retired,
           });
         }
       }
@@ -68,6 +69,7 @@ const expandPoolConfigV2Lite = (config) => {
           version: 'v2_lite',
           versionId: pool.versionId,
           isOption: false,
+          retired: pool.retired,
         });
       }
       return result;
@@ -103,6 +105,7 @@ const expandPoolConfigOption = (config) => {
           version: 'option',
           versionId: pool.versionId,
           isOption: true,
+          retired: pool.retired,
         });
       }
       return result;
@@ -137,6 +140,7 @@ const expandPoolConfigV2LiteOpen = (config) => {
             version: 'v2_lite_open',
             versionId: pool.versionId,
             isOpen: true,
+            retired: pool.retired,
           });
         }
       } else {
