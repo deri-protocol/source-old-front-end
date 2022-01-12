@@ -792,7 +792,7 @@
           ],
           "initialBlock": "12305540",
           "type": "option",
-          "version": "option",
+          "version": "v2",
           "versionId": "option",
           "chainId": "56",
           "retired": true
