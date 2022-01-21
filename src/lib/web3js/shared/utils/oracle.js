@@ -20,8 +20,8 @@ export const getPriceInfoForV1 = async(symbol) => {
   let url
   let baseUrl =
     env === 'prod'
-      ? `https://oracle4.deri.finance/${method}`
-      : `https://oracle2.deri.finance/${method}`;
+      ? `https://oraclemainnet.deri.finance/${method}`
+      : `https://oracletestnet.deri.finance/${method}`;
   const addSymbolParam = (url, symbol) =>
     `${url}?symbol=${symbol}`;
   if (symbol) {
@@ -61,8 +61,8 @@ export const getOracleUrl = (symbol, type='futures') => {
   }
   let baseUrl =
     env === 'prod'
-      ? `https://oracle4.deri.finance/${method}`
-      : `https://oracle2.deri.finance/${method}`;
+      ? `https://oraclemainnet.deri.finance/${method}`
+      : `https://oracletestnet.deri.finance/${method}`;
   const addSymbolParam = (url, symbol) =>
     `${url}?symbol=${symbol}`;
 

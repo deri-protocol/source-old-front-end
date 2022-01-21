@@ -17,8 +17,8 @@ export const getOracleServerUrl = (chainId, symbol, type = "futures") => {
     symbol = `${symbol}_v2_bsc`;
   }
   let baseUrl = isProdChain(chainId)
-    ? `https://oracle4.deri.finance/${method}`
-    : `https://oracle2.deri.finance/${method}`;
+    ? `https://oraclemainnet.deri.finance/${method}`
+    : `https://oracletestnet.deri.finance/${method}`;
   const addSymbolParam = (url, symbol) => `${url}?symbol=${symbol}`;
 
   if (symbol) {

@@ -18,7 +18,7 @@ const history = {}
 
 let onRealtimeCallback = null;
 
-// const socket = io('wss://oracle2.deri.finance', {
+// const socket = io('wss://oracletestnet.deri.finance', {
 const socket = io(process.env.REACT_APP_WSS_URL, {
     transports: ['websocket'],
     withCredentials: true
