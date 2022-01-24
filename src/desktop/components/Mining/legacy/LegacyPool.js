@@ -22,7 +22,7 @@ function Pool({version,lang,loading}){
         <br></br>
         <div className='retired-pools'>{lang['retired-pools']}</div>
         {lang['retired-text']}
-        <a href="https://app.deri.finance/#/mining">{lang['new-pools']}</a>
+        <a href="https://app.deri.finance/#/pool">{lang['new-pools']}</a>
       </div>
       <div className="retired-mining-info">
         <div className='pools'>

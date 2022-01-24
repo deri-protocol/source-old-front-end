@@ -36,7 +36,8 @@ export default function useMiningPool(isNew,wallet,retired){
       if(retired){
         let v1Configs = getContractAddressConfig(env,'v1')
         const preminingPools = getPreminingContractConfig(env);
-        configs = v1Configs.concat(preminingPools);
+        configs = configs.concat(preminingPools);
+        configs = configs.concat(v1Configs)
       }
       configs = combineSymbolfromPoolConfig(configs);
       configs = configs.map((config) => mapPoolInfo(config,wallet,chainInfo))
@@ -89,7 +90,7 @@ export default function useMiningPool(isNew,wallet,retired){
         let v1Pools = pools.filter(p => (p.version === 'v1' || !p.version) && !p.retired)
         let v2Pools = pools.filter(p => (p.version === 'v2' || p.version === 'v2_lite' || p.version === 'v2_lite_dpmm'  ) && !p.retired)
         let optionPools = pools.filter(p => (p.version === 'option') && !p.retired)
-        const legacy = pools.filter(p => p.retired && !p.premining)
+        const legacy = pools.filter(p => p.retired && !p.premining && p.version !== 'v2' && p.version !== 'v2_lite' && p.version !== 'option')
         const preminings = pools.filter(p =>  p.retired && p.premining) 
         let openPools = pools.filter(p => p.isOpen)
         

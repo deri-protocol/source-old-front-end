@@ -29,7 +29,7 @@ function Footer({intl}){
                 <a href="http://deri.finance/#/team">{lang['team']}</a>
             </span>
             <span className="mt-27">
-              <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
+              <a href="https://docs.deri.finance/library/faqs">{lang['faq']}</a>
             </span>
           </div>
           <div className="mt-19">© 2021 {lang['deri-protocol']}</div>

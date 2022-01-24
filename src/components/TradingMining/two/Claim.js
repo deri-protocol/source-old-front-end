@@ -22,18 +22,14 @@ function Claim({ wallet, lang }) {
   const [claimedBNB, setClaimedBNB] = useState('')
   const [claimableBNB, setClaimableBNB] = useState('')
   const [lockedBNB, setLockedBNB] = useState('')
-  const deriprice = 0.4475321
-  const bnbprice = 529.59
 
 
   const getUserReward = async () => {
     let res = await getUserStakingReward(wallet.detail.account, 2)
     if (res) {
-      let deri =(res.rewardDERI / deriprice).toString() 
       let deriValue = res.rewardDERI 
       let bnb = ((+res.specialRewardsA) + (+res.specialRewardsB)) /2
       setClaimRewardBnbValue(bnb)
-      // setClaimRewarDeriSum(deri)
       setClaimRewardDeriValue(deriValue)
     }
 
@@ -86,17 +82,16 @@ function Claim({ wallet, lang }) {
     } else {
       document.getElementsByClassName('claim-button')[0].style.color = '#FFF'
     }
-    // if (+claimableBNB === 0) {
-    //   document.getElementsByClassName('claim-button')[1].style.color = '#AAA'
-    // } else {
-    //   document.getElementsByClassName('claim-button')[1].style.color = '#FFF'
-    // }
+    if (+claimableBNB === 0) {
+      document.getElementsByClassName('claim-button')[1].style.color = '#AAA'
+    } else {
+      document.getElementsByClassName('claim-button')[1].style.color = '#FFF'
+    }
   }, [claimableDeri, claimableBNB])
   const getClaimInfo = async () => {
     let res = await getUserStakingClaimInfo(wallet.detail.account, 2)
     if (res) {
       let total = (+res.regular + (+res.toppoint) + (+res.toppnl)).toString()
-      let deri = (total * deriprice).toString()
       setClaimedDeri(res.claimed)
       setClaimableDeri(res.claimable)
       setLockedDeri(res.locked)
@@ -112,20 +107,18 @@ function Claim({ wallet, lang }) {
     let res = await getUserStakingBnbClaimInfo(wallet.detail.account, 2)
     if (res) {
       let total = +res.toppoint + (+res.toppnl)
-      let value = total * bnbprice
-      setClaimedBNB(res.claimed)
-      setClaimableBNB(res.claimable)
-      setLockedBNB(res.locked)
-      setClaimedTopPointsBNB(res.toppoint)
-      setClaimedTopPnlBNB(res.toppnl)
+      setClaimedBNB(+res.claimed)
+      setClaimableBNB(+res.claimable)
+      setLockedBNB(+res.locked)
+      setClaimedTopPointsBNB(+res.toppoint)
+      setClaimedTopPnlBNB(+res.toppnl)
       setClaimRewardBNB(total)
-      setClaimRewardBnbValue(value)
     }
   }
   useEffect(() => {
     if (wallet.isConnected()) {
       getClaimInfo()
-      // getClaimBnbInfo()
+      getClaimBnbInfo()
       getUserReward()
     }
   }, [wallet.detail.account])
@@ -172,8 +165,7 @@ function Claim({ wallet, lang }) {
                   <div className='rewards-top-dist-two'>
                     <TipWrapper>
                       <span className='hover' tip=' The top 10 traders ranked by points earned will share a pool of $125,000 in DERI tokens.'>
-                        {/* <DeriNumberFormat value={claimRewardTopPointsDeri} decimalScale={2} thousandSeparator={true} /> */}
-                        ???
+                        <DeriNumberFormat value={claimRewardTopPointsDeri} decimalScale={2} thousandSeparator={true} />
                       </span>
                     </TipWrapper>
                   </div>
@@ -185,8 +177,7 @@ function Claim({ wallet, lang }) {
                   <div className='rewards-top-dist-two'>
                     <TipWrapper>
                       <span className='hover' tip='The top 10 traders ranked by PnL will share a pool of $125,000 in DERI tokens.'>
-                        {/* <DeriNumberFormat value={claimRewardTopPnlDeri} decimalScale={2} thousandSeparator={true} /> */}
-                        ???
+                        <DeriNumberFormat value={claimRewardTopPnlDeri} decimalScale={2} thousandSeparator={true} />
                       </span>
                     </TipWrapper>
                   </div>
@@ -243,16 +234,15 @@ function Claim({ wallet, lang }) {
               <span className='claim-title'>My Rewards</span>
               <div className='claim-reward-num-box'>
                 <div className='claim-reward-num'>
-                  $ --
-                  {/* <DeriNumberFormat value={claimRewardBnbValue} decimalScale={2} thousandSeparator={true} /> */}
+                  $ <DeriNumberFormat value={claimRewardBnbValue} decimalScale={2} thousandSeparator={true} />
                   <span className='yue'>＝</span>
                   <TipWrapper>
                     <span className='hover' tip={`The BNB rewards consist of two part: \n
                     - Special rewards for the top 10 traders ranked by points \n
                     - Special rewards for the top 10 traders ranked by PnL
                     `}>
-                      {/* <DeriNumberFormat value={claimRewardBNB} decimalScale={4} thousandSeparator={true} /> */}
-                      ???
+                      <DeriNumberFormat value={claimRewardBNB} decimalScale={4} thousandSeparator={true} />
+                      
                     </span>
                   </TipWrapper>
                 </div>
@@ -264,8 +254,7 @@ function Claim({ wallet, lang }) {
                   <div className='rewards-top-dist-two '>
                     <TipWrapper>
                       <span className='hover' tip=' The top 10 traders ranked by points earned will share a pool of $125,000 in BNB tokens.'>
-                        {/* <DeriNumberFormat value={claimRewardTopPointsBNB} decimalScale={2} thousandSeparator={true} /> */}
-                        ???
+                        <DeriNumberFormat value={claimRewardTopPointsBNB} decimalScale={2} thousandSeparator={true} />
                       </span>
                     </TipWrapper>
                   </div>
@@ -277,8 +266,7 @@ function Claim({ wallet, lang }) {
                   <div className='rewards-top-dist-two'>
                     <TipWrapper>
                       <span className='hover' tip='The top 10 traders ranked by PnL will share a pool of $125,000 in BNB tokens.'>
-                        {/* <DeriNumberFormat value={claimRewardTopPnlBNB} decimalScale={2} thousandSeparator={true} /> */}
-                        ???
+                        <DeriNumberFormat value={claimRewardTopPnlBNB} decimalScale={2} thousandSeparator={true} />
                       </span>
                     </TipWrapper>
                   </div>
@@ -288,7 +276,7 @@ function Claim({ wallet, lang }) {
             </div>
 
           </div>
-          {/* <div className='claim-right'>
+          <div className='claim-right'>
 
             <div className='claim-total-deri'>
               <div className='claimed-deri'>
@@ -321,7 +309,7 @@ function Claim({ wallet, lang }) {
                 <Button className='claim-button' btnText='CLAIM BNB' click={claimBNB} lang={lang}></Button>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
 

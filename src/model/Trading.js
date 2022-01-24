@@ -130,7 +130,7 @@ export default class Trading {
     if (wallet.isConnected()) {
       this.setWallet(wallet);
       this.setConfigs(all.filter(c => eqInNumber(wallet.detail.chainId, c.chainId)))
-      const defaultConfig = all.length > 0 ? all[0] : {} // this.getDefaultConfig(this.configs, wallet);
+      const defaultConfig = this.configs.length > 0 ? this.configs[0] : all[0] // this.getDefaultConfig(this.configs, wallet);
       //如果还是为空，则默认用所有config的第一条
       this.setConfig(defaultConfig);
       //如果没有钱包或者链接的链不一致，设置默认config，BTCUSD

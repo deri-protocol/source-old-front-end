@@ -69,7 +69,7 @@ function Menu({ lang, locale }) {
                 <a href={`http://deri.finance/?locale=${locale}#/team`} className='team-item'>{lang.team}</a>
               </li>
               <li>
-                <a href="https://docs.deri.finance/faq">{lang.faq}</a>
+                <a href="https://docs.deri.finance/library/faqs">{lang.faq}</a>
               </li>
               <li>
                 <a href="https://docs.deri.finance/">{lang.guide}</a>
@@ -114,7 +114,7 @@ function Menu({ lang, locale }) {
               <li>
                 {isProduction
                   ?
-                  <a rel='noreferrer' href={`https://v2app.deri.finance/#/#retired`} className='retired-item'>{lang['retired-pools']}</a>
+                  <a rel='noreferrer' href={`https://app.deri.finance/#/retired`} className='retired-item'>{lang['retired-pools']}</a>
                   :
                   <Link className='retired-item' to='/retired'>{lang['retired-pools']}</Link>}
               </li>
@@ -129,7 +129,7 @@ function Menu({ lang, locale }) {
 
             </ul>
           </li>
-          <li className='event'>
+          {/* <li className='event'>
             <span className='y-event' >
               Trade to Earn
             </span>
@@ -139,7 +139,7 @@ function Menu({ lang, locale }) {
               :
               <Link className='' to='/trade-to-earn'> 2 Million DERI</Link>
             }
-          </li>
+          </li> */}
         </ul>
       </div>
       {/* <Version /> */}

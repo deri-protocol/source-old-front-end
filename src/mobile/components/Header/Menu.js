@@ -65,7 +65,7 @@ export default function Menu({ closeMenu, lang, locale }) {
                 <a href={`http://deri.finance/?locale=${locale}#/team`}>{lang['team']}</a>
               </li>
               <li>
-                <a href="https://docs.deri.finance/faq">{lang['faq']}</a>
+                <a href="https://docs.deri.finance/library/faqs">{lang['faq']}</a>
               </li>
               <li>
                 <a href="https://docs.deri.finance/">{lang['guide']}</a>
@@ -95,19 +95,19 @@ export default function Menu({ closeMenu, lang, locale }) {
               <a href='https://app.deri.finance/#/trade-to-earn'>{lang['signin']}</a>
               </li>
               <li>
-              <a href='https://v2app.deri.finance/#/trade-to-earn'>{lang['retired-pools']}</a>
+              <a href='https://app.deri.finance/#/retired'>{lang['retired-pools']}</a>
               </li>
               {env === 'testnet' && <li>
                 <Link to='/faucet'>{lang['faucet']}</Link>
               </li> }
             </ul>
           </li>
-          <li className='event'>
+          {/* <li className='event'>
             <span className='y-event' >
               Trade to Earn
             </span>
               <a href='https://app.deri.finance/#/trade-to-earn'>2 Million  DERI</a>
-          </li>
+          </li> */}
         </ul>
       </div>
       <Footer lang={lang} />

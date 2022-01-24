@@ -9,7 +9,7 @@ import moment from 'moment';
 import './index-two.less'
 import epochTwo from '../../../../components/TradingMining/img/epochTwo.svg'
 export default function Index({lang}){
-  const eventEndTimestamp = moment.utc('2021-11-10 10:00:00')
+  const eventEndTimestamp = moment.utc('2022-1-17 10:00:00')
   const [timeover, setTimeover] = useState(eventEndTimestamp.isBefore(moment.utc()) ? true : false)
   return (
     <div className='trading-mining'>

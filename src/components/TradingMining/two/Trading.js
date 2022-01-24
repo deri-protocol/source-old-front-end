@@ -748,17 +748,17 @@ function Trading({ wallet, lang, loading }) {
               </div>
               <div className='button-link'>
                 <TipWrapper block={false} tip={lang['staking-hover']}>
-                  <a tip={lang['staking-hover']} href='https://app.deri.finance/?locale=en#/mining/v2_lite/56/perpetual/AXSUSDT,MBOXUSDT,iBSCDEFI,iGAME,ALICEUSDT,AGLDUSDT,SHIBUSDT,SANDUSDT/DERI/0x9e2f5E284BEEb2C955987eD1EbB2149494CC1e41?symbolId=0'>
+                  <a tip={lang['staking-hover']} href='https://app.deri.finance/#/pool/v2_lite/56/future/0x26bE73Bdf8C113F3630e4B766cfE6F0670Aa09cF'>
                     {lang['staking']}
                   </a>
                 </TipWrapper>
                 <TipWrapper block={false} tip={lang['futures-hover']} >
-                  <a tip={lang['futures-hover']} href='https://app.deri.finance/#/futures/pro'>
+                  <a tip={lang['futures-hover']} href='https://app.deri.finance/#/trade/futures'>
                     {lang['futures']}
                   </a>
                 </TipWrapper>
                 <TipWrapper block={false} tip={lang['options-hover']}>
-                  <a tip={lang['options-hover']} href='https://app.deri.finance/#/options/pro'>
+                  <a tip={lang['options-hover']} href='https://app.deri.finance/#/trade/options'>
                     {lang['options']}
                   </a>
                 </TipWrapper>

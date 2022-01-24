@@ -39,6 +39,7 @@ export default function Promotional({ lang }) {
       {curTab === 'upcoming' && <div className='upcoming'>
         {/* <TradingMiningNow lang={lang} /> */}
         No data
+        {/* <TradingMiningNow lang={lang}/> */}
       </div>}
     </div>
   )
